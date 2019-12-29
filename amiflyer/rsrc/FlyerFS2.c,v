@@ -1,0 +1,1090 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+1.2
+date	95.08.11.13.07.46;	author Flick;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.08.04.15.05.19;	author Flick;	state Exp;
+branches;
+next	1.0;
+
+1.0
+date	95.05.05.15.49.38;	author Flick;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+1.2
+log
+@Now uses ControlMsg string made by BSTRtoCSTR, not an array on stack
+@
+text
+@/*********************************************************************\
+*
+* Flyer FileSystem - Interfaces AmigaDOS to the Flyer card(s)
+*							Module 2 - Volumes and misc support
+*
+* $Id: FlyerFS2.c,v 1.1 1995/08/04 15:05:19 Flick Exp Flick $
+*
+* $Log: FlyerFS2.c,v $
+*Revision 1.1  1995/08/04  15:05:19  Flick
+*Big cleanup -- removed all globals
+*
+*Revision 1.0  1995/05/05  15:49:38  Flick
+*FirstCheckIn
+*
+*
+* Copyright (c) 1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+*	02/22/94		Marty	created
+\*********************************************************************/
+
+#include "exec/types.h"
+#include "exec/io.h"
+#include "exec/memory.h"
+#include "exec/tasks.h"
+#include "exec/alerts.h"
+#include "devices/timer.h"
+#include "devices/trackdisk.h"
+#include "devices/input.h"
+#include "devices/inputevent.h"
+#include "intuition/intuition.h"
+#include "dos/dosextens.h"
+#include "dos/filehandler.h"
+#include "proto/exec.h"
+#include "proto/dos.h"
+#include "string.h"
+
+#include "flyerlib.h"
+#include "flyer.h"
+#include	"FlyerFS.h"
+
+#include "FlyerFS2.ps"
+#include "FlyerFS1.p"
+#include "FlyerFS2.p"
+#include "FlyerFS3.p"
+
+#define	DEBUGGING	0
+
+#if DEBUGGING
+#define	DBUG(x)	x
+void kprintf(char *, ... );
+#else
+#define	DBUG(x)	/* nada */
+#endif
+
+
+/* These are never used, except for external viewing pleasure */
+char static const	VersionString[] = "$VER: FlyerFileSystem 1.05 (04.08.95)";
+char static const CopyrightString[] = "Copyright © 1995 NewTek, Inc.";
+char static const AuthorString[] = "Written by Marty Flickinger";
+
+
+BPTR DuplicateLock(struct FSbase *FS,BPTR lock)
+{
+	struct	LongLock		*ll,*l2;
+	struct	DeviceList	*vol;
+	BPTR		newlock,hold;
+	ULONG		grip,newgrip,err;
+
+	if (lock == NULL) 		/* Lock on root? */
+		return(0);
+
+	grip = Lock2Grip(lock);
+
+	ll = (struct LongLock *)BADDR(lock);
+
+//	if (ll->ll_Key == 0)			/* Invalid lock? */
+//		return(DOSFALSE);
+
+	if (FS->myVolume != ll->ll_Volume) 		// If duplock on unmounted volume
+	{
+		hold = FS->MasterLockList;				// Be sure to add new lock to THAT volume
+		vol = (struct DeviceList *)BADDR(ll->ll_Volume);
+		FS->MasterLockList = vol->dl_LockList;
+		newlock = RequestLock(FS,ll->ll_Key,SHARED_LOCK,grip);
+		if (newlock)
+		{
+			l2 = (struct LongLock *)BADDR(newlock);
+			l2->ll_Volume = ll->ll_Volume;
+		}
+		vol->dl_LockList = FS->MasterLockList;
+		FS->MasterLockList = hold;
+	}
+	else
+	{
+		FS->FlyVol.Path = 0;
+		err = FlyerCopyGrip(&FS->FlyVol,grip,&newgrip);
+		if (err==FERR_OKAY)
+			newlock = RequestLock(FS,ll->ll_Key,SHARED_LOCK,newgrip);
+		else
+			newlock = 0;
+	}
+
+	return(newlock);
+}
+
+
+void RingMeBack(struct FSbase *FS,int seconds)
+{
+	register	struct	timerequest	*ior;
+
+	ior = &FS->IntervalTimer;
+
+	FS->TimerPkt.Action = ACTION_TIMER;		// Counterfeit packet when time up
+	FS->TimerPkt.Link = (APTR)ior;
+	ior->tr_node.io_Message.mn_Node.ln_Name = (char *)&FS->TimerPkt;
+	ior->tr_node.io_Command = TR_ADDREQUEST;
+	ior->tr_time.tv_secs = seconds;
+	ior->tr_time.tv_micro = 0;
+	SendIO((struct IORequest *)ior);
+}
+
+
+/* This routine locks the directory that is the parent of the locked item */
+
+BPTR GetParent(struct FSbase *FS,BPTR lock)
+{
+	ULONG		grip,newgrip,block,err;
+
+	grip = Lock2Grip(lock);
+
+	FS->FlyVol.Path = NULL;
+	err = FlyerParent(&FS->FlyVol,grip,&newgrip,&block);
+	if (err)
+	{
+		FS->DOSerror = 0;
+		lock = 0;
+	}
+	else
+	{
+		lock = RequestLock(FS,block,SHARED_LOCK,newgrip);
+
+		DBUG(kprintf("\nMade lock %lx: Block:%lx  Grip:%lx",lock,block,newgrip);)
+
+		if (lock==0)
+			FS->DOSerror = ERROR_OBJECT_NOT_FOUND;
+	}
+
+	return(lock);
+}
+
+
+void GetMuchoStuffOnDrive(struct FSbase *FS)
+{
+	register	struct	FileSysStartupMsg	*fssm;
+	register	ULONG		*env;
+	struct	DevInfo	*dviptr;
+	char		*ControlMsg;
+
+	DBUG(kprintf("%ls\n",VersionString+6);)
+
+	/* Get OS version 34, 36, 37, etc. */
+	FS->OSversion = GetOSversion();
+
+	fssm = (struct FileSysStartupMsg *)BADDR(FS->DosPkt->dp_Arg2);		// fssm ptr
+	env = (ULONG *)BADDR(fssm->fssm_Environ);
+	dviptr = (struct DevInfo *)BADDR(FS->DosPkt->dp_Arg3);
+
+	/* Copy control string into local buffer and null-terminate it */
+	ControlMsg = BSTRtoCSTR(env[DE_CONTROL]);
+	if (ControlMsg==NULL)
+	{
+		Cleanup(FS);
+		FS->ID = 0;			// Failure
+		return;
+	}
+
+	DBUG(kprintf("Control string = ->%ls<-\n",ControlMsg);)
+
+	FS->FSinfo.len = sizeof(struct FlyerVolInfo);
+	FS->FlyVol.Path = 0;
+	FS->FlyVol.Board = (UBYTE)GrabArg(ControlMsg,"BOARD",0);			/* Board number */
+	FS->FlyVol.SCSIdrive = ((UBYTE)GrabArg(ControlMsg,"CHAN",0)<<3) +
+						(UBYTE)GrabArg(ControlMsg,"UNIT",0);	/* SCSI unit number */
+	FS->FlyerDrive = FS->FlyVol.SCSIdrive;		// Keep (just for debugging)
+	FS->FlyVol.Flags = FVF_USENUMS;			// Always use these hard numbers
+
+	FS->ClipAct.Volume = &FS->FlyVol;
+	FS->ClipAct.ReturnTime = RT_STOPPED;	// All are syncronous
+
+	DBUG(kprintf("Startup packet indicates...\n");)
+	DBUG(kprintf("   board: %ld\n",FS->FlyVol.Board);)
+	DBUG(kprintf("   drive: %ld\n",FS->FlyVol.SCSIdrive);)
+
+	FS->TimerErr = FS->IEerr = -1;
+
+	FS->IEReply = (struct MsgPort *)CreatePort(0,0);		// Open inputevent.dev
+	if (FS->IEReply)
+		FS->IEIO = (struct IOStdReq *)CreateStdIO(FS->IEReply);
+	if (FS->IEIO)
+		FS->IEerr = OpenDevice((UBYTE *)"input.device",0,
+			(struct IORequest *)FS->IEIO,0);
+
+	FS->TimerErr = OpenDevice("timer.device",UNIT_VBLANK,		// Open timer
+		(struct IORequest *)&FS->IntervalTimer,0);
+	if (FS->TimerErr)
+	{
+		Cleanup(FS);
+		FS->ID = 0;			// Failure
+	}
+	else
+	{
+		FS->ClockTime = FS->IntervalTimer;		// Clone it
+
+		FS->IntervalTimer.tr_node.io_Message.mn_ReplyPort = FS->myMsgPort;
+		FS->ClockTime.tr_node.io_Message.mn_ReplyPort = &FS->ClockReplyPort;
+
+		if (GetVolumeInfo(FS))			// Get volume node, drive info
+			DiskInOut(FS,1);				// Might cause problems for WB1.3
+
+		DBUG(kprintf("dvi @@ %lx\n",dviptr);)
+		dviptr->dvi_Task = (APTR)FS->myMsgPort;		// Complete DevInfo so doesn't spawn more
+	}
+
+	FreeVec(ControlMsg);					// Free this string
+}
+
+
+ULONG GrabArg(char *startup,char *keyword,ULONG dflt)
+{
+	register	char *ptr,*scan,*cmp;
+	ULONG		val;
+	char		c;
+
+	for (scan=startup;*scan;scan++)
+	{
+		ptr = scan;
+		cmp = keyword;
+		do
+		{
+			if (*cmp == 0)
+			{
+				if (*ptr++ != '=')
+					return(1);			/* Flag only */
+				val = 0;
+				while ((c=*ptr++,c>='0')&&(c<='9'))
+				{
+					val *= 10;
+					val += (ULONG)(c-'0');
+				}
+				return(val);
+			}
+		} while (uppercase(*cmp++) == uppercase(*ptr++));
+	}
+
+	return(dflt);
+}
+
+
+char uppercase(char in)
+{
+	if ((in>='a')||(in<='z'))
+		return((char)(in-32));
+	else
+		return(in);
+}
+
+
+void Cleanup(struct FSbase *FS)
+{
+	if (!FS->TimerErr)
+		CloseDevice((struct IORequest *)&FS->IntervalTimer);
+
+	if (!FS->IEerr)	CloseDevice((struct IORequest *)FS->IEIO);
+	if (FS->IEIO)		DeleteStdIO(FS->IEIO);
+	if (FS->IEReply)	DeletePort(FS->IEReply);
+}
+
+
+struct DeviceList *MakeVolume(char *name)
+{
+	register	struct	DeviceList	*vol;
+	register	BPTR		*first;
+	register	UBYTE		*mem;
+
+	vol = (struct DeviceList *)AllocMem(sizeof(struct DeviceList),MEMF_PUBLIC|MEMF_CLEAR);
+	if (vol)
+	{
+		mem = (UBYTE *)AllocMem(*name + 2,MEMF_PUBLIC|MEMF_CLEAR);
+		if (mem == NULL)
+		{
+			FreeMem((UBYTE *)vol,sizeof(struct DeviceList));
+			vol = NULL;
+		}
+		else
+		{
+			vol->dl_Name = (BSTR)MKBADDR(mem);
+			vol->dl_DiskType = ID_FLYER_DISK;
+//			vol->dl_DiskType = ID_DOS_DISK;
+
+			strncpy(mem,name,*name+1);		/* Copy BSTR */
+				// This is not smart; I have to null-terminate a BSTR!!
+				// But DOS seems to like it that way!?!?
+				// Now, even my code is relying on this elsewhere!
+			mem[1 + *mem] = 0;
+
+			/* Insert it into DeviceList at top */
+			Forbid();
+//~~~~~~~~~~~~~~
+			first = GetDevListPtr();
+			vol->dl_Next = *first;
+			*first = (BPTR)MKBADDR(vol);
+//~~~~~~~~~~~~~~
+			Permit();
+		}
+	}
+
+	return(vol);
+}
+
+
+void DeleteVolume(BPTR vol)
+{
+	register	struct	DeviceList	*volptr;
+	register	BPTR		*list;
+	register	char		*name;
+
+	if (vol)
+	{
+		DBUG(kprintf("Deleting volume\n");)
+
+		Forbid();
+//~~~~~~~~~~~~~~
+		for (list=GetDevListPtr() ; *list ; list=(BPTR *)BADDR(*list))
+		{
+			if (*list == vol)
+			{
+				volptr = (struct DeviceList *)BADDR(vol);
+				*list = volptr->dl_Next;							// link around it
+				name = (char *)BADDR(volptr->dl_Name);
+				FreeMem((UBYTE *)name,*name+2);
+				FreeMem((UBYTE *)volptr,sizeof(struct DeviceList));
+			}
+		}
+//~~~~~~~~~~~~~~
+		Permit();
+	}
+}
+
+
+void UndoVolume(struct FSbase *FS)
+{
+	register	struct	DeviceList	*vol;
+	register	BPTR		*ptr;
+
+	DBUG(kprintf("Undoing volume\n");)
+
+	if (FS->myVolume)						// Is the mounted volume?
+	{
+		/*** If volume has any locks outstanding, copy into volume node ***/
+		if (FS->MasterLockList)
+		{
+			vol = (struct DeviceList *)BADDR(FS->myVolume);
+			ptr = &vol->dl_LockList;
+			while (*ptr)							// Find last one in list
+				ptr = (BPTR *)BADDR(*ptr);
+
+			*ptr = FS->MasterLockList;			// Append Master locklist
+			vol->dl_Task = 0;						// Volume is unmounted
+		}
+		else
+		{
+			DeleteVolume(FS->myVolume);		// Locks, forget about volume
+		}
+		FS->MasterLockList = FS->myVolume = 0;		// "UnMount" volume
+	}
+}
+
+
+void DiskChanges(struct FSbase *FS)
+{
+	int	nowloaded;
+
+	nowloaded = GetDiskState(FS);						// Find out if disk is in or out
+
+	if ((FS->DiskLoaded) && (nowloaded == 0))		// Disk removed?
+	{
+		DBUG(kprintf("Ejected\n");)
+
+		UndoVolume(FS);
+		DiskInOut(FS,0);					// Create DISKREMOVED input event
+		FS->ID = ID_NO_DISK_PRESENT;
+	}
+
+	if ((FS->DiskLoaded == 0) && (nowloaded))		// Disk inserted?
+	{
+		DBUG(kprintf("Inserted\n");)
+
+		GetVolumeInfo(FS);		// Make sure it knows a disk is loaded!
+		DiskInOut(FS,1);			// Create DISKINSERTED input event
+	}
+
+	FS->DiskLoaded = nowloaded;
+}
+
+
+BPTR *GetDevListPtr(VOID)
+{
+	return(&((struct DosInfo *)BADDR(((struct RootNode *)DOSBase->dl_Root)->rn_Info))->di_DevInfo);
+}
+
+
+struct DeviceList * GetVolumeInfo(struct FSbase *FS)
+{
+	register	struct	DeviceList	*vol;
+	register	BPTR		link;
+				BPTR		*p7;
+	ULONG	error;
+	BOOL	conflict,foundmine;
+
+	DBUG(kprintf("Mounting disc volume...\n");)
+
+	/* Setup excuse in case any data read fails (unformatted disk) */
+	FS->ID = ID_NOT_REALLY_DOS;
+
+	if (FS->FlyerState != FLYST_OKAY)		// No Flyer yet, keep waiting
+	{
+		FS->ID = ID_NO_DISK_PRESENT;
+		return(0);
+	}
+
+	FS->FlyVol.Path = 0;
+	FS->FSinfo.len = sizeof(struct FlyerVolInfo);
+	error = FlyerDriveInfo(&FS->FlyVol,&FS->FSinfo);	/* Talk to Flyer... */
+
+	DBUG(kprintf("FSinfo error code %ld\n",error);)
+
+	if (error == FERR_SELTIMEOUT)			// If no drive here
+		FS->ID = ID_NO_DISK_PRESENT;
+
+	if (error)
+		return(0);
+
+	if (FS->FSinfo.Ident != 0x524f4f54)
+	{
+		FS->ID = ID_NOT_REALLY_DOS;
+/*		FS->ID = ID_UNREADABLE_DISK; */
+		return(0);
+	}
+	FS->ID = ID_FLYER_DISK;
+
+	SetLogicalInfo(FS);						// Setup for Log Blk Size
+
+	/* Work volume name */
+	FS->FSinfo.LTitle = strlen(FS->FSinfo.Title);	/* Convert C-string to L-string */
+
+	DBUG(kprintf("The disc's title: %ls\n",FS->FSinfo.Title);)
+
+	/* Now find volume for disc, or make new one */
+
+	conflict = foundmine = FALSE;
+
+	Forbid();
+//~~~~~~~~~~~~~~~~~
+	vol = NULL;
+	for (link=*(GetDevListPtr()) ; link ; link = vol->dl_Next)
+	{
+		vol = (struct DeviceList *)BADDR(link);
+		if (vol->dl_Type == DLT_VOLUME)
+		{
+			if (CompareBSTRs(&FS->FSinfo.LTitle,(char *)BADDR(vol->dl_Name)))
+			{
+				/* Different FS with same volume name? */
+				if ((vol->dl_Task) && (vol->dl_Task != (struct MsgPort *)FS->myMsgPort))
+					conflict = TRUE;
+				else
+				{
+					if ((vol->dl_VolumeDate.ds_Days == FS->FSinfo.DiskDate.ds_Days)
+					&&(vol->dl_VolumeDate.ds_Minute == FS->FSinfo.DiskDate.ds_Minute)
+					&&(vol->dl_VolumeDate.ds_Tick == FS->FSinfo.DiskDate.ds_Tick))
+					{
+						foundmine = TRUE;			// My volume probably
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (!foundmine)
+	{
+		/* Go ahead and make a new volume, even if similar one already exists */
+
+		vol = MakeVolume(&FS->FSinfo.LTitle);	/* Allocate volume node, plug in title */
+		if (vol)
+		{
+			/* Fill in rest of volume node */
+			vol->dl_Lock = 0;
+			vol->dl_LockList = 0;
+			vol->dl_Type = DLT_VOLUME;
+			vol->dl_VolumeDate = FS->FSinfo.DiskDate;	/* Copy Disk datestamp */
+		}
+	}
+
+	if (vol)
+	{
+		vol->dl_Task = (struct MsgPort *)FS->myMsgPort;	// Show it's mounted
+		FS->myVolume = (BPTR)MKBADDR(vol);					// Keep ptr --> current volume node
+
+		/* Move locks listed in volume node ----> My master lock list */
+		p7 = &FS->MasterLockList;
+		while (*p7)
+		{
+			p7 = (BPTR *)BADDR(*p7);				/* scan for end of MasterLockList */
+		}
+		*p7 = vol->dl_LockList;
+		vol->dl_LockList = 0;
+	}
+//~~~~~~~~~~~~~~~~~
+	Permit();
+
+	if (conflict)
+	{
+		DBUG(kprintf("Conflict\n");)
+		DuplicateVolumeError(FS,vol);		/* Warn user! */
+	}
+
+	return(vol);
+}
+
+
+
+/* Find logical block size to use (smallest one that will contain 'logsize') */
+/* Set all variables needed for logical block reading */
+void SetLogicalInfo(struct FSbase *FS)
+{
+	int	i;
+
+	for (i=0;i<16;i++)			/* Compute shift bits for logblk size */
+	{
+		if ((1<<i) >= FS->FSinfo.BlkSize)
+			break;
+	}
+	FS->LogBlkShift = i;
+}
+
+
+
+// CompareBSTRs:
+//
+// A straight comparison of the 2 BSTR's is made (all characters must be
+// the same (not case-sensitive) and lengths must match.
+
+BOOL CompareBSTRs(char *s1,char *s2)
+{
+	register	char	chr1,chr2;
+	register	char	*p1,*p2;
+	register	UBYTE	len;
+
+	p1 = s1;
+	p2 = s2;
+
+	len = *p1++;
+
+	if (len != *p2++)			// If different lengths, give up!
+		return(FALSE);
+
+	while (len--)
+	{
+		chr1 = *p1++;
+		if ((chr1 >= 'a')&&(chr1 <= 'z')) chr1-=32;  // make upper case
+
+		chr2 = *p2++;
+		if ((chr2 >= 'a')&&(chr2 <= 'z')) chr2-=32;  // make upper case
+
+		if (chr1 != chr2)
+			return(FALSE);				// mismatch!
+	}
+	return(TRUE);						// same!
+}
+
+
+void DiskInOut(struct FSbase *FS,int flag)
+{
+				struct	InputEvent	event;
+	register	struct	IOStdReq		*iob;
+
+	iob = FS->IEIO;
+
+	DBUG(kprintf("Disk in/out %ld\n",flag);)
+
+	if (!FS->IEerr)
+	{
+		iob->io_Command = IND_WRITEEVENT;
+		iob->io_Flags = 0;
+		iob->io_Length = sizeof(struct InputEvent);
+		iob->io_Data = (APTR)&event;
+
+		event.ie_Class = (flag)?IECLASS_DISKINSERTED:IECLASS_DISKREMOVED;
+		event.ie_Code = IECODE_NOBUTTON;
+		event.ie_NextEvent = 0;
+		event.ie_Qualifier = 0;
+
+		DoIO((struct IORequest *)iob);
+	}
+}
+
+
+void GetDateStamp(struct FSbase *FS,struct DateStamp *stamp)
+{
+	register ULONG secs,temp;
+
+	FS->ClockTime.tr_node.io_Command = TR_GETSYSTIME;
+	FS->ClockTime.tr_node.io_Flags = 1;
+
+	DoIO((struct IORequest *)&FS->ClockTime);		/* get system time */
+
+	secs = FS->ClockTime.tr_time.tv_secs;
+	temp = secs/86400;
+	secs -= temp*86400;
+	stamp->ds_Days = temp;			/* set days */
+
+	temp = secs/60;
+	secs -= temp*60;
+	stamp->ds_Minute = temp;		/* set minutes */
+
+	stamp->ds_Tick = secs*50 + FS->ClockTime.tr_time.tv_micro/20000;
+}
+@
+
+
+1.1
+log
+@Big cleanup -- removed all globals
+@
+text
+@d6 1
+a6 1
+* $Id: FlyerFS2.c,v 1.0 1995/05/05 15:49:38 Flick Exp Flick $
+d9 3
+d158 1
+a158 1
+	char		ControlMsg[100];
+d170 7
+a176 1
+	BSTRtoCSTR(env[DE_CONTROL],ControlMsg);
+a209 1
+		return;
+d211 3
+d215 2
+a216 1
+	FS->ClockTime = FS->IntervalTimer;		// Clone it
+d218 2
+a219 2
+	FS->IntervalTimer.tr_node.io_Message.mn_ReplyPort = FS->myMsgPort;
+	FS->ClockTime.tr_node.io_Message.mn_ReplyPort = &FS->ClockReplyPort;
+d221 3
+a223 2
+	if (GetVolumeInfo(FS))			// Get volume node, drive info
+		DiskInOut(FS,1);				// Might cause problems for WB1.3
+d225 1
+a225 2
+	DBUG(kprintf("dvi @@ %lx\n",dviptr);)
+	dviptr->dvi_Task = (APTR)FS->myMsgPort;		// Complete DevInfo so doesn't spawn more
+@
+
+
+1.0
+log
+@FirstCheckIn
+@
+text
+@d6 1
+a6 1
+* $Id$
+d8 3
+a10 1
+* $Log$
+d12 1
+d28 1
+d38 5
+a42 1
+#include	"FlyerFS.p"
+d48 1
+a52 1
+extern	struct	Library		*FlyerBase;
+d55 3
+a57 24
+char		VersionString[] = "$VER: FlyerFileSystem 1.04 (10.03.95)";
+char		CopyrightString[] = "Copyright © 1995 NewTek, Inc.";
+char		AuthorString[] = "Written by Marty Flickinger";
+
+#ifdef DEBUGGING
+
+void BSTR2Terminal(string)
+char  *string;
+{
+	register	int	len;
+	register	char	*p;
+
+	kprintf("\x22");
+	if (*string == 0)
+		kprintf("NULL");
+	else {
+		p = string+1;
+		for (len = *string;len;len--)
+			kprintf("%lc",*p++);
+	}
+	kprintf("\x22");
+}
+
+#endif
+d62 4
+a65 5
+	register	BPTR		newlock,hold;
+	register	struct	LongLock		*ll,*l2;
+	register	struct	DeviceList	*vol;
+				ULONG		grip,newgrip;
+				int		err;
+d72 1
+a72 1
+	ll = (struct LongLock *)(lock<<2);
+d74 2
+a75 4
+#if 0
+	if (ll->ll_Key == 0)			/* Invalid lock? */
+		return(DOSFALSE);
+#endif
+d77 4
+a80 3
+	if (FS->myVolume != ll->ll_Volume) { /* If duplock on unmounted volume */
+		hold = FS->MasterLockList;		/* Be sure to add new lock to THAT volume */
+		vol = (struct DeviceList *)((ll->ll_Volume)<<2);
+d83 3
+a85 2
+		if (newlock) {
+			l2 = (struct LongLock *)(newlock<<2);
+d91 2
+a92 1
+	else {
+d95 1
+a95 1
+		if (!err)
+d111 1
+a111 1
+	FS->TimerPkt.Action = ACTION_TIMER;	/* Counterfeit packet when time up */
+d123 1
+a123 1
+int GetParent(struct FSbase *FS,BPTR lock)
+d125 1
+a125 2
+	ULONG		grip,newgrip,block;
+	int		err;
+d129 4
+a132 3
+	FS->FlyVol.Path = 0;
+	err = FlyerParent(&FS->FlyVol,grip,&newgrip);
+	if (err) {
+d134 1
+a134 1
+		return(0);
+d136 3
+d140 1
+a140 2
+	block = 77;
+	lock = RequestLock(FS,block,SHARED_LOCK,newgrip);
+d142 3
+a144 1
+	DBUG(kprintf("\nMade lock %lx: Block:%ld  Grip:%lx",lock,block,newgrip);)
+a145 3
+	if (lock==0)
+		FS->DOSerror = ERROR_OBJECT_NOT_FOUND;
+
+a149 36
+void ReplyToDOS(struct FSbase *FS)
+{
+	register	struct	DosPacket	*dp;
+	register	struct	MsgPort		*port;
+	register	struct	Message		*msg;
+
+	dp = FS->DosPkt;
+
+	DBUG(kprintf(" [%lx,%lx]",dp->dp_Res1,dp->dp_Res2);)
+
+	msg = (struct Message *)dp->dp_Link;			/* get ptr to EXEC message */
+	if (msg == NULL) return;
+	port = dp->dp_Port;									/* get ptr to reply port	*/
+	dp->dp_Port = FS->myMsgPort;
+	msg->mn_Node.ln_Name = (char *)dp;
+	if (port) PutMsg(port,msg);
+}
+
+
+void ReturnArgs(struct FSbase *FS,LONG res1,LONG res2)
+{
+	register	struct	DosPacket	*dp;
+
+	if ((res1==0)&&(FS->myFileOpen))
+		FreeMem((UBYTE *)FS->myFileOpen,sizeof(struct FileOpen));
+	FS->myFileOpen = 0;
+
+	dp = FS->DosPkt;
+	if (dp) {
+		dp->dp_Res1 = res1;
+		dp->dp_Res2 = res2;
+		ReplyToDOS(FS);
+	}
+}
+
+
+d162 3
+a164 3
+	fssm = (struct FileSysStartupMsg *)((FS->DosPkt->dp_Arg2)<<2); /* fssm ptr */
+	env = (ULONG *)((fssm->fssm_Environ)<<2);
+	dviptr = (struct DevInfo *)((FS->DosPkt->dp_Arg3)<<2);
+d176 2
+a177 1
+	FS->FlyVol.Flags = FVF_USENUMS;		/* Always use these hard numbers */
+d180 1
+a180 1
+	FS->ClipAct.ReturnTime = RT_STOPPED;	/* All are syncronous */
+d188 1
+a188 1
+	FS->IEReply = (struct MsgPort *)CreatePort(0,0);	/* Open inputevent.dev */
+d195 1
+a195 1
+	FS->TimerErr = OpenDevice("timer.device",UNIT_VBLANK,		/* Open timer */
+d197 2
+a198 1
+	if (FS->TimerErr) {
+d200 1
+a200 1
+		FS->ID = 0;			/* Failure */
+d204 1
+a204 1
+	FS->ClockTime = FS->IntervalTimer;		/* Clone it */
+d209 2
+a210 3
+	if (GetVolumeInfo(FS)) {		/* Get volume node, drive info */
+		DiskInOut(FS,1);				/* Might cause problems for WB1.3 */
+	}
+d213 1
+a213 1
+	dviptr->dvi_Task = (APTR)FS->myMsgPort;
+d223 2
+a224 1
+	for (scan=startup;*scan;scan++) {
+d227 4
+a230 2
+		do {
+			if (*cmp == 0) {
+d234 2
+a235 1
+				while ((c=*ptr++,c>='0')&&(c<='9')) {
+d274 30
+a303 7
+	vol = (struct DeviceList *)
+		AllocMem(sizeof(struct DeviceList),MEMF_PUBLIC|MEMF_CLEAR);
+	if (vol == NULL) return(0);
+	mem = (UBYTE *)AllocMem(*name + 2,MEMF_PUBLIC|MEMF_CLEAR);
+	if (mem == NULL) {
+		FreeMem((UBYTE *)vol,sizeof(struct DeviceList));
+		return(0);
+a304 16
+	vol->dl_Name = (BSTR)((ULONG)mem>>2);
+	vol->dl_DiskType = ID_FLYER_DISK;
+/*	vol->dl_DiskType = ID_DOS_DISK; */
+
+	strncpy(mem,name,*name+1);		/* Copy BSTR */
+		/* This is not smart; I have to null-terminate a BSTR!! */
+		/* But DOS seems to like it that way!?!? */
+		/* So do I now (relying on this) */
+	mem[1 + *mem] = 0;
+
+	/* Insert it into DeviceList at top */
+	Forbid();
+	first = GetDevListPtr();
+	vol->dl_Next = *first;
+	*first = (BPTR)((ULONG)vol>>2);
+	Permit();
+d316 16
+a331 11
+	if (vol == NULL) return;
+
+	DBUG(kprintf("Deleting volume\n");)
+
+	Forbid();
+	list = GetDevListPtr();
+	while (*list != vol) {
+		list = (BPTR *)((*list)<<2);
+		if (list == NULL) {
+			Permit();
+			return;
+d333 2
+a335 7
+
+	volptr = (struct DeviceList *)(vol<<2);
+	*list = volptr->dl_Next;			/* link around it */
+	name = (char *)(((ULONG)(volptr->dl_Name))<<2);
+	FreeMem((UBYTE *)name,*name+2);
+	FreeMem((UBYTE *)volptr,sizeof(struct DeviceList));
+	Permit();
+d346 6
+a351 4
+	if (FS->myVolume) {		/* Volume mounted? */
+/* If volume has any locks outstanding, copy into volume node */
+		if (FS->MasterLockList) {
+			vol = (struct DeviceList *)((ULONG)FS->myVolume<<2);
+d353 5
+a357 5
+			while (*ptr) {
+				ptr = (BPTR *)(((ULONG)*ptr)<<2);
+			}
+			*ptr = FS->MasterLockList;
+			vol->dl_Task = 0;				/* Unmounted */
+d359 3
+a361 2
+		else {
+			DeleteVolume(FS->myVolume);		/* Locks, forget about volume */
+d363 26
+a388 1
+		FS->MasterLockList = FS->myVolume = 0;		/* "UnMount" volume */
+d390 2
+d397 1
+a397 1
+	return(&((struct DosInfo *)((((struct RootNode *)DOSBase->dl_Root)->rn_Info)<<2))->di_DevInfo);
+d401 1
+a401 1
+int GetVolumeInfo(struct FSbase *FS)
+d406 2
+a407 1
+				int		error,conflict;
+d414 2
+a415 1
+	if (FS->WaitFlyer) {		/* No Flyer yet, keep waiting */
+d426 1
+a426 1
+	if (error == FERR_SELTIMEOUT)			/* If no drive here */
+d432 2
+a433 1
+	if (FS->FSinfo.Ident != 0x524f4f54) {
+d440 1
+a440 1
+	SetLogicalInfo(FS);	/* Setup for Log Blk Size */
+d449 2
+d452 1
+a452 2
+
+	conflict = 0;
+d454 7
+a460 4
+	for (link=*(GetDevListPtr());link;link = vol->dl_Next) {
+		vol = (struct DeviceList *)(link<<2);
+		if (vol->dl_Type == DLT_VOLUME) {
+			if (CompareBSTRs(&FS->FSinfo.LTitle,(char *)(((ULONG)vol->dl_Name)<<2),0)==0) {
+d463 3
+a465 2
+					conflict = 1;
+				else {
+d469 4
+a472 1
+						goto FoundIt;			/* My volume probably */
+d478 13
+a490 6
+	/* Go ahead and make a new volume, even if similar one already exists */
+
+	vol = MakeVolume(&FS->FSinfo.LTitle);	/* Allocate volume node, plug in title */
+	if (vol == NULL) {
+		Permit();
+		return(0);
+d493 13
+a505 14
+	/* Fill in rest of volume node */
+	vol->dl_Lock = 0;
+	vol->dl_LockList = 0;
+	vol->dl_Type = DLT_VOLUME;
+	vol->dl_VolumeDate = FS->FSinfo.DiskDate;	/* Copy Disk datestamp */
+
+FoundIt:
+	vol->dl_Task = (struct MsgPort *)FS->myMsgPort;  /* Show it's mounted */
+	FS->myVolume = (BPTR)((ULONG)vol>>2);	/* Keep ptr --> current volume node */
+
+	/* Move locks listed in volume node ----> My master lock list */
+	p7 = &FS->MasterLockList;
+	while (*p7) {
+		p7 = (BPTR *)((*p7)<<2);				/* scan for end of MasterLockList */
+d507 1
+a507 3
+	*p7 = vol->dl_LockList;
+	vol->dl_LockList = 0;
+
+d510 2
+a511 1
+	if (conflict) {
+d516 1
+a516 1
+	return(1);
+d527 2
+a528 1
+	for (i=0;i<16;i++) {			/* Compute shift bits for logblk size */
+d537 6
+a542 17
+/*
+CompareBSTRs: compare the two input BSTR, return (NULL) if same.  Not case-
+sensitive, and s2 may contain a revision (;rev) which should be checked for
+and ignored in the comparison.
+
+Also, starting v89, if s2 is longer than 30 chars it is truncated to 30 so
+that really long file names can be accesseD by just entering the first 30
+characters (AmigaDos will clip off requests longer than 30).
+
+If 'special' flag is 0, a straight comparison of the 2 BSTR's is made (all
+characters must be the same (not case-sensitive) and lengths must match.
+*/
+
+ 
+LONG CompareBSTRs(s1,s2,special)
+char  *s1,*s2;
+BYTE	special;
+a543 1
+	register	int	refcnt,cmpcnt;
+d546 1
+d551 1
+a551 2
+	refcnt = *p1++;
+	cmpcnt = *p2++;
+d553 2
+a554 12
+	if (special) {				/* Special length checking? */
+		if (cmpcnt < refcnt)		/* Is string being checked too short? */
+			return(-1);				/* Then I'm sure they don't match! */
+		else if (cmpcnt > refcnt) {	/* Is it too long? */
+			if (p2[refcnt] != ';')		/* would length match with ;rev clipped? */
+				return(-1);					/* No, I'm sure they don't match */
+		}										/* Yes, compare for span of reference string */
+	}
+	else {
+		if (cmpcnt != refcnt)	/* Normal length checking: diff lengths, quit! */
+			return(-1);
+	}
+d556 2
+a557 1
+	for (;refcnt;refcnt--) {
+d559 2
+a560 1
+		if ((chr1 >= 'a')&&(chr1 <= 'z')) chr1-=32;  /* make upper case */
+d562 4
+a565 2
+		if ((chr2 >= 'a')&&(chr2 <= 'z')) chr2-=32;  /* make upper case */
+		if (chr1 != chr2) return(-1);	/* mismatch */
+d567 1
+a567 1
+	return(0);									/* same */
+d580 2
+a581 1
+	if (!FS->IEerr) {
+@

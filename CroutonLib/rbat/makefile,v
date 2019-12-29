@@ -1,0 +1,1699 @@
+head	2.40;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+2.40
+date	94.11.11.14.33.43;	author CACHELIN4000;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	94.11.08.13.19.36;	author CACHELIN4000;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	94.10.01.12.38.58;	author Kell;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	94.08.29.17.20.13;	author CACHELIN4000;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	94.08.29.16.14.01;	author pfrench;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	94.08.28.15.49.03;	author CACHELIN4000;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	94.08.28.15.02.21;	author CACHELIN4000;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	94.08.28.14.55.53;	author CACHELIN4000;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	94.08.08.15.27.15;	author pfrench;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	94.07.25.18.52.42;	author Kell;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.07.23.14.07.01;	author CACHELIN4000;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.07.18.15.35.13;	author CACHELIN4000;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.07.06.20.44.56;	author Kell;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.07.06.20.05.14;	author Kell;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.07.06.12.49.09;	author Kell;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.06.23.15.38.39;	author CACHELIN4000;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.03.14.10.51.49;	author CACHELIN4000;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.03.11.13.08.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.03.11.12.22.46;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.03.11.12.18.13;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.03.11.12.17.17;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.03.11.12.16.01;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.03.11.12.14.00;	author Kell;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.03.11.11.14.29;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.03.10.23.51.58;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.03.10.13.53.29;	author CACHELIN4000;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.03.10.13.31.42;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.03.09.20.51.36;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.03.09.20.49.55;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.03.09.18.38.37;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.03.09.18.01.56;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.03.09.17.57.03;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.03.09.06.14.04;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.03.07.12.13.02;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.03.07.09.21.21;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.03.07.09.19.15;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.03.07.07.11.17;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.03.07.02.36.16;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.03.02.13.15.34;	author CACHELIN4000;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.02.18.23.19.31;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.18.23.07.46;	author CACHELIN4000;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.40
+log
+@remove smalldata from link
+@
+text
+@#********************************************************************
+#* $makefile$
+#* $Id: Makefile,v 2.39 1994/11/08 13:19:36 CACHELIN4000 Exp CACHELIN4000 $
+#* $Log: Makefile,v $
+# Revision 2.39  1994/11/08  13:19:36  CACHELIN4000
+# Create map file, make temp files with actual obj name.
+#
+# Revision 2.38  94/10/01  12:38:58  Kell
+# Added SerialDebug module.
+# 
+# Revision 2.37  1994/08/29  17:20:13  CACHELIN4000
+# Add BitMaps.c
+#
+# Revision 2.35  94/08/28  15:49:03  CACHELIN4000
+# *** empty log message ***
+# 
+# Revision 2.34  94/08/28  15:02:21  CACHELIN4000
+# DATA=FAR
+# 
+# Revision 2.33  94/08/28  14:55:53  CACHELIN4000
+# ERROR image, code=far
+# 
+# Revision 2.32  94/08/08  15:27:15  pfrench
+# Added FilePaths.c to dependencies
+# 
+# Revision 2.31  1994/07/25  18:52:42  Kell
+# Removed un-used line from crouton.library dependency
+#
+# Revision 2.30  94/07/23  14:07:01  CACHELIN4000
+# *** empty log message ***
+# 
+# Revision 2.29  94/07/18  15:35:13  CACHELIN4000
+# *** empty log message ***
+# 
+#
+# Revision 2.27  94/07/06  20:05:14  Kell
+# *** empty log message ***
+#
+# Revision 2.26  94/07/06  12:49:09  Kell
+# *** empty log message ***
+# 
+# Revision 2.25  94/06/23  15:38:39  CACHELIN4000
+# Add large bitmap dependency to bitmaps.h, ==> filetypes.o
+# 
+# Revision 2.24  94/03/14  10:51:49  CACHELIN4000
+# *** empty log message ***
+# 
+# Revision 2.23  94/03/11  13:08:55  CACHELIN4000
+#  Un-did RESETOPTIONS paranoid destruction of working makefile
+#
+# Revision 2.22  94/03/11  12:22:46  Kell
+# *** empty log message ***
+#
+# Revision 2.15  94/03/10  13:53:29  CACHELIN4000
+# Comment out ram:temp dest. for Library; it made wrong internal Lib name
+#
+# Revision 2.14  94/03/10  13:31:42  Kell
+# *** empty log message ***
+#
+# Revision 2.4  94/03/07  07:11:17  Kell
+# *** empty log message ***
+#
+# Revision 2.3  94/03/07  02:36:16  CACHELIN4000
+# Add croutons.h dependency to FileTypes.c
+#
+# Revision 2.1  94/02/18  23:19:31  CACHELIN4000
+# *** empty log message ***
+#
+# Revision 2.0  94/02/18  23:07:46  CACHELIN4000
+# FirstCheckIn
+#
+#* Copyright (c)1993 NewTek, Inc.
+#* Confidental and Proprietary. All rights reserved.
+#*
+#* Notes on library directories:
+#* /libinc contains includes for users of the library
+#* /libproto contains prototypes for users of the library
+#*		(/proto used to created library)
+#*
+#*********************************************************************
+
+CRLIB_IMAGES = \
+	crlib:art/AUDIO \
+	crlib:art/AUDIO_sm \
+	crlib:art/CGBOOK \
+	crlib:art/CGBOOK_sm \
+	crlib:art/CONTROL \
+	crlib:art/CONTROL_sm \
+	crlib:art/CRAWL \
+	crlib:art/CRAWL_sm \
+	crlib:art/EPS \
+	crlib:art/EPS_sm \
+	crlib:art/FONT \
+	crlib:art/FONT_sm \
+	crlib:art/FRAMESTORE \
+	crlib:art/FRAMESTORE_sm \
+	crlib:art/FXALGO \
+	crlib:art/FXALGO_sm \
+	crlib:art/FXANIM \
+	crlib:art/FXANIM_sm \
+	crlib:art/FXCR \
+	crlib:art/FXCR_sm \
+	crlib:art/FXILBM \
+	crlib:art/FXILBM_sm \
+	crlib:art/IMAGE \
+	crlib:art/IMAGE_sm \
+	crlib:art/LWENV \
+	crlib:art/LWENV_sm \
+	crlib:art/LWMOT \
+	crlib:art/LWMOT_sm \
+	crlib:art/LWOBJ \
+	crlib:art/LWOBJ_sm \
+	crlib:art/LWSCENE \
+	crlib:art/LWSCENE_sm \
+	crlib:art/LWSURF \
+	crlib:art/LWSURF_sm \
+	crlib:art/PROJECT \
+	crlib:art/PROJECT_sm \
+	crlib:art/REXX \
+	crlib:art/REXX_sm \
+	crlib:art/SCROLL \
+	crlib:art/SCROLL_sm \
+	crlib:art/TEXT \
+	crlib:art/TEXT_sm \
+	crlib:art/UNKNOWN \
+	crlib:art/UNKNOWN_sm \
+	crlib:art/VIDEO \
+	crlib:art/VIDEO_sm\
+	crlib:art/ERROR \
+	crlib:art/ERROR_sm \
+	crlib:art/FLOPPY \
+	crlib:art/FLOPPY_sm \
+	crlib:art/DRIVE_sm \
+	crlib:art/DRIVE \
+	crlib:art/CDROM \
+	crlib:art/CDROM_sm \
+	crlib:art/KEY_sm \
+	crlib:art/KEY \
+	crlib:art/FLYER
+
+
+CRLIB_OBJ = \
+	crlib:obj/crouton.o \
+	crlib:obj/smartstring.o \
+	crlib:obj/croutondos.o \
+	crlib:obj/misc.o \
+	crlib:obj/filetypes.o \
+	crlib:obj/bufferdos.o \
+	crlib:obj/CroutonDefs.o \
+	crlib:obj/FilePaths.o \
+	crlib:obj/BitMaps.o \
+	crlib:obj/SerialDebug.o
+
+lib: crlib:exe/crouton.library crlib:pragma/crouton.h \
+	crlib:libinc/crouton_lib.i tinc:crouton_lib.i libs:crouton.library
+
+libs:crouton.library: crlib:exe/crouton.library
+	copy crlib:exe/crouton.library libs: quiet clone
+	avail >nil: FLUSH
+	echo "crouton.library copied to libs:"
+
+crlib:exe/crouton.library: crlib:bat/LastUpdateDate $(CRLIB_OBJ) crlib:fd/crouton.fd
+	slink libfd crlib:fd/crouton.fd from lib:libent.o lib:libinit.o $(CRLIB_OBJ) \
+	MAP crlib:crouton.map MLIB MSYM MXREF \
+	to ram:crouton.library libVersion 4 libRevision 0 lib lib:sc.lib
+	@@copy ram:crouton.library $@@ quiet clone
+	@@delete ram:crouton.library quiet
+
+crlib:pragma/crouton.h: crlib:fd/crouton.fd
+	fd2pragma crlib:fd/crouton.fd crlib:pragma/crouton.h
+# 	@@NextTime crlib:fd/crouton.fd crlib:pragma/crouton.h
+
+crlib:libinc/crouton_lib.i: crlib:fd/crouton.fd
+	execute crlib:bat/fd2asm
+# 	@@NextTime crlib:fd/crouton.fd crlib:libinc/crouton_lib.i
+
+tinc:crouton_lib.i: crlib:libinc/crouton_lib.i
+# it will be put into switcher/sinc
+	copy crlib:libinc/crouton_lib.i tinc: quiet clone
+# 	@@NextTime crlib:libinc/crouton_lib.i tinc:crouton_lib.i
+
+# This line is to support testmake
+ram:NeverExists: lib
+	quit 20
+
+#*******************************************************************
+# Remember to use LastUpdateDate dependancy on all slinks!!
+# only does this if LastUpdateDate doesn't exist
+crlib:bat/LastUpdateDate:
+	date >crlib:bat/LastUpdateDate
+
+#*******************************************************************
+# Compiling rules.
+
+LIBSAS = RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX LIBCODE\
+	NOVER IDIR=scinc: IDIR=Include.h: IDIR=tinc:	\
+	IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/
+#	DATA=FAR CODE=FAR \
+#	GLOBALSYMBOLTABLE=tsrc:GST/amiga.gst
+
+.c.o:
+	sc $(LIBSAS) OBJNAME=ram:$>.o $*.c
+	@@copy ram:$>.o $@@ quiet clone
+	@@delete ram:$>.o quiet
+# 	@@NextTime $*.c ram:temp
+#*******************************************************************
+
+crlib:printbitmap: crlib:printbitmap.c
+	sc LINK STRIPDEBUG crlib:printbitmap.c
+
+crlib:inc/bitmaps.h: $(CRLIB_IMAGES) crlib:printbitmap
+	crlib:bat/makebitmaps
+
+crlib:obj/bitmaps.o: crlib:src/bitmaps.c crlib:inc/bitmaps.h
+	sc RESETOPTIONS NOVER NOSTKCHK STRMERGE UNSCHAR ERRORREXX LIBCODE OBJNAME=ram:$>.o \
+		IDIR=Include.h: $*.c
+	@@copy ram:$>.o $@@ quiet clone
+	@@delete ram:$>.o quiet
+
+crlib:obj/crouton.o: crlib:src/crouton.c crlib:libinc/listhelp.h crlib:bat/makefile
+
+crlib:obj/filetypes.o: crlib:src/filetypes.c crlib:inc/bitmaps.h crlib:libinc/croutons.h crlib:bat/makefile
+
+crlib:obj/smartstring.o: crlib:src/smartstring.c crlib:libinc/listhelp.h crlib:bat/makefile
+
+crlib:obj/croutondos.o: crlib:src/croutondos.c crlib:libinc/listhelp.h crlib:bat/makefile
+
+crlib:obj/bufferdos.o: crlib:src/bufferdos.c crlib:libinc/croutondos.h crlib:bat/makefile
+
+crlib:obj/filepaths.o: crlib:src/filepaths.c crlib:bat/makefile
+
+#********************************************
+# for HiSoft assembler, options in assembler.i
+HISOFT = -Icrlib:inc/ -D -L -O
+HIERRS = >crlib:hisoft.errs
+# Not all versions like include stuff above...
+GENIM = GenIm2.lastwork
+
+.a.o:
+	$(GENIM) $(HIERRS) $*.a $(HISOFT)ram:temp
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+#********************************************
+
+
+crlib:obj/misc.o: crlib:src/misc.a crlib:bat/makefile
+
+crlib:obj/CroutonDefs.o: crlib:src/CroutonDefs.a crlib:bat/makefile
+
+crlib:obj/SerialDebug.o: crlib:src/SerialDebug.a
+
+# end of makefile
+@
+
+
+2.39
+log
+@Create map file, make temp files with actual obj name.
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.38 94/10/01 12:38:58 Kell Exp Locker: CACHELIN4000 $
+#* $Log:	makefile,v $
+d130 11
+a140 1
+	crlib:art/ERROR_sm
+d165 1
+a165 1
+	to ram:crouton.library libVersion 4 libRevision 0 smalldata lib lib:sc.lib
+d196 1
+a196 1
+	IDIR=scinc: IDIR=Include.h: IDIR=tinc:	\
+a197 1
+# 	OBJNAME=ram:$>.o  \
+d215 2
+a216 1
+	sc RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX LIBCODE OBJNAME=ram:$>.o IDIR=Include.h: DATA=far $*.c
+@
+
+
+2.38
+log
+@Added SerialDebug module.
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.37 1994/08/29 17:20:13 CACHELIN4000 Exp Kell $
+#* $Log: makefile,v $
+d151 1
+d182 1
+a182 2
+LIBSAS = RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX \
+ 	OBJNAME=ram:temp LIBCODE \
+d185 1
+d190 3
+a192 1
+	sc $(LIBSAS) $*.c
+a193 2
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+d203 3
+a205 3
+	sc RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX LIBCODE OBJNAME=ram:temp IDIR=Include.h: DATA=far $*.c
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+@
+
+
+2.37
+log
+@Add BitMaps.c
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.35 94/08/28 15:49:03 CACHELIN4000 Exp $
+#* $Log:	makefile,v $
+d135 2
+a136 1
+	crlib:obj/BitMaps.o
+d233 2
+@
+
+
+2.36
+log
+@*** empty log message ***
+@
+text
+@d3 60
+a62 2
+#* $Id: makefile,v 2.44 1994/07/07 10:51:10 CACHELIN4000 Exp $
+#*
+d66 5
+a71 76
+OBJS = edit:obj/edit.o \
+	edit:obj/prophelp.o \
+	edit:obj/scrollgrid.o \
+	edit:obj/scrollfast.o \
+	edit:obj/gadgethelp.o \
+	edit:obj/art.o \
+	edit:obj/grazer.o \
+	edit:obj/editwindow.o \
+	edit:obj/grid.o \
+	edit:obj/handlescroll.o \
+	edit:obj/drag.o \
+	edit:obj/draghelp.o \
+	edit:obj/filelist.o \
+	edit:obj/project.o \
+	edit:obj/grazergadgets.o \
+	edit:obj/graphichelp.o \
+	edit:obj/doshelp.o \
+	edit:obj/handlecommon.o \
+	edit:obj/openbm.o \
+	edit:obj/imageinfo.o \
+	edit:obj/gfxsupport.o \
+  edit:obj/oras.o \
+  edit:obj/stdmem.o \
+  edit:obj/ckpt.o \
+  edit:obj/panic.o \
+  edit:obj/popup.o \
+	edit:obj/toastsupport.o \
+  edit:obj/filetypes.o \
+	edit:obj/sequence.o \
+  edit:obj/Controls.o \
+  edit:obj/panel.o
+
+FINEART = vt:exe/toaster/system/Gadget64.pic \
+  vt:exe/toaster/system/Gadget4.pic
+
+
+PROTOS = EDIT:Proto/ToastSupport.p \
+    EDIT:Proto/edit.p \
+    EDIT:Proto/filetypes.p \
+    EDIT:Proto/grazer.p \
+    EDIT:Proto/scrollgrid.p \
+    EDIT:Proto/filelist.p \
+    EDIT:Proto/draghelp.p \
+    EDIT:Proto/graphichelp.p \
+    EDIT:Proto/project.p \
+    EDIT:Proto/gadgethelp.p \
+    EDIT:Proto/editwindow.p \
+    EDIT:Proto/doshelp.p \
+    EDIT:Proto/handlescroll.p \
+    EDIT:Proto/arexxport.p \
+    EDIT:Proto/grazergadgets.p \
+    EDIT:Proto/handlecommon.p \
+    EDIT:Proto/sequence.p \
+    EDIT:Proto/drag.p \
+    EDIT:Proto/prophelp.p \
+    EDIT:Proto/panel.p \
+    EDIT:Proto/customprop.p \
+    EDIT:Proto/Controls.p \
+    EDIT:Proto/grid.p
+
+vt:exe/toaster/edit: edit:exe/edit.big
+	copy edit:exe/edit.big vt:exe/toaster/edit quiet clone
+#  	@@NextTime edit:exe/edit.big vt:exe/toaster/edit
+
+edit:exe/edit: edit:bat/LastUpdateDate $(OBJS) $(FINEART)
+	slink WITH edit:bat/withoutfile
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+edit:exe/edit.big: edit:bat/LastUpdateDate $(OBJS) $(FINEART)
+	slink WITH edit:bat/withfile
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+big: edit:exe/edit.big
+	echo "edit:exe/edit.big done"
+d73 87
+a159 10
+small: edit:exe/edit
+	echo "edit:exe/edit done"
+
+vt:exe/toaster/system/Gadget64.pic: edit:art/Gadget64.pic
+  copy edit:art/Gadget64.pic vt:exe/toaster/system/Gadget64.pic quiet clone
+#  @@NextTime edit:art/Gadget64.pic vt:exe/toaster/system/Gadget64.pic
+
+vt:exe/toaster/system/Gadget4.pic: edit:art/Gadget4.pic
+  copy edit:art/Gadget4.pic vt:exe/toaster/system/Gadget4.pic quiet clone
+#  @@NextTime edit:art/Gadget4.pic vt:exe/toaster/system/Gadget4.pic
+a160 1
+
+d162 1
+a162 1
+ram:NeverExists: vt:exe/toaster/edit
+d168 3
+a170 2
+edit:bat/LastUpdateDate:
+	date >edit:bat/LastUpdateDate
+d172 1
+a172 3
+
+#********************************************
+# Compiling Rules
+d174 6
+a179 9
+# SAS/C 6.0   NOTE: These long options don't work sometimes, so sc uses
+# the options in ENV:sc/scoptions, unless there is an scoptions in your CD... BEWARE
+#SAS = OBJNAME=edit:obj/ ERRORREXX GST=edit:dat/amiga.gst NOSTACKCHECK UNSCHAR STRMERGE DEBUG=S IDIR=include.h: IDIR=scinc: IDIR=edit:inc/ IDIR=edit:proto/ IDIR=edit:dat/ IDIR=crlib:libinc/ IDIR=tinc:
+
+SAS =   RESETOPTIONS NOSTACKCHECK STRMERGE UNSCHAR ERRORREXX \
+	OBJNAME=ram:temp DEBUG=FULLFLUSH DEFINE=RELEASE DEFINE=FINAL_CODE \
+	GST=edit:dat/amiga.gst CODE=FAR\
+	IDIR=Include.h: IDIR=scinc: IDIR=tinc: IDIR=edit:inc/ \
+	IDIR=edit:proto/ IDIR=edit:dat/ IDIR=crlib:libinc/
+d182 8
+a189 6
+	echo "Compiling $*.c"
+	sc $(SAS) OBJNAME=ram:temp $*.c
+#	NextTime $*.c ram:temp
+	copy ram:temp $@@ quiet clone
+	delete ram:temp quiet
+#********************************************
+d191 2
+a192 1
+CROUTONS = crlib:libinc/Croutons.h crlib:pragma/crouton.h
+d194 4
+a197 74
+edit:obj/edit.o: edit:src/edit.c edit:src/ImageInfo.c \
+	edit:inc/editwindow.h edit:inc/grazer.h \
+	edit:inc/gadgets.h edit:inc/prophelp.h $(PROTOS)\
+	edit:inc/project.h edit:inc/filelist.h edit:inc/editswit.h $(CROUTONS)
+
+edit:obj/filetypes.o: edit:src/filetypes.c $(PROTOS) $(CROUTONS)
+
+edit:obj/panel.o: edit:src/panel.c $(PROTOS) edit:inc/panel.h $(CROUTONS)
+	echo "Compiling $*.c"
+	sc $(SAS) CODE=FAR OBJNAME=ram:temp $*.c
+	copy ram:temp $@@ quiet clone
+	delete ram:temp quiet
+
+edit:obj/Controls.o: edit:src/Controls.c $(PROTOS)  edit:inc/panel.h $(CROUTONS)
+
+edit:obj/prophelp.o: edit:src/prophelp.c edit:inc/prophelp.h $(PROTOS)
+
+edit:obj/scrollgrid.o: edit:src/scrollgrid.c $(PROTOS)
+
+edit:obj/gadgethelp.o: edit:src/gadgethelp.c $(PROTOS)
+
+edit:obj/art.o: edit:dat/art.c edit:inc/gadgets.h
+
+edit:obj/handlescroll.o: edit:src/handlescroll.c \
+	edit:inc/editwindow.h edit:inc/gadgets.h $(PROTOS)
+
+edit:obj/grazer.o: edit:src/grazer.c \
+	edit:inc/editwindow.h edit:inc/grazer.h edit:inc/gadgets.h $(CROUTONS) \
+	edit:inc/filelist.h edit:inc/doshelp.h edit:inc/prophelp.h \
+	edit:inc/request.h edit:inc/project.h edit:inc/editswit.h $(PROTOS)
+
+edit:obj/editwindow.o: edit:src/editwindow.c  \
+	edit:inc/editwindow.h edit:inc/gadgets.h edit:inc/prophelp.h \
+	edit:inc/editswit.h $(PROTOS) $(CROUTONS)
+
+edit:obj/grid.o: edit:src/grid.c  \
+	edit:inc/editwindow.h \
+	edit:inc/gadgets.h $(PROTOS) $(CROUTONS)
+
+edit:obj/drag.o: edit:src/drag.c  \
+	edit:inc/editwindow.h $(PROTOS) \
+	edit:inc/gadgets.h edit:inc/draghelp.h edit:inc/project.h $(CROUTONS)
+
+edit:obj/draghelp.o: edit:src/draghelp.c  \
+	edit:inc/draghelp.h $(PROTOS)
+
+edit:obj/filelist.o: edit:src/filelist.c  \
+	edit:inc/filelist.h edit:inc/grazer.h $(PROTOS) $(CROUTONS)
+
+edit:obj/project.o: edit:src/project.c $(PROTOS) \
+	edit:inc/editwindow.h edit:inc/project.h edit:inc/gadgets.h \
+	edit:inc/prophelp.h edit:inc/grazer.h edit:popup/popup.h \
+  edit:inc/editswit.h edit:inc/Tags.h $(CROUTONS)
+
+edit:obj/grazergadgets.o: edit:src/grazergadgets.c  $(PROTOS) \
+	edit:inc/editwindow.h edit:inc/grazer.h edit:inc/gadgets.h \
+	edit:inc/filelist.h edit:inc/doshelp.h edit:inc/request.h \
+	edit:inc/editswit.h
+
+edit:obj/graphichelp.o: edit:src/graphichelp.c edit:inc/request.h \
+	edit:inc/gadgets.h $(PROTOS) $(CROUTONS)
+
+edit:obj/doshelp.o: edit:src/doshelp.c edit:inc/doshelp.h \
+	edit:inc/request.h $(PROTOS)
+
+edit:obj/handlecommon.o: edit:src/handlecommon.c  \
+	edit:inc/editwindow.h edit:inc/gadgets.h edit:inc/project.h edit:inc/grazer.h \
+	edit:inc/filelist.h edit:inc/request.h $(PROTOS)
+
+edit:obj/arexxport.o: edit:src/arexxport.c  \
+	edit:inc/editwindow.h edit:inc/project.h edit:inc/grazer.h \
+	edit:inc/gadgets.h edit:inc/projectrexx.h
+
+edit:obj/imageinfo.o: edit:src/imageinfo.c edit:inc/gadgets.h $(CROUTONS)
+d199 1
+a199 2
+edit:obj/sequence.o: edit:src/sequence.c edit:inc/editwindow.h \
+	edit:inc/project.h edit:inc/gadgets.h	edit:inc/editswit.h $(PROTOS) $(CROUTONS)
+d201 1
+d203 3
+a205 1
+#********************************************
+d207 1
+a207 4
+ORAS_DEP = edit:popup/oras.c \
+	edit:popup/functions.h \
+	edit:popup/ckpt.h
+edit:obj/oras.o: $(ORAS_DEP)
+d209 1
+a209 19
+STDMEM_DEP = edit:popup/stdmem.c \
+	edit:popup/functions.h \
+	edit:popup/ckpt.h
+edit:obj/stdmem.o: $(STDMEM_DEP)
+
+CKPT_DEP = edit:popup/ckpt.c \
+	edit:popup/functions.h \
+	edit:popup/ckpt.h
+edit:obj/ckpt.o: $(CKPT_DEP)
+
+PANIC_DEP = edit:popup/panic.c \
+	edit:popup/functions.h \
+	edit:popup/ckpt.h
+edit:obj/panic.o: $(PANIC_DEP)
+
+POPUP_DEP = edit:popup/popup.c \
+	edit:popup/functions.h \
+	edit:popup/ckpt.h
+edit:obj/popup.o: $(POPUP_DEP)
+d213 3
+a215 2
+HISOFT = -Iedit:inc/ -D -L -O
+HIERRS = >edit:hisoft.errs
+a217 1
+# Assembly rules
+a222 1
+
+a224 5
+edit:obj/scrollfast.o: edit:src/scrollfast.a
+
+edit:obj/customprop.o: edit:src/customprop.a
+
+edit:obj/openbm.o: edit:src/openbm.a
+d226 1
+a226 1
+edit:obj/gfxsupport.o: edit:src/gfxsupport.a crlib:libinc/crouton_lib.i
+d228 1
+a228 1
+edit:obj/toastsupport.o: edit:src/toastsupport.a tinc:instinct.i
+@
+
+
+2.35
+log
+@*** empty log message ***
+@
+text
+@d3 2
+a4 57
+#* $Id: makefile,v 2.34 94/08/28 15:02:21 CACHELIN4000 Exp Locker: CACHELIN4000 $
+#* $Log:	makefile,v $
+# Revision 2.34  94/08/28  15:02:21  CACHELIN4000
+# DATA=FAR
+# 
+# Revision 2.33  94/08/28  14:55:53  CACHELIN4000
+# ERROR image, code=far
+# 
+# Revision 2.32  94/08/08  15:27:15  pfrench
+# Added FilePaths.c to dependencies
+# 
+# Revision 2.31  1994/07/25  18:52:42  Kell
+# Removed un-used line from crouton.library dependency
+#
+# Revision 2.30  94/07/23  14:07:01  CACHELIN4000
+# *** empty log message ***
+# 
+# Revision 2.29  94/07/18  15:35:13  CACHELIN4000
+# *** empty log message ***
+# 
+#
+# Revision 2.27  94/07/06  20:05:14  Kell
+# *** empty log message ***
+#
+# Revision 2.26  94/07/06  12:49:09  Kell
+# *** empty log message ***
+# 
+# Revision 2.25  94/06/23  15:38:39  CACHELIN4000
+# Add large bitmap dependency to bitmaps.h, ==> filetypes.o
+# 
+# Revision 2.24  94/03/14  10:51:49  CACHELIN4000
+# *** empty log message ***
+# 
+# Revision 2.23  94/03/11  13:08:55  CACHELIN4000
+#  Un-did RESETOPTIONS paranoid destruction of working makefile
+#
+# Revision 2.22  94/03/11  12:22:46  Kell
+# *** empty log message ***
+#
+# Revision 2.15  94/03/10  13:53:29  CACHELIN4000
+# Comment out ram:temp dest. for Library; it made wrong internal Lib name
+#
+# Revision 2.14  94/03/10  13:31:42  Kell
+# *** empty log message ***
+#
+# Revision 2.4  94/03/07  07:11:17  Kell
+# *** empty log message ***
+#
+# Revision 2.3  94/03/07  02:36:16  CACHELIN4000
+# Add croutons.h dependency to FileTypes.c
+#
+# Revision 2.1  94/02/18  23:19:31  CACHELIN4000
+# *** empty log message ***
+#
+# Revision 2.0  94/02/18  23:07:46  CACHELIN4000
+# FirstCheckIn
+#
+a7 5
+#* Notes on library directories:
+#* /libinc contains includes for users of the library
+#* /libproto contains prototypes for users of the library
+#*		(/proto used to created library)
+#*
+d9 87
+a96 86
+CRLIB_IMAGES = \
+	crlib:art/AUDIO \
+	crlib:art/AUDIO_sm \
+	crlib:art/CGBOOK \
+	crlib:art/CGBOOK_sm \
+	crlib:art/CONTROL \
+	crlib:art/CONTROL_sm \
+	crlib:art/CRAWL \
+	crlib:art/CRAWL_sm \
+	crlib:art/EPS \
+	crlib:art/EPS_sm \
+	crlib:art/FONT \
+	crlib:art/FONT_sm \
+	crlib:art/FRAMESTORE \
+	crlib:art/FRAMESTORE_sm \
+	crlib:art/FXALGO \
+	crlib:art/FXALGO_sm \
+	crlib:art/FXANIM \
+	crlib:art/FXANIM_sm \
+	crlib:art/FXCR \
+	crlib:art/FXCR_sm \
+	crlib:art/FXILBM \
+	crlib:art/FXILBM_sm \
+	crlib:art/IMAGE \
+	crlib:art/IMAGE_sm \
+	crlib:art/LWENV \
+	crlib:art/LWENV_sm \
+	crlib:art/LWMOT \
+	crlib:art/LWMOT_sm \
+	crlib:art/LWOBJ \
+	crlib:art/LWOBJ_sm \
+	crlib:art/LWSCENE \
+	crlib:art/LWSCENE_sm \
+	crlib:art/LWSURF \
+	crlib:art/LWSURF_sm \
+	crlib:art/PROJECT \
+	crlib:art/PROJECT_sm \
+	crlib:art/REXX \
+	crlib:art/REXX_sm \
+	crlib:art/SCROLL \
+	crlib:art/SCROLL_sm \
+	crlib:art/TEXT \
+	crlib:art/TEXT_sm \
+	crlib:art/UNKNOWN \
+	crlib:art/UNKNOWN_sm \
+	crlib:art/VIDEO \
+	crlib:art/VIDEO_sm\
+	crlib:art/ERROR \
+	crlib:art/ERROR_sm
+
+CRLIB_OBJ = \
+	crlib:obj/crouton.o \
+	crlib:obj/smartstring.o \
+	crlib:obj/croutondos.o \
+	crlib:obj/misc.o \
+	crlib:obj/filetypes.o \
+	crlib:obj/bufferdos.o \
+	crlib:obj/CroutonDefs.o\
+	crlib:obj/FilePaths.o
+
+lib: crlib:exe/crouton.library crlib:pragma/crouton.h \
+	crlib:libinc/crouton_lib.i tinc:crouton_lib.i libs:crouton.library
+
+libs:crouton.library: crlib:exe/crouton.library
+	copy crlib:exe/crouton.library libs: quiet clone
+	avail >nil: FLUSH
+	echo "crouton.library copied to libs:"
+
+crlib:exe/crouton.library: crlib:bat/LastUpdateDate $(CRLIB_OBJ) crlib:fd/crouton.fd
+	slink libfd crlib:fd/crouton.fd from lib:libent.o lib:libinit.o $(CRLIB_OBJ) \
+	to ram:crouton.library libVersion 4 libRevision 0 lib lib:sc.lib
+	@@copy ram:crouton.library $@@ quiet clone
+	@@delete ram:crouton.library quiet
+
+crlib:pragma/crouton.h: crlib:fd/crouton.fd
+	fd2pragma crlib:fd/crouton.fd crlib:pragma/crouton.h
+# 	@@NextTime crlib:fd/crouton.fd crlib:pragma/crouton.h
+
+crlib:libinc/crouton_lib.i: crlib:fd/crouton.fd
+	execute crlib:bat/fd2asm
+# 	@@NextTime crlib:fd/crouton.fd crlib:libinc/crouton_lib.i
+
+tinc:crouton_lib.i: crlib:libinc/crouton_lib.i
+# it will be put into switcher/sinc
+	copy crlib:libinc/crouton_lib.i tinc: quiet clone
+# 	@@NextTime crlib:libinc/crouton_lib.i tinc:crouton_lib.i
+d99 1
+a99 1
+ram:NeverExists: lib
+d105 3
+a107 2
+crlib:bat/LastUpdateDate:
+	date >crlib:bat/LastUpdateDate
+d109 2
+a110 2
+#*******************************************************************
+# Compiling rules.
+d112 9
+a120 6
+LIBSAS = RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX \
+ 	OBJNAME=ram:temp LIBCODE \
+	IDIR=scinc: IDIR=Include.h: IDIR=tinc:	\
+	IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/
+#	DATA=FAR CODE=FAR \
+#	GLOBALSYMBOLTABLE=tsrc:GST/amiga.gst
+d123 73
+a195 5
+	sc $(LIBSAS) $*.c
+# 	@@NextTime $*.c ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+#*******************************************************************
+d197 3
+a199 2
+crlib:inc/bitmaps.h: $(CRLIB_IMAGES)
+	crlib:bat/makebitmaps
+d201 3
+a203 1
+crlib:obj/crouton.o: crlib:src/crouton.c crlib:libinc/listhelp.h crlib:bat/makefile
+d205 1
+a205 1
+crlib:obj/filetypes.o: crlib:src/filetypes.c crlib:inc/bitmaps.h crlib:libinc/croutons.h crlib:bat/makefile
+d207 2
+a208 1
+crlib:obj/smartstring.o: crlib:src/smartstring.c crlib:libinc/listhelp.h crlib:bat/makefile
+a209 1
+crlib:obj/croutondos.o: crlib:src/croutondos.c crlib:libinc/listhelp.h crlib:bat/makefile
+d211 1
+a211 1
+crlib:obj/bufferdos.o: crlib:src/bufferdos.c crlib:libinc/croutondos.h crlib:bat/makefile
+d213 24
+a236 1
+crlib:obj/filepaths.o: crlib:src/filepaths.c crlib:bat/makefile
+d240 2
+a241 3
+HISOFT = -Icrlib:inc/ -D -L -O
+HIERRS = >crlib:hisoft.errs
+# Not all versions like include stuff above...
+d244 1
+d250 1
+d253 5
+d259 1
+a259 1
+crlib:obj/misc.o: crlib:src/misc.a crlib:bat/makefile
+d261 1
+a261 1
+crlib:obj/CroutonDefs.o: crlib:src/CroutonDefs.a crlib:bat/makefile
+@
+
+
+2.34
+log
+@DATA=FAR
+@
+text
+@d3 5
+a7 2
+#* $Id: Makefile,v 2.33 94/08/28 14:55:53 CACHELIN4000 Exp Locker: CACHELIN4000 $
+#* $Log:	Makefile,v $
+d171 1
+a171 1
+ 	OBJNAME=ram:temp DATA=FAR CODE=FAR LIBCODE \
+d174 1
+@
+
+
+2.33
+log
+@ERROR image, code=far
+@
+text
+@d3 1
+a3 1
+#* $Id: Makefile,v 2.32 94/08/08 15:27:15 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d168 1
+a168 1
+ 	OBJNAME=ram:temp CODE=FAR LIBCODE \
+@
+
+
+2.32
+log
+@Added FilePaths.c to dependencies
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.31 1994/07/25 18:52:42 Kell Exp pfrench $
+#* $Log: makefile,v $
+d110 3
+a112 1
+	crlib:art/VIDEO_sm
+d162 1
+a162 1
+# Compiling rules. optimized object, runs only with switcher
+d165 1
+a165 1
+ 	OBJNAME=ram:temp LIBCODE \
+d180 1
+a180 1
+crlib:obj/crouton.o: crlib:src/crouton.c crlib:libinc/listhelp.h
+d182 1
+a182 1
+crlib:obj/filetypes.o: crlib:src/filetypes.c crlib:inc/bitmaps.h crlib:libinc/croutons.h
+d184 3
+a186 3
+crlib:obj/smartstring.o: crlib:src/smartstring.c crlib:libinc/listhelp.h
+
+crlib:obj/croutondos.o: crlib:src/croutondos.c crlib:libinc/listhelp.h
+d188 1
+a188 1
+crlib:obj/bufferdos.o: crlib:src/bufferdos.c crlib:libinc/croutondos.h
+d190 1
+a190 1
+crlib:obj/filepaths.o: crlib:src/filepaths.c
+a198 3
+#* crlib:obj/dosbuffer.o: crlib:src/dosbuffer.a
+#*	$(GENIM) $(HIERRS) crlib:src/dosbuffer.a $(HISOFT)crlib:obj/dosbuffer.o
+
+d207 1
+a207 1
+crlib:obj/misc.o: crlib:src/misc.a
+d209 1
+a209 1
+crlib:obj/CroutonDefs.o: crlib:src/CroutonDefs.a
+@
+
+
+2.31
+log
+@Removed un-used line from crouton.library dependency
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.30 94/07/23 14:07:01 CACHELIN4000 Exp Locker: Kell $
+#* $Log:	makefile,v $
+d116 2
+a117 1
+	crlib:obj/CroutonDefs.o
+d184 2
+@
+
+
+2.30
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.29 94/07/18 15:35:13 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+a125 3
+
+#	to $@@ libVersion 4 libRevision 0 lib lib:sc.lib
+
+@
+
+
+2.29
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.28 94/07/06 20:44:56 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d122 1
+a122 1
+	to ram:crouton.library libVersion 3 libRevision 9 lib lib:sc.lib
+@
+
+
+2.28
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.27 94/07/06 20:05:14 Kell Exp Locker: Kell $
+d5 1
+d8 1
+a8 1
+# 
+d119 1
+a119 1
+	to ram:crouton.library libVersion 4 libRevision 0 lib lib:sc.lib
+@
+
+
+2.27
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.26 94/07/06 12:49:09 Kell Exp Locker: Kell $
+d5 3
+d118 6
+a123 4
+	to $@@ libVersion 4 libRevision 0 lib lib:sc.lib
+#	to ram:temp libVersion 4 libRevision 0 lib lib:sc.lib
+#	@@copy ram:temp $@@ quiet clone
+#	@@delete ram:temp quiet
+a149 1
+#LIBSAS = RESETOPTIONS OBJNAME=ram:temp LIBCODE \
+d151 1
+a151 4
+
+#LIBSAS = RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX \
+
+LIBSAS = RESETOPTIONS NOSTKCHK \
+a154 1
+
+a155 1
+
+@
+
+
+2.26
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.25 94/06/23 15:38:39 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d147 4
+a150 1
+LIBSAS = RESETOPTIONS NOSTKCHK STRMERGE UNSCHAR ERRORREXX \
+@
+
+
+2.25
+log
+@Add large bitmap dependency to bitmaps.h, ==> filetypes.o
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.24 94/03/14 10:51:49 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d143 3
+a145 1
+LIBSAS = OBJNAME=ram:temp LIBCODE \
+d148 2
+@
+
+
+2.24
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.23 94/03/11 13:08:55 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d28 1
+a28 1
+# 
+d42 48
+d104 1
+d118 1
+a118 1
+crlib:libinc/crouton_lib.i: crlib:fd/crouton.fd 
+d121 1
+a121 1
+	
+a142 1
+	
+d144 1
+d151 3
+@
+
+
+2.23
+log
+@ Un-did RESETOPTIONS paranoid destruction of working makefile
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.22 94/03/11 12:22:46 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d10 1
+a10 7
+# 
+# Revision 2.17  94/03/11  11:14:29  Kell
+# *** empty log message ***
+# 
+# Revision 2.16  94/03/10  23:51:58  Kell
+# Added CroutonDefs.a
+# 
+d13 1
+a13 1
+# 
+d16 1
+a16 25
+# 
+# Revision 2.13  94/03/09  20:51:36  Kell
+# *** empty log message ***
+# 
+# Revision 2.11  94/03/09  18:38:37  Kell
+# *** empty log message ***
+# 
+# Revision 2.10  94/03/09  18:01:56  Kell
+# *** empty log message ***
+# 
+# Revision 2.9  94/03/09  17:57:03  Kell
+# *** empty log message ***
+# 
+# Revision 2.8  94/03/09  06:14:04  Kell
+# *** empty log message ***
+# 
+# Revision 2.7  94/03/07  12:13:02  Kell
+# *** empty log message ***
+# 
+# Revision 2.6  94/03/07  09:21:21  Kell
+# *** empty log message ***
+# 
+# Revision 2.5  94/03/07  09:19:15  Kell
+# *** empty log message ***
+# 
+d19 1
+a19 1
+# 
+d22 1
+a22 4
+# 
+# Revision 2.2  94/03/02  13:15:34  CACHELIN4000
+# *** empty log message ***
+# 
+@
+
+
+2.22
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.17 94/03/11 11:14:29 Kell Exp Locker: Kell $
+d5 3
+d117 2
+a118 1
+LIBSAS = RESETOPTIONS OBJNAME=ram:temp LIBCODE \
+@
+
+
+2.21
+log
+@*** empty log message ***
+@
+text
+@d115 1
+a115 1
+	IDIR=Include.h: IDIR=scinc: IDIR=tinc:	\
+@
+
+
+2.20
+log
+@*** empty log message ***
+@
+text
+@d115 3
+a117 2
+	IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/ \
+	IDIR=tinc:
+@
+
+
+2.19
+log
+@*** empty log message ***
+@
+text
+@d116 1
+a116 1
+	IDIR=scinc: IDIR=tinc:
+@
+
+
+2.18
+log
+@*** empty log message ***
+@
+text
+@d116 1
+a116 1
+	IDIR=Include.h: IDIR=scinc: IDIR=tinc:
+@
+
+
+2.17
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.16 94/03/10 23:51:58 Kell Exp Locker: Kell $
+d5 3
+d115 3
+a117 1
+	IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/
+@
+
+
+2.16
+log
+@Added CroutonDefs.a
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.15 94/03/10 13:53:29 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d111 2
+a112 1
+LIBSAS = OBJNAME=ram:temp LIBCODE IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/
+@
+
+
+2.15
+log
+@Comment out ram:temp dest. for Library; it made wrong internal Lib name
+@
+text
+@d3 5
+a7 2
+#* $Id: Makefile,v 2.14 94/03/10 13:31:42 Kell Exp Locker: CACHELIN4000 $
+#* $Log:	Makefile,v $
+d66 2
+a67 1
+	crlib:obj/bufferdos.o
+d136 2
+a137 2
+crlib:obj/misc.o: crlib:src/misc.a
+	$(GENIM) $(HIERRS) crlib:src/misc.a $(HISOFT)ram:temp
+d141 6
+@
+
+
+2.14
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.13 94/03/09 20:51:36 Kell Exp Locker: Kell $
+#* $Log:	makefile,v $
+d74 4
+a77 3
+	to ram:temp libVersion 4 libRevision 0 lib lib:sc.lib
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+@
+
+
+2.13
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.11 94/03/09 18:38:37 Kell Exp Locker: Kell $
+d5 3
+@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@d74 1
+a74 1
+ 	@@NextTime crlib:fd/crouton.fd crlib:pragma/crouton.h
+d78 1
+a78 1
+ 	@@NextTime crlib:fd/crouton.fd crlib:libinc/crouton_lib.i
+d83 1
+a83 1
+ 	@@NextTime crlib:libinc/crouton_lib.i tinc:crouton_lib.i
+d127 1
+a127 1
+	@@NextTime $*.a ram:temp
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.10 94/03/09 18:01:56 Kell Exp Locker: Kell $
+d5 3
+d86 1
+a86 1
+ram:NeverExists: crlib:exe/crouton.library
+d100 1
+a100 1
+ 	@@NextTime $*.c ram:temp
+@
+
+
+2.10
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.9 94/03/09 17:57:03 Kell Exp Locker: Kell $
+d5 3
+d66 2
+a67 2
+	copy ram:temp $@@ quiet clone
+	delete ram:temp quiet
+d71 1
+d75 1
+d80 1
+d91 1
+d93 8
+a100 2
+
+LIBSAS = OBJNAME=crlib:obj/ LIBCODE IDIR=crlib:inc/ IDIR=crlib:proto/ IDIR=crlib:libinc/
+a102 1
+	sc $(LIBSAS) crlib:src/crouton.c
+a104 1
+	sc $(LIBSAS) crlib:src/filetypes.c
+a106 1
+	sc $(LIBSAS) crlib:src/smartstring.c
+a108 1
+	sc $(LIBSAS) crlib:src/croutondos.c
+a110 1
+	sc $(LIBSAS) crlib:src/bufferdos.c
+d124 3
+a126 3
+	NextTime $*.a ram:temp
+	copy ram:temp $@@ quiet clone
+	delete ram:temp quiet
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.8 94/03/09 06:14:04 Kell Exp Locker: Kell $
+d5 3
+d84 1
+a84 1
+	echo >crlib:bat/LastUpdateDate
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.7 94/03/07 12:13:02 Kell Exp Locker: Kell $
+d5 3
+d41 1
+d57 1
+a57 1
+crlib:exe/crouton.library: $(CRLIB_OBJ) crlib:fd/crouton.fd
+d59 3
+a61 1
+	to crlib:exe/crouton.library libVersion 4 libRevision 0 lib lib:sc.lib
+d77 7
+d112 4
+a115 1
+	$(GENIM) $(HIERRS) crlib:src/misc.a $(HISOFT)crlib:obj/misc.o
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+#* $Id: MakeFile,v 2.6 94/03/07 09:21:21 Kell Exp Locker: Kell $
+#* $Log:	MakeFile,v $
+d50 1
+a50 1
+	copy crlib:exe/crouton.library libs: clone
+d61 1
+a61 3
+	cd crlib:fd
+	fd2asm >crlib:libinc/crouton_lib.i crouton.fd
+	cd crlib:src
+d65 1
+a65 1
+	copy crlib:libinc/crouton_lib.i tinc: clone
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+#* $Id: makefile,v 2.5 94/03/07 09:19:15 Kell Exp Locker: Kell $
+#* $Log:	makefile,v $
+d44 1
+a44 1
+	crlib:libinc/crouton_lib.i tinc:crouton_lib.i
+d46 3
+a48 2
+	copy crlib:exe/crouton.library libs:
+	echo "crouton.library made and copied to libs:"
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.4 94/03/07 07:11:17 Kell Exp Locker: Kell $
+d5 3
+a59 2
+	assign >ram:Assign_Output
+	type ram:Assign_Output
+a60 1
+	cd crlib:src
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+#* $Id: makefile,v 2.3 94/03/07 02:36:16 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d37 3
+a39 1
+lib: crlib:exe/crouton.library crlib:pragma/crouton.h crlib:libinc/crouton_lib.i
+d50 1
+a50 1
+crlib:libinc/crouton_lib.i: crlib:fd/crouton.fd
+d53 7
+@
+
+
+2.3
+log
+@Add croutons.h dependency to FileTypes.c
+@
+text
+@Binary files makefile and t:,RCSt1A70c0238 differ
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@Binary files Makefile and t:,RCSt1A70e7ef8 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70ca0b0 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files makefile and t:,RCSt1A70f11d0 differ
+@

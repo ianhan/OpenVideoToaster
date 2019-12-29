@@ -1,0 +1,1052 @@
+3c3
+< ;;	RTS
+---
+>  ;;; RTS
+14c14
+<  xdef SetPointerPick		;"real" pickpointer, when picking active,msertns.o
+---
+>  xdef SetPointerPick	;"real" pickpointer, when picking active,msertns.o
+27,28d26
+< 
+< 	include "ram:mod.i"
+30,32c28,30
+< ;;	include "lotsa-includes.i"	;needed for screens.i
+< ;;	include "screens.i"		;sc_ViewPort
+< ;;	include "windows.i"
+---
+> 	include "lotsa-includes.i"	;needed for screens.i
+> 	include "screens.i"		;sc_ViewPort
+> 	include "windows.i"
+35,45d32
+< 
+< 	include	"intuition/intuition.i"
+< 	include	"intuition/pointerclass.i"
+< 	include	"lib/intuition_lib.i"
+< 	include	"lib/graphics_lib.i"
+< 	include	"ps:layout.i"
+< 	include	"ps:serialdebug.i"
+< 
+< 
+< 
+< 	xref FlagAlphapaint_
+84,85c71
+< 	xref FlagCopyColor_
+< 	xref CurrentFrameNbr_
+---
+> 
+91,106c77
+< 	xref	Paint8red_
+< 	xref	Paint8green_
+< 	xref	Paint8blue_
+< 
+< 
+< ;SERDEBUG	equ	1
+< ;X10		equ	1
+< ;X11		equ	1
+< ;X12		equ	1
+< ;X13		equ	1
+< ;X14		equ	1
+< ;X15		equ	1
+< ;X16		equ	1
+< 
+< 
+< 	xdef SupCusPtr					;setup custom pointer//brush imagery
+---
+> 	xdef SupCusPtr		;setup custom pointer//brush imagery
+111c82
+< *	beq.s	eaSupCus
+---
+> 	beq.s	eaSupCus
+113,115c84,86
+< 	moveq	#1,D0					;DEPTH 1 for rastport, treat as"2" for sprite
+< 	moveq	#32,d1					;wt of 32 (longword) for bit
+< 	moveq	#32,d2					;ht
+---
+> 	moveq	#1,D0		;DEPTH 1 for rastport, treat as"2" for sprite
+> 	moveq	#32,d1		;wt of 32 (longword) for bit
+> 	moveq	#32,d2		;ht
+121d91
+< 	
+126c96
+< ;inita_rport:						;CALL WITH a1=bitmap, A0=rastport
+---
+> ;inita_rport:		;CALL WITH a1=bitmap, A0=rastport
+128,129c98,99
+< 	move.l	A0,a1					;a1 is args for next syscall
+< 	CALLIB Graphics,InitRastPort			;sets fgpen=1, bg=0, aol=1
+---
+> 	move.l	A0,a1			;a1 is args for next syscall
+> 	CALLIB Graphics,InitRastPort	;sets fgpen=1, bg=0, aol=1
+132c102
+< 	move.l	a0,a1					;rastport arg
+---
+> 	move.l	a0,a1	;rastport arg
+137c107
+< 	move.l	a1,rp_BitMap(A0)			;shove A1=bitmap into A0 rastport struct
+---
+> 	move.l	a1,rp_BitMap(A0)	;shove A1=bitmap into A0 rastport struct
+141,142d110
+< eaSupCus:
+< 	rts						;SupCusPtr
+144c112,117
+< 
+---
+> 	;april25..tried but no effect?
+> 	;xref FillTmpRas_	;glommed from text/fill bup scratch.o ref'
+> 	;lea	FillTmpRas_(BP),a1	;a1=tmpras
+> 	;move.l	a1,rp_TmpRas(A0)	;RASTPORT graphics paradigm sometimes weak
+> eaSupCus:
+> 	rts			;SupCusPtr
+147d119
+< ;;	DUMPMSG <SetPointerMagnify>
+165d136
+< ;;	DUMPMSG <SetCutCrossHair>
+179d149
+< ;;	DUMPMSG	<SetPointerCut>
+217d186
+< ;;	DUMPMSG <InvisiblePointer>
+229d197
+< ;;	DUMPMSG <ClearPointer>
+234c202
+< 	bsr	set_crosshair	;sets it on window in A0
+---
+> 	bsr.s	set_crosshair	;sets it on window in A0
+253,256c221,223
+< ;;	tst.l	wd_Pointer(a0)
+< ;;	beq.s	9$
+< ;;	JMPLIB	Intuition,ClearPointer
+< 	bsr	NewClearPointer
+---
+> 	tst.l	wd_Pointer(a0)
+> 	beq.s	9$
+> 	JMPLIB	Intuition,ClearPointer
+260c227,228
+< ;;	DUMPMSG <FixPointer>
+---
+>   KLUDGEOUT
+> 
+265a234,235
+> 	bne.s	end_fixp		;no 'fix' needed
+> 
+271d240
+< 
+275a245
+> 
+297,298c267
+< ;;  KLUDGEOUT
+< ;;	DUMPMSG	<SetPointerPickWhat>
+---
+>   KLUDGEOUT
+319d287
+< ;;	DUMPMSG <SetPointerPick>
+341d308
+< ;;	DUMPMSG <HiresColorsOnly>
+381,383d347
+< 	move.l	TScreenPtr_(BP),a0
+< 	bsr	Isl_LoadRGB	;use same palette for palette screen
+< 
+492,494d455
+< 
+< ;;	move.w	#$fff,(a1)	; test only
+< 
+525,527d485
+< 	move.l	TScreenPtr_(BP),a0
+< 	bsr	Isl_LoadRGB	;use same palette for palette screen
+< 
+552,553d509
+< 	tst.b	FlagAlphapaint_(BP)		;if in alpha mode don't change colors
+< 	bne	100$
+555d510
+< 100$
+558,559d512
+< 	move.l	a0,-(sp)
+< 	moveq	#20,d0	;number of entries, ensure we get 'sprite white' too
+561,562c514
+< 	tst.b	FlagAlphapaint_(BP)		;if in alpha mode don't change colors
+< 	bne	101$
+---
+> 	moveq	#20,d0	;number of entries, ensure we get 'sprite white' too
+564,574d515
+< 101$
+< 	move.l	(sp)+,a0	;viewport
+< 	lea	CTab,a1
+< 	move.b	Paint8red_+1(a5),cent
+< 	move.b	Paint8green_+1(a5),cent+4
+< 	move.b	Paint8blue_+1(a5),cent+8
+< 
+< 	tst.b	FlagAlphapaint_(BP)		;if in alpha mode don't change colors
+< 	bne	102$
+< 	CALLIB	SAME,LoadRGB32
+< 102$
+578,585d518
+< CTab	dc.w	1	;number of colors
+< 	dc.w	17	;start at color 0
+< 
+< cent	dc.l	$ff000000,0,0
+< 
+< 	dc.l	0
+< 
+< 
+587,592c520,524
+< ;;	RTS				;KOUT
+< ;;	DUMPMSG <GrayPointer>
+< 	move.w	#$0777,d0			;make pointer be gray #7 (12)
+< 	lea	HiresColorTable_(BP),a1		;'global' usage, hires scr
+< 	move.w 	d0,(17*2)(a1)			;force new color into #17,whichisthe18th
+< 	move.w	d0,(19*2)(a1)			;#$0fff,(19*2)(a1);bright white sprite?
+---
+> 	move.w	#$0777,d0	;make pointer be gray #7 (12)
+> 	lea	HiresColorTable_(BP),a1	;'global' usage, hires scr
+> 	move.w 	d0,(17*2)(a1)	;force new color into #17,whichisthe18th
+> 	move.w	d0,(19*2)(a1)	;#$0fff,(19*2)(a1);bright white sprite?
+> 
+594,595c526,527
+< 	bsr.s	Isl_LoadRGB			;preserves a1=colortable ptr
+< 	move.l	SkScreenPtr_(BP),d0		;MiniScreen for digits?
+---
+> 	bsr.s	Isl_LoadRGB		;preserves a1=colortable ptr
+> 	move.l	SkScreenPtr_(BP),d0	;MiniScreen for digits?
+601c533,534
+< 	st	FlagGrayPointer_(BP)		;usecolormap only does hires gray loadrgb4
+---
+> 	st	FlagGrayPointer_(BP) ;usecolormap only does hires gray loadrgb4
+> 
+605,609c538,542
+< ;;	DUMPMSG <SetPointerTo>
+< 	moveq	#6+9-6,d0			;height 
+< 	moveq	#16,d1				;width
+< 	moveq	#-1,d2				;xoffset//hotspot
+< 	moveq	#-3,d3				;yoffset
+---
+>   KLUDGEOUT
+> 	moveq	#6+9-6,d0	;height 
+> 	moveq	#16,d1	;width
+> 	moveq	#-1,d2	;xoffset//hotspot
+> 	moveq	#-3,d3	;yoffset
+613c546
+< 	move.l	GWindowPtr_(BP),a0		;regular/text gadgets
+---
+> 	move.l	GWindowPtr_(BP),a0	;regular/text gadgets
+616c549
+< 	move.l	ToolWindowPtr_(BP),a0		;ham toolbox
+---
+> 	move.l	ToolWindowPtr_(BP),a0	;ham toolbox
+621d553
+< 
+623c555
+< 	cmp.l	#0,a0				;window not opened?
+---
+> 	cmp.l	#0,a0		;window not opened?
+625c557,559
+< 	lea	CusPtr_Pointer,a2		;'std brush'
+---
+> 
+> 		;MAY10'89
+> 	lea	CusPtr_Pointer,a2	;'std brush'
+627a562
+> 
+629c564
+< 	beq.s	anrts				;pointer already set to this one
+---
+> 	beq.s	anrts		;pointer already set to this one
+631,634c566
+< 	xref	CurrentPointer_
+< 	move.l	a1,CurrentPointer_(BP)
+< ;;	JMPLIB	Intuition,SetPointer
+< 	jsr	NewSetPointer
+---
+> 	JMPLIB	Intuition,SetPointer
+643,649d574
+< skipifptr:	macro
+< 	cmp.l	#\1,d0
+< 	beq	anrts
+< 	endm
+< 
+< 
+< 
+651,653c576
+< ;	DUMPMSG <AproPointer>
+< 	tst.b	FlagCopyColor_(BP)
+< 	bne	enda_apro
+---
+>   KLUDGEOUT
+658c581
+< 	;move.l	ToolWindowPtr_(BP),a0			;elim 'wait' for hamtools APRIL13
+---
+> 	;move.l	ToolWindowPtr_(BP),a0	;elim 'wait' for hamtools APRIL13
+666c589,591
+< 	bne	HiresPtrHires				;yep, set pointer for 'hires'
+---
+> 	bne	HiresPtrHires		;yep, set pointer for 'hires'
+> 
+> 	suba.l	a1,a1	;a1=0//null for apro'
+668c593,595
+< 	suba.l	a1,a1					;a1=0//null for apro'
+---
+> 	move.l	GWindowPtr_(BP),d0	;hires window
+> 	beq.s	anrts			;enda_apro, no hires window
+> 	move.l	wd_Pointer(a1,d0.L),d0	;a1=null, d0=hiresmouseptr
+670,672c597,600
+< 	move.l	GWindowPtr_(BP),d0			;hires window
+< 	beq.s	anrts					;enda_apro, no hires window
+< 	move.l	wd_Pointer(a1,d0.L),d0			;a1=null, d0=hiresmouseptr
+---
+> skipifptr:	macro
+> 	cmp.l	#\1,d0
+> 	beq.s	anrts
+> 	endm
+674c602
+< 	skipifptr PointerTo_data			;dont change ptr if any of these
+---
+> 	skipifptr PointerTo_data	;dont change ptr if any of these
+685c613
+< 	xref FlagNeedRepaint_				;may02..
+---
+> 	xref FlagNeedRepaint_		;may02..
+687c615
+< 	beq.s	19$					;e12$;ClearPointer;.s	killpickptr
+---
+> 	beq.s	19$	;e	12$	;ClearPointer		;.s	killpickptr
+689,690c617,618
+< 	xref FlagSetGrid_				;DigiPaint PI
+< 	tst.b	FlagSetGrid_(BP)			;DigiPaint PI
+---
+> 	xref FlagSetGrid_		;DigiPaint PI
+> 	tst.b	FlagSetGrid_(BP)	;DigiPaint PI
+693c621
+< 	tst.l	PasteBitMap_Planes_(BP)			;really have a brush?
+---
+> 	tst.l	PasteBitMap_Planes_(BP)	;really have a brush?
+696c624,625
+< 	skipifptr PointerPickWhat_data			;MAY02 note: *this* causes problems?
+---
+> 	skipifptr PointerPickWhat_data	;MAY02 note: *this* causes problems?
+> ;;killpickptr:				;may02
+698,701c627,630
+< 	move.l	FirstScreen_(BP),d1 			;ib_FirstScreen(a6),d1	;D1, watch, SCREENnptr in d-reg
+< 	beq.s	okok					;wha? no intu->1stscr?
+< 
+< 	cmp.l	XTScreenPtr_(BP),d1			;hires screen
+---
+> 	;no need;move.l	IntuitionLibrary_(BP),a6 ;check out 'front screens'
+> 	move.l	FirstScreen_(BP),d1 ;ib_FirstScreen(a6),d1	;D1, watch, SCREENnptr in d-reg
+> 	beq.s	okok			;wha? no intu->1stscr?
+> 	cmp.l	XTScreenPtr_(BP),d1	;hires screen
+703,704c632
+< 
+< 	cmp.l	TScreenPtr_(BP),d1			;hamtool screen
+---
+> 	cmp.l	TScreenPtr_(BP),d1	;hamtool screen
+705a634,637
+> 	cmp.l	ScreenPtr_(BP),d1	;bigpic screen in front
+> 	beq.s	HiresPtrHires		;mouseimage for 'bigpicture'
+> 	cmp.l	MScreenPtr_(BP),d1	;magnify screen
+> 	beq.s	HiresPtrHires		;mouseimage for 'bigpicture' on magnify
+707,713c639,640
+< 	cmp.l	ScreenPtr_(BP),d1			;bigpic screen in front
+< 	beq	HiresPtrHires				;mouseimage for 'bigpicture'
+< 
+< 	cmp.l	MScreenPtr_(BP),d1			;magnify screen
+< 	beq	HiresPtrHires				;mouseimage for 'bigpicture' on magnify
+< 
+< 	tst.w	sc_MouseY(a1,d1.L)			;d1=ib_FirstScreen, a1=0=null
+---
+> 	tst.w	sc_MouseY(a1,d1.L)	;d1=ib_FirstScreen, a1=0=null
+> 	;june291990;bmi.s	okok			;"above" front screen
+715d641
+< 
+718d643
+< 
+721d645
+< 
+724,725c648
+< 
+< 	bra.s	okok					;on some other window
+---
+> 	bra.s	okok		;on some other window
+729c652
+< 	beq	anrts					;enda_apro
+---
+> 	beq	anrts			;enda_apro
+736c659
+< 	beq.s	trymain					;no magnify scr
+---
+> 	beq.s	trymain			;no magnify scr
+738c661
+< 	bpl	HiresPtrHires				;mouseimage for 'bigpicture'
+---
+> 	bpl.s	HiresPtrHires		;mouseimage for 'bigpicture'
+740,741c663,664
+< 	move.l	XTScreenPtr_(BP),d0			;hires tools/menu
+< 	beq.s	tryhtool				;no scr?
+---
+> 	move.l	XTScreenPtr_(BP),d0	;hires tools/menu
+> 	beq.s	tryhtool		;no scr?
+743c666
+< 	bpl	HiresPtrHires
+---
+> 	bpl.s	HiresPtrHires
+745,746c668,669
+< 	move.l	TScreenPtr_(BP),d0			;ham tools
+< 	beq.s	trybig					;no scr?
+---
+> 	move.l	TScreenPtr_(BP),d0	;ham tools
+> 	beq.s	trybig			;no scr?
+750,752c673,675
+< 	tst.l	ScreenPtr_(BP)				;bigpic
+< 	beq.s	HiresPtrHires				;no big screen, use hires ptr
+< 	bra.s	HiresPtrHires				;mouseimage for 'bigpicture'
+---
+> 	tst.l	ScreenPtr_(BP)		;bigpic
+> 	beq.s	HiresPtrHires		;no big screen, use hires ptr
+> 	bra.s	HiresPtrHires		;mouseimage for 'bigpicture'
+754,755c677
+< 	rts		
+< 
+---
+> 	rts
+758d679
+< ;	DUMPMSG	<HAMTOOL>
+765c686
+< 	move.l	GWindowPtr_(BP),a0 			;regular/text gadgets
+---
+> 	move.l	GWindowPtr_(BP),a0 	;regular/text gadgets
+769,770c690,691
+< ResetPointer:						;make pointer be "whatever it's supposed to be"
+< ;	DUMPMSG <ResetPointer>
+---
+> ResetPointer:	;make pointer be "whatever it's supposed to be"
+>   KLUDGEOUT
+774,775c695,697
+< HiresPtrHires:						;may04'89...ensure hamtool pointer is 'cleared'
+< ;	DUMPMSG	<HiresPtrHires>
+---
+> HiresPtrHires:
+>   KLUDGEOUT
+> 		;may04'89...ensure hamtool pointer is 'cleared'
+778a701
+> 
+781d703
+< 
+784d705
+< 
+789c710
+< 	tst.b	FlagSetGrid_(BP)			;DigiPaint PI
+---
+> 	tst.b	FlagSetGrid_(BP)	;DigiPaint PI
+791d711
+< 
+795c715
+< 	move.l	GWindowPtr_(BP),d0 			;regular/text gadgets
+---
+> 	move.l	GWindowPtr_(BP),d0 	;regular/text gadgets
+798,799c718
+< 
+< 	tst.b	FlagMenu_(BP)				;menu displayed/verified?
+---
+> 	tst.b	FlagMenu_(BP)		;menu displayed/verified?
+801d719
+< 
+804,806c722,723
+< 
+< 	tst.W	FlagOpen_(BP)				;open.b, save.b
+< 	bne	intu_clrptr				;clear if requester
+---
+> 	tst.W	FlagOpen_(BP)	;open.b, save.b
+> 	bne	intu_clrptr	;clear if requester
+808c725
+< 	tst.b	FlagSetGrid_(BP)			;DigiPaint PI
+---
+> 	tst.b	FlagSetGrid_(BP)	;DigiPaint PI
+813,814c730
+< 
+< 	tst.l	PasteBitMap_Planes_(BP)			;carrying a brush?
+---
+> 	tst.l	PasteBitMap_Planes_(BP)	;carrying a brush?
+816a733,734
+> 	;tst.b	FlagMenu_(BP)
+> 	;bne	intu_clrptr	;clear if menu displayed
+818,820c736,739
+< 	move.l	FirstScreen_(BP),d1 			;ib_FirstScreen(a6),d1	;D1, watch, SCREENnptr in d-reg
+< 	cmp.l	ScreenPtr_(BP),d1			;bigpic in front?
+< 	beq	set_cusptr				;sets 'custom' on window in A0
+---
+> 	;no need;move.l	IntuitionLibrary_(BP),a6 ;check out 'front screens'
+> 	move.l	FirstScreen_(BP),d1 ;ib_FirstScreen(a6),d1	;D1, watch, SCREENnptr in d-reg
+> 	cmp.l	ScreenPtr_(BP),d1	;bigpic in front?
+> 	beq	set_cusptr		;sets 'custom' on window in A0
+823,834c742,745
+< 	bmi	EB_set_cusptr				;"above" hires, set custom brush
+< ;AUG051990;cmp.w	#15+1,d1
+< ;;	cmp.w	#(15+1)*2,d1
+< ;;	bcc	EB_intu_clrptr				;"below" 1st line of tools on hires
+< 
+< 
+< 	tst.b	CurrentFrameNbr_(BP)
+< 	bne	intu_clrptr
+< 
+< 
+< 	cmp.w	#BC_miny,d1
+< 	ble	intu_clrptr
+---
+> 	bmi	EB_set_cusptr	;"above" hires, set custom brush
+> 	;AUG051990;cmp.w	#15+1,d1
+> 	cmp.w	#(15+1)*2,d1
+> 	bcc	EB_intu_clrptr	;"below" 1st line of tools on hires
+836,838d746
+< 	cmp.w	#BC_maxy,d1
+< 	bgt	intu_clrptr
+< 
+840,841c748
+< 	bne	intu_clrptr				;clear if slider tools
+< 
+---
+> 	bne	intu_clrptr	;clear if slider tools
+843,844c750
+< 	bne	intu_clrptr				;clear if text tools
+< 
+---
+> 	bne	intu_clrptr	;clear if text tools
+846c752
+< 	bne	intu_clrptr				;clear if palette tools
+---
+> 	bne	intu_clrptr	;clear if palette tools
+849,855c755,764
+< 
+< 	cmp.w	#BC_minx,d0
+< 	ble	intu_clrptr
+< 
+< 	cmp.w	#BC_maxx,d0
+< 	bgt	intu_clrptr
+< 	bra	EB_set_cusptr
+---
+> 	;SEP101990;cmp.w	#332-1,d0
+> 	;SEP101990;bcs	EB_intu_clrptr	;"left" of brush size/shape tools
+> 	;SEP101990;cmp.w	#416,d0
+> 	;SEP101990;bcc	EB_set_cusptr	;"right of" hires, set custom brush
+> 
+> 	;SEP101990;
+> 	cmp.w	#352,d0
+> 	bcs	EB_intu_clrptr	;"left" of brush size/shape tools
+> 	bra	EB_set_cusptr	;"right of" hires, set custom brush
+> 		;note:"Dead" code after here...SEP101990
+857c766,777
+< 
+---
+> 		;redo "pointer over brush gadgets"
+>   IFC 't','f' ;june291990
+> 	tst.W	FlagOpen_(BP)	;open.b, save.b, load/save requester alive?
+> 	bne.s	filereq_open
+> 	tst.b	FlagGadgetDown_(BP)	;set/clrd by main.msg
+> 	beq	set_cusptr	;standard brush (if any)
+> 	;MAY90;movem.l	d0/a0,-(sp)
+> 	;MAY90;xjsr	ClearBrushImagery
+> 	;MAY90;xjsr	GraphicsWaitBlit
+> 	;MAY90;movem.l	(sp)+,d0/a0
+> filereq_open:
+>   ENDC ;june291990
+862,863c782,783
+< 	moveq	#6,d1					;brush rtn #6 is single dot
+< 	bra.s	cbn2\@					;type '0' (dotb) forces size, too
+---
+> 	moveq	#6,d1			;brush rtn #6 is single dot
+> 	bra.s	cbn2\@			;type '0' (dotb) forces size, too
+865,866c785,786
+< 	add.w	BrushSize_(BP),d1			;0..6
+< cbn2\@	move.w	d1,BrushNumber_(BP)			;0..41
+---
+> 	add.w	BrushSize_(BP),d1	;0..6
+> cbn2\@	move.w	d1,BrushNumber_(BP)	;0..41
+873c793
+< 	movem.w	d2/d3/d4,-(sp)				;save curt brush info
+---
+> 	movem.w	d2/d3/d4,-(sp)	;save curt brush info
+878c798
+< ifleftof:	macro 					;hiresedge,number,size/type
+---
+> ifleftof:	macro ;hiresedge,number,size/type
+881c801
+< 	move.w	#\2,Brush\3_(BP)			;BrushSize_ or BrushType_
+---
+> 	move.w	#\2,Brush\3_(BP)	;BrushSize_ or BrushType_
+887c807
+< 	ifleftof 332+12,0,Size				;LARGEST
+---
+> 	ifleftof 332+12,0,Size	;LARGEST
+893c813
+< 	ifleftof 404+12,6,Size				;SMALLEST
+---
+> 	ifleftof 404+12,6,Size	;SMALLEST
+901c821
+< 							;ifleftof 610+30,6,Type	;macro "saved" from expansion
+---
+> 	;ifleftof 610+30,6,Type	;macro "saved" from expansion
+909,910c829,832
+< 	;MAY90;xjsr	BGadDisplay			;redo pointer imagery (CUSTOMIZE HERE)
+< 	xjsr	BGadDisplay				;redo pointer imagery (CUSTOMIZE HERE) june291990
+---
+> 	;MAY90;xjsr	BGadDisplay	;redo pointer imagery (CUSTOMIZE HERE)
+> 	xjsr	BGadDisplay	;redo pointer imagery (CUSTOMIZE HERE) june291990
+> 
+> 	move.w	BrushNumber_(BP),DispBrushNumber_(BP) ;displayed brush #
+912c834
+< 	move.w	BrushNumber_(BP),DispBrushNumber_(BP) 	;displayed brush #
+---
+> 	movem.w	(sp)+,d2/d3/d4	;restore current brush info
+914c836
+< 	movem.w	(sp)+,d2/d3/d4				;restore current brush info
+---
+> 	move.l	(sp)+,a0
+916c838
+< 	move.l	(sp)+,a0				;force pointer, re-call intuition
+---
+> 		;force pointer, re-call intuition
+919c841
+< 	cmp.w	#6,d0					;single dot?
+---
+> 	cmp.w	#6,d0			;single dot?
+921c843
+< 	lea	GenericCrossHair_Pointer,a1		;single dot gets 'crosshair'
+---
+> 	lea	GenericCrossHair_Pointer,a1	;single dot gets 'crosshair'
+936c858
+< EB_set_cusptr:						;end brush sizer? may01
+---
+> EB_set_cusptr:				;end brush sizer? may01
+938c860
+< 	tst.b	FlagGadgetDown_(BP)			;set/clrd by main.msg
+---
+> 	tst.b	FlagGadgetDown_(BP)	;set/clrd by main.msg
+940,942c862,864
+< 	sf	FlagGadgetDown_(BP)			;set/clrd by main.msg
+< 	st	FlagNeedGadRef_(BP)			;clearzout/resets brush size imagery
+<  ENDC	
+---
+> 	sf	FlagGadgetDown_(BP)	;set/clrd by main.msg
+> 	st	FlagNeedGadRef_(BP)	;clearzout/resets brush size imagery
+>  ENDC
+945,946c867
+< ;;	DUMPREG	<BrushNumber - D0>
+< 	cmp.w	#6,d0					;single dot?
+---
+> 	cmp.w	#6,d0			;single dot?
+948c869
+< 	lea	GenericCrossHair_Pointer,a1		;single dot gets 'crosshair'
+---
+> 	lea	GenericCrossHair_Pointer,a1	;single dot gets 'crosshair'
+958,959c879,880
+< 	moveq	#-4+1-4,d2				;xoffset//hotspot
+< 	moveq	#-6-4,d3				;yoffset
+---
+> 	moveq	#-4+1-4,d2	;xoffset//hotspot
+> 	moveq	#-6-4,d3	;yoffset
+960a882
+> 
+962a885
+> 
+966,967c889
+< 
+< EndOf_AltPtr:						;SEP081990....
+---
+> EndOf_AltPtr:		;SEP081990....
+969,972c891,894
+< 	xref	FlagRepainting_				;SEP111990
+< 	xref	FlagNeedRepaint_			;SEP121990
+< 	xref	FlagOpen_				;SEP121990
+< 	tst.l	MsgPtr_(BP)				;already HAVE a msg?
+---
+> 	xref	FlagRepainting_		;SEP111990
+> 	xref	FlagNeedRepaint_	;SEP121990
+> 	xref	FlagOpen_		;SEP121990
+> 	tst.l	MsgPtr_(BP)	;already HAVE a msg?
+974,981c896,903
+< 	xjsr	ScrollAndCheckCancel			;canceler.asm, dumps moves...SEP121990
+< 	bne.s	9$					;no right mouse button "off" - wanna cancel
+< 	tst.b	FlagRepainting_(BP)			;SEP111990
+< 	bne.s	9$					;don't turn off "right button cancel" if repainting...
+< 	tst.b	FlagNeedRepaint_(BP)			;SEP121990
+< 	bne.s	9$					;also not if need repaint
+< 	;tst.W	FlagOpen_(BP)				;loading or saving?	;SEP121990
+< 	tst.b	FlagOpen_(BP)				;file loading?	;SEP121990
+---
+> 	xjsr	ScrollAndCheckCancel	;canceler.asm, dumps moves...SEP121990
+> 	bne.s	9$		;no right mouse button "off" - wanna cancel
+> 	tst.b	FlagRepainting_(BP)	;SEP111990
+> 	bne.s	9$		;don't turn off "right button cancel" if repainting...
+> 	tst.b	FlagNeedRepaint_(BP)	;SEP121990
+> 	bne.s	9$		;also not if need repaint
+> 	;tst.W	FlagOpen_(BP)	;loading or saving?	;SEP121990
+> 	tst.b	FlagOpen_(BP)	;file loading?	;SEP121990
+983c905
+< 	xjsr	CheckIDCMP				;main.msg.i....is a msg waiting?
+---
+> 	xjsr	CheckIDCMP	;main.msg.i....is a msg waiting?
+985c907
+< 	xjmp	ResetIDCMP				;turns OFF menu verify (main.msg.i)
+---
+> 	xjmp	ResetIDCMP	;turns OFF menu verify (main.msg.i)
+988,989c910,911
+< 	xdef SetDiskPointerWait				;pointers.o, non-it' "disk-wait" APRIL29
+< SetDiskPointerWait:					;pointers.o, non-it' "disk-wait" APRIL29
+---
+> 	xdef SetDiskPointerWait	;pointers.o, non-it' "disk-wait" APRIL29
+> SetDiskPointerWait:	;pointers.o, non-it' "disk-wait" APRIL29
+991,999c913,923
+< SetAltPointerWait:					;alt for create determine...only non-interruptable?
+< 	pea	EndOf_AltPtr(pc)			;SEP081990
+< 	move.l	WindowPtr_(BP),a0			;big picture
+< 
+< 							;(DUPLICATE CODE....swiped from 'setcrosshair')
+< 	moveq	#6+2,d0					;height 
+< 	moveq	#16,d1					;width
+< 	moveq	#-1,d2					;xoffset//hotspot
+< 	moveq	#-3,d3					;yoffset
+---
+> SetAltPointerWait:	;alt for create determine...only non-interruptable?
+>   KLUDGEOUT
+> 
+> 	pea	EndOf_AltPtr(pc)	;SEP081990
+> 	move.l	WindowPtr_(BP),a0	;big picture
+> 
+> 		;(DUPLICATE CODE....swiped from 'setcrosshair')
+> 	moveq	#6+2,d0	;height 
+> 	moveq	#16,d1	;width
+> 	moveq	#-1,d2	;xoffset//hotspot
+> 	moveq	#-3,d3	;yoffset
+1003c927
+< 	lea	AltPointerSnz_data,a1			;'alternate' wait image (revrs'd colors)
+---
+> 	lea	AltPointerSnz_data,a1	;'alternate' wait image (revrs'd colors)
+1006a931,932
+>   KLUDGEOUT
+> 		;MAY22
+1008,1016c934,943
+< 	cmp.b	#3,EffectNumber_(BP)			;flip/rotates?
+< 	bcc	SetAltPointerWait			;can't cancel these....
+< 	
+< 	move.l	WindowPtr_(BP),a0			;big picture
+< 
+< 	moveq	#6+2,d0					;height 
+< 	moveq	#16,d1					;width
+< 	moveq	#-1,d2					;xoffset//hotspot
+< 	moveq	#-3,d3					;yoffset
+---
+> 	cmp.b	#3,EffectNumber_(BP)	;flip/rotates?
+> 	bcc	SetAltPointerWait	;can't cancel these....
+> 
+> 	move.l	WindowPtr_(BP),a0	;big picture
+> 
+> 		;(DUPLICATE CODE....swiped from 'setcrosshair')
+> 	moveq	#6+2,d0	;height 
+> 	moveq	#16,d1	;width
+> 	moveq	#-1,d2	;xoffset//hotspot
+> 	moveq	#-3,d3	;yoffset
+1020,1021c947,948
+< 	lea	PointerSnz_data,a1			;'regular' wait ptr for hires
+< cont_pw:						;"continue pointer wait" code...altpointer entry
+---
+> 	lea	PointerSnz_data,a1	;'regular' wait ptr for hires
+> cont_pw:	;"continue pointer wait" code...altpointer entry
+1023,1027c950,954
+< 	moveq	#23,d0					;height 
+< 	moveq	#16,d1					;width
+< 	moveq	#-7,d2					;xoffset//hotspot
+< 	moveq	#-8,d3					;yoffset
+< 	move.l	GWindowPtr_(BP),a0			;put wait ptr on hires
+---
+> 	moveq	#23,d0	;height 
+> 	moveq	#16,d1	;width
+> 	moveq	#-7,d2	;xoffset//hotspot
+> 	moveq	#-8,d3	;yoffset
+> 	move.l	GWindowPtr_(BP),a0	;put wait ptr on hires
+1030,1036c957,963
+< 	lea	PointerSnz_data,a1			;'regular' wait ptr for hires
+< 	moveq	#23,d0					;height 
+< 	moveq	#16,d1					;width
+< 	moveq	#-7,d2					;xoffset//hotspot
+< 	moveq	#-8,d3					;yoffset
+< 	move.l	ToolWindowPtr_(BP),a0			;put 'regular' wait ptr on hamtools
+< 	bsr	intuition_setpointer	
+---
+> 	lea	PointerSnz_data,a1	;'regular' wait ptr for hires
+> 	moveq	#23,d0	;height 
+> 	moveq	#16,d1	;width
+> 	moveq	#-7,d2	;xoffset//hotspot
+> 	moveq	#-8,d3	;yoffset
+> 	move.l	ToolWindowPtr_(BP),a0	;put 'regular' wait ptr on hamtools
+> 	bsr	intuition_setpointer
+1039c966
+< 	bra	GrayPointer				;make pointer color be gray
+---
+> 	bra	GrayPointer		;make pointer color be gray
+1043,1154c970
+< NewClearPointer
+< 	movem.l	d0-d1/a0-a2,-(sp)
+< ;	DUMPMSG <NewClearPointer>			;window is in a0
+< 	lea	ClearPointerTagList,a1
+< 	CALLIB	Intuition,SetWindowPointerA
+< 	movem.l	(sp)+,d0-d1/a0-a2
+< 	rts
+< 
+< 
+< 
+< NewSetPointer
+< 	movem.l	d0-d1/a0-a2,-(sp)
+< ;;	CALLIB	Intuition,SetPointer
+< ;;	DUMPMSG	<NEW SET POINTER>
+<  ifeq 0
+< 	move.l	d2,setxoffset+4
+< 	move.l	d3,setyoffset+4
+< 
+< 	move.l	OldPointer,d0
+< 	beq	NOTOLDPTR
+< 	move.l	d0,a0
+< ;;	DUMPMSG	<DISPOSE OF OLD POINTER>	
+< 	CALLIB	Intuition,DisposeObject
+< NOTOLDPTR
+< 	lea	pbm,a0
+< 	move.w	2(sp),d0
+< 
+< 	moveq.l	#0,d1					;fake a lace pointer
+< 	cmp.w	#18,d0					;for this height only
+< 	bne.s	.fix
+< 	move.l	d3,d1
+< 	asr.l	#1,d1
+< 	move.l	d1,setyoffset+4
+< 	moveq.l	#4,d1
+< 	addq.l	#1,d0
+< 	lsr.w	#1,d0
+< .fix
+< 	move.w	d0,bm_Rows(a0)
+< 	move.w	6(sp),d0
+< 	add.w	#15,d0
+< 	lsr.w	#4,d0					;by four to skip other plane
+< 	add.w	d0,d0
+< 	move.w	d0,bm_BytesPerRow(a0)			;interleaved planes
+< 
+< 	move.b	#2,bm_Depth(a0)
+< 
+< 	lea	TempSpriteData,a1
+< 	lea	TempSpriteData+(256*2),a2
+< 	move.l	a1,bm_Planes(a0)
+< 	move.l	a2,bm_Planes+4(a0)
+< 	move.l	3*4(sp),d0				;sprite
+< 	addq.l	#4,d0
+< 	move.l	d0,a0
+< 	move.w	2(sp),d0
+< 
+< 	bra.s	44$
+< 33$	move.w	(a0)+,(a1)+
+< 	move.w	(a0)+,(a2)+
+< 	add.w	d1,a0					;skip every other line because os does not support lace
+< 44$	dbf	d0,33$	
+< 
+< 	sub.l	a0,a0
+< 	lea	ClassString,a1
+< 	lea	PointerClassTagList,a2
+< 	CALLIB	Intuition,NewObjectA
+< 	move.l	d0,OldPointer
+< 
+< 	move.l	4*2(sp),a0
+< 	lea	PointerTagList,a1
+< 	CALLIB	Intuition,SetWindowPointerA
+< ;;	DUMPMSG	<SetWindowPointerA>
+<  endc
+< 	movem.l	(sp)+,d0-d1/a0-a2
+< 	rts
+< 
+< 
+< 
+< 
+< 	xdef	debug_pointer
+< debug_pointer:
+< 	movem.l	d0-d1/a0-a2,-(sp)
+< *
+< 	lea	CusPtr_Pointer,a1
+< ;	DUMPMEM	<CusPtr_Pointer>,(A1),#250
+< *
+< 	movem.l	(sp)+,d0-d1/a0-a2
+< 	rts
+< 
+< 
+< 	ALLDUMPS	
+< 
+< 
+< 
+< ClearPointerTagList
+< 		dc.l	WA_Pointer,0
+< 		dc.l	0
+< PointerTagList
+< 		dc.l	WA_Pointer
+< OldPointer	dc.l	0
+< 		dc.l	0				;end of tag list
+< 
+< 
+< 
+< PointerClassTagList
+< setxoffset	dc.l	POINTERA_XOffset,0
+< setyoffset	dc.l	POINTERA_YOffset,0
+< 		dc.l	POINTERA_XResolution,POINTERXRESN_70NS
+< 		dc.l	POINTERA_YResolution,POINTERYRESN_HIGH
+< 
+< 		dc.l	POINTERA_BitMap,pbm
+< 		dc.l	0				;End of list
+< 
+---
+>  section data,DATA	;we need chip ram only for image data
+1156,1163d971
+< 
+< pbm	ds.b	bm_SIZEOF
+< 
+< ClassString
+< 	dc.b	'pointerclass',0
+< 
+<  section data,DATA					;we need chip ram only for image data
+< 
+1165c973
+< 	dc.w $0000 					;$0666
+---
+> 	dc.w $0000 ;$0666
+1167,1171c975,979
+< 	dc.w $0aaa 					;$0fff
+< 	dc.w $0666				 	;$0fff ;$0000
+< ;SEP061990;dcb.w	(12+4),$0
+< 	dcb.w	12,$0888				;gray for pointer...SEP061990
+< 	dc.w $0777					;sprite colors...
+---
+> 	dc.w $0aaa ;$0fff
+> 	dc.w $0666 ;$0fff ;$0000
+> 	;SEP061990;dcb.w	(12+4),$0
+> 	dcb.w	12,$0888	;gray for pointer...SEP061990
+> 	dc.w $0777		;sprite colors...
+1176,1177c984,985
+< PointerSnz_data:					;the 'EURO' look
+< 	dc.w 0,0					;2 null words, position&control
+---
+> PointerSnz_data:	;the 'EURO' look
+> 	dc.w 0,0	;2 null words, position&control
+1210c1018
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1213,1215c1021,1023
+<  XDEF AltPointerSnz_data				;SEP081990...for "reset idcmp"
+< AltPointerSnz_data:					;simply the "complement" of the normal wait ptr
+< 	dc.w 0,0					;2 null words, position&control
+---
+>  XDEF AltPointerSnz_data	;SEP081990...for "reset idcmp"
+> AltPointerSnz_data:	;simply the "complement" of the normal wait ptr
+> 	dc.w 0,0	;2 null words, position&control
+1248c1056
+< 	dc.w 0,0				;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1251c1059
+< ;	dc.w 0,0				;2 null words, position&control
+---
+> ;	dc.w 0,0	;2 null words, position&control
+1307c1115
+< ;	dc.w 0,0				;need these also???	
+---
+> ;	dc.w 0,0	;need these also???	
+1310c1118
+< 	dc.w 0,0				;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1329c1137
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1332c1140
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1351c1159
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1367c1175
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1371c1179
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1391c1199
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1394c1202
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1407c1215
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1411c1219
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1425c1233
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1428c1236
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1448c1256
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1464c1272
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1467c1275
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1479c1287
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1481c1289
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1493c1301
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1499c1307
+< 	dc.w 0,0					;2 null words, position&control
+---
+> 	dc.w 0,0	;2 null words, position&control
+1504c1312
+< 	dc.w 0,$4000 ;$5a5a,$4000			;"hotspot" in 2nd bit
+---
+> 	dc.w 0,$4000 ;$5a5a,$4000	;"hotspot" in 2nd bit
+1506c1314
+< 	dc.w 0,0 ;$5a5a,0	
+---
+> 	dc.w 0,0 ;$5a5a,0
+1520c1328
+< 	dc.w 0,0					;need these also???	
+---
+> 	dc.w 0,0	;need these also???	
+1522c1330
+< 	dc.w 0,0					;these extra for "new" taller brushes
+---
+> 	dc.w 0,0	;these extra for "new" taller brushes
+1532c1340
+< 	dc.w 0,0					;12 additional lines for "steve's big circle brushes"
+---
+> 	dc.w 0,0	;12 additional lines for "steve's big circle brushes"
+1546,1549d1353
+< 
+< 
+< TempSpriteData
+< 	ds.w	256*4

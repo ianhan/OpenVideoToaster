@@ -1,0 +1,3549 @@
+head	2.67;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.67
+date	97.04.02.12.47.46;	author MIKE;	state Exp;
+branches;
+next	2.66;
+
+2.66
+date	95.06.14.14.53.46;	author pfrench;	state Exp;
+branches;
+next	2.65;
+
+2.65
+date	95.03.16.14.36.12;	author CACHELIN4000;	state Exp;
+branches;
+next	2.64;
+
+2.64
+date	95.03.02.12.34.38;	author pfrench;	state Exp;
+branches;
+next	2.63;
+
+2.63
+date	95.02.20.16.11.42;	author pfrench;	state Exp;
+branches;
+next	2.62;
+
+2.62
+date	95.02.20.13.46.11;	author pfrench;	state Exp;
+branches;
+next	2.61;
+
+2.61
+date	95.02.19.16.50.16;	author pfrench;	state Exp;
+branches;
+next	2.60;
+
+2.60
+date	95.02.18.19.08.16;	author Kell;	state Exp;
+branches;
+next	2.59;
+
+2.59
+date	95.02.17.17.07.58;	author pfrench;	state Exp;
+branches;
+next	2.58;
+
+2.58
+date	95.02.17.16.39.31;	author pfrench;	state Exp;
+branches;
+next	2.57;
+
+2.57
+date	95.02.17.15.06.58;	author pfrench;	state Exp;
+branches;
+next	2.56;
+
+2.56
+date	95.02.17.14.21.14;	author pfrench;	state Exp;
+branches;
+next	2.55;
+
+2.55
+date	95.02.17.14.20.11;	author pfrench;	state Exp;
+branches;
+next	2.54;
+
+2.54
+date	94.12.31.03.31.27;	author pfrench;	state Exp;
+branches;
+next	2.53;
+
+2.53
+date	94.12.30.18.45.44;	author CACHELIN4000;	state Exp;
+branches;
+next	2.52;
+
+2.52
+date	94.12.23.14.41.00;	author pfrench;	state Exp;
+branches;
+next	2.51;
+
+2.51
+date	94.12.21.23.31.09;	author pfrench;	state Exp;
+branches;
+next	2.50;
+
+2.50
+date	94.12.21.23.16.04;	author pfrench;	state Exp;
+branches;
+next	2.49;
+
+2.49
+date	94.12.21.21.31.02;	author pfrench;	state Exp;
+branches;
+next	2.48;
+
+2.48
+date	94.12.21.20.05.15;	author pfrench;	state Exp;
+branches;
+next	2.47;
+
+2.47
+date	94.12.20.19.38.35;	author CACHELIN4000;	state Exp;
+branches;
+next	2.46;
+
+2.46
+date	94.12.19.22.39.14;	author pfrench;	state Exp;
+branches;
+next	2.45;
+
+2.45
+date	94.12.17.04.50.44;	author Kell;	state Exp;
+branches;
+next	2.44;
+
+2.44
+date	94.12.09.15.38.59;	author pfrench;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	94.12.08.13.25.30;	author CACHELIN4000;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	94.11.15.17.50.26;	author pfrench;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	94.11.09.12.46.40;	author pfrench;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	94.10.21.23.22.40;	author CACHELIN4000;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	94.10.17.14.33.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	94.10.16.13.09.36;	author CACHELIN4000;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	94.10.14.13.36.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	94.10.14.09.52.56;	author CACHELIN4000;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	94.10.12.18.56.19;	author CACHELIN4000;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	94.09.23.20.08.24;	author pfrench;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	94.09.21.21.32.47;	author pfrench;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	94.09.20.22.46.29;	author pfrench;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	94.09.08.15.40.55;	author pfrench;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.09.02.01.34.45;	author pfrench;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.09.01.23.50.14;	author pfrench;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.09.01.22.27.03;	author pfrench;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.09.01.18.41.42;	author pfrench;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.09.01.18.29.15;	author pfrench;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.08.31.23.07.52;	author Kell;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.08.30.16.24.45;	author pfrench;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.08.30.10.35.59;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.08.27.00.19.20;	author CACHELIN4000;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.07.08.10.11.16;	author CACHELIN4000;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.07.07.17.00.50;	author CACHELIN4000;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.07.07.00.42.46;	author CACHELIN4000;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.07.04.18.37.15;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.06.04.02.27.21;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.06.03.19.52.36;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.06.03.19.02.13;	author CACHELIN4000;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.04.22.14.31.39;	author CACHELIN4000;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.03.17.09.52.43;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.03.15.14.57.54;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.03.15.13.46.11;	author CACHELIN4000;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.03.15.13.40.09;	author CACHELIN4000;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.03.13.07.54.41;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.03.11.14.55.35;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.03.11.14.38.30;	author CACHELIN4000;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.03.11.14.30.15;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.03.11.09.32.09;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.03.05.21.05.14;	author CACHELIN4000;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.02.28.18.10.40;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.02.23.14.52.22;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.02.19.09.34.15;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.17.16.23.50;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.67
+log
+@got es_message ready to recieve new command -- ES_REDRAW_ALL --
+@
+text
+@/********************************************************************
+* $EditWindow.c$
+* $Id: editwindow.c,v 2.66 1995/06/14 14:53:46 pfrench Exp MIKE $
+* $Log: editwindow.c,v $
+*Revision 2.66  1995/06/14  14:53:46  pfrench
+*Moved FrameSave command to end of EndGrazRequest
+*
+*Revision 2.65  1995/03/16  14:36:12  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.64  1995/03/02  12:34:38  pfrench
+*Added switcher un-used rawkey handling code
+*
+*Revision 2.63  1995/02/20  16:11:42  pfrench
+*Now properly responds to locate file.
+*
+*Revision 2.62  1995/02/20  13:46:11  pfrench
+*Made path greater again now that we've got some global
+*data moved into the far section.
+*
+*Revision 2.61  1995/02/19  16:50:16  pfrench
+*temporarily un-sized editwindow request buffer size
+*
+*Revision 2.60  1995/02/18  19:08:16  Kell
+*Moved the SetEditDepth call in Render_EDIT handling so it would also happen before windows are opened.
+*
+*Revision 2.59  1995/02/17  17:07:58  pfrench
+*Added check for global edit depth
+*
+*Revision 2.58  1995/02/17  16:39:31  pfrench
+*Added tons o' stuff for skell
+*
+*Revision 2.57  1995/02/17  15:06:58  pfrench
+*Now reply's to messageport of save file initiator
+*
+*Revision 2.56  1995/02/17  14:21:14  pfrench
+*modified text of locate file requester
+*
+*Revision 2.55  1995/02/17  14:20:11  pfrench
+*Added support for es_locatefile messages from switcher
+*
+*Revision 2.54  1994/12/31  03:31:27  pfrench
+*Now SendSwitcher does same thing as sendswitcherreply, without
+*the return value
+*
+*Revision 2.53  1994/12/30  18:45:44  CACHELIN4000
+*Comment out weird Msg->Error=NULL which seems to cause 2000 to have timing dependent communication errors.
+*
+*Revision 2.52  1994/12/23  14:41:00  pfrench
+*Slight optimization in FlushWindowPort()
+*
+*Revision 2.51  1994/12/21  23:31:09  pfrench
+*Tried to fix visual ickyness with directory tabs/crouton border.
+*
+*Revision 2.50  1994/12/21  23:16:04  pfrench
+*Removed explicit rendering calls from directory tabs,
+*as the text is now being handled by intuition.
+*
+*Revision 2.49  1994/12/21  21:31:02  pfrench
+*Hopefully final tweaking of grid position
+*
+*Revision 2.48  1994/12/21  20:05:15  pfrench
+*Added Directory tabs images
+*
+*Revision 2.47  1994/12/20  19:38:35  CACHELIN4000
+*Only use close gadget in Arrange() with grazer windows
+*
+*Revision 2.46  1994/12/19  22:39:14  pfrench
+*Modified for now shared-code proof.library.
+*
+*Revision 2.45  1994/12/17  04:50:44  Kell
+*Removed ES_FlyerVolumes handling.  This is now sent to the Switcher, instead of recieved from the Switcher.
+*
+*Revision 2.44  1994/12/09  15:38:59  pfrench
+*Cleaned up a few things while fixing wbtofront/back
+*
+*Revision 2.43  1994/12/08  13:25:30  CACHELIN4000
+*Change Vertical Slider width and position
+*
+*Revision 2.42  1994/11/15  17:50:26  pfrench
+*Added support to highlight delayed error croutons when
+*the error is posted, and not before.
+*
+*Revision 2.41  1994/11/09  12:46:40  pfrench
+*Added initial support for proof.lib
+*
+*Revision 2.40  1994/10/21  23:22:40  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.39  94/10/17  14:33:55  CACHELIN4000
+*Correct SwitcherOn test&toggle in SwitcherSwitch
+*
+*Revision 2.37  94/10/14  13:36:55  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.36  94/10/14  09:52:56  CACHELIN4000
+*Add ES_FlyerVolumes support to HandleSwitcher()
+*
+*Revision 2.35  94/10/12  18:56:19  CACHELIN4000
+*Fix call to DisplayMessage()
+*
+*Revision 2.34  94/09/23  20:08:24  pfrench
+*Moved loadslice to main event loop
+*
+*Revision 2.33  1994/09/21  21:32:47  pfrench
+*Added new FlushWindowPort call
+*
+*Revision 2.32  1994/09/20  22:46:29  pfrench
+*No longer initializes its own FG list as that is done
+*through the dir cache.
+*
+*Revision 2.31  1994/09/08  15:40:55  pfrench
+*Added support for refreshing the accesswindow
+*
+*Revision 2.30  1994/09/02  01:34:45  pfrench
+*Now gets delay time from msg->Error.
+*
+*Revision 2.29  1994/09/01  23:50:14  pfrench
+*Added temporary delayed message stuff
+*
+*Revision 2.28  1994/09/01  22:27:03  pfrench
+*Added DelayedError timer.device message handling
+*
+*Revision 2.27  1994/09/01  18:41:42  pfrench
+*Fixed problems with ESMessage allocation/free
+*
+*Revision 2.26  1994/09/01  18:29:15  pfrench
+*put preliminary support for delayed error messages.
+*
+*Revision 2.25  1994/08/31  23:07:52  Kell
+*new debugs
+*
+*Revision 2.24  1994/08/30  16:24:45  pfrench
+*Fixed mungwall hit with message allocation
+*
+*Revision 2.23  1994/08/30  10:35:59  Kell
+*Changed SendSwitcherReply(), SendSwitcher() and PutSwitcher() to work with ESParams structures so we can easily work with any number of parameters.
+*
+*Revision 2.22  1994/08/27  00:19:20  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.21  94/07/08  10:11:16  CACHELIN4000
+*replace SendSwitcher() with PutSwitcher() in SendSwitcherReply(),
+*
+*Revision 2.20  94/07/07  17:00:50  CACHELIN4000
+*Fix Message bug w/ LastMsg global in HandleSwitcher()
+*
+*Revision 2.19  94/07/07  00:42:46  CACHELIN4000
+*SnedSwitcherReply --> register args
+*
+*Revision 2.18  94/07/04  18:37:15  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.17  94/06/04  02:27:21  Kell
+*Went back to the using SIMPLE_REFRESH on the edit windows. Necessary!!
+*When leaving switcher mode, the editor now waits on the switcher.
+*
+*Revision 2.16  94/06/03  19:52:36  Kell
+*Restored the edit windows SIMPLE_REFRESH (killed a bad idea)
+*
+*Revision 2.15  94/06/03  19:02:13  CACHELIN4000
+*remove window's WFLG_SIMPLE_REFRESH
+*
+*Revision 2.14  94/04/22  14:31:39  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.13  94/03/17  09:52:43  Kell
+**** empty log message ***
+*
+*Revision 2.12  94/03/15  14:57:54  Kell
+**** empty log message ***
+*
+*Revision 2.11  94/03/15  13:46:11  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.10  94/03/15  13:40:09  CACHELIN4000
+*Eliminate DefaultFG = internalcroutons from ES_STARTUP
+*
+*Revision 2.9  94/03/13  07:54:41  Kell
+*Reworked the way debug statements work.  Added ES_QUIT handler.
+*
+*Revision 2.8  94/03/11  14:55:35  Kell
+**** empty log message ***
+*
+*Revision 2.7  94/03/11  14:38:30  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.6  94/03/11  14:30:15  Kell
+*Added some debug statements
+*
+*Revision 2.5  94/03/11  09:32:09  Kell
+**** empty log message ***
+*
+*Revision 2.4  94/03/05  21:05:14  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.3  94/02/28  18:10:40  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.2  94/02/23  14:52:22  Kell
+**** empty log message ***
+*
+*Revision 2.1  94/02/19  09:34:15  Kell
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  16:23:50  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  15:56:50  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  14:44:08  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+*	12-17-92	Steve H		Convert to use SmartStrings
+*	12-8-93	Steve H		Last Update
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <rexx/storage.h>       /* off of ARexx disk */
+// #include <rexx/rxslib.h>        /* off of ARexx disk */
+// #include <rexx/errors.h>
+
+#include <editwindow.h>
+#include <gadgets.h>
+#include <prophelp.h>
+#include <editswit.h>
+#include <delayerr.h>
+#include <crouton_all.h>
+
+#ifndef PROOF_LIB_H
+#include <proof_lib.h>
+#endif
+
+#include <dirtabs.h>
+#include <croutongrid.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#endif
+
+#ifdef CUSTOM_BODY
+#include <customprop.p>
+#endif
+
+/****************************************/
+//#define SERDEBUG	1
+#include <serialdebug.h>
+
+#define DBHMSG NA("HandleSwitcher")
+/****************************************/
+#define REG(x) register __##x
+
+VOID DumpRP(UBYTE *);
+
+extern struct IntuiMessage	global_sw_im;
+extern struct Library *ProofBase;
+extern struct Window *access_win;
+extern struct FastGadget **DefaultFG;
+extern struct Gadget Gadget1,*FT_Gadget1,*GRZ_Gadget1;
+extern struct List WindowList;
+extern struct EditWindow *EditTop,*EditBottom;
+extern struct Screen *EditScreen;
+extern struct MsgPort *EditPort,*SwitPort;
+extern struct TextFont *EditFont;
+extern struct Window *SwitWind;
+extern struct MsgPort *DelayedErrMsgPort;
+extern struct DelayedErrorRequest *global_der;
+extern BOOL DelayedErrorPending;
+extern struct AccessWindow *global_aw;
+
+extern struct ESParams1 ESparams1;
+extern struct ESParams5 ESparams5;
+extern UBYTE *FlyerDrives[];
+extern LONG FlyerDriveCount;
+#define ICON_WIDTH 80
+#define MAX_UWORD 65535
+#define LEFT_EDGE 8		// LeftEdge of leftmost gadget in relation to window
+
+extern VOID KPutStr(char *String);
+extern LONG KPrintF( STRPTR fmt, ... );
+
+extern VOID SoftSpriteOn(VOID);
+extern VOID SoftSpriteOff(VOID);
+
+BOOL SwitcherOn = TRUE;
+LONG global_EditScreenDepth;
+
+//extern struct ESMessage OurESMessage;
+
+extern struct Hook DummyHook;
+struct TagItem nw_ti[2] = {
+	{ WA_BackFill,(ULONG)&DummyHook },
+	{ TAG_DONE,TRUE }
+};
+struct ExtNewWindow NewWindowStructure3 = {
+	0,0,	/* window XY origin relative to TopLeft of screen */
+	640,400,	/* window width and height */
+	0,1,	/* detail and block pens */
+	NEWSIZE+MOUSEBUTTONS+MOUSEMOVE+GADGETDOWN+GADGETUP+RAWKEY+REQCLEAR+DISKINSERTED+DISKREMOVED,	/* IDCMP flags */
+	WFLG_SIMPLE_REFRESH+BORDERLESS+ACTIVATE+RMBTRAP+WFLG_NW_EXTENDED,	/* other window flags */
+	&Gadget1,	/* first gadget in gadget list */
+	NULL,	/* custom CHECKMARK imagery */
+	NULL,	/* window title */
+	NULL,	/* custom screen pointer */
+	NULL,	/* custom bitmap */
+	5,5,	/* minimum width and height */
+	640,600,	/* maximum width and height */
+	CUSTOMSCREEN,	/* destination screen type */
+	&nw_ti[0]
+};
+
+static ULONG global_LocateFileType;
+static ULONG global_LocateFileFlags;
+static ULONG global_LocateFileMode;
+static struct MsgPort *global_LocateFile_mp;
+static STRPTR global_LocateFileName;
+static STRPTR *global_LocateFileTxt;
+LONG global_do_locatefile;
+
+extern struct FastGadget **PtrProject;
+extern struct FastGadget **XtrProject;
+
+LONG SetEditDepth( LONG depth );
+BOOL __regargs HandleErrPort( struct MsgPort *Port );
+
+struct ESMessage __asm *PutESPort(
+	REG(d0) WORD Type, REG(d1) LONG *D1, REG(a0) struct MsgPort *mp );
+
+static BOOL __regargs HandleSwitcherReply(
+	struct MsgPort *Port, struct ESMessage *lastmsg, LONG *pLastReply );
+
+LONG do_LocateFileRequest( void );
+static LONG EndLocateFileRequest( struct GrazerRequest *gr, LONG mode );
+
+#ifdef LATER
+static struct ESMessage *GetOnlyMsg(
+	struct MsgPort *mp, struct ESMessage *lastmsg );
+#endif
+
+/****** EditWindow/OpenEditWindow *************************************
+*
+*   NAME
+*	OpenEditWindow
+*
+*   SYNOPSIS
+*	BOOL OpenEditWindow(struct EditWindow *Edit)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+BOOL OpenEditWindow(struct EditWindow *Edit)
+{
+	struct ExtNewWindow *NW;
+	BOOL Success = FALSE;
+	struct Gadget *Gadget;
+	struct PropInfo *PropInfo=NULL;
+
+	NW = &NewWindowStructure3; 	// uses NewWindow from powerwindows output
+	NW->FirstGadget = NULL; 	// don't add until after open
+	NW->DetailPen = SCREEN_PEN;
+	NW->Screen = Edit->Screen;
+	NW->LeftEdge = 0;// Edit->LeftEdge;
+	NW->TopEdge = Edit->TopEdge;
+
+#ifndef SWIT_ONLY
+	if (SwitPort) {
+#endif
+	NW->LeftEdge = 32;
+	NW->TopEdge += 44;
+#ifndef SWIT_ONLY
+	}
+#endif
+
+	NW->Width = Edit->Width;
+	NW->Height = Edit->Height;
+
+// note that NW->IDCMPFlags set in HandleCommon.c
+
+	if (Gadget = FindGadget(Edit->Gadgets,ID_KNOB)) {
+		PropInfo = Gadget->SpecialInfo;
+		PropInfo->VertPot = 0; // always open at top
+	}
+
+// first open as SIMPLE_REFRESH
+	Edit->Window = OpenWindow((struct NewWindow *)NW);
+
+// then make SMART_REFRESH (to get around clear to color 0 problem)
+	if (Edit->Window)
+	{
+		if ( Edit->ew_cg )
+		{
+			struct Gadget *Grid;
+
+			Grid = FindGadget(Edit->Gadgets,ID_GRID);
+
+			ob_SetAttrs( Edit->ew_cg,
+				CRGRIDA_DestLeft,		Edit->Window->LeftEdge + Grid->LeftEdge,
+				CRGRIDA_DestTop,		Edit->Window->TopEdge + Grid->TopEdge,
+				CRGRIDA_DestWidth,	Grid->Width,
+				CRGRIDA_DestHeight,	Grid->Height,
+				TAG_DONE );
+		}
+
+		MakeSimpleSmart(Edit->Window);
+		SetFont(Edit->Window->RPort,EditFont);
+		AddGList(Edit->Window,Edit->Gadgets,0,MAX_UWORD,NULL);
+
+		if (Success = RenderEditWindow(Edit,TRUE))
+			BuildWaitMask();
+	}
+	return(Success);
+}
+
+/****** EditWindow/RenderEditWindow *********************************
+*
+*   NAME
+*	RenderEditWindow
+*
+*   SYNOPSIS
+*	BOOL RenderEditWindow(struct EditWindow *Edit,BOOL Erase)
+*
+*   FUNCTION
+*	Does everything needed to render entire EditWindow
+*
+*********************************************************************
+*/
+BOOL RenderEditWindow(struct EditWindow *Edit,BOOL Erase)
+{
+	BOOL Success = FALSE;
+
+	if ( global_EditScreenDepth )
+	{
+		struct Gadget *Gadget;
+		struct RastPort *RP;
+
+		RP = Edit->Window->RPort;
+		if (Erase) {
+			SetRast(Edit->Window->RPort,SCREEN_PEN);
+		}
+
+		if (Gadget = FindGadget(Edit->Gadgets,ID_PATH)) {
+			NewBorderBox(RP,Gadget->LeftEdge-4,Gadget->TopEdge-2-3,
+				Gadget->LeftEdge+Gadget->Width+3,
+				Gadget->TopEdge+Gadget->Height+4-1,BOX_REV_BORDER);
+		}
+
+		if (Gadget = FindGadget(Edit->Gadgets,ID_GRID))
+		{
+			if ( Edit->Node.Type == EW_GRAZER )
+			{
+				/* Draw Outer border containing directory tabs, then... */
+
+				NewBorderBox(RP,Gadget->LeftEdge-2,Gadget->TopEdge-2,
+					Gadget->LeftEdge+Gadget->Width+1,
+					Gadget->TopEdge+Gadget->Height+1+16+8,BOX_REV);
+			}
+
+			NewBorderBox(RP,Gadget->LeftEdge-2,Gadget->TopEdge-2,
+				Gadget->LeftEdge+Gadget->Width+1,
+				Gadget->TopEdge+Gadget->Height+1,BOX_REV);
+		}
+
+		RefreshGList(Edit->Gadgets,Edit->Window,NULL,MAX_UWORD);
+		RedrawPopupText(Edit);
+		InitKnobRail(Edit);
+		DrawKnobRail(Edit); // don't want to wait
+		Edit->DisplayGrid = TRUE;
+		Edit->RenderRail = FALSE;
+	}
+
+	Success = TRUE;
+	return(Success);
+}
+
+/****** EditWindow/CloseEditWindow **********************************
+*
+*   NAME
+*	CloseEditWindow
+*
+*   SYNOPSIS
+*	VOID CloseEditWindow(struct EditWindow *Edit)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+VOID CloseEditWindow(struct EditWindow *Edit)
+{
+	if (Edit) {
+		if (Edit->Window) {
+			CloseWindow(Edit->Window);
+			Edit->Window = NULL;
+			BuildWaitMask();
+		}
+	}
+}
+
+/****** EditWindow/InitEditWindow *************************************
+*
+*   NAME
+*	InitEditWindow
+*
+*   SYNOPSIS
+*	BOOL InitEditWindow(struct EditWindow *Edit,struct NewEditWindow *New)
+*
+*   FUNCTION
+*	First time setup of EditWindow structure - assumed to be cleared
+*
+*********************************************************************
+*/
+BOOL InitEditWindow(struct EditWindow *Edit,struct NewEditWindow *New)
+{
+	BOOL Success = FALSE;
+
+	if (Edit && New && Edit->Special) {
+
+		AddTail(&WindowList,(struct Node *)&Edit->Node.MinNode);
+		NewList(&Edit->DragList);
+
+		if (New->Options & OPTION_ALLOW_DRAG) Edit->AllowDrag = TRUE;
+		Edit->Screen = New->Screen;
+		Edit->Location = New->Location;
+		Edit->IconWidth = ICON_WIDTH;
+		Edit->IconHeight = ICON_HEIGHT;
+		Edit->LeftEdge = New->LeftEdge;
+		Edit->TopEdge = New->TopEdge;
+		Edit->Width = New->Width;
+		Edit->Height = New->Height;
+
+		Success = TRUE;
+	}
+	return(Success);
+}
+
+/****** EditWindow/FreeEditWindow *************************************
+*
+*   NAME
+*	FreeEditWindow
+*
+*   SYNOPSIS
+*	VOID FreeEditWindow(struct EditWindow *Edit)
+*
+*   FUNCTION
+*	Frees EditWindow stuff,
+*	Does NOT free Edit->Special or Special->EditList or EditWindow itself
+*
+*********************************************************************
+*/
+VOID FreeEditWindow(struct EditWindow *Edit)
+{
+	if (Edit) {
+		if (Edit->Gadgets) FreeGadgets(Edit->Gadgets);
+		Remove((struct Node *)&Edit->Node.MinNode); // from WindowList
+		FreeGrid(Edit);
+	}
+}
+
+/****** EditWindow/AllocEditNode ******************************************
+*
+*   NAME
+*	AllocEditNode
+*
+*   SYNOPSIS
+*	struct EditNode *AllocEditNode(struct SmartString *Name)
+*
+*   FUNCTION
+*	The Name SmartString is duplicated into the EditNode.
+*	Therefore, you must still free Name yourself.
+*
+*********************************************************************
+*/
+struct EditNode *AllocEditNode(struct SmartString *Name)
+{
+	struct EditNode *Node;
+
+	if (Node = (struct EditNode *)AllocSmartNode(Name,sizeof(struct EditNode),
+		MEMF_CLEAR)) {
+		Node->Node.Type = EN_STANDARD;
+		Node->Redraw = TRUE;
+	}
+	return(Node);
+}
+
+/****** EditWindow/ArrangeEditGadgets **********************************
+*
+*   NAME
+*	ArrangeEditGadgets
+*
+*   SYNOPSIS
+*	BOOL ArrangeEditGadgets(struct EditWindow *Edit)
+*
+*   FUNCTION
+*	Positions [ID_CLOSE],ID_KNOB,ID_UP,ID_DOWN gadgets,
+*	Initializes ID_GRID's LeftEdge, and Width
+*	(TopEdge,Height must be initialized before calling this routine)
+*
+*********************************************************************
+*/
+#define DOWN_BTM 204
+BOOL ArrangeEditGadgets(struct EditWindow *Edit)
+{
+	struct Gadget *Close,*Prop,*Up,*Down,*Grid;
+	BOOL success = FALSE;
+
+	if(Edit->Node.Type!=EW_PROJECT)
+		Close = FindGadget(Edit->Gadgets,ID_CLOSE);
+	else
+		Close=NULL;
+	if ((Prop = FindGadget(Edit->Gadgets,ID_KNOB)) &&
+		(Up = FindGadget(Edit->Gadgets,ID_UP)) &&
+		(Down = FindGadget(Edit->Gadgets,ID_DOWN)) &&
+		(Grid = FindGadget(Edit->Gadgets,ID_GRID))) {
+
+		Up->LeftEdge = LEFT_EDGE;
+		Down->LeftEdge = Up->LeftEdge;
+		Prop->LeftEdge = Up->LeftEdge + 2;
+		Prop->Width = Up->Width-4;
+		Grid->LeftEdge = GRID_LEFT;
+		Grid->Width = GRID_WIDTH;
+
+		if (Edit->Location == EW_TOP)
+			if (Edit->Height == TOP_SMALL)
+				Down->TopEdge = 204 - Down->Height;
+			else
+				Down->TopEdge = 404 - Down->Height;
+		else
+			Down->TopEdge = BOTTOM_SMALL - Down->Height;
+
+		Up->TopEdge = Down->TopEdge - Up->Height;
+	if(Close)
+	{
+		Close->LeftEdge = LEFT_EDGE;
+		Close->TopEdge = 0;
+		Prop->TopEdge = Close->TopEdge+Close->Height+4;
+	}
+	else Prop->TopEdge = 4;
+	Prop->Height = Up->TopEdge - 4 - Prop->TopEdge;
+
+		success = TRUE;
+	}
+	return(success);
+}
+
+/****** EditWindow/ResizeEditWindow *********************************
+*
+*   NAME
+*	ResizeEditWindow
+*
+*   SYNOPSIS
+*	BOOL ResizeEditWindow(struct EditWindow *Edit,UWORD NewHeight)
+*
+*   FUNCTION
+*	First calls EditWindow->ResizeWindow(), then
+*	calls SizeWindow(), waits for IDCMP_NEWSIZE, then renders gadgets
+*
+*********************************************************************
+*/
+VOID MakeSimpleSmart(struct Window *Window)
+{
+	struct Layer *Layer;
+
+	Forbid();
+	Layer = Window->RPort->Layer;
+	Layer->Flags &= (~LAYERSIMPLE);
+	Layer->Flags |= LAYERSMART;
+	Window->Flags &= (~WFLG_SIMPLE_REFRESH); // WFLG_SMART_REFRESH is 0
+	Permit();
+}
+
+//*******************************************************************
+VOID MakeSmartSimple(struct Window *Window)
+{
+	struct Layer *Layer;
+
+	Forbid();
+	Layer = Window->RPort->Layer;
+	Layer->Flags &= (~LAYERSMART);
+	Layer->Flags |= LAYERSIMPLE;
+	Window->Flags |= WFLG_SIMPLE_REFRESH; // WFLG_SMART_REFRESH is 0
+	Permit();
+}
+
+//*******************************************************************
+BOOL ResizeEditWindow(struct EditWindow *Edit,UWORD NewHeight)
+{
+	BOOL Success = FALSE;
+	struct Gadget *Gadget;
+	struct RastPort *RP;
+
+	Edit->Height = NewHeight;
+	RemoveGList(Edit->Window,Edit->Gadgets,MAX_UWORD);
+	Edit->Resize(Edit,NewHeight);
+	FreeGrid(Edit);
+
+	if (Gadget = FindGadget(Edit->Gadgets,ID_KNOB)) {
+	if (AllocGrid(Edit))
+		Success = TRUE;
+	} else Success = TRUE;
+
+//	SizeWindow(Edit->Window,0,((WORD)NewHeight) - Edit->Window->Height);
+	RP = Edit->Window->RPort;
+//	SetDrMd(RP,JAM2);
+//	SetRast(RP,SCREEN_PEN);
+
+	MakeSmartSimple(Edit->Window);
+	ChangeWindowBox(Edit->Window,Edit->Window->LeftEdge,
+		Edit->Window->TopEdge,Edit->Window->Width,NewHeight);
+	WaitForClass(Edit->Window->UserPort,IDCMP_NEWSIZE);
+	MakeSimpleSmart(Edit->Window);
+
+	AddGList(Edit->Window,Edit->Gadgets,0,MAX_UWORD,NULL);
+	RenderEditWindow(Edit,TRUE);
+	Edit->RedrawList = TRUE;
+
+	return(Success);
+}
+
+/****** EditWindow/WaitForClass *************************************
+*
+*   NAME
+*	WaitForClass
+*
+*   SYNOPSIS
+*	VOID WaitForClass(struct MsgPort *UserPort,ULONG Class)
+*
+*   FUNCTION
+*
+*********************************************************************
+*/
+VOID WaitForClass(struct MsgPort *UserPort,ULONG Class)
+{
+	BOOL Done = FALSE;
+	struct IntuiMessage *IntuiMsg;
+
+	while (!Done) {
+		while (IntuiMsg = (struct IntuiMessage *)GetMsg(UserPort)) {
+			if (IntuiMsg->Class == Class) Done = TRUE;
+			ReplyMsg((struct Message *)IntuiMsg);
+		}
+		if (!Done) WaitPort(UserPort);
+	}
+}
+
+//*******************************************************************
+VOID RefreshEdit(VOID)
+{
+	struct EditWindow *Edit,*Next;
+
+	Edit = (struct EditWindow *)WindowList.lh_Head;
+	while (Next = (struct EditWindow *)Edit->Node.MinNode.mln_Succ) {
+		Edit->ew_OptRender = FALSE;
+		if (Edit->Window) RenderEditWindow(Edit,TRUE);
+		Edit = Next;
+	}
+}
+
+LONG SetEditDepth( LONG depth )
+{
+	struct EditWindow *Edit,*Next;
+
+	global_EditScreenDepth = depth;
+
+	Edit = (struct EditWindow *)WindowList.lh_Head;
+
+	while ( Next = (struct EditWindow *)Edit->Node.MinNode.mln_Succ )
+	{
+		Edit->ew_OptRender = FALSE;
+
+		if ( Edit->ew_cg )
+		{
+			ob_SetAttrs( Edit->ew_cg,
+				CRGRIDA_DestDepth,	depth,
+				TAG_DONE );
+		}
+
+		if ( Edit->Window )
+		{
+			Edit->Window->RPort->Mask = (1 << depth) - 1;
+
+			RenderEditWindow(Edit,TRUE);
+		}
+
+		Edit = Next;
+	}
+
+	return(depth);
+}
+
+//*******************************************************************
+BOOL __regargs HandleSwitcher(
+	struct MsgPort *Port)
+{
+	return(HandleSwitcherReply(Port,NULL,NULL));
+}
+
+static BOOL __regargs HandleSwitcherReply(
+	struct MsgPort *Port, struct ESMessage *lastmsg, LONG *pLastReply )
+{
+	struct ESMessage *Msg;
+	BOOL	quit=FALSE;
+
+	do
+	{
+		while (Msg = (struct ESMessage *)GetMsg(Port))
+		{	// IDCMP msgs I send to switcher also come back to this port
+			DUMPHEXIL("Editor Received Message: ",(LONG)Msg,"...  ");
+			DUMPHEXIW("Cookie: ",(WORD)Msg->Cookie,"\\");
+			if ( Msg->Cookie == EDIT_COOKIE )
+			{
+				if ( pLastReply )
+					*pLastReply = Msg->Reply;
+
+				switch(Msg->Type)
+				{
+					case ES_STARTUP:
+						if( ((struct RexxMsg *)Msg)->rm_Node.mn_Node.ln_Type == NT_REPLYMSG )
+								break;
+						PtrProject = (struct FastGadget **)Msg->Reply;
+						Msg->Reply = ES_ERR_NONE;
+						SwitWind = (struct Window *)Msg->Data[2]; // switcher's window (IDCMP)
+								// SwitWind never changes during program (important for us)
+							if(!(EditScreen = (struct Screen *)Msg->Data[0]))
+				//				|| (!(DefaultFG = (struct FastGadget **)Msg->Data[1])))
+								Msg->Reply = ES_ERR_GENERIC; // fail
+							else InitScreenStuff();
+						break;
+
+					case ES_RENDER_EDIT:
+						DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+						Msg->Reply = ES_ERR_NONE;
+						if (Msg->Data[0] == 0) // Switcher wants all our windows closed
+						{
+							CloseAccessWindow();
+							access_win = NULL;
+							MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+						}
+						else	// Switcher wants us open
+						{
+							SetEditDepth( Msg->Data[1] );
+
+							if (EditTop)// If our windows are already open, then we just need to refresh them
+							{
+//								SetEditDepth( Msg->Data[1] );
+
+								SoftSpriteOff();
+								RefreshEdit();           
+                        //was disabled
+								aw_Redraw(global_aw);
+								SoftSpriteOn();
+							}
+							else	// Else, open them
+							{
+								if ( !(access_win = OpenAccessWindow()) )
+									Msg->Reply = 2;
+								if (!MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+									Msg->Reply = 2;
+							}
+						}
+						break;
+
+					case ES_QUIT:
+					//DEBUGMSG(DBHMSG,"ES_QUIT");
+						quit=TRUE;
+						break;
+
+					case ES_RENDER_SWIT: // a reply
+						DEBUGMSG(DBHMSG,"ES_RENDER_SWIT .. (a reply?)");
+						break;
+
+					case ES_LocateFile:
+					{
+						if ( Msg->Message.mn_Node.ln_Type != NT_REPLYMSG )
+						{
+							global_LocateFile_mp = Msg->Message.mn_ReplyPort;
+							global_LocateFileType = Msg->Data[0];
+							global_LocateFileName = (STRPTR) Msg->Data[1];
+							global_LocateFileFlags = Msg->Data[2];
+							global_LocateFileTxt = (STRPTR *) Msg->Data[3];
+							global_LocateFileMode = Msg->Data[4];
+							global_do_locatefile = TRUE;
+
+//KPrintF("LocateFile( %08lx, \"%s\", %ld, %ld)\n",
+//	Msg->Data[0],Msg->Data[1],Msg->Data[2],Msg->Data[4]);
+						}
+					}
+					break;
+
+					case ES_SwitcherRAWKEY:
+					{
+						if ( Msg->Message.mn_Node.ln_Type != NT_REPLYMSG )
+						{
+							global_sw_im.Class		= IDCMP_RAWKEY;
+							global_sw_im.Code			= Msg->Data[0];
+							global_sw_im.Qualifier	= Msg->Data[1];
+						}
+					}
+					break;
+
+				} // switch Type
+
+				if ( Msg->Message.mn_Node.ln_Type == NT_REPLYMSG )
+				{
+					struct DelayedError	*de;
+					if ( lastmsg == Msg )
+						lastmsg=NULL;
+					/*	Check for delayed Error information in reply
+					 *	If non-NULL, build a timer request according
+					 *	to the value that's in there
+					 */
+					if ( de = Msg->Error )
+					{
+//						Msg->Error = NULL; // This causes stuff to break on 2000 w/out debuggery
+						// DelayedErrorPending flags
+						// 0x01 == Message is being communicated
+						// 0x02 == Next Error should be displayed
+
+						if ( DelayedErrorPending & 0x01 )
+						{
+							AbortIO( (struct IORequest *)global_der );
+							WaitIO( (struct IORequest *)global_der );
+							GetMsg( DelayedErrMsgPort );
+						}
+						// Copy the information over and send it off
+						global_der->der_de = *de;
+						global_der->der_timerequest.tr_time.tv_secs = de->de_hottime.tv_secs;
+						global_der->der_timerequest.tr_time.tv_micro = de->de_hottime.tv_micro;
+						// Set crouton num for error
+						if ( (Msg->Type == ES_Select) || (Msg->Type == ES_Auto) )
+						{
+							if ( EditTop )
+								global_der->der_croutonnum =
+									GetProjNodeOrder(EditTop,(struct FastGadget *)((ULONG *)Msg->Data)[0]);
+							else
+								global_der->der_croutonnum = -1;
+						}
+						else
+						{
+							global_der->der_croutonnum = -1;
+						}
+						DelayedErrorPending = 0x03;
+						SendIO( (struct IORequest *)global_der );
+					}
+					DUMPHEXIL("Free Message: ",(LONG)Msg,"...  ");
+					DUMPUDECL("size of Message: ",(LONG)Msg->Message.mn_Length,"\\");
+					FreeMem(Msg,Msg->Message.mn_Length);
+					Msg = NULL;
+				}
+			}
+			else if ( ((struct IntuiMessage *)Msg)->IDCMPWindow == SwitWind )
+			{
+				DUMPHEXIL("IntuiMessage: ",(LONG)Msg,"...  ");
+				DUMPHEXIW("non-Cookie: ",(WORD)Msg->Cookie," ");
+				DUMPHEXIL("sizeof(IntuiMessage) = ",(LONG)sizeof(struct IntuiMessage),"\\");
+				FreeMem(Msg,sizeof(struct IntuiMessage));
+				Msg = NULL;
+			}
+
+			if ( Msg && (Msg->Message.mn_Node.ln_Type == NT_MESSAGE) )
+			{
+				ReplyMsg(&Msg->Message);
+			}
+		}
+		if(lastmsg) WaitPort(Port);
+	} while (lastmsg);
+
+	return(quit); // exit edit?
+}
+
+#ifdef LATER
+static struct ESMessage *GetOnlyMsg(
+	struct MsgPort *mp, struct ESMessage *lastmsg )
+{
+	struct Message	*msg;
+
+	if ( lastmsg )
+	{
+		do
+		{
+			Forbid();
+			{
+				struct Message	*nextmsg;
+
+				for ( msg = (struct Message *)mp->mp_MsgList.lh_Head;
+						nextmsg = (struct Message *)msg->mn_Node.ln_Succ;
+						msg = nextmsg )
+				{
+					if ( msg == (struct Message *)lastmsg )
+					{
+						lastmsg = NULL;
+						Remove((struct Node *)msg);
+						Signal(mp->mp_SigTask,(1L << mp->mp_SigBit));
+						break;
+					}
+				}
+
+			}
+			Permit();
+
+			if (lastmsg)
+				WaitPort(mp);
+
+		} while (lastmsg);
+	}
+	else
+	{
+		msg = GetMsg(mp);
+	}
+
+	return((struct ESMessage *)msg);
+}
+#endif
+
+//*******************************************************************
+struct ESMessage __asm __inline *PutSwitcher(
+	REG(d0) WORD Type, REG(d1) LONG *D1)
+{
+
+	if (!SwitPort)
+		return(NULL);
+	else
+		return(PutESPort(Type,D1,SwitPort));
+}
+
+struct ESMessage __asm *PutESPort(
+	REG(d0) WORD Type, REG(d1) LONG *D1, REG(a0) struct MsgPort *mp )
+{
+	struct ESMessage *Msg;
+	LONG *dataptr;
+	LONG	i=0;
+
+	if(D1)
+	{
+ 		i = *D1++;
+		if(i>MAX_ESPARAMS) i=MAX_ESPARAMS; // May cause bogus calls!!!
+	}
+
+	if (Msg = SafeAllocMem(sizeof(struct ESMessage)+(i<<2),MEMF_CLEAR))
+	{
+		// DelayedErrorPending flags
+		// 0x01 == Message is being communicated
+		// 0x02 == Next Error should be displayed
+		if ( DelayedErrorPending & 0x01 )
+		{
+			AbortIO( (struct IORequest *)global_der );
+			WaitIO( (struct IORequest *)global_der );
+			GetMsg( DelayedErrMsgPort );
+		}
+		DelayedErrorPending = 0;
+
+		Msg->Cookie = EDIT_COOKIE;
+		Msg->Type = Type;
+		Msg->Message.mn_ReplyPort = EditPort;
+		Msg->Message.mn_Length = sizeof(struct ESMessage)+(i<<2);
+		DUMPHEXIL("Allocate Message: ",(LONG)Msg,"...  ");
+		DUMPUDECL(" of ",(LONG)Msg->Message.mn_Length," bytes");
+		DUMPUDECL(" with ",(LONG)i," parameters \\");
+		dataptr = Msg->Data;
+
+		while (i--)	*dataptr++ = *D1++;
+
+		PutMsg(mp,&Msg->Message);
+	}
+
+	DUMPHEXIL("PutSwitcher() Msg= ",(LONG)Msg," ");
+	DUMPUDECL("length= ",Msg->Message.mn_Length,"\\");
+	return(Msg);
+}
+
+// Dummy wrapper, eliminated async messaging options
+void __inline __asm SendSwitcher(REG(d0) WORD Type, REG(d1) APTR D1)
+{
+//	PutSwitcher(Type,(LONG *)D1);
+	SendSwitcherReply(Type,D1);
+}
+
+//*******************************************************************
+LONG __asm SendSwitcherReply(
+	REG(d0) WORD Type, REG(d1) APTR D1)
+{
+	struct ESMessage	*lastmsg;
+	LONG					 reply;
+
+#ifndef SWIT_ONLY
+	if (!SwitPort) return(NULL);
+#endif
+
+//	KPrintF("PutSwitcher(%ld)...",(long)Type);
+	lastmsg = PutSwitcher(Type,(LONG *)D1);
+//	KPrintF("HandleSwitcher...");
+//	Delay(10);
+	HandleSwitcherReply(EditPort,lastmsg,&reply);
+//	KPrintF("HS Done\n");
+
+	return(reply);
+}
+
+//*******************************************************************
+// called when user changes views
+// send message to switcher only if needs to
+BOOL __regargs SwitcherSwitch(
+	BOOL Power)
+{
+	if (Power && (!SwitcherOn))
+	{
+		//DEBUGMSG(DBHMSG,"Before SwitcherSwitch() sends ES_RENDER_SWIT TRUE");
+		ESparams1.Data1=TRUE;
+		SendSwitcherReply(ES_RENDER_SWIT,&ESparams1);	// need to wait for switcher to clear its bm
+		//DEBUGMSG(DBHMSG,"  After SwitcherSwitch() sent ES_RENDER_SWIT TRUE");
+		SwitcherOn=TRUE;
+	}
+	else if ((!Power) && (SwitcherOn))
+	{
+		//DEBUGMSG(DBHMSG,"Before SwitcherSwitch() sends ES_RENDER_SWIT FALSE");
+		ESparams1.Data1=FALSE;
+		SendSwitcherReply(ES_RENDER_SWIT,&ESparams1);
+		//DEBUGMSG(DBHMSG,"  After SwitcherSwitch() sent ES_RENDER_SWIT FALSE");
+		SwitcherOn=FALSE;
+	}
+	return(TRUE);
+}
+
+BOOL __regargs HandleErrPort( struct MsgPort *Port )
+{
+	if ( GetMsg(Port) )
+	{
+		if ( DelayedErrorPending & 0x02 )
+		{
+			DisplayMessage(global_der->der_de.de_errstr);
+
+			if ( (global_der->der_croutonnum >= 0) && EditTop )
+			{
+				EditTop->DisplayGrid = TRUE;
+				EditTop->ew_OptRender = TRUE;
+
+				if ( EditTop->ew_cg )
+				{
+					ob_DoMethod( EditTop->ew_cg,CRGRIDM_SelectCrouton,
+						global_der->der_croutonnum,GRIDSELECT_MULTIPLE,
+						CROUTONSELECT_SELECTED|CROUTONSELECT_ERROR);
+				}
+
+				UpdateDisplay(EditTop);
+			}
+		}
+	}
+
+	global_der->der_croutonnum = -1;
+
+	DelayedErrorPending = 0;
+
+	return(DelayedErrorPending);
+}
+
+void FlushWindowPort( struct Window *win, ULONG idcmpflags )
+{
+	struct IntuiMessage *this_im;
+	ULONG next_im;
+
+	Forbid();
+
+	for ( this_im = (struct IntuiMessage *)win->UserPort->mp_MsgList.lh_Head;
+			next_im = (ULONG) this_im->ExecMessage.mn_Node.ln_Succ;
+			this_im = (struct IntuiMessage *) next_im )
+	{
+		if ( this_im->Class & idcmpflags )
+		{
+			Remove( (struct Node *)this_im );
+			ReplyMsg( (struct Message *)this_im );
+		}
+	}
+
+	Permit();
+}
+
+//*******************************************************************
+//*******************************************************************
+
+static char *LocateFileReqText[] = {
+	"Save File",
+	"Locate the directory and file below using the file requester.",
+	"Enter a filename and Select \"Continue\" to save the file.",
+};
+#define LOCATE_FILE_REQTEXT_NUMLINES	3
+
+static struct GrazerRequest LocateFileGrazRequest = {
+
+	LocateFileReqText,
+	LOCATE_FILE_REQTEXT_NUMLINES,
+
+	NULL,
+	0,
+
+	0,
+	0,
+	0,
+
+	GRAZREQ_RESTOREVIEW,
+
+	EndLocateFileRequest,
+};
+
+LONG LocateFileRequest( void )
+{
+	STRPTR	 filename = global_LocateFileName;
+	STRPTR	*txtarray = global_LocateFileTxt;
+	char		*f;
+
+	global_do_locatefile = FALSE;
+
+	if ( global_LocateFileFlags & 0x01 )
+		LocateFileGrazRequest.gr_Flags |= GRAZREQ_ALLOWCREATE;
+	else
+		LocateFileGrazRequest.gr_Flags &= ~(GRAZREQ_ALLOWCREATE);
+
+	/* only get path part of project name */
+	if ( filename && strlen(filename) && (f = FilePart(filename)) )
+	{
+		char	c;
+
+		/* Store the file name */
+		strcpy(LocateFileGrazRequest.gr_InitialFileName,f);
+
+		c = *f;	*f = '\0';
+
+		/* Store the directory */
+		LocateFileGrazRequest.gr_InitialPath = AllocSmartString(filename,NULL);
+		*f = c;
+	}
+	else
+	{
+		LocateFileGrazRequest.gr_InitialFileName[0] = '\0';
+		LocateFileGrazRequest.gr_InitialPath = NULL;
+	}
+
+	if ( txtarray )
+	{
+		LocateFileGrazRequest.gr_num_reqlines = 0;
+		LocateFileGrazRequest.gr_reqtext = txtarray;
+
+		while ( *txtarray++ )
+			LocateFileGrazRequest.gr_num_reqlines++;
+	}
+	else
+	{
+		LocateFileGrazRequest.gr_reqtext = LocateFileReqText;
+		LocateFileGrazRequest.gr_num_reqlines = LOCATE_FILE_REQTEXT_NUMLINES;
+	}
+
+	BeginGrazerRequest( &LocateFileGrazRequest );
+	return(0);
+}
+
+static char global_LocateFilePath[320];
+
+static LONG EndLocateFileRequest( struct GrazerRequest *gr, LONG mode )
+{
+	LONG						 retval = 0;
+
+	if ( mode && (gr->gr_Flags & GRAZREQ_VALIDFILENAME) )
+	{
+		strcpy(global_LocateFilePath,GetCString(gr->gr_FilePath));
+
+		// Success!
+		retval = TRUE;
+	}
+
+	if ( gr->gr_CancelBottomType == EW_GRAZER )
+		DoAllNewDir(EditBottom);
+
+	req_DoLayout(	gr->gr_CancelTopType,
+						gr->gr_CancelTopHeight,
+						gr->gr_CancelBottomType);
+
+	if (gr->gr_FilePath)
+	{
+		FreeSmartString(gr->gr_FilePath);
+		gr->gr_FilePath = NULL;
+	}
+
+
+	if ( retval )
+	{
+		ESparams5.Data1=global_LocateFileType;
+		ESparams5.Data2=(LONG)global_LocateFilePath;
+		ESparams5.Data3=global_LocateFileFlags;
+		ESparams5.Data4=NULL;
+		ESparams5.Data5=global_LocateFileMode;
+
+		/* message is asynchronous as the switcher may not
+		 * be sending this message.
+		 */
+		PutESPort(ES_FoundFile,(LONG *)&ESparams5,global_LocateFile_mp);
+	}
+
+	return(retval);
+}
+
+// end of editwindow.c
+@
+
+
+2.66
+log
+@Moved FrameSave command to end of EndGrazRequest
+@
+text
+@d3 1
+a3 1
+* $Id: editwindow.c,v 2.65 1995/03/16 14:36:12 CACHELIN4000 Exp pfrench $
+d5 3
+d863 2
+a864 1
+								RefreshEdit();
+@
+
+
+2.65
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.64 1995/03/02 12:34:38 pfrench Exp CACHELIN4000 $
+* $Log: EditWindow.c,v $
+a1275 11
+		ESparams5.Data1=global_LocateFileType;
+		ESparams5.Data2=(LONG)global_LocateFilePath;
+		ESparams5.Data3=global_LocateFileFlags;
+		ESparams5.Data4=NULL;
+		ESparams5.Data5=global_LocateFileMode;
+
+		/* message is asynchronous as the switcher may not
+		 * be sending this message.
+		 */
+		PutESPort(ES_FoundFile,(LONG *)&ESparams5,global_LocateFile_mp);
+
+d1291 15
+@
+
+
+2.64
+log
+@Added switcher un-used rawkey handling code
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.63 1995/02/20 16:11:42 pfrench Exp pfrench $
+d5 3
+@
+
+
+2.63
+log
+@Now properly responds to locate file.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.62 1995/02/20 13:46:11 pfrench Exp pfrench $
+d5 3
+d260 1
+d891 11
+@
+
+
+2.62
+log
+@Made path greater again now that we've got some global
+data moved into the far section.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.61 1995/02/19 16:50:16 pfrench Exp pfrench $
+d5 4
+d317 3
+d333 1
+a333 1
+static LONG LocateFileRequest( STRPTR filename, STRPTR *txtarray );
+d879 1
+a879 1
+							/* Msg->Data[1] = filename */
+d881 1
+a881 1
+							/* Msg->Data[3] = textarray */
+d883 1
+d885 2
+a886 1
+							LocateFileRequest((STRPTR)Msg->Data[1],(STRPTR *)Msg->Data[3]);
+d1194 1
+a1194 1
+static LONG LocateFileRequest( STRPTR filename, STRPTR *txtarray )
+d1196 2
+a1197 1
+	/* Set initial path of grazer */
+d1200 2
+d1208 1
+a1208 1
+	if ( filename && (f = FilePart(filename)) )
+@
+
+
+2.61
+log
+@temporarily un-sized editwindow request buffer size
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.60 1995/02/18 19:08:16 Kell Exp pfrench $
+d5 3
+d1233 1
+a1233 1
+static char global_LocateFilePath[3/*20*/];
+@
+
+
+2.60
+log
+@Moved the SetEditDepth call in Render_EDIT handling so it would also happen before windows are opened.
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.59 1995/02/17 17:07:58 pfrench Exp Kell $
+* $Log: editwindow.c,v $
+d1230 1
+a1230 1
+static char global_LocateFilePath[320];
+@
+
+
+2.59
+log
+@Added check for global edit depth
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.58 1995/02/17 16:39:31 pfrench Exp pfrench $
+* $Log: EditWindow.c,v $
+d830 2
+d834 1
+a834 1
+								SetEditDepth( Msg->Data[1] );
+@
+
+
+2.58
+log
+@Added tons o' stuff for skell
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.57 1995/02/17 15:06:58 pfrench Exp pfrench $
+d5 3
+d274 1
+d417 5
+a421 2
+	struct Gadget *Gadget;
+	struct RastPort *RP;
+d423 4
+a426 4
+	RP = Edit->Window->RPort;
+	if (Erase) {
+		SetRast(Edit->Window->RPort,SCREEN_PEN);
+	}
+d428 5
+a432 5
+	if (Gadget = FindGadget(Edit->Gadgets,ID_PATH)) {
+		NewBorderBox(RP,Gadget->LeftEdge-4,Gadget->TopEdge-2-3,
+			Gadget->LeftEdge+Gadget->Width+3,
+			Gadget->TopEdge+Gadget->Height+4-1,BOX_REV_BORDER);
+	}
+d434 1
+a434 3
+	if (Gadget = FindGadget(Edit->Gadgets,ID_GRID))
+	{
+		if ( Edit->Node.Type == EW_GRAZER )
+d436 8
+a443 1
+			/* Draw Outer border containing directory tabs, then... */
+d447 1
+a447 1
+				Gadget->TopEdge+Gadget->Height+1+16+8,BOX_REV);
+d450 6
+a455 3
+		NewBorderBox(RP,Gadget->LeftEdge-2,Gadget->TopEdge-2,
+			Gadget->LeftEdge+Gadget->Width+1,
+			Gadget->TopEdge+Gadget->Height+1,BOX_REV);
+a457 6
+	RefreshGList(Edit->Gadgets,Edit->Window,NULL,MAX_UWORD);
+	RedrawPopupText(Edit);
+	InitKnobRail(Edit);
+	DrawKnobRail(Edit); // don't want to wait
+	Edit->DisplayGrid = TRUE;
+	Edit->RenderRail = FALSE;
+d748 2
+@
+
+
+2.57
+log
+@Now reply's to messageport of save file initiator
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.56 1995/02/17 14:21:14 pfrench Exp pfrench $
+d5 3
+d257 1
+a257 1
+extern struct ESParams3 ESparams3;
+d298 1
+d304 1
+d313 1
+a313 1
+static LONG LocateFileRequest(ULONG filetype, STRPTR filename, ULONG flags );
+d736 30
+d818 2
+d849 7
+a855 1
+							LocateFileRequest(Msg->Data[0],(STRPTR)Msg->Data[1],Msg->Data[2]);
+d1158 1
+a1158 1
+	GRAZREQ_ALLOWCREATE | GRAZREQ_RESTOREVIEW,
+d1163 1
+a1163 1
+static LONG LocateFileRequest(ULONG filetype, STRPTR filename, ULONG flags )
+d1168 5
+d1193 13
+a1205 2
+	global_LocateFileType = filetype;
+	global_LocateFileFlags = flags;
+d1211 2
+d1219 7
+a1225 3
+		ESparams3.Data1=global_LocateFileType;
+		ESparams3.Data2=(LONG)GetCString(gr->gr_FilePath);
+		ESparams3.Data3=global_LocateFileFlags;
+d1230 1
+a1230 1
+		PutESPort(ES_SaveFile,(LONG *)&ESparams3,global_LocateFile_mp);
+@
+
+
+2.56
+log
+@modified text of locate file requester
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.55 1995/02/17 14:20:11 pfrench Exp pfrench $
+d5 3
+d293 4
+d302 3
+d809 5
+a813 1
+						LocateFileRequest(Msg->Data[0],(STRPTR)Msg->Data[1],Msg->Data[2]);
+d935 11
+a945 1
+	struct ESMessage *Msg=NULL;
+a948 1
+	if (!SwitPort) return(Msg);
+d979 1
+a979 1
+		PutMsg(SwitPort,&Msg->Message);
+d981 1
+d1103 1
+a1103 1
+struct GrazerRequest LocateFileGrazRequest = {
+a1119 3
+ULONG global_LocateFileType;
+ULONG global_LocateFileFlags;
+
+d1162 7
+a1168 9
+		if ( !SendSwitcherReply(ES_SaveFile,&ESparams3) )
+		{
+			// Success!
+			retval = TRUE;
+		}
+		else
+		{
+			// Some Error condition.
+		}
+@
+
+
+2.55
+log
+@Added support for es_locatefile messages from switcher
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.54 1994/12/31 03:31:27 pfrench Exp pfrench $
+d5 3
+d1074 2
+a1075 2
+	"Locate the directory and project below using the file requester.",
+	"Enter a filename and Select \"Continue\" to save the project.",
+@
+
+
+2.54
+log
+@Now SendSwitcher does same thing as sendswitcherreply, without
+the return value
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.53 1994/12/30 18:45:44 CACHELIN4000 Exp pfrench $
+d5 4
+d237 1
+a237 1
+extern struct EditWindow *EditTop;
+d248 1
+d260 1
+a260 1
+ 
+d295 3
+d322 1
+a322 1
+	
+d381 1
+a381 1
+*   NAME   
+d431 1
+a431 1
+	Success = TRUE;	
+d437 1
+a437 1
+*   NAME   
+a443 1
+*	
+d445 1
+d461 1
+a461 1
+*   NAME   
+d498 1
+a498 1
+*   NAME   
+d521 1
+a521 1
+*   NAME   
+d547 1
+a547 1
+*   NAME   
+d607 1
+a607 1
+*   NAME   
+d681 1
+a681 1
+*   NAME   
+d793 7
+d883 1
+a883 1
+				
+d1064 99
+@
+
+
+2.53
+log
+@Comment out weird Msg->Error=NULL which seems to cause 2000 to have timing dependent communication errors.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.52 1994/12/23 14:41:00 pfrench Exp CACHELIN4000 $
+d5 3
+d948 2
+a949 2
+	PutSwitcher(Type,(LONG *)D1);
+	//SendSwitcherReply(Type,D1);
+d963 1
+d965 1
+d968 1
+@
+
+
+2.52
+log
+@Slight optimization in FlushWindowPort()
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.51 1994/12/21 23:31:09 pfrench Exp $
+d5 3
+d723 2
+a724 3
+		{
+	// IDCMP msgs I send to switcher also come back to this port
+			DUMPHEXIL("Message: ",(LONG)Msg,"...  ");
+d734 11
+a744 11
+			      if( ((struct RexxMsg *)Msg)->rm_Node.mn_Node.ln_Type == NT_REPLYMSG )
+							break;
+					PtrProject = (struct FastGadget **)Msg->Reply;
+					Msg->Reply = ES_ERR_NONE;
+					SwitWind = (struct Window *)Msg->Data[2]; // switcher's window (IDCMP)
+							// SwitWind never changes during program (important for us)
+						if(!(EditScreen = (struct Screen *)Msg->Data[0]))
+			//				|| (!(DefaultFG = (struct FastGadget **)Msg->Data[1])))
+							Msg->Reply = ES_ERR_GENERIC; // fail
+						else InitScreenStuff();
+					break;
+d747 3
+a749 15
+					DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+
+					Msg->Reply = ES_ERR_NONE;
+
+					// Switcher wants all our windows closed
+					if (Msg->Data[0] == 0)
+					{
+						CloseAccessWindow();
+						access_win = NULL;
+						MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+					}
+					else	// Switcher wants us open
+					{
+						// If our windows are already open, then we just need to refresh them
+						if (EditTop)
+d751 3
+a753 7
+							SoftSpriteOff();
+
+							RefreshEdit();
+
+							aw_Redraw(global_aw);
+
+							SoftSpriteOn();
+d755 1
+a755 1
+						else	// Else, open them
+d757 14
+a770 5
+							if ( !(access_win = OpenAccessWindow()) )
+								Msg->Reply = 2;
+
+							if (!MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+								Msg->Reply = 2;
+d772 1
+a772 2
+					}
+					break;
+d777 1
+a777 1
+					break;
+d781 1
+a781 1
+					break;
+a786 1
+
+a788 1
+
+a792 1
+
+d795 1
+a795 2
+						Msg->Error = NULL;
+
+a805 1
+
+a809 1
+
+d814 1
+a814 1
+								global_der->der_croutonnum = 
+a822 1
+
+a823 1
+
+a825 1
+
+a903 3
+//	DUMPREG("PutSwitcher() Entry:"); // just this does fix it
+//	DUMPSTR(D1);
+//	DUMPHEXIL(" @@ ",D1, "\\"); // just this line doesn't fix it
+a904 1
+
+a915 1
+
+a921 1
+
+d929 2
+a930 1
+		DUMPUDECL(" of ",(LONG)Msg->Message.mn_Length," bytes\\");
+d961 1
+a961 1
+
+@
+
+
+2.51
+log
+@Tried to fix visual ickyness with directory tabs/crouton border.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.50 1994/12/21 23:16:04 pfrench Exp pfrench $
+d5 3
+d1046 2
+a1047 1
+	struct IntuiMessage *this_im,*next_im;
+d1052 2
+a1053 2
+			next_im = (struct IntuiMessage *)this_im->ExecMessage.mn_Node.ln_Succ;
+			this_im = next_im )
+@
+
+
+2.50
+log
+@Removed explicit rendering calls from directory tabs,
+as the text is now being handled by intuition.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.49 1994/12/21 21:31:02 pfrench Exp pfrench $
+d5 4
+d396 2
+d402 4
+a405 6
+		else
+		{
+			NewBorderBox(RP,Gadget->LeftEdge-2,Gadget->TopEdge-2,
+				Gadget->LeftEdge+Gadget->Width+1,
+				Gadget->TopEdge+Gadget->Height+1,BOX_REV);
+		}
+@
+
+
+2.49
+log
+@Hopefully final tweaking of grid position
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.48 1994/12/21 20:05:15 pfrench Exp pfrench $
+d5 3
+a404 6
+
+	if ( Gadget = FindGadget(Edit->Gadgets,ID_DIRTAB_CYCLE) )
+	{
+		ob_DoMethod(Gadget,GM_RENDER,NULL,Edit->Window->RPort,0);
+	}
+
+@
+
+
+2.48
+log
+@Added Directory tabs images
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.47 1994/12/20 19:38:35 CACHELIN4000 Exp pfrench $
+d5 3
+d391 1
+a391 1
+				Gadget->TopEdge+Gadget->Height+1+16,BOX_REV);
+@
+
+
+2.47
+log
+@Only use close gadget in Arrange() with grazer windows
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.46 1994/12/19 22:39:14 pfrench Exp CACHELIN4000 $
+d5 3
+d183 1
+d381 15
+a395 4
+	if (Gadget = FindGadget(Edit->Gadgets,ID_GRID)) {
+		NewBorderBox(RP,Gadget->LeftEdge-2,Gadget->TopEdge-2,
+			Gadget->LeftEdge+Gadget->Width+1,
+			Gadget->TopEdge+Gadget->Height+1,BOX_REV);
+d397 1
+d399 6
+@
+
+
+2.46
+log
+@Modified for now shared-code proof.library.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.45 1994/12/17 04:50:44 Kell Exp pfrench $
+d5 3
+d511 1
+a511 1
+*	Positions ID_CLOSE,ID_KNOB,ID_UP,ID_DOWN gadgets,
+d523 5
+a527 2
+	if ((Close = FindGadget(Edit->Gadgets,ID_CLOSE)) &&
+		(Prop = FindGadget(Edit->Gadgets,ID_KNOB)) &&
+d532 4
+a535 7
+		Close->LeftEdge = LEFT_EDGE;
+		Up->LeftEdge = Close->LeftEdge;
+		Down->LeftEdge = Close->LeftEdge;
+//		Prop->LeftEdge = Close->LeftEdge;
+//		Prop->Width = Close->Width;
+		Prop->LeftEdge = Close->LeftEdge + 2;
+		Prop->Width = Close->Width-4;
+a538 1
+		Close->TopEdge = 0;
+d548 4
+d553 3
+a555 1
+		Prop->Height = Up->TopEdge - 4 - Prop->TopEdge;
+@
+
+
+2.45
+log
+@Removed ES_FlyerVolumes handling.  This is now sent to the Switcher, instead of recieved from the Switcher.
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.44 1994/12/09 15:38:59 pfrench Exp Kell $
+* $Log: editwindow.c,v $
+d173 4
+a176 1
+#include <object.h>
+d202 1
+@
+
+
+2.44
+log
+@Cleaned up a few things while fixing wbtofront/back
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.43 1994/12/08 13:25:30 CACHELIN4000 Exp pfrench $
+* $Log: EditWindow.c,v $
+a733 5
+					break;
+
+					case ES_FlyerVolumes:
+						if(FlyerDriveCount==0) BuildFlyerList();
+						Msg->Reply = (LONG)FlyerDrives;
+@
+
+
+2.43
+log
+@Change Vertical Slider width and position
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.42 1994/11/15 17:50:26 pfrench Exp CACHELIN4000 $
+d5 3
+d217 3
+a223 2
+LONG LastReply=0;
+struct ESMessage *LastMsg=NULL;
+d251 8
+d661 6
+d679 3
+a681 1
+				LastReply = Msg->Reply;
+d714 2
+d717 1
+d719 2
+d752 2
+a753 2
+					if ( LastMsg == Msg )
+						LastMsg=NULL;
+d815 1
+d817 1
+d819 3
+a821 2
+		if(LastMsg) WaitPort(Port);
+	} while (LastMsg);
+d825 44
+d923 2
+a924 1
+	SendSwitcherReply(Type,D1);
+d931 3
+a933 1
+//	DUMPREG("SendSwitcherReply() Entry: \\");
+d937 6
+a942 12
+	LastReply = NULL;
+	HandleSwitcher(EditPort); // flush port
+//	DUMPSTR(D1);
+//	DUMPHEXIL(" @@ ",D1, "\\");
+	DUMPMSG("  Before SendSwitcherReply() sends Type");
+	LastMsg = PutSwitcher(Type,(LONG *)D1);
+	DUMPMSG("After SendSwitcherReply() sent Type");
+
+//	DUMPREG("SentSwitcherReply() done: \\");
+	WaitPort(EditPort);
+	HandleSwitcher(EditPort);
+	return(LastReply);
+@
+
+
+2.42
+log
+@Added support to highlight delayed error croutons when
+the error is posted, and not before.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.41 1994/11/09 12:46:40 pfrench Exp pfrench $
+d5 4
+d507 4
+a510 2
+		Prop->LeftEdge = Close->LeftEdge;
+		Prop->Width = Close->Width;
+@
+
+
+2.41
+log
+@Added initial support for proof.lib
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.40 1994/10/21 23:22:40 CACHELIN4000 Exp pfrench $
+d5 3
+d207 2
+a208 1
+VOID KPutStr(char *String);
+d749 14
+d902 15
+d919 2
+@
+
+
+2.40
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.39 94/10/17 14:33:55 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d157 3
+d289 16
+a304 1
+	if (Edit->Window) {
+d308 1
+d629 1
+d657 2
+a658 2
+						PtrProject = (struct FastGadget **)Msg->Reply;
+						Msg->Reply = ES_ERR_NONE;
+d715 1
+a715 3
+					if( LastMsg == Msg )
+					{
+						struct DelayedError	*de;
+d717 1
+d720 12
+a731 4
+						/*	Check for delayed Error information in reply
+						 *	If non-NULL, build a timer request according
+						 *	to the value that's in there
+						 */
+d733 1
+a733 1
+						if ( de = Msg->Error )
+d735 4
+a738 1
+							Msg->Error = NULL;
+d740 4
+a743 15
+							// DelayedErrorPending flags
+							// 0x01 == Message is being communicated
+							// 0x02 == Next Error should be displayed
+
+							if ( DelayedErrorPending & 0x01 )
+							{
+								AbortIO( (struct IORequest *)global_der );
+								WaitIO( (struct IORequest *)global_der );
+								GetMsg( DelayedErrMsgPort );
+							}
+
+							// Copy the information over and send it off
+							global_der->der_de = *de;
+							global_der->der_timerequest.tr_time.tv_secs = de->de_hottime.tv_secs;
+							global_der->der_timerequest.tr_time.tv_micro = de->de_hottime.tv_micro;
+d745 1
+a745 1
+							DelayedErrorPending = 0x03;
+d747 1
+a747 2
+							SendIO( (struct IORequest *)global_der );
+						}
+@
+
+
+2.39
+log
+@Correct SwitcherOn test&toggle in SwitcherSwitch
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.37 94/10/14 13:36:55 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d168 1
+a168 1
+#define SERDEBUG	1
+d624 2
+d729 2
+d737 3
+d790 2
+a791 1
+
+d799 1
+a799 1
+	//DUMPHEXIL("length= ",Msg->Message.mn_Length,"\\");
+@
+
+
+2.38
+log
+@Add Break to ES_RENDERSWIT in HandleSwitcher(), move ES_FlyerVolumes above that.
+@
+text
+@d165 1
+a165 1
+//#define SERDEBUG	1
+d640 1
+a640 1
+					//DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+d681 1
+a681 1
+						//DEBUGMSG(DBHMSG,"ES_RENDER_SWIT");
+d782 2
+a783 2
+	
+		while (i--)	*dataptr++ = *D1++;		
+d787 1
+a787 1
+	//DUMPHEXIL("PutSwitcher() Msg= ",(LONG)Msg," ");
+d810 1
+a810 1
+//	DUMPMSG("  Before SendSwitcherReply() sends Type");
+d812 1
+a812 1
+//	DUMPMSG("After SendSwitcherReply() sent Type");
+d826 1
+a826 1
+	if (Power && (SwitcherOn==FALSE))
+d832 1
+a832 1
+
+d834 1
+a834 1
+	else if ((!Power) && (SwitcherOn==TRUE))
+d840 1
+@
+
+
+2.37
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.36 94/10/14 09:52:56 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d670 5
+a681 4
+
+					case ES_FlyerVolumes:
+						if(FlyerDriveCount==0) BuildFlyerList();
+						Msg->Reply = (LONG)FlyerDrives;
+@
+
+
+2.36
+log
+@Add ES_FlyerVolumes support to HandleSwitcher()
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.35 94/10/12 18:56:19 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+a675 1
+						Msg->Reply = ES_ERR_NONE;
+d677 1
+a677 5
+						Msg->Reply = FlyerDrives;
+					break;
+
+
+						if (!Msg->Reply) SwitcherOn = Msg->Data[0]; // if success
+@
+
+
+2.35
+log
+@Fix call to DisplayMessage()
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.34 94/09/23 20:08:24 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d183 2
+a184 1
+
+d671 7
+@
+
+
+2.34
+log
+@Moved loadslice to main event loop
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.33 1994/09/21 21:32:47 pfrench Exp pfrench $
+* $Log: EditWindow.c,v $
+d837 1
+a837 1
+			DisplayMessage(global_der->der_de.de_errstr,EditScreen);
+@
+
+
+2.33
+log
+@Added new FlushWindowPort call
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.32 1994/09/20 22:46:29 pfrench Exp pfrench $
+d5 3
+d162 1
+a630 2
+					aw_Redraw(global_aw);
+
+d634 2
+d644 1
+d648 3
+@
+
+
+2.32
+log
+@No longer initializes its own FG list as that is done
+through the dir cache.
+@
+text
+@d3 6
+a8 2
+* $Id: editwindow.c,v 2.31 1994/09/08 15:40:55 pfrench Exp pfrench $
+* $Log: editwindow.c,v $
+a681 2
+							// Pending & 0x01 when error has been sent
+							// to the timer.device
+a693 6
+
+							// May want to actually pay attention to the
+							// time values in the delayed error message,
+							// but for now, I'm just using the default
+							// delay value of 1.5 seconds.
+
+d833 20
+@
+
+
+2.31
+log
+@Added support for refreshing the accesswindow
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.30 1994/09/02 01:34:45 pfrench Exp pfrench $
+* $Log: EditWindow.c,v $
+a356 1
+		NewList(&Edit->Special->EditList); // node list
+@
+
+
+2.30
+log
+@Now gets delay time from msg->Error.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.29 1994/09/01 23:50:14 pfrench Exp pfrench $
+d5 3
+d163 1
+d617 3
+a619 1
+						//DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+d621 1
+a621 1
+						Msg->Reply = ES_ERR_NONE;
+d624 3
+a626 10
+					if (Msg->Data[0] == 0) MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+					// Switcher wants us open
+					else {
+					// If our windows are already open, then we just need to refresh them
+					if (EditTop) {
+						RefreshEdit();
+					// Else, open them
+					} else {
+						if (!MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+							Msg->Reply = 2;
+d628 12
+@
+
+
+2.29
+log
+@Added temporary delayed message stuff
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.28 1994/09/01 22:27:03 pfrench Exp pfrench $
+d5 3
+d613 1
+a613 1
+						DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+d633 1
+a633 1
+					DEBUGMSG(DBHMSG,"ES_QUIT");
+d638 1
+a638 1
+						DEBUGMSG(DBHMSG,"ES_RENDER_SWIT");
+a656 3
+#ifndef OLDWAY
+						if ( (Msg->Type == ES_Select) && Msg->Reply )
+#else
+a657 1
+#endif
+d659 6
+d666 1
+a666 1
+							// to the timer.device.
+a674 3
+#ifndef OLDWAY
+							global_der->der_de.de_errstr = "General Error";
+#else
+d676 4
+a679 1
+#endif
+a684 4
+							// DelayedErrorPending flags
+							// 0x01 == Message is out there!
+							// 0x02 == Error should be displayed on screen
+
+a687 1
+							Msg->Error = NULL;
+d728 15
+a742 1
+	if (Msg = SafeAllocMem(sizeof(struct ESMessage)+(i<<2),MEMF_CLEAR)) {
+a747 2
+		DelayedErrorPending &= ~0x02;
+
+d754 2
+a755 2
+	DUMPHEXIL("PutSwitcher() Msg= ",(LONG)Msg," ");
+	DUMPHEXIL("length= ",Msg->Message.mn_Length,"\\");
+d795 1
+a795 1
+		DEBUGMSG(DBHMSG,"Before SwitcherSwitch() sends ES_RENDER_SWIT TRUE");
+d798 1
+a798 1
+		DEBUGMSG(DBHMSG,"  After SwitcherSwitch() sent ES_RENDER_SWIT TRUE");
+d803 1
+a803 1
+		DEBUGMSG(DBHMSG,"Before SwitcherSwitch() sends ES_RENDER_SWIT FALSE");
+d806 1
+a806 1
+		DEBUGMSG(DBHMSG,"  After SwitcherSwitch() sent ES_RENDER_SWIT FALSE");
+d813 7
+a819 4
+	GetMsg(Port);
+
+	if ( DelayedErrorPending & 0x02 )
+		DisplayMessage(global_der->der_de.de_errstr,EditScreen);
+d825 1
+@
+
+
+2.28
+log
+@Added DelayedError timer.device message handling
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.27 1994/09/01 18:41:42 pfrench Exp pfrench $
+d5 3
+d654 3
+d658 1
+d670 3
+d674 1
+a674 1
+
+d687 1
+d705 1
+a705 1
+	} while (LastMsg) ;
+@
+
+
+2.27
+log
+@Fixed problems with ESMessage allocation/free
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.26 1994/09/01 18:29:15 pfrench Exp pfrench $
+d5 3
+d151 3
+d194 2
+d653 24
+a676 1
+							/* Build timer request for delayed error */
+a677 1
+
+d723 2
+d788 11
+@
+
+
+2.26
+log
+@put preliminary support for delayed error messages.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.25 1994/08/31 23:07:52 Kell Exp pfrench $
+d5 3
+d590 1
+a590 1
+					SwitWind = (struct Window *)Msg->Data3; // switcher's window (IDCMP)
+d592 2
+a593 2
+						if(!(EditScreen = (struct Screen *)Msg->Data1))
+			//				|| (!(DefaultFG = (struct FastGadget **)Msg->Data2)))
+d604 1
+a604 1
+					if (Msg->Data1 == 0) MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+d626 1
+a626 1
+						if (!Msg->Reply) SwitcherOn = Msg->Data1; // if success
+d634 1
+a634 1
+						// struct DelayedError	*de;
+d642 2
+a643 2
+#ifdef LATER
+						if ( de = Msg->Reply )
+d647 1
+a647 1
+#endif
+d687 1
+a687 1
+	if (Msg = SafeAllocMem(sizeof(struct MinESMessage)+(i<<2),MEMF_CLEAR)) {
+d691 1
+a691 1
+		Msg->Message.mn_Length = sizeof(struct MinESMessage)+(i<<2);
+d693 1
+a693 1
+		dataptr = &(Msg->Data1);
+@
+
+
+2.25
+log
+@new debugs
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.24 1994/08/30 16:24:45 pfrench Exp Kell $
+* $Log: editwindow.c,v $
+d111 1
+d572 2
+a573 1
+	do {
+d577 2
+a578 1
+			if (Msg->Cookie == EDIT_COOKIE) {
+d580 38
+a617 5
+				switch(Msg->Type) {
+	//**********************************
+			case ES_STARTUP:
+				DEBUGMSG(DBHMSG,"ES_STARTUP");
+	      if( ((struct RexxMsg *)Msg)->rm_Node.mn_Node.ln_Type == NT_REPLYMSG )
+a618 29
+				PtrProject = (struct FastGadget **)Msg->Reply;
+				Msg->Reply = ES_ERR_NONE;
+			SwitWind = (struct Window *)Msg->Data3; // switcher's window (IDCMP)
+					// SwitWind never changes during program (important for us)
+				if(!(EditScreen = (struct Screen *)Msg->Data1))
+	//				|| (!(DefaultFG = (struct FastGadget **)Msg->Data2)))
+					Msg->Reply = ES_ERR_GENERIC; // fail
+				else InitScreenStuff();
+			break;
+
+	//**********************************
+			case ES_RENDER_EDIT:
+				DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+
+				Msg->Reply = ES_ERR_NONE;
+	// Switcher wants all our windows closed
+			if (Msg->Data1 == 0) MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+// Switcher wants us open
+			else {
+	// If our windows are already open, then we just need to refresh them
+			if (EditTop) {
+				RefreshEdit();
+	// Else, open them
+			} else {
+				if (!MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+					Msg->Reply = 2;
+			}
+			}
+			break;
+d620 2
+a621 13
+	//**********************************
+			case ES_QUIT:
+			DEBUGMSG(DBHMSG,"ES_QUIT");
+				quit=TRUE;
+			break;
+
+	//**********************************
+			case ES_RENDER_SWIT: // a reply
+				DEBUGMSG(DBHMSG,"ES_RENDER_SWIT");
+
+				if (!Msg->Reply) SwitcherOn = Msg->Data1; // if success
+			break;
+	//**********************************
+d623 2
+d626 21
+a646 5
+				if (Msg->Message.mn_Node.ln_Type == NT_REPLYMSG) {
+					DUMPHEXIL("Freeing Message: ",(LONG)Msg," , ");
+					DUMPHEXIL("length= ",Msg->Message.mn_Length,"\\");
+//					DUMPHEXIL("Data1= ",Msg->Data1," \\ ");
+					if(LastMsg == Msg) LastMsg=NULL;
+d650 3
+a652 1
+			} else if (((struct IntuiMessage *)Msg)->IDCMPWindow == SwitWind) {
+d657 1
+a657 1
+			if (Msg && (Msg->Message.mn_Node.ln_Type == NT_MESSAGE))
+d689 1
+a689 1
+	
+@
+
+
+2.24
+log
+@Fixed mungwall hit with message allocation
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.23 1994/08/30 10:35:59 Kell Exp pfrench $
+* $Log: EditWindow.c,v $
+d124 1
+a124 1
+// #define SERDEBUG	1
+d627 2
+a628 1
+					DUMPHEXIL("Data1= ",Msg->Data1," \\ ");
+d678 1
+@
+
+
+2.23
+log
+@Changed SendSwitcherReply(), SendSwitcher() and PutSwitcher() to work with ESParams structures so we can easily work with any number of parameters.
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.22 1994/08/27 00:19:20 CACHELIN4000 Exp Kell $
+* $Log: editwindow.c,v $
+d664 2
+a670 2
+		Msg->Message.mn_ReplyPort = EditPort;
+		Msg->Message.mn_Length = sizeof(struct MinESMessage)+(i<<2);
+@
+
+
+2.22
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.21 94/07/08 10:11:16 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d136 2
+d145 3
+a147 1
+extern struct ESMessage OurESMessage;
+d641 1
+a641 1
+	REG(d0) WORD Type, REG(d1) LONG D1, REG(d2) LONG D2, REG(d3) LONG D3 )
+d644 3
+d651 8
+a658 1
+	if (Msg = SafeAllocMem(sizeof(struct ESMessage),MEMF_CLEAR)) {
+d661 5
+a665 3
+		Msg->Data1 = D1;
+		Msg->Data2 = D2;
+		Msg->Data3 = D3;
+d667 1
+a667 1
+		Msg->Message.mn_Length = sizeof(struct ESMessage);
+d675 1
+a675 1
+void __inline __asm SendSwitcher(REG(d0) WORD Type, REG(d1) LONG D1, REG(d2) LONG D2, REG(d3) LONG D3 )
+d677 1
+a677 1
+	SendSwitcherReply(Type,D1,D2,D3);
+d682 1
+a682 1
+	REG(d0) WORD Type, REG(d1) LONG D1, REG(d2) LONG D2, REG(d3) LONG D3 )
+d693 1
+a693 1
+	LastMsg = PutSwitcher(Type,D1,D2,D3);
+d711 2
+a712 1
+		SendSwitcherReply(ES_RENDER_SWIT,TRUE,0,0);	// need to wait for switcher to clear its bm
+d719 2
+a720 1
+		SendSwitcherReply(ES_RENDER_SWIT,FALSE,0,0);
+@
+
+
+2.21
+log
+@replace SendSwitcher() with PutSwitcher() in SendSwitcherReply(), 
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.20 94/07/07 17:00:50 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d25 1
+a25 1
+*remove window's WFLG_SIMPLE_REFRESH 
+@
+
+
+2.20
+log
+@Fix Message bug w/ LastMsg global in HandleSwitcher()
+@
+text
+@d3 5
+a7 2
+* $Id: EditWIndow.c,v 2.19 94/07/07 00:42:46 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWIndow.c,v $
+d630 1
+a630 1
+struct ESMessage __asm *SendSwitcher(
+d634 1
+a634 1
+//	DUMPREG("SendSwitcher() Entry:"); // just this does fix it
+d648 1
+a648 1
+	DUMPHEXIL("SendSwitcher() Msg= ",(LONG)Msg," ");
+d652 6
+d671 1
+a671 1
+	LastMsg = SendSwitcher(Type,D1,D2,D3);
+d696 1
+a696 1
+		SendSwitcher(ES_RENDER_SWIT,FALSE,0,0);
+@
+
+
+2.19
+log
+@SnedSwitcherReply --> register args
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.18 94/07/04 18:37:15 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d136 1
+a136 1
+
+d513 1
+a513 1
+*	
+d549 14
+a562 13
+	while (Msg = (struct ESMessage *)GetMsg(Port)) {
+
+// IDCMP msgs I send to switcher also come back to this port
+		if (Msg->Cookie == EDIT_COOKIE) {
+			LastReply = Msg->Reply;
+			switch(Msg->Type) {
+//**********************************
+		case ES_STARTUP:
+			DEBUGMSG(DBHMSG,"ES_STARTUP");
+      if( ((struct RexxMsg *)Msg)->rm_Node.mn_Node.ln_Type == NT_REPLYMSG )
+				break;
+			PtrProject = (struct FastGadget **)Msg->Reply;
+			Msg->Reply = ES_ERR_NONE;
+d564 10
+a573 10
+				// SwitWind never changes during program (important for us)
+			if(!(EditScreen = (struct Screen *)Msg->Data1))
+//				|| (!(DefaultFG = (struct FastGadget **)Msg->Data2)))
+				Msg->Reply = ES_ERR_GENERIC; // fail
+			else InitScreenStuff();
+		break;
+
+//**********************************
+		case ES_RENDER_EDIT:
+			DEBUGMSG(DBHMSG,"ES_RENDER_EDIT");
+d575 3
+a577 3
+			Msg->Reply = ES_ERR_NONE;
+// Switcher wants all our windows closed
+		if (Msg->Data1 == 0) MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+d579 11
+a589 11
+		else {
+// If our windows are already open, then we just need to refresh them
+		if (EditTop) {
+			RefreshEdit();
+// Else, open them
+		} else {
+			if (!MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+				Msg->Reply = 2;
+		}
+		}
+		break;
+d591 2
+a592 2
+//**********************************
+		case ES_QUIT:
+d594 2
+a595 10
+			quit=TRUE;
+		break;
+
+//**********************************
+		case ES_RENDER_SWIT: // a reply
+			DEBUGMSG(DBHMSG,"ES_RENDER_SWIT");
+
+			if (!Msg->Reply) SwitcherOn = Msg->Data1; // if success
+		break;
+//**********************************
+d597 18
+a614 3
+			} // switch Type
+			if (Msg->Message.mn_Node.ln_Type == NT_REPLYMSG) {
+				FreeMem(Msg,Msg->Message.mn_Length);
+d617 3
+a619 3
+		} else if (((struct IntuiMessage *)Msg)->IDCMPWindow == SwitWind) {
+			FreeMem(Msg,sizeof(struct IntuiMessage));
+			Msg = NULL;
+d621 2
+a622 4
+
+		if (Msg && (Msg->Message.mn_Node.ln_Type == NT_MESSAGE))
+			ReplyMsg(&Msg->Message);
+	}
+d627 2
+a628 2
+VOID __regargs SendSwitcher(
+	WORD Type,LONG D1,LONG D2,LONG D3)
+d630 5
+a634 5
+	struct ESMessage *Msg;
+
+#ifndef SWIT_ONLY
+	if (!SwitPort) return;
+#endif
+d645 2
+d653 1
+d659 5
+a663 4
+
+	DEBUGMSG(DBHMSG,"Before SendSwitcherReply() sends Type");
+	SendSwitcher(Type,D1,D2,D3);
+	DEBUGMSG(DBHMSG,"After SendSwitcherReply() sent Type");
+d665 1
+@
+
+
+2.18
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.17 94/06/04 02:27:21 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d111 1
+d639 2
+a640 2
+LONG SendSwitcherReply(
+	WORD Type,LONG D1,LONG D2,LONG D3)
+@
+
+
+2.17
+log
+@Went back to the using SIMPLE_REFRESH on the edit windows. Necessary!!
+When leaving switcher mode, the editor now waits on the switcher.
+@
+text
+@d3 6
+a8 2
+* $Id: editwindow.c,v 2.16 94/06/03 19:52:36 Kell Exp Locker: Kell $
+* $Log:	editwindow.c,v $
+d103 1
+a103 1
+#define SERDEBUG	1
+@
+
+
+2.16
+log
+@Restored the edit windows SIMPLE_REFRESH (killed a bad idea)
+@
+text
+@d3 1
+a3 1
+* $Id: editwindow.c,v 2.15 94/06/03 19:02:13 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d658 2
+a659 2
+		SendSwitcher(ES_RENDER_SWIT,TRUE,0,0);
+		DEBUGMSG(DBHMSG,"  After SwitcherSwitch() sent ES_RENDER_SWIT FALSE");
+@
+
+
+2.15
+log
+@remove window's WFLG_SIMPLE_REFRESH 
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.14 94/04/22 14:31:39 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d133 1
+a133 2
+//	WFLG_SIMPLE_REFRESH+BORDERLESS+ACTIVATE+RMBTRAP+WFLG_NW_EXTENDED,	/* other window flags */
+	BORDERLESS+ACTIVATE+RMBTRAP+WFLG_NW_EXTENDED,	/* other window flags */
+@
+
+
+2.14
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.13 94/03/17 09:52:43 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d130 2
+a131 1
+	WFLG_SIMPLE_REFRESH+BORDERLESS+ACTIVATE+RMBTRAP+WFLG_NW_EXTENDED,	/* other window flags */
+@
+
+
+2.13
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.12 94/03/15 14:57:54 Kell Exp Locker: Kell $
+* $Log:	editwindow.c,v $
+@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: editwindow.c,v 2.11 94/03/15 13:46:11 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d90 1
+a90 1
+#define DBHMSG YA("HandleSwitcher")
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.10 94/03/15 13:40:09 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d84 1
+a84 1
+//#define SERDEBUG	1
+@
+
+
+2.10
+log
+@Eliminate DefaultFG = internalcroutons from ES_STARTUP
+/.
+@
+text
+@d3 1
+a3 1
+* $Id: EditWindow.c,v 2.9 94/03/13 07:54:41 Kell Exp Locker: CACHELIN4000 $
+d5 3
+@
+
+
+2.9
+log
+@Reworked the way debug statements work.  Added ES_QUIT handler.
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.8 94/03/11 14:55:35 Kell Exp Locker: Kell $
+* $Log:	editwindow.c,v $
+d532 2
+a533 2
+			if ((!(EditScreen = (struct Screen *)Msg->Data1)) ||
+				(!(DefaultFG = (struct FastGadget **)Msg->Data2)))
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: editwindow.c,v 2.7 94/03/11 14:38:30 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d74 2
+a75 3
+
+
+#define SERDEBUG	1
+d78 2
+a79 1
+#define DBHMSG TRUE
+a80 3
+
+
+
+d146 1
+a146 1
+
+d512 1
+d522 1
+a522 1
+			DEBUGMSG("DBHMSG","ES_STARTUP");
+d537 1
+a537 1
+			DEBUGMSG("DBHMSG","ES_RENDER_EDIT");
+d556 6
+d563 1
+a563 1
+			DEBUGMSG("DBHMSG","ES_RENDER_SWIT");
+d567 1
+d582 1
+a582 1
+	return(FALSE); // exit edit?
+d615 2
+a616 1
+	DUMPMSG("Before SendSwitcherReply() sends Type");
+d618 2
+a619 1
+	DUMPMSG("  After SendSwitcherReply() sent Type");
+d633 1
+a633 1
+		DUMPMSG("Before SwitcherSwitch() sends ES_RENDER_SWIT TRUE");
+d635 2
+a636 1
+		DUMPMSG("  After SwitcherSwitch() sent ES_RENDER_SWIT TRUE");
+d640 1
+a640 1
+		DUMPMSG("Before SwitcherSwitch() sends ES_RENDER_SWIT FALSE");
+d642 1
+a642 1
+		DUMPMSG("  After SwitcherSwitch() sent ES_RENDER_SWIT FALSE");
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.6 94/03/11 14:30:15 Kell Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d536 1
+a536 1
+			DEBUGMSG("DBHMSG","ES_STARTUP");
+d556 1
+a556 1
+			DEBUGMSG("DBHMSG","ES_STARTUP");
+@
+
+
+2.6
+log
+@Added some debug statements
+@
+text
+@d3 5
+a7 2
+* $Id: editwindow.c,v 2.5 94/03/11 09:32:09 Kell Exp Locker: Kell $
+* $Log:	editwindow.c,v $
+d34 1
+a34 1
+* Confidental and Proprietary. All rights reserved. 
+d45 4
+d518 3
+a520 2
+			DebugMsg("DBHMSG","ES_STARTUP");
+	
+a521 1
+	
+d533 1
+a533 1
+			DebugMsg("DBHMSG","ES_STARTUP");
+d553 1
+a553 1
+			DebugMsg("DBHMSG","ES_STARTUP");
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: editwindow.c,v 2.4 94/03/05 21:05:14 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d61 2
+d66 5
+d511 2
+d514 1
+d526 2
+d546 2
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: EditWindow.c,v 2.3 94/02/28 18:10:40 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	EditWindow.c,v $
+d58 3
+d580 1
+a580 1
+	DumpMsg("Before SendSwitcherReply() sends Type");
+d582 1
+a582 1
+	DumpMsg("  After SendSwitcherReply() sent Type");
+d596 1
+a596 1
+		DumpMsg("Before SwitcherSwitch() sends ES_RENDER_SWIT TRUE");
+d598 1
+a598 1
+		DumpMsg("  After SwitcherSwitch() sent ES_RENDER_SWIT TRUE");
+d602 1
+a602 1
+		DumpMsg("Before SwitcherSwitch() sends ES_RENDER_SWIT FALSE");
+d604 1
+a604 1
+		DumpMsg("  After SwitcherSwitch() sent ES_RENDER_SWIT FALSE");
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@Binary files EditWindow.c and t:,RCSt1A710dc80 differ
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@Binary files EditWindow.c and t:,RCSt1A70e0df0 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files EditWindow.c and t:,RCSt1A70c3480 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files EditWindow.c and t:,RCSt1A70c0270 differ
+@

@@ -1,0 +1,5144 @@
+head	2.32;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.32
+date	95.02.16.20.21.33;	author Kell;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	95.02.12.05.19.14;	author Kell;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.12.24.10.05.09;	author Kell;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.12.17.14.38.28;	author Kell;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.12.06.23.25.40;	author Kell;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.12.06.23.25.04;	author Kell;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.12.03.06.10.51;	author Kell;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.07.27.19.26.57;	author Kell;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	93.11.16.02.08.27;	author Kell;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	93.10.29.03.40.50;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	93.10.26.13.19.00;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	93.10.25.20.37.37;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	93.10.23.05.06.27;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	93.09.30.15.59.34;	author Turcotte;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	93.09.10.16.06.54;	author Turcotte;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	93.09.05.01.19.05;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	93.09.01.00.27.23;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	93.08.31.22.22.00;	author Turcotte;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	93.08.27.16.45.40;	author Turcotte;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	93.08.25.00.33.40;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	93.06.19.10.32.41;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	93.06.09.12.21.41;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.05.14.01.03.35;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.03.18.15.17.02;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.03.11.16.58.50;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.03.06.01.10.24;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	93.02.28.02.51.23;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	93.02.24.03.31.15;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	93.02.13.14.28.24;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	93.01.20.23.54.57;	author Turcotte;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	93.01.20.23.50.28;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.11.12.19.19.19;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.21.12.58;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.32
+log
+@Now does a KillAlphaKey before any frame reading.
+@
+text
+@********************************************************************
+* autocal.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: autocal.a,v 2.31 1995/02/12 05:19:14 Kell Exp Kell $
+*
+* $Log: autocal.a,v $
+*Revision 2.31  1995/02/12  05:19:14  Kell
+*Some grays changed from $666 to $555 to match the current color01.
+*
+*Revision 2.30  1994/12/24  10:05:09  Kell
+*Changed VID4 loopback to VID2 so it can work with the Flyer.
+*
+*Revision 2.29  1994/12/17  14:38:28  Kell
+*New routine for Checking Digital Phase error, w/o requiring an external sync source, but can use Flyer clips instead.
+*
+*Revision 2.28  1994/12/06  23:25:40  Kell
+*Added GrabIQ and DoneGrabIQ for grabbing a frame & getting the YIQs.
+*
+*Revision 2.27  1994/12/06  23:25:04  Kell
+**** empty log message ***
+*
+*Revision 2.26  1994/12/03  06:10:51  Kell
+*New uses WriteHardSets instead of SaveHardSets, to prevent CDROM write errors.
+*
+*Revision 2.25  1994/07/27  19:26:57  Kell
+**** empty log message ***
+*
+*Revision 2.24  1993/11/16  02:08:27  Kell
+*Changed the Reading Copperlist so AA machines use $888 palette color
+*
+*Revision 2.23  93/10/29  03:40:50  Kell
+**** empty log message ***
+*
+*Revision 2.22  93/10/26  13:19:00  Kell
+*Disabled red/green/blue error flashes.
+*
+*Revision 2.21  93/10/25  20:37:37  Kell
+*Now uses external HardSetsData.a file.
+*
+*Revision 2.20  93/10/23  05:06:27  Kell
+*Now Hardsets contains multiple Grab preset tables.
+*ReadScanLine can read one scan line in 1/60 sec.
+*CaliReadScanLine bugs fixed, now saves new presets correctly.
+*InitReadScanLine/7Quad now generates either 7 or 10 grabs/line data.
+*
+*Revision 2.19  93/09/30  15:59:34  Turcotte
+*Replace 68000 Grab test.
+*
+*Revision 2.18  93/09/10  16:06:54  Turcotte
+*Remove 68000 Grab test.
+*
+*Revision 2.17  93/09/05  01:19:05  Kell
+**** empty log message ***
+*
+*Revision 2.16  93/09/01  00:27:23  Kell
+*Fixed fast 040 framegrabbing streak bug.
+*
+*Revision 2.15  93/08/31  22:22:00  Turcotte
+**** empty log message ***
+*
+*Revision 2.14  93/08/27  16:45:40  Turcotte
+**** empty log message ***
+*
+*Revision 2.13  93/08/25  00:33:40  Kell
+*AutoMatte, AutoHue, AutoPedGain now return more parameters
+*
+*Revision 2.12  93/06/19  10:32:41  Kell
+*More discriptive AutoCal/TestAutoCal return codes
+*
+*Revision 2.11  93/06/09  12:21:41  Kell
+**** empty log message ***
+*
+*Revision 2.10  93/05/14  01:03:35  Kell
+**** empty log message ***
+*
+*Revision 2.9  93/03/18  15:17:02  Kell
+**** empty log message ***
+*
+*Revision 2.8  93/03/11  16:58:50  Kell
+*Moved ReadScanLineBMs to top of memory.
+*
+*Revision 2.7  93/03/06  01:10:24  Kell
+*TestMain2EXT() and TestMain2Vid4() now leave BLACK in bank 0, instead of white.
+*
+*Revision 2.6  93/02/28  02:51:23  Kell
+*Now using nice $555 gray displays for everything.
+*
+*Revision 2.5  93/02/24  03:31:15  Kell
+*Major changes to take advantage of the new AA Toaster.
+*
+*Revision 2.4  93/02/13  14:28:24  Kell
+*Changes to support the AA chip set
+*
+*Revision 2.3  93/01/20  23:54:57  Turcotte
+**** empty log message ***
+*
+*Revision 2.2  93/01/20  23:50:28  Kell
+*Added InitReadScanLine funtion
+*
+*Revision 2.1  92/11/12  19:19:19  Kell
+*Fixed AutoCals SimpleBMCopList to clear the ViewModes field of SUSBM.
+*
+*Revision 2.0  92/05/18  21:12:58  Hartford
+**** empty log message ***
+*
+*********************************************************************
+* By S.R. Kell,   NewTek, Inc     Oct 1989
+**************************************************************
+	include	"assembler.i"
+;;	include "RAM:conditional.i"
+
+	include	"exec/types.i"
+	include	"exec/execbase.i"
+	include	"hardware/custom.i"
+	include	"macros.i"
+	include	"custom.i"
+	include "rect.i"
+	include "vthand.i"
+	include	"instinct.i"
+	include	"elh.i"
+	include "hardsets.i"
+	include "cop.i"
+
+	include	"vtdebug.i"
+	include "serialdebug.i"
+
+;;SERDEBUG	set	1
+
+;;CLIDEBUG	SET	1
+
+;;DEBUGRSL	SET	1	;debug readscanline
+;;DBCRSL	SET	1	;debug calireadscanline
+
+;;DEBUGPAUSEGRAB	SET	1
+
+	IFD	SLAVE_VERSION
+;;DEBUGSLAVE	SET	1
+	ENDC
+
+;;RSLCONTRAST	SET	1	;set for readscanline with contrast palette
+
+
+;;DEBUGTRSL	SET	1	;debug testreadscanline
+
+;;ENABLEFLASH	SET	1	;enable red/green/blue error flashes
+
+	XCODE	Grab1Bank
+	XCODE	ReadScanLine
+	XCODE	SetGain
+	XCODE	SetPedestal
+	XCODE	SetGainCrude
+	XCODE	SetPedestalCrude
+;;	XCODE	SetDAHue,dahbug,dahb
+	XCODE	AutoCalibrate
+	XCODE	CaliReadScanLine
+	XCODE	TestReadScanLine
+	XCODE	InitReadScanLineBMs,InitReadScanLine
+	XCODE	WriteGrayPulse
+	XCODE	TestAutoCal
+	XCODE	TestMain2EXT,TestRGBTermination
+
+	XCODE	Scatter2IQs
+	XCODE	ReadScatter
+	XCODE	InitRead7QuadsBMs
+	XCODE	TestVid1Camera
+	XCODE	TestMain2Vid4
+	XCODE	AutoTerm
+	XCODE	AutoHue
+	XCODE	AutoMatte
+	XCODE	SetDigitalPhase
+	XCODE	SetExternalPhase
+	XCODE	DeltaPhase
+
+	XCODE	Test68000Grab
+	XCODE	 SendBytes2Toaster,SendBytes2ToasterAVEI
+	
+
+	XDATA	ReadScanBMFlags
+;;	XDATA	ToasterConfig,ReadScanLineTable,ReadScanLimitTBL
+
+	XREF	ToasterConfig,CurrentGrabType
+	XREF	PedConfig,GainConfig,huedp,hueep
+	XREF	redcynmp,maggrnmp,bluyelmp
+
+;;;;TEST_SWITCHER	SET	1	; Addendum 10/30/90:
+*					; define to make a special version
+*					; of the Switcher for in-house
+*					; Toaster testing
+		
+	SECTION	,CODE
+
+* SetUp to grab 756 pixels, starting at quad #3
+* ~InitReadScanLineBMs:
+InitReadScanLineBMs:
+	move.l	d0,-(sp)
+	moveq	#3,d0
+	bsr.s	InitReadScanLine
+	move.l	(sp)+,d0
+	rts
+
+*--------------------------------
+* Setup to grab 756 pixels starting at the start quad
+* ~InitReadScanLine (d0=left most quad number)
+InitReadScanLine:
+	movem.l	d0-d5/a0-a4/a6,-(sp)
+
+	lea	ReadScanBMFlags(pc),a0
+	btst.b	#0,1(a0)
+	beq.s	2$
+	cmp.w	2(a0),d0
+	bne.s	2$
+	move.w	CurrentGrabType,d1
+	cmp.w	4(a0),d1
+	beq	666$		;don't do it, it's alread done!
+2$	bset.b	#0,1(a0)
+	move.w	d0,2(a0)
+	move.w	d1,4(a0)
+
+	bsr	GetCurrentReadTable
+	
+	move.l	TB_EffectsBase+EFB_ReadPlane1A(a5),-(sp)
+	move.l	TB_EffectsBase+EFB_ReadPlane0A(a5),-(sp)
+	
+	move.w	d0,d2		;start quad
+
+;***!!!***
+	move.w	CaliGroupsOf8(a6),d3	;# of groups of 8 scan lines
+	subq.w	#1,d3
+
+* Generate byte data for one grab scan line
+4$	move.l	TB_EffectsBase+EFB_BuffX(a5),a0
+	move.w	d2,d0
+	
+;***!!!****
+	move.w	CaliGrabsPerLine(a6),d4		;# samples / scanline
+	subq.w	#1,d4
+
+;***!!!***
+5$	move.w	CaliQuadsPerGrab(a6),d5		;bitmaps quad wide / sample
+	subq.w	#1,d5
+10$	move.b	d0,(a0)+
+	dbra	d5,10$
+	addq.w	#1,d0
+	dbra	d4,5$
+
+	move.w	d0,d2		;stash next quad
+
+	subq.w	#1,d0
+
+;***!!!***
+	move.w	CaliRightRepeat(a6),d4
+	bra.s	15$
+12$	move.b	d0,(a0)+	;fill last few quads
+15$	dbra	d4,12$	
+
+*****************************************
+
+* convert to bitplanes, to produce 1 read preset
+	move.l	TB_EffectsBase+EFB_BuffX(a5),a0
+	movea.l	sp,a1
+	lea	TB_EffectsBase+EFB_Bytes2BmLUT(a5),a2
+	moveq	#0,d0
+	move.l	#184,d1	;# of quads = 736 pixels
+	CALLTL	Bytes2BitMaps
+	
+* fix bm for sprite transparency
+	movea.l	(a1),a0		;source low
+	movea.l	4(a1),a1	;source high
+	
+	subq.w	#2,a0		;will clear word under sprite
+	subq.w	#2,a1		;will clear word under sprite
+
+	move.w	#$ffff,(a0)	;for sprite transparency see palette
+	move.w	#$ffff,(a1)	;for sprite transparency
+
+* duplicate bm for other read presets.
+* Used for other pixels of quad, and the complimentary field
+
+	lea	96(a0),a2
+	lea	96(a1),a4
+
+	moveq	#6,d0		;repeat the data for the next 7 lines
+20$	moveq	#23,d1		;24*4=96 bytes = 768 BM
+40$	move.l	(a0)+,(a2)+
+	move.l	(a1)+,(a4)+
+	dbra	d1,40$
+
+	lea	-96(a0),a0	
+	lea	-96(a1),a1	
+	dbra	d0,20$
+
+	addi.l	#96*8,(sp)
+	addi.l	#96*8,4(sp)
+
+	dbra	d3,4$	
+
+	addq.w	#8,sp
+
+666$	movem.l	(sp)+,d0-d5/a0-a4/a6
+	rts
+
+*-----------------------
+ReadScanBMFlags	dc.w	0	;0=init, bit 0=ReadScanLine presets A, bit 1=Read7Quads presets B, bit 2=Read7Quads presets C
+		dc.w	0,0	;start quad preset A, preset table 2,4
+		dc.w	0,0	;start quad preset B, preset table 6,8
+		dc.w	0,0	;start quad preset C, preset table 10,12
+
+**********************************************************
+* ~InitRead7QuadsBMs(startQuad#, presets)
+*
+* SetUp to grab 7 consecutive quads
+* Note: quads 218-222 = CB, and 227-228 = Color back porch
+
+* As of 3-11-93
+* If presets = 0 then use ReadPlane0/1B	(picture area)
+* If presets = 1 then use ReadPlane0/1C (sync area)
+
+InitRead7QuadsBMs:
+	movem.l	d0-d2/a0-a4/a6,-(sp)
+
+	lea	ReadScanBMFlags(pc),a0
+	tst.w	d1
+	bne.s	20$
+
+* presets B
+	btst.b	#1,1(a0)
+	beq.s	15$
+	cmp.w	6(a0),d0
+	bne.s	15$
+	move.w	CurrentGrabType,d2
+	cmp.w	8(a0),d2
+	beq	666$		;don't do it, it's alread done!
+15$	bset.b	#1,1(a0)
+	move.w	d0,6(a0)
+	move.w	d2,8(a0)
+	bra.s	30$
+
+* presets C	
+20$	btst.b	#2,1(a0)
+	beq.s	25$
+	cmp.w	10(a0),d0
+	bne.s	25$
+	move.w	CurrentGrabType,d2
+	cmp.w	12(a0),d2
+	beq	666$		;don't do it, it's alread done!
+25$	bset.b	#2,1(a0)
+	move.w	d0,10(a0)
+	move.w	d2,12(a0)
+
+30$	bsr	GetCurrentReadTable	
+
+	tst.w	d1
+	bne.s	3$
+	move.l	TB_EffectsBase+EFB_ReadPlane1B(a5),-(sp)
+	move.l	TB_EffectsBase+EFB_ReadPlane0B(a5),-(sp)
+	bra.s	4$
+3$	move.l	TB_EffectsBase+EFB_ReadPlane1C(a5),-(sp)
+	move.l	TB_EffectsBase+EFB_ReadPlane0C(a5),-(sp)
+
+* Generate byte data for one grab scan line
+4$	move.l	TB_EffectsBase+EFB_BuffX(a5),a0
+	moveq	#6,d2
+
+5$	moveq	#25,d1
+10$	move.b	d0,(a0)+
+	dbra	d1,10$
+	addq.w	#1,d0
+	dbra	d2,5$
+
+	subq.w	#1,d0
+	move.b	d0,(a0)+	;fill last few quads
+	move.b	d0,(a0)+	
+
+* convert to bitplanes, to produce 1 read preset
+	move.l	TB_EffectsBase+EFB_BuffX(a5),a0
+	movea.l	sp,a1
+	lea	TB_EffectsBase+EFB_Bytes2BmLUT(a5),a2
+	moveq	#0,d0
+	move.l	#184,d1	;# of quads = 736 pixels
+	CALLTL	Bytes2BitMaps
+	
+* fix bm for sprite transparency
+	movea.l	(a1),a0		;source low
+	movea.l	4(a1),a1	;source high
+	
+	subq.w	#2,a0		;will clear word under sprite
+	subq.w	#2,a1		;will clear word under sprite
+
+	move.w	#$ffff,(a0)	;for sprite transparency see palette
+	move.w	#$ffff,(a1)	;for sprite transparency
+
+	addq.w	#8,sp
+
+666$	movem.l	(sp)+,d0-d2/a0-a4/a6
+	rts
+
+* CHIP code  (not necessary )
+*	SECTION	,CODE_C	
+
+* The 27 if big enough for the ReadScatter (27 groups of 8)
+GRABSTACK	set	(27*MAXGRABSPERLINE*4)
+	
+*******************************************************************
+* ~ReadScanLine(->destbuff, ->destcomp, ->TB, bank, scanline)
+*		   a0	      a1	a5    d0     d1
+
+a0ptr	set	(4*8)
+
+ReadScanLine:
+	movem.l	d0-d7/a0-a4/a6,-(sp)
+
+	bsr	InitReadScanLineBMs
+
+***********************
+	IFD	DEBUGRSL
+	tst.w	debugrslflag
+	beq	10$
+	nop
+	DUMPNUM	<scanline>,d1	
+10$
+	ENDC	;DEBUGRSL
+***********************
+
+	move.w	#0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_Modulo(a5)
+
+	bsr	ReadPart1	;a6->CurrentReadTable
+	
+	lea	TB_EffectsBase+EFB_VTSprites1(a5),a0
+	GETCURRENT	a0
+;;	move.l		a0,TB_CurrentSprite1(a5)	;done early ??
+	moveq	#0,d3
+	move.l	d1,d0
+	lsr.l	#1,d0
+	roxl.w	#1,d3	;least sig bit of line #, 0=II/IV, 1=I/III	
+	bchg	#0,d3	; 0=I/III, 1 = II/IV  
+
+	andi.l	#$ff,d0	;probably not necessary
+	ror.l	#4,d0
+	ror.w	#4,d0	
+	
+	IFD	AACHIPS
+	eori.l	#$f000f000,d0	;complement Sprite1 for transparency problems
+	ENDC
+
+	moveq	#3,d1		;was 0
+
+;****!!!***
+	moveq	#0,d2
+	move.w	CaliGroupsOf8(a6),d2
+	lsl.w	#3,d2		;*8
+
+	CALLTL	FillSprite
+
+	lea	TB_EffectsBase+EFB_ReadPlanesA(a5),a0	;->preset0 planes
+* hard coded BMs, don't need to double buffer
+	move.l	a0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBPlanes+DB_DataA(a5)
+	move.l	a0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBPlanes+DB_DataB(a5)
+
+***********************
+	IFD	DEBUGRSL
+	tst.w	debugrslflag
+	beq	20$
+
+	lea	TB_EffectsBase+EFB_VTSprites0(a5),a0
+	GETCURRENT	a0
+	DUMPMEM	<Sprite0>,0(a0),#(243*4)
+
+	lea	TB_EffectsBase+EFB_VTSprites1(a5),a0
+	GETCURRENT	a0
+	DUMPMEM	<Sprite1>,0(a0),#(243*4)
+
+20$
+	ENDC	;DEBUGRSL
+***********************
+
+	moveq	#-3,d4		;TopLine of BM
+	bsr	ReadPart2
+
+	movem.l	(sp)+,d0-d7/a0-a4/a6
+	rts
+
+*******************************************************************
+* ReadScatter(->destbuff, ->destcomp, ->TB, bank, fields, presets)
+*		   a0	      a1      a5    d0	   d1	    d2
+* d1=0 then I/III, d1=1 then II/IV
+* 
+* Reads 7 or more quads from 27 lines (both normal/complimentary fields)
+* from lines = 3, 12, 21, .... 237
+*
+* As of 3-11-93
+* If presets = 0 then use ReadPlane0/1B	(sync area)
+* If presets = 1 then use ReadPlane0/1C	(picture area)
+
+ReadScatter:
+	movem.l	d0-d7/a0-a4/a6,-(sp)
+
+	move.w	d1,d3		;fields
+
+	lea	TB_EffectsBase+EFB_ReadPlanesB(a5),a2	;->preset0 planes
+	tst.w	d2
+	beq.s	3$
+	lea	TB_EffectsBase+EFB_ReadPlanesC(a5),a2	;->preset0 planes
+
+* hard coded BMs, don't need to double buffer
+3$	move.l	a2,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBPlanes+DB_DataA(a5)
+	move.l	a2,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBPlanes+DB_DataB(a5)
+
+	move.w	#-96,TB_EffectsBase+EFB_SetUpSBM+SUSBM_Modulo(a5)
+
+* always do 27 sets of 8
+	bsr	GetCurrentReadTable			;a6->CurrentReadTable
+	move.w	CaliGroupsOf8(a6),stasholdgroups	;save GroupsOf8
+	move.w	#27,CaliGroupsOf8(a6)
+	bsr.s	ReadPart1		;a6->CurrentReadTable
+	
+	move.l	TB_EffectsBase+EFB_BuffY(a5),a0
+	move.l	a0,a1
+
+	moveq	#3,d0	;top line#
+	move.w	#26,d1	;line counter
+5$	move.w	#7,d2
+10$	
+	IFD	AACHIPS
+	not.b	d0	;Complement Sprite1, using complemented sprite palette
+	ENDC
+	
+	move.b	d0,(a0)+
+
+	IFD	AACHIPS
+	not.b	d0	;put it back as it was
+	ENDC
+
+	dbra	d2,10$
+	add.w	#9,d0
+	dbra	d1,5$
+
+	move.l	a1,a0	;restore ->BuffY
+	lea	TB_EffectsBase+EFB_VTSprites1(a5),a1
+	GETCURRENT	a1
+;;	move.l		a1,TB_CurrentSprite1(a5)	;done early ??
+	moveq	#3,d0			;was 0
+
+	move.l	#27*8,d1		;was SPRITEHEIGHT
+	move.l	#B2SNORM,d2
+	CALLTL	Bytes2Sprite1
+
+	moveq	#0,d4				;TopLine of BM
+	bsr	ReadPart2
+	move.w	stasholdgroups,CaliGroupsOf8(a6)	;restore GroupsOf8
+
+	movem.l	(sp)+,d0-d7/a0-a4/a6
+	rts
+
+stasholdgroups	dc.w	0
+
+*--------------------------------------------
+* returns a6->current read table
+ReadPart1:
+	move.l	d1,-(sp)
+	lea	TB_EffectsBase+EFB_VTSprites0(a5),a0	;used below !
+	move.l	a0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBSprite0E(a5)
+	move.l	a0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBSprite0R(a5)
+
+	lea	TB_EffectsBase+EFB_VTSprites1(a5),a1	;used below !
+	move.l	a1,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBSprite1E(a5)
+	move.l	a1,TB_EffectsBase+EFB_SetUpSBM+SUSBM_DBSprite1R(a5)
+	
+	lea	ReadColorMap(pc),a2
+	move.l	a2,TB_EffectsBase+EFB_SetUpSBM+SUSBM_ColorMap(a5)
+
+	move.w	#2,TB_EffectsBase+EFB_SetUpSBM+SUSBM_Depth(a5)
+	move.w	#768,TB_EffectsBase+EFB_SetUpSBM+SUSBM_BMwidth(a5)
+	move.w	#768,TB_EffectsBase+EFB_SetUpSBM+SUSBM_CRTwidth(a5)
+;;	move.w	#0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_Modulo(a5)
+	move.w	#0,TB_EffectsBase+EFB_SetUpSBM+SUSBM_ViewModes(a5)
+
+	CALLTL	KillAlphaKey
+	CALLTL	NoTransFreeze
+
+* Fix up sprites for ELHs
+	DEA.l	TB_VTSetUp,a2
+
+	ELHGET_AM	a2,d2
+	move.w	d2,-(sp)
+	ELHGET_BM	a2,d2
+	move.w	d2,-(sp)
+	ELHGET_PV	a2,d2
+	move.w	d2,-(sp)
+
+	ELHPUT_AM_I	a2,VTI_AM_ENCODER
+	ELHPUT_BM_I	a2,VTI_BM_ENCODER
+	ELHPUT_PV_I	a2,VTI_PV_ENCODER
+
+ ;;	ELHCLEAR_ABSE	a2	;done by FreezeThaw
+	ELHSET_BRIDGE 	a2	;freezethaw whould have messed this up
+	ELHCLEAR_AFP	a2
+	ELHSET_AFR	a2	;Set to Fix CG Grabing Problems
+	ELHCLEAR_LINP	a2	;necessary ?????
+
+	ELHCLEAR_OBR	a2
+;;	ELHSET_OBR	a2
+	tst.b	d0
+	bne.s	9$
+	ELHSET_OBR	a2
+;;	ELHCLEAR_OBR	a2
+
+9$	GETCURRENT	a0
+
+	bsr	GetCurrentReadTable	;a6->CurrentReadTable
+
+* Necessary to clear out rest of Sprite0 to prevent unwanted headers
+	move.l	#$f0000000,d0
+
+;***!!!****
+	moveq	#0,d1
+	move.w	CaliGroupsOf8(a6),d1
+	lsl.w	#3,d1		;*8
+	addq.w	#6,d1		;six headers total
+	move.l	#241,d2
+	sub.w	d1,d2
+
+	CALLTL	FillSprite
+
+	addq.w	#4,a0
+
+	GETCURRENT	a1
+	addq.w	#4,a1
+
+	move.l	VTSU_RG+SURG_EH2R(a2),(a0)+	;CERB will be low
+	move.l	VTSU_RG+SURG_EH1R(a2),(a0)+
+	move.l	VTSU_RG+SURG_EH0R(a2),(a0)
+
+	move.l	VTSU_BI+SUBI_EH2B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$ff00ff00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)+
+
+	move.l	VTSU_BI+SUBI_EH1B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$ff00ff00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)+
+
+	move.l	VTSU_BI+SUBI_EH0B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$0f000f00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)
+
+* restore AM,BM and other bits
+	move.w	(sp)+,d2
+	ELHPUT_PV_R	a2,d2
+	move.w	(sp)+,d2
+	ELHPUT_BM_R	a2,d2
+	move.w	(sp)+,d2
+	ELHPUT_AM_R	a2,d2
+	
+	ELHSET_AFP	a2
+	ELHSET_LINP	a2	;necessary ?????
+	ELHCLEAR_BRIDGE a2
+
+;***!!!!***
+	move.w	CaliGroupsOf8(a6),d2
+	lsl.w	#5,d2		;*8*4
+	lea	4(a0,d2.w),a0
+	lea	4(a1,d2.w),a1
+
+	move.l	VTSU_RG+SURG_EH0R(a2),(a0)+	;CERB will be low
+	move.l	VTSU_RG+SURG_EH1R(a2),(a0)+
+	move.l	VTSU_RG+SURG_EH2R(a2),(a0)
+
+	move.l	VTSU_BI+SUBI_EH0B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$0f000f00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)+
+
+	move.l	VTSU_BI+SUBI_EH1B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$0f000f00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)+
+
+	move.l	VTSU_BI+SUBI_EH2B(a2),d2
+	IFD	AACHIPS
+	eori.l	#$0f000f00,d2	;complement Sprite1 for transparency problems
+	ENDC
+	ori.w	#$f000,d2	;set L7-L4 of line# high to prevent transparency
+	move.l	d2,(a1)
+	
+	move.l	(sp)+,d1
+	rts
+
+************************************************************
+
+	IFND	AACHIPS
+* I=most sig nibble, B=least sig nibble,  NOTE: The data must be complemented
+ReadColorMap	dc.w	$229	;color00 I=1 B=1
+		dc.w	$227	;color01 I=1 B=0
+		dc.w	$228	;color02 I=0 B=1
+		dc.w	$226	;color03 I=0 B=0
+	ENDC
+
+	IFD	AACHIPS
+* G0=most sig nibble, R0=least sig nibble,  NOTE: The data must be complemented
+
+* NOTE: Color 0 has G0 & R0 high, but R2 & B2 are always low
+* So we must complement the G0 / R0 planes of the sprite so that the
+* correct colors will show when the sprite is transparent = color 0.
+* On the A2000 we would show color 3, but with the A4000 we are stuck
+* with color 0.
+	IFND	RSLCONTRAST
+ReadColorMap	dc.l	BLANKGRAYHW!$0113	;color00 I=G0/B1=1 B=R0/B0=1
+		dc.l	BLANKGRAYHW!$0012	;color01 I=G0/B1=1 B=R0/B0=0
+		dc.l	BLANKGRAYHW!$0101	;color02 I=G0/B1=0 B=R0/B0=1
+		dc.l	BLANKGRAYHW!$0000	;color03 I=G0/B1=0 B=R0/B0=0
+	ENDC	
+
+	IFD	RSLCONTRAST
+ReadColorMap	dc.l	$00000113	;color00 I=G0/B1=1 B=R0/B0=1
+		dc.l	$05550012	;color01 I=G0/B1=1 B=R0/B0=0
+		dc.l	$0aaa0101	;color02 I=G0/B1=0 B=R0/B0=1
+		dc.l	$0fff0000	;color03 I=G0/B1=0 B=R0/B0=0
+	ENDC
+
+	ENDC	;AACHIPS
+
+************************************************************
+* d4=top line of BM, a6->CurrentReadTable
+ReadPart2:
+	ror.w	#4,d3	;f0 bit
+
+	lea	TB_EffectsBase+EFB_VTSprites0(a5),a0
+	GETCURRENT	a0
+	lea	4+(3*4)(a0),a0
+
+****!!!!!****
+	move.w	CaliGroupsOf8(a6),d0
+	subq.w	#1,d0
+
+	move.w	#%0010<<12,d1	;flip complimentory fields bit
+
+20$	swap	d3
+	move.w	#%0000<<12,d3
+	swap	d3
+
+	move.l	d3,(a0)+	;field I/II, pixel 0
+	eor.w	d1,d3		
+	move.l	d3,(a0)+	;field III/IV, pixel 0
+
+	swap	d3
+	move.w	#%0010<<12,d3
+	swap	d3
+	eor.w	d1,d3		
+
+	move.l	d3,(a0)+	;field I/II, pixel 1
+	eor.w	d1,d3		
+	move.l	d3,(a0)+	;field III/IV, pixel 1
+
+	swap	d3
+	move.w	#%1100<<12,d3
+	swap	d3
+	eor.w	d1,d3		
+
+	move.l	d3,(a0)+	;field I/II, pixel 2
+	eor.w	d1,d3		
+	move.l	d3,(a0)+	;field III/IV, pixel 2
+
+	swap	d3
+	move.w	#%1110<<12,d3
+	swap	d3
+	eor.w	d1,d3		
+
+	move.l	d3,(a0)+	;field I/II, pixel 3
+	eor.w	d1,d3		
+	move.l	d3,(a0)+	;field III/IV, pixel 3
+
+	eor.w	d1,d3		
+	dbra	d0,20$
+	
+;;	ori.l	#$f0000000,d3	;avoid transparency causing extended headers
+;;	moveq	#24,d0
+;;25$	move.l	d3,(a0)+
+;;	eor.w	d1,d3		
+;;	dbra	d0,25$
+
+;----------------------------------------------------
+* WARNING!!!! The sprite will hang off of the bottom of the bitmap.
+* I don't know if this is a problem on nonAA chip machines????
+
+	lea	TB_EffectsBase+EFB_SetUpSBM(a5),a0
+	move.l	d4,d0		;TopBMLine
+	moveq	#0,d1		;TopWait
+
+;****!!!***
+	moveq	#0,d2
+	move.w	CaliGroupsOf8(a6),d2
+	lsl.w	#3,d2		;*8
+	addq.w	#6,d2
+
+	moveq	#0,d3		;scroll
+	
+	IFD	AACHIPS
+	XREF	CompRSLPalFlag
+	move.w	#1,CompRSLPalFlag	;do complemented palette
+	ENDC
+
+	CALLTL	SetUpSimpleBMCopList	
+
+	CALLTL	AllInterruptsOff	;what about DMA, ie Audio ????????
+;;	CALLTL	DisableInterrupts	;DON'T USE THIS OR ELSE A VERTICAL INTERRUPT WILL HAPPEN AS SOON AS YOU ENABLEINTERRUPTS!!
+
+*-------
+	IFD	DEBUGPAUSEGRAB
+
+	lea	_custom+vhposr,a1
+	GET.w	TB_ClipASec,d0
+	bra.s	3332$
+3330$	move.w	(a1),d1
+	tst.b	d1
+	bpl.s	3330$	
+3331$	move.w	(a1),d1
+	tst.b	d1
+	bmi.s	3331$	
+3332$	dbra	d0,3330$
+
+	ENDC
+*-------
+
+	IFD	RSLCONTRAST
+* color0 debug indicator
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	move.w	#$11f,_custom+color
+	ENDC
+
+	move.l	a6,-(sp)
+	GET.l	TB_SYSBase,a6		; pointer to ExecBase
+	move.l	#CACRF_EnableI!CACRF_IBE!CACRF_FreezeD,d0
+;;	move.l	#CACRF_EnableI!CACRF_IBE!CACRF_EnableD!CACRF_DBE!CACRF_CopyBack,d0
+	move.l	#CACRF_EnableI!CACRF_FreezeI!CACRF_IBE!CACRF_EnableD!CACRF_FreezeD!CACRF_DBE!CACRF_CopyBack,d1
+	CALLROM	CacheControl
+	move.l	d0,stashcache
+	move.l	(sp)+,a6
+
+	lea	TB_EffectsBase+EFB_SimpleBMCopLists(a5),a0
+	GETCURRENT	a0
+
+	IFD	RSLCONTRAST
+* color0 debug indicator
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	move.w	#$f13,_custom+color
+	ENDC
+
+	CALLTL	InstallFieldAndWait
+
+********************
+	IFD	DEBUGRSL
+	
+* holding down LMB arms this debugging stuff. RMB unarms.
+* LMB when armed, single steps.
+
+	tst.w	debugrslflag
+	bne.s	30$
+	ISLMBUP		;down and not yet in mode
+	bne.s	40$
+
+	move.w	#1,debugrslflag
+31$	ISLMBUP
+	beq.s	31$	;wait until up
+	
+30$	ISLMBUP
+	beq.s	36$	;jump if down
+	ISRMBUP
+	bne.s	30$	;loop if both up
+
+	clr.w	debugrslflag	;continue as normal if RMB is clicked
+32$	ISRMBUP
+	beq.s	32$	;wait until RMB is up.  Now it's unarmed	
+	bra.s	37$	
+
+36$	ISLMBUP
+	beq.s	36$	;wait until LMB is up, continue to next frame
+
+37$	CALLTL	Wait4Top
+
+;;!! Does this work if the AllInterruptsOff is before DUMPELH?
+;;!! For the silent rev around 9-2-93, I commented out the
+;;!! AllInterruptsOff below, and uncommented the above call.
+;;!! This fixed the new FrameGrabbing streak bug on fast 040s.
+ 
+;;	DUMPELH	<ELHBITS:>
+
+40$
+	ENDC	DEBUGRSL
+
+********************
+
+;;	CALLTL	AllInterruptsOff	;what about DMA, ie Audio ????????
+
+	clr.b   $bfe301		;program parallel port as input
+
+* I am using more space than needed because ReadScatter grabs more than 768
+	lea	-GRABSTACK*2(sp),sp	;temp destination onto stack
+	movea.l	sp,a0
+	lea	GRABSTACK(sp),a1
+
+	lea	$dff006,a2	;=vert
+	lea	$dff007,a3	;=horiz
+;;	lea	$bfe101,a4	;parallel port read address DONE BELOW NOW
+
+*when debugged remove this hardcode BLITTER/AUDIO DMA OFF move !!!!!!!!
+	move.w	#%0000000001001111,$dff096
+
+************ grab here **********************
+* My tests show that if this code is running out of CHIPMEM on a
+* 68000 A2000, and the destination buffers are in CHIPMEM, that it takes
+* 21.5 quads to grab a sample, but I am allowing for 26 quads.
+
+* The horizontal waits for this CHIP situation are approx
+* 47-65, 66-95, 96-114, 126-145, 146-175, 176-195, 196-204 
+* This is nicely fit by 65 + 23 + 23 ...... to = 204
+* But I think I might get by with 48 + 26 + 26 ..... to 204
+* I may need to use the fit that is near the high end of the limits so
+* that the code can still work on a ultra fast processory too ???
+
+* Stangely enough, when this code was in FASTMEM, and the destination was
+* also in FASTMEM, on a 68000 A2000, I got the same results!!!
+
+	move.w	CurrentGrabType,d0
+	add.w	d0,d0
+	add.w	d0,d0
+
+	lea	GrabCode,a4
+	movea.l	0(a4,d0.w),a4
+
+	jsr	(a4)
+
+*-------------------------------------------
+
+	IFD	RSLCONTRAST
+* color0 debug indicator
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	move.w	#$11f,_custom+color
+	ENDC
+
+	move.l	a6,-(sp)
+	GET.l	TB_SYSBase,a6		; pointer to ExecBase
+	move.l	stashcache,d0
+	move.l	#CACRF_EnableI!CACRF_FreezeI!CACRF_IBE!CACRF_EnableD!CACRF_FreezeD!CACRF_DBE!CACRF_CopyBack,d1
+	CALLROM	CacheControl
+	movea.l	(sp)+,a6
+
+*--------------
+	IFD	RSLCONTRAST
+* color0 debug indicator
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	move.w	#$ff3,_custom+color
+	ENDC
+
+*--------------
+* re-arrange the data
+	movea.l	sp,a0
+	movea.l	GRABSTACK*2+a0ptr+4(sp),a1	;destination buffer A
+	bsr	rearrange
+
+	lea	GRABSTACK(sp),a0
+	movea.l	GRABSTACK*2+a0ptr+8(sp),a1	;destination buffer B
+	bsr	rearrange
+
+	lea	GRABSTACK*2(sp),sp
+
+	IFD	RSLCONTRAST
+* color0 debug indicator
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	move.w	#$1f3,_custom+color
+	ENDC
+
+*--------------
+	move.w	#%1000000001000011,$dff096
+
+	lea	TB_EffectsBase+EFB_VTSprites1(a5),a0
+	FLIPCURRENT	a0
+;;	GETCURRENTANDFLIP	a0		;flip sprite1
+;;	move.l		a0,TB_CurrentSprite1(a5)  ;a good thing to change????
+
+	lea	TB_EffectsBase+EFB_VTSprites0(a5),a0
+	FLIPCURRENT	a0		;flip sprite1
+
+	lea	TB_EffectsBase+EFB_SimpleBMCopLists(a5),a0
+	FLIPCURRENT	a0
+
+	move.l	TB_EffectsBase+EFB_SetUpSBM+SUSBM_SprTbl(a5),TB_CurrentSpr0Tbl(a5) ;doing it early
+	move.w	#BPLCON0_DEPTH2,TB_BPLCON0(a5)
+	move.w	#21,TB_CurrentVStart(a5)
+	move.l	#SPRITE0CTRL241,TB_CurrentSprite0Ctrl(a5)
+	move.l	#SPRITE1CTRL241,TB_CurrentSprite1Ctrl(a5)
+
+	XJSR	InstallAVEnoWait	;frees up some DMA
+
+********************
+	IFD	DEBUGRSL
+
+	tst.w	debugrslflag
+	beq.s	640$
+
+	WAIT4LMBDOWN
+	WAIT4LMBUP
+
+640$
+	ENDC	DEBUGRSL
+
+********************
+
+	CALLTL	AllInterruptsOn
+;;	CALLTL	EnableInterrupts
+
+	rts
+
+*********************************************************
+Grab7:
+	lea	$bfe101,a4	;parallel port read address
+
+;***!!!!***
+	movem.w	CaliRSLtable(a6),d0-d6
+
+	IFD	DEBUGTRSL
+;;	 DUMPREG	<Start of grab7>
+;;	 CALLTL	Wait4Top
+	ENDC
+
+;***!!!!***
+	move.w	CaliGroupsOf8(a6),d7
+	subq.w	#1,d7
+
+	swap	d7
+	move.w	#(21+3)-1,d7	;top line - 1 (don't use MOVEQ!!)
+78$	cmp.b	(a2),d7
+	bhi.s	78$
+	swap	d7
+
+79$	tst.b	(a3)
+	bpl.s	79$		;wait to right part of line-1
+
+.next8	swap	d7
+	move.w	#3,d7		;8 scan lines	(don't use MOVEQ!!)
+
+.next1	tst.b	(a3)
+	bmi.s	.next1
+
+110$	cmp.b	(a3),d0
+	bhi.s	110$
+	move.b	(a4),(a0)+
+
+111$	cmp.b	(a3),d1
+	bhi.s	111$
+	move.b	(a4),(a0)+
+
+112$	cmp.b	(a3),d2
+	bhi.s	112$
+	move.b	(a4),(a0)+
+
+113$	cmp.b	(a3),d3
+	bhi.s	113$
+	move.b	(a4),(a0)+
+
+114$	cmp.b	(a3),d4
+	bhi.s	114$
+	move.b	(a4),(a0)+
+
+115$	cmp.b	(a3),d5
+	bhi.s	115$
+	move.b	(a4),(a0)+
+
+116$	cmp.b	(a3),d6
+	bhi.s	116$
+	move.b	(a4),(a0)+
+
+*-----
+	
+200$	tst.b	(a3)
+	bmi.s	200$
+	
+210$	cmp.b	(a3),d0
+	bhi.s	210$
+	move.b	(a4),(a1)+
+
+211$	cmp.b	(a3),d1
+	bhi.s	211$
+	move.b	(a4),(a1)+
+
+212$	cmp.b	(a3),d2
+	bhi.s	212$
+	move.b	(a4),(a1)+
+
+213$	cmp.b	(a3),d3
+	bhi.s	213$
+	move.b	(a4),(a1)+
+
+214$	cmp.b	(a3),d4
+	bhi.s	214$
+	move.b	(a4),(a1)+
+
+215$	cmp.b	(a3),d5
+	bhi.s	215$
+	move.b	(a4),(a1)+
+
+216$	cmp.b	(a3),d6
+	bhi.s	216$
+	move.b	(a4),(a1)+
+
+	dbra	d7,.next1
+
+	swap	d7
+	dbra	d7,.next8
+
+	rts
+
+*********************************************************
+Grab10:
+	lea	$bfe101,a4	;parallel port read address
+
+;***!!!!***
+;;	movem.w	ReadScanLineTable,d0-d6
+	
+	movem.w	CaliRSLtable(a6),d0-d7
+	swap	d0
+	move.w	CaliRSLtable+(8*2)(a6),d0	;sample 9
+	swap	d0
+	swap	d1
+	move.w	CaliRSLtable+(9*2)(a6),d1	;sample 10
+	swap	d1
+	swap	d7
+
+	IFD	DEBUGTRSL
+;;	 DUMPREG	<Start of grab10>
+;;	 CALLTL	Wait4Top
+	ENDC
+
+;***!!!!***
+	move.w	CaliGroupsOf8(a6),d7
+	subq.w	#1,d7
+
+	swap	d6
+	move.w	#(21+3)-1,d6	;top line - 1 (don't use MOVEQ!!)
+78$	cmp.b	(a2),d6
+	bhi.s	78$
+
+79$	tst.b	(a3)
+	bpl.s	79$		;wait to right part of line-1
+
+.next8	swap	d7
+	move.w	#3,d6		;8 scan lines	(don't use MOVEQ!!)
+
+.next1	swap	d6
+
+.next0	tst.b	(a3)
+	bmi.s	.next0
+
+110$	cmp.b	(a3),d0
+	bhi.s	110$
+	move.b	(a4),(a0)+
+
+111$	cmp.b	(a3),d1
+	bhi.s	111$
+	move.b	(a4),(a0)+
+	swap	d0
+
+112$	cmp.b	(a3),d2
+	bhi.s	112$
+	move.b	(a4),(a0)+
+
+113$	cmp.b	(a3),d3
+	bhi.s	113$
+	move.b	(a4),(a0)+
+	swap	d1
+
+114$	cmp.b	(a3),d4
+	bhi.s	114$
+	move.b	(a4),(a0)+
+
+115$	cmp.b	(a3),d5
+	bhi.s	115$
+	move.b	(a4),(a0)+
+
+116$	cmp.b	(a3),d6
+	bhi.s	116$
+	move.b	(a4),(a0)+
+
+117$	cmp.b	(a3),d7
+	bhi.s	117$
+	move.b	(a4),(a0)+
+
+;;	swap	d0
+118$	cmp.b	(a3),d0
+	bhi.s	118$
+	move.b	(a4),(a0)+
+
+;;	swap	d1
+119$	cmp.b	(a3),d1
+	bhi.s	119$
+	move.b	(a4),(a0)+
+
+	swap	d0
+	swap	d1
+*-----
+	
+200$	tst.b	(a3)
+	bmi.s	200$
+	
+210$	cmp.b	(a3),d0
+	bhi.s	210$
+	move.b	(a4),(a1)+
+
+211$	cmp.b	(a3),d1
+	bhi.s	211$
+	move.b	(a4),(a1)+
+	swap	d0
+
+212$	cmp.b	(a3),d2
+	bhi.s	212$
+	move.b	(a4),(a1)+
+
+213$	cmp.b	(a3),d3
+	bhi.s	213$
+	move.b	(a4),(a1)+
+	swap	d1
+
+214$	cmp.b	(a3),d4
+	bhi.s	214$
+	move.b	(a4),(a1)+
+
+215$	cmp.b	(a3),d5
+	bhi.s	215$
+	move.b	(a4),(a1)+
+
+216$	cmp.b	(a3),d6
+	bhi.s	216$
+	move.b	(a4),(a1)+
+
+217$	cmp.b	(a3),d7
+	bhi.s	217$
+	move.b	(a4),(a1)+
+
+;;	swap	d0
+218$	cmp.b	(a3),d0
+	bhi.s	218$
+	move.b	(a4),(a1)+
+
+;;	swap	d1
+219$	cmp.b	(a3),d1
+	bhi.s	219$
+	move.b	(a4),(a1)+
+
+	swap	d0
+	swap	d1
+
+	swap	d6
+	dbra	d6,.next1
+
+	swap	d7
+	dbra	d7,.next8
+
+	rts
+
+*---------------------------------------------------------------
+* a0->source, a1->destination, a6->Current Read Table
+rearrange:
+	movem.l	d0-d2/a0-a4,-(sp)
+
+****!!!!*****
+	move.w	CaliGrabsPerLine(a6),d0	;*1
+	lea	0(a0,d0.w),a2
+	move.w	d0,d2
+	add.w	d2,d2			;*2
+	lea	0(a0,d2.w),a3
+	add.w	d0,d2			;*3
+	lea	0(a0,d2.w),a4
+	
+***!!!!***
+	move.w	CaliGroupsOf8(a6),d1
+	subq.w	#1,d1
+
+***!!!!***
+5$	move.w	CaliGrabsPerLine(a6),d0
+	subq.w	#1,d0
+
+10$	move.b	(a0)+,(a1)+	;pixel 0 of quad
+	move.b	(a2)+,(a1)+
+	move.b	(a3)+,(a1)+
+	move.b	(a4)+,(a1)+	;pixel 3 of quad
+	dbra	d0,10$
+	
+****!!!!****
+	lea	0(a0,d2.w),a0
+	lea	0(a2,d2.w),a2
+	lea	0(a3,d2.w),a3
+	lea	0(a4,d2.w),a4
+	
+	dbra	d1,5$
+
+	movem.l	(sp)+,d0-d2/a0-a4
+	rts
+
+**********************************************************************
+* ~WriteGrayPulse(chipchunk,tb,value1,value2,value3,width1,width2,line,height,bank)
+*		 a0        a5   d0     d1     d2      d3   d4	  d5   d6     d7
+* Uses BuffA
+* Uses 92*16 bytes = 1472 bytes of chip (1536 on AA machine)
+* This assumes you are frozen, and not in a transition, and not in LUT mode
+* If you aren't sure call NoTransFreeze before the call to WriteGrayPulse
+
+AA	set	96
+
+d0ptr	set	(2)
+
+WriteGrayPulse
+	movem.l	d0-d4/a0-a2,-(sp)
+
+	movea.l	a0,a2
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0   ;bytes
+	movea.l	a0,a1
+
+	move.w	#AA*8,d0
+	sub.w	d3,d0
+	sub.w	d4,d0	
+	move.w	d0,-(sp)
+	move.l	d0ptr(sp),d0
+	
+	bra.s	20$
+10$	move.b	d0,(a1)+
+20$	dbra	d3,10$
+	
+	bra.s	40$
+30$	move.b	d1,(a1)+	
+40$	dbra	d4,30$
+
+	move.w	(sp)+,d0
+	bra.s	60$
+50$	move.b	d2,(a1)+	
+60$	dbra	d0,50$
+
+	movea.l	a0,a1
+	move.l	d5,d0
+	move.l	d6,d1
+	move.l	d7,d2
+	bsr	SendBytes2Toaster
+
+	movem.l	(sp)+,d0-d4/a0-a2
+	rts
+
+**********************************************************************
+* ~Grab1Bank(->TB, IS, bank)
+
+d0ptr	set	(2*2)
+Grab1Bank
+	movem.l	d0-d2/a0-a1,-(sp)
+
+;;	CALLTL	NoTransFreeze	
+	
+	DEA.l	TB_VTSetUp,a0
+	ELHTEST_ABSE	a0
+	beq.s	10$		;jump if already frozen
+	move.w	#VIDEOTYPE_FREEZE4,d0
+	CALLTL	FreezeThawDVE	;don't wan't to necessarily finish transition
+
+10$	ELHGET_IS	a0,d0
+	move.w	d0,-(sp)	;save IS
+
+	moveq	#0,d0
+	ELHTEST_OBR	a0
+	beq.s	18$
+	moveq	#1,d0
+18$	move.w	d0,-(sp)	;save OBR
+
+	tst.w	d1
+	bne.s	20$
+	ELHCLEAR_OBR	a0	
+	bra.s	30$
+20$	ELHSET_OBR	a0
+
+30$	move.l	d0ptr(sp),d0
+	ELHPUT_IS_R	a0,d0	;new IS
+		
+	ELHSET_LINP	a0
+	ELHSET_LINR	a0
+	ELHSET_BRIDGE	a0
+
+	lea.l	elhlist2(pc),a0
+
+	CALLTL	AllInterruptsOff
+	CALLTL	SendELHList2Toaster
+* now near top of frame 
+
+	lea	TB_EffectsBase+EFB_Sprite0Live(a5),a0
+	GETNONCURRENT	a0
+	move.l	TB_CurrentSprite0Ctrl(a5),(a0)		;probably already ok
+
+* modify current copper list, so the following fields will be written
+	move.l	a0,d0 ;->sprite0
+
+	movea.l	TB_CurrentCopList(a5),a0	;->currently shown coplist
+	move.l	TB_CurrentSpr0Tbl(a5),d2
+	beq.s	100$
+	movea.l	d2,a1
+
+50$	move.w	(a1)+,d2	;fix current shown copperlist entry sprites
+	beq.s	100$
+	move.w	d0,6(a0,d2.w)
+	swap	d0
+	move.w	d0,2(a0,d2.w)	
+	swap	d0
+	bra.s	50$	
+	
+100$	moveq	#3,d0
+110$	CALLTL	Wait4Top
+	dbra	d0,110$
+
+	DEA.l	TB_VTSetUp,a0
+	move.l	#VIDEOTYPE_FREEZE4,d0
+	CALLTL	FreezeThawDVE		;make sure it is properly frozen
+
+	CALLTL	AllInterruptsOn
+
+	move.w	(sp)+,d0
+	bne.s	115$
+	ELHCLEAR_OBR	a0
+	bra.s	118$
+115$	ELHSET_OBR	a0
+118$	move.w	(sp)+,d0
+	ELHPUT_IS_R	a0,d0
+
+	lea.l	elhlist2(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d2/a0-a1
+	rts
+
+elhlist2	dc.b	EH2,EHEND
+
+	CNOP	0,2
+
+**************************************************
+LL	set	35
+HH	set	220
+LINE	set	240
+
+* Will foul up ChipMem, so you need to ReDoDisplay()
+* returns +/- error amount
+* SetGain Pre 2.0, Pre 10-dec-9. Equiv. to 1.0 code
+* ~SetGainCrude:
+SetGainCrude:
+	movem.l	d0-d7/a0-a4,-(sp)
+
+	CALLTL	InstallAVE
+
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#LL,d0		;start level
+	moveq	#0,d1		;step level
+	move.l	#HH,d2		;final level
+	move.l	#368,d3		;start width
+	moveq	#0,d4		;step width
+	move.l	#LINE,d5	;line start
+	moveq	#1,d6		;#lines
+	moveq	#0,d7		;bank
+	bsr	WriteGrayPulse
+
+	DEA.l	TB_VTSetUp,a4
+	ELHPUT_BM_I	a4,VTI_BM_DAC0	;AM & BM were commented out pre 2-19-93
+	ELHPUT_AM_I	a4,VTI_AM_VID1
+3$	ELHPUT_PV_I	a4,VTI_PV_VID1
+	ELHPUT_LK_I	a4,VTI_LK_VID1
+	ELHPUT_IS_I	a4,VTI_IS_VID1	;will be main temporarily
+	ELHPUT_CDS_I	a4,VTI_CDS_CD
+	ELHPUT_CD_I	a4,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster		;done below via Grab1Bank
+			
+	moveq	#0,d3
+	moveq	#7,d4
+
+5$	bset	d4,d3
+	bsr.s	100$
+	bge.s	20$	;jump if d0 >= to expected
+	bclr	d4,d3
+	neg.w	d0	* d0 = abs error amount
+20$	dbra	d4,5$
+
+30$	move.w	d0,d4	;save error when bit 0 was high
+	bclr	#0,d3
+	bsr.s	100$
+	bge.s	35$	;jump if d0 >= to expected
+	neg.w	d0
+35$	cmp.w	d4,d0
+	bls.s	40$	;jump if bit 0 low was closest
+	bset	#0,d3
+
+40$ ;;	move.w	d3,GainConfig
+	ELHPUT_GAIN_R	a4,d3
+	lea.l	elhlist6B(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d7/a0-a4
+	rts
+
+;-----------
+100$:	move.w	d3,d0
+	ELHPUT_GAIN_R	a4,d0
+	lea.l	elhlist6B(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	moveq	#VTI_IS_MAIN,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne.s	106$
+	moveq	#VTI_IS_EXT,d0
+
+106$	moveq	#1,d1
+	bsr	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+
+	move.l	d1,d0		;bank
+	move.l	#LINE,d1		;scan line
+	bsr	ReadScanLine
+
+	lea	184-32(a0),a2	;will get complimentary field also
+	lea	184-32(a1),a3
+	moveq	#63,d2
+	moveq	#0,d1
+	moveq.l	#0,d5
+10$	move.b	(a2)+,d5
+	add.w	d5,d1
+	move.b	(a3)+,d5
+	add.w	d5,d1
+	dbra	d2,10$		;128 times larger
+
+	lea	552-32(a0),a2
+	lea	552-32(a1),a3
+	moveq	#63,d2
+	moveq	#0,d0
+15$	move.b	(a2)+,d5
+	add.w	d5,d0
+	move.b	(a3)+,d5
+	add.w	d5,d0
+	dbra	d2,15$		;128 times larger
+
+	sub.w	d1,d0		;hi-low
+	sub.w	#(HH-LL)*128,d0	;+/- error amount
+	rts
+
+**********************************************
+GG	SET	4	;some level above noise range of 0
+LINE	set	240
+
+* Will foul up ChipMem, so you need to ReDoDisplay()
+* This will kill Gain setting
+* Max ped is at PED=255
+* ~SetPedestalCrude:
+SetPedestalCrude:
+	movem.l	d0-d7/a0-a2,-(sp)
+
+	CALLTL	InstallAVE
+
+* Plot digital GG
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#GG,d0		;start level
+	moveq	#0,d1		;step level
+	moveq	#0,d2		;final level
+	move.l	#736,d3		;start width
+	moveq	#0,d4		;step width
+	move.l	#LINE,d5	;line start
+	moveq	#1,d6		;#lines
+	moveq	#0,d7		;bank
+	bsr	WriteGrayPulse
+
+	DEA.l	TB_VTSetUp,a2
+	ELHPUT_GAIN_I	a2,128	;mid range
+	lea	elhlist6B(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	ELHPUT_BM_I	a2,VTI_BM_DAC0	;AM & BM were commented out pre 2-19-93
+	ELHPUT_AM_I	a2,VTI_AM_VID1
+3$	ELHPUT_PV_I	a2,VTI_PV_VID1
+	ELHPUT_LK_I	a2,VTI_LK_VID1
+	ELHPUT_IS_I	a2,VTI_IS_VID1	;will be main temporarily
+	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster		;done below via Grab1Bank
+			
+* find PED which produces a level >= to digital level GG
+	move.w	#$ff,d3
+	moveq	#7,d4
+	moveq	#5,d5		;only do 6 bits
+5$	bclr	d4,d3
+
+	move.w	d3,d0
+	ELHPUT_PED_R	a2,d0
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	moveq	#VTI_IS_MAIN,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne.s	6$
+	moveq	#VTI_IS_EXT,d0
+
+6$	moveq	#1,d1
+	bsr	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	move.l	d1,d0		;bank
+	move.l	#LINE,d1		;scan line
+	bsr	ReadScanLine
+
+	lea	368-32(a0),a0	;will get complimentary field also
+	lea	368-32(a1),a1
+	moveq	#31,d1
+	moveq	#0,d0
+	moveq	#0,d2
+10$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,10$		;64 times larger
+
+	cmpi.w	#GG*64,d0	;error amount
+	bge.s	20$		;jump if d0 >= to expected
+	bset	d4,d3
+20$	subq.w	#1,d4
+	dbra	d5,5$
+		
+40$	ELHPUT_PED_R	a2,d3
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d7/a0-a2
+	rts
+
+**********************************************
+HH	set	200
+MM	set	135
+LL	set	71
+
+LINE	set	240
+
+* Will foul up ChipMem, so you need to ReDoDisplay()
+* Max ped is at PED=255
+* Pre 2.0, Pre 10-dec-91. Equiv. to 1.0 code
+*~SetPedestalFast:
+SetPedestalFast:
+	movem.l	d0-d7/a0-a2,-(sp)
+
+	CALLTL	InstallAVE
+
+* Plot digital steps
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#LL,d0		;start level
+	move.l	#MM,d1		;step level
+	move.l	#HH,d2		;final level
+	move.l	#245,d3		;start width
+	move.l	#245,d4		;step width
+	move.l	#LINE,d5	;line start
+	moveq	#1,d6		;#lines
+	moveq	#0,d7		;bank
+	bsr	WriteGrayPulse
+
+	DEA.l	TB_VTSetUp,a2
+	ELHPUT_BM_I	a2,VTI_BM_DAC0	;AM & BM were commented out pre 2-19-93
+	ELHPUT_AM_I	a2,VTI_AM_VID1
+3$	ELHPUT_PV_I	a2,VTI_PV_VID1
+	ELHPUT_LK_I	a2,VTI_LK_VID1
+	ELHPUT_IS_I	a2,VTI_IS_VID1	;will be main temporarily
+	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster		;done below via Grab1Bank
+			
+* find PED which produces a level closest to perfect
+	moveq	#0,d3
+	moveq	#7,d4
+
+5$	bset	d4,d3
+	bsr.s	100$
+	ble.s	20$		;jump if d0 <= to expected
+	bclr	d4,d3
+	neg.w	d0		;d0 = -abs error amount
+20$	dbra	d4,5$
+
+30$	move.w	d0,d4	;save -error when bit 0 was high
+	bclr	#0,d3
+	bsr.s	100$
+	ble.s	35$	;jump if d0 >= to expected
+	neg.w	d0
+
+35$	cmp.w	d4,d0
+	bge.s	40$	;jump if bit 0 low was closest
+	bset	#0,d3
+	
+40$ ;;	move.w	d3,PedConfig
+  	ELHPUT_PED_R	a2,d3
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d7/a0-a2
+	rts
+
+;-----------------
+100$	move.w	d3,d0
+	ELHPUT_PED_R	a2,d0
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	moveq	#VTI_IS_MAIN,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne.s	106$
+	moveq	#VTI_IS_EXT,d0
+
+106$	moveq	#1,d1
+	bsr	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	move.l	d1,d0		;bank
+	move.l	#LINE,d1		;scan line
+	bsr	ReadScanLine
+
+	moveq	#0,d0
+	moveq	#0,d2
+
+	lea	122-10(a0),a0	;will get complimentary field also
+	lea	122-10(a1),a1
+	moveq	#20,d1
+10$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,10$		;64 times larger
+
+	lea	224(a0),a0	;will get complimentary field also
+	lea	224(a1),a1
+	moveq	#20,d1
+12$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,12$		;64 times larger
+
+	lea	224(a0),a0	;will get complimentary field also
+	lea	224(a1),a1
+	moveq	#20,d1
+14$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,14$		;64 times larger
+
+	sub.w	#(LL+MM+HH)*42,d0	;error amount
+	rts
+
+**********************************************
+HH	set	200
+MM	set	135
+LL	set	71
+
+LINE	set	240
+
+* Will foul up ChipMem, so you need to ReDoDisplay()
+* Max ped is at PED=255
+*~SetPedestal:
+SetPedestal:
+	movem.l	d0-d7/a0-a3,-(sp)
+
+	bsr	InitPedestal
+			
+* find PED which produces a level closest to perfect
+
+*a3->VTSetUp
+*d3 samplePED
+*d4 bit counter (high to low)
+
+	moveq	#0,d3
+	moveq	#7,d4
+
+5$	bset	d4,d3
+	bsr	GetPedestal
+	ble.s	20$		;jump if d0 <= to expected
+	bclr	d4,d3
+	neg.w	d0		;d0 = -abs error amount
+20$	dbra	d4,5$
+
+30$	move.w	d0,d4	;save -error when bit 0 was high
+	bclr	#0,d3
+	bsr	GetPedestal
+	ble.s	35$	;jump if d0 >= to expected
+	neg.w	d0
+
+35$	cmp.w	d4,d0
+	bge.s	40$	;jump if bit 0 low was closest
+	bset	#0,d3
+	
+40$ 	move.w	d3,PedConfig
+	ELHPUT_PED_R	a3,d3
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d7/a0-a3
+	rts
+
+**********************************************
+* returns d0= (71+135+200)*42digital - (71+135+200)*42analog
+*~TestPedestal:
+TestPedestal:
+	movem.l	d1-d7/a0-a3,-(sp)
+
+	bsr.s	InitPedestal	;a3->VTSetUp
+			
+	ELHGET_PED	a3,d3
+	bsr.s	GetPedestal	;d0 = error amount
+	ext.l	d0
+
+	movem.l	(sp)+,d1-d7/a0-a3
+	rts
+
+;-----------------
+InitPedestal:
+	CALLTL	InstallAVE
+
+* Plot digital steps
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#LL,d0		;start level
+	move.l	#MM,d1		;step level
+	move.l	#HH,d2		;final level
+	move.l	#245,d3		;start width
+	move.l	#245,d4		;step width
+	move.l	#LINE,d5	;line start
+	moveq	#1,d6		;#lines
+	moveq	#0,d7		;bank
+	CALLTL	WriteGrayPulse
+
+	DEA.l	TB_VTSetUp,a3
+	ELHPUT_PV_I	a3,VTI_PV_VID1
+	ELHPUT_LK_I	a3,VTI_LK_DAC0
+	ELHPUT_CDS_I	a3,VTI_CDS_CD
+	ELHPUT_CD_I	a3,VTI_CD_SHOWB
+	JUMPTL	SendELH2Toaster
+	
+;-----------------
+* d0-d2/a0-a1=scratch regs, d3=samplePED, a3->vtsetup
+* returns error amount in d0
+GetPedestal:
+	move.w	d3,d0
+	ELHPUT_PED_R	a3,d0
+	lea.l	elhlist6A(pc),a0
+	CALLTL	SendELHList2Toaster
+
+* grab analog
+	ELHPUT_AM_I	a3,VTI_AM_MONO
+	ELHPUT_BM_I	a3,VTI_AM_MONO ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MAIN,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;analog control sample
+
+	move.l	d1,d0		;bank
+	move.l	#LINE,d1	;scan line
+	bsr.s	200$		;read the scan line, and get levels
+
+	move.w	d0,d5		;stash analog level
+
+* grab digital
+*	ELHPUT_AM_I	a3,VTI_AM_DAC0
+*	ELHPUT_BM_I	a3,VTI_AM_DAC0 ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MONO,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;digital grab
+
+* move digital results to bank DV1
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	move.l	#LINE,d1	;line
+	CALLTL	ReadScanLine
+
+;a0->buffa, a1->buffb	
+	GET.l	TB_CHIPMem,a2
+	move.l	#LINE+2,d0	;dest line
+	moveq	#1,d1		;# of lines
+	moveq	#0,d2		;bank DV1
+	CALLTL	SendBytes2Toaster
+
+* grab digital results (to cancel out parts of the analog path)
+	ELHPUT_AM_I	a3,VTI_AM_DAC0
+	ELHPUT_BM_I	a3,VTI_AM_DAC0 ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MAIN,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;analog control sample
+
+	move.l	d1,d0		;bank
+	move.l	#LINE+2,d1	;scan line
+	bsr.s	200$		;read the scan line, and get levels
+
+;d0=digital, d5=analog (it will be < 32K)
+	sub.w	d5,d0	;d0 = error amount w/ condition codes set
+	rts
+
+*-------------------------
+* d1=line
+200$	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	CALLTL	ReadScanLine
+
+	moveq	#0,d0
+	moveq	#0,d2
+
+	lea	122-10(a0),a0	;will get complimentary field also
+	lea	122-10(a1),a1
+	moveq	#20,d1
+10$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,10$		;42 times larger
+
+	lea	224(a0),a0	;will get complimentary field also
+	lea	224(a1),a1
+	moveq	#20,d1
+12$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,12$		;42 times larger
+
+	lea	224(a0),a0	;will get complimentary field also
+	lea	224(a1),a1
+	moveq	#20,d1
+14$	move.b	(a0)+,d2
+	add.w	d2,d0
+	move.b	(a1)+,d2
+	add.w	d2,d0
+	dbra	d1,14$		;42 times larger
+	rts			;d0 = sum of (71+135+200)*42
+
+**************************************************
+LL	set	35
+HH	set	220
+LINE	set	240
+
+* Will foul up ChipMem, so you need to ReDoDisplay()
+* returns +/- error amount
+*~SetGain:
+SetGain:
+	movem.l	d0-d7/a0-a4,-(sp)
+
+	bsr	InitGain		
+* find GAIN which produces a level closest to perfect
+
+*a4->VTSetUp
+*d3 samplePED
+*d4 bit counter (high to low)
+			
+	moveq	#0,d3
+	moveq	#7,d4
+
+5$	bset	d4,d3
+	bsr	GetGain
+	bge.s	20$	;jump if d0 >= to expected
+	bclr	d4,d3
+	neg.w	d0	* d0 = abs error amount
+20$	dbra	d4,5$
+
+30$	move.w	d0,d4	;save error when bit 0 was high
+	bclr	#0,d3
+	bsr	GetGain
+	bge.s	35$	;jump if d0 >= to expected
+	neg.w	d0
+35$	cmp.w	d4,d0
+	bls.s	40$	;jump if bit 0 low was closest
+	bset	#0,d3
+
+40$ 	move.w	d3,GainConfig
+	ELHPUT_GAIN_R	a4,d3
+	lea.l	elhlist6B(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d7/a0-a4
+	rts
+
+**********************************************
+* returns d0 = (220-35)*128digital - (220-35)*128analog
+*~TestGain:
+TestGain:
+	movem.l	d1-d7/a0-a4,-(sp)
+
+	bsr.s	InitGain	;a4->VTSetUp
+			
+	ELHGET_GAIN	a4,d3
+	bsr.s	GetGain		;d0 = error amount
+	ext.l	d0
+
+	movem.l	(sp)+,d1-d7/a0-a4
+	rts
+
+;--------------------------
+InitGain:
+	CALLTL	InstallAVE
+
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#LL,d0		;start level
+	moveq	#0,d1		;step level
+	move.l	#HH,d2		;final level
+	move.l	#368,d3		;start width
+	moveq	#0,d4		;step width
+	move.l	#LINE,d5	;line start
+	moveq	#1,d6		;#lines
+	moveq	#0,d7		;bank
+	CALLTL	WriteGrayPulse
+
+	DEA.l	TB_VTSetUp,a4
+	ELHPUT_PV_I	a4,VTI_PV_VID1
+	ELHPUT_LK_I	a4,VTI_LK_DAC0
+	ELHPUT_CDS_I	a4,VTI_CDS_CD
+	ELHPUT_CD_I	a4,VTI_CD_SHOWB
+	JUMPTL	SendELH2Toaster
+
+;-----------
+GetGain:
+	move.w	d3,d0
+	ELHPUT_GAIN_R	a4,d0
+	lea.l	elhlist6B(pc),a0
+	CALLTL	SendELHList2Toaster
+
+* grab analog
+	ELHPUT_AM_I	a4,VTI_AM_MONO
+	ELHPUT_BM_I	a4,VTI_AM_MONO ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MAIN,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;analog control sample
+
+	move.l	d1,d0		;bank
+	move.l	#LINE,d1	;scan line
+	bsr.s	200$		;read the scan line, and get levels
+
+	move.w	d0,d6		;stash analog hi-low level
+
+* grab digital
+*	ELHPUT_AM_I	a4,VTI_AM_DAC0
+*	ELHPUT_BM_I	a4,VTI_AM_DAC0 ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MONO,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;digital grab
+
+* move digital results to bank DV1
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	move.l	#LINE,d1	;line
+	CALLTL	ReadScanLine
+
+;a0->buffa, a1->buffb	
+	GET.l	TB_CHIPMem,a2
+	move.l	#LINE+2,d0	;dest line
+	moveq	#1,d1		;# of lines
+	moveq	#0,d2		;bank DV1
+	CALLTL	SendBytes2Toaster
+
+* grab digital results (to cancel out parts of the analog path)
+	ELHPUT_AM_I	a4,VTI_AM_DAC0
+	ELHPUT_BM_I	a4,VTI_AM_DAC0 ;sent out by grab1bank = EH2
+	moveq	#VTI_IS_MAIN,d0
+	moveq	#1,d1
+	CALLTL	Grab1Bank	;analog control sample
+
+	move.l	d1,d0		;bank
+	move.l	#LINE+2,d1	;scan line
+	bsr.s	200$		;read the scan line, and get levels
+
+;d0=digital, d6=analog (it will be < 32K)
+	sub.w	d6,d0	;d0 = error amount w/ condition codes set
+	rts
+
+*-------------------------
+* d1=line
+200$	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	CALLTL	ReadScanLine
+
+	lea	184-32(a0),a2	;will get complimentary field also
+	lea	184-32(a1),a3
+	moveq	#63,d2
+	moveq	#0,d1
+	moveq.l	#0,d5
+10$	move.b	(a2)+,d5
+	add.w	d5,d1
+	move.b	(a3)+,d5
+	add.w	d5,d1
+	dbra	d2,10$		;64 times larger
+
+	lea	552-32(a0),a2
+	lea	552-32(a1),a3
+	moveq	#63,d2
+	moveq	#0,d0
+15$	move.b	(a2)+,d5
+	add.w	d5,d0
+	move.b	(a3)+,d5
+	add.w	d5,d0
+	dbra	d2,15$		;64 times larger
+
+	sub.w	d1,d0		;(HI-LOW)*128
+	rts
+
+**********************************************************
+* returns d0=error code, d1= gain error.ped error (gainLimit.pedLimit)
+*				31-16    15-0 bits
+* error= 1=Ped bad, 2=Gain bad, 3=both Ped&Gain bad
+* Will foul up ChipMem, so you need to ReDoDisplay()
+*~TestAutoCal:
+TestAutoCal:
+	movem.l	d2-d3,-(sp)
+	move.l	d0,d3	;Gain.ped Limits DAC*128.DAC*42 (usually about 2*128.3*42)
+	bsr	TestPedestal
+*d0.w= (71+135+200)*42digital - (71+135+200)*42analog
+
+	move.l	d0,-(sp)
+	bge.s	10$
+	neg.w	d0
+10$	move.w	d0,d1
+
+	bsr	TestGain
+*d0.w = (220-35)*128digital - (220-35)*128analog
+
+	move.w	d0,(sp)
+	bge.s	20$
+	neg.w	d0
+20$	move.w	d0,d2
+
+	moveq	#0,d0	;assume no failures
+	cmp.w	d3,d1
+	bcs.s	30$	;jump if PED ok
+	moveq	#1,d0
+
+30$	swap	d3
+	cmp.w	d3,d2
+	bcs.s	100$	;jump if GAIN ok
+	bset	#1,d0	
+
+100$	tst.w	d0
+	movem.l	(sp)+,d1-d3
+	rts
+
+**********************************************************
+* returns d0=error code, d1= gain error.ped error
+*				31-16    15-0 bits
+*
+*~AutoCalibrate:
+AutoCalibrate:
+	movem.l	d2/a0-a1,-(sp)
+
+	CALLTL	NoTransFreeze
+
+	DEA.l	TB_VTSetUp,a0			;Put Black on main
+	moveq.l	#0,d0
+	ELHTEST_NOSNOW	a0
+	beq.s	365$
+	moveq.l	#-1,d0
+365$	move.w	d0,-(sp)			;snow
+
+	ELHGET_MA	a0,d0
+	move.w		d0,-(sp)		;mat a
+	ELHGET_MB	a0,d0
+	move.w		d0,-(sp)		;mat b
+	ELHGET_AM	A0,D0
+	move.w		d0,-(sp)		;A mux
+	ELHGET_BM	A0,D0
+	move.w		d0,-(sp)		;B mux
+
+	ELHPUT_MA_I	a0,0
+	ELHPUT_MB_I	a0,0
+	ELHPUT_AM_I	A0,VTI_AM_ENCODER
+	ELHPUT_BM_I	A0,VTI_BM_ENCODER
+	ELHSET_NOSNOW	A0
+
+	LEA	MainBlankList(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	CALLTL	InstallAVE
+	CALLTL	SoftSpriteBPLCON0Off
+
+	subq.w	#8,sp
+	tst.w	PedConfig
+	bmi.s	10$		;force autoconfig
+
+	move.l	#((2*128)<<16)+(3*42),d0	;gain.ped limits
+	bsr	TestAutoCal
+	movem.l	d0-d1,(sp)
+	beq	40$				;Auto Cal not needed
+
+	moveq.l	#1,d1				;flash 1 blue if autocal needed
+	move.w	#$00f,d0
+	bsr	FlashError
+
+10$	bsr	SetPedestalCrude
+	bsr	SetGainCrude
+	
+	bsr	SetPedestalFast		;just to assure it is more accurate
+	bsr	SetGain
+	bsr	SetPedestal
+	CALLTL	WriteHardSets	;assume success, was SaveHardSets
+
+	IFD	DEBUGTRSL
+;;	 move.l	a6,-(sp)
+;;	 bsr	GetCurrentReadTable
+;;	 DUMPMEM	<SaveHS RSLtable>,CaliRSLtable(a6),#32
+;;	 movea.l (sp)+,a6
+	ENDC
+
+	move.l	#((3*128)<<16)+(4*42),d0	;gain.ped limits
+	bsr	TestAutoCal
+	movem.l	d0-d1,(sp)	
+	beq.s	40$			;jump if successfully calibated
+
+	moveq	#1,d1			;flash one red if AutoCal failed
+	move.w	#$f00,d0
+	bsr	FlashError
+
+40$	DEA.l	TB_VTSetUp,a0			;Restore Main
+	ELHPUT_IS_I	a0,VTI_IS_ENCODER	;HACK
+
+	move.w	8(sp),d0
+	ELHPUT_BM_R	A0,D0
+	move.w	10(sp),d0
+	ELHPUT_AM_R	A0,D0
+	move.w	12(sp),d0
+	ELHPUT_MB_R	A0,D0
+	move.w	14(sp),d0
+	ELHPUT_MA_R	A0,D0
+	move.w	16(sp),d0
+	bne.s	374$
+	ELHCLEAR_NOSNOW	A0
+374$	LEA	MainBlankList(pc),a0		;set headers to toaster
+	CALLTL	SendELHList2Toaster
+
+;;	CALLTL	ReDoDisplay
+	PUT.w	#VIDEOTYPE_LIVE,TB_VideoFlagSec
+	CALLTL	CookAndServeFreeze
+;;	CALLTL	InstallAVEI
+
+	moveq	#7,d0
+999$	CALLTL	Wait4Top
+	dbra	d0,999$
+
+	CALLTL	SoftSpriteBPLCON0On
+
+	movem.l	(sp)+,d0-d1
+	lea	5*2(sp),sp
+
+	movem.l	(sp)+,d2/a0-a1
+	rts
+
+elhlist6A	dc.b	EH6A,EHEND
+elhlist6B	dc.b	EH6B,EHEND
+	CNOP	0,2
+
+**********************************************************
+
+crslline	SET	504
+
+	IFD	DBCRSL
+crslline	SET	220
+	ENDC
+
+* BOOL, a0->CaliResults = CaliReadScanLine(forceflag)
+* d0=forceflag=0 if want to check existing table, else 1=force calibration
+* This will trash the first bytes of TB_CHIPMem so you'll need to
+* do a ReDoDisplay() after this call before you bring up AVEI.
+* I think this function assumes AVE is up on entry.
+* a0=NULL if Calibration wasn't necessary.
+
+*~CaliReadScanLine
+CaliReadScanLine
+	tst.w	d0	;tst.l ?
+	beq.s	10$	
+
+* force calibration, starting at MAXGRABSPERLINE, working towards MINGRABSPERLINE	
+	tst.w	CurrentGrabType
+	beq.s	10$
+	clr.w	CurrentGrabType	;CurrentRSLTable(a6)
+	clr.w	ReadScanBMFlags	;force new BM read data
+
+10$	bsr	CalibrateRead	;try current read table
+	tst.l	d0
+	bne	777$
+
+* try other tables
+	movem.l	d1/a6,-(sp)
+	lea	ToasterConfig,a6
+	move.w	CurrentRSLTable(a6),d1	;save current read table
+
+50$	move.w	CurrentRSLTable(a6),d0
+	addq.w	#1,d0
+	move.w	d0,CurrentRSLTable(a6)	;assume ok
+	add.w	d0,d0
+	add.w	d0,d0
+	tst.l	ReadPresetTable(a6,d0.w)
+	bne.s	100$
+	clr.w	CurrentRSLTable(a6)	;reset to top
+	
+100$	moveq	#0,d0			;assume failure
+	cmp.w	CurrentRSLTable(a6),d1
+	beq.s	666$			;jump if no more to check
+
+	clr.w	ReadScanBMFlags	;force new BM read data
+	bsr.s	CalibrateRead	;try current read table
+	tst.l	d0
+	beq	50$		;try next table
+
+666$	movem.l	(sp)+,d1/a6
+777$	rts
+
+****************************************************
+CalibrateRead:
+	movem.l	d1-d7/a1-a4/a6,-(sp)
+	
+	CALLTL	SoftSpriteBPLCON0Off
+
+	move.w	d0,d7				;stash forceflag
+
+	DEA.l	TB_VTSetUp,a0			;Put Black on main
+	moveq.l	#0,d0
+	ELHTEST_NOSNOW	a0
+	beq.s	365$
+	moveq.l	#-1,d0
+365$	move.w	d0,-(sp)			;snow
+
+	ELHGET_MA	a0,d0
+	move.w		d0,-(sp)		;mat a
+	ELHGET_MB	a0,d0
+	move.w		d0,-(sp)		;mat b
+	ELHGET_AM	A0,D0
+	move.w		d0,-(sp)		;A mux
+	ELHGET_BM	A0,D0
+	move.w		d0,-(sp)		;B mux
+
+	ELHPUT_MA_I	a0,0
+	ELHPUT_MB_I	a0,0
+	ELHPUT_AM_I	A0,VTI_AM_ENCODER
+	ELHPUT_BM_I	A0,VTI_BM_ENCODER
+	ELHSET_NOSNOW	A0
+
+	LEA	MainBlankList(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	bsr	GetCurrentReadTable	;a6->current table
+	clr.w	didcaliflag
+
+	tst.w	d7
+	bne	.forceit
+
+	IFD	DBCRSL
+	DUMPMSG	<---------------------------------------->
+	ENDC
+
+	move.l	#crslline,d0			;line number
+	moveq.l	#0,d1				;bank #
+	move.l	TB_CHIPMem(a5),a0
+	CALLTL	TestReadScanLine		;will freeze it
+	tst.l	d0
+	bne	.RestoreExit
+
+	IFD	DBCRSL
+	DUMPMSG	<current preset failed>
+	ENDC
+
+.trysomething
+
+;***!!!***
+	movea.l	a6,a4
+	adda.w	CaliStatic(a6),a4
+
+*----
+.checknext
+	tst.w	(a4)
+	beq.s	.TryFullCali
+
+;**!!!***
+	move.w	CaliGrabsPerLine(a6),d0
+	subq.w	#1,d0
+
+;***!!!***
+	lea	CaliRSLtable(a6),a0
+
+.setnew	move.w	(a4)+,(a0)+
+	dbf	d0,.setnew
+
+	move.l	#crslline,d0			;line number
+	moveq.l	#0,d1				;bank #
+	move.l	TB_CHIPMem(a5),a0
+	CALLTL	TestReadScanLine
+	suba.l	a0,a0			;assume OK, no ->CaliResults
+	tst.l	d0
+	bne	.SaveRestoreExit	;save new presets
+					;a0->CaliResults is bogus!!!
+	IFD	DBCRSL
+	DUMPMSG	<preset failed>
+	ENDC
+
+	bra.s	.checknext
+*----
+
+.TryFullCali
+	
+	IFD	DBCRSL
+	DUMPMSG	<all presets failed>	
+	ENDC
+
+	moveq.l	#1,d1			;1 Green flashes 
+	move.w	#$0f0,d0
+	bsr	FlashError
+
+*--------------------
+.forceit
+
+	IFD	DBCRSL
+	DUMPMSG	<Calibrate>
+	ENDC
+
+	move.w	#1,didcaliflag
+
+;***!!!!*****
+	lea	CaliRSLtable(a6),a2
+
+	movea.l	a2,a0
+	moveq	#0,d0
+
+;**!!!****
+	move.w	CaliGrabsPerLine(a6),d1
+	subq.w	#2,d1
+
+10$	move.w	d0,(a0)+
+	dbra	d1,10$
+	move.w	#$80,(a0)	;necessary so bmi loop works at line start
+
+	lea	CaliResults,a3
+	move.l	a3,CaliResultsPtr
+
+;****!!!*****
+	movea.l	a6,a3
+	adda.w	CaliLimitTBL(a6),a3
+
+;**!!**
+	moveq	#0,d3
+	move.w	CaliCheckCenter(a6),d3	; (apparently works for 1st wait position??)
+
+;**!!***
+	move.w	CaliGrabsPerLine(a6),-(sp)	;counter
+
+	CALLTL	InstallAVE
+
+* d3 is incremented by 4
+20$	movea.l	TB_CHIPMem(a5),a0
+	move.l	#71,d0
+	move.l	#200,d1
+	move.l	d0,d2
+	moveq	#4,d4
+	move.l	#crslline,d5
+	moveq	#2,d6
+
+	IFD	DBCRSL
+	moveq	#8,d6
+	ENDC
+
+	moveq	#0,d7
+	bsr	WriteGrayPulse
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+
+;;	move.w	(a3)+,(a2)	;try left most wait from LimitTBL
+;;	move.w	(a3)+,d2
+
+	move.w	(a3)+,d5	;try left most wait from LimitTBL
+	move.w	(a3)+,d2	;wait counter+1
+
+;***!!!****
+	move.w	CaliGrabsPerLine(a6),d0
+	cmp.w	(sp),d0
+	beq.s	25$		;first sample
+
+	move.w	-2(a2),d7	;previous wait
+	
+	cmp.w	d7,d5
+	bhi.s	25$		;jmp if d5 > previous wait position
+
+	moveq	#0,d0		;assume failure
+	addq.w	#1,d7
+	sub.w	d7,d5
+	add.w	d5,d2
+	bmi	70$		;failure !!!! (no waits left to check)
+
+	move.w	d7,d5
+
+25$	move.w	d5,(a2)
+ 	
+ 	moveq	#0,d5		;current low count
+	moveq	#0,d7		;stashed low count
+
+30$	moveq	#0,d0		;bank
+	move.l	#crslline,d1		;scan line
+	CALLTL	ReadScanLine
+
+	IFD	DBCRSL
+	bsr	crsldb
+	ENDC
+
+	movea.l	a0,a4
+	bsr	checkpulse
+	beq	50$		;failed
+
+	movea.l	a1,a4
+	bsr	checkpulse
+	beq	50$		;failed
+	
+	moveq	#0,d0		;bank
+	move.l	#crslline+1,d1		;scan line
+	CALLTL	ReadScanLine
+
+	IFD	DBCRSL
+	bsr	crsldb
+	ENDC
+
+	movea.l	a0,a4
+	bsr	checkpulse
+	beq.s	50$		;failed
+
+	movea.l	a1,a4
+	bsr	checkpulse
+	beq.s	50$		;failed
+
+	IFD	DBCRSL
+	DUMPMSG	<grab OK>
+	LEDHIGH
+	WAIT4LMB
+	ENDC
+
+* Grabbed OK
+	tst.w	d5		;are we on a run?
+	bne.s	35$
+	move.w	(a2),d4		;save new current low
+35$	addq.w	#1,d5		;atleast 1 good wait position
+
+	tst.w	d2
+	bne.s	60$		;fall thru if last quad
+
+* Grabbed BAD
+50$
+	IFD	DBCRSL
+	DUMPMSG	<grab BAD>
+	LEDLOW
+	WAIT4LMB
+	ENDC
+
+	cmp.w	d5,d7		;jmp if d5 <= d7
+	bcc.s	55$		;jump if not a record
+	move.w	d5,d7		;save record count (where there the most possible wait positions)
+	move.w	d4,d6		;save wait position
+
+55$	moveq	#0,d5
+	
+60$	addq.w	#1,(a2)
+	dbra	d2,30$
+
+	moveq	#0,d0		;assume failure
+	tst.w	d7
+	beq	70$		;failure !!!!	
+
+	move.w	d6,d0		;left most wait
+	add.w	d7,d0		;1st position past right most good wait
+	
+*-------
+	IFD	DBCRSL
+	move.w	d3,d7
+
+;***!!!***
+	sub.w	CaliCheckCenter(a6),d7
+;;	sub.w	TB_ClipASec(a5),d7	
+
+	lsr.w	#2,d7	;quad
+	DUMPUDEC.w	<Quad=>,d7,< >
+	move.w	d0,d7
+	subq.w	#1,d7
+	DUMPUDEC.w	<Left=>,d6,< >
+	DUMPUDEC.w	<Right=>,d7,< >
+	ENDC
+*--------
+
+	movea.l	CaliResultsPtr,a0
+	move.w	d6,(a0)+
+	move.w	d0,(a0)+
+	move.l	a0,CaliResultsPtr
+
+;***** This was a test of using a position left of the grab center
+;;	move.w	d6,d7
+;;	add.w	TB_ClipASec(a5),d7	;magic number (4???)
+
+	add.w	d0,d6
+	subq.w	#1,d6		;want to round down, not up
+	lsr.w	#1,d6		;average
+
+;;	cmp.w	d7,d6
+;;	bls.s	69$		;jump is center is <= to left+magic number
+;;	move.w	d7,d6
+
+69$	move.w	d6,(a2)+
+
+	IFD	DBCRSL
+	DUMPUDEC.w	<Best=>,d6,<\>
+	ENDC
+	
+	addq.w	#4,d3		;->next quad pixel
+
+	IFD	DBCRSL
+	LEDHIGH
+	ENDC
+
+	subq.w	#1,(sp)
+	bne	20$
+	moveq	#1,d0		;success
+
+70$ ;;	move.l	d0,-(sp)
+    ;;	CALLTL	ReDoDisplay	;why not outside loop??
+    ;;	move.l	(sp)+,d0
+
+	addq.w	#2,sp
+
+	tst.l	d0
+	beq	.RestoreExit		;dont save numbers that are bad
+
+;***!!!!****
+	movea.l	a6,a0
+	adda.w	CaliFIFO(a6),a0		;point to next entry to update
+	lea	CaliRSLtable(a6),a1
+
+;***!!!****
+;;	DUMPMEM	<ReadScanLineTable2>,(a1),#16*2
+
+;***!!!***
+	move.w	CaliGrabsPerLine(a6),d1
+	subq.w	#1,d1
+
+777$	move.w	(a1)+,(a0)+
+	dbf	d1,777$
+	
+	move.w	CaliDynamic(a6),CaliFIFO(a6)	;assume reset back to top
+
+	tst.w	(a0)
+	beq.s	.SaveRestoreExit	;jump if at table end
+
+	suba.l	a6,a0	;offset to next entry in FIFO table
+	move.w	a0,CaliFIFO(a6)
+
+.SaveRestoreExit
+	move.l	d0,-(sp)
+* !!!!!!! The SoftSprite allows the pointer to show on requesters.
+* But if CaliReadScanLine is called via an ARexx scripts/crouton this crashes.
+;;	CALLTL	SoftSpriteAudioOn	;!!!!!!!!! NEEDS TO WORK	
+	CALLTL	WriteHardSets		;was SaveHardSets
+
+
+	IFD	DEBUGTRSL
+;;	 bsr	GetCurrentReadTable
+;;	 DUMPMEM	<WriteHS RSLtable>,CaliRSLtable(a6),#32
+	ENDC
+
+
+;;	CALLTL	SoftSpriteAudioOff	;!!!!!!!!! NEEDS TO WORK
+	move.l	(sp)+,d0
+
+.RestoreExit
+
+	move.l	d0,d1				;save error code
+
+	DEA.l	TB_VTSetUp,a0			;Restore Main
+	move.w	(sp)+,d0
+	ELHPUT_BM_R	A0,D0
+	move.w	(sp)+,d0
+	ELHPUT_AM_R	A0,D0
+	move.w	(sp)+,d0
+	ELHPUT_MB_R	A0,D0
+	move.w	(sp)+,d0
+	ELHPUT_MA_R	A0,D0
+	move.w	(sp)+,d0
+	bne.s	374$
+	ELHCLEAR_NOSNOW	A0
+374$	LEA	MainBlankList(pc),a0		;set headers to toaster
+	CALLTL	SendELHList2Toaster
+	move.l	d1,d0
+
+	CALLTL	SoftSpriteBPLCON0On
+
+	movem.l	(sp)+,d1-d7/a1-a4/a6
+;;	dbne	d1,5$
+;;	move.w	(sp)+,d1
+
+	suba.l	a0,a0
+	tst.w	didcaliflag
+	beq.s	987$
+	lea	CaliResults,a0
+
+;****!!!****
+;;	DUMPMEM	<CaliResults>,(a0),#10*2*2
+
+987$	rts
+
+didcaliflag	dc.w	0
+
+;-----------------------------
+
+* a4->buffer, a6->Current Read Table, d3 = quad*4 = left pixel of marker quad
+
+checkpulse
+	movem.l	d3-d4/a4,-(sp)
+
+	adda.w	d3,a4	;->left pixel of marker quad
+
+;***!!!!****
+	suba.w	CaliCheckCenter(a6),a4	;->start
+	
+	move.l	#$47474747,d0
+
+;***!!!***
+	move.w	CaliCheckLeft(a6),d3
+
+	move.w	CaliGrabsPerLine(a6),d4
+	add.w	d4,d4
+	add.w	d4,d4	;*4
+
+;***!!!***
+30$	adda.w	d4,a4
+
+	cmp.l	(a4),d0
+	dbne	d3,30$
+	
+	cmp.l	(a4),d0
+	bne.s	666$		;failed
+
+;***!!!****
+	adda.w	d4,a4
+
+	cmpi.l	#$c8c8c8c8,(a4)
+	bne.s	666$
+
+;***!!!***
+	move.w	CaliCheckRight(a6),d3
+
+;****!!!!****
+40$	adda.w	d4,a4
+
+	cmp.l	(a4),d0
+	dbne	d3,40$
+
+	cmp.l	(a4),d0
+	bne.s	666$		;failed
+
+	moveq	#1,d0		;success
+
+50$	movem.l	(sp)+,d3-d4/a4
+	rts
+
+666$	moveq	#0,d0		;failure
+	bra.s	50$
+
+;--------------------
+	IFD	DBCRSL
+
+AA	set	96
+BB	set	AA*4
+
+* a0 & a1 ->buffers
+crsldb	movem.l	d0-d7/a0-a6,-(sp)
+
+	move.w	d3,d4
+	move.w	(a2),d5
+	movea.l	a0,a2
+	movea.l	a1,a3
+	move.l	d0,d6	;bank
+	move.l	d1,d7	;line
+
+;;	bra.s	10$
+
+	movea.l	TB_CHIPMem(a5),a0
+	move.l	#BB*3,d0
+	pea	AA*0(a0,d0.l)
+	move.l	#BB*2,d0
+	pea	AA*0(a0,d0.l)
+	move.l	#BB*1,d0
+	pea	AA*0(a0,d0.l)
+	move.l	#BB*0,d0
+	pea	AA*0(a0,d0.l)
+	move.l	#BB*3,d0
+	pea	AA*1(a0,d0.l)
+	move.l	#BB*2,d0
+	pea	AA*1(a0,d0.l)
+	move.l	#BB*1,d0
+	pea	AA*1(a0,d0.l)
+	move.l	#BB*0,d0
+	pea	AA*1(a0,d0.l)
+
+	movea.l	a2,a0	;bytes
+	movea.l	sp,a1	;->planes
+	moveq	#0,d0
+	move.l	#AA/2,d1
+
+	CALLTL	Bytes2Planes
+
+	movea.l	a3,a0
+	add.l	#AA*2,d0
+	CALLTL	Bytes2Planes
+
+	lea	4*4(sp),a0	;->planes
+	move.l	d7,d0		;line
+	subq.w	#6,d0	
+	moveq	#1,d1		;#lines
+	move.l	d6,d2		;bank
+	move.l	#768,d3		;width
+
+	IFD	AACHIPS
+	move.l	d4,-(sp)
+	moveq	#0,d4		;do zipper write also
+	ENDC
+
+	CALLTL	DoBlockWrite
+
+	cmpi.w	#220-6,d0
+	bne.s	5$
+	addq.w	#1,d0
+	CALLTL	DoBlockWrite
+5$
+	IFD	AACHIPS
+	move.l	(sp)+,d4
+	ENDC
+
+	CALLTL	Wait4Top
+
+	lea	8*4(sp),sp
+
+10$	CALLTL	InstallAVEI
+
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_AM_I	a0,VTI_AM_DAC0
+	ELHPUT_BM_I	a0,VTI_BM_DAC0
+	CALLTL	SendELH2Toaster
+
+;;	sub.w	CaliCheckRead(a6),d4
+;;	lsr.w	#2,d4	;quad
+;;	DUMPUDEC.w	<Quad=>,d4,< >
+;;	DUMPUDEC.w	<Wait=>,d5,<\>
+
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+	ENDC
+
+**********************************************************
+*~SendBytes2Toaster(buffa, buffb, chipchunk, linestart, #lines, bank)
+*		      a0     a1    a2	        d0        d1	 d2
+* Uses AA*16 bytes = 1472 bytes of chip (1536 on AA machine)
+* This assumes you are frozen, and not in a transition, and not in LUT mode
+* If you aren't sure call NoTransFreeze before the call to SendBytes2Taoster
+
+	IFND	AACHIPS
+AA	set	92	;was 96
+	ENDC
+
+	IFD	AACHIPS
+AA	set	96
+	ENDC
+
+a1ptr	set	(8*4+7*4)
+d0ptr	set	(8*4)
+d1ptr	set	(8*4+4)
+
+SendBytes2Toaster:
+	movem.l	d0-d5/a0-a1,-(sp)
+
+;;	CALLTL	NoTransFreeze
+
+	move.w	#AA*4*3,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*2,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*1,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*0,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*3,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*2,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*1,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*0,d0
+	pea	AA*1(a2,d0.w)
+
+	movea.l	sp,a1	;->planes
+	moveq	#0,d0
+	move.l	#AA/2,d1
+	CALLTL	Bytes2Planes
+
+	movea.l	a1ptr(sp),a0
+	add.l	#AA*2,d0
+	CALLTL	Bytes2Planes
+
+	lea	4*4(sp),a0	;->planes
+	move.l	d0ptr(sp),d0	;line#
+	moveq	#1,d1		;#lines
+;;	d2=bank
+	move.l	#AA*8,d3	;width
+
+	IFD	AACHIPS
+	moveq	#1,d4		;no zipper write
+	ENDC
+
+	move.l	d1ptr(sp),d5
+	
+	CALLTL	InterruptsOff	;prevent softsprite from causing havic
+
+	bra.s	20$
+10$	CALLTL	DoBlockWrite
+	addq.w	#1,d0
+20$	dbra	d5,10$
+
+	CALLTL	Wait4Top
+
+	CALLTL	InterruptsOn
+
+	lea	8*4(sp),sp
+	movem.l	(sp)+,d0-d5/a0-a1
+	rts
+
+**********************************************************
+*~SendBytes2ToasterAVEI(buffa, buffb, linestart, #lines, bank)
+*		          a0     a1   	 d0        d1	  d2
+* Uses AA*16 bytes = 1472 bytes of chip (1536 on AA machine)
+*
+* This is similar to SendBytes2Toaster except a chipchuck is not supplied.
+* It uses the top 1472 bytes of the Toaster Chip chunk, and it leaves the
+* AVEI copper list up during the write.
+* This assumes you are frozen, and not in a transition, and not in LUT mode
+* If you aren't sure call NoTransFreeze before the call to SendBytes2ToasterAVEI
+
+	IFND	AACHIPS
+AA	set	92	;was 96
+	ENDC
+
+	IFD	AACHIPS
+AA	set	96
+	ENDC
+
+a1ptr	set	(8*4+7*4)
+d0ptr	set	(8*4)
+d1ptr	set	(8*4+4)
+
+SendBytes2ToasterAVEI:
+	movem.l	d0-d5/a0-a2,-(sp)
+
+;;	CALLTL	NoTransFreeze
+
+	GET.l	TB_CHIPMem,d0
+	add.l	TB_CHIPMemSIZE(a5),d0	;Top of chip
+	sub.l	#AA*16,d0
+	move.l	d0,a2			;->chipmem
+
+	move.w	#AA*4*3,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*2,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*1,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*0,d0
+	pea	AA*0(a2,d0.w)
+	move.w	#AA*4*3,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*2,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*1,d0
+	pea	AA*1(a2,d0.w)
+	move.w	#AA*4*0,d0
+	pea	AA*1(a2,d0.w)
+
+	movea.l	sp,a1	;->planes
+	moveq	#0,d0
+	move.l	#AA/2,d1
+	CALLTL	Bytes2Planes
+
+	movea.l	a1ptr(sp),a0
+	add.l	#AA*2,d0
+	CALLTL	Bytes2Planes
+
+	lea	4*4(sp),a0	;->planes
+	move.l	d0ptr(sp),d0	;line#
+	moveq	#1,d1		;#lines
+;;	d2=bank
+	move.l	#AA*8,d3	;width
+
+	IFD	AACHIPS
+	moveq	#1,d4		;no zipper write
+	ENDC
+
+	move.l	d1ptr(sp),d5
+	
+	CALLTL	InterruptsOff
+
+	bra.s	20$
+10$	CALLTL	DoBlockWriteAVEI
+	addq.w	#1,d0
+20$	dbra	d5,10$
+
+	CALLTL	Wait4Top
+
+	CALLTL	InterruptsOn
+
+	lea	8*4(sp),sp
+	movem.l	(sp)+,d0-d5/a0-a2
+	rts
+
+**********************************************************
+*~ BOOL TestReadScanLine(chipchunk,tb,line,bank)
+*		    	 a0       a5  d0   d1		
+* Uses 92*16 bytes = 1472 bytes of chip (more on a AA chip machine = 1536)
+
+TestReadScanLine:
+	movem.l	d1-d3/a0-a2,-(sp)
+
+	IFD	DEBUGTRSL
+	 move.l	#200,d0		;line
+	 moveq	#0,d1		;bank
+	ENDC
+
+	CALLTL	NoTransFreeze
+	
+	movea.l	a0,a2
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0   ;bytes
+	movea.l	a0,a1
+
+* ramp 71-200-71-200-71-200-110  = 736 bytes
+
+	moveq	#71,d2
+	move.w	#129,d3
+10$	move.b	d2,258(a1)
+	move.b	d2,516(a1)
+	move.b	d2,(a1)+
+	addq.w	#1,d2
+	dbra	d3,10$
+	
+	subq.w	#2,d2
+	moveq	#127,d3
+20$	move.b	d2,258(a1)
+	move.b	d2,(a1)+
+	subq.w	#1,d2
+	dbra	d3,20$
+	
+	lea	388(a1),a1
+	move.w	#199,d2
+	moveq	#89,d3
+30$	move.b	d2,(a1)+
+	subq.w	#1,d2
+	dbra	d3,30$
+
+	movea.l	a0,a1
+;;	d0=linestart
+	move.l	d1,d2	;bank
+
+	moveq	#1,d1	;#lines
+
+	IFD	DEBUGTRSL
+	 moveq	#4,d1
+	ENDC
+
+	bsr	SendBytes2Toaster
+
+	IFD	DEBUGTRSL
+	 movem.l	d0-d2/a0-a2,-(sp)
+	ENDC
+
+	movea.l	a0,a2
+	lea	800(a0),a0
+	lea	800*2(a0),a1	;-> around BuffB
+	move.l	d0,d1		;scanline	
+	move.l	d2,d0		;bank
+	bsr	ReadScanLine
+
+*-----------
+	IFD	DEBUGTRSL
+	 movem.l	d0-d2/a0-a2,-(sp)
+	 movem.l	6*4(sp),d0-d2/a0-a2
+	 lea	800(a0),a0
+	 lea	800*2(a0),a1	;-> around BuffB
+	 sub.w	#12,d0
+	 bsr	SendBytes2Toaster
+	
+	 DEA.l	TB_VTSetUp,a0
+	 ELHGET_AM	a0,d0
+	 ELHGET_BM	a0,d1
+	 ELHPUT_AM_I	a0,VTI_AM_DAC0
+	 ELHPUT_BM_I	a0,VTI_BM_DAC0
+	 CALLTL	SendELH2Toaster
+
+	 DUMPMSG	<TestReadScanLine wait>
+	 WAIT4LMB
+
+	 ELHPUT_AM_R	a0,d0
+	 ELHPUT_BM_R	a0,d1
+	 CALLTL	SendELH2Toaster
+
+	 movem.l	(sp)+,d0-d2/a0-a2
+	 lea	6*4(sp),sp
+	ENDC
+*-----------
+
+	moveq	#1,d0		;assume success
+	move.w	#500,d1		;or shorter ????
+40$	move.b	(a2)+,d2
+	cmp.b	(a0)+,d2
+	bne.s	50$
+	cmp.b	(a1)+,d2
+	dbne	d1,40$
+
+50$	tst.w	d1
+	bmi.s	60$	
+	moveq	#0,d0		;failure
+
+60$	tst.w	d0
+	movem.l	(sp)+,d1-d3/a0-a2
+	rts
+
+MainBlankList	dc.b	EH3,EH2,EH3,EHEND
+	cnop	0,4
+
+**-------------------------------------------------------------------
+**	FlashError(color,count)
+**		    d0     d1
+**-------------------------------------------------------------------
+FlashError
+	IFD	ENABLEFLASH
+
+	movem.l	d0-d2,-(sp)
+	CALLTL	AllInterruptsOff
+	CALLTL	InstallAVE
+	CALLTL	Wait4Top
+	bra.s	3$
+1$
+	IFD	AACHIPS
+	move.w	#$c42,_custom+bplcon3	;do upper & lower nibbles
+	ENDC
+
+	move.w	#0,_custom+color
+	bsr.s	.colorpause
+	move.w	d0,_custom+color
+	bsr.s	.colorpause
+3$	dbf	d1,1$
+
+	CALLTL	InstallAVE
+	CALLTL	Wait4Top
+	CALLTL	AllInterruptsOn
+	movem.l	(sp)+,d0-d2
+	rts
+.colorpause
+	moveq.l	#30,d2
+2$	CALLTL	Wait4Top
+	dbf	d2,2$
+	ENDC		;ENABLEFLASH
+
+	rts
+
+***********************************************************
+* returns d0=signed sin(ThetaError) (it was absolute value before 12-9-91)
+* returns d1=EPat0 sin(ThetaError), d2=EPat63 sin(ThetaError)
+*~SetExternalPhase:
+
+d1ptr set 8
+d2ptr set 12
+ 
+SetExternalPhase:
+	movem.l d1-d7/a0-a2,-(sp)
+
+	IFD	DEBUGSLAVE
+	DUMPMSG < >
+	DUMPMSG <--------------------------------------------->
+	DUMPMSG	<SetExternalPhase>
+	DUMPMSG	<--------------------------------------------->
+	ENDC
+
+;;	CALLTL	InstallAVE	;not necessary if from AutoHue()
+
+* initialize grabbing bitmaps
+	move.w	#88,d0		;quads 88-94 picture area
+	moveq	#0,d1		;presets
+	bsr	InitRead7QuadsBMs	;NOTE!! Also done by TestMain2Vid4
+
+	move.w	#219,d0		;quads 219-225 sync area
+	move.w	#1,d1		;presets
+	bsr	InitRead7QuadsBMs	;NOTE!! Also done by TestVid1Camera
+
+* write saturated CB to bank 0
+;;	move.w	#128,d0	;y
+;;	move.w	#26,d1	;i	;+/- 33.9 ires of chroma, goosed!
+;;	move.w	#-40,d2	;q
+
+* Warning: Due to Differential Gain, Y must be 60!
+	move.w	#60,d0	;y
+	move.w	#17,d1	;i	;not goosed (was 24, -37)
+	move.w	#-26,d2	;q
+
+	moveq	#0,d3	;bank
+	moveq	#0,d4	;startline
+	move.w	#481,d5	;#lines
+	CALLTL	WriteYIQBlock
+	
+* setup headers for remainder of test
+	DEA.l	TB_VTSetUp,a2
+	ELHPUT_BM_I	a2,VTI_BM_DAC0
+	ELHPUT_AM_I	a2,VTI_AM_DAC0
+	ELHPUT_PV_I	a2,VTI_PV_ENCODER ;experimentally determined
+	ELHPUT_LK_I	a2,VTI_LK_ENCODER ;experimentally determined
+
+	ELHPUT_IS_I	a2,VTI_IS_VID2
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	beq.s	1$
+	ELHPUT_IS_I	a2,VTI_IS_EXT
+
+1$	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+;;	ELHPUT_PED_I	a2,128		;mid scale pedistal
+;;	ELHPUT_GAIN_I	a2,0		;max gain
+	ELHPUT_DP_I	a2,32
+	ELHPUT_EP_I	a2,32
+	lea	elh56list(pc),a0
+	CALLTL	SendELHList2Toaster	
+	
+* wait to settle, probably not necessary
+	moveq	#2,d0
+5$	CALLTL	Wait4Top
+	dbra	d0,5$
+
+* grab Ideal CB thru chroma remove filter
+	move.l	#VTI_BM_DAC0,d0
+
+	moveq	#0,d2		;picture area
+	bsr	getiq
+
+	movem.l	d0-d1,-(sp)	;stash Ideal I*162*2, Q*162*2
+
+;-------
+	moveq	#-1,d4		;best distance, obviously bad
+	moveq	#63,d5		;best EP
+
+	IFND	SLAVE_VERSION
+	move.l	#63,d6		;EP counter
+	ENDC
+
+	IFD	SLAVE_VERSION
+	move.l	#15,d6		;EP counter
+	ENDC
+
+* setup external phase
+10$	move.w	d6,d0
+
+	IFD	SLAVE_VERSION
+	lsl.w	#2,d0
+	ENDC
+
+	ELHPUT_EP_R	a2,d0
+	lea	elh5list(pc),a0
+	CALLTL	SendELHList2Toaster
+	
+* wait to settle, necessary ????
+	moveq	#3,d0
+20$	CALLTL	Wait4Top
+	dbra	d0,20$
+
+* grab VID1 CB into bank 1
+	move.w	#VTI_BM_VID1,d0
+
+	moveq	#1,d2		;sync area WAS 256 before 10-20-93
+;;	move.w	#256,d2		;sync area
+	bsr	getiq
+
+	movem.l	(sp),d2-d3	;Ideal I*162*2, Q*162*2
+	bsr	DeltaPhase
+
+* d0=sin(ThetaError) from the tested value to the ideal value,
+* with positive values for counter-clockwise.  So, if the ideal
+* hue is clockwise from the tested hue, the result is negative.
+* This is negative of what I would normally want, so I usually
+* negate this value later if I need it.
+
+	IFD	DEBUGSLAVE
+	DUMPUDEC.w <EP/4=>,d6,< >
+	DUMPHEXI.l <error=>,d0,<\>
+	ENDC
+
+	IFND	SLAVE_VERSION
+	cmpi.w	#63,d6
+	ENDC
+
+	IFD	SLAVE_VERSION
+	cmpi.w	#15,d6
+	ENDC
+
+	bne.s	21$
+	move.l	d0,d2ptr(sp)	;d1
+	bra.s	23$
+
+21$	tst.w	d6
+	bne.s	23$
+	move.l	d0,d1ptr(sp)	;d2
+
+23$	move.l	d0,d1
+	tst.l	d0
+	bpl.s	25$
+	neg.l	d0
+
+25$	cmp.l	d0,d4
+	bcs.s	30$	;jump if d0 > d4
+	
+	move.l	d1,d7	;stash new signed low
+	move.l	d0,d4	;stash new absolute low
+	move.w	d6,d5
+
+	IFD	SLAVE_VERSION
+	lsl.w	#2,d5
+	ENDC
+
+30$	dbra	d6,10$
+
+	addq.w	#8,sp
+
+	move.w	d5,hueep
+	ELHPUT_EP_R	a2,d5
+	lea	elh5list(pc),a0
+	CALLTL	SendELHList2Toaster
+
+;;	CALLTL	ReDoDisplay	; display everything as well as
+;;	CALLTL	InstallAVEI	; Bring up Linear (Analog) Interface
+
+	move.l	d7,d0
+	neg.l	d0		;if <0 then the best phase is too far
+				;clock wise from the ideal phase
+
+	movem.l (sp)+,d1-d7/a0-a2
+	rts
+
+;----------------
+* d0=VTI_BM,  d2=presets
+getiq:
+	move.l	d0,d1
+	ELHPUT_BM_R	a2,d1
+	move.l	d0,d1
+	ELHPUT_AM_R	a2,d1
+	CALLTL	SendELH2Toaster
+
+	move.l	#VTI_IS_VID2,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	beq.s	1$
+	move.l	#VTI_IS_EXT,d0
+1$	moveq	#1,d1		;bank
+	bsr	Grab1Bank	;route to bank 1
+		
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	bsr	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	bsr	Scatter2IQs	
+	
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162 * 2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162 * 2
+
+	rts	;d0=i*162*2, d1=q*162*2
+
+***********************************************************
+* d0 sin(angularError) = CheckDigitalPhase(VidChannel e.g. VTI_IS_VID3)
+* This does not require any external sync, if Flyer is being feed into Vid3.
+* This uses the currently set Digital Phase.
+* Check for VID2 loop back first.
+
+	XDEF	CheckDigitalPhase
+CheckDigitalPhase:
+	movem.l	d0-d6/a0-a2,-(sp)
+	
+	move.l	d0,d6		;stash videochannel
+       
+	CALLTL	InstallAVE	;not necessary if from AutoHue()
+	CALLTL	NoTransFreeze
+	
+* initialize grabbing bitmaps
+	move.w	#88,d0		;quads 88-94 picture area
+	moveq	#0,d1		;presets
+	bsr	InitRead7QuadsBMs	;NOTE!! Also done by TestMain2Vid4
+
+* setup headers for initial grab
+	DEA.l	TB_VTSetUp,a2
+	move.w	d6,d0
+	ELHPUT_BM_R	a2,d0
+	move.w	d6,d0
+	ELHPUT_AM_R	a2,d0
+	ELHPUT_PV_I	a2,VTI_PV_ENCODER ;experimentally determined
+	ELHPUT_LK_I	a2,VTI_LK_ENCODER ;experimentally determined
+	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+	lea	elh56list(pc),a0
+	CALLTL	SendELHList2Toaster	
+	
+* wait to settle, probably not necessary
+	moveq	#2,d0
+5$	CALLTL	Wait4Top
+	dbra	d0,5$
+
+	move.l	#VTI_IS_VID2,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	beq.s	15$
+	move.l	#VTI_IS_EXT,d0
+15$	moveq	#1,d1		;bank
+	CALLTL	Grab1Bank	;route to bank 1
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	moveq	#0,d2		;picture area
+	CALLTL	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	CALLTL	Scatter2IQs	
+	
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162*2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162*2
+	move.l	d0,d4		;stash I
+	move.l	d1,d5		;stash Q
+
+	move.l	d6,d0		;IS
+	DUMPHEXI.l	<IS=>,d0,<\>
+
+	moveq	#0,d1		;bank
+	CALLTL	Grab1Bank	;route to bank 0
+
+	ELHPUT_BM_I	a2,VTI_BM_DAC0
+	ELHPUT_AM_I	a2,VTI_AM_DAC0
+	CALLTL	SendELH2Toaster
+
+	move.l	#VTI_IS_VID2,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	beq.s	25$
+	move.l	#VTI_IS_EXT,d0
+25$	moveq	#1,d1		;bank
+	CALLTL	Grab1Bank	;route to bank 1
+	
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	moveq	#0,d2		;picture area
+	CALLTL	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	CALLTL	Scatter2IQs	
+	
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162*2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162*2
+
+	move.l	d4,d2
+	move.l	d5,d3
+
+	CALLTL	DeltaPhase
+	neg.l	d0
+	move.l	d0,(sp)		;signed return value ("-" = clockwise error)
+
+* Call DoneGrabIQ or use NOIQ ARexx command
+;; 	CALLTL	InitReadScanLineBMs
+;;	CALLTL	ReDoDisplay
+;;	CALLTL	InstallAVEI
+
+	movem.l	(sp)+,d0-d6/a0-a2
+	rts
+
+***********************************************************
+* d0 sin(angularError) = SetDigitalPhase(d0= sin(angularFudge))
+* returns d1=DPat0 sin(angularError), d2=DPat63 sin(angularError)
+*~SetDigitalPhase:
+
+d1ptr	set	4
+d2ptr	set	8
+
+SetDigitalPhase:
+	movem.l d0-d7/a0-a2,-(sp)	;ignore d0-d2 !!! just room on stack
+
+	IFD	DEBUGSLAVE
+	DUMPMSG < >
+	DUMPMSG <--------------------------------------------->
+	DUMPMSG	<SetDigitalPhase>
+	DUMPMSG	<--------------------------------------------->
+	ENDC
+
+	move.l	d0,d7
+       
+;;	CALLTL	InstallAVE	;not necessary if from AutoHue()
+	
+* none this is really necessary !!!
+* Though, since apparently the MUX selections can affect HUE, I feel
+* like I should alway set the machine to some known state
+	DEA.l	TB_VTSetUp,a2
+	ELHPUT_BM_I	a2,VTI_BM_VID1
+	ELHPUT_AM_I	a2,VTI_AM_VID1
+	ELHPUT_PV_I	a2,VTI_PV_ENCODER ;experimentally determined
+	ELHPUT_LK_I	a2,VTI_LK_ENCODER ;experimentally determined
+	ELHPUT_IS_I	a2,VTI_IS_VID1
+	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+;;	ELHPUT_PED_I	a2,128		;mid scale pedistal
+;;	ELHPUT_GAIN_I	a2,128		;mid scale gain
+	lea	elh56list(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	move.w	#219,d0		;quads 219-225 sync area
+	move.w	#1,d1		;presets
+	bsr	InitRead7QuadsBMs ;not necessary if following SetExternalPhase() !!!!
+
+;-------
+	move.l	#$fffffff,d4	;best distance, obviously bad
+	moveq	#63,d5		;best DP
+
+	IFND	SLAVE_VERSION
+	move.l	#63,d6		;DP counter
+	ENDC
+
+	IFD	SLAVE_VERSION
+	move.l	#15,d6		;DP counter
+	ENDC
+
+10$	move.w	d6,d0
+
+	IFD	SLAVE_VERSION
+	lsl.w	#2,d0
+	ENDC
+
+	ELHPUT_DP_R	a2,d0
+	lea	elh5list(pc),a0
+	CALLTL	SendELHList2Toaster
+	
+* wait to settle, necessary ????
+	moveq	#3,d0
+20$	CALLTL	Wait4Top
+	dbra	d0,20$
+	
+	move.w	#VTI_IS_VID1,d0
+	moveq	#1,d1		;bank
+	bsr	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	move.w	#1,d2		;sync area
+	bsr	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	bsr	Scatter2IQs	
+
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162*2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162*2
+
+ IFD	CRAP
+* instead of minimizing the sum of the squares of the differences,
+* maybe it would be better to compare Q/I slopes, which would not be
+* foiled by varying saturations ????
+
+	sub.l	#5385,d0 ;= cos(57)*20*1.4*(40/36.7)*324
+	muls	d0,d0	;assume diff < +/- 32K
+	
+	add.l	#8293,d1 ;= sin(57)*20*1.4*(40/36.7)*324
+	muls	d1,d1	;assume diff < +/- 32K
+	
+	add.l	d1,d0
+ ENDC
+
+	move.l	#2693,d2	;= cos(-57)*20*1.4*(40/36.7)*162
+	move.l	#-4146,d3	;= sin(-57)*20*1.4*(40/36.7)*162
+	CALLTL	DeltaPhase
+
+* d0=sin(ThetaError) from the tested value to the ideal value,
+* with positive values for counter-clockwise.  So, if the ideal
+* hue is clockwise from the tested hue, the result is negative.
+* This is negative of what I would normally want, so I usually
+* negate this value later if I need it.
+
+	IFD	DEBUGSLAVE
+	DUMPUDEC.w <DP/4=>,d6,< >
+	DUMPHEXI.l <error=>,d0,<\>
+	ENDC
+
+	IFND	SLAVE_VERSION
+	cmpi.w	#63,d6
+	ENDC
+
+	IFD	SLAVE_VERSION
+	cmpi.w	#15,d6
+	ENDC
+
+	bne.s	21$
+	move.l	d0,d2ptr(sp)
+	bra.s	23$
+
+21$	tst.w	d6
+	bne.s	23$
+	move.l	d0,d1ptr(sp)
+
+23$	add.l	d7,d0		;top it with fudge (EPs error fudge factor)
+	move.l	d0,d1
+
+	tst.l	d0
+	bpl.s	25$
+	neg.l	d0
+
+25$	cmp.l	d0,d4
+	bcs.s	30$	;jump if d0 > d4
+	
+	move.l	d1,(sp)
+	move.l	d0,d4	;stash new low
+	move.w	d6,d5
+
+	IFD	SLAVE_VERSION
+	lsl.w	#2,d5
+	ENDC
+
+30$	dbra	d6,10$
+
+	move.w	d5,huedp
+	ELHPUT_DP_R	a2,d5
+	lea	elh5list(pc),a0
+	CALLTL	SendELHList2Toaster
+
+* not necessary if from AutoHue()
+;;	CALLTL	ReDoDisplay	; display everything as well as
+;;	CALLTL	InstallAVEI	; Bring up Linear (Analog) Interface
+
+	move.l	(sp)+,d0
+	neg.l	d0		;if <0 then the best phase is too far
+				;clock wise from the ideal phase
+
+	movem.l (sp)+,d1-d7/a0-a2
+	rts
+
+elh5list dc.b	EH5,EHEND
+elh56list dc.b	EH1,EH2,EH4,EH5,EH6A,EH6B,EHEND
+elhlist6AB dc.b	EH6A,EH6B,EHEND
+	cnop	0,4
+
+***********************************************************
+* Y+I Y+Q Y-I Y-Q = Scatter2IQs(normBuff, compBuff, startQuad, #Quads)
+* d0  d1  d2  d3		  a0         a1        d0        d1
+* Each value is the sum of #Quads * 27lines * 2fields = #quads * 54
+*
+*~Scatter2IQs
+Scatter2IQs
+	movem.l	d4-d7/a0-a1/a6,-(sp)
+	add.w	d0,d0
+	add.w	d0,d0
+	adda.w	d0,a0
+	adda.w	d0,a1
+	
+	bsr	GetCurrentReadTable	;a6->current read table
+	move.w	CaliGrabsPerLine(a6),d4
+	sub.w	d1,d4
+	
+	add.w	d4,d4
+	add.w	d4,d4	;pixel skip
+	swap	d4
+	move.w	d1,d4	;quad count
+
+	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+	moveq	#0,d3
+	moveq	#0,d7
+
+* 27 (norm/comp) lines
+	move.w	#12,d6	;(12+1)*2+1=27
+10$	move.w	d4,d5
+	bra.s	30$
+20$	bsr.s	positiveI
+	bsr.s	negativeI
+30$	dbra	d5,20$
+
+	bsr.s	nextquads
+
+	move.w	d4,d5
+	bra.s	50$
+40$	bsr.s	negativeI
+	bsr.s	positiveI
+50$	dbra	d5,40$
+
+	bsr.s	nextquads
+	dbra	d6,10$
+
+	move.w	d4,d5
+	bra.s	70$
+60$	bsr.s	positiveI
+	bsr.s	negativeI
+70$	dbra	d5,60$
+
+	movem.l	(sp)+,d4-d7/a0-a1/a6
+	rts
+
+nextquads
+	swap	d4
+	adda.w	d4,a0
+	adda.w	d4,a1
+	swap	d4
+	rts
+
+positiveI
+	move.b	(a0)+,d7
+	add.l	d7,d0	;+I
+	move.b	(a1)+,d7
+	add.l	d7,d2	;-I
+	move.b	(a0)+,d7
+	add.l	d7,d1	;+Q
+	move.b	(a1)+,d7
+	add.l	d7,d3	;-Q
+	rts
+
+negativeI
+	move.b	(a0)+,d7
+	add.l	d7,d2	;-I
+	move.b	(a1)+,d7
+	add.l	d7,d0	;+I
+	move.b	(a0)+,d7
+	add.l	d7,d3	;-Q
+	move.b	(a1)+,d7
+	add.l	d7,d1	;+Q
+	rts
+
+***********************************************************
+* ErrorCode / ExternalError / DigitalError = AutoHue()
+*    d0            d1             d2
+* The error values are signed (were absolute value before 12-9-91)
+*~AutoHue
+AutoHue
+	movem.l	a0/d3,-(sp)
+	CALLTL	InstallAVE
+
+	DEA.l	TB_VTSetUp,a0
+	moveq	#0,d3
+
+	bsr	SetExternalPhase
+	move.l	d0,d1		;save EPs error
+
+	ELHGET_EP	a0,d0
+	tst.w	d0
+	beq.s	10$	
+	cmpi.w	#60,d0
+	bcs.s	20$
+10$	addq.w	#1,d3	;EP error
+
+20$	move.l	d1,d0		;try to copy EPs error,so Dig & analog match
+	move.l	d1,-(sp)	;protect d1
+	bsr	SetDigitalPhase
+	move.l	(sp)+,d1
+	move.l	d0,d2
+	ELHGET_DP	a0,d0
+	tst.w	d0
+	beq.s	30$	
+	cmpi.w	#60,d0
+	bcs.s	40$
+30$	addq.w	#2,d3	;DP error
+
+* is this really necessary when done in our startup code
+40$ 	CALLTL	InitReadScanLineBMs
+
+	move.l	d1,-(sp)
+	tst.w	d3
+	beq.s	50$
+	moveq	#2,d1			;flash two red if AutoCal failed
+	move.w	#$f00,d0
+	bsr	FlashError
+
+50$ ;;	CALLTL	SaveHardSets	;assume success
+;;	CALLTL	ReDoDisplay
+	move.l	(sp)+,d1
+;;	CALLTL	InstallAVEI
+
+	move.l	d3,d0
+	movem.l	(sp)+,a0/d3
+	rts	
+
+***********************************************************
+* result = DeltaPhase(i1, q1, i2, q2)
+* if -1 < result < 1, then Theta = arcsin(result)
+* else Theta = (signResult*180 degrees) + arcsin(result-signResult*2)
+* where signResult = 1 if result >= 0, else = -1
+* Result is a Real LONG:
+* result:  LONG		ThetaDegrees       v1
+*  0.0	   $00000	  0                ^
+*  0.5     $08000	  30		+0 | -0
+*  1.0	   $10000	  90		/      \	
+*  1.5	   $18000         150	       /        \
+*  2.0	   $20000	  180        +1    +    -1 
+* -0.5     $ffff8000     -30	       \        /
+* -1.0	   $ffff0000	 -90            \      /
+* -1.5	   $fffe8000 	 -150           +2 | -2
+* -2.0	   $fffe0000	 -180
+
+*~DeltaPhase:
+DeltaPhase:
+	movem.l d1-d6,-(sp)
+
+	move.w	d0,d4	;save i1
+	move.w	d1,d5	;save q1
+
+	muls	d0,d0	;i1*i1
+	muls	d1,d1	;q1*q1
+	add.l	d1,d0
+	XJSR	SquareRootULONG
+
+	move.w	d0,d1		;save vector length1
+	
+	move.w	d2,d0	;i2
+	muls	d0,d0	
+	move.w	d3,d6	;q2
+	muls	d6,d6
+	add.l	d6,d0
+	XJSR	SquareRootULONG
+
+	mulu	d0,d1		;length1 * length2
+
+	move.w	d2,d0	;i2
+	muls	d5,d0	;q1*i2
+	move.w	d4,d6	;i1
+	muls	d3,d6	;q2*i1
+	sub.l	d6,d0	;q1*i2-q2*i1	;based on cross product
+
+	XJSR	ScaleFraction
+	XJSR	DivideReal
+	
+	muls	d4,d2	;i1*i2
+	muls	d5,d3	;q1*q2	
+	add.l	d3,d2	;i1*i2+q2*q1	;based on dot product
+	bpl.s	10$
+
+	neg.l	d0			;-sin(theta)
+	bpl.s	5$
+	add.l	#$20000,d0
+	bra.s	10$
+5$	add.l	#$fffe0000,d0
+
+10$	movem.l (sp)+,d1-d6
+	rts
+
+***********************************************************
+* Requires AutoHue patches, to pass thru ColorBurst
+*~TestVid1Camera
+TestVid1Camera
+	movem.l d1-d3/a0-a1,-(sp)
+
+	CALLTL	InstallAVE
+
+* setup headers for remainder of test
+	DEA.l	TB_VTSetUp,a0
+;;	ELHPUT_PED_I	a0,128		;mid scale pedistal
+;;	ELHPUT_GAIN_I	a0,128		;mid scale gain
+	lea	elhlist6AB(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	move.w	#219,d0		;quads 219-225 sync area
+	move.w	#1,d1		;presets
+	bsr	InitRead7QuadsBMs
+
+	move.w	#VTI_IS_VID1,d0
+	moveq	#0,d1		;bank
+	bsr	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#0,d0		;bank
+	moveq	#0,d1		;fields I/III
+	move.w	#1,d2		;sync area
+	bsr	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	bsr	Scatter2IQs	
+
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162*2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162*2
+
+	muls	d0,d0
+	muls	d1,d1
+	add.l	d1,d0	;square of saturation
+
+	moveq	#1,d2	;assume success
+	cmpi.l	#(14*162)*(14*162),d0	;approx min gain of 1/2
+	bcc.s	10$
+	moveq	#0,d2	;fail
+
+10$ ;;	CALLTL	ReDoDisplay
+    ;;	CALLTL	InstallAVEI
+	move.l	d2,d0
+
+	movem.l	(sp)+,d1-d3/a0-a1
+	rts
+
+***********************************************************
+* Returns d0=1 if Main is connected to EXT, 0 if not
+*
+* NOTE!!!! This would be faster if we toggled the new RGB term bits to
+* determine if it's an old or new toaster.
+*
+* THIS ASSUMES SNOW IS NOT TURNED ON!!  IT REALLY LIKES BLACK MATTE!!!
+* THIS IS HOW THINGS ARE WHEN I START UP THE SWITCHER.
+TestMain2EXT
+	movem.l d1-d7/a0-a1,-(sp)
+
+	CALLTL	InstallAVE
+;;	CALLTL	NoTransFreeze
+	
+* initialize grabbing bitmaps
+	move.w	#88,d0		;quads 88-94 picture area
+	moveq	#0,d1		;presets
+	CALLTL	InitRead7QuadsBMs	;NOTE!!! done also by TestMain2Vid4
+					; & SetExternalPhase
+
+* SendBytes2Toaster / ReadScanLine would be faster but since I need
+* the InitRead7QuadsBMs latter, this is better in the long run.
+
+* write white to bank 0
+	move.w	#200,d0	;y
+	move.w	#VTI_IS_EXT,d6
+	move.w	#VTI_BM_ENCODER,d7
+	bsr	tm2v4
+	move.l	d0,-(sp)
+
+* write black to bank 0
+	move.w	#71,d0	;y
+;;	move.w	#VTI_IS_EXT,d6
+;;	move.w	#VTI_BM_ENCODER,d7
+	bsr	tm2v4
+
+	move.l	(sp)+,d1
+	sub.l	d0,d1	;white-black	
+
+	bset.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	moveq	#1,d2	;assume EXT hooked to Main, not DAC0
+
+	cmpi.l	#(64*4*162),d1	;approx min gain of 1/2
+	ble.s	10$
+
+	bclr.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	moveq	#0,d2	;fail
+
+10$
+;; 	CALLTL	InitReadScanLineBMs	;added this
+;;	CALLTL	RestoreMattColor
+;;	CALLTL	ReDoDisplay
+;;   	CALLTL	InstallAVEI
+
+	move.l	d2,d0
+	movem.l	(sp)+,d1-d7/a0-a1
+	rts
+
+***********************************************************
+* Returns d0=1 if Main is connected to Vid2, 0 if not
+* Before 12-24-94 this used Input VID4.  I didn't feel like changing this funciton name.
+*
+*~TestMain2Vid4
+TestMain2Vid4
+	movem.l d1-d7/a0-a1,-(sp)
+	CALLTL	InstallAVE
+;;	CALLTL	NoTransFreeze
+	
+* initialize grabbing bitmaps
+	move.w	#88,d0		;quads 88-94 picture area
+	moveq	#0,d1		;presets
+	CALLTL	InitRead7QuadsBMs	;NOTE!!! done also by TestMain2Vid4
+					; & SetExternalPhase
+* write white to bank 0
+	move.w	#200,d0	;y
+	move.w	#VTI_IS_VID2,d6
+	move.w	#VTI_BM_DAC0,d7
+	bsr	tm2v4
+	move.l	d0,-(sp)
+
+* write black to bank 0
+	move.w	#71,d0	;y
+;;	move.w	#VTI_IS_VID2,d6
+;;	move.w	#VTI_BM_DAC0,d7
+	bsr	tm2v4
+
+	move.l	(sp)+,d1
+	sub.l	d0,d1	;white-black	
+
+	moveq	#1,d2	;assume success = VID2
+	cmpi.l	#(64*4*162),d1	;approx min gain of 1/2
+	bge.s	10$
+
+	moveq	#0,d2	;fail
+
+10$
+;; 	CALLTL	InitReadScanLineBMs	;added this
+;;	CALLTL	RestoreMattColor
+;;	CALLTL	ReDoDisplay
+;;   	CALLTL	InstallAVEI
+
+	move.l	d2,d0
+	movem.l	(sp)+,d1-d7/a0-a1
+	rts
+
+*************************************************************
+* Used by TestMain2EXT() & TestMain2Vid4()
+tm2v4:
+* write black or white to bank 0
+	moveq	#0,d1	;i
+	moveq	#0,d2	;q
+	moveq	#0,d3	;bank
+	moveq	#0,d4	;startline
+	move.w	#481,d5	;#lines
+	CALLTL	WriteYIQBlock
+
+tm2v4post	
+* setup headers for routing ENCODER to main (EXT on new Toaster)
+	DEA.l	TB_VTSetUp,a0
+
+	ELHPUT_MA_I	a0,0	;matte to black!!
+	ELHPUT_MB_I	a0,0
+	ELHSET_NOSNOW	A0
+
+	move.w	d7,d0
+	ELHPUT_BM_R	a0,d0
+	move.w	d7,d0
+	ELHPUT_AM_R	a0,d0
+
+	ELHPUT_PV_I	a0,VTI_PV_ENCODER
+	ELHPUT_LK_I	a0,VTI_LK_DAC0
+;;	ELHPUT_IS_I	a0,VTI_IS_VID2	;changed below
+	ELHPUT_CDS_I	a0,VTI_CDS_CD
+	ELHPUT_CD_I	a0,VTI_CD_SHOWB
+;;	ELHPUT_PED_I	a0,128		;mid scale pedistal
+;;	ELHPUT_GAIN_I	a0,128		;mid scale gain
+	lea	elh56list(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+* Old/New Test: This will grab DAC0=black/white on old Toasters.
+* 		It will grab encoder on new Toasters.
+* Old VID2 Test: This will grab DAC0=black/white if VID2 hooked to Main 
+	move.w	d6,d0
+	moveq	#1,d1		;bank
+	CALLTL	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	moveq	#0,d2		;picture area
+	CALLTL	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	CALLTL	Scatter2IQs	
+	
+	add.l	d1,d0
+	add.l	d2,d0
+	add.l	d3,d0	;Y*4*162*2
+
+	rts
+
+***********************************************************
+AutoTerm
+	rts
+
+***********************************************************
+*~ BOOL Test68000Grab()
+*
+* Tests the standard 68000 frame grabbing routines.
+* If this returns FALSE than frame grab using the ReadScanLine routines.
+* This routine will detect the GVP Series 2 RAM boards.
+* Do this test at Toaster Startup only, because it trashes a few lines at
+* the top of field I.  The result of this test should be store in
+* TB_Flags GRAB68000_OK_BIT
+
+LINE	 SET	1	;near top of display
+NUMLINES SET	4
+BANK	 SET	0
+QUADS	 SET	182
+
+Test68000Grab:
+	movem.l d1-d3/a0-a2,-(sp)
+
+	moveq	#0,d0		;assume failure (non 68000 or bad 68000)
+	GET.l	TB_SYSBase,a0
+	btst.b	#AFB_68010,AttnFlags+1(a0)
+	bne	666$		;jump if can't use 68000 routines
+
+	CALLTL	InstallAVE
+	CALLTL	SoftSpriteBPLCON0Off
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0   ;bytes
+	movea.l	a0,a1
+
+* ramp 71-200-71-200-71-200-110  = 736 bytes
+
+	moveq	#71,d0
+	move.w	#129,d1
+10$	move.b	d0,258(a1)
+	move.b	d0,516(a1)
+	move.b	d0,(a1)+
+	addq.w	#1,d0
+	dbra	d1,10$
+	
+	subq.w	#2,d0
+	moveq	#127,d1
+20$	move.b	d0,258(a1)
+	move.b	d0,(a1)+
+	subq.w	#1,d0
+	dbra	d1,20$
+	
+	lea	388(a1),a1
+	move.w	#199,d0
+	moveq	#89,d1
+30$	move.b	d0,(a1)+
+	subq.w	#1,d0
+	dbra	d1,30$
+
+	movea.l	a0,a1
+	GET.l	TB_CHIPMem,a2	;chip buffer
+	move.l	#(LINE*2)+1,d0	;linestart
+	moveq	#1,d1		;#lines
+	moveq	#BANK,d2	;bank
+
+	CALLTL	NoTransFreeze
+
+* write to 4 lines of field I
+	moveq	#NUMLINES-1,d3
+35$	CALLTL	SendBytes2Toaster
+	addq.w	#2,d0
+	dbra	d3,35$
+
+	movea.l	a2,a0
+	move.l	d2,d0			;bank 0
+	moveq	#0,d1			;field I
+	CALLTL	GrabField
+
+	tst.l	d0
+	beq.s	666$
+	
+	adda.l	#(LINE*756)+1,a0 ;->scambled dest, line 1 field I
+
+	moveq	#0,d0		;assume failure
+
+	moveq	#NUMLINES-1,d1		;check 4 lines
+
+36$	movea.l	a1,a2		;source
+	moveq	#3,d2		;4 pixels per quad
+
+38$	move.w	#QUADS-1,d3		;or shorter ???? = 724 pixels per line
+
+40$	cmpm.b	(a0)+,(a2)+	;pixel 0,4,8 .....
+	bne.s	666$
+	addq.w	#3,a2	
+	dbra	d3,40$
+
+	lea	189-QUADS(a0),a0
+	lea	-(QUADS*4)+1(a2),a2	
+	dbra	d2,38$
+
+	dbra	d1,36$
+
+	moveq	#1,d0	;success
+
+666$	move.l	d0,d2
+
+	CALLTL	SoftSpriteBPLCON0On
+;;	CALLTL	ReDoDisplay
+;;	CALLTL	InstallAVEI	;AVE will be up via GrabField
+	move.l	d2,d0
+
+	movem.l	(sp)+,d1-d3/a0-a2
+	rts
+
+***********************************************************
+* This needs to be called after one or more GrabIQs
+
+	XDEF	DoneGrabIQ
+DoneGrabIQ
+	CALLTL	InitReadScanLineBMs
+	CALLTL	RestoreMattColor
+	CALLTL	ReDoDisplay	; display everything as well as
+	CALLTL	InstallAVEI	; Bring up Linear (Analog) Interface
+	rts
+
+***********************************************************
+* GrabIQ(InputSource, bank, ->results)
+*	     d0        d1      a0
+*
+* Grabs 3 (7?) quads from lines 27 lines (=3, 12, 21, ..... 237)
+* Results points to a LONG buffer large enough for 4 longs.
+* For [(Y+I),(Y+Q),(Y-I),(Y-Q)] * 162 results
+
+a0ptr	set	(4*4)
+	
+	XDEF	GrabIQ
+GrabIQ:
+	movem.l d0-d3/a0-a1,-(sp)
+
+	CALLTL	InstallAVE		;not necessary if from AutoHue()
+
+* initialize grabbing bitmaps
+	move.w	#88,d0			;quads 88-94 picture area
+	moveq	#0,d1			;presets = picture area
+	CALLTL	InitRead7QuadsBMs
+		
+	move.l	(sp),d0
+	move.l	4(sp),d1	;bank
+	CALLTL	Grab1Bank	;route to bank 1
+		
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	move.l	d1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	moveq	#0,d2		;picture area
+	CALLTL	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads (this should be enough)
+	CALLTL	Scatter2IQs	;*162
+	
+	movea.l	a0ptr(sp),a0
+	lea	4*4(a0),a0
+	movem.l	d0-d3,-(a0)	;[(Y+I),(Y+Q),(Y-I),(Y-Q)] * 162
+
+	movem.l (sp)+,d0-d3/a0-a1
+	rts
+
+***********************************************************
+* The MA, MB, MP registers will be messed up afterwards.
+* You will need to do a ReDoDisplay() also.  AVE is left up.
+* Returns d0=red error, d1=yellow error, d2=magenta error
+*         d3=red MP	d4=yellow MP,    d5=magenta MP
+*~AutoMatte
+AutoMatte
+	movem.l d6-d7/a0-a3,-(sp)
+	
+	IFD	DEBUGSLAVE
+	DUMPMSG < >
+	DUMPMSG <--------------------------------------------->
+	DUMPMSG	<AutoMatte>
+	DUMPMSG	<--------------------------------------------->
+	ENDC
+
+	CALLTL	InstallAVE	;not necessary if from AutoHue()
+
+* initialize grabbing bitmaps
+	move.w	#88,d0		;quads 88-94 picture area
+	moveq	#0,d1		;presets
+	CALLTL	InitRead7QuadsBMs	;NOTE!!! done also by TestMain2Vid4
+					; & SetExternalPhase
+
+	moveq	#0,d4	;startline
+	move.w	#481,d5	;#lines
+	DEA.l	TB_VTSetUp,a2
+
+* 3 of these structures on stack
+* sizeof = 20 bytes
+* 16	LONG	ideal Q*162
+* 12	LONG	ideal I*162
+* 8	LONG	current	MP
+* 4	LONG	current	+/-(error)
+* 0	LONG	current abs(error)	
+
+red	set	4
+yellow	set	(red+5*4)
+magenta	set	(yellow+5*4)
+
+	lea	-(3*(5*4)+4)(sp),sp
+
+* write saturated ideal color to bank 0
+	move.w	#141,d0	;y
+	move.w	#82,d1	;i	;+/- 56 ires of red, goosed!
+	move.w	#29,d2	;q
+	lea	red(sp),a3
+	bsr	amidealyiq
+
+	move.w	#141,d0	;y
+	move.w	#63,d1	;i 51	;+/- 56 ires of yellow, goosed!
+	move.w	#-61,d2	;q -49
+	lea	yellow(sp),a3
+	bsr	amidealyiq
+
+	move.w	#141,d0	;y
+	move.w	#41,d1	;i	;+/- 56 ires of magenta, goosed!
+	move.w	#77,d2	;q
+	lea	magenta(sp),a3
+	bsr	amidealyiq
+
+;-------
+	ELHPUT_BM_I	a2,VTI_BM_ENCODER
+	ELHPUT_AM_I	a2,VTI_AM_ENCODER
+	CALLTL	SendELH2Toaster
+
+	move.l	#15,d4		;MP counter
+	
+* setup matte phase
+10$	move.w	d4,d0
+
+	ELHPUT_MA_I	a2,$f
+	ELHPUT_MB_I	a2,$0
+	ELHPUT_MP_R	a2,d0
+	lea	elh3list(pc),a0
+	CALLTL	SendELHList2Toaster
+
+* wait to settle, necessary ????
+	moveq	#1,d0
+20$	CALLTL	Wait4Top
+	dbra	d0,20$
+
+* grab mono into bank 1
+	bsr	amgetiq
+
+	move.l	d0,(sp)		;stash sample I*162 ?
+	
+	lea	red(sp),a3
+	bsr	amfinderror
+
+	IFD	DEBUGSLAVE
+	DUMPUDEC.w <\Red   MP=>,d4,< >
+	ENDC
+
+	lea	yellow(sp),a3
+	bsr	amfinderror
+
+	IFD	DEBUGSLAVE
+	DUMPUDEC.w  <Blue  MP=>,d4,< >
+	ENDC
+
+	lea	magenta(sp),a3
+	bsr	amfinderror
+
+	IFD	DEBUGSLAVE
+	DUMPUDEC.w  <Green MP=>,d4,< >
+	ENDC
+
+30$	dbra	d4,10$
+
+	lea	red(sp),a3
+	move.w	10(a3),redcynmp
+	moveq	#2,d0		;red
+	bsr.s	amupdate
+
+	lea	magenta(sp),a3
+	move.w	10(a3),maggrnmp
+	moveq	#3,d0		;green
+	bsr.s	amupdate
+
+	lea	yellow(sp),a3
+	move.w	10(a3),bluyelmp
+	moveq	#4,d0		;blue
+	bsr.s	amupdate
+
+;;	lea	yellow(sp),a3
+	moveq	#5,d0		;yellow
+	bsr.s	amupdate
+
+	lea	magenta(sp),a3
+	moveq	#6,d0		;magenta
+	bsr.s	amupdate
+
+	lea	red(sp),a3
+	moveq	#7,d0		;cyan
+	bsr.s	amupdate
+
+	move.l	red+4(sp),d0
+	move.l	yellow+4(sp),d1
+	move.l	magenta+4(sp),d2
+	move.w	red+10(sp),d3
+	ext.l	d3
+	move.w	yellow+10(sp),d4
+	ext.l	d4
+	move.w	magenta+10(sp),d5
+	ext.l	d5
+
+	lea	(3*(5*4)+4)(sp),sp
+
+;;	CALLTL	ReDoDisplay	; display everything as well as
+;;	CALLTL	InstallAVEI	; Bring up Linear (Analog) Interface
+
+	movem.l (sp)+,d6-d7/a0-a3
+	rts
+
+;----------------
+amupdate
+	XLEA	BGColorFGL_,a0
+	CALLTL	IndexFastG
+	move.l	d0,a0
+	move.w	FG_IndexID(a0),d0
+	andi.w	#$fff0,d0		;zero out MP
+	or.w	10(a3),d0		;new phase
+	move.w	d0,FG_IndexID(a0)
+	rts
+
+;----------------
+amfinderror
+	move.l	4(sp),d0	;sample I*162 ?
+	movem.l	12(a3),d2-d3	;Ideal yellow I*162, Q*162 ??
+	CALLTL	DeltaPhase
+
+* d0=sin(ThetaError) from the tested value to the ideal value,
+* with positive values for counter-clockwise.  So, if the ideal
+* hue is clockwise from the tested hue, the result is negative.
+* This is negative of what I would normally want, so I usually
+* negate this value later if I need it.
+
+	IFD	DEBUGSLAVE
+	DUMPHEXI.l <error=>,d0,<\>
+	ENDC
+
+	move.l	d0,d2		;save +/- error
+
+	tst.l	d0
+	bpl.s	25$
+	neg.l	d0
+
+25$	cmp.l	(a3),d0
+	bhi.s	30$		;jump if d0 > current abs(error)
+	
+	movem.l	d0/d2/d4,(a3)	;save new values
+30$	rts
+
+;----------------
+* d0,d1,d2 = y i q	a2= vtsetup	
+amidealyiq
+	moveq	#0,d3	;bank
+	CALLTL	WriteYIQBlock
+	
+* setup headers for ideal grab
+	ELHPUT_BM_I	a2,VTI_BM_DAC0
+	ELHPUT_AM_I	a2,VTI_AM_DAC0
+	ELHPUT_PV_I	a2,VTI_PV_VID1
+	ELHPUT_LK_I	a2,VTI_LK_VID1
+	ELHPUT_CDS_I	a2,VTI_CDS_CD
+	ELHPUT_CD_I	a2,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster	
+	
+* grab Ideal color thru chroma remove filter
+	bsr.s	amgetiq
+	movem.l	d0-d1,12(a3)	;stash Ideal Red I*162, Q*162 ??
+	move.l	#-1,(a3)	;make abs(error) obviously too high
+	rts
+
+;----------------
+amgetiq:
+	move.l	#VTI_IS_VID2,d0
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	beq.s	1$
+	move.l	#VTI_IS_EXT,d0
+1$	moveq	#1,d1		;bank
+	CALLTL	Grab1Bank	;route to bank 1
+		
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#1,d0		;bank
+	moveq	#0,d1		;fields I/III
+	moveq	#0,d2		;picture area
+	CALLTL	ReadScatter
+
+;;	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+;;   	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#2,d0		;start quad 0-6
+	moveq	#3,d1		;#quads
+	CALLTL	Scatter2IQs	
+	
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162*2
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162*2
+
+	rts	;d0=i*162*2, d1=q*162*2
+
+elh3list dc.b	EH3,EHEND
+	cnop	0,4
+
+
+TestRGBTermination:
+	rts
+
+***********************************************************
+* returns -> to current Read Scan Line Table in A6
+GetCurrentReadTable
+	move.l	d0,-(sp)
+	lea	ToasterConfig,a6
+	move.w	CurrentRSLTable(a6),d0
+	add.w	d0,d0
+	add.w	d0,d0
+	move.l	ReadPresetTable(a6,d0.w),d0
+	adda.l	d0,a6
+	move.l	(sp)+,d0
+	rts
+
+***********************************************************
+
+	ALLDUMPS	
+
+***********************************************************
+	SECTION	,DATA
+
+GrabCode	dc.l	Grab10
+		dc.l	Grab7
+
+stashcache
+	dc.l	0
+
+CaliResultsPtr	ds.l	1
+CaliResults:		;low and high beam positions for each region
+	ds.w	40	;at least MAXGRABSPERLINE*2
+
+stashda	dcb.l	64,0	
+
+debugrslflag	dc.w	0	;flag for single stepping ReadScanLine
+
+	END
+@
+
+
+2.31
+log
+@Some grays changed from $666 to $555 to match the current color01.
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.30 1994/12/24 10:05:09 Kell Exp Kell $
+d10 3
+d580 1
+@
+
+
+2.30
+log
+@Changed VID4 loopback to VID2 so it can work with the Flyer.
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.29 1994/12/17 14:38:28 Kell Exp Kell $
+d10 3
+d122 1
+d718 4
+a721 4
+ReadColorMap	dc.l	$06660113	;color00 I=G0/B1=1 B=R0/B0=1
+		dc.l	$06660012	;color01 I=G0/B1=1 B=R0/B0=0
+		dc.l	$06660101	;color02 I=G0/B1=0 B=R0/B0=1
+		dc.l	$06660000	;color03 I=G0/B1=0 B=R0/B0=0
+@
+
+
+2.29
+log
+@New routine for Checking Digital Phase error, w/o requiring an external sync source, but can use Flyer clips instead.
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.28 1994/12/06 23:25:40 Kell Exp Kell $
+d10 3
+d3225 1
+a3225 1
+	ELHPUT_IS_I	a2,VTI_IS_VID4
+d3361 1
+a3361 1
+	move.l	#VTI_IS_VID4,d0
+d3389 1
+a3389 1
+* Check for VID4 loop back first.
+d3423 1
+a3423 1
+	move.l	#VTI_IS_VID4,d0
+d3458 1
+a3458 1
+	move.l	#VTI_IS_VID4,d0
+d3986 2
+a3987 1
+* Returns d0=1 if Main is connected to Vid4, 0 if not
+d4002 1
+a4002 1
+	move.w	#VTI_IS_VID4,d6
+d4009 1
+a4009 1
+;;	move.w	#VTI_IS_VID4,d6
+d4016 1
+a4016 1
+	moveq	#1,d2	;assume success = VID4
+d4058 1
+a4058 1
+;;	ELHPUT_IS_I	a0,VTI_IS_VID4	;changed below
+d4068 1
+a4068 1
+* Old VID4 Test: This will grab DAC0=black/white if VID4 hooked to Main 
+d4478 1
+a4478 1
+	move.l	#VTI_IS_VID4,d0
+@
+
+
+2.28
+log
+@Added GrabIQ and DoneGrabIQ for grabbing a frame & getting the YIQs.
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.27 1994/12/06 23:25:04 Kell Exp Kell $
+d10 3
+d121 1
+d3383 111
+d4207 1
+@
+
+
+2.27
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.26 1994/12/03 06:10:51 Kell Exp Kell $
+d10 3
+@
+
+
+2.26
+log
+@New uses WriteHardSets instead of SaveHardSets, to prevent CDROM write errors.
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.25 1994/07/27 19:26:57 Kell Exp Kell $
+d10 3
+d3240 1
+a3240 1
+	movem.l	d0-d1,-(sp)	;stash Ideal I*162, Q*162
+d3277 1
+a3277 1
+	movem.l	(sp),d2-d3	;Ideal I*162, Q*162
+d3370 2
+a3371 2
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162
+d3373 1
+a3373 1
+	rts	;d0=i*162, d1=q*162
+d3461 2
+a3462 2
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162
+d3787 2
+a3788 2
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162
+d3966 1
+a3966 1
+	add.l	d3,d0	;Y*4*162
+d4084 55
+d4223 1
+a4223 1
+	move.l	d0,(sp)		;stash sample I*162
+d4306 2
+a4307 2
+	move.l	4(sp),d0	;sample I*162
+	movem.l	12(a3),d2-d3	;Ideal yellow I*162, Q*162
+d4349 1
+a4349 1
+	movem.l	d0-d1,12(a3)	;stash Ideal Red I*162, Q*162
+d4375 2
+a4376 2
+	sub.l	d2,d0		;(Y+I)-(Y-I) = I * 162
+	sub.l	d3,d1		;(Y+Q)-(Y-Q) = Q * 162
+d4378 1
+a4378 1
+	rts	;d0=i*162, d1=q*162
+@
+
+
+2.25
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.24 1993/11/16 02:08:27 Kell Exp Kell $
+d10 3
+d2194 1
+a2194 1
+	CALLTL	SaveHardSets	;assume success
+@
+
+
+2.24
+log
+@Changed the Reading Copperlist so AA machines use $888 palette color
+@
+text
+@d7 1
+a7 1
+* $Id: autocal.a,v 2.23 93/10/29 03:40:50 Kell Exp Locker: Kell $
+d9 4
+a12 1
+* $Log:	autocal.a,v $
+@
+
+
+2.23
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b3df8 differ
+@
+
+
+2.22
+log
+@Disabled red/green/blue error flashes.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b9080 differ
+@
+
+
+2.21
+log
+@Now uses external HardSetsData.a file.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b04c8 differ
+@
+
+
+2.20
+log
+@Now Hardsets contains multiple Grab preset tables.
+ReadScanLine can read one scan line in 1/60 sec.
+CaliReadScanLine bugs fixed, now saves new presets correctly.
+InitReadScanLine/7Quad now generates either 7 or 10 grabs/line data.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78afc78 differ
+@
+
+
+2.19
+log
+@Replace 68000 Grab test.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78af528 differ
+@
+
+
+2.18
+log
+@Remove 68000 Grab test.
+@
+text
+@Binary files AutoCal.a and t:,RCSt1A70ad8c8 differ
+@
+
+
+2.17
+log
+@*** empty log message ***
+@
+text
+@Binary files AutoCal.a and t:,RCSt1A70a2178 differ
+@
+
+
+2.16
+log
+@Fixed fast 040 framegrabbing streak bug.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78afc50 differ
+@
+
+
+2.15
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b02c8 differ
+@
+
+
+2.14
+log
+@*** empty log message ***
+@
+text
+@Binary files AutoCal.a and t:,RCSt1A70a2078 differ
+@
+
+
+2.13
+log
+@AutoMatte, AutoHue, AutoPedGain now return more parameters
+@
+text
+@Binary files AutoCal.a and t:,RCSt1A70a2078 differ
+@
+
+
+2.12
+log
+@More discriptive AutoCal/TestAutoCal return codes
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b0308 differ
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b0b18 differ
+@
+
+
+2.10
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78b0150 differ
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a2aa8 differ
+@
+
+
+2.8
+log
+@Moved ReadScanLineBMs to top of memory.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a38a0 differ
+@
+
+
+2.7
+log
+@TestMain2EXT() and TestMain2Vid4() now leave BLACK in bank 0, instead of white.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a38a0 differ
+@
+
+
+2.6
+log
+@Now using nice $555 gray displays for everything.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a3c58 differ
+@
+
+
+2.5
+log
+@Major changes to take advantage of the new AA Toaster.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a4560 differ
+@
+
+
+2.4
+log
+@Changes to support the AA chip set
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a41c8 differ
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a3ab8 differ
+@
+
+
+2.2
+log
+@Added InitReadScanLine funtion
+@
+text
+@Binary files AutoCal.a and t:,RCSt1A78b93b0 differ
+@
+
+
+2.1
+log
+@Fixed AutoCals SimpleBMCopList to clear the ViewModes field of SUSBM.
+@
+text
+@Binary files autocal.a and t:,RCSt1A78a40e0 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files autocal.a and t:,RCSt1A031ca40 differ
+@

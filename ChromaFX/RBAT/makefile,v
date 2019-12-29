@@ -1,0 +1,312 @@
+head	2.12;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+2.12
+date	94.10.04.20.28.12;	author pfrench;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.09.29.18.15.03;	author pfrench;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.09.29.18.06.55;	author pfrench;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.09.29.16.08.59;	author pfrench;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	92.09.10.17.02.14;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	92.05.29.18.24.58;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	92.05.29.18.19.35;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	92.05.29.18.10.27;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	92.05.29.17.48.14;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	92.05.29.17.26.30;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	92.05.29.17.09.59;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.05.28.13.34.22;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.19.17.16.21;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.12
+log
+@Added lutc.c
+@
+text
+@#********************************************************************
+#* $RCSfile: makefile,v $
+#*
+#* Copyright (c)1992 NewTek, Inc.
+#* Confidental and Proprietary. All rights reserved. 
+#*
+#* $Id: makefile,v 2.11 1994/09/29 18:15:03 pfrench Exp pfrench $
+#*
+#*********************************************************************
+# HiSoft assembler include path
+HISOFT = -icfx:inc/ -L -D LINE -O
+
+#ASSEMBLE = GenIm2
+ASSEMBLE = GenAm
+ASSEMERRS = >cfx:hisoft.errs
+
+LINK = slink
+LINKERRS = >cfx:slink.errs
+
+DEST = VT:exe/Toaster/AuxLibs/
+
+OBJS = \
+ cfx:obj/lut0.o \
+ cfx:obj/lut1.o \
+ cfx:obj/lut2.o \
+ cfx:obj/lut3.o \
+ cfx:obj/lut4.o \
+ cfx:obj/lut5.o \
+ cfx:obj/lut6.o \
+ cfx:obj/lut7.o \
+ cfx:obj/lut8.o \
+ cfx:obj/lut9.o \
+ cfx:obj/lutA.o \
+ cfx:obj/lutB.o \
+ cfx:obj/lutC.o \
+ cfx:obj/LutBits.o \
+ cfx:obj/LutRam.o \
+ cfx:obj/LutLib.o
+
+$(DEST)ChromaFX: $(OBJS)
+	$(LINK) $(LINKERRS) WITH cfx:bat/withfile
+
+###########################################################
+# This line is to support testmake
+ram:NeverExists: $(OBJS)
+	quit 20
+
+###########################################################
+# NOTE: These Lut files don't have the correct dependencies!!!!!
+DEPEND = cfx:inc/assembler.i cfx:inc/LUTequ.i tinc:InstinctUpdate tinc:EfLibUpdate
+
+cfx:obj/lut0.o: cfx:src/lut0.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut0.a $(HISOFT)cfx:obj/lut0.o
+
+cfx:obj/lut1.o: cfx:src/lut1.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut1.a $(HISOFT)cfx:obj/lut1.o
+
+cfx:obj/lut2.o: cfx:src/lut2.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut2.a $(HISOFT)cfx:obj/lut2.o
+
+cfx:obj/lut3.o: cfx:src/lut3.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut3.a $(HISOFT)cfx:obj/lut3.o
+
+cfx:obj/lut4.o: cfx:src/lut4.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut4.a $(HISOFT)cfx:obj/lut4.o
+
+cfx:obj/lut5.o: cfx:src/lut5.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut5.a $(HISOFT)cfx:obj/lut5.o
+
+cfx:obj/lut6.o: cfx:src/lut6.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut6.a $(HISOFT)cfx:obj/lut6.o
+
+cfx:obj/lut7.o: cfx:src/lut7.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut7.a $(HISOFT)cfx:obj/lut7.o
+
+cfx:obj/lut8.o: cfx:src/lut8.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut8.a $(HISOFT)cfx:obj/lut8.o
+
+cfx:obj/lut9.o: cfx:src/lut9.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lut9.a $(HISOFT)cfx:obj/lut9.o
+
+cfx:obj/lutA.o: cfx:src/lutA.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lutA.a $(HISOFT)cfx:obj/lutA.o
+
+cfx:obj/lutB.o: cfx:src/lutB.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lutB.a $(HISOFT)cfx:obj/lutB.o
+
+cfx:obj/lutC.o: cfx:src/lutC.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/lutC.a $(HISOFT)cfx:obj/lutC.o
+
+cfx:obj/LutBits.o: cfx:src/LutBits.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/LutBits.a $(HISOFT)cfx:obj/LutBits.o
+
+cfx:obj/LutRam.o: cfx:src/LutRam.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/LutRam.a $(HISOFT)cfx:obj/LutRam.o
+
+cfx:obj/LutLib.o: cfx:src/LutLib.a $(DEPEND)
+	$(ASSEMBLE) $(ASSEMERRS) cfx:src/LutLib.a $(HISOFT)cfx:obj/LutLib.o
+
+# end of makefile
+@
+
+
+2.11
+log
+@Now using GenAm instead of GenIm2.  Although this breaks
+the makefile because of optimizations that occur in lut4.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.10 1994/09/29 18:06:55 pfrench Exp pfrench $
+d35 1
+d87 3
+@
+
+
+2.10
+log
+@Added line debug to compiler options
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.9 1994/09/29 16:08:59 pfrench Exp pfrench $
+d13 2
+a14 1
+ASSEMBLE = GenIm2
+@
+
+
+2.9
+log
+@Now using slink instead of blink
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.8 1992/09/10 17:02:14 Kell Exp pfrench $
+d11 1
+a11 1
+HISOFT = -icfx:inc/ -L -D -O
+@
+
+
+2.8
+log
+@Eliminated instinct.i & eflib.i dependencies.
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.7 92/05/29 18:24:58 Kell Exp Locker: Kell $
+d16 2
+a17 2
+LINK = blink
+LINKERRS = >cfx:blink.errs
+@
+
+
+2.7
+log
+@Changed NeverExists dependencies AGAIN!
+@
+text
+@Binary files makefile and t:,RCSt1A031c9b8 differ
+@
+
+
+2.6
+log
+@changed ChromaFX: to $(DEST)ChromaFX:
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.5
+log
+@changed withoutfile to withfile
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.4
+log
+@killed ChromaFX.big.  Fixed ChromaFX dependencies.
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.3
+log
+@fixed dependencies on the code modules
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.2
+log
+@Took $(DEST) off of ChromaFX: and ChromaFX.big:
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.1
+log
+@now works with VT:exe
+@
+text
+@Binary files makefile and t:,RCSt1A0296820 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A03170d0 differ
+@

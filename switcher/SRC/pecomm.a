@@ -1,0 +1,6072 @@
+********************************************************************
+* $RCSfile: pecomm.a,v $ - starting point of all new source code modules
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: pecomm.a,v 2.168 1997/04/02 16:06:53 Holt Exp Holt $
+*
+* $Log: pecomm.a,v $
+*Revision 2.168  1997/04/02  16:06:53  Holt
+*fixed null named framestore save problem
+*
+*Revision 2.167  1997/02/07  00:05:42  Holt
+**** empty log message ***
+*
+*Revision 2.166  1996/11/19  11:00:40  Holt
+**** empty log message ***
+*
+*Revision 2.165  1996/08/13  16:44:45  Holt
+*added support for HQ6 MODE.
+*
+*Revision 2.164  1996/04/29  10:29:58  Holt
+**** empty log message ***
+*
+*Revision 2.163  1996/02/15  11:29:34  Holt
+*added hand_take
+*
+*Revision 2.162  1996/01/30  12:59:44  Holt
+*turned off serdebug
+*
+*Revision 2.161  1996/01/30  12:53:06  Holt
+*fixed vol to not go to 0 durring shuttle.
+*
+*Revision 2.160  1996/01/02  17:41:34  Holt
+*turned off debug
+*
+*Revision 2.159  1995/12/27  15:46:01  Holt
+*tested clock sync
+*
+*Revision 2.158  1995/10/17  15:28:25  Flick
+*Hand_Jump was brain-dead, was setting A/V points based on content LAST TIME,
+*then reset A/V content flags for current TAG values!!  Fixes DHD_Jump
+*
+*Revision 2.157  1995/10/17  12:23:31  Flick
+*Hand_ChangeAudio now uses modified StuffCAparams (that supports mono correctly)
+*Other clients of this function use the same one, now called StuffCAparams2
+*which coerces things to stereo quite annoyingly, but too much depends on this now!
+*
+*Revision 2.156  1995/09/08  18:10:18  Flick
+*Fixed deficiencies in Jog/Shuttle handling to allow scrubbing volume/balance
+*
+*Revision 2.155  1995/08/20  00:59:43  Flick
+*Argh! Sloppy code alert! InitJogShuttle wasn't setting Flyer ReturnTime, so
+*we were doing this sync (instead of in parallel with RCB rendering!!!)
+*
+*Revision 2.154  1995/08/14  12:49:05  Flick
+*Disabled debugging
+*
+*Revision 2.153  1995/08/09  12:22:09  Holt
+*turned serdebug flag on.
+*
+*Revision 2.152  1995/08/07  15:29:09  Flick
+*Nothing much, just tested/cleaned up Hand_Jog code a bit
+*
+*Revision 2.151  1995/07/18  13:55:45  Flick
+*PanelOpen,PanelClose now use RT_STOPPED (much safer)
+*
+*Revision 2.150  1995/07/13  15:08:23  Flick
+*Changed hand_tweek to support writing values as USE or SAVE (OOPSKELL)
+*
+*Revision 2.149  1995/07/12  12:19:18  Flick
+*MakeTestClip now sets D2=field# for Flyer_OpenWriteField call
+*
+*Revision 2.148  1995/07/05  15:04:59  Flick
+*Added call to FGC_InterpTagsCommand for duplicating w/ corner symbols
+*
+*Revision 2.147  1995/06/09  16:03:28  Holt
+**** empty log message ***
+*
+*Revision 2.146  1995/06/05  12:08:55  Flick
+*Fixed VID4 bug in ES_SetPrefs
+*
+*Revision 2.145  1995/04/20  11:09:09  Flick
+*Fixed Hand_JOG for clips with > 32K fields, DoMouseXY handles 15 bits only!
+*
+*Revision 2.144  1995/03/16  12:08:19  Holt
+**** empty log message ***
+*
+*Revision 2.143  1995/03/16  11:17:56  Holt
+*fixed 333$ to 666$
+*
+*Revision 2.142  1995/03/16  09:37:02  Flick
+*Cleaned up Hand_RecordAppend
+*
+*Revision 2.141  1995/03/15  18:59:09  CACHELIN4000
+*Add ES_RecordAppend, FLYER_AddFields... just a start
+*
+*Revision 2.140  1995/03/15  13:05:12  Holt
+**** empty log message ***
+*
+*Revision 2.139  1995/03/14  13:58:39  Holt
+**** empty log message ***
+*
+*Revision 2.138  1995/03/07  14:58:50  CACHELIN4000
+*Re-Do HAND_CompressionMode forfast drive mode
+*
+*Revision 2.137  1995/03/02  12:35:23  pfrench
+*Added switcher un-used rawkey handling code
+*
+*Revision 2.136  1995/02/26  17:22:51  Holt
+**** empty log message ***
+*
+*Revision 2.135  1995/02/24  18:54:44  pfrench
+*fixed mangle-o code checking framestore
+*
+*Revision 2.134  1995/02/24  18:49:38  Holt
+*checked in so pat can work on it.
+*
+*Revision 2.133  1995/02/20  17:49:28  pfrench
+*using hardcoded FRAM data type
+*
+*Revision 2.132  1995/02/20  17:27:43  pfrench
+*Now makes sure requested frame save before continuing.
+*
+*Revision 2.131  1995/02/18  20:44:42  Kell
+*New handlers for FoundFile, and Change
+*Audio.  New sender for LocateFile.  Made a subroutine for all PutMsgs.
+*
+*Revision 2.130  1995/02/17  16:09:54  Kell
+*Now informs the editor of screen depth (a variable)
+*Also, kills keys at end of sequence.
+*
+*Revision 2.129  1995/02/16  20:36:26  Kell
+*Now realtime feedback on palette colors when going between 2/3 monitor modes.  Also, hack panel CancelCGs.
+*
+*Revision 2.128  1995/02/13  15:12:21  Kell
+*Fixed infinite loop bug in GetPrefs
+*
+*Revision 2.127  1995/02/12  05:14:27  Kell
+*Now handles allowing External VID3/4 on the SystemPrefs.
+*These will auto-switch to Flyer when required.
+*
+*Revision 2.126  1995/02/11  18:47:37  Kell
+*Now Jogs can handle clips larger than 18 Min.  (no limit)
+*
+*Revision 2.124  1995/02/10  15:23:11  Kell
+*Added AudioControl handler.  Optimized the GetStuctValue calls for GetTable.
+*
+*Revision 2.123  1995/01/31  10:23:50  Kell
+*New  hardcoded data to create a clip to test TBC keying.
+*
+*Revision 2.122  1995/01/25  18:19:23  Kell
+*Now complement sense of AGC flag before sending to TBC
+*
+*Revision 2.121  1995/01/25  13:04:17  Kell
+*TBC hack panel finished.
+*
+*Revision 2.120  1995/01/24  12:00:05  Kell
+*New  handlers for TBCread, TBCwrite, Pause, and Clip Cutting.
+*
+*Revision 2.119  1995/01/23  15:37:43  Kell
+*Hand_Hack changed to have Hack Type has a ES parameter, vs twhk_Type.
+*
+*Revision 2.118  1995/01/04  18:54:10  Kell
+*Re-enabled the code that forces both caf_AUDIOL/R on during jog/shuttle.
+*
+*Revision 2.117  1995/01/04  17:00:41  Kell
+*Don't force both channels on caf_AUDIOL/R if only playing mono.
+*
+*Revision 2.116  1994/12/31  05:17:31  Kell
+*DOHIT debugging
+*
+*Revision 2.115  1994/12/31  04:05:42  Kell
+*Removed Matte color being forced in before sequences.
+*
+*Revision 2.114  1994/12/30  20:13:00  Kell
+*Now forcing all RenderCallBack Frames to Field I.
+*
+*Revision 2.113  1994/12/30  02:46:08  Kell
+*Removed dependency on TB_FlyerVolumes.  Instead using Flyer_VolumeName.
+*Removed Hand_FlyerVolume (not needed anymore)
+*
+*Revision 2.112  1994/12/29  11:29:26  Kell
+*New debugs, and now supports QUIT_BIT to signal event loop to Quit switcher.
+*
+*Revision 2.111  1994/12/29  08:00:40  Kell
+*Now don't allow non-Field Is in jogging.  Also, jog max limit upped by 1.
+*
+*Revision 2.110  1994/12/28  18:04:10  Kell
+*Now does a Forbid/permit around sending a message to the Editor.
+*Also, once again supports forcing Main to matte black before sequences.
+*
+*Revision 2.109  1994/12/23  14:49:26  Kell
+*New debugs.
+*
+*Revision 2.108  1994/12/23  03:32:53  Kell
+*New debugs.
+*
+*Revision 2.107  1994/12/17  04:56:29  Kell
+*New ES_FlyerVolumes handler.  Now this is received from the Editor, instead of sent to the editor.
+*New MakeTestClip code for making an IVectorWithPulse 4 field clip.
+*
+*Revision 2.106  1994/12/09  15:42:01  pfrench
+*Now a little more friendly when waiting for replies
+*
+*Revision 2.105  1994/12/06  23:34:32  Kell
+*Limited Sub-Nyquist to not it's best mode.  Using 3 instead of 2.
+*
+*Revision 2.104  1994/12/05  19:21:40  Kell
+*New values for compression modes.
+*
+*Revision 2.103  1994/12/05  19:09:24  Kell
+*Support for Record compression modes.
+*
+*Revision 2.102  1994/11/30  22:42:22  Kell
+*New SavePrefs handler.
+*
+*Revision 2.101  1994/11/23  16:41:33  Kell
+*New  Hand_NewFieldCount and Hand_UnSavable handlers added.
+*
+*Revision 2.100  1994/11/18  08:54:10  Kell
+*New WaitForReplyMessage() function.
+*
+*Revision 2.99  1994/11/17  15:40:09  Kell
+*Syncclock function added.  Now can occur outside of ES_StartSequence call.
+*
+*Revision 2.98  1994/11/11  10:17:50  Kell
+*Changed parameters on some older Flyer functions. ToasterMux, InputSelect, Start/End Headlist, Play/Record Mode.
+*
+*Revision 2.97  1994/11/10  02:52:08  Kell
+*New InitFlyerPlay function to set input sync, and Play mode.
+*
+*Revision 2.96  1994/11/04  08:46:21  Kell
+*ES_LoadedSlices now used WhatSlicesLoaded() call.
+*
+*Revision 2.95  1994/11/04  03:29:29  Kell
+*Some Debugs for Hand_RecordSource, added LoadedSlices support.
+*Now uses new DUMPCA macro.
+*
+*Revision 2.94  1994/11/02  19:11:56  Kell
+*Now forces both CAF_AUDIO flags on if either is used.
+*Sets audio volume depending on user setting for Jog/Shuttle.
+*
+*Revision 2.93  1994/10/31  17:08:45  Kell
+*Now reads flyer calibration values before Tweeking.
+*
+*Revision 2.92  1994/10/28  14:13:08  Kell
+*Added Tweek handling for Pedestal.
+*
+*Revision 2.91  1994/10/28  12:59:13  Kell
+*Now redraws display after calling Application Slices.
+*
+*Revision 2.90  1994/10/27  14:00:31  Kell
+*Hacks to turn a still into a 4 field sequence.
+*For strobbing BM dma in sync with the GoClock %00 fields
+*Checks to see if TB clock and Flyer clock stay in sync.
+*
+*Revision 2.89  1994/10/25  13:53:24  Kell
+*Remarks
+*
+*Revision 2.88  1994/10/25  07:11:04  Kell
+**** empty log message ***
+*
+*Revision 2.87  1994/10/25  07:06:52  Kell
+*Fixed vhposr bug when syncing flyer and switcher clocks.
+*
+*Revision 2.86  1994/10/21  23:22:53  Kell
+*Fixed some InputTerm bugs.
+*
+*Revision 2.85  1994/10/21  17:01:47  Kell
+*New Hand_GetPrefs and Hand_SetPrefs handlers.
+*
+*Revision 2.84  1994/10/15  01:29:50  Kell
+*The Hack flyer adjustment panel now uses the Editors Volume list to get a flyer volume name.
+*
+*Revision 2.83  1994/10/12  00:23:55  Kell
+*Fixed Jogging not showing correct video channel.
+*Now supports GRAZERLOAD_BIT on ES_LoadCrouton, so we can have different end points on clips that are played form Grazer, vs drug into project.
+*
+*Revision 2.82  1994/10/07  23:39:16  Kell
+*Now handles audio only clips better.
+*Code for ES_hack for calibrating the flyer manually.
+*
+*Revision 2.81  1994/10/05  05:53:43  Kell
+*Better debugs.  ES_Hack added.
+*
+*Revision 2.80  1994/10/01  12:56:45  Kell
+*Added Flyer_DefaultSelect for restoring muxes after record.
+*
+*Revision 2.79  1994/10/01  01:08:18  Kell
+*Increased SHUTTLE mouse distance to 500 (from 300)
+*Tied in Clip Icon making.  Though currently does BUSY wait for 3 secs!!
+*
+*Revision 2.78  1994/09/30  21:07:38  Kell
+*Handlers for Making and Appending Icon, plus getting clip info.
+*
+*Revision 2.77  1994/09/29  15:27:19  Kell
+*Handlers for Clip Heads added.  Now Defrag Voids clip heads.
+*
+*Revision 2.76  1994/09/28  22:22:38  Kell
+**** empty log message ***
+*
+*Revision 2.75  1994/09/28  22:18:59  Kell
+**** empty log message ***
+*
+*Revision 2.74  1994/09/28  22:15:37  Kell
+*Now has ES_DefragFlyer handler.
+*
+*Revision 2.73  1994/09/28  19:30:57  Kell
+**** empty log message ***
+*
+*Revision 2.72  1994/09/28  18:58:24  Kell
+*Select on Clips when sequencing now works with our new clock stuff.
+*
+*Revision 2.71  1994/09/27  09:07:34  Kell
+*New Hand_CheckRecord handler
+*
+*Revision 2.70  1994/09/27  08:10:58  Kell
+*First attempt at ES_Record.
+*ES_RecodeSource now stashes requested state for ES_Records use.
+*
+*Revision 2.69  1994/09/27  04:45:35  Kell
+*Handlers for FlyerCommpression, RecordSource added.
+*Now ES_Stop is used for play/record or sequencing.
+*
+*Revision 2.68  1994/09/23  08:31:05  Kell
+*Shuttle now avoids the FF/REW stage mode.  1x & -1x now larger area.
+*
+*Revision 2.67  1994/09/22  05:10:55  Kell
+*Re-enabled calls to Flyer for Record/Play mode & GetFieldClock.
+*
+*Revision 2.66  1994/09/14  02:01:07  Kell
+*Fixed ES_ commands for loading Slices.  Was using FGC_LOAD, needed FGC_SELECTK.
+*
+*Revision 2.65  1994/09/14  01:03:40  Kell
+*SelectK is now sent, even if slice hasn't yet been loaded.
+*
+*Revision 2.64  1994/09/14  00:18:52  Kell
+*New handlers for Slice commands (LW,TP,CG,CFX)
+*Now audio is attenuated during Shuttles.
+*
+*Revision 2.63  1994/09/13  19:04:45  Kell
+*Hack to improve Jog/Shuttle.  NOTE: Audio not currently working here.
+*
+*Revision 2.62  1994/09/13  05:56:44  Kell
+*First working Jog, Shuttle & Jump (since old NAB code)
+*
+*Revision 2.61  1994/09/08  19:23:49  Kell
+*Ne PutTable, GetTable, TagSize handlers.
+*PutValue now can add a NEW tag item to a FG list.
+*
+*Revision 2.60  1994/09/06  21:43:56  Kell
+*Moved ES message table to top of file.  Added a Shuttle Table.
+*
+*Revision 2.59  1994/09/02  08:34:31  Kell
+*Now Prvwing Clip errors are sent to the DelayError system.
+*Aborting Clips via Stop button now works.
+*Jog now puts pointer back where it should be.
+*
+*Revision 2.58  1994/09/02  03:03:23  Kell
+*Fixed some Jog bugs that confused Y movements with X.
+*
+*Revision 2.57  1994/08/31  22:59:34  Kell
+*Attempt at a new Jog routine.
+*
+*Revision 2.55  1994/08/30  10:28:28  Kell
+*Changed some of the handler names.
+*
+*Revision 2.54  1994/08/27  06:58:15  Kell
+*Commented out some obsolete tag items in Jog. Jog is now really broke!
+*
+*Revision 2.53  1994/08/09  03:53:38  Kell
+*Changed return codes on ES_LoadCrouton.  Now ->FG or NULL only.
+*
+*Revision 2.52  1994/08/03  19:49:47  Kell
+**** empty log message ***
+*
+*Revision 2.51  1994/08/03  06:39:22  Kell
+*Now project entries remember their original location (e.g. CDROM)
+*
+*Revision 2.50  1994/07/27  19:27:47  Kell
+**** empty log message ***
+*
+*Revision 2.49  1994/07/22  20:42:04  Kell
+*Now using AmigaDOS's LoadSeg
+*
+*Revision 2.48  94/07/22  19:31:15  Kell
+**** empty log message ***
+*
+*Revision 2.47  94/07/07  02:32:56  Kell
+*Fixed errors in Load/Save/New Project commands, and ES_Startup command documentation.
+*Added ES_ClearProject command.
+*
+*Revision 2.46  94/07/01  12:58:10  Kell
+*Disabled Flyer function calls.  It's now broken!!!!
+*
+*Revision 2.45  94/06/04  03:59:28  Kell
+*Cleaned up the Flag mess associated with who (Editor/Switcher) controls which part of the screen, and which mode we are in.
+*Removed some old obsolete handlers.
+*Added a NoRender function to send to the Editor (for going in/out of Setup slice).
+*The SendProjectEditMessage now checks for Editor first.  Returns result.
+*Fixed multiple renderings of switcher when going into Switcher mode.
+*
+*Revision 2.44  94/05/27  17:18:31  Kell
+**** empty log message ***
+*
+*Revision 2.43  94/05/24  22:05:31  Kell
+*ES_AUTO now does a FGC_TOMAIN command.  The AUTO handler code was way
+*simplified (and now called Hand_ToMain.
+*ES_SELECT command now returns BOOL.
+*Many FGC_....Command calls renamed to this new naming convention.
+*
+*Revision 2.42  94/05/02  17:42:03  Kell
+*Added SelectDefault handling.
+*
+*Revision 2.41  94/04/25  14:40:05  Kell
+*Removed BW jog.
+*Now looks at GUImode flags to see if switcher is up and honors that
+*special Select.
+*
+*Revision 2.40  94/04/21  17:28:45  Kell
+*Added ES_GUImode handling.
+*
+*Revision 2.39  94/03/31  13:17:38  Kell
+*All sorts of new additions for NAB 94.
+*
+*Revision 2.38  94/03/18  17:22:29  Kell
+**** empty log message ***
+*
+*Revision 2.37  94/03/18  09:21:43  Kell
+*Sequencing now disables rendering to switcher.  Syncs DHD to SW clock.
+*
+*Revision 2.36  94/03/17  09:45:09  Kell
+*Now disables grid rendering when redrawing switcher.
+*
+*Revision 2.35  94/03/15  23:59:51  Kell
+**** empty log message ***
+*
+*Revision 2.34  94/03/15  23:48:43  Kell
+*Added code for ES_FGcommand handling.
+*
+*Revision 2.33  94/03/15  19:07:18  Kell
+*Added ES_PutValue and ES_GetValue handlers
+*
+*Revision 2.32  94/03/15  16:55:19  Kell
+**** empty log message ***
+*
+*Revision 2.31  94/03/15  16:48:09  Kell
+**** empty log message ***
+*
+*Revision 2.30  94/03/15  16:17:25  Kell
+**** empty log message ***
+*
+*Revision 2.29  94/03/15  14:21:57  Kell
+*Killed internalcrouton loading stuff.
+*Finished Read/Write/New Project.  Finished crouton duplicate.
+*
+*Revision 2.28  94/03/13  08:01:56  Kell
+*No F8 only loads the Grazer if not alread loaded. Added ES_QUIT routine.
+*
+*Revision 2.27  94/03/11  15:00:28  Kell
+**** empty log message ***
+*
+*Revision 2.26  94/03/08  07:37:13  Kell
+**** empty log message ***
+*
+*Revision 2.25  94/03/06  16:52:01  Kell
+**** empty log message ***
+*
+*Revision 2.24  94/02/19  09:31:42  Kell
+**** empty log message ***
+*
+*Revision 2.23  94/02/07  15:55:16  Kell
+*Various changes to support the new 4.0 croutons & projects.
+*
+*Revision 2.22  94/01/14  13:06:03  Kell
+**** empty log message ***
+*
+*Revision 2.21  94/01/07  17:39:47  Kell
+**** empty log message ***
+*
+*Revision 2.20  94/01/07  17:35:23  Turcotte
+**** empty log message ***
+*
+*Revision 2.19  93/12/28  15:22:53  Turcotte
+**** empty log message ***
+*
+*Revision 2.18  93/12/09  19:26:39  Turcotte
+**** empty log message ***
+*
+*Revision 2.17  93/12/09  02:43:42  Turcotte
+**** empty log message ***
+*
+*Revision 2.16  93/12/07  02:24:31  Turcotte
+**** empty log message ***
+*
+*Revision 2.15  93/12/06  19:27:27  Turcotte
+**** empty log message ***
+*
+*Revision 2.14  93/12/04  00:10:59  Turcotte
+**** empty log message ***
+*
+*Revision 2.13  93/12/04  00:06:04  Turcotte
+**** empty log message ***
+*
+*Revision 2.12  93/12/03  17:10:47  Turcotte
+*Added Select
+*
+*Revision 2.11  93/12/03  16:08:52  Turcotte
+**** empty log message ***
+*
+*Revision 2.10  93/12/01  01:45:22  Turcotte
+*Added project commands.
+*
+*Revision 2.9  93/11/30  23:04:13  Turcotte
+*Added Duplicate
+*
+*Revision 2.8  93/11/30  18:22:48  Turcotte
+**** empty log message ***
+*
+*Revision 2.7  93/11/30  17:20:00  Turcotte
+**** empty log message ***
+*
+*Revision 2.6  93/11/29  16:22:23  Turcotte
+*Added messages for loading and unloading croutons
+*
+*Revision 2.5  93/11/23  16:58:18  Turcotte
+**** empty log message ***
+*
+*Revision 2.4  93/11/19  17:57:01  Turcotte
+**** empty log message ***
+*
+*Revision 2.3  93/11/11  18:24:01  Turcotte
+**** empty log message ***
+*
+*Revision 2.2  93/11/06  04:28:44  Kell
+**** empty log message ***
+*
+*Revision 2.1  93/11/05  19:03:33  Turcotte
+**** empty log message ***
+*
+*Revision 2.0  93/11/05  18:47:57  Turcotte
+*FirstCheckIn
+*
+*********************************************************************
+
+	include	"assembler.i"
+
+	include "exec/types.i"
+	include "exec/lists.i"
+	include "exec/nodes.i"
+	include "exec/ports.i"
+	include	"libraries/dos.i"
+	INCLUDE	'workbench/startup.i'
+	include	"hardware/custom.i"
+	include 'hardware/intbits.i'
+
+	include	"instinct.i"
+	include	"EditSwit.i"
+	include "custom.i"
+
+	include	"lib/exec_lib.i"
+	include	"lib/dos_lib.i"
+
+	include	"macros.i"s
+	include "tags.i"
+	include "flyer.i"
+
+	include "vtdebug.i"
+	include	"serialdebug.i"
+
+;;SERDEBUG	EQU	1 ;KEEP THIS ENABLED IF YOU WANT PRINTS TIED TO HOTKEY
+;DBTBC	set	1 ;debug TBC writing THIS IS ON the Ralt+Rshift+F1 HOTKEY
+
+	ALLDUMPS
+
+;;DBHD	set	1	;Debug HandlePEMessage
+;;DBSPM	set	1	;Debug SendProject...Message stuff
+
+;;DBHPEM	set	1	;Debug HandlePEMessageMessage
+;;DBJOG	set	1	;Debug Handle_Jog
+;;DBCLOCK	set	1	;Debug clock syncronization
+;;DBCA	set	1	;debug ClipAction Structure
+
+;;DBMTC	set	1	;debug MakeTestClip
+
+
+;;SETDOHIT SET	$100	;do enforcer hits starting at $100
+
+******************************************************************
+;;TESTFIELD0 set	1	;Determine where Field 0 (I) is. Hack test.
+
+;;FORCE2MATTE	SET	1	;Set if you want sequence to go to matte Black before they start
+
+
+******************************************************************
+PEMessageTab
+	dc.l	Hand_DUMMY		;()
+	dc.l	Hand_STARTUP		;() PUT/GETMESSAGE
+	dc.l	Hand_RENDER_EDIT	;(WINDOWOPENFLAG, ScreenDepth) PUTMESSAGE  Should never get this message
+	dc.l	Hand_RENDER_SWIT	;(Mode)
+
+	dc.l	Hand_ClearProject	;(List#)
+	dc.l	Hand_PanelOpen		;(FG)
+
+	dc.l	Hand_GETPLIST		;()
+	dc.l	Hand_FreeCrouton	;(FG)
+	dc.l	Hand_LoadCrouton	;(name,grazerflag)
+	dc.l	Hand_DuplicateCrouton	;(FG)
+
+	dc.l	Hand_LoadProject	;(List#,name)
+	dc.l	Hand_SaveProject	;(List#,name)
+	dc.l	Hand_NewProject		;(List#,name)
+	dc.l	Hand_Select		;(FG)
+	dc.l	Hand_Auto		;(FG)
+	dc.l	Hand_StartSeq		;()
+	dc.l	Hand_Stop		;() used to stop playing/Recording clips & sequencing
+	dc.l	Hand_QUIT		;() PUT/GETMESSAGE
+
+	dc.l	Hand_GetValue		;(FG,TagID)
+	dc.l	Hand_PutValue		;(FG,TagID,Value)
+	dc.l	Hand_FGcommand		;(FG,FGCcommand)
+	dc.l	Hand_PanelClose		;(FG)
+
+	dc.l	Hand_Record		;(->name, fields, ->StartFunct, ->StopFunct, Flags)
+	dc.l	Hand_Pause		;(PauseFlag)
+	dc.l	Hand_Jog		;(RenderCallBack)
+	dc.l	Hand_Shuttle		;(RenderCallBack)
+
+	dc.l	Hand_InitRecord		;()
+	dc.l	Hand_InitPlay		;()
+
+	IFD	FORCE2MATTE
+	dc.l	Hand_Main2Blank		;()
+	ENDC
+	IFND	FORCE2MATTE
+	dc.l	Hand_DUMMY
+	ENDC
+
+	dc.l	Hand_GUImode		;(mode)
+	dc.l	Hand_SelectDefault	;()
+	dc.l	Hand_Jump		;(FG,Field)
+	dc.l	Hand_ApplyTags		;(FGsource,FGdestination)
+
+	dc.l	Hand_TagSize		;(FG, TagID)
+	dc.l	Hand_GetTable		;(FG, ->Table, TableSize, TagID)
+	dc.l	Hand_PutTable		;(FG, ->Table, TableSize, TagID)
+
+	dc.l	Hand_LightWave		; (FGC_Command)
+	dc.l	Hand_ToasterPaint 	; (FGC_Command)
+	dc.l	Hand_ToasterCG		; (FGC_Command)
+	dc.l	Hand_ChromaFX		; (FGC_Command)
+
+	dc.l	Hand_FlyerDriveInfo 	; ->FlyerVolInfo=(->volumename, ->FlyerVolInfo)  supplied ->FlyerVolInfo maybe NULL
+	dc.l	Hand_RecordSource	; (VideoSource)
+	dc.l	Hand_CompressionMode 	; (mode)
+	dc.l	Hand_CheckRecord 	; (), returns FERR_..., 0 if recording finished OK
+
+	dc.l	Hand_DefragFlyer	; (->volumename)
+	dc.l	Hand_StartHeadList	; ()
+	dc.l	Hand_MakeClipHead 	; (->name,VidStart,VidFields,AudStart,AudFields)
+	dc.l	Hand_EndHeadList  	; ()
+
+	dc.l	Hand_MakeClipIcon	; (->name,->crud,crudsize,field)
+	dc.l	Hand_FlyerClipInfo	; (->clipname, ->ClipInfo or NULL)
+	dc.l	Hand_AppendIcon	 	; (->name)
+	dc.l	Hand_Hack		; ('Name',->HackStructure)
+
+	dc.l	Hand_DUMMY		; not used yet
+	dc.l	Hand_GetPrefs		; (->SystemPrefs Structure) fill in current values
+	dc.l	Hand_SetPrefs		; (->SystemPrefs)
+	dc.l	Hand_LoadedSlices	; () returns Slice Mask
+	dc.l	Hand_UnSavable		;(FG, TagID)	;marks Tag item so it doesn't get saved in the project
+	dc.l	Hand_NewFieldCount	;(FG)	;This needs to be called if an FXs speed or duration has changed.
+	dc.l	Hand_SavePrefs	 	;() saves an HS file. Returns ERROR. Though we usually ignore errors!
+
+	dc.l	Hand_StartClipCutList  	;(->filename, DestructFlag)
+	dc.l	Hand_AddClipCut  	;(->filename, StartField, NumFields, VidAudFlags)
+	dc.l	Hand_EndClipCutList	;(DoItFlag)
+	dc.l	Hand_AudioControl	;(->FlyAudCtrl, operationFlags)
+	dc.l	Hand_ChangeAudio	;(->FG)  Use this to modify the currently playing clip
+	dc.l	Hand_DUMMY	    	;(Type,->Name,flags,->textarray,mode) ONLY SEND TO EDITOR
+	dc.l	Hand_FoundFile        	;(Type,->name,flags,->textarray,mode)
+	dc.l	Hand_DUMMY	    	;(Code,Qualifier) ONLY SEND TO EDITOR
+	dc.l	Hand_RecordAppend	;(->name, fields)
+	dc.l	Hand_Take		;(fg)
+	dc.l	Hand_MoveSoftSprite ;(X, Y)
+
+
+;; New Handlers go here
+
+PEMessageTabE
+
+****** HandlePEMessage ******************************************************
+*
+*   NAME
+*	HandlePEMessage -- This function handles all messages for the Project
+*	                   editor.
+*
+*   SYNOPSIS
+*	HandlePEMessage(Message)
+*	                  d0
+*
+*   FUNCTION
+*	Each ES_Type handler will be called with a pointer to the message
+*	in d0.
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  - has been set
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+
+*a5->TB
+	xdef	HandlePEMessage
+HandlePEMessage:
+	movem.l	d0-d7/a0-a6,-(sp)
+
+	move.l	d0,a0
+
+*-------------------
+	IFD	DBHPEM
+	tst.l	d0
+	bne	10$
+	DEBUGMSG	DBHPEM,<HandlePEMessage: Message Pointer is NULL !!!!!!!!!!!!!!!!>
+	bra	.exit
+10$ 	DEBUGMEM	DBHPEM,<HandlePEMessage: Message=>,ES_Cookie(a0),#ES_SIZEOF-ES_Cookie
+	ENDC
+*-------------------
+
+	move.w	ES_Type(a0),d1
+	cmp.w	#(PEMessageTabE-PEMessageTab)/4,d1
+	ble.s	.okcommand
+
+	DOHIT
+
+	moveq.l	#ES_ERR_GENERIC,d0
+	move.l	d0,ES_Reply(a0)
+	bra.s	.exit
+.okcommand
+
+	add.w	d1,d1
+	add.w	d1,d1
+	lea	PEMessageTab,a0
+	move.l	0(a0,d1.w),a0
+
+	DOHIT
+
+	jsr	(a0)			;DON'T NEED TO SAVE REGISTERS!
+.exit
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+
+
+
+
+******* BringUpProjectEditor ************************************************
+*
+*   NAME
+*	BringUpProjectEditor -- Load Project editor and get it started
+*   SYNOPSIS
+*	BringUpProjectEditor()
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+	xdef	BringUpProjectEditor
+BringUpProjectEditor:
+	CALLTL	DisplayWaitSprite
+
+	XLEA	NoGrazerFlag,a0
+	tst.b	(a0)
+	bne.s	10$
+
+	lea	EditWindowName,a0
+	bsr	LoadProgram
+
+	move.l	d0,TB_EditSegList(a5)	;save Edit seg list. (when message
+					;comes back you will want to free it.
+	bne.s	155$
+
+* couldn't load or didn't want editor
+10$
+;;	XLEA	GridSelFGs,a0
+;;	move.l	a0,TB_GridSelFGL(a5)
+
+	CALLTL	ReDoDisplay
+	bra	156$
+
+155$
+	bsr	SendProjectEditStartMessage	;supplies -> project FGs, TB_Screen, TB_Window
+	bsr	SendProjectEditRenderMessage	;open windows & render
+
+156$	CALLTL	DisplayNormalSprite
+	rts
+
+******* Switcher/LoadProgram *************************************************
+*
+*   NAME
+*	LoadProgram -- Load a code segment and create process.
+*
+*   SYNOPSIS
+*	LoadProgram(*FileName)
+*	               a0
+*   FUNCTION
+*	This function is used be load the project editor, and create the
+*	project editor process.
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+EDIT_STACK_SIZE	EQU	10000		;This is the size of the stack given
+					;to the project editor.
+LoadProgram:
+	clr.l	d0
+	movem.l	d0-d5/a0-a1/a6,-(sp)
+
+
+	move.l	a0,d3			;file name
+
+	move.l	TB_DOSBase(a5),a6		;start from boot dirrectory
+	move.l	TB_BootLock(a5),d1
+	CALLROM	CurrentDir
+	move.l	d0,d5
+
+	move.l	d3,a0			;filename
+	move.l	a0,d1
+
+	CALLROM	LoadSeg
+****** Use this if you want our LoadSeg
+;;	move.l	#20000,d0		;buffersize
+;;	CALLTL	NLoadSegment
+
+	move.l	d0,(sp)			;return pointer to code segment.
+	beq	.exit
+
+	move.l	d3,d1	; name
+	moveq.l	#0,d2	; pri
+	move.l	d0,d3
+	move.l	#EDIT_STACK_SIZE,d4
+	XSYS	CreateProc
+	move.l	d0,d2
+	bne.s	.gotprocess
+
+	move.l	d3,d1
+	clr.l	(sp)			;clear return code
+	CALLTL	UnLoadSegment
+	bra	.exit
+.gotprocess
+
+	lea	FakeStartup,a1
+
+	move.b	#NT_MESSAGE,sm_Message+LN_TYPE(a1)
+	move.l	TB_ARexxPort(a5),sm_Message+MN_REPLYPORT(a1)
+	move.w	#sm_SIZEOF,sm_Message+MN_LENGTH(a1)
+
+	move.l	d2,sm_Process(a1)
+	move.l	d3,sm_Segment(a1)
+	moveq	#1,d0
+	move.l	d0,sm_NumArgs(a1)
+	moveq.l	#0,d0
+	move.l	d0,sm_ToolWindow(a1)
+	lea	NullWBArgList,a0
+	move.l	TB_BootLock(a5),wa_Lock(a0)
+	move.l	a0,sm_ArgList(a1)
+
+	move.l	d2,a0
+	move.l	TB_SYSBase(a5),a6
+	XSYS	PutMsg
+
+
+	moveq.l	#10-1,d2
+.WaitLoop
+	moveq.l	#50,d1	; one second
+	move.l	TB_DOSBase(a5),a6
+	XSYS	Delay
+
+* look for port
+	move.l	TB_SYSBase(a5),a6
+	lea	EditPortName,a1
+	XSYS	FindPort
+	tst.l	d0
+	dbne	d2,.WaitLoop
+
+***!!!*** WHAT IF THIS TIMED OUT BECAUSE THE EDITOR CAN'T OPEN A PORT ???
+
+.exit
+	move.l	TB_DOSBase(a5),a6
+	move.l	d5,d1			;return to old directory
+	CALLROM	CurrentDir
+.quit
+	movem.l	(sp)+,d0-d5/a0-a1/a6
+	rts
+
+
+****************************************************************************
+* Must have ES_Type, all Data and ES_Reply fields filled out in the
+* our OnlyMessage.
+*
+* SendMessage2Editor()
+*
+SendMessage2Editor:
+	movem.l	d0-d1/a0-a2/a6,-(sp)
+	DEBUGMSG	DBSPM,<SendMessage2Editor:>
+
+	clr.l	(sp)			;assume no Editor present
+
+	XLEA	NoGrazerFlag,a0
+	tst.b	(a0)
+	bne	.exit			;jump if Editor not open
+
+	lea	OnlyMessage,a2
+
+	move.b	#NT_MESSAGE,LN_TYPE(a2)
+	move.l	TB_ARexxPort(a5),MN_REPLYPORT(a2)
+	move.w	#ES_SIZEOF,MN_LENGTH(a2)
+	move.w	#EditCookie,ES_Cookie(a2)
+
+* Why is this clr commented out ??????
+;;	clr.l	ES_Reply(a2)			;if editor is present it will
+						;replace this with a valid
+						;non return code.
+	move.l	TB_SYSBase(a5),a6
+	CALLROM	Forbid
+
+	lea	EditPortName,a1
+;;	move.l	TB_SYSBase(a5),a6
+	CALLROM	FindPort
+	tst.l	d0
+	beq	.exit2			;NULL = Editor port not present
+
+.gotport
+	move.l	d0,a0			;port
+	move.l	a2,a1			;message
+;;	move.l	TB_SYSBase(a5),a6
+
+	DEBUGMSG	DBSPM,<before PutMsg>
+
+	CALLROM	PutMsg
+
+	DEBUGMSG	DBSPM,<after PutMsg>
+
+	CALLROM	Permit
+
+	move.l	TB_ARexxPort(a5),a0
+	lea	OnlyMessage,a1
+
+	DEBUGMSG	DBSPM,<before WaitForReplyMessage>
+
+	bsr	WaitForReplyMessage	;Will throw away this message reply
+					;so ARexx handler will never see it!
+
+	DEBUGMSG	DBSPM,<after WaitForReplyMessage>
+
+	move.l	a2,(sp)	 ;nonzero returncode = success, ->message
+	bra.s	.exit
+.exit2
+	CALLROM	Permit
+.exit	movem.l	(sp)+,d0-d1/a0-a2/a6
+	tst.l	d0
+	rts
+
+****** WaitForReplyMessage **************************************************
+*
+*   NAME
+*	WaitForReplyMessage -- waits for a reply message to come back to a port
+*
+*   SYNOPSIS
+*	Message = WaitForReplyMessage(Port, message)
+*	  d0                           a0     a1
+*
+*   FUNCTION
+*	This function will wait for a reply message to appear at a port.
+*	It will return with a pointer to the message (no longer on the port)
+*	Any other messages are still left on the port.
+*
+*   INPUTS
+*	Port  - message port to wait on
+*	Message - the message to wait for
+*
+*   RESULT
+*	message - message that came back
+*
+*   BUGS
+*
+*****************************************************************************
+	XDEF	WaitForReplyMessage
+WaitForReplyMessage:
+	movem.l	d0-d1/a0-a3/a6,-(sp)
+
+	movea.l	(4).w,a6		;exec base
+	movea.l	a0,a2
+	movea.l a1,a3
+
+.dosearch
+	CALLROM	Forbid
+
+	lea	MP_MSGLIST+LH_HEAD(a2),a0
+.loop	move.l	(a0),a0
+	tst.l	(a0)
+	beq	.notfound
+
+	cmp.b	#NT_REPLYMSG,LN_TYPE(a0)
+	bne	.loop
+
+	cmpa.l	a3,a0
+	bne	.loop
+
+	move.l	a0,(sp)			;return code
+	move.l	a0,a1
+
+	DEBUGMSG	DBSPM,<REMOVEing the particular Reply>
+	REMOVE
+	bra	.exit
+.notfound
+
+	moveq.l	#0,d0			;wait for a new message to come
+	moveq.l	#0,d1			;to this port
+	move.b	MP_SIGBIT(a2),d1
+	bset	d1,d0
+
+	CALLROM	Permit
+
+	IFD	DBSPM
+	DUMPTXT	<Z>
+	ENDC
+
+	CALLROM	Wait			;wait for a new message to be sent
+					;Can have other messages piled up.
+	IFD	DBSPM
+	DUMPTXT	<!>
+	ENDC
+
+	bra	.dosearch
+
+.exit
+	CALLROM	Permit
+	movem.l	(sp)+,d0-d1/a0-a3/a6
+	rts
+
+
+****** SendProjectEditMessage ***********************************************
+*
+*   NAME
+*	SendProjectEditMessage -- This sends the project editor a message
+*
+*   SYNOPSIS
+*	Result = SendProjectEditMessage(ES_Type,Data1,Data2,Data3,Reply)
+*	                                  d0    d1    d2      d3   d4
+*
+*   FUNCTION
+*	This function sends the message defined in EditSwit.i to the project
+*	Editor. THIS IS A FRONT END TO MOST OF THE MESSAGE SENDING CALLS.
+*
+*   INPUTS
+*	ES_Type -  see EditSwit.i
+*	Data1   -  see EditSwit.i
+*	Data2   -  see EditSwit.i
+*	Data3   -  see EditSwit.i
+*
+*	a5->TB
+*
+*   RESULT
+*	Result -  d0 is NULL if project editor port not found.
+*		  You may use condition flags as a test.
+*
+*		  Else, d0->pointer to message used.
+*		  You should check ES_Reply to see what has happened.
+*
+*   BUGS
+*
+*****************************************************************************
+	xdef	SendProjectEditMessage
+SendProjectEditMessage:
+	move.l	a0,-(sp)
+
+	lea	OnlyMessage,a0
+	move.w	d0,ES_Type(a0)
+	movem.l	d1-d3,ES_Data1(a0)
+	move.l	d4,ES_Reply(a0)
+
+	bsr	SendMessage2Editor
+
+	movea.l	(sp)+,a0
+	rts
+
+
+*****************************************************************************
+* ALL PUTMESSAGES ***********************************************************
+*****************************************************************************
+
+****** SendProjectEditRenderMessage *****************************************
+*
+*   NAME
+*	SendProjectEditRenderMessage -- Send a render message to Project
+*	                                editor
+*
+*   SYNOPSIS
+*	message = SendProjectEditRenderMessage()
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*	d0->Message Sent to Project editor. Or NULL if no Editor.
+*
+*   BUGS
+*
+*****************************************************************************
+	xdef	SendProjectEditRenderMessage
+SendProjectEditRenderMessage:
+	DEBUGMSG	DBSPM,<SendProjectEditRenderMessage:>
+
+	movem.l	d1-d3/a0,-(sp)
+
+	move.l	#ES_RENDER_EDIT,d0
+	moveq.l	#TRUE,d1			;open editor windows & render
+	moveq.l	#0,d2
+	GET.w	TB_InterfaceDepth,d2
+	moveq.l	#0,d3
+	bsr	SendProjectEditMessage
+	beq.s	10$				;jump if Editor isn't loaded
+	bset.b	#7,TB_DisplayRenderMode(a5)	;Editor will control top half
+
+10$	movem.l	(sp)+,d1-d3/a0
+	rts
+
+****** SendProjectEditNoRenderMessage *****************************************
+*
+*   NAME
+*	SendProjectEditNoRenderMessage -- Send a render message to Project
+*	                                editor
+*
+*   SYNOPSIS
+*	message = SendProjectEditNoRenderMessage()
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*	d0->Message Sent to Project editor. Or NULL if no Editor.
+*
+*   BUGS
+*
+*****************************************************************************
+	xdef	SendProjectEditNoRenderMessage
+SendProjectEditNoRenderMessage:
+	DEBUGMSG	DBSPM,<SendProjectEditNoRenderMessage:>
+
+	movem.l	d1-d3,-(sp)
+
+	bclr.b	#7,TB_DisplayRenderMode(a5)	;switcher will control top half
+
+	move.l	#ES_RENDER_EDIT,d0
+	moveq.l	#FALSE,d1			;close editor windows
+	moveq.l	#0,d2
+	moveq.l	#0,d3
+	bsr	SendProjectEditMessage
+
+	movem.l	(sp)+,d1-d3
+	rts
+
+****** SendProjectEditQuitMessage *****************************************
+*
+*   NAME
+*	SendProjectEditQuitMessage -- Send a render message to Project
+*	                                editor
+*
+*   SYNOPSIS
+*	message = SendProjectEditQuitMessage()
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*	d0->Message Sent to Project editor. Or NULL if no Editor.
+*   BUGS
+*
+*****************************************************************************
+	xdef	SendProjectEditQuitMessage
+SendProjectEditQuitMessage:
+	DEBUGMSG	DBSPM,<SendProjectEditQuitMessage:>
+	movem.l	d1-d3,-(sp)
+
+	move.l	#ES_QUIT,d0
+	moveq.l	#0,d1			;open windows
+	moveq.l	#0,d2
+	moveq.l	#0,d3
+	bsr	SendProjectEditMessage
+
+	bset.b	#QUIT_BIT,TB_Flags4(a5)
+
+10$	movem.l	(sp)+,d1-d3
+	rts
+
+****** SendProjectEditStartMessage: *****************************************
+*
+*   NAME
+*	SendProjectEditStartMessage -- Send a start message to Project editor
+*
+*   SYNOPSIS
+*	Result = SendProjectEditStartMessage()
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*	d0->Message Sent to Project editor. Or NULL if no Editor.
+*
+*	Data1    - screen
+*	Data2    - Internal croutons
+*	Data3    - Window
+*
+*   BUGS
+*
+*****************************************************************************
+	xdef	SendProjectEditStartMessage
+SendProjectEditStartMessage:
+	DEBUGMSG	DBSPM,<SendProjectEditStartMessage:>
+
+	movem.l	d1-d4/a0,-(sp)
+
+	move.l	#ES_STARTUP,d0
+	move.l	TB_Screen(a5),d1
+
+;;	lea	InteralCroutons,a0
+;;	move.l	a0,d2
+	moveq	#0,d2
+
+	move.l	TB_Window(a5),d3
+	move.l	TB_ToolBoxGrids(a5),d4	;we put project in Reply
+
+	bsr	SendProjectEditMessage
+
+	movem.l	(sp)+,d1-d4/a0
+	rts
+
+****** SendLocateFileMessage ***********************************************
+*
+*   NAME
+*	SendLocateFileMessage -- This sends the project editor a message
+*
+*   SYNOPSIS
+*	Result = SendProjectEditMessage(Type,->name,flags,->textarray,mode)
+*
+*   FUNCTION
+*	This function sends the message defined in EditSwit.i to the project
+*	Editor.
+*
+*   INPUTS
+* 	See abovef
+*	a5->TB
+*
+*   RESULT
+*	Result -  d0 is NULL if project editor port not found.
+*		  You may use condition flags as a test.
+*
+*		  Else, d0->pointer to message used.
+*		  You should check ES_Reply to see what has happened.
+*
+*   BUGS
+*
+*****************************************************************************
+	XDEF	SendLocateFileMessage
+SendLocateFileMessage:
+	DEBUGMSG	DBSPM,<SendLocateFileMessage:>
+
+	move.l	a0,-(sp)
+
+	lea	OnlyMessage,a0
+
+	move.w	#ES_LocateFile,ES_Type(a0)
+	movem.l	d0-d4,ES_Data1(a0)
+	clr.l	ES_Reply(a0)			;if editor is present it will
+						;replace this with a valid
+						;non return code.
+	bsr	SendMessage2Editor
+	movea.l	(sp)+,a0
+	rts
+
+
+*****************************************************************************
+* ALL GETMESSAGES ***********************************************************
+*****************************************************************************
+
+Hand_ApplyTags
+
+* FALL THRU TO DUMMY
+
+****** Hand_DUMMY ***********************************************************
+*
+*   NAME
+*	Hand_DUMMY -- This does nothing
+*
+*   SYNOPSIS
+*	Hand_DUMMY(message)
+*	              d0
+*
+*   FUNCTION
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  - has been set
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_DUMMY
+	DEBUGMSG	DBHD,<Hand_DUMMY:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	rts
+
+
+******* Hand_MoveSoftSprite ************************************************
+*
+*   NAME
+*	Hand_MoveSoftSprite -- moves the Softsprite(mousepointer) to an absolute 
+*						position on the screen.			
+*   SYNOPSIS
+*	Hand_MoveSoftSprite(X, Y)
+*
+*   FUNCTION
+*
+*   INPUTS
+*	a5->TB
+*
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+Hand_MoveSoftSprite:
+	 XLABEL		_MoveSoftSpriteABS
+	movem.l	a0-a6/d0-d7,-(sp)
+	move.l	d0,a1
+	move.l	ES_Data1(a1),d0
+	move.l	ES_Data2(a1),d1
+	CALLTL	MoveSoftSpriteABS
+	movem.l	(sp)+,a0-a6/d0-d7
+	rts
+
+
+
+****** Hand_Hack ***********************************************************
+*
+*   NAME
+*	Hand_Hack -- This does nothing
+*
+*   SYNOPSIS
+*	Hand_Hack(message)
+*	              d0
+*
+*   FUNCTION
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  - has been set
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+
+AudioByte	set	$a2	;audio symbol character
+
+Hand_Hack
+	DEBUGMSG	DBHD,<Hand_Hack:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)	;assume no error
+
+	move.l	TB_FlyerBase(a5),d0
+	beq	666$
+
+	movea.l	ES_Data2(a0),a1	;->Hack Structure
+	move.l	ES_Data1(a0),d0
+
+	cmpi.l	#HACK_TBCopen,d0
+	beq	Hand_TBCopen
+
+	cmpi.l	#HACK_TBCread,d0
+	beq	Hand_TBCread
+
+	cmpi.l	#HACK_TBCwrite,d0
+	beq	Hand_TBCwrite
+
+	cmpi.l	#HACK_TBCclose,d0
+	beq	Hand_TBCclose
+
+	cmpi.l	#HACK_TWEAK,d0
+	beq	Hand_Tweek
+
+666$	rts
+
+*--------------------------------------
+Hand_Tweek:
+	DEBUGMSG	DBHD,<Hand_Tweek:>
+
+	move.l	twhk_Flags(a1),d5
+
+	btst	#HKB_READCALIB,d5
+	beq.s	30$
+	btst	#HKB_PLAY_A,d5
+	bne	.gettwk_play_A
+	btst	#HKB_PLAY_B,d5
+	bne	.gettwk_play_B
+	btst	#HKB_RECORD_A,d5
+	bne	.gettwk_rec_A
+	btst	#HKB_RECORD_B,d5
+	bne	.gettwk_rec_B
+	bra	666$
+
+30$
+	moveq	#0,d3			;(dflt = no save)
+	btst	#HKB_SAVE,d5		;Save to NOVRAM?
+	beq.s	.nosave
+	moveq	#1,d3			;SAVE!
+.nosave
+	btst	#HKB_PLAY_A,d5
+	bne	.puttwk_play_A
+	btst	#HKB_PLAY_B,d5
+	bne	.puttwk_play_B
+	btst	#HKB_RECORD_A,d5
+	bne	.puttwk_rec_A
+	btst	#HKB_RECORD_B,d5
+	bne	.puttwk_rec_B
+	bra	666$
+
+* Play A
+.puttwk_play_A
+	bsr	.ensure_play_mode
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_HPLAYOFFSETA,D1	;item, assume play A
+	move.l	twhk_Position(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_EDGE,D1	;item
+	move.l	twhk_Clock(a1),d2		;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_COURSE,D1	;item
+	move.l	twhk_Coarse(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_FINE,D1	;item
+	move.l	twhk_Fine(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_PEDESTALA,D1	;item
+
+;;	move.l	twhk_Pedestal(a1),d2	;value
+	move.l	#60,d2			;always D2 sync level
+
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	bra	666$
+
+* Play B
+.puttwk_play_B
+	bsr	.ensure_play_mode
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_HPLAYOFFSETB,D1	;item, assume play A
+	move.l	twhk_Position(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_EDGE,D1	;item
+	move.l	twhk_Clock(a1),d2		;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_COURSE,D1	;item
+	move.l	twhk_Coarse(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_FINE,D1	;item
+	move.l	twhk_Fine(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_PEDESTALB,D1	;item
+
+;;	move.l	twhk_Pedestal(a1),d2	;value
+	move.l	#60,d2			;always D2 sync level
+
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	bra	666$
+
+* Record A
+.puttwk_rec_A
+	bsr	.ensure_rec_mode
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_HRECOFFSETA,D1	;item, assume play A
+	move.l	twhk_Position(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+	moveq	#0,d4			;channel A
+	bra	350$
+
+* Record B
+.puttwk_rec_B
+	bsr	.ensure_rec_mode
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_HRECOFFSETB,D1	;item, assume play A
+	move.l	twhk_Position(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+	moveq	#1,d4			;channel B
+
+* same for both Record A or B
+350$	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_EDGE,D1	;item
+	move.l	twhk_Clock(a1),d2		;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_COURSE,D1	;item
+	move.l	twhk_Coarse(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_FINE,D1	;item
+	move.l	twhk_Fine(a1),d2	;value
+;	moveq	#1,d3			;d3 = save switch (set above)
+	XJSR	Flyer_WriteCalib
+
+*------
+	btst	#HKB_TESTREC,d5
+	beq	666$
+
+*-------
+	moveq	#0,d0			;first drive it can find
+	move.l	#1<<FVIB_VIDEOREADY,d1	;that can do video
+	XJSR	Flyer_VolumeName
+	beq	666$
+	movea.l	d0,a1
+
+	CALLTL	DisplayWaitSprite
+	lea	recordphase(pc),a0
+
+510$	move.b	(a1)+,(a0)+
+	bne	510$
+	move.b	#':',-1(a0)
+
+	move.b	#'R',(a0)+
+	move.b	#'e',(a0)+
+	move.b	#'c',(a0)+
+	move.b	#'o',(a0)+
+	move.b	#'r',(a0)+
+	move.b	#'d',(a0)+
+	move.b	#'P',(a0)+
+	move.b	#'h',(a0)+
+	move.b	#'a',(a0)+
+	move.b	#'s',(a0)+
+	move.b	#'e',(a0)+
+	move.b	#0,(a0)+
+
+*-------
+580$	GET.l	TB_DOSBase,a6
+	move.l	#recordphase,d1
+	move.l	d1,a2			;used below
+	XSYS	DeleteFile
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a1
+	move.l	a2,fv_Path(a1)			;->name
+
+	move.b	#RT_STOPPED,ca_ReturnTime(a0)
+	move.b	d4,ca_Channel(a0)		;Record Channel 0.
+	move.b	#CAF_VIDEO,ca_Flags(a0)
+	move.b	#CAPF_STEALOURVIDEO+CAPF_KILLOTHERVIDEO,ca_PermissFlags(a0)
+
+	move.l	#4,ca_VidFieldCount(a0)
+	XJSR	Flyer_Record	;a0->ClipAction
+
+*-------
+	lea	recordphase(pc),a0
+	moveq	#0,d0			;field I
+	XJSR	Flyer_OpenReadField
+	move.l	d0,a0
+
+;	move.l	#120,d0			;#lines
+;	XJSR	Flyer_SkipLines
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a1
+	XJSR	Flyer_ReadLine
+
+	XJSR	Flyer_CloseField
+
+	lea	recordphase(pc),a0
+	moveq	#2,d0			;field III
+	XJSR	Flyer_OpenReadField
+	move.l	d0,a0
+
+;	move.l	#120,d0			;#lines
+;	XJSR	Flyer_SkipLines
+
+	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	XJSR	Flyer_ReadLine
+
+	XJSR	Flyer_CloseField
+
+;;	GET.l	TB_DOSBase,a6
+	move.l	#recordphase,d1
+	XSYS	DeleteFile
+
+*-------
+	CALLTL	CancelCG
+	CALLTL	NoTransFreeze
+
+	moveq	#VTI_IS_VID1,d0
+	moveq	#0,d1		;bank 0
+	CALLTL	Grab1Bank
+
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	move.l	#241,d0			;line start
+	move.l	#1,d1			;# of lines
+	moveq	#0,d2			;bank
+
+	moveq	#10,d3
+	CALLTL	AllInterruptsOff
+600$	CALLTL	SendBytes2ToasterAVEI
+	exg	a0,a1
+	addq.l	#1,d0
+	CALLTL	SendBytes2ToasterAVEI
+	addq.l	#1,d0
+	dbra	d3,600$
+	CALLTL	AllInterruptsOn
+
+	PUT.w	#M_DV0,TB_MainSec
+	CALLTL	CookAndServeMain
+	CALLTL	DisplayNormalSprite
+
+666$	rts
+
+* play mode
+.ensure_play_mode
+	move.l	d3,-(sp)
+
+	tst.w	RecordModeFlag
+	beq	1666$
+	clr.w	RecordModeFlag
+
+	bsr	AbortPlayRec
+
+	XJSR	Flyer_DefaultSelect
+
+	moveq	#0,d0		;no specific board
+	XJSR	Flyer_PlayMode
+
+1666$	move.l	(sp)+,d3
+	rts
+
+* record mode
+.ensure_rec_mode
+	move.l	d3,-(sp)
+
+	tst.w	RecordModeFlag
+	bne	2666$
+	move.w	#1,RecordModeFlag
+
+	bsr	AbortPlayRec
+
+	moveq	#0,d0		;no specific board
+	XJSR	Flyer_RecordMode
+
+	move.l	#FLY_VideoSource_VID1,d0
+	XJSR	Flyer_InputSelect
+
+2666$	move.l	(sp)+,d3
+	rts
+
+*------------------------
+* Get Play A values
+.gettwk_play_A
+	subq.w	#4,sp
+	lea.l	2(sp),a0
+	moveq	#0,d0			;board
+	move.l	#CALIB_HPLAYOFFSETA,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Position(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_EDGE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Clock(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_COURSE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Coarse(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACA_PHASE_FINE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Fine(a1)	;value
+
+;;	moveq	#0,d0			;board
+;;	move.l	#CALIB_PEDESTALA,D1	;item, assume play A
+;;	XJSR	Flyer_ReadCalib
+;;	move.w	(a0),d0
+;;	ext.l	d0
+;;	move.l	d0,twhk_Pedestal(a1)	;value
+
+	addq.w	#4,sp
+	bra	666$
+
+* Get Play B values
+.gettwk_play_B
+	subq.w	#4,sp
+	lea.l	2(sp),a0
+	moveq	#0,d0			;board
+	move.l	#CALIB_HPLAYOFFSETB,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Position(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_EDGE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Clock(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_COURSE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Coarse(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_DACB_PHASE_FINE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Fine(a1)	;value
+
+;;	moveq	#0,d0			;board
+;;	move.l	#CALIB_PEDESTALB,D1	;item, assume play A
+;;	XJSR	Flyer_ReadCalib
+;;	move.w	(a0),d0
+;;	ext.l	d0
+;;	move.l	d0,twhk_Pedestal(a1)	;value
+
+	addq.w	#4,sp
+	bra	666$
+
+* Get Record A values
+.gettwk_rec_A
+	subq.w	#4,sp
+	lea.l	2(sp),a0
+	moveq	#0,d0			;board
+	move.l	#CALIB_HRECOFFSETA,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Position(a1)	;value
+	moveq	#0,d4			;channel A
+	bra	1350$
+
+* Get Record B values
+.gettwk_rec_B
+	subq.w	#4,sp
+	lea.l	2(sp),a0
+	moveq	#0,d0			;board
+	move.l	#CALIB_HRECOFFSETB,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Position(a1)	;value
+	moveq	#0,d4			;channel A
+;;	bra	1350$
+
+
+* same for both Record A or B
+1350$	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_EDGE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Clock(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_COURSE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Coarse(a1)	;value
+
+	moveq	#0,d0			;board
+	move.l	#CALIB_ADC_PHASE_FINE,D1	;item, assume play A
+	XJSR	Flyer_ReadCalib
+	move.w	(a0),d0
+	ext.l	d0
+	move.l	d0,twhk_Fine(a1)	;value
+
+	addq.w	#4,sp
+	bra	666$
+
+recordphase 	dcb.b	32+14,0
+	CNOP	0,4
+
+*--------------------------------------
+* Returns d1 & d2 according to current TB settings
+
+	XDEF	SetupToasterMux
+SetupToasterMux
+	moveq	#1,d1	;Flyer video on Flyer VID3
+	moveq	#1,d2	;Flyer video on Flyer VID4
+
+	btst.b	#FLYER3_BIT,TB_Flags4(a5)
+	bne.s	10$
+	moveq	#0,d1
+
+10$	btst.b	#FLYER4_BIT,TB_Flags4(a5)
+	bne.s	20$
+	moveq	#0,d2
+20$	rts
+
+*--------------------------------------
+* SetupPlayChannel(a0->clipaction, a5->TB)
+*
+* Sets up ToasterMux for the required play channel, if necessary
+
+	XDEF	SetupPlayChannel
+SetupPlayChannel
+	movem.l	d0-d3,-(sp)
+	tst.b	ca_Channel(a0)
+	bne.s	20$
+
+* using VID3
+	btst.b	#FLYER3_BIT,TB_Flags4(a5)
+	bne.s	666$
+	bset.b	#FLYER3_BIT,TB_Flags4(a5)
+	bra.s	30$
+
+* using VID4
+20$	btst.b	#FLYER4_BIT,TB_Flags4(a5)
+	bne.s	666$
+	bset.b	#FLYER4_BIT,TB_Flags4(a5)
+
+30$	bsr.s	SetupToasterMux
+	moveq	#0,d0	;all boards!!
+	moveq	#0,d3	;Standard Toaster PRVW (not CAMcorder)
+	XJSR	Flyer_ToasterMux
+
+666$	movem.l	(sp)+,d0-d3
+	rts
+
+*--------------------------------------
+* a0->ESmessage
+*
+Hand_TBCopen
+	bsr	SetupToasterMux
+	moveq	#0,d0	;all boards!!
+	moveq	#1,d3	;TBCed video on CAMcorder
+	XJSR	Flyer_ToasterMux
+	rts
+
+*--------------------------------------
+* a0->ESmessage
+*
+Hand_TBCclose
+	bsr	SetupToasterMux
+	moveq	#0,d0	;all boards!!
+	moveq	#0,d3	;Standard Toaster PRVW (not CAMcorder)
+	XJSR	Flyer_ToasterMux
+	rts
+
+*--------------------------------------
+* a0->ESmessage, a1->some Hack structure
+*
+Hand_TBCread
+	DEBUGMSG	DBHD,<Hand_TBCread:>
+
+	XLEA	TBCsettings,a0
+	moveq	#0,d0		;only Board 0 *****!!!!!!
+	move.l	#TBCOF_STATUS,d1
+	XJSR	Flyer_TBCcontrol
+
+;;	XLEA	TBCsettings,a0
+	move.w	#TBC_sizeof-1,d0
+10$	move.b	(a0)+,(a1)+
+	dbra	d0,10$
+	rts
+
+*--------------------------------------
+* a0->ESmessage, a1->some Hack structure
+*
+Hand_TBCwrite
+	DEBUGMSG	DBHD,<Hand_TBCwrite: ---------------------->
+
+	XLEA	TBCsettings,a0
+	move.w	#TBC_sizeof-1,d0
+10$	move.b	(a1)+,(a0)+
+	dbra	d0,10$
+
+	XLEA	TBCsettings,a0
+	moveq	#0,d0		;only Board 0 *****!!!!!!
+	move.l	#TBCOF_STATUS!TBCOF_MODES!TBCOF_ADJUST,d1
+
+	IFD	SERDEBUG
+	IFD	DBTBC
+ 	 btst.b	#TOGGLE_BIT,TB_Flags4(a5)
+	 beq	.nodb1
+
+	DUMPBITS.b	<Status    =>,tbc_Status(a0),<\>
+	DUMPBITS.b	<Flags     =>,tbc_Flags(a0),<\>
+	DUMPBITS.b	<DecFlags  =>,tbc_DecFlags(a0),<\>
+	DUMPBITS.b	<EncFlags  =>,tbc_EncFlags(a0),<\>
+	DUMPBITS.b	<Term      =>,tbc_Term(a0),<\>
+	DUMPBITS.b	<KeyerFlags=>,tbc_KeyerFlags(a0),<\>
+	DUMPUDEC.b	<InputSel  =>,tbc_InputSel(a0),<\>
+	DUMPSDEC.b	<Bright    =>,tbc_Bright(a0),<\>
+	DUMPUDEC.b	<Contrast  =>,tbc_Contrast(a0),<\>
+	DUMPUDEC.b	<Sat       =>,tbc_Sat(a0),<\>
+	DUMPSDEC.b	<Hue       =>,tbc_Hue(a0),<\>
+	DUMPHEXI.W	<Phase     =>,tbc_Phase(a0),<\>
+	DUMPHEXI.W	<HorAdj    =>,tbc_HorAdj(a0),<\>
+	DUMPUDEC.b	<Fader     =>,tbc_Fader(a0),<\\>
+.nodb1
+	ENDC
+	ENDC
+
+	bchg.b	#TBCDB_AGC,tbc_DecFlags(a0)	;***!! change sense
+	XJSR	Flyer_TBCcontrol
+	bchg.b	#TBCDB_AGC,tbc_DecFlags(a0)	;***!! restore sense
+	rts
+
+****** Hand_STARTUP ***********************************************************
+*
+*   NAME
+*	Hand_STARTUP -- This recognizes the editor
+*
+*   SYNOPSIS
+*	Hand_STARTUP(message)
+*	              d0
+*
+*   FUNCTION
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  - has been set
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_STARTUP
+	DEBUGMSG	DBHD,<Hand_STARTUP:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+
+	XLEA	NoGrazerFlag,a0
+	tst.b	(a0)
+	beq.s	10$	;jump if already up
+	clr.b	(a0)
+
+	bsr	SendProjectEditStartMessage	;supplies -> project FGs, TB_Screen, TB_Window
+	bsr	SendProjectEditRenderMessage	;display editor
+
+10$	rts
+
+****** Hand_QUIT ***********************************************************
+*
+*   NAME
+*	Hand_QUIT
+*
+*   SYNOPSIS
+*	Hand_QUIT(message)
+*	              d0
+*
+*   FUNCTION
+*	This should never be called.
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_QUIT
+	DEBUGMSG	DBHD,<Hand_QUIT:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)	;no errors on QUIT
+
+	bset.b	#QUIT_BIT,TB_Flags4(a5)
+
+	rts
+
+****** Hand_RENDER_EDIT ***********************************************************
+*
+*   NAME
+*	Hand_RENDER_EDIT
+*
+*   SYNOPSIS
+*	Hand_RENDER_EDIT(message)
+*	              d0
+*
+*   FUNCTION
+*	This should never be called.
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_RENDER_EDIT
+	DEBUGMSG	DBHD,<Hand_RENDER_EDIT:>
+
+	move.l	d0,a0
+	moveq.l	#ES_ERR_GENERIC,d0
+	move.l	d0,ES_Reply(a0)
+	rts
+****** Hand_RENDER_SWIT ***********************************************************
+*
+*   NAME
+*	Hand_RENDER_SWIT
+*
+*   SYNOPSIS
+*	Hand_RENDER_SWIT(message)
+*	              d0
+*
+*   FUNCTION
+*	tells Switcher to (re)render
+*   INPUTS
+*	Data1: TRUE means open windows if not open (and refresh)
+*	       FALSE means close windows (no refresh before close)
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_RENDER_SWIT
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)	;assume success
+
+	DEBUGTXT	DBHD,<Hand_RENDER_SWIT: >
+	DEBUGHEXI.B	DBHD,<OpenFlag=>,ES_Data1+3(a0),<\>
+
+
+	tst.l	ES_Data1(a0)
+	bne	2$
+
+* Close switcher window and don't refresh imagery
+
+
+* Set the Switcher to Simple refresh
+*+	GET.l	TB_SYSBase,a6
+*+	CALLROM	Forbid
+*+	GET.l	TB_Window,a0
+*+	ori.l	#WFLG_SIMPLE_REFRESH,wd_Flags(a0)
+*+	movea.l	wd_RPort(a0),a0
+*+	movea.l	rp_Layer(a0),a0
+*+	andi.w	#~LAYERSMART,lr_Flags(a0)
+*+	ori.w	#LAYERSIMPLE,lr_Flags(a0)
+*+	CALLROM	Permit
+
+	CALLTL	SoftSpriteOff
+	bset.b	#5,TB_DisplayRenderMode(a5)	;Edit controls top overscan borders
+	CALLTL	ClearToastDisplay		;Intuition will Stash empty switcher bottom
+	bclr.b	#5,TB_DisplayRenderMode(a5)	;Switcher controls top overscan borders
+	CALLTL	SoftSpriteOn
+
+	bset.b	#6,TB_DisplayRenderMode(a5)	;editor will control bottom half
+	XLEA	SwitcherArea_,a0
+	or.w	#GFLG_DISABLED,gg_Flags(A0)
+	bra	1$
+
+* Open switcher window (if not open) and refresh bottom half of display
+2$
+
+* Set the Switcher to Smart refresh
+*+	GET.l	TB_SYSBase,a6
+*+	CALLROM	Forbid
+*+	GET.l	TB_Window,a0
+*+	andi.l	#~WFLG_SIMPLE_REFRESH,wd_Flags(a0)
+*+	movea.l	wd_RPort(a0),a0
+*+	movea.l	rp_Layer(a0),a0
+*+	andi.w	#~LAYERSIMPLE,lr_Flags(a0)
+*+	ori.w	#LAYERSMART,lr_Flags(a0)
+*+	CALLROM	Permit
+
+	bclr.b	#6,TB_DisplayRenderMode(a5)	;switcher will control bottom half
+	XLEA	SwitcherArea_,a0
+	and.w	#~GFLG_DISABLED,gg_Flags(A0)
+
+* The following temporary flag prevents the project from also getting erased
+* when going to Switcher Mode.
+* (since the overscan borders normally get erased by ReDoSwitcher)
+	bset.b	#5,TB_DisplayRenderMode(a5)	;Edit controls top overscan borders
+	XJSR	ReDoSwitcher
+	bclr.b	#5,TB_DisplayRenderMode(a5)	;Switcher controls top overscan borders
+
+1$	rts
+
+****** Hand_TagSize ***********************************************************
+*
+*   NAME
+*	Hand_TagSize
+*
+*   SYNOPSIS
+*	Hand_TagSize(message) (FG, TagID)
+*	                d0
+*
+*   FUNCTION
+*	Get Tag size from FGs taglist
+*
+*   INPUTS
+*
+*   RESULT
+*	LONG result. Defaults to zero if Tag item can't be found.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_TagSize
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a0		;crouton
+	PUT.l	ES_Data2(a1),TB_TagID
+
+	DEBUGHEXI.l	DBHD,<Hand_TagSize: tagid=>,TB_TagID(a5),< >
+	CALLTL	FGC_TagInfoCommand
+	GET.l	TB_TagSize,ES_Reply(a1)		;LONG value  (defaults to zero on errors)
+
+	IFD	DBHD
+	GET.l	TB_TagSize,d0
+	DEBUGUDEC.l	DBHD,< TagSize=>,d0,<\>
+	ENDC
+
+	rts
+
+****** Hand_GetValue ***********************************************************
+*
+*   NAME
+*	Hand_GetValue
+*
+*   SYNOPSIS
+*	Hand_GetValue(message)
+*	                d0
+*
+*   FUNCTION
+*	Get value from FGs taglist
+*   INPUTS
+*
+*   RESULT
+*	LONG result. Defaults to zero if Tag item doesn't exist or Error.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_GetValue
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a0		;crouton
+	move.l	ES_Data2(a1),d0		;TagID
+
+	DEBUGHEXI.l	DBHD,<Hand_GetValue: tagid=>,d0,< >
+	CALLTL	GetLongValue
+	DEBUGUDEC.l	DBHD,<result=>,d0,<\>
+
+	move.l	d0,ES_Reply(a1)		;LONG value  (defaults to zero)
+	rts
+
+****** Hand_GetTable ***********************************************************
+*
+*   NAME
+*	Hand_GetTable
+*
+*   SYNOPSIS
+*	Hand_GetTable(message) (FG, ->Table, TableSize, TagID)
+*	                d0
+*
+*   FUNCTION
+*	Get Table from FGs taglist
+*   INPUTS
+*
+*   RESULT
+*	LONG result. Defaults to zero if Tag item doesn't exist or Error.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_GetTable
+	move.l	d0,a2
+
+	movea.l	ES_Data1(a2),a0		;crouton
+	movea.l	ES_Data2(a2),a1		;->data
+	move.l	ES_Data3(a2),d1		;size
+	move.l	ES_Data4(a2),d0		;ID
+
+	IFD	DBHD
+	DUMPHEXI.l	<Hand_GetTable: tagid=>,d0,< >
+	DUMPHEXI.l	<FG=>,a0,< >
+	DUMPUDEC.l	<Size=>,d1,<\>
+	ENDC
+
+	CALLTL	GetStructValue
+
+	DEBUGMEM	DBHD,<Table>,0(a1),d1
+
+	move.l	d0,ES_Reply(a2)		;Error code if any
+
+	DEBUGSDEC.l	DBHD,<Hand_GetTable Reply=>,d0,<\>
+
+	rts
+
+****** Hand_UnSavable ***********************************************************
+*
+*   NAME
+*	Hand_UnSavable
+*
+*   SYNOPSIS
+*	Hand_UnSavable(message)
+*	                d0
+*
+*   FUNCTION
+*	Marks Tag item so it doesn't get saved in the project
+*
+*   INPUTS
+*
+*   RESULT
+*	Error code.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_UnSavable
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a0		;crouton
+	PUT.l	ES_Data2(a2),TB_TagID	;TagID
+
+	DEBUGHEXI.l	DBHD,<Hand_UnSavable: tagid=>,ES_Data2,< >
+
+	CALLTL	FGC_UnSavableCommand
+
+	move.w	TB_ErrFlag(a5),d0
+	ext.l	d0
+	move.l	d0,ES_Reply(a2)		;error code
+	rts
+
+****** Hand_NewFieldCount ***********************************************************
+*
+*   NAME
+*	Hand_NewFieldCount
+*
+*   SYNOPSIS
+*	Hand_NewFieldCount(message)
+*	                d0
+*
+*   FUNCTION
+*	This needs to be called if a Current FXs speed or duration has changed.
+*
+*   INPUTS
+*
+*   RESULT
+*	Error code.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_NewFieldCount
+	DEBUGMSG	DBHD,<Hand_NewFieldCount:>
+
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a0		;crouton
+
+	CALLTL	FGC_FCountCommand
+
+	move.w	TB_ErrFlag(a5),d0
+	ext.l	d0
+	move.l	d0,ES_Reply(a2)		;error code
+	rts
+
+****** Hand_PutValue ***********************************************************
+*
+*   NAME
+*	Hand_PutValue
+*
+*   SYNOPSIS
+*	Hand_PutValue(message)
+*	                d0
+*
+*   FUNCTION
+*	Put value into FGs taglist
+*   INPUTS
+*
+*   RESULT
+*	Error code. Non zero if can't put (will add a new node if necessary)
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_PutValue
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a0		;crouton
+	move.l	ES_Data2(a2),d0		;TagID
+	lea	ES_Data3(a2),a1		;->LONG Data
+
+	moveq.l	#4,d1			;TagSize
+
+	DEBUGHEXI.l	DBHD,<Hand_PutValue: tagid=>,d0,< >
+	DEBUGUDEC.l	DBHD,<value=>,0(a1),<\>
+
+	CALLTL	AddValue2FGtags
+	move.l	d0,ES_Reply(a2)		;error code
+	rts
+
+****** Hand_PutTable ***********************************************************
+*
+*   NAME
+*	Hand_PutTable
+*
+*   SYNOPSIS
+*	Hand_PutTable(message)  (FG, ->Table, TableSize, TagID)
+*	                d0
+*
+*   FUNCTION
+*	Put table into FGs taglist
+*   INPUTS
+*
+*   RESULT
+*	Error code. Non zero if can't put (will add a new node if necessary)
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_PutTable
+	move.l	d0,a2
+	movea.l	ES_Data1(a2),a0		;crouton
+	movea.l	ES_Data2(a2),a1		;->Data
+	move.l	ES_Data3(a2),d1		;TagSize
+	move.l	ES_Data4(a2),d0		;TagID
+
+	DEBUGHEXI.l	DBHD,<Hand_PutTable: tagid=>,d0,< >
+	DEBUGHEXI.l	DBHD,< FG=>,a0,<\>
+	DEBUGMEM	DBHD,<Table>,0(a1),d1
+
+	CALLTL	AddValue2FGtags
+	move.l	d0,ES_Reply(a2)		;error code
+	rts
+
+
+****** CheckForFName  ****************************************
+*
+*   NAME
+*	CheckForFName
+*
+*   SYNOPSIS
+*	Error = CheckForFName(FILENAME) 
+*	        	        A0	
+*
+*   FUNCTION
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+**************************************************************
+CheckForFName
+	movem.l	d0-d3/a0-a6,-(sp)
+	GET.l	TB_DOSBase,a6
+	move.l	#0,(sp)			;until we know otherwise ok
+	move.l	a0,d1
+	XSYS	FilePart
+
+	move.l	d0,a0
+;	DUMPMEM	<FilePart>,(A0),#64
+
+	tst.l	(a0)
+	bne	.ok	
+	move.l	#1,(sp)
+.ok
+
+	movem.l	(sp)+,d0-d3/a0-a6
+	rts
+
+
+****** Hand_FoundFile ***********************************************************
+*
+*   NAME
+*	Hand_FoundFile
+*
+*   SYNOPSIS
+*	Hand_FoundFile(message) (Type,->name,flags,->textarray,mode)
+*	                d0	 Data1   2     3        4        5
+*
+*   FUNCTION
+*	Returns back a file name, from the Grazer filerequester.
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_FoundFile
+
+	move.l	d0,a2			;->Message
+
+	move.l	ES_Data2(a2),d0		;name
+	beq	600$			;Jump if no file name found (= cancel)
+
+	cmpi.l	#'FRAM',ES_Data1(a2)	; is a framestore crouton?
+	bne	600$
+
+	movea.l	d0,a0			;->FileName
+
+;;	DUMPMEM	<FILENAME>,(A0),#64
+;; 040297 DEH, Was a file name really returned?
+	bsr	CheckForFName
+	tst.l	d0		;error if not 0
+	bne	600$
+
+	
+;;	DUMPMEM	<tst.w   ES_Data5(a2)>,ES_Data5(A2),#16
+	tst.l	ES_Data5(a2)		;4 or 1 field save mode
+	beq.s	100$			;default = 4 field
+
+* Assume single Field Framesave
+	moveq	#1,d0
+	XJSR  	ReallyProcessSaveButton	;Whatever code does a 1 field save
+;; 	(d0=returned error)
+	bra.s	600$
+
+* Assume four field Framesave
+100$
+	moveq	#3,d0
+	XJSR	ReallyProcessSaveButton	;To whatever code does a 4 field save  (d0=error)
+;; 	(d0=returned error)
+
+600$	move.l	d0,ES_Reply(a2)		;error code if any
+666$	rts
+
+****** Hand_GETPLIST ***********************************************************
+*
+*   NAME
+*	Hand_GETPLIST -- provide project editor with fastgadget list.
+*
+*   SYNOPSIS
+*	Hand_GETPLIST(message)
+*	                d0
+*
+*   FUNCTION
+*	asks swticher for gadget list
+*   INPUTS
+*
+*   RESULT
+*	Pointer to pointer to First node of list. (Note this is not
+*	a list header structure)
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_GETPLIST
+	DEBUGMSG	DBHD,<Hand_GETPLIST:>
+
+	move.l	d0,a0
+	move.l	TB_ToolBoxGrids(a5),a1
+;;	move.l	(a1),ES_Reply(a0)
+	move.l	a1,ES_Reply(a0)		;pointer to pointer
+	rts
+
+****** Hand_FreeCrouton *****************************************************
+*
+*   NAME
+*	Hand_FreeCrouton -- Free a crouton loaded by ES_LoadCrouton, or
+*	                    project loading.
+*
+*   SYNOPSIS
+*	Hand_FreeCrouton(message)
+*	                d0
+*
+*   FUNCTION
+*	frees crouton in Data1.  You must be sure to unlink this crouton
+*	from the current list before sending this message.
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_FreeCrouton:
+	DEBUGMSG	DBHD,<Hand_FreeCrouton:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	move.l	ES_Data1(a0),a0
+	move.l	TB_EfxFG(a5),d2
+	move.l	a0,a2
+	CALLTL	RemoveTBFG
+	cmp.l	d2,a2
+	bne.s	1$			;if we just removed the selected
+	CALLTL	SelectStdEfx		;effect we must try to select something
+1$	rts
+
+****** Hand_LoadCrouton *****************************************************
+*
+*   NAME
+*	Hand_LoadCrouton -- Load a crouton from a disk file.
+*
+*   SYNOPSIS
+*	Hand_LoadCrouton(message)
+*	                   d0
+*
+*   FUNCTION
+*	Loads a crouton from disk.  This croton may not have default values
+*	set.
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  Pointer to a crouton.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_LoadCrouton:
+	DEBUGMSG	DBHD,<Hand_LoadCrouton:>
+
+	move.l	d0,a2			;message
+	clr.l	ES_Reply(a2)
+	move.l	ES_Data1(a2),a0		;file name
+
+	bclr.b	#GRAZERLOAD_BIT,TB_Flags3(a5)
+	move.l	ES_Data2(a2),d0
+	beq.s	10$
+	bset.b	#GRAZERLOAD_BIT,TB_Flags3(a5)
+
+10$	bsr	LoadDiskCrouton
+	bclr.b	#GRAZERLOAD_BIT,TB_Flags3(a5)
+
+	move.l	d0,ES_Reply(a2)		;zero if failure
+
+;;	DEBUGMSG	DBHD,<ENDOF Hand_LoadCrouton:>
+	rts
+
+*------------------------------------------
+* Returns ->FG
+LoadDiskCrouton	;(A0=filename)
+
+	movem.l	a0-a1,-(sp)
+
+	CALLTL	LoadCroutonFile
+	beq	.skip
+
+;;	DEBUGMSG	DBHD,<LoadCroutonFile is OK>
+
+	movea.l	a0,a1			;->filename
+	movea.l	d0,a0			;->FG
+
+	move.b	#-1,FG_DispFlag(a0)	;don't let switcher display this icon
+	move.w	#2,FG_IndexID(a0)
+
+* stash the original path into the crouton.
+	move.l	#TAGID_OriginalLocation,d0
+	CALLTL	AddString2FGtags
+
+	move.l	a0,d0		;->FG
+.skip	movem.l	(sp)+,a0-a1
+	rts
+
+
+****** Hand_DuplicateCrouton *****************************************************
+*
+*   NAME
+*	Hand_DuplicateCrouton -- Duplicate the current crouton
+*
+*   SYNOPSIS
+*	Hand_DuplicateCrouton(message)
+*	                   d0
+*
+*   FUNCTION
+*	Reloads a crouton from disk, and copies any changes to the new
+*	crouton.
+*
+*   INPUTS
+*	Data1   - pointer to a crouton
+*   RESULT
+*	ES_Reply  -  Pointer to a duplicate crouton.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_DuplicateCrouton:
+	move.l	d0,a2			;message
+
+	clr.l	ES_Reply(a2)
+	move.l	ES_Data1(a2),a0		;crouton
+	movea.l	FGS_FileName(a0),a0
+
+	DEBUGTXT	DBHD,<Hand_DuplicateCrouton: file=>
+	DEBUGSTR	DBHD,(a0)
+	DEBUGMSG	DBHD,<>
+
+	bsr	LoadDiskCrouton
+	move.l	d0,ES_Reply(a2)
+	beq.s	.skip
+
+	move.l	ES_Data1(a2),a0		;source crouton
+	move.l	d0,a1			;clone
+	bsr	CloneCroutonData
+
+	move.l	d0,a0
+	CALLTL	FGC_InterpTagsCommand	;Interpret tags, update FG flags (for symbols)
+
+.skip	rts
+
+*---------------------------------------------
+* a0=source a1=destination
+CloneCroutonData
+	movem.l	d0-d1/a0-a2,-(sp)
+	CALLTL	FGC_SaveTagsCommand	;see if FG has any tags & where
+	movea.l	a1,a0			;->destination
+	GET.l	TB_Tags,d0		;no tags supplied in source
+	beq.s	666$
+
+10$	movea.l	d0,a1	 		;->node
+	lea.l	TLN_SIZEOF(a1),a2 	;->first item in tag list
+	PUT.l	a2,TB_Tags
+
+	CALLTL	FGC_LoadTagsCommand
+
+	move.l	(a1),d0		;->next node in list
+	bne.s	10$		;jump if more lists
+
+666$	movem.l	(sp)+,d0-d1/a0-a2
+	rts
+
+****** Hand_LoadProject *****************************************************
+*
+*   NAME
+*	Hand_LoadProject -- load a project
+*
+*   SYNOPSIS
+*	Hand_LoadProject(message)
+*	                   d0
+*
+*   FUNCTION
+*	loads a project file from disk.
+*
+*   INPUTS
+*	Data1   - list #
+*	Data2   - pointer to a filename
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_LoadProject:
+	move.l	d0,a2
+
+	move.l	#1001,d0
+	move.l	ES_Data1(a2),d1		;list #
+	move.l	ES_Data2(a2),a0		;filename
+
+	DEBUGUDEC.l	DBHD,<Hand_LoadProject: listnum=>,d1,<\>
+	DEBUGTXT	DBHD,<filename=>
+	DEBUGSTR	DBHD,(a0)
+	DEBUGMSG	DBHD,<>
+
+	CALLTL	NewReadProject
+
+	move.l	TB_LastGlobalError(a5),ES_Reply(a2)
+	rts
+
+****** Hand_LoadedSlices *****************************************************
+*
+*   NAME
+*	Hand_LoadedSlices
+*
+*   SYNOPSIS
+*	Hand_LoadedSlices(message)
+*	                   d0
+*
+*   FUNCTION
+*	Returns ULONG mask of what slices are currently loaded.
+*
+*   INPUTS
+* 	None
+*   RESULT
+*	ES_Reply  -  ULONG mask
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_LoadedSlices:
+	DEBUGMSG	DBHD,<Hand_LoadedSlices:>
+
+	move.l	d0,a0
+	XJSR	WhatSlicesLoaded
+	move.l	d0,ES_Reply(a0)
+	rts
+
+****** Hand_SaveProject *****************************************************
+*
+*   NAME
+*	Hand_SaveProject -- save a project
+*
+*   SYNOPSIS
+*	Hand_SaveProject(message)
+*	                   d0
+*
+*   FUNCTION
+*	Saves a project file to disk.
+*
+*   INPUTS
+*	Data1   - list #
+*	Data2   - pointer to a filename or NULL to use current filename.
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*
+****** Hand_NewProject ******
+*
+*   NAME
+*	Hand_NewProject -- creates an empty (default) project
+*
+*   SYNOPSIS
+*	Hand_NewProject(message)
+*	                   d0
+*
+*   FUNCTION
+*	Creates a new project with nothing in it in the Editor and on HD
+*
+*   INPUTS
+*	Data1   - list #
+*	Data2   - pointer to a filename
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+
+Hand_NewProject:
+	DEBUGMSG	DBHD,<Hand_NewProject:>
+
+	move.l	d0,a2
+
+	move.l	ES_Data1(a2),d0		;list #
+	CALLTL	NewReadDefaultProject
+
+	move.l	a2,d0
+;;	bra	Hand_SaveProject
+
+Hand_SaveProject:
+	DEBUGMSG	DBHD,<Hand_SaveProject:>
+
+	move.l	d0,a2
+
+	XLEA	FullProjectName,a0	;last loaded project name (might be DefaultProject)
+	move.l	ES_Data2(a2),d0		;filename
+	beq.s	10$			;Jump if no name supplied
+	move.l	d0,a0			;use supplied name
+
+10$	move.l	#1001,d0
+	move.l	ES_Data1(a2),d1		;list #
+
+	DEBUGUDEC.l	DBHD,<Hand_SaveProject: listnum=>,d1,<\>
+	DEBUGTXT	DBHD,<filename=>
+	DEBUGSTR	DBHD,(a0)
+	DEBUGMSG	DBHD,<>
+
+	CALLTL	NewWriteProject
+
+	move.l	TB_LastGlobalError(a5),ES_Reply(a2)
+
+	rts
+
+****** Hand_ClearProject *****************************************************
+*
+*   NAME
+*	Hand_ClearProject -- removes all croutons from a project
+*
+*   SYNOPSIS
+*	Hand_ClearProject(message)
+*	                   d0
+*
+*   FUNCTION
+*	Creates an empty project in the Editor
+*
+*   INPUTS
+*	Data1   - list #
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_ClearProject:
+	DEBUGMSG	DBHD,<Hand_ClearProject:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+
+	move.l	ES_Data1(a0),d0		;list #
+	CALLTL	NewUnloadToolbox	; remove croutons from this list
+	rts
+
+****** Hand_Select *****************************************************
+*
+*   NAME
+*	Hand_Select -- SelectQ a Crouton
+*
+*   SYNOPSIS
+*	Hand_Select(message)
+*	               d0
+*
+*   FUNCTION
+*	Sends a FGC_SELECT to a fg
+*
+*   INPUTS
+*	Data1   - pointer fastgadget
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Select:
+	DEBUGMSG	DBHD,<Hand_Select:>
+
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a0
+	CALLTL	FGC_SelectCommand
+
+	clr.l	ES_Error(a1)		;to make sure (assume no error)
+	move.w	TB_ErrFlag(a5),d0
+	ext.l	d0
+	move.l	d0,ES_Reply(a1)
+	beq.s	10$
+	move.l	TB_LastError(a5),ES_Error(a1)
+
+10$	rts
+
+****** Hand_FGcommand *****************************************************
+*
+*   NAME
+*	Hand_FGcommand -- Send a FGC command to a Crouton
+*
+*   SYNOPSIS
+*	Hand_FGcommand(message)
+*	               d0
+*
+*   FUNCTION
+*	Sends a FGC_ command to a fg
+*
+*   INPUTS
+*	Data1   - pointer fastgadget
+*	Data2	- FGC command #
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_FGcommand:
+	move.l	d0,a1
+	move.l	ES_Data2(a1),d0	;FGC command
+	move.l	ES_Data1(a1),a0	;->FG
+
+	DEBUGHEXI.l	DBHD,<Hand_FGcommand: FG=>,a0,< >
+	DEBUGUDEC.l	DBHD,<FGCcommand=>,d0,< >
+
+	CALLTL	SendFGC2Crouton
+
+	moveq.l	#0,d0
+	GET.w	TB_ErrFlag,d0
+
+	DEBUGHEXI.l	DBHD,<result=>,d0,<\>
+
+	move.l	d0,ES_Reply(a1)
+
+	rts
+
+****** Hand_Auto *****************************************************
+*
+*   NAME
+*	Hand_Auto -- was _Auto
+*
+*   SYNOPSIS
+*	Hand_Auto(message)
+*	            d0
+*
+*   FUNCTION
+*	Sends a FGC_TOMAIN to a fg
+*
+*   INPUTS
+*	Data1   - pointer fastgadget
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Auto:
+	DEBUGMSG	DBHD,<Hand_Auto:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	move.l	ES_Data1(a0),a0
+	CALLTL	FGC_ToMainCommand
+	rts
+
+
+****** Hand_Take *****************************************************
+*
+*   NAME
+*	Hand_Take -- was _Take
+*
+*   SYNOPSIS
+*	Hand_Take(message)
+*	            d0
+*
+*   FUNCTION
+*	Sends a FGC_Take to a fg
+*
+*   INPUTS
+*	Data1   - pointer fastgadget
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Take:
+	DEBUGMSG	DBHD,<Hand_Take:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	move.l	ES_Data1(a0),a0
+	CALLTL	FGC_TakeCommand
+	rts
+
+
+****** Hand_StartSeq *****************************************************
+*
+*   NAME
+*	Hand_StartSeq -- Indicate start of sequence
+*
+*   SYNOPSIS
+*	Hand_StartSeq(message)
+*	                d0
+*
+*   FUNCTION
+*
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_StartSeq:
+
+	DEBUGMSG	DBHD,<Hand_StartSeq:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+
+***
+*-------------------
+** This is used to determine which bits of the Flyer Field clock correspond
+** to field I of the Toaster.  You should key on WHITE, key keying the
+** 4FieldCount stillstore over Matte (=encoder), with key set to about 85 or greater.
+** Then run this.  Look at it on a Betacam SP deck single framing, or a Waveform monitor.
+** Or you should see only one of the numbers with black under it, the other
+** will have your user interface.  The one that has black = %00 field bits on the
+** flyer
+
+	IFD	TESTFIELD0
+	movem.l	d0-d7/a0-a6,-(sp)
+
+	tst.w	TB_OLaySec(a5)	; HACK
+	beq	777$
+
+	CALLTL	DisableInterrupts
+
+	DEA.l	TB_VTSetUp,a0
+	ELHCLEAR_MATTE	a0
+	CALLTL	SendELH2Toaster
+
+4$	CALLTL	IsRMBdown
+	tst.l	d0
+	bne.s	4$
+
+	XJSR	Flyer_GetFieldClock
+	move.l	d0,d2
+
+5$	XJSR	Flyer_GetFieldClock
+	cmp.l	d0,d2
+	beq.s	5$
+	move.l	d0,d2
+
+	CALLTL	Wait4Top
+
+	move.w	#$8100,_custom+dmacon	;bm dma on
+	andi.w	#%11,d0
+	bne.s	7$
+	move.w	#$100,_custom+dmacon	;bm dma off
+
+7$	CALLTL	IsRMBdown
+	tst.l	d0
+	beq.s	5$
+
+	move.w	#$8100,_custom+dmacon	;bm dma on
+
+	ELHSET_MATTE	a0
+	CALLTL	SendELH2Toaster
+
+	CALLTL	EnableInterrupts
+
+777$	movem.l	(sp)+,d0-d7/a0-a6
+
+	ENDC		;TESTFIELD0
+
+*-------------------
+
+	CALLTL	ImageryOff
+	CALLTL	InstallAVE
+
+* This is done earlier so Head making doesn't glitch the output
+;;	GET.w	TB_MainSec,d0
+;;	andi.w	#M_VIDEO3!M_VIDEO4,d0
+;;	beq.s	20$
+;;	bsr	ForceMainToBlank
+;; This Abort is usually don before Head making!
+;;20$	bsr	AbortPlayRec
+
+	bsr	SyncClocks	;if sequence starts with RT_STARTED, don't
+				;bother to do this again!
+
+666$	bset.b	#4,TB_DisplayRenderMode(a5)
+
+	rts
+
+**********************************************************************
+	XDEF	SyncClocks
+SyncClocks
+	movem.l	d0-d1/a0,-(sp)
+
+* sync up Flyer & the Switchers clocks
+	tst.l	TB_FlyerBase(a5)
+	beq	666$
+
+	CALLTL	DisableInterrupts
+
+	XJSR	Flyer_GetFieldClock
+	move.l	d0,d1
+
+10$	XJSR	Flyer_GetFieldClock
+	cmp.l	d0,d1
+	beq.s	10$
+
+* Usually about 40% down field. The current count applies to this field.
+
+	lea	_custom,a0
+20$ 	move.b	vhposr(a0),d1
+    	cmpi.b	#30,d1
+    	bcs.s	20$	;jump if too near field start (to be safe before setting MasterTime)
+
+;;	subq.l	#1,d0			;compensate because GetFieldClock changes 40% down the field
+
+	PUT.l	d0,TB_MasterTime
+
+***!!! Only a hack to see if the MasterClock is counting accurately.
+	XREF	FieldBit
+	clr.w	FieldBit
+
+	move.w	#INTF_VERTB,_custom+intreq	;clear any stacked up vertical interrupts
+
+	CALLTL	EnableInterrupts
+
+666$	movem.l	(sp)+,d0-d1/a0
+	rts
+
+****** Hand_Stop *****************************************************
+*
+*   NAME
+*	Hand_Stop -- Indicate end of sequence, playing or recording
+*
+*   SYNOPSIS
+*	Hand_Stop(message)
+*	               d0
+*
+*   FUNCTION
+*
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Stop:
+	DEBUGMSG	DBHD,<Hand_Stop:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+
+	bsr	AbortPlayRec
+
+	btst.b	#4,TB_DisplayRenderMode(a5)
+	beq	666$			;jump if not sequencing
+
+*-------------
+	IFD	DBCLOCK
+	CALLTL	AllInterruptsOff
+
+	XJSR	Flyer_GetFieldClock
+	move.l	d0,d2
+
+5$	XJSR	Flyer_GetFieldClock
+	cmp.l	d0,d2
+	beq.s	5$
+
+;	subq.l	#1,d0
+	sub.l	TB_MasterTime(a5),d0
+	beq	6$
+
+	DUMPMSG		<>
+	DUMPMSG		<ERROR ERROR ERROR ERROR ERROR ERROR ****!!!!!!!>
+	DUMPMSG		<Flyer & Switcher Clocks not Syncronized!!!!>
+;;	DUMPHEXI.L	<    FlyerTime-MasterTime = >,d0,<\>
+	DUMPHEXI.L	<    FlyerTime-1 >,d2,<\>
+
+
+6$
+	DUMPHEXI.L	<    FlyerTime-MasterTime = >,d0,<\>
+	
+
+	CALLTL	AllInterruptsOn
+	ENDC
+*-------------
+
+	bclr.b	#4,TB_DisplayRenderMode(a5)
+	PUT.l	#-1,TB_SequencePosition
+	PUT.l	#-1,TB_FieldCounter
+
+	IFD	FORCE2MATTE
+	GET.w	TB_MainSec,d0
+	andi.w	#M_ENCODER,d0
+	bne.s	30$
+	move.w	StashBKG,d0	;only restore original if not on Matte
+	beq.s	30$
+	CALLTL	SetMatteColor
+	ENDC
+
+30$	CALLTL	InstallAVE
+	CALLTL	KillAlphaKey
+	CALLTL	ImageryOn
+	CALLTL	ReDoDisplay
+	CALLTL	InstallAVEI
+
+666$	rts
+
+****** Hand_Main2Blank *****************************************************
+*
+*   NAME
+*	Hand_Main2Blank -- Indicate end of sequence
+*
+*   SYNOPSIS
+*	Hand_Main2Blank(message)
+*	               d0
+*
+*   FUNCTION
+*	Forces Main to Matte Black if it was on a Flyer drive.
+*  	This should be called if the Flyer needs to copy flyer data
+*       to/from a Flyer drive, because that can glitch the Flyer output.
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+
+	IFD	FORCE2MATTE
+Hand_Main2Blank:
+	DEBUGMSG	DBHD,<Hand_Main2Blank:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+
+	clr.w	StashBKG		;assume Matte already black (or not used)
+
+	GET.w	TB_MainSec,d0
+	andi.w	#M_VIDEO3!M_VIDEO4,d0
+	beq.s	666$
+
+	GET.w	TB_ToastBGC,StashBKG	;if zero don't need to restore
+	bsr	ForceMainToBlank
+666$	rts
+	ENDC
+
+****** Hand_GUImode *****************************************************
+*
+*   NAME
+*	Hand_GUImode -- Supply the switcher with the current display mode
+*
+*   SYNOPSIS
+*	Hand_GUImode(message)
+*	               d0
+*
+*   FUNCTION
+*	THIS IS AN OLD COMMAND.  THE LATEST THINKING IS THAT THE SWITCHER
+*	ONLY NEEDS TO BE CONCERNED WITH TWO MODES: EDITOR & SWITCHER.
+*	THESE ARE DIRECTLY RELATED TO TB_DisplayRenderMode BIT 6, SO
+*	TB_GUImode ISN'T CURRENTLY BEING USED.
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_GUImode:
+	DEBUGMSG	DBHD,<Hand_GUImode:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	move.l	ES_Data1(a0),d0
+	PUT.w	d0,TB_GUImode
+	rts
+
+****** Hand_SelectDefault *****************************************************
+*
+*   NAME
+*	Hand_SelectDefault -- Select internal default effect (fade)
+*
+*   SYNOPSIS
+*	Hand_SelectDefault(message)
+*	               	     d0
+*
+*   FUNCTION
+*
+*
+*   INPUTS
+*
+*   RESULT
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_SelectDefault:
+	DEBUGMSG	DBHD,<Hand_SelectDefault:>
+
+	move.l	d0,a0
+	clr.l	ES_Reply(a0)
+	CALLTL	SelectStdEfx	;internal fade
+	rts
+
+*****************************************************
+	XDEF	ForceMainToBlank
+ForceMainToBlank
+* Set Matte to black
+	move.l	d0,-(sp)
+
+	GET.w	TB_MainSec,d0
+	andi.w	#M_ENCODER,d0
+	bne.s	666$			;avoid if already on Matte
+
+	moveq	#0,d0			;black
+	SET_MATT	d0		; Change toastbase to new matte
+	TEST_MATT_LOCK
+	bne.s	100$
+	CALLTL	SetMatteColor
+	GET.l	TB_EfxFG,a0
+	CALLTL	FGC_BGCommand
+
+* Display Matte
+100$	PUT.w	#M_ENCODER,TB_MainSec
+	CALLTL	CookAndServeMain
+666$	move.l	(sp)+,d0
+	rts
+
+
+
+
+*****************************************************
+	IFD	CRAP
+
+	XDEF	ForcePrvwToBlank
+ForcePrvwToBlank
+	PUT.w	#M_ENCODER,TB_PrvwSec
+	CALLTL	CookAndServePrvw
+	rts
+	ENDC	;CRAP
+
+
+****** Hand_Record *****************************************************
+*
+*   NAME
+*	Hand_Record
+*
+*   SYNOPSIS
+*	Hand_Record(message)
+*	               d0
+*
+*   FUNCTION
+*	Records a Flyer Clip
+*
+*   INPUTS
+*  	(->name, fields, ->StartFunct, ->StopFunct, Flags)
+*	ES_Data1 ES_Data2   ES_Data3     ES_Data4   ES_Data5
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Record:
+	DEBUGMSG	DBHD,<Hand_Record:>
+
+	move.l	d0,a2
+	move.l	TB_FlyerBase(a5),d0
+	beq	666$
+
+	bsr	AbortPlayRec
+
+	XLEA	MyClipAction,a0
+
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a1
+	move.l	ES_Data1(a2),fv_Path(a1)	;->name
+
+	move.l	ES_Data5(a2),d1			;Flags
+
+;;???	move.b	#RT_STARTED,ca_ReturnTime(a0)
+	move.b	#RT_IMMED,ca_ReturnTime(a0)
+
+	move.b	#0,ca_Channel(a0)	;Always using Channel 0 for record!!!
+
+	move.w	#0,d0			;assume nothing to record
+	tst.w	RecordVideo
+	beq.s	10$
+	move.b	#CAF_VIDEO,d0
+10$	tst.b	MyRecordAudioGain1
+	beq.s	20$
+	ori.b	#CAF_AUDIOL,d0
+20$	tst.b	MyRecordAudioGain2
+	beq.s	30$
+	ori.b	#CAF_AUDIOR,d0
+30$	btst	#FLYB_APPEND,d1
+	beq.s	40$
+	ori.b	#CAF_APPEND,d0
+40$	move.b	d0,ca_Flags(a0)
+	move.b	#CAPF_STEALOURVIDEO+CAPF_KILLOTHERVIDEO,ca_PermissFlags(a0)
+
+**!! Need flags for Record Serial port1 or port2
+
+** This isn't currently supported on record
+** Use the Hand_RecordGain call
+;;	move.b	MyRecordAudioGain1,ca_VolSust1+1(a0)
+;;	move.b	MyRecordAudioGain2,ca_VolSust2+1(a0)
+
+	move.l	ES_Data2(a2),ca_VidFieldCount(a0)
+	move.l	ES_Data2(a2),ca_AudFieldCount(a0)
+
+	CALLTL	DisplayWaitSprite
+
+	move.l	ES_Data3(a2),d0
+	beq.s	100$
+	movem.l	a0/a2/a5,-(sp)
+	movea.l	d0,a0
+	jsr	(a0)		;Wait for Record
+	movem.l	(sp)+,a0/a2/a5
+
+100$	DEBUGCA	DBCA,<Flyer_Record CA------------------->,0(a0)
+
+	XJSR	Flyer_Record	;a0->ClipAction
+
+	bne.s	333$		;exit with error
+
+	move.l	ES_Data4(a2),d0
+	beq.s	200$
+	movem.l	a2/a5,-(sp)
+	movea.l	d0,a0
+	jsr	(a0)		;Wait for Abort
+	movem.l	(sp)+,a2/a5
+	bsr	AbortPlayRec
+
+200$	moveq	#0,d0		;No errors
+333$	CALLTL	DisplayNormalSprite
+666$	move.l	d0,ES_Reply(a2)
+	rts
+
+
+
+****** Hand_RecordAppend *****************************************************
+*
+*   NAME
+*	Hand_RecordAppend
+*
+*   SYNOPSIS
+*	Hand_RecordAppend(message)
+*	               d0
+*
+*   FUNCTION
+*	Records fields onto an existing Flyer Clip
+*
+*   INPUTS
+*  	(->name, fields,)
+*	ES_Data1 ES_Data2
+*
+*   RESULT
+*	ES_Reply  -  error code 0 if ok
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_RecordAppend:
+	DEBUGMSG	DBHD,<Hand_RecordAppend:>
+
+	move.l	d0,a2
+	move.l	TB_FlyerBase(a5),d0
+	beq	666$
+
+	bsr	AbortPlayRec
+
+	XLEA	MyClipAction,a0
+
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a1
+	move.l	ES_Data1(a2),fv_Path(a1)	;->name
+
+	move.b	#RT_STOPPED,ca_ReturnTime(a0)	;Is a synchronous call
+
+	move.b	#0,ca_Channel(a0)	;Always using Channel 0 for record!!!
+
+	move.w	#0,d0			;assume nothing to record
+	tst.w	RecordVideo
+	beq.s	10$
+	move.b	#CAF_VIDEO,d0
+10$	tst.b	MyRecordAudioGain1
+	beq.s	20$
+	ori.b	#CAF_AUDIOL,d0
+20$	tst.b	MyRecordAudioGain2
+	beq.s	30$
+	ori.b	#CAF_AUDIOR,d0
+30$	move.b	d0,ca_Flags(a0)
+	move.b	#CAPF_STEALOURVIDEO+CAPF_KILLOTHERVIDEO,ca_PermissFlags(a0)
+
+	move.l	ES_Data2(a2),ca_VidFieldCount(a0)
+	move.l	ES_Data2(a2),ca_AudFieldCount(a0)
+
+100$	DEBUGCA	DBCA,<Flyer_RecordAppend CA------------------->,0(a0)
+
+	XJSR	Flyer_AppendFields	;a0->ClipAction
+
+	bne.s	666$		;exit with error
+
+200$	moveq	#0,d0		;No errors
+666$	move.l	d0,ES_Reply(a2)
+	rts
+
+
+
+
+****** Hand_Jog *****************************************************
+*
+*   NAME
+*	Hand_Jog
+*
+*   SYNOPSIS
+*	Hand_Jog(message)
+*	           d0
+*
+*   FUNCTION
+*	Jumps to a particular clip field
+*
+*   INPUTS
+*	Data1   - rendercallback
+*
+*   RESULT
+*	ES_Reply  -  resulting block #	(0 if failure)
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+JOGMAXDE	 set	60			;1 sec
+JOGNOACC	 set	(JOGMAXDE+(1<<10))	;approx 18 sec
+JOGMAXACC	 set	(JOGNOACC+(1<<15))	;approx 9 min
+
+Hand_Jog:
+	DEBUGMSG	DBHD,<Hand_Jog:>
+
+	bsr	InitJogShuttle
+
+	move.l	RCB_Max(a3),d1
+
+;;	DUMPUDEC.l <Jog Max=>,d1,< >
+;;	DUMPUDEC.l <Min=>,RCB_Min(a3),<\>
+
+	sub.l	RCB_Min(a3),d1		;assumes Min <= Max
+
+* Scale jog amount because DoMouseXY can't handle >= 32K of movement
+	moveq	#0,d3
+10$	cmp.l	#$7FFE,d1
+	bls	20$			;jump if < 32K fields of Jog
+	addq.w	#1,d3
+	lsr.l	#1,d1
+	bra.s	10$
+
+*---------------------
+
+* Scale Acceleration/deacceleration for clip size
+20$	moveq	#-1,d2		;assume max deaccel
+	cmpi.w	#JOGMAXDE,d1
+	bls.s	100$		;jump if <= JOGMAXDE, use max deaccel
+
+	cmpi.w	#JOGNOACC,d1
+	bhi.s	50$		;jump if > JOGNOACC, use some accel
+
+* Need	some deaccel
+	move.w	d1,d2
+	subi.w	#JOGMAXDE,d2
+	lsl.w	#5,d2		;* 32K/(1<<10)
+	neg.w	d2		;-32 to -30K
+	bra.s	100$
+
+* Need acceleration
+50$	move.w	#$7fff,d2		;assume max accel
+	cmpi.w	#JOGMAXACC,d1
+	bcc.s	100$			;jump if >= JOGMAXACC
+
+* Need some acceleration
+	move.w	d1,d2
+	subi.w	#JOGNOACC,d2
+;;	lsl.w	#0,d2		;* 32K/(1<<15)
+
+*--------------------
+100$
+	addq.w	#1,d1			;can't quite reach the limit.
+
+;;	DUMPUDEC.w <X Max=>,d1,< >
+	swap	d1
+	clr.w	d1			;no Y
+
+	move.l	RCB_Frame(a3),d0	;assumes Min <= Frame <= Max
+;;	DUMPUDEC.l <Frame=>,d0,<\>
+	sub.l	RCB_Min(a3),d0
+	lsr.l	d3,d0			;scale it down
+
+;;	DUMPUDEC.w <Initial X scaled=>,d0,<\>
+
+	swap	d0
+	clr.w	d0			;no Y
+	lea	renderjog(pc),a0
+
+;	DUMPUDEC.w <*** Accel=>,d2,<***\>
+
+*   a0->render code
+*  a1->abort function
+*  a2->ESmessage
+*  a3->RCBstruct
+*  a4->RenderCall
+*   d0=initialXY
+*   d1=limitsXY
+*   d2=accel
+*   d3=scaler
+
+	CALLTL	SoftSpriteOff
+	CALLTL	DoMouseXY
+	bsr	FinishJogShuttle
+	CALLTL	SoftSpriteOn
+
+666$	rts
+
+*-------------------------------
+* d0.w=frame-min, d3=scaler, a3->RCB, a4=render function
+renderjog
+	clr.w	d0			;forget Y
+	swap	d0
+
+;	DUMPUDEC.l <Xjog=>,d0,< >
+
+	lsl.l	d3,d0			;scale it up
+
+;;	DUMPUDEC.l <Xjog=>,d0,< >
+
+	add.l	RCB_Min(a3),d0
+
+;;	DUMPUDEC.l <scaled/offset=>,d0,< >
+
+***!!!! Hacked to avoid non-color frame calls (only Field I accepted)
+	andi.l	#~%11,d0
+
+;;	DUMPUDEC.l <rounded=>,d0,<\>
+
+	move.l	d0,RCB_Frame(a3)
+
+	XLEA	MyClipAction,a0
+
+	move.b	ca_Flags(a0),d1
+	btst	#CAB_VIDEO,d1
+	beq.s	10$
+	move.l	d0,ca_VidStartField(a0)
+
+10$	andi.b	#CAF_AUDIOL!CAF_AUDIOR,d1
+	beq.s	20$
+	move.l	d0,ca_AudStartField(a0)
+
+20$	XJSR	Flyer_DoFindField
+
+	movea.l	a3,a0
+	jsr	(a4)
+
+	XLEA	MyClipAction,a0
+	XJMP	Flyer_WaitAction
+
+*-------------------------------
+wait4rmbup
+	CALLTL	IsRMBdown
+	bra	checkabort
+
+wait4lmbup
+	CALLTL	IsLMBdown
+
+checkabort
+	tst.l	d0
+	beq.s	666$		;jump if abort
+	moveq	#0,d0
+	rts
+
+666$
+;;	DUMPMSG	<ABORTED ABORTED ABORTED>
+
+* Turn off Audio
+	XLEA	MyClipAction,a0
+	tst.l	ca_VolSust1(a0)	;assumes VolSust2 always follows VolSust1 !!!
+	beq.s	555$
+	clr.l	ca_VolSust1(a0)
+
+	XJSR	Flyer_DoFindField
+	XJSR	Flyer_WaitAction
+
+555$	moveq	#1,d0
+	rts
+
+*----------------
+* On entry d0->ESmessage
+*
+* returns
+*  a1->abort function
+*  a2->ESmessage
+*  a3->RCBstruct
+*  a4->RenderCall
+*
+InitJogShuttle
+	movea.l	d0,a2		;->ESMessage
+	movea.l	ES_Data1(a2),a3	;->RenderCallBack
+
+	GET.l	TB_Screen,a4
+	move.w	sc_MouseX(a4),RCB_MouseX(a3)	; to return to when done with TBar
+	move.w	sc_MouseY(a4),RCB_MouseY(a3)
+
+	movea.l	RCB_Function(a3),a4		;render function
+
+	lea	wait4lmbup(pc),a1		;assume LBM is down
+	CALLTL	IsLMBdown
+	tst.l	d0
+	bne.s	100$
+	lea	wait4rmbup(pc),a1		;assume RBM is down
+
+100$	movem.l	a0-a1,-(sp)
+	movea.l	RCB_FG(a3),a0
+	XLEA	MyClipAction,a1
+	move.b	#RT_IMMED,ca_ReturnTime(a1)
+	bsr	StuffCAparams2		;Need to stuff vid start/stop
+	movem.l	(sp)+,a0-a1		;& Aud start/stop so can change as jog
+	rts
+
+*-------------------------------
+* On entry, make sure interrupts are on here
+*  a2->ESmessage
+*  a3->RCBstruct
+*
+* Nothing returned
+
+FinishJogShuttle
+	move.w	RCB_MouseX(a3),d0	; to return to when done with TBar
+	move.w	RCB_MouseY(a3),d1
+	CALLTL	MoveSoftSpriteABS	; reposition the SoftSprite
+
+	move.l	RCB_Frame(a3),d0
+***!!!! Hacked to avoid non-color frame calls (only Field I accepted)
+	andi.l	#~%11,d0
+	move.l	d0,RCB_Frame(a3)
+
+	move.l	d0,ES_Reply(a2)	;final position
+	rts
+
+*********************************************************
+
+*----------------------------
+ STRUCTURE	ShuttleTBL,0
+
+* FieldsPerFrame is never zero (use as forward table marker)
+	UWORD STBL_FieldsPerFrame  ;1=field, 2=2 field frame, 4=color frame, (NEVER 0)
+
+	WORD  STBL_NormalStep
+	UWORD STBL_FramesPerSkip   	; -1 !!!!
+	WORD  STBL_SkipStep
+	UWORD STBL_SkipsPerSpeedChange	; -1 !!!!
+
+	WORD   STBL_VelocityNumerator
+	UWORD  STBL_VelocityDenominator
+
+	WORD  STBL_DeltaXCenter
+
+* DeltaX is never zero (use as reverse table marker)
+	WORD  STBL_DeltaXMax
+
+ LABEL	 STBL_SIZEOF
+*----------------------------
+
+SHUTTLELIMIT	EQU 30	;How many mouse clicks before goes into Shuttle mode
+SHUTTLEWIDTH 	EQU 500	;zero is at SHUTTLEWIDTH/2
+
+;;NUMSPEEDS 	EQU 23	;zero counts as 2 speeds
+NUMSPEEDS	EQU 43
+
+	dc.w	0	;reverse table marker
+
+* One STRUCT ShuttleTBL for each speed.
+
+ShuttleTable:
+
+	dc.w	1,-1,0,-62,31,-63,1,SHUTTLEWIDTH*1/(NUMSPEEDS*2),SHUTTLEWIDTH*1/NUMSPEEDS	;-63
+	dc.w	1,-1,0,-30,31,-31,1,SHUTTLEWIDTH*3/(NUMSPEEDS*2),SHUTTLEWIDTH*2/NUMSPEEDS	;-31
+	dc.w	1,-1,0,-14,31,-15,1,SHUTTLEWIDTH*5/(NUMSPEEDS*2),SHUTTLEWIDTH*3/NUMSPEEDS	;-15
+	dc.w	1,-1,0,-6,31,-7,1,SHUTTLEWIDTH*7/(NUMSPEEDS*2),SHUTTLEWIDTH*4/NUMSPEEDS	;-7
+	dc.w	1,-1,0,-2,31,-3,1,SHUTTLEWIDTH*9/(NUMSPEEDS*2),SHUTTLEWIDTH*5/NUMSPEEDS	;-3
+	dc.w	4,-4,0,-4,7,-2,1,SHUTTLEWIDTH*11/(NUMSPEEDS*2),SHUTTLEWIDTH*6/NUMSPEEDS	;-2
+
+ShuttleREW:
+	dc.w	2,0,0,-2,15,-1,1,SHUTTLEWIDTH*24/(NUMSPEEDS*2),SHUTTLEWIDTH*18/NUMSPEEDS	;-1
+
+;;	dc.w	4,0,1,-4,3,-1,2,SHUTTLEWIDTH*15/(NUMSPEEDS*2),SHUTTLEWIDTH*8/NUMSPEEDS	;-1/2
+;;	dc.w	4,0,3,-4,1,-1,4,SHUTTLEWIDTH*17/(NUMSPEEDS*2),SHUTTLEWIDTH*9/NUMSPEEDS	;-1/4
+;;	dc.w	4,0,7,-4,0,-1,8,SHUTTLEWIDTH*19/(NUMSPEEDS*2),SHUTTLEWIDTH*10/NUMSPEEDS	;-1/8
+
+* Velocity = (NormalStep+(SkipStep/(FramesPerSkip+1)))/FieldsPerFrame
+*
+* #fields/outputchange=FieldsPerFrame*(FramesPerSkip+1)
+* #fields/speedchange=FieldsPerFrame*(FramesPerSkip+1)*(SkipsPerSpeedChange+1)
+* a*(c+1)*(e+1)
+*
+*               +---------- FieldsPerFrame = FrameSize, how often updated
+*               | +-------- NormalStep     = equals FrameSize, or 0 if <= 1X
+*               | | +------ FramesPerSkip+1 = # of Frames before a Skip
+*               | | | +---- SkipStep        = How far to skip (added to normal step)
+*               | | | | +-- SkipsPerSpeedChange+1 = # of skips before change
+*               | | | | |
+*               a,b,c,d,e
+*               ---------
+
+ShuttleStop:
+	dc.w	4,0,0,0,0,0,1,SHUTTLEWIDTH*42/(NUMSPEEDS*2),SHUTTLEWIDTH*24/NUMSPEEDS		;4 field freeze = 0x
+
+;;	dc.w	4,0,7,4,0,1,8,SHUTTLEWIDTH*25/(NUMSPEEDS*2),SHUTTLEWIDTH*13/NUMSPEEDS		;1/8  = (0+(4/8))/4
+;;	dc.w	4,0,3,4,1,1,4,SHUTTLEWIDTH*27/(NUMSPEEDS*2),SHUTTLEWIDTH*14/NUMSPEEDS		;1/4  = (0+(4/4))/4
+;;	dc.w	4,0,1,4,3,1,2,SHUTTLEWIDTH*29/(NUMSPEEDS*2),SHUTTLEWIDTH*15/NUMSPEEDS		;1/2  = (0+(4/2))/4
+
+ShuttleFF:
+	dc.w	4,0,0,4,7,1,1,SHUTTLEWIDTH*60/(NUMSPEEDS*2),SHUTTLEWIDTH*36/NUMSPEEDS		;1    = (0+(4/1))/4
+
+NUMSLOW EQU	36
+	dc.w	4,4,0,4,7,2,1,SHUTTLEWIDTH*(1*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(1+NUMSLOW)/NUMSPEEDS		;2    = (4+(4/1))/4
+	dc.w	2,2,0,4,15,3,1,SHUTTLEWIDTH*(2*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(2+NUMSLOW)/NUMSPEEDS	;3    = (2+(4/1))/2
+	dc.w	1,1,0,4,31,5,1,SHUTTLEWIDTH*(3*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(3+NUMSLOW)/NUMSPEEDS	;5    = (1+(4/1))/1
+	dc.w	1,1,0,8,31,9,1,SHUTTLEWIDTH*(4*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(4+NUMSLOW)/NUMSPEEDS	;9    = (1+(8/1))/1
+	dc.w	1,1,0,16,31,17,1,SHUTTLEWIDTH*(5*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(5+NUMSLOW)/NUMSPEEDS	;17   = (1+(16/1))/1
+	dc.w	1,1,0,32,31,33,1,SHUTTLEWIDTH*(6*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(6+NUMSLOW)/NUMSPEEDS	;33   = (1+(32/1))/1
+	dc.w	1,1,0,64,31,65,1,SHUTTLEWIDTH*(7*2+2*NUMSLOW-1)/(NUMSPEEDS*2),SHUTTLEWIDTH*(7+NUMSLOW)/NUMSPEEDS	;65   = (1+(64/1))/1
+
+	dc.w	0	;forward table marker
+
+	CNOP	0,4
+
+****** Hand_Shuttle *****************************************************
+*
+*   NAME
+*	Hand_Shuttle
+*
+*   SYNOPSIS
+*	Hand_Shuttle(message)
+*	               d0
+*
+*   FUNCTION
+*	Moves thru a clip at various rates
+*
+*   INPUTS
+*	Data1   - rendercallback
+*
+*   RESULT
+*	ES_Reply  -  Final field
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+
+FIXEDSPEED	set	1	;if defined FF/REW only at 1x or -1x
+;;ALLOWFFREW	set	1	;FF/REW allowed before shuttle. Must move SHUTTLELIMIT first.
+
+Hand_Shuttle:
+	DEBUGMSG	DBHD,<Hand_Shuttle:>
+
+	bsr	InitJogShuttle
+
+*  a1->abort function
+*  a2->ESmessage
+*  a3->RCBstruct
+*  a4->RenderCall
+
+	lea	ShuttleFF(pc),a6	;assume FF
+	tst.b	RCB_Flags(a3)
+	bpl.s	10$
+	lea	ShuttleREW(pc),a6
+
+*d0/d1 will be used by DeltaXMouse
+* a6->current location of Shuttle data
+
+10$	moveq	#0,d2			;accum mouse X
+	move.l	RCB_Frame(a3),d3	;current frame counter
+
+	CALLTL	SoftSpriteOff
+
+	IFD	ALLOWFFREW
+	CALLTL	DeltaXMouse	;d1=initial mouse X
+	ENDC
+
+**!!! TURN OFF MOST INTERRUPTS!!!!
+
+20$	move.w	STBL_SkipsPerSpeedChange(a6),d4	;step counter
+
+30$	move.w	STBL_FramesPerSkip(a6),d5
+
+	IFD	ALLOWFFREW
+*---------
+* Crop to legal frame numbers
+40$	cmp.l	RCB_Min(a3),d3
+	bge.s	42$
+	move.l	RCB_Min(a3),d3
+	bra.s	47$
+
+42$	cmp.l	RCB_Max(a3),d3
+	ble.s	48$
+	move.l	RCB_Max(a3),d3
+47$	lea	ShuttleStop(pc),a6	;force it to stopped if end reached
+
+* This makes sure I'm asking for the correct type of frame
+48$	move.w	STBL_FieldsPerFrame(a6),d0
+	subq.w	#1,d0		;1,2,4 -> 0,1,3
+	not.w	d0		;-> %..1111, %..1110, %..1100
+	and.w	d0,d3		;round down
+	move.l	d3,RCB_Frame(a3)
+
+*---------
+***!!!! Hacked to avoid non-color frame calls (only Field I accepted)
+	move.w	d3,d0
+	andi.w	#3,d0
+	bne.s	70$
+
+	XLEA	MyClipAction,a0
+
+	move.b	ca_Flags(a0),d7
+	btst	#CAB_VIDEO,d7
+	beq.s	72$
+	move.l	d3,ca_VidStartField(a0)
+
+72$	andi.b	#CAF_AUDIOL!CAF_AUDIOR,d7
+	beq.s	73$
+	move.l	d3,ca_AudStartField(a0)
+
+73$	XJSR	Flyer_DoFindField	;will indicate 1,2 or 4 fields
+
+	movea.l	a3,a0
+	movem.l	d1-d7/a1-a6,-(sp)
+	jsr	(a4)
+	movem.l	(sp)+,d1-d7/a1-a6
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_WaitAction	;wait until 1, 2 or 4 fields starts
+
+70$	jsr	(a1)
+	bne	ShuttleAbort	;abort
+
+*---------
+	CALLTL	DeltaXMouse	;d0 = delta
+	add.w	d0,d2		;accum
+
+	cmpi.w	#-SHUTTLELIMIT,d2
+	ble	DoShuttle	;jump if reached lowest shuttle limit
+	cmpi.w	#SHUTTLELIMIT,d2
+	bge	DoShuttle	;jump if reached highest shuttle limit
+
+*---------
+	move.w	STBL_NormalStep(a6),d0
+	ext.l	d0
+	add.l	d0,d3
+
+	dbra	d5,40$		;--FramesPerSkip
+
+	move.w	STBL_SkipStep(a6),d0
+	ext.l	d0
+	add.l	d0,d3
+
+	dbra	d4,30$		;--SkipsPerSpeedChange
+
+*--------------
+	IFD	FIXEDSPEED
+	bra	20$
+	ENDC
+
+	IFND	FIXEDSPEED
+	tst.b	RCB_Flags(a3)
+	bpl.s	60$		;forward
+
+* Reverse
+	lea	-STBL_SIZEOF(a6),a0
+	tst.w	STBL_DeltaXMax(a0)
+	bra.s	65$
+
+* Forward
+60$	lea	STBL_SIZEOF(a6),a0
+	tst.w	STBL_FieldsPerFrame(a0)
+65$	beq	20$	;jump reached end of table
+	movea.l	a0,a6	;new Shuttle data
+	bra	20$
+	ENDC
+
+DoShuttle:  ;see above Fall Thru!!!
+
+    ENDC 	;IFD ALLOWFFREW
+
+* IFND ALLOWFFREW THIS WILL FALL THRU TO doing Shuttle!!!!!
+
+**********************************
+* Go into Shuttle Mode
+*
+
+* a6->current ShuttleTBL, d5=FramesPerSkip counter, d3=Frame
+
+* This is the standard shuttle code.
+
+shuttlestart:	;aren't really using this label
+
+	CALLTL	DeltaXMouse		 ;d1=initial mouse X
+	move.w	STBL_DeltaXCenter(a6),d2 ;initial xy
+
+*  a1->abort function
+*  a2->ESmessage
+*  a3->RCBstruct
+*  a4->RenderCall
+
+*---------
+* Get new shuttle position, and crop to limits
+5$	CALLTL	DeltaXMouse	;d0 = delta
+	add.w	d0,d2		;accum
+	bpl.s	8$
+	moveq	#0,d2		;don't allow <0
+	bra.s	9$
+8$	cmpi.w	#SHUTTLEWIDTH,d2
+	bls.s	9$
+	move.w	#SHUTTLEWIDTH,d2 ;don't allow beyond limit
+
+*----------------------
+* Find what Speed I'm shuttling at, d2=SHUTTLE position
+9$	lea	ShuttleTable(pc),a0
+	bra.s	15$
+10$	lea	STBL_SIZEOF(a0),a0
+15$	cmp.w	STBL_DeltaXMax(a0),d2
+	bhi.s	10$
+	cmpa.l	a0,a6
+	beq.s	20$		;jump if same Shuttle Tbl
+*----------------------
+
+* a0->New Shuttle Table
+	movea.l	a0,a6
+	move.w	STBL_FramesPerSkip(a6),d5
+
+* a6->Same Shuttle Table
+20$	move.w	STBL_NormalStep(a6),d0
+	ext.l	d0
+	add.l	d0,d3
+
+	dbra	d5,40$		;--FramesPerSkip
+	move.w	STBL_FramesPerSkip(a6),d5
+
+	move.w	STBL_SkipStep(a6),d0
+	ext.l	d0
+	add.l	d0,d3
+
+*---------
+* Crop to legal frame numbers
+40$	cmp.l	RCB_Min(a3),d3
+	bge.s	42$
+	move.l	RCB_Min(a3),d3
+	bra.s	47$
+
+42$	cmp.l	RCB_Max(a3),d3
+	ble.s	48$
+	move.l	RCB_Max(a3),d3
+
+* may or maynot be a new speed (could already be stopped)
+47$	lea	ShuttleStop(pc),a0	;end reached, so force it to stopped
+	move.w	STBL_DeltaXCenter(a0),d2	;a6 will get updated later
+
+*---------
+
+* This makes sure I'm asking for the correct type of frame
+48$	move.w	STBL_FieldsPerFrame(a6),d0
+	subq.w	#1,d0		;1,2,4 -> 0,1,3
+	not.w	d0		;-> %..1111, %..1110, %..1100
+	and.w	d0,d3		;round down
+	move.l	d3,RCB_Frame(a3)
+
+	move.w	STBL_VelocityNumerator(a6),RCB_VelocityNumerator(a3)
+	move.w	STBL_VelocityDenominator(a6),RCB_VelocityDenominator(a3)
+
+*---------
+***!!!! Hacked to avoid non-color frame calls (only Field I accepted)
+	move.w	d3,d0
+	andi.w	#3,d0
+	bne 	70$
+
+	XLEA	MyClipAction,a0
+
+	move.b	ca_Flags(a0),d4
+	btst	#CAB_VIDEO,d4
+	beq.s	72$
+	move.l	d3,ca_VidStartField(a0)
+
+72$	andi.b	#CAF_AUDIOL!CAF_AUDIOR,d4
+	beq.s	73$
+	move.l	d3,ca_AudStartField(a0)
+
+*-------------------
+***!!! Do we want these volumes to be based on the user set volume??
+** Yes PF, this is more of that skell cut/past code!!DEH
+73$	clr.l	ca_VolSust1(a0) ;assume stopped (assume VolSus1 is after VolSus2!!!)
+
+	move.w	RCB_VelocityNumerator(a3),d4
+	beq.s	52$		;jump if want no volume on Still, speed=0
+
+	bpl.s	55$
+	neg.w	d4
+
+*-----
+55$	move.w	MyAudioVolume1,d0	;assume +/- 1x
+	beq.s	51$
+*	cmp.w	RCB_VelocityDenominator(a3),d4
+*	bls.s	50$		;jump if speed <= 1
+* calculate volume1
+*	mulu	RCB_VelocityDenominator(a3),d0
+*	divu	d4,d0
+50$
+;	DUMPREG	<vol de in d4>
+
+	cmp.w	#8,d4			;if Vel donom>8 then vol/2 
+	bls	33$
+	lsr.w	#1,d0
+33$			
+	move.w	d0,ca_VolSust1(a0)
+
+
+
+*-----
+51$	move.w	MyAudioVolume2,d0	;assume +/- 1x
+	beq.s	52$
+*	cmp.w	RCB_VelocityDenominator(a3),d4
+*	bls.s	53$			;jump if speed <= 1
+* calculate volume1
+*	mulu	RCB_VelocityDenominator(a3),d0
+*	divu	d4,d0
+53$
+	cmp.w	#8,d4			;if Vel donom>8 then vol/2
+	bls	34$
+	lsr.w	#1,d0
+34$
+	move.w	d0,ca_VolSust2(a0)
+
+*-------------------
+
+52$	XJSR	Flyer_DoFindField	;will indicate 1,2 or 4 fields
+
+	movea.l	a3,a0
+	movem.l	d1-d7/a1-a6,-(sp)
+	jsr	(a4)
+	movem.l	(sp)+,d1-d7/a1-a6
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_WaitAction	;wait until 1, 2 or 4 fields starts
+
+70$	jsr	(a1)
+	bne	ShuttleAbort	;abort
+	bra	5$
+
+*------------------------------
+ShuttleAbort:
+	bsr	FinishJogShuttle
+
+**!!! TURN ON MOST INTERRUPTS!!!!
+
+	CALLTL	SoftSpriteOn
+	rts
+
+****** Hand_InitPlay *****************************************************
+*
+*   NAME
+*	Hand_InitPlay
+*
+*   SYNOPSIS
+*	Hand_InitPlay(message)
+*	               d0
+*
+*   FUNCTION
+*	Sets up the Flyer for playing
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  cleared
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_InitPlay:
+	DEBUGMSG	DBHD,<Hand_InitPlay:>
+
+	move.l	d0,a1
+	bsr	InitFlyerPlay
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+******************************
+* ERROR = InitFlyerPlay()
+
+	XDEF	InitFlyerPlay
+InitFlyerPlay:
+	bsr	AbortPlayRec
+
+	XJSR	Flyer_DefaultSelect
+
+	clr.w	RecordModeFlag
+
+	moveq	#0,d0		;no specific board
+	XJSR	Flyer_PlayMode
+	rts
+
+****** Hand_FlyerDriveInfo *****************************************************
+*
+*   NAME
+*	Hand_FlyerDriveInfo
+*
+*   SYNOPSIS
+*	Hand_FlyerDriveInfo(message)
+*	               d0
+*
+*   FUNCTION
+*	Get info about a particular drive
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  ->FlyerVolInfo
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_FlyerDriveInfo:
+	DEBUGMSG	DBHD,<Hand_FlyerDriveInfo:>
+
+	move.l	d0,a2
+	movea.l	ES_Data1(a2),a0		;name
+	movea.l	ES_Data2(a2),a1		;FlyerVolInfo  ;Maybe NULL
+
+	XJSR	Flyer_GetVolumeInfo
+
+	move.l	d0,ES_Reply(a2)
+	rts
+
+****** Hand_FlyerClipInfo *****************************************************
+*
+*   NAME
+*	Hand_FlyerClipInfo
+*
+*   SYNOPSIS
+*	Hand_FlyerClipInfo(message)
+*	               d0
+*
+*   FUNCTION
+*	Get info about a particular clip
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  ->ClipInfo
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_FlyerClipInfo:
+	DEBUGMSG	DBHD,<Hand_FlyerClipInfo:>
+
+	move.l	d0,a2
+	movea.l	ES_Data1(a2),a0		;name
+	movea.l	ES_Data2(a2),a1		;ClipInfo  ;Maybe NULL
+
+	XJSR	Flyer_GetClipInfo
+
+	move.l	d0,ES_Reply(a2)
+	rts
+
+****** Hand_CompressionMode *****************************************************
+*
+*   NAME
+*	Hand_CompressionMode
+*
+*   SYNOPSIS
+*	Hand_CompressionMode(message)
+*	               d0
+*
+*   FUNCTION
+*	Setup a record with a particular compression mode.
+*	OLD WAY: 0=standard, 1=extended
+*	3/6/95 Way: Low Nibble is mode (0-4), High Nibble is DriveSpeed (0,1)
+*		To recreate the old way, extended mode, use 3 instead of 1 with drive speed 0
+*		Now editor will directly pass mode for flyer (worst will still be wired to 4)
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  - error
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_CompressionMode:
+	DEBUGMSG	DBHD,<Hand_CompressionMode:>
+
+	move.l	d0,a0
+
+	moveq.l	#0,d0		;all boards ???
+	moveq.l	#4,d2		;worst mode
+	moveq.l	#0,d3		;strategy = auto-switching via compressed size
+
+***	moveq.l	#0,d1		;assume standard record
+***	tst.l	ES_Data1(a0)
+***	beq.s	20$
+* extended mode
+***	moveq.l	#3,d1		;2=Subnyquist, but 3 is OK and longer
+	move.l	ES_Data1(a0),d1
+	DUMPREG	<d1 compression mode in switcher>
+20$	XJSR	Flyer_VideoCompressModes
+
+	move.l	d0,ES_Reply(a0)
+	rts
+
+
+****** Hand_RecordSource *****************************************************
+*
+*   NAME
+*	Hand_RecordSource
+*
+*   SYNOPSIS
+*	Hand_RecordSource(message)
+*	               d0
+*
+*   FUNCTION
+*	Setup toaster output for a given record source
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  error
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_RecordSource:
+	DEBUGMSG	DBHD,<Hand_RecordSource:>
+
+	move.l	d0,a1
+	clr.l	ES_Reply(a1)		;assume no errors
+
+* see AudioControl
+;;	move.w	ES_Data2+2(a1),MyRecordAudioGain1
+;;	move.w	ES_Data3+2(a1),MyRecordAudioGain2
+
+	move.l	ES_Data1(a1),d0		;video source
+	move.w	d0,RecordVideo
+
+;;	DUMPSDEC.l	<Source=>,d0,<\\>
+
+	XJSR	Flyer_InputSelect
+	rts
+
+****** Hand_AudioControl *****************************************************
+*
+*   NAME
+*	Hand_AudioControl
+*
+*   SYNOPSIS
+*	Hand_AudioControl(message)
+*	               d0
+*
+*   FUNCTION
+*	Control record gain, get Overdrive indication, etc.
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  error
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_AudioControl:
+	DEBUGMSG	DBHD,<Hand_AudioControl:>
+
+	move.l	d0,a1
+
+	move.l	ES_Data1(a1),a0		;->FlyAudCtrl
+	move.l	ES_Data2(a1),d1		;flags
+
+* just stashing the Gain for fun
+	btst	#FACOB_SETGAIN,d1
+	beq.s	10$
+	moveq	#0,d0
+	move.b	fac_LeftGain(a0),MyRecordAudioGain1
+	move.b	fac_RightGain(a0),MyRecordAudioGain2
+
+10$	moveq	#0,d0		;all boards
+	XJSR	Flyer_AudioCtrl
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_InitRecord *****************************************************
+*
+*   NAME
+*	Hand_InitRecord
+*
+*   SYNOPSIS
+*	Hand_InitRecord(message)
+*	               d0
+*
+*   FUNCTION
+*	Sets up the Flyer for playing
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  cleard
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_InitRecord:
+	DEBUGMSG	DBHD,<Hand_InitRecord:>
+
+
+	move.l	d0,a1
+	bsr	AbortPlayRec
+
+	moveq	#0,d0		;no specific board
+	XJSR	Flyer_RecordMode
+
+	move.w	#1,RecordModeFlag
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+
+****** Hand_DefragFlyer *****************************************************
+*
+*   NAME
+*	Hand_DefragFlyer
+*
+*   SYNOPSIS
+*	Hand_DefragFlyer(message)
+*	                   d0
+*
+*   FUNCTION
+*	Sets up the Flyer for playing
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  error
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_DefragFlyer:
+	DEBUGMSG	DBHD,<Hand_DefragFlyer:>
+
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a0
+
+	XJSR	Flyer_VoidCardHeads	;free up as much space as possible
+	XJSR	Flyer_DeFrag
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_CheckRecord *****************************************************
+*
+*   NAME
+*	Hand_CheckRecord
+*
+*   SYNOPSIS
+*	Hand_CheckRecord(message)
+*	                   d0
+*
+*   FUNCTION
+*	Sees if the Flyer is still recording (or Playing???)
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  =0 = FERR_OKAY if recording finished OK
+*                    = FERR_BUSY if not done
+*                    = FERR_??? if ran out of room
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_CheckRecord:
+	DEBUGMSG	DBHD,<Hand_CheckRecord:>
+
+	move.l	d0,a1
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_CheckAction
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_ChangeAudio *****************************************************
+*
+*   NAME
+*	Hand_ChangeAudio
+*
+*   SYNOPSIS
+*	Hand_ChangeAudio(message)
+*	                   d0
+*
+*   FUNCTION
+*	Sees if the Flyer is still recording
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  =0 = FERR_OKAY if recording finished OK
+*                    = FERR_BUSY if not done
+*                    = FERR_??? if ran out of room
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_ChangeAudio:
+	DEBUGMSG	DBHD,<Hand_ChangeAudio:>
+
+	move.l	d0,a2
+
+	movea.l	ES_Data1(a2),a0		;FG
+	XLEA	MyClipAction,a1
+	bsr	StuffCAparams
+
+	movea.l	a1,a0			;->CA
+	XJSR	Flyer_ChangeAudio
+
+	move.l	d0,ES_Reply(a2)
+	rts
+
+****** Hand_Pause *****************************************************
+*
+*   NAME
+*	Hand_Pause
+*
+*   SYNOPSIS
+*	Hand_Pause(message)
+*	                   d0
+*
+*   FUNCTION
+*	Start/Stop Flyer recording (or maybe Play??)
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  = Error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Pause
+	DEBUGMSG	DBHD,<Hand_Pause:>
+
+	move.l	d0,a1
+
+	XLEA	MyClipAction,a0
+	move.l	ES_Data1(a1),d0
+	XJSR	Flyer_PauseAction
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_StartClipCutList *****************************************************
+*
+*   NAME
+*	Hand_StartClipCutList
+*
+*   SYNOPSIS
+*	Hand_StartClipCutList(message)
+*	                   d0
+*
+*   FUNCTION
+*	Set up for making destructive, or non-destructive clip cutting
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_StartClipCutList
+	DEBUGMSG	DBHD,<Hand_StartClipCutList:>
+
+	move.l	d0,a1
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a2
+	move.l	ES_Data1(a1),fv_Path(a2)	;->name
+	move.l	ES_Data2(a1),d0
+	XJSR	Flyer_StartClipCutList
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_AddClipCut *****************************************************
+*
+*   NAME
+*	Hand_AddClipCut
+*
+*   SYNOPSIS
+*	Hand_AddClipCut(message)
+*	                   d0
+*
+*   FUNCTION
+*	Specified info about a particular clip cut.  Done after StartClipCutList.
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_AddClipCut
+	DEBUGMSG	DBHD,<Hand_AddClipCut:>
+
+	move.l	d0,a1
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a2
+	move.l	ES_Data1(a1),fv_Path(a2)	;->name
+
+	move.l	ES_Data4(a1),d0
+	move.b	d0,ca_Flags(a0)
+
+	btst	#CAB_VIDEO,d0
+	beq.s	30$
+	move.l	ES_Data2(a1),ca_VidStartField(a0)
+	move.l	ES_Data3(a1),ca_VidFieldCount(a0)
+
+30$	andi.b	#CAF_AUDIOL!CAF_AUDIOR,d0
+	beq.s	40$
+	move.l	ES_Data2(a1),ca_AudStartField(a0)
+	move.l	ES_Data3(a1),ca_AudFieldCount(a0)
+
+40$	XJSR	Flyer_AddClipCut
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_EndClipCutList *****************************************************
+*
+*   NAME
+*	Hand_EndClipCutList
+*
+*   SYNOPSIS
+*	Hand_EndClipCutList(message)
+*	                   d0
+*
+*   FUNCTION
+*	Create the cuts that have been made via AddClipCut
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_EndClipCutList
+	DEBUGMSG	DBHD,<Hand_EndClipCutList:>
+
+	move.l	d0,a1
+
+;;	XLEA	MyClipAction,a0		;THIS IS NO LONGER REQUIRED
+	move.l	ES_Data1(a1),d0
+	XJSR	Flyer_EndClipCutList
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_StartHeadList *****************************************************
+*
+*   NAME
+*	Hand_StartHeadList
+*
+*   SYNOPSIS
+*	Hand_StartHeadList(message)
+*	                   d0
+*
+*   FUNCTION
+*	Set up ALL boards for making clip heads
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_StartHeadList:
+	DEBUGMSG	DBHD,<Hand_StartHeadList:>
+
+	move.l	d0,a1
+
+	moveq	#0,d0			;all boards!!!
+	XJSR	Flyer_StartHeadList
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+
+****** Hand_EndHeadList *****************************************************
+*
+*   NAME
+*	Hand_EndHeadList
+*
+*   SYNOPSIS
+*	Hand_EndHeadList(message)
+*	                   d0
+*
+*   FUNCTION
+*	Create the heads that have been made via MakeClipHead
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_EndHeadList:
+	DEBUGMSG	DBHD,<Hand_EndHeadList:>
+
+	move.l	d0,a1
+
+	moveq	#0,d0		;all boards!!!
+	moveq	#1,d1		;don't abort, really do it!
+	XJSR	Flyer_EndHeadList
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_MakeClipHead *****************************************************
+*
+*   NAME
+*	Hand_MakeClipHead
+*
+*   SYNOPSIS
+*	Hand_MakeClipHead(message)
+*	                   d0
+*
+*   FUNCTION
+*	Create the heads that have been made via MakeClipHead
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_MakeClipHead:
+	DEBUGMSG	DBHD,<Hand_MakeClipHead:>
+
+	move.l	d0,a1
+
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_Defaults
+
+	movea.l	ca_Volume(a0),a2
+	move.l	ES_Data1(a1),fv_Path(a2)	;->name
+
+	move.l	ES_Data2(a1),ca_VidStartField(a0)
+	move.l	ES_Data3(a1),ca_VidFieldCount(a0)
+	move.l	ES_Data4(a1),ca_AudStartField(a0)
+	move.l	ES_Data5(a1),ca_AudFieldCount(a0)
+
+	XJSR	Flyer_MakeClipHead
+
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_MakeClipIcon *****************************************************
+*
+*   NAME
+*	Hand_MakeClipIcon
+*
+*   SYNOPSIS
+*	Hand_MakeClipIcon(message)
+*	                   d0
+*
+*   FUNCTION
+*	Create an ".i" icon file for a clip
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_MakeClipIcon:
+	DEBUGMSG	DBHD,<Hand_MakeClipIcon:>
+
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a0	;name
+	move.l	ES_Data2(a2),a1	;->CrUD
+	move.l	ES_Data3(a2),d0 ;CrUD size
+	move.l	ES_Data4(a2),d1 ;Field#
+
+	CALLTL	MakeClipIcon
+
+	move.l	d0,ES_Reply(a2)
+	rts
+
+****** Hand_AppendIcon *****************************************************
+*
+*   NAME
+*	Hand_AppendIcon
+*
+*   SYNOPSIS
+*	Hand_AppendIcon(message)
+*	                   d0
+*
+*   FUNCTION
+*	Addes the ".i" icon file to the data file for redundency.
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_AppendIcon:
+	DEBUGMSG	DBHD,<Hand_AppendIcon:>
+
+	move.l	d0,a1
+
+	move.l	ES_Data1(a1),a0	;name
+	CALLTL	AppendClipIcon
+	move.l	d0,ES_Reply(a1)
+	rts
+
+****** Hand_SetPrefs *****************************************************
+*
+*   NAME
+*	Hand_SetPrefs
+*
+*   SYNOPSIS
+*	Hand_SetPrefs(message)
+*	                   d0
+*
+*   FUNCTION
+*	Sets various system global parameters
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+	XREF	MT_GPI
+
+Hand_SetPrefs:
+	DEBUGMSG	DBHD,<Hand_SetPrefs:>
+
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a0		;->SystemPrefs structure
+
+* Set VID3/VID4
+	moveq	#0,d0
+	btst.b	#spB_FlyerVID3,spref_Flags1(a0)
+	beq.s	5$
+	bset	#FLYER3_BIT,d0
+5$	btst.b	#spB_FlyerVID4,spref_Flags1(a0)
+	beq.s	8$
+	bset	#FLYER4_BIT,d0		;d0=mask of desired settings
+
+8$	GET.b	TB_Flags4,d1
+	eor.b	d1,d0			;compare against current settings
+	andi.b	#FLYER3_MASK!FLYER4_MASK,d0
+	beq.s	9$
+
+* New VID3 or VID4 settings
+	andi.b	#~(FLYER3_MASK!FLYER4_MASK),TB_Flags4(a5)	;turn off VID3/VID4 bits
+	btst.b	#spB_FlyerVID3,spref_Flags1(a0)
+	beq.s	40$
+	bset.b	#FLYER3_BIT,TB_Flags4(a5)
+40$	btst.b	#spB_FlyerVID4,spref_Flags1(a0)
+	beq.s	45$
+	bset.b	#FLYER4_BIT,TB_Flags4(a5)
+45$	bsr	SetupToasterMux		;gets d1/d2
+	moveq	#0,d0	;all boards!!
+	moveq	#0,d3	;Standard Toaster PRVW (not CAMcorder)
+	XJSR	Flyer_ToasterMux
+
+*------------------------------
+* Set termination
+9$	moveq	#0,d0
+	move.b	spref_Termination(a0),d0
+	PUT.w	d0,TB_InputTerm
+	DEA	TB_VTSetUp,a1
+	ELHPUT_TERM_R	a1,d0
+
+* Set 2/3 Monitor
+	moveq.l	#0,d0
+	btst.b	#spB_PrvwOLay,spref_Flags1(a0)
+	beq.s	10$
+	moveq.l	#-1,d0
+10$	PUT.w	d0,TB_UserOn
+	bne.s	20$
+	ELHCLEAR_USERON	a1		; denote user interface is off
+	ELHCLEAR_PVMUTE a1
+	bra.s	30$
+
+20$	ELHSET_USERON	a1		; denote user interface is on
+	ELHSET_PVMUTE	a1
+
+30$	btst.b	#AVEI_BIT,TB_Flags(a5)
+	beq.s	35$
+	CALLTL	InstallAVEIdoELH	; New AVEI colors if possible
+	bra.s	50$
+35$	CALLTL	SendELH2Toaster
+
+* Set GPI
+50$	moveq	#0,d2
+	move.b	spref_GPI(a0),d2
+
+	XCALL	ObtainSwitcherGPISettings	; get current state of GPI
+	cmp.l	d0,d2
+	beq	100$				; ...if all is already setup
+
+	pea	MT_GPI			; reset previous config GPI FG
+	move.l	sp,a0
+	XCALL	IndexFastG
+	move.l	d0,a0
+	clr.w	FG_HiLiteMask(a0)
+
+	move.l	d2,d0			; setup the new config GPI FG
+	move.l	sp,a0
+	XCALL	IndexFastG
+	lea	4(sp),sp
+	move.l	d0,a0
+	move.b	FG_HiLiteVal(a0),d0
+	move.b	d0,FG_HiLiteMask(a0)
+	move.b	d0,FG_HiLiteMask+1(a0)
+
+	move.l	d2,d0				; install the new GPI
+	XCALL	ChangeSwitcherGPISettings	; settings
+
+100$
+;;	CALLTL	WriteHardSets		;Should I use WriteHardSets????
+;;	move.l	d0,ES_Reply(a2)		;0=OK, 1=OpenError, 2=Write error
+
+	clr.l	ES_Reply(a2)	;can't fail
+	rts
+
+****** Hand_GetPrefs *****************************************************
+*
+*   NAME
+*	Hand_GetPrefs
+*
+*   SYNOPSIS
+*	Hand_GetPrefs(message)
+*	                   d0
+*
+*   FUNCTION
+*	Get various system global parameters
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+	XREF	MT_GPI
+
+Hand_GetPrefs:
+	DEBUGMSG	DBHD,<Hand_GetPrefs:>
+
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a0		;->SystemPrefs structure
+
+	clr.l	(a0)			;clear everything out
+
+* Get termination
+	GET.w	TB_InputTerm,d0
+	move.b	d0,spref_Termination(a0)
+
+* Get 2/3 Monitor
+	tst.w	TB_UserOn(a5)
+	beq.s	20$
+	bset.b	#spB_PrvwOLay,spref_Flags1(a0)
+
+* Get VID3 state
+20$	btst.b	#FLYER3_BIT,TB_Flags4(a5)
+	beq.s	30$
+	bset.b	#spB_FlyerVID3,spref_Flags1(a0)
+
+* Get VID4 state
+30$	btst.b	#FLYER4_BIT,TB_Flags4(a5)
+	beq.s	100$
+	bset.b	#spB_FlyerVID4,spref_Flags1(a0)
+
+* Get GPI
+100$	XCALL	ObtainSwitcherGPISettings	; get current state of GPI
+	move.b	d0,spref_GPI(a0)
+
+	clr.l	ES_Reply(a1)		;no errors possible
+	rts
+
+****** Hand_SavePrefs *****************************************************
+*
+*   NAME
+*	Hand_SavePrefs
+*
+*   SYNOPSIS
+*	Hand_SavePrefs(message)
+*	                   d0
+*
+*   FUNCTION
+*      Saves an HS file
+*
+*   INPUTS
+*
+*   RESULT
+*	ES_Reply  -  = error, Though we usually ignore errors!
+*
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_SavePrefs:
+	DEBUGMSG	DBHD,<Hand_SavePrefs:>
+
+	movea.l	d0,a0
+	CALLTL	WriteHardSets		;Should I use WriteHardSets????
+	move.l	d0,ES_Reply(a0)		;0=OK, 1=OpenError, 2=Write error
+	rts
+
+*******************************************************************
+AbortPlayRec
+	movem.l	d0/a0,-(sp)
+	suba.l	a0,a0
+
+	XJSR	Flyer_AbortAction	;kill all actions
+
+	movem.l	(sp)+,d0/a0
+	rts
+
+****** Hand_PanelOpen ***********************************************************
+*
+*   NAME
+*	Hand_PanelOpen
+*
+*   SYNOPSIS
+*	Hand_PanelOpen(message) (FG)
+*	                d0
+*
+*   FUNCTION
+*	Prepare flyer for Jog/Shuttle/Jump
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_PanelOpen
+	DEBUGMSG	DBHD,<Hand_PanelOpen:>
+
+	move.l	d0,a2
+	move.l	ES_Data1(a2),a3		;crouton
+	clr.l	ES_Reply(a2)		;assume no errors
+
+******
+*-----------------
+** THIS HACK TURNS A FRAMESTORE IN DV1 INTO 4 FIELDS OF CYCLING DATA.
+** THE TOP 1/4 OF THE SOURCE = FIELD I OF DESTINATION
+** THE NEXT 1/4 OF THE SOURCE = FIELD II OF DESTINATION
+** THE NEXT 1/4 OF THE SOURCE = FIELD III OF DESTINATION
+** THE BOTTOM 1/4 OF THE SOURCE = FIELD IV OF DESTINATION
+** YOU SHOULD AVOID COLORS IN YOUR SOURCE.
+** THIS WAS USED TO CREATE THE 4FieldCount FrameStore.
+
+	IFD	CRAP
+	movem.l	d0-d7/a0-a6,-(sp)
+
+	CALLTL	AllInterruptsOff
+	CALLTL	InstallAVE
+
+	move.l	#(480/2)-1,d3	;line counter for field I/II data
+
+662$	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+	moveq	#0,d0		;bank
+
+	move.l	d3,d1
+	addq.w	#1,d1
+
+* ~ReadScanLine(->destbuff, ->destcomp, ->TB, bank, scanline)
+*		   a0	      a1	a5    d0     d1
+	CALLTL	ReadScanLine
+
+	lea	768(a0),a0
+	lea	768(a1),a1
+	add.w	#(480/2),d1	;line number for field III or IV line
+
+	CALLTL	ReadScanLine
+
+	lea	-768(a1),a1
+	move.w	#752-1,d0
+664$	move.b	(a0)+,(a1)+
+	dbra	d0,664$
+
+*----
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0
+    	movea.l	TB_EffectsBase+EFB_BuffB(a5),a1
+
+	GET.l	TB_CHIPMem,a2
+
+	move.l	d3,d0
+	cmpi.w	#(480/4),d0
+	ble.s	665$
+	sub.w	#(480/4),d0
+	lsl.w	#2,d0
+	addq.w	#2,d0
+	bra.s	667$
+
+* field I & III line
+665$	lsl.w	#2,d0	;*4
+	addq.w	#1,d0
+
+667$	moveq	#1,d1		;# of lines
+	moveq	#1,d2		;bank DV1
+
+*~SendBytes2Toaster(buffa, buffb, chipchunk, linestart, #lines, bank)
+*		      a0     a1    a2	        d0        d1	 d2
+	CALLTL	SendBytes2Toaster
+
+	addq.w	#2,d0
+	CALLTL	SendBytes2Toaster
+
+	dbra	d3,662$
+
+	CALLTL	ReDoDisplay
+	CALLTL	InstallAVEI
+	CALLTL	AllInterruptsOn
+
+	movem.l	(sp)+,d0-d7/a0-a6
+	bra	666$
+
+	ENDC
+*-----------------
+
+***!!!!*** This would be better done with a FGC_PANELOPEN command
+	XLEA	MyClipAction,a0
+	XJSR	Flyer_Defaults
+
+	cmpi.l	#CrUD_Video,FGS_ObjectType(a3)
+	beq.s	5$
+	cmpi.l	#CrUD_Audio,FGS_ObjectType(a3)
+	beq	6$
+	rts
+*-----------------------
+
+5$	CALLTL	DoTakeNoKey
+
+* Use opposite channel from what is showing on prvw
+	GET.w	TB_PrvwSec,d0
+	andi.w	#M_VIDEO3,d0
+	beq.s	10$		;jump if Prvw <> VID3
+
+* Use channel 1 = M_VIDEO4
+	PUT.w	#M_VIDEO4,TB_MainSec
+	move.b	#1,ca_Channel(a0)
+	bra.s	20$
+
+* Use channel 0 = M_VIDEO3
+10$	PUT.w	#M_VIDEO3,TB_MainSec
+	move.b	#0,ca_Channel(a0)
+
+20$	bsr	SetupPlayChannel
+	CALLTL	CookAndServeMain
+
+*----
+6$	bsr	AbortPlayRec	;to prevent confusion
+
+* a0->ca a3->FG
+	movea.l	ca_Volume(a0),a1
+	move.l	FGS_FileName(a3),fv_Path(a1)
+
+;;	clr.l	ca_ID(a0)
+
+	move.b	#RT_STOPPED,ca_ReturnTime(a0)
+
+*-----------
+	movea.l	a0,a1
+	movea.l	a3,a0		;a0->fg, a1->ca
+	bsr	StuffCAparams2
+
+	movea.l	a1,a0			;->ca
+	XJSR	Flyer_BeginFindField
+
+	lea	FindFieldCA,a1
+	clr.l	(a1)			;assume failure
+	move.l	d0,ES_Reply(a2)
+	bne.s	666$
+	move.l	a0,(a1)
+666$	rts
+
+*-------------------------------------
+* a0->FG, a1->CA
+* Determine if audio is wanted (this version forces stereo)
+StuffCAparams2
+	movem.l	d0-d2,-(sp)
+	move.b	#CAPF_STEALOURVIDEO+CAPF_KILLOTHERVIDEO,ca_PermissFlags(a1)
+	move.w	#(71<<8)+$80,ca_MatteY(a1)	;71.5 D2 Black
+
+	move.b	#CAF_USEMATTE+CAF_NOPREROLL,d1  ;assume no audio
+
+	clr.w	ca_VolSust1(a1)		;0 volume for any disabled channels
+	clr.w	ca_VolSust2(a1)		;0 volume for any disabled channels
+
+	move.l	#TAGID_Duration,d0
+	CALLTL	GetLongValue
+	beq.s	61$			;jump if no video
+	ori.b	#CAF_VIDEO,d1
+
+61$	move.l	#TAGID_AudioOn,d0
+	CALLTL	GetLongValue
+	move.l	d0,d2
+
+	btst	#AUDB_Channel1Enabled,d2
+	beq.s	62$
+
+	move.l	#TAGID_AudioVolume1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust1(a1)	;Always set volume, even if 0
+	beq.s	62$			;jump if no audio1
+	ori.b	#CAF_AUDIOL,d1
+
+;;	move.l	#TAGID_AudioVolume1,d0
+;;	CALLTL	GetLongValue
+;;	move.w	d0,ca_VolSust1(a1)
+;;***!!! Do we want this volume to be based on the user set volume??
+;;	move.w	#$ffff/2,ca_VolSust1(a1) ;this default may be changed before DoFindField
+;	move.w	d0,ca_VolSust1(a1)
+
+	move.l	#TAGID_AudioPan1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan1(a1)
+
+62$	btst	#AUDB_Channel2Enabled,d2
+	beq.s	65$
+
+	move.l	#TAGID_AudioVolume2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust2(a1)	;Always set volume, even if 0
+	beq.s	65$			;jump if no audio2
+	ori.b	#CAF_AUDIOR,d1
+
+;;	move.l	#TAGID_AudioVolume2,d0
+;;	CALLTL	GetLongValue
+;;	move.w	d0,ca_VolSust2(a1)
+;;***!!! Do we want this volume to be based on the user set volume??
+;;	move.w	#$ffff/2,ca_VolSust2(a1) ;this default may be changed before DoFindField
+;	move.w	d0,ca_VolSust2(a1)
+
+	move.l	#TAGID_AudioPan2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan2(a1)
+
+* This hack always forces both audio channels to be on,
+* even if one is disabled or has a volume of zero!!!
+* This was because the flyer code could not play a mono-channel from a
+* stereo recorded sample.
+* As of 1-4-95 this distroys Flyer Matte & locks machine without this hack
+
+***!!! Maybe the following hack can be removed, as it was in CroutonHandler.a
+* setupaudiopreroll routine.  I was afraid to because there is no time for
+* beta testing.  And with volumes of zero, it will be WYSIWYG enough.
+
+65$	move.b	#CAF_AUDIOL!CAF_AUDIOR,d0
+	and.b	d1,d0
+	beq.s	66$
+	ori.b	#CAF_AUDIOL!CAF_AUDIOR,d1
+
+66$	move.b	d1,ca_Flags(a1)
+
+	move.l	ca_VolSust1(a1),MyAudioVolume1	;assume next to MyAudioVolume2
+
+	movem.l	(sp)+,d0-d2
+	rts
+
+
+*-------------------------------------
+* a0->FG, a1->CA
+* Determine if audio is wanted (this version supports mono)
+StuffCAparams
+	movem.l	d0-d2,-(sp)
+	move.b	#CAPF_STEALOURVIDEO+CAPF_KILLOTHERVIDEO,ca_PermissFlags(a1)
+	move.w	#(71<<8)+$80,ca_MatteY(a1)	;71.5 D2 Black
+
+	move.b	#CAF_USEMATTE+CAF_NOPREROLL,d1  ;assume no audio
+
+	clr.w	ca_VolSust1(a1)		;0 volume for any disabled channels
+	clr.w	ca_VolSust2(a1)		;0 volume for any disabled channels
+
+	move.l	#TAGID_Duration,d0
+	CALLTL	GetLongValue
+	beq.s	61$			;jump if no video
+	ori.b	#CAF_VIDEO,d1
+
+61$	move.l	#TAGID_AudioOn,d0
+	CALLTL	GetLongValue
+	move.l	d0,d2
+
+	btst	#AUDB_Channel1Enabled,d2
+	beq.s	62$
+
+	move.l	#TAGID_AudioVolume1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust1(a1)	;Always set volume, even if 0
+
+	ori.b	#CAF_AUDIOL,d1
+
+	move.l	#TAGID_AudioPan1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan1(a1)
+
+62$	btst	#AUDB_Channel2Enabled,d2
+	beq.s	65$
+
+	move.l	#TAGID_AudioVolume2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust2(a1)	;Always set volume, even if 0
+
+	ori.b	#CAF_AUDIOR,d1
+
+	move.l	#TAGID_AudioPan2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan2(a1)
+
+65$	move.b	d1,ca_Flags(a1)
+
+	move.l	ca_VolSust1(a1),MyAudioVolume1	;assume next to MyAudioVolume2
+
+	movem.l	(sp)+,d0-d2
+	rts
+
+
+****** Hand_PanelClose ***********************************************************
+*
+*   NAME
+*	Hand_PanelClose
+*
+*   SYNOPSIS
+*	Hand_PanelClose(message) (FG)
+*	                d0
+*
+*   FUNCTION
+*	Remove flyer from Jog/Shuttle/Jump mode
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_PanelClose
+	DEBUGMSG	DBHD,<Hand_PanelClose:>
+
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a2		;crouton
+	clr.l	ES_Reply(a1)		;assume never any errors !!!!
+
+***!!!!*** This would be better done with a FGC_PANELCLOSE command
+	cmpi.l	#CrUD_Video,FGS_ObjectType(a2)
+	beq.s	5$
+	cmpi.l	#CrUD_Audio,FGS_ObjectType(a2)
+	bne.s	666$
+
+5$	lea	FindFieldCA,a2
+	move.l	(a2),d0
+	beq.s	666$
+	clr.l	(a2)
+	movea.l	d0,a0
+
+	move.b	#RT_STOPPED,ca_ReturnTime(a0)
+
+	XJSR	Flyer_EndFindField
+
+666$	rts
+
+****** Hand_Jump ***********************************************************
+*
+*   NAME
+*	Hand_Jump
+*
+*   SYNOPSIS
+*	Hand_Jump(message) (FG,field) !!!! DON'T NEED FG
+*	             d0
+*
+*   FUNCTION
+*	Move to location in flyer clip
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_Jump
+	DEBUGMSG	DBHD,<Hand_Jump:>
+
+	move.l	d0,a1
+	move.l	ES_Data1(a1),a2		;crouton (or NULL to mute)
+	clr.l	ES_Reply(a1)
+
+	XLEA	MyClipAction,a0
+
+;	move.b	ca_Flags(a0),d1
+;	btst	#CAB_VIDEO,d1
+;	beq.s	72$
+	move.l	ES_Data2(a1),ca_VidStartField(a0)
+
+;72$	andi.b	#CAF_AUDIOL!CAF_AUDIOR,d1
+;	beq.s	73$
+	move.l	ES_Data2(a1),ca_AudStartField(a0)
+
+73$	
+	cmp.w	#0,a2			;FG provided?
+	beq.s	.mute			;No, mute audio
+
+	movem.l	a0-a1,-(sp)
+	move.l	a0,a1			;a1=CA
+	move.l	a2,a0			;a0=FG
+;	bsr	StuffCAparams		;Need to re-stuff volume,pan,etc.
+
+	bclr	#CAB_VIDEO,ca_Flags(a1)	;Assume w/o video
+	move.l	#TAGID_Duration,d0
+	CALLTL	GetLongValue
+	beq.s	.novid			;jump if no video
+	bset	#CAB_VIDEO,ca_Flags(a1)
+.novid
+	move.l	#TAGID_AudioVolume1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust1(a1)
+
+	move.l	#TAGID_AudioVolume2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_VolSust2(a1)
+
+	move.l	#TAGID_AudioPan1,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan1(a1)
+
+	move.l	#TAGID_AudioPan2,d0
+	CALLTL	GetLongValue
+	move.w	d0,ca_AudioPan2(a1)
+
+	movem.l	(sp)+,a0-a1
+	bra.s	.doit
+
+.mute	clr.l	ca_VolSust1(a0)
+	bclr	#CAB_VIDEO,ca_Flags(a0)		;No video, just audio mute
+
+.doit	XJSR	Flyer_DoFindField
+	XJSR	Flyer_WaitAction
+	rts
+
+****** Hand_LightWave ***********************************************************
+*
+*   NAME
+*	Hand_LightWave
+*
+*   SYNOPSIS
+*	Hand_LightWave(message) (FGC_command)
+*	                  d0
+*
+*   FUNCTION
+*	Send a FGC message to LightWave
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_LightWave
+	DEBUGMSG	DBHD,<Hand_LightWave:>
+
+	move.l	d0,a0
+	move.l	ES_Data1(a0),d1		;FGC_command
+	moveq	#TDSLICEID,d0		;SLICEID
+	bsr	SendSliceCommand
+
+	move.l	d0,ES_Reply(a0)
+	rts
+
+****** Hand_ChromaFX ***********************************************************
+*
+*   NAME
+*	Hand_ChromaFX
+*
+*   SYNOPSIS
+*	Hand_ChromaFX(message) (FGC_command)
+*	                  d0
+*
+*   FUNCTION
+*	Send a FGC message to ChromaFX
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_ChromaFX
+	DEBUGMSG	DBHD,<Hand_ChromaFX:>
+
+	move.l	d0,a0
+	move.l	ES_Data1(a0),d1		;FGC_command
+	moveq	#LTSLICEID,d0		;SLICEID
+	bsr	SendSliceCommand
+
+	move.l	d0,ES_Reply(a0)
+	rts
+
+****** Hand_ToasterCG ***********************************************************
+*
+*   NAME
+*	Hand_ToasterCG
+*
+*   SYNOPSIS
+*	Hand_ToasterCG(message) (FGC_command)
+*	                  d0
+*
+*   FUNCTION
+*	Send a FGC message to ToasterCG
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_ToasterCG
+	DEBUGMSG	DBHD,<Hand_ToasterCG:>
+
+	move.l	d0,a0
+	move.l	ES_Data1(a0),d1		;FGC_command
+	moveq	#CGSLICEID,d0		;SLICEID
+	bsr	SendSliceCommand
+
+	move.l	d0,ES_Reply(a0)
+	rts
+
+****** Hand_ToasterPaint ***********************************************************
+*
+*   NAME
+*	Hand_ToasterPaint
+*
+*   SYNOPSIS
+*	Hand_ToasterPaint(message) (FGC_command)
+*	                  d0
+*
+*   FUNCTION
+*	Send a FGC message to ToasterPaint
+*
+*   INPUTS
+*
+*   RESULT
+*	ERROR result.
+*   BUGS
+*
+*   SEE ALSO
+*	EditSwit.i
+*****************************************************************************
+Hand_ToasterPaint
+	DEBUGMSG	DBHD,<Hand_ToasterPaint:>
+
+	move.l	d0,a0
+	move.l	ES_Data1(a0),d1		;FGC_command
+	moveq	#PTSLICEID,d0		;SLICEID
+	bsr	SendSliceCommand
+
+	move.l	d0,ES_Reply(a0)
+	rts
+
+***************************************************************
+* d0=SLIDEID, d1=FGC_Command
+* Returns Error code.
+SendSliceCommand:
+	movem.l	d1-d2/a0-a1,-(sp)
+	move.l	d1,d2
+
+	clr.w	TB_ErrFlag(a5)		; assume no errors
+
+	DEA	TB_SliceFGL,a0
+	XCALL	IndexFastG		; search Slice FGL for FG
+	beq	610$			; ...stop if Slice FGL corrupt
+	move.l	d0,a0			; address FG
+
+*----------------
+	cmp.w	#FGC_LOAD,d2
+	bne	100$
+
+* Load
+	tst.w	FG_PTRIndex(a0)
+	bne	500$			; ...if already loaded
+
+	CALLTL	FGC_SelectKCommand
+	bra	400$
+
+*----------------
+100$	cmp.w	#FGC_UNLOAD,d2
+	bne	200$
+
+* Unload
+	tst.w	FG_PTRIndex(a0)
+	beq	500$			; ...if already unloaded
+
+	CALLTL	FGC_UnloadCommand
+	bra	400$
+
+*----------------
+200$	cmp.w	#FGC_SELECT,d2
+	bne	500$			; Unknown command = no error
+
+* Select
+	tst.w	FG_PTRIndex(a0)
+	beq	620$			; ...if not loaded
+
+	CALLTL	FGC_SelectKCommand
+;;	bra.s	400$
+
+
+
+*----------------
+400$	CALLTL	ReDoDisplay	;***!!!	Why isn't the Editor doing this??
+	CALLTL	InstallAVEI	;***!!!
+
+500$	move.w	TB_ErrFlag(a5),d0
+	ext.l	d0
+
+666$	movem.l	(sp)+,d1-d2/a0-a1
+	rts
+
+610$	move.l	#1,d0			;Slice FGL corrupt
+	bra	666$
+
+620$	move.l	#2,d0			;Slice is not loaded
+	bra	666$
+
+*************************************************************************
+* Name=MakeTestClip()
+*
+* This writes out a 4 field clip with a test pattern.  See bars.a
+
+	XDEF	MakeTestClip
+MakeTestClip:
+	movem.l	d0-d2/a0-a1/a6,-(sp)
+
+	DEBUGMSG  DBMTC,<MakeTestClip:>
+
+	clr.l	(sp)			;assume error
+
+	GET.l	TB_FlyerBase,d0
+	beq	666$			;error, unable to send message
+
+	moveq	#0,d0			;first drive it can find
+	move.l	#1<<FVIB_VIDEOREADY,d1	;that can do video
+	XJSR	Flyer_VolumeName
+	beq	666$
+	movea.l	d0,a1
+
+	DEBUGMSG  DBMTC,<Got FlyerVolume for Video>
+
+	lea	testphase2(pc),a0
+510$	move.b	(a1)+,(a0)+
+	bne	510$
+	move.b	#':',-1(a0)
+
+	move.b	#'T',(a0)+
+	move.b	#'e',(a0)+
+	move.b	#'s',(a0)+
+	move.b	#'t',(a0)+
+	move.b	#'S',(a0)+
+	move.b	#'i',(a0)+
+	move.b	#'g',(a0)+
+	move.b	#'n',(a0)+
+	move.b	#'a',(a0)+
+	move.b	#'l',(a0)+
+	move.b	#0,(a0)
+
+	GET.l	TB_DOSBase,a6
+	move.l	#testphase2,d1
+	XSYS	DeleteFile
+
+*---------
+* Field I
+	lea	testphase2(pc),a0
+
+	IFD	 DBMTC
+	DUMPTXT </attemping to open ===">
+	DUMPSTR 0(a0)
+	DUMPMSG <"=== >
+	ENDC
+
+	move.l	#FWF_NEW,d0		;mode (instead of FWF_APPEND)
+	moveq	#0,d1			;best compression mode
+	moveq	#0,d2			;Field I
+	XJSR	Flyer_OpenWriteField
+	beq	666$			;couldn't open
+	move.l	d0,a0			;FileHandle
+
+	DEBUGMSG  DBMTC,<Open Field I OK>
+
+	move.w	#(240/2)-1,d1
+;a0->handle, a1->buff
+591$	lea	NormalBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	lea	CompBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	dbra	d1,591$
+
+	XJSR	Flyer_CloseField
+
+*---------
+* Field II
+
+	lea	testphase2(pc),a0
+	move.l	#FWF_APPEND,d0		;mode (instead of FWF_APPEND)
+	moveq	#0,d1			;best compression mode
+	moveq	#1,d2			;Field II
+	XJSR	Flyer_OpenWriteField
+	beq	610$			;couldn't open
+	move.l	d0,a0			;FileHandle
+
+	DEBUGMSG  DBMTC,<Open Field II OK>
+
+	move.w	#(240/2)-1,d1
+;a0->handle, a1->buff
+592$	lea	CompBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+
+	lea	NormalBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	dbra	d1,592$
+
+	XJSR	Flyer_CloseField
+
+*---------
+* Field III
+
+	lea	testphase2(pc),a0
+	move.l	#FWF_APPEND,d0		;mode (instead of FWF_APPEND)
+	moveq	#0,d1			;best compression mode
+	moveq	#2,d2			;Field III
+	XJSR	Flyer_OpenWriteField
+	beq	610$			;couldn't open
+	move.l	d0,a0			;FileHandle
+
+	DEBUGMSG  DBMTC,<Open Field III OK>
+
+	move.w	#(240/2)-1,d1
+;a0->handle, a1->buff
+593$	lea	CompBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	lea	NormalBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	dbra	d1,593$
+
+	XJSR	Flyer_CloseField
+
+*---------
+* Field IV
+
+	lea	testphase2(pc),a0
+	move.l	#FWF_APPEND,d0		;mode (instead of FWF_APPEND)
+	moveq	#0,d1			;best compression mode
+	moveq	#3,d2			;Field IV
+	XJSR	Flyer_OpenWriteField
+	beq	610$			;couldn't open
+	move.l	d0,a0			;FileHandle
+
+	DEBUGMSG  DBMTC,<Open Field IV OK>
+
+	move.w	#(240/2)-1,d1
+;a0->handle, a1->buff
+594$	lea	NormalBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	lea	CompBuff(pc),a1
+	XJSR	Flyer_WriteLine
+	bne	600$
+
+	dbra	d1,594$
+
+	move.l	#testphase2,(sp)	;success ->name
+	bra	605$
+	nop
+
+*---------
+;a0->handle
+600$
+	DEBUGHEXI.l  DBMTC,<Write Failed, Error#=>,d0,<\>
+
+605$	XJSR	Flyer_CloseField
+
+610$	tst.l	(sp)
+	bne.s	666$
+;;	GET.l	TB_DOSBase,a6
+	move.l	#testphase2,d1
+	XSYS	DeleteFile
+
+666$	movem.l	(sp)+,d0-d2/a0-a1/a6
+	rts
+
+testphase2 	dcb.b	32+16,0
+
+
+	IFD	CRAP
+NormalBuff
+CompBuff
+	dcb.b	184,$80
+	dcb.b	184,$81
+	dcb.b	184,$82
+	dcb.b	200,$83
+	ENDC
+
+;;	IFD	CRAP
+NormalBuff	dcb.b	92,72
+		dcb.b	4,200
+		dcb.b	96,72
+		dcb.l	368/4,((72<<24)!(136<<16)!(200<<8)!136)
+		dcb.b	96,200
+		dcb.b	4,72
+		dcb.b	92,200
+
+CompBuff	dcb.b	92,72
+		dcb.b	4,200
+		dcb.b	96,72
+		dcb.l	368/4,((200<<24)!(136<<16)!(72<<8)!136)
+		dcb.b	96,200
+		dcb.b	4,72
+		dcb.b	92,200
+;;	ENDC
+
+*************************************************************************
+*************************************************************************
+*************************************************************************
+
+	xdef	EditPortName
+EditPortName	dc.b	'edit.port',0
+
+EditWindowName
+	dc.b	'Edit',0
+
+	cnop	0,4
+NullWBArgList	DC.l	0
+		DC.l	Bogus
+Bogus:
+	DC.b	'',0
+
+*---------------------------------
+	SECTION	,DATA
+
+FindFieldCA	dc.l	0
+
+LastShuttleTBL	 dc.l	0
+LastFramesPerSkip dc.w	0
+
+MyAudioVolume1	dc.w	0
+MyAudioVolume2	dc.w	0
+
+MyRecordAudioGain1	dc.b	2
+MyRecordAudioGain2	dc.b	2
+
+RecordVideo	dc.w	0
+
+RecordModeFlag	dc.w	0
+
+	IFD	FORCE2MATTE
+StashBKG	dc.w	0
+	ENDC
+
+*---------------------------------
+	SECTION	,BSS
+
+FakeStartup	dcb.b	sm_SIZEOF,0
+OnlyMessage	dcb.b	ES_SIZEOF,0	;This is the message used to
+					;communicate with the project editor
+
+

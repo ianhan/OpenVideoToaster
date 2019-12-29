@@ -1,0 +1,3328 @@
+********************************************************************
+* LUT4.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LUT4.a,v 2.8 1993/05/13 19:39:15 Finch2 Exp $
+*
+* $Log: LUT4.a,v $
+*Revision 2.8  1993/05/13  19:39:15  Finch2
+*Fixed Problem With Duplicate Pixel
+*
+*Revision 2.7  93/05/13  18:44:55  Finch2
+*Added 3 Bits Plane In DoSafeWrite
+*
+*Revision 2.3  93/04/06  12:05:50  Finch2
+*Fixed Problem in DupPixel
+*
+*Revision 2.1  93/03/19  15:44:09  Kell
+*Now uses 768 wide write buffer.
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT4"
+	section LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"Custom.i"
+	Include	"VTDebug.i"
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT2.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTA.i"
+	Include	"LUTB.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT4:								*
+*									*
+*	Contains the Code for the 4th LUT Module.			*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+MAXIMUMSIZE	EQU	56		; Maximum Buffer Size.
+LEFTEDGE	EQU	TBFG_LEFTEDGE-8	; Left Edge Of Toaster Buffer.
+TOPEDGE		EQU	TBFG_TOPEDGE	; Top  Edge Of Toaster Buffer.
+	PAGE
+*************************************************************************
+*									*
+*	DotCrawlQuadLeft:						*
+*									*
+*	Makes 1/8, and 3/4 Values of an Left Quad Value.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Left Quad Value to Convert.				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Left 1/8 Quad Value.					*
+*	D1.L	= Left 3/4 Quad Value.					*
+*									*
+*	02.July 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DotCrawlQuadLeft
+LUT_DotCrawlQuadLeft:
+	MOVEM.L	D2-D7,-(A7)		; Save Calling State.
+*
+*	Make The Seperate Values.
+*
+	MOVEQ.L	#0,D2			; Make First Value.
+	MOVE.B	D0,D2			; D2.L = Part of Quad.
+	LSR.L	#8,D0			; Move Down.
+	MOVEQ.L	#0,D3			; Make Second Value.
+	MOVE.B	D0,D3			; D3.L = Part of Quad.
+	LSR.L	#8,D0			; Move Down.
+	MOVEQ.L	#0,D4			; Make Second Value.
+	MOVE.B	D0,D4			; D4.L = Part of Quad.
+	LSR.W	#8,D0			; Move Down.
+	MOVEQ.L	#0,D5			; Make Second Value.
+	MOVE.B	D0,D5			; D5.L = Part of Quad.
+	MOVEQ.L	#IREBlack,D7		; D7.L = IRE Black Value.
+*
+*	Build 3/4 Value.
+*
+	MOVE.L	D5,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#1,D6			; Divided By 2.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 4/8.
+	LSL.W	#8,D1			; Move Up.
+	MOVE.L	D4,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#5,D6			; Times 5.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 5/8.
+	SWAP.W	D1			; Move Up.
+	MOVE.L	D3,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#6,D6			; Times 6.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 6/8.
+	LSL.W	#8,D1			; Move Up.
+	MOVE.L	D2,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#7,D6			; Times 7.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 7/8.
+*
+*	Build 1/8 Value.
+*
+	MOVE.B	D7,D0			; Save Result 0/8.
+	LSL.W	#8,D0			; Move Up.
+	MOVE.L	D4,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 1/8.
+	SWAP.W	D0			; Move Up.
+	MOVE.L	D3,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#2,D6			; Divided By 4.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 2/8.
+	LSL.W	#8,D0			; Move Up.
+	MOVE.L	D2,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#3,D6			; Times 3.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 3/8.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D2-D7		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DotCrawlQuadRight:						*
+*									*
+*	Makes 1/8, and 3/4 Values of an Right Quad Value.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Right Quad Value to Convert.				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Right 1/8 Quad Value.					*
+*	D1.L	= Right 3/4 Quad Value.					*
+*									*
+*	02.July 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DotCrawlQuadRight
+LUT_DotCrawlQuadRight:
+	MOVEM.L	D2-D7,-(A7)		; Save Calling State.
+*
+*	Make The Seperate Values.
+*
+	MOVEQ.L	#0,D2			; Make First Value.
+	MOVE.B	D0,D2			; D2.L = Part of Quad.
+	LSR.L	#8,D0			; Move Down.
+	MOVEQ.L	#0,D3			; Make Second Value.
+	MOVE.B	D0,D3			; D3.L = Part of Quad.
+	LSR.L	#8,D0			; Move Down.
+	MOVEQ.L	#0,D4			; Make Second Value.
+	MOVE.B	D0,D4			; D4.L = Part of Quad.
+	LSR.W	#8,D0			; Move Down.
+	MOVEQ.L	#0,D5			; Make Second Value.
+	MOVE.B	D0,D5			; D5.L = Part of Quad.
+	MOVEQ.L	#IREBlack,D7		; D7.L = IRE Black Value.
+*
+*	Build 3/4 Value.
+*
+	MOVE.L	D5,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#7,D6			; Times 7.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 7/8.
+	LSL.W	#8,D1			; Move Up.
+	MOVE.L	D4,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#6,D6			; Times 6.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 6/8.
+	SWAP.W	D1			; Move Up.
+	MOVE.L	D3,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#5,D6			; Times 5.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 5/8.
+	LSL.W	#8,D1			; Move Up.
+	MOVE.L	D2,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#1,D6			; Divided By 2.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D1			; Save Result 4/8.
+*
+*	Build 1/8 Value.
+*
+	MOVE.L	D5,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	MULS.W	#3,D6			; Times 3.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 3/8.
+	LSL.W	#8,D0			; Move Up.
+	MOVE.L	D4,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#2,D6			; Divided By 4.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 2/8.
+	SWAP.W	D0			; Move Up.
+	MOVE.L	D3,D6			; Get Value.
+	SUB.L	D7,D6			; Make Delta Amount.
+	ASR.L	#3,D6			; Divided By 8.
+	ADD.L	D7,D6			; Plus Base Amount.
+	MOVE.B	D6,D0			; Save Result 1/8.
+	LSL.W	#8,D0			; Move Up.
+	MOVE.B	D7,D0			; Save Result 0/8.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D2-D7		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FillPlanes:							*
+*									*
+*	Fills The Planes Buffer With a Value of the Byte.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Byte Value To Fill With.				*
+*	D1.L	= Number  of Buffer Lines.				*
+*	A0.L	= Address of Planes Table.				*
+*									*
+*	Output:								*
+*									*
+*	The Planes Are Filled With A Value of The Byte.			*
+*									*
+*	09.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FillPlanes
+LUT_FillPlanes:
+	MOVEM.L	D0-D6/A0-A1,-(A7)	; Save Calling State.
+*
+*	Loop For Number of Planes And Fill Area of Memory.
+*
+	MOVE.L	D0,D2			; D2.L = Byte Value.
+	MOVE.L	D1,D3			; D3.L = Number  of Buffer Lines.
+	MOVEA.L	A0,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#NUMQUADSDATA>>3,D1	; D1.L = Number  of Long Words.
+	MOVE.W	#NUMQUADS,D6		; D6.L = Offset To Next Plane.
+	MOVEQ.L	#8-1,D4			; D4.L = Loop Counter.
+FILPL1	MOVEQ.L	#0,D0			; Make Current Fill Value.
+	LSR.W	#1,D2			; Set Or Not?
+	BCC.S	FILPL2			; Jump If Not Set.
+	MOVEQ.L	#-1,D0			; Else Set Value.
+FILPL2	MOVEA.L	(A1)+,A0		; Pointer To This Planes.
+	MOVE.L	D3,D5			; D5.L = Number of Buffer Lines.
+	BRA.S	FILPL4			; Start Looping.
+FILPL3	BSR	FillLong		; Fill Area of Memory.
+	ADDA.W	D6,A0			; Point Past Other Plane.
+FILPL4	DBF	D5,FILPL3		; Loop For Buffer Size.
+	DBF	D4,FILPL1		; Loop For Number of Planes.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D6/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DupEdges:							*
+*									*
+*	Duplicates the Edges of the Color Map As Quickly As Possable.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Buffer Lines.				*
+*	A0.L	= Address of Planes Table.				*
+*									*
+*	Output:								*
+*									*
+*	The Edges of the Planes Area Are Duplicated As Quickly They Can.*
+*									*
+*	01.June 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DupEdges
+LUT_DupEdges:
+	MOVEM.L	D0-D7/A0-A2,-(A7)	; Save Calling State.
+*
+*	Loop For Number of Planes And Fill Area of Memory.
+*
+	MOVEQ.L	#(NUMQUADS/2),D3	; D3.L = Offset To Next Plane.
+	MOVE.W	#$00F0,D6		; D6.W = Left  AND Mask.
+	MOVEQ.L	#$000F,D7		; D7.L = Right AND Mask.
+	MOVEQ.L	#8-1,D1			; D1.L = Loop Counter.
+DUPED1	MOVEA.L	(A0)+,A1		; Pointer To This Planes.
+	MOVE.L	D0,D2			; D2.L = Number of Buffer Lines.
+	BRA.S	DUPED3			; Start Looping.
+*
+*	Duplicate Left Edge, 16 Quad Positions.
+*
+DUPED2	MOVE.B	8(A1),D4		; Get Left Edge.
+	AND.W	D6,D4			; Remove Other Bits.
+	MOVE.W	D4,D5			; Duplicate It.
+	LSR.W	#4,D5			; Move It Down.
+	OR.W	D5,D4			; D4.B = Value.
+	MOVEA.L	A1,A2			; Address of Fill Area.
+	MOVE.B	D4,(A2)+		; Save  0.
+	MOVE.B	D4,(A2)+		; Save  1.
+	MOVE.W	(A1),(A2)+		; Save  2 -  3.
+	MOVE.L	(A1),(A2)		; Save  4 -  7.
+*
+*	Duplicate Right Edge, 72 Quad Positions.
+*
+	ADDA.W	#(NUMQUADSDATA-72)/2,A1	; Address of First Word to Fill.
+	MOVEA.L	A1,A2			; Save Starting Address.
+	MOVE.B	-1(A1),D4		; Get Ending Value.
+	AND.W	D7,D4			; Remove Other Bits.
+	MOVE.W	D4,D5			; Duplicate It.
+	LSL.W	#4,D5			; Move Up.
+	OR.W	D5,D4			; D4.B = Fill Value.
+	MOVE.B	D4,(A1)+		; Save  0.
+	MOVE.B	D4,(A1)+		; Save  1.
+	MOVE.W	(A2),(A1)+		; Save  2 -  3.
+	MOVE.L	(A2),D4			; Fill Value.
+	MOVE.L	D4,(A1)+		; Save  4 -  7.
+	MOVE.L	D4,(A1)+		; Save  8 - 11.
+	MOVE.L	D4,(A1)+		; Save 12 - 15.
+	MOVE.L	D4,(A1)+		; Save 16 - 19.
+	MOVE.L	D4,(A1)+		; Save 20 - 23.
+	MOVE.L	D4,(A1)+		; Save 24 - 27.
+	MOVE.L	D4,(A1)+		; Save 28 - 31.
+	MOVE.L	D4,(A1)+		; Save 32 - 35.
+	MOVE.L	D4,(A1)+		; Save 36 - 39.
+	ADDA.W	D3,A1			; Point Past Other Plane.
+DUPED3	DBF	D2,DUPED2		; Loop For Buffer Size.
+	DBF	D1,DUPED1		; Loop For Number of Planes.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D7/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetSourceDoSafeWrite:						*
+*									*
+*	Creates The Source BitMap Structure For The DoSafeWrite Routine.*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Number  of Lines To Write.				*
+*	D2.L	= Amount  to Offset In Source Data.			*
+*	A0.L	= Address of Source BitMap Structure ( bm_SIZEOF ).	*
+*	A2.L	= Address of 8 Planes Table ( 8 * 4 ).			*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= At This Address The Source BitMap Is Created.		*
+*									*
+*	14.August 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetSourceDoSafeWrite
+LUT_SetSourceDoSafeWrite:
+	MOVEM.L	D1/A0/A2,-(A7)		; Save Calling State.
+*
+*	Make The Source Bit Map.
+*
+	MOVE.W	#NUMQUADS/2,bm_BytesPerRow(A0) ; Save Width.
+	LSL.W	#2,D1			; D1.W = 4 Times The Height.
+	MOVE.W	D1,bm_Rows(A0)		; Save  Height.
+	CLR.B	bm_Flags(A0)		; Clear Flags.
+	MOVE.B	#4,bm_Depth(A0)		; Save  Depth.
+	CLR.W	bm_Pad(A0)		; Clear Pad.
+	ADDQ.L	#bm_Planes,A0		; A0.L = Address of 8 Planes Table.
+	ADDA.W	#4*4,A2			; A2.L = Address of 4 Planes Table.
+	MOVE.L	(A2)+,D1		; Get Plane 0 Address.
+	ADD.L	D2,D1			; Offset By Amount.
+	MOVE.L	D1,(A0)+		; Save  Plane 0.
+	MOVE.L	(A2)+,D1		; Get Plane 1 Address.
+	ADD.L	D2,D1			; Offset By Amount.
+	MOVE.L	D1,(A0)+		; Save  Plane 1.
+	MOVE.L	(A2)+,D1		; Get Plane 2 Address.
+	ADD.L	D2,D1			; Offset By Amount.
+	MOVE.L	D1,(A0)+		; Save  Plane 2.
+	MOVE.L	(A2)+,D1		; Get Plane 3 Address.
+	ADD.L	D2,D1			; Offset By Amount.
+	MOVE.L	D1,(A0)+		; Save  Plane 3.
+	CLR.L	(A0)+			; Clear Plane 4.
+	CLR.L	(A0)+			; Clear Plane 5.
+	CLR.L	(A0)+			; Clear Plane 6.
+	CLR.L	(A0)+			; Clear Plane 7.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1/A0/A2		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetLineCountDoSafeWrite:					*
+*									*
+*	Changes The Line Count In The Do Safe Write Routine.		*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Number  of Lines To Write.				*
+*	A0.L	= Address of Source BitMap Structure ( bm_SIZEOF ).	*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= At This Address The Source Line Count Is Changed.	*
+*									*
+*	23.August 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetLineCountDoSafeWrite
+LUT_SetLineCountDoSafeWrite:
+	MOVE.L	D1,-(A7)		; Save Calling State.
+*
+*	Change The Line Count.
+*
+	LSL.W	#2,D1			; D1.W = 4 Times The Height.
+	MOVE.W	D1,bm_Rows(A0)		; Save  Height.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetInterfaceDoSafeWrite:					*
+*									*
+*	Creates The Interface BitMap Structure For DoSafeWrite Routine.	*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Number  of Lines To Write.				*
+*	A1.L	= Address of Interface BitMap Structure ( bm_SIZEOF ).	*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= At This Address The Interface BitMap Is Created.	*
+*									*
+*	14.August 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetInterfaceDoSafeWrite
+LUT_SetInterfaceDoSafeWrite:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make The Destination Bit Map.
+*
+	MOVEA.L	TB_BitMap(A5),A0	; A0.L = Address of BitMap.
+	MOVE.W	bm_BytesPerRow(A0),D0	; D0.W = Width of One Line.
+	MOVE.W	D0,bm_BytesPerRow(A1)	; Save Width.
+	LSL.W	#3,D1			; D1.W = 4 Times The Height.
+	NEG.W	D1			; - 4 Times The Height.
+	ADDI.W	#480-32,D1		; D1.W = 2 * ( 240 - 16 - Height * 4 ).
+	MOVE.W	D1,bm_Rows(A1)		; Save Height.
+	MOVE.B	bm_Flags(A0),bm_Flags(A1) ;Get Flags.
+	MOVE.B	#2,bm_Depth(A1) 	; Save Depth 2000.
+	BTST.B	#ECSFETCH_BIT,TB_Flags2(A5) ; ECS Chip Set?
+	BNE.S	STINF1			; Jump If Amiga 2000.
+	MOVE.B	#3,bm_Depth(A1) 	; Save Depth 4000.
+STINF1	MOVE.W	bm_Pad(A0),bm_Pad(A1)	; Get Pad.
+	MULU.W	#2*(38-21),D0		; D0.L = Plane Offset Amount.
+	ADDQ.L	#bm_Planes,A0		; A0.L = Address of Source Planes Table.
+	ADDQ.L	#bm_Planes,A1		; A1.L = Address of Destin Planes Table.
+	MOVE.L	(A0)+,D1		; Get Plane 0.
+	ADD.L	D0,D1			; Point Past Lines.
+	MOVE.L	D1,(A1)+		; Plane 0.
+	MOVE.L	(A0)+,D1		; Get Plane 1.
+	ADD.L	D0,D1			; Point Past Lines.
+	MOVE.L	D1,(A1)+		; Plane 1.
+	MOVE.L	(A0)+,D1		; Get Plane 2.
+	ADD.L	D0,D1			; Point Past Lines.
+	MOVE.L	D1,(A1)+		; Plane 2.
+	CLR.L	(A1)+		 	; Plane 3.
+	CLR.L	(A1)+		 	; Plane 4.
+	CLR.L	(A1)+		 	; Plane 5.
+	CLR.L	(A1)+		 	; Plane 6.
+	CLR.L	(A1)+		 	; Plane 7.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	WriteDoSafeBlock:						*
+*									*
+*	Writes Out a Safe Data Block to Toaster into DVE1.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Starting Line Number.					*
+*	D2.L	= DVE Bank Number.					*
+*	A0.L	= Address of Source    BitMap Structure ( bm_SIZEOF ).	*
+*	A1.L	= Address of Interface BitMap Structure ( bm_SIZEOF ).	*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Safe Data Block Is Written Out To Toaster.			*
+*									*
+*	08.Jul 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_WriteDoSafeBlock
+LUT_WriteDoSafeBlock:
+	MOVEM.L	D0-D5/A2,-(A7)		; Save Calling State.
+*
+*	Drop Us Out of LUT Mode.
+*
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VTSetup.
+	ELHTEST_LUT	A0		; Is LUT Mode On?
+	BEQ.S	WRDSB1			; Skip If LUT Mode Off.
+	CALLTL	LUToff			; Make Sure LUT Mode Is Off.
+;;;	BSR	LUT_SendSpriteToToaster	; Update the Toaster.
+WRDSB1	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+*
+*	Now Do The Write.
+*
+	MOVE.L	D0,D3			; D3.L = Start Write Number.
+	ADDQ.L	#1,D3			; Adjust Position.
+	MOVE.L	D2,D4			; D4.L = DVE Bank Number.
+	MOVEQ.L	#0,D0			; D0.L = dataBMModulo.
+	MOVEQ.L	#17,D1			; D1.L = CustomBMTop, Interface Top.
+	MOVEQ.L	#0,D2			; D2.L = AM = 0 / BM = 1.
+	SUBA.L	A2,A2			; A2.L = Palette.
+	MOVEQ.L	#1,D5			; Don't allow Zipper Write
+	TST.L	TB_ColorCycle(A5)	; Are We Currently Color Cycling?
+	BNE.S	WRDSB2			; Jump If It Is Enabled.
+	CALLTL	DoSafeWrite		; Write Out The Data.
+	BRA.S	WRDSB3			; Exit Subroutine.
+WRDSB2	BCLR.B	#TBCF_Enable,TB_CycleFlags(A5) ; Disable until ready.
+	CALLTL	Wait4Top		; Wait Till End of Frame.
+	CALLTL	DoSafeWrite		; Write Out The Data.
+	CALLTL	Wait4Top		; Wait Till End of Frame.
+	BSET.B	#TBCF_Enable,TB_CycleFlags(A5) ; Enable When Done.
+*
+*	Exit Subroutine.
+*
+WRDSB3	MOVEM.L	(A7)+,D0-D5/A2		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MakeColorSquare:						*
+*									*
+*	Makes the Color Squair On the Screen.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= 0RGB Value To Write Into Square.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Color Square Is Written Into the DVE Buffer.			*
+*									*
+*	16.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+BOXLEF	SET	(LEFTEDGE+400)/4	; Color Square Left Edge.
+BOXTOP	SET	TOPEDGE+228		; Color Square Top  Edge.
+BOXWID	SET	18			; Color Square Width.
+BOXHIG	SET	8			; Color Square Height.
+*
+BUFSIZ	SET	NUMQUADS*BOXHIG*2 	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_MakeColorSquare
+LUT_MakeColorSquare:
+	MOVEM.L D0-D4/A0-A2,-(A7)	; Save Calling State.
+*
+*	Should we point to the upper Chip planes (6 & 7)????
+*
+	MOVE.L	TB_CHIPMem+6*4(A5),A1	; some chipmem I can use
+	MOVE.L	A1,D1			; High order nibbles
+	ADDI.L	#3*BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; bit 7
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 6
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 5
+	MOVE.L	A1,-(A7)		; 4
+	MOVE.L	A1,D1			; Next scan line = Low order nibbles
+	ADDI.L	#(3*BUFSIZ)+NUMQUADS/2,D1
+	MOVE.L	D1,-(A7)		; bit 3
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 2
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 1
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 0
+*
+*	Build YIQ Data Into A0.L Buffer, Then Translate It To A1.L Buffer.
+*
+	MOVEA.L	A7,A1			; A1.L = Address of Dest Planes Table.
+	SUBA.W	#NUMQUADSDATA*4,A7	; A7.L = Address of Quads Buffer.
+*
+*	Make Color Square.
+*
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVEQ.L	#BOXWID,D1		; D1.L = Number  of Quads Pixels.
+	LEA.L	4*(BOXLEF)(A7),A0	; A0.L = Address of Quads Buffer.
+	BSR	FillLong		; Fill The Area of Memory.
+*
+*	Make Left and Right Black.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#NUMQUADSDATA-(BOXLEF+BOXWID),D1 ; D1.L = Number  of Quads Pixels.
+	LEA.L	4*(BOXLEF+BOXWID)(A7),A0 ;A0.L = Address of Quads Buffer.
+	BSR	FillLong		; Fill The Area of Memory.
+	MOVE.L	#BOXLEF,D1		; D1.L = Number  of Quads Pixels.
+	MOVEA.L	A7,A0			; A0.L = Address of Quads Buffer.
+	BSR	FillLong		; Fill The Area of Memory.
+*
+*	Make 1/8 and 3/4 Values to Get Rid of Dot Crawl.
+*
+	MOVE.L	4*(BOXLEF)(A7),D0	; Get Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Values.
+	MOVE.L	D0,4*(BOXLEF-2)(A7)	; Save Left  Edge.
+	MOVE.L	D1,4*(BOXLEF-1)(A7)	; Save Left  Edge.
+	MOVE.L	4*(BOXLEF)(A7),D0	; Get Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Values.
+	MOVE.L	D1,4*(BOXLEF+BOXWID+0)(A7) ; Save Right Edge.
+	MOVE.L	D0,4*(BOXLEF+BOXWID+1)(A7) ; Save Right Edge.
+*
+*	Build Into Planes.
+*
+	MOVEQ.L	#0,D0			; D0.L = Destination Byte Offset.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVE.L	A1,D2			; A1.L = Save Planes Table.
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVE.L	#NUMQUADSDATA,D0	; D0.L = Number of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Make 1/8 and 3/4 Values to Get Rid of Dot Crawl.
+*
+	MOVE.L	4*(BOXLEF)(A7),D0	; Get Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Values.
+	MOVE.L	D0,4*(BOXLEF-2)(A7)	; Save Left  Edge.
+	MOVE.L	D1,4*(BOXLEF-1)(A7)	; Save Left  Edge.
+	MOVE.L	4*(BOXLEF)(A7),D0	; Get Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Values.
+	MOVE.L	D1,4*(BOXLEF+BOXWID+0)(A7) ; Save Right Edge.
+	MOVE.L	D0,4*(BOXLEF+BOXWID+1)(A7) ; Save Right Edge.
+*
+*	Build Into Planes.
+*
+	MOVE.L	#NUMQUADS,D0		; D0.L = Number of Quads.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	D2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+	ADDA.W	#NUMQUADSDATA*4,A7	; Get Rid of Quads Buffer.
+*
+*	Duplicate Data To Fill Out Max.  2 * Line Count, Start on 2nd Line.
+*
+	MOVEQ.L	#0,D4			; D4.W = Phase Table Pointer.
+	MOVE.L	#NUMQUADS*2,D1		; D1.L = Offset to Second Line.
+	MOVE.W	#BOXHIG*2-2-1,D2	; D2.W = Loop Counter.
+	MOVEA.L	A1,A2			; A2.L = Address of Planes Table.
+DOCOS1	MOVEQ.L	#0,D3			; D3.W = Pointer to Plane 4 to 7.
+DOCOS2	MOVEA.L	4*4(A2,D3.W),A0		; A0.L = Address of Source.
+	LEA.L	0(A0,D1.L),A1		; A1.L = Address of Destination.
+	BTST.B	D4,#LUT_PhaseMask	; Which Phase Is It?
+	BEQ.S	DOCOS3			; Jump If Normal Phase.
+	ADDA.W	#NUMQUADS,A0		; Else Complement Phase.
+DOCOS3	MOVEQ.L	#NUMQUADSDATA>>2,D0	; Number of Long Words To Move.
+	BSR	MoveLong		; Move The Line.
+	ADDQ.W	#4,D3			; D3.W = Updated Plane 4 to 7.
+	CMPI.W	#4*4,D3			; Add Done?
+	BCS.S	DOCOS2			; Jump If Not Done.
+	ADDQ.W	#1,D4			; D4.L = Next Position In Phase Table.
+	ANDI.W	#7,D4			; Make Sure In Range 0 to 7.
+	ADDI.L	#NUMQUADS,D1		; D1.L = Offset to Next Line.
+	DBF	D2,DOCOS1		; Loop From 2 * ( Second to End ).
+*
+*	Write Data Out To Toaster.
+*
+	MOVE.L	#BOXTOP,D0		; D0.L = Starting Line Number.
+	MOVEQ.L	#BOXHIG,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	MOVEQ.L	#4-1,D3			; Loop Counter.
+DOCOS4	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	ADD.L	D1,D0			; Increment Line Number.
+	DBF	D3,DOCOS4		; Loop And Write The Data.
+	MOVEQ.L	#6,D1			; Only 38 Lines Total.
+	BSR	LUT_SetLineCountDoSafeWrite ; 4 * 8 = 32, 6 Left for 38.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Make Sure It's All Done.
+	LEA.L	2*bm_SIZEOF+4*8(A7),A7	; Return Plane Table.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D4/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ClearDVE1:							*
+*									*
+*	Clears the DVE1 Buffer to Quad Color.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Quad Value to Clear Screen With.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Entire DVE1 Buffer Is Cleared To Quad Color.			*
+*									*
+*	20.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+MAXBUF	SET	MAXIMUMSIZE		; Maximum Buffer Size.
+BUFSIZ	SET	NUMQUADS*MAXBUF*2	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_ClearDVE1
+LUT_ClearDVE1:
+	MOVEM.L D0-D4/A0-A2,-(A7)	; Save Calling State.
+*
+*	Should we point to the upper Chip planes (6 & 7)????
+*
+	MOVE.L	TB_CHIPMem+6*4(A5),A1	; some chipmem I can use
+	MOVE.L	A1,D1			; High order nibbles
+	ADDI.L	#3*BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; bit 7
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 6
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 5
+	MOVE.L	A1,-(A7)		; 4
+	MOVE.L	A1,D1			; Next scan line = Low order nibbles
+	ADDI.L	#(3*BUFSIZ)+NUMQUADS/2,D1
+	MOVE.L	D1,-(A7)		; bit 3
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 2
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 1
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 0
+*
+*	Build YIQ Data Into A0.L Buffer, Then Translate It To A1.L Buffer.
+*
+	MOVEA.L	A7,A1			; A1.L = Address of Planes Table.
+	SUBA.W	#NUMQUADSDATA*4,A7	; Make Quads Buffer.
+*
+*	Make Entrie Screen Same Color.
+*
+	MOVE.L	#NUMQUADSDATA,D1	; D1.L = Number  of Quads.
+	MOVEA.L	A7,A0			; A0.L = Address of Quads Buffer.
+	BSR	FillLong		; Fill The Area of Memory.
+	MOVEQ.L	#0,D0			; D0.L = Destination Byte Offset.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVE.L	A1,D2			; A1.L = Save Planes Table.
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVE.L	#NUMQUADSDATA,D0	; D0.L = Number of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+	MOVE.L	#NUMQUADS,D0		; D0.L = Number of Quads.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	D2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+	ADDA.W	#NUMQUADSDATA*4,A7	; Get Rid of Quads Buffer.
+*
+*	Duplicate Data To Fill Out Max.  2 * Line Count, Start on 2nd Line.
+*
+	MOVEQ.L	#0,D4			; D4.W = Phase Table Pointer.
+	MOVE.L	#NUMQUADS*2,D1		; D1.L = Offset to Second Line.
+	MOVE.W	#MAXBUF*2-2-1,D2	; D2.W = Loop Counter.
+	MOVEA.L	A1,A2			; A2.L = Address of Planes Table.
+CLDVE1	MOVEQ.L	#0,D3			; D3.W = Pointer to Plane 4 to 7.
+CLDVE2	MOVEA.L	4*4(A2,D3.W),A0		; A0.L = Address of Source.
+	LEA.L	0(A0,D1.L),A1		; A1.L = Address of Destination.
+	BTST.B	D4,#LUT_PhaseMask	; Which Phase Is It?
+	BEQ.S	CLDVE3			; Jump If Normal Phase.
+	ADDA.W	#NUMQUADS,A0		; Else Complement Phase.
+CLDVE3	MOVEQ.L	#NUMQUADSDATA>>2,D0	; Number of Long Words To Move.
+	BSR	MoveLong		; Move The Line.
+	ADDQ.W	#4,D3			; D3.W = Updated Plane 4 to 7.
+	CMPI.W	#4*4,D3			; Add Done?
+	BCS.S	CLDVE2			; Jump If Not Done.
+	ADDQ.W	#1,D4			; D4.L = Next Position In Phase Table.
+	ANDI.W	#7,D4			; Make Sure In Range 0 to 7.
+	ADDI.L	#NUMQUADS,D1		; D1.L = Offset to Next Line.
+	DBF	D2,CLDVE1		; Loop From 2 * ( Second to End ).
+*
+*	Write Data Out to Toaster.
+*
+	MOVEQ.L	#0,D0			; D0.L = Starting Line Number.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	SUBA.L	A1,A1			; A1.L = Address of Interface.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	MOVEQ.L	#MAXBUF,D3		; D3.L = Maximum Buffer Size.
+	MOVE.L	#DISPLAYHEIGHT,D4	; D4.L = Number to Send Out.
+CLDVE4	MOVE.L	D4,D1			; Assume Buffer Size.
+	CMP.L	D3,D1			; How Many Left To Go Out?
+	BCS.S	CLDVE5			; Jump If < Buffer Size.
+	MOVE.L	D3,D1			; Set To Buffer Size.
+CLDVE5	BSR	LUT_SetLineCountDoSafeWrite ; D1.L = Current Line Count.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	ADD.L	D1,D0			; Move To Next Line.
+	SUB.L	D1,D4			; Reduce Number Left.
+	BGT.S	CLDVE4			; Jump Back If Not Done.
+	CALLTL	Wait4Top		; Make Sure It's All Done.
+	LEA.L	bm_SIZEOF+4*8(A7),A7	; Return Plane Table.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D4/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	InitilizeDVE1:							*
+*									*
+*	Initilizes the DVE1 Buffer.					*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Entire DVE1 Buffer Is Initilized.				*
+*									*
+*	8.Oct 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_InitilizeDVE1
+LUT_InitilizeDVE1:
+	MOVEM.L	D0-D2/A0,-(A7)		; Save Calling State.
+*
+*	Check What The Main Is Looking At.
+*
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	LEA.L	INTDV3(PC),A0		; A0.L = Address of Table.
+	MOVEQ.L	#INTDV3LN-1,D0		; D0.L = Length of Table.
+	MOVE.W	TB_MainSec(A5),D1	; D1.L = What The User Sees.
+INTDV1	MOVE.W	D1,D2			; In Digital Video, More Than 1 Bit Set.
+	AND.W	(A0)+,D2		; Is It This One?
+	DBNE	D0,INTDV1		; Loop Until Found.
+	BNE.S	INTDV2			; Jump If Ok.
+	MOVEQ.L	#VTI_IS_VID1,D0		; D0.L = Video 1.
+*
+*	Clear Out the Bank.
+*
+INTDV2	MOVEQ.L	#1,D1			; D1.L = Bank Number.
+	CALLTL	Grab1Bank		; Clear The Bank.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0		; Return Calling State.
+	RTS
+*
+*		M_MONO,M_ENCODER,M_DV1,M_DV0,M_VIDEO4,M_VIDEO3,M_VIDEO2,M_VIDEO1
+*
+INTDV3	DC.W	M_MONO,M_ENCODER,$0000,M_DV0,M_VIDEO4,M_VIDEO3,M_VIDEO2,M_VIDEO1
+INTDV3LN EQU	(*-INTDV3)/2
+	PAGE
+*************************************************************************
+*									*
+*	MakeEditColors:							*
+*									*
+*	Makes the Edit Colors Band On The Screen.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= 0 -> Top Edit Buffer, !0 -> Bottom Edit Buffer.	*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Edit Color Band Is Written On The Screen.			*
+*									*
+*	20.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+BOXLEF	SET	(LEFTEDGE+LUT_PickLeft)/4 ;Edit Colors Left Edge.
+BOXTOP	SET	TOPEDGE+162		; Edit Colors Top  Edge.
+BOXWID	SET	LUT_EditBufSz		; Edit Colors Width.
+BOXHIG	SET	8			; Edit Colors Height.
+*
+BUFSIZ	SET	NUMQUADS*BOXHIG*2	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_MakeEditColors
+LUT_MakeEditColors:
+	MOVEM.L D0-D5/A0-A2,-(A7)	; Save Calling State.
+*
+*	Should we point to the upper Chip planes (6 & 7)????
+*
+	MOVE.L	TB_CHIPMem+6*4(A5),A1	; some chipmem I can use
+	MOVE.L	A1,D1			; High order nibbles
+	ADDI.L	#3*BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; bit 7
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 6
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 5
+	MOVE.L	A1,-(A7)		; 4
+	MOVE.L	A1,D1			; Next scan line = Low order nibbles
+	ADDI.L	#(3*BUFSIZ)+NUMQUADS/2,D1
+	MOVE.L	D1,-(A7)		; bit 3
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 2
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 1
+	SUBI.L	#BUFSIZ,D1
+	MOVE.L	D1,-(A7)		; 0
+*
+*	Get Addresses of Buffers.
+*
+	MOVEA.L	A7,A2			; A2.L = Address of Dest Planes Table.
+	SUBA.W	#NUMQUADSDATA*4,A7	; Make Buffer On Stack.
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	TST.L	D0			; Top Or Bottom Buffer?
+	BEQ.S	MEDTC1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Address of Bottom Edit Buffer.
+*
+*	Make Beginning 1/8 and 3/4 Quad Values.
+*
+MEDTC1	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; Make YIQ Value.
+	BSR	YIQQUAD			; Make Quad Value.
+	SWAP.W	D0			; *** Starting On Odd Line.
+	MOVE.L	D0,D4			; D4.L = Starting Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Dot Crawl.
+	MOVE.L	D0,D2			; D2.L = Left Value.
+	MOVE.L	D1,D3			; D3.L = Left Value.
+	MOVE.L	D4,D0			; D0.L = Starting Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Dot Crawl.
+	LEA.L	BOXLEF*4(A7),A1		; Address of Area To Fill.
+	MOVE.L	D3,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D2,-(A1)		; Store 1/8 Quad.
+	MOVE.L	D0,-(A1)		; Store 1/8 Quad.
+	MOVE.L	D1,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D3,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D2,-(A1)		; Store 1/8 Quad.
+*
+*	Loop And Make The Colors.
+*
+	LEA.L	4*BOXLEF(A7),A1		; Address of Destination.
+	MOVE.L	D4,(A1)+		; Save Starting Quad Value.
+	MOVEQ.L	#LUT_EditBufSz-2,D1	; Loop Counter.
+MEDTC2	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	SWAP.W	D0			; *** Starting On Odd Line.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D1,MEDTC2		; Loop Until Done.
+*
+*	Make Ending 1/8 and 3/4 Quad Values.
+*
+	MOVE.L	D0,D5			; D5.L = Ending Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Dot Crawl.
+	MOVE.L	D0,D2			; D2.L = Left Value.
+	MOVE.L	D1,D3			; D3.L = Left Value.
+	MOVE.L	D5,D0			; D0.L = Ending Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Dot Crawl.
+	MOVE.L	D1,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D0,(A1)+		; Store 1/8 Quad.
+	MOVE.L	D2,(A1)+		; Store 1/8 Quad.
+	MOVE.L	D3,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D1,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D0,(A1)+		; Store 1/8 Quad.
+*
+*	Make Left and Right Black.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#NUMQUADSDATA-(BOXLEF+BOXWID+11),D1 ; D1.L = Number  of QuadsPixels.
+	LEA.L	4*(BOXLEF+BOXWID+11)(A7),A0 ; A0.L = Address of QuadsBuffer.
+	BSR	FillLong		; Fill The Area of Memory.
+	MOVE.L	#BOXLEF-11,D1		; D1.L = Number  of Quads Pixels.
+	MOVEA.L	A7,A0			; A0.L = Address of Quads Buffer.
+	BSR	FillLong		; Fill The Area of Memory.
+*
+*	Build Into Planes.
+*
+	MOVEQ.L	#0,D0			; D0.L = Destination Byte Offset.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVE.L	#NUMQUADSDATA,D0	; D0.L = Number  of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Make The Complement Starting Edges.
+*
+	SWAP.W	D4			; Generate Comp Quad Value.
+	MOVE.L	D4,D0			; D0.L = Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Dot Crawl.
+	MOVE.L	D0,D2			; D2.L = Left Value.
+	MOVE.L	D1,D3			; D3.L = Left Value.
+	MOVE.L	D4,D0			; D0.L = Starting Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Dot Crawl.
+	LEA.L	BOXLEF*4(A7),A1		; Address of Area To Fill.
+	MOVE.L	D3,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D2,-(A1)		; Store 1/8 Quad.
+	MOVE.L	D0,-(A1)		; Store 1/8 Quad.
+	MOVE.L	D1,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D4,-(A1)		; Store Quad.
+	MOVE.L	D3,-(A1)		; Store 3/4 Quad.
+	MOVE.L	D2,-(A1)		; Store 1/8 Quad.
+*
+*	Make The Complement Ending Edges.
+*
+	SWAP.W	D5			; Generate Comp Quad Value.
+	MOVE.L	D5,D0			; D0.L = Quad Value.
+	BSR	LUT_DotCrawlQuadLeft	; Make Left Dot Crawl.
+	MOVE.L	D0,D2			; D2.L = Left Value.
+	MOVE.L	D1,D3			; D3.L = Left Value.
+	MOVE.L	D5,D0			; D0.L = Ending Quad Value.
+	BSR	LUT_DotCrawlQuadRight	; Make Right Dot Crawl.
+	LEA.L	(BOXLEF+BOXWID)*4(A7),A1 ;Address of Area To Fill.
+	MOVE.L	D1,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D0,(A1)+		; Store 1/8 Quad.
+	MOVE.L	D2,(A1)+		; Store 1/8 Quad.
+	MOVE.L	D3,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D5,(A1)+		; Store Quad.
+	MOVE.L	D1,(A1)+		; Store 3/4 Quad.
+	MOVE.L	D0,(A1)+		; Store 1/8 Quad.
+*
+*	Generate the Complement Plane.
+*
+	MOVE.L	#NUMQUADS,D0		; D0.L = Number of Quads.
+	MOVEQ.L	#NUMQUADSDATA>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+	ADDA.W	#NUMQUADSDATA*4,A7	; Get Rid of Quads Buffer.
+*
+*	Duplicate Data To Fill Out Max.  2 * Line Count, Start on 2nd Line.
+*
+	MOVEQ.L	#0,D4			; D4.W = Phase Table Pointer.
+	MOVE.L	#NUMQUADS*2,D1		; D1.L = Offset to Second Line.
+	MOVE.W	#BOXHIG*2-2-1,D2	; D2.W = Loop Counter.
+MEDTC3	MOVEQ.L	#0,D3			; D3.W = Pointer to Plane 4 to 7.
+MEDTC4	MOVEA.L	4*4(A2,D3.W),A0		; A0.L = Address of Source.
+	LEA.L	0(A0,D1.L),A1		; A1.L = Address of Destination.
+	BTST.B	D4,#LUT_PhaseMask	; Which Phase Is It?
+	BEQ.S	MEDTC5			; Jump If Normal Phase.
+	ADDA.W	#NUMQUADS,A0		; Else Complement Phase.
+MEDTC5	MOVEQ.L	#NUMQUADSDATA>>2,D0	; Number of Long Words To Move.
+	BSR	MoveLong		; Move The Line.
+	ADDQ.W	#4,D3			; D3.W = Updated Plane 4 to 7.
+	CMPI.W	#4*4,D3			; Add Done?
+	BCS.S	MEDTC4			; Jump If Not Done.
+	ADDQ.W	#1,D4			; D4.L = Next Position In Phase Table.
+	ANDI.W	#7,D4			; Make Sure In Range 0 to 7.
+	ADDI.L	#NUMQUADS,D1		; D1.L = Offset to Next Line.
+	DBF	D2,MEDTC3		; Loop From 2 * ( Second to End ).
+*
+*	Write Data Out To Toaster.
+*
+	MOVE.L	#BOXTOP,D0		; D0.L = Starting Line Number.
+	MOVEQ.L	#BOXHIG,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	ADD.L	D1,D0			; Increment Line Number.
+	MOVEQ.L	#4,D1			; Only 12 Lines Total.
+	BSR	LUT_SetLineCountDoSafeWrite ; Adjust The Line Count.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Make Sure It's All Done.
+	LEA.L	2*bm_SIZEOF+4*8(A7),A7	; Return Plane Table.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D5/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendEditMap:							*
+*									*
+*	Sends the Current Color Map Out To the DVE1 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE1 Buffer.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	96			; Window Height.
+MAXBUF	SET	8			; Maximum Buffer Size.
+BOXLEF	SET	(LEFTEDGE+120)/4	; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendEditMap
+LUT_SendEditMap:
+	MOVEM.L D0-D5/A0-A3,-(A7)	; Save Calling State.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+*
+*	Clear Starting Buffer to Black Value.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#MAXBUF*2,D1		; D1.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_FillPlanes		; Make Black Value.
+*
+*	Build The DeltaRED,StartRED, DeltaGREEN,StartGREEN, DeltaBLUE,StartBLUE.
+*
+	SUBA.W	#12*LUT_EditBufSz/3,A7	; Internal Delta Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D2	; D2.L = Loop Counter.
+	MOVEQ.L	#WINHIG,D3		; D3.L = Value to Divide By.
+	MOVEQ.L	#-128,D4		; D4.B = 1/2 Value.
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	LEA.L	LUT_EditBufBot(A4),A1	; Address of Bot Edit Buffer.
+SNEDM1	ADDQ.L	#3,A0			; Increment to Next.
+	ADDQ.L	#3,A1			; Increment to Next.
+*
+*	Make DeltaRED, StartRED.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Red Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Red Value End.
+	SUB.L	D0,D1			; D1.L = Delta Red.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Red.
+	MOVE.W	D1,(A3)+		; DeltaRED.
+	MOVE.B	D0,(A3)+		; StartRED.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaGREEN, StartGREEN.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Green Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Green Value End.
+	SUB.L	D0,D1			; D1.L = Delta Green.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Green.
+	MOVE.W	D1,(A3)+		; DeltaGREEN.
+	MOVE.B	D0,(A3)+		; StartGREEN.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaBLUE, StartBLUE.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Blue Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Blue Value End.
+	SUB.L	D0,D1			; D1.L = Delta Blue.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Blue.
+	MOVE.W	D1,(A3)+		; DeltaBLUE.
+	MOVE.B	D0,(A3)+		; StartBLUE.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Check Condition Of Loop.
+*
+	ADDQ.L	#3,A0			; Increment to Next.
+	ADDQ.L	#3,A1			; Increment to Next.
+	DBF	D2,SNEDM1		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	SUBA.W	#4*(4+LUT_EditBufSz/3),A7 ; Make Internal Buffer.
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNEDM2	MOVEA.L	A3,A0			; A0.L = Address of Deltas.
+	LEA.L	4*2(A7),A1		; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D2	; Loop Counter.
+SNEDM3	MOVE.W	(A0)+,D0		; Get DeltaRED.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	LSL.L	#8,D0			; D0.L = XRA2.
+	MOVE.W	(A0)+,D0		; Get DeltaGREEN.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	MOVE.W	(A0)+,D1		; Get DeltaBLUE.
+	ADD.W	(A0),D1			; D1.W = New Starting Position.
+	MOVE.W	D1,(A0)+		; Save Back New Starting Value.
+	LSR.W	#8,D1			; Put In Low Position.
+	MOVE.B	D1,D0			; D0.L = XRGB.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D2,SNEDM3		; Loop Until Done.
+*
+*	Set The Normal / Complement Offsets, Convert With Quads to Planes.
+*
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	MOVE.L	D4,D0			; Do Editor Phase Adjustment.
+	ADDQ.L	#LUT_PhaseAdd,D0	; We Moved a Line.
+	BTST.L	#1,D0			; In Complement Mode?
+	BEQ.S	SNEDM4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+*
+*	Convert to Toaster Format.
+*
+SNEDM4	MOVE.L	4*2(A7),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A7)			; Save 1/8 Value.
+	MOVE.L	D1,4(A7)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A7),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A7) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A7) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEQ.L	#LUT_EditBufSz/3,D0	; D0.L = Number  of Quads.
+	ADDQ.L	#4*2,A0			; Move Past First 2 Quads.
+	MOVEA.L	A0,A1			; A1.L = Address of Colored Area.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	4*2(A7),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A7)			; Save 1/8 Value.
+	MOVE.L	D1,4(A7)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A7),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A7) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A7) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNEDM5			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	ADDI.L	#TOPEDGE+296-MAXBUF,D0	; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To Toaster.
+*
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	2*bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNEDM5	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNEDM2			; Loop Until Done.
+	ADDA.W	#4*(4+LUT_EditBufSz/3)+8*4+12*LUT_EditBufSz/3,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D5/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendDVEMap:							*
+*									*
+*	Sends the Current Color Map Out To the DVE0 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	    = Address of LUT Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Send to DVE0 Buffer.	*
+*	A5.L	    = Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE0 Buffer.			*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Made During File Write.		*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	480			; Window Height.
+MAXBUF	SET	48			; Maximum Buffer Size.
+BOXLEF	SET	16			; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendDVEMap
+LUT_SendDVEMap:
+	MOVEM.L D0-D5/A0-A3,-(A7)	; Save Calling State.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+*
+*	Build The DeltaRED,StartRED, DeltaGREEN,StartGREEN, DeltaBLUE,StartBLUE.
+*
+	SUBA.W	#12*LUT_EditBufSz,A7	; Internal Delta Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	MOVEQ.L	#LUT_EditBufSz-1,D2	; D2.L = Loop Counter.
+	MOVE.W	#WINHIG,D3		; D3.W = Value to Divide By.
+	MOVEQ.L	#-128,D4		; D4.B = 1/2 Value.
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	LEA.L	LUT_EditBufBot(A4),A1	; Address of Bot Edit Buffer.
+*
+*	Make DeltaRED, StartRED.
+*
+SNEDV1	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Red Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Red Value End.
+	SUB.L	D0,D1			; D1.L = Delta Red.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Red.
+	MOVE.W	D1,(A3)+		; DeltaRED.
+	MOVE.B	D0,(A3)+		; StartRED.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaGREEN, StartGREEN.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Green Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Green Value End.
+	SUB.L	D0,D1			; D1.L = Delta Green.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Green.
+	MOVE.W	D1,(A3)+		; DeltaGREEN.
+	MOVE.B	D0,(A3)+		; StartGREEN.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaBLUE, StartBLUE.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Blue Value Start.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A1)+,D1		; Get Blue Value End.
+	SUB.L	D0,D1			; D1.L = Delta Blue.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Blue.
+	MOVE.W	D1,(A3)+		; DeltaBLUE.
+	MOVE.B	D0,(A3)+		; StartBLUE.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+	DBF	D2,SNEDV1		; Loop Until Done.
+*
+*	Set Up For Main Loop.
+*
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	SUBA.W	#LUT_EditBufSz*4,A7	; Make Internal Buffer.
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+*
+*	Loop And Make The Colors.
+*
+SNEDV2	BSR	LUT_CheckLinear		; Check For Linear Ramp At End.
+	BEQ.S	SNEDV5			; Jump If On Last Line.
+	MOVEA.L	A3,A0			; A0.L = Address of Deltas.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz-1,D2	; Loop Counter.
+SNEDV3	MOVE.W	(A0)+,D0		; Get DeltaRED.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	LSL.L	#8,D0			; D0.L = XRA2.
+	MOVE.W	(A0)+,D0		; Get DeltaGREEN.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	MOVE.W	(A0)+,D1		; Get DeltaBLUE.
+	ADD.W	(A0),D1			; D1.W = New Starting Position.
+	MOVE.W	D1,(A0)+		; Save Back New Starting Value.
+	LSR.W	#8,D1			; Put In Low Position.
+	MOVE.B	D1,D0			; D0.L = XRGB.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D2,SNEDV3		; Loop Until Done.
+*
+*	Set The Normal / Complement Offsets, Convert With Quads to Planes.
+*
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	ADDQ.W	#1,D4			; For Phase Test.
+	BTST.L	#1,D4			; In Complement Mode?
+	BEQ.S	SNEDV4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+SNEDV4	SUBQ.W	#1,D4			; From Phase Test.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEQ.L	#LUT_EditBufSz,D0	; D0.L = Number  of Quads.
+	MOVEA.L	A0,A1			; A1.L = Address of Colored Area.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Duplicate the Left and Right Edges.
+*
+	MOVEQ.L	#MAXBUF*2,D0		; D0.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_DupEdges		; Duplicate the Edges.
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+SNEDV5	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNEDV6			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	SUBI.L	#MAXBUF,D0		; D0.L = Adjust By Buffer Position.
+*
+*	Write Data Out To File.
+*
+	MOVEA.L	LTR_FramePtr(A4),A0	; A0.L = Address of Frame File.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height  of Box.
+	BSR	LUT_WriteFrameData	; Write Data Out To File.
+	BNE.S	SNEDV7			; Exit On File Write Error.
+*
+*	Write Data Out To Toaster.
+*
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write It To the Toaster?
+	BEQ.S	SNEDV6			; Skip If Don't Send It To Toaster.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset & DVE Bank #.
+	SUBA.L	A1,A1			; A1.L = Address of Interface BM.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNEDV6	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNEDV2			; Loop Until Done.
+	MOVEQ.L	#0,D0			; No Error, Set CC == Zero.
+SNEDV7	ADDA.W	#LUT_EditBufSz*4+8*4+12*LUT_EditBufSz,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D5/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LongHue:							*
+*									*
+*	Performes The HUE Interplation Between The Top and Bottom Lines.*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= First  Hue Value.					*
+*	D1.L	= Second Hue Value.					*
+*	D7.L	= Value of Hue Flags.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Hue Delta.						*
+*	D7.L	= Updated Hue Flags.					*
+*									*
+*	If rewritting this routine is nessary, another way to do it is	*
+*	to keep a running count of Arc in D7.L by adding D0.W and D1.W	*
+*	to D7 every time you enter subroutine.  So you know how many	*
+*	degrees of arc the spread covers at all times.			*
+*									*
+*	30.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_LongHue
+LUT_LongHue:
+*
+*	Make The Delta.
+*
+	SUB.W	D1,D0			; D0.L = Total Increment.
+	BMI.S	LONGH1			; Jump If Negative Increment.
+	TST.W	D7			; I Have a Positive #, Old Negative?
+	BPL.S	LONGH8			; Jump If Old Positive.
+	CMPI.W	#$4000,D0		; Thru 180 Degrees?
+	BCC.S	LONGH4			; Jump If Thru 180 Degrees.
+	BRA.S	LONGH2			; Else Add In 180 Degrees.
+LONGH1	TST.W	D7			; I have a Negative #, Old Positive?
+	BMI.S	LONGH8			; Jump If Old Negative.
+	CMPI.W	#$C000,D0		; Thru 180 Degrees?
+	BCS.S	LONGH4			; Jump If Thru 180 Degrees.
+*
+*	Add In 180 Degrees.
+*
+LONGH2	BTST.L	#17,D7			; Phase Reverse Every 360?
+	BNE.S	LONGH5			; Jump On Reverse Phase.
+	CLR.W	D7			; Get Rid Of Low Bits.
+	TST.L	D7			; Transition Thru Zero?
+	BEQ.S	LONGH8			; Jump If At Zero Degrees of Arc.
+LONGH3	SWAP.W	D7			; Get 180 Count.
+	ADDQ.W	#1,D7			; Increment It.
+	SWAP.W	D7			; Resetore.
+	BRA.S	LONGH8			; Skip Else Part.
+*
+*	Subtract Off 180 Degrees.
+*
+LONGH4	BTST.L	#17,D7			; Phase Reverse Every 360?
+	BNE.S	LONGH3			; Jump On Reverse Phase.
+LONGH5	SWAP.W	D7			; Get 180 Count.
+	TST.W	D7			; At Zero?
+	BEQ.S	LONGH6			; Jump If At Zero.
+	SUBQ.W	#1,D7			; Reduct It By One.
+	BRA.S	LONGH7			; Skip Else Part.
+LONGH6	ADDQ.W	#1,D7			; Complement 180 Position.
+LONGH7	SWAP.W	D7			; Restore.
+*
+*	Add In the Addition 360 Degrees If It Exists.
+*
+LONGH8	MOVE.W	D0,D7			; Save For Old Value.
+	MOVE.L	D7,-(A7)		; Save Value.
+	ASR.L	#1,D7			; Go From 180 Count to 360 Count.
+	CLR.W	D7			; Leave Only Extra Degrees.
+	ADD.L	D7,D0			; Increase By Extra Degrees.
+	MOVE.L	(A7)+,D7		; Return Value.
+*
+*	Go In Normal Or Reverse Direction?
+*
+	BTST.L	#16,D7			; Reverse Bit Set?
+	BEQ.S	LONGH9			; Jump If Normal.
+	TST.W	D0			; Reverse Case.
+	BPL.S	LONGHB			; Jump If Plus Case.
+	BRA.S	LONGHA			; Jump Minus Case.
+LONGH9	TST.W	D0			; Normal Case.
+	BMI.S	LONGHB			; Jump If Minus Case.
+LONGHA	DIVU.W	D3,D0			; D0.W = HUE Increment.
+	BRA.S	LONGHC			; Skip Else Part.
+LONGHB	NEG.W	D0			; Else Flip It Over.
+	DIVU.W	D3,D0			; Do The Division.
+	NEG.W	D0			; D0.W = HUE Increment.
+*
+*	Exit Subroutine.
+*
+LONGHC	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendSpectrumMap:						*
+*									*
+*	Sends the Current Color Map Out To the DVE1 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE1 Buffer.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	96			; Window Height.
+MAXBUF	SET	8			; Maximum Buffer Size.
+BOXLEF	SET	(LEFTEDGE+120)/4	; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendSpectrumMap
+LUT_SendSpectrumMap:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+*
+*	Clear Starting Buffer to Black Value.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#MAXBUF*2,D1		; D1.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_FillPlanes		; Make Black Value.
+*
+*	Build The DeltaRED,StartRED, DeltaGREEN,StartGREEN, DeltaBLUE,StartBLUE.
+*
+	SUBA.W	#12*LUT_EditBufSz/3,A7	; Internal Delta Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D2	; D2.L = Loop Counter.
+	MOVEQ.L	#WINHIG,D3		; D3.L = Value to Divide By.
+	MOVEQ.L	#-128,D4		; D4.B = 1/2 Value.
+	MOVEQ.L	#0,D7			; D7.L = Direction Flag.
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	LEA.L	LUT_EditBufBot(A4),A1	; Address of Bot Edit Buffer.
+SPECT1	ADDQ.L	#3,A0			; Increment to Next.
+	ADDQ.L	#3,A1			; Increment to Next.
+*
+*	Make The Starting and Ending HSI Values.
+*
+	MOVE.B	(A0)+,D0		; Get Starting Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A0)+,D0		; Get Starting Green.
+	LSL.W	#8,D0			; Put In Middle Position.
+	MOVE.B	(A0)+,D0		; Get Starting Blue.
+	BSR	RGBHSI			; D0.L = HSI Value.
+	MOVE.L	D0,D5			; D5.L = Starting HSI Value.
+	MOVE.B	(A1)+,D0		; Get Ending Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A1)+,D0		; Get Ending Green.
+	LSL.W	#8,D0			; Put In Middle Position.
+	MOVE.B	(A1)+,D0		; Get Ending Blue.
+	BSR	RGBHSI			; D0.L = HSI Value.
+	MOVE.L	D0,D6			; D6.L = Ending HSI Value.
+*
+*	Make DeltaHUE, StartHUE.
+*
+	MOVE.L	D6,D0			; D0.L = Ending   Position.
+	MOVE.L	D5,D1			; D1.L = Starting Position.
+	CLR.W	D0			; Clear Low Bits.
+	SWAP.W	D0			; D0.L = Ending   Position.
+	CLR.W	D1			; Clear Low Bits.
+	SWAP.W	D1			; D1.L = Starting Position.
+	BSR	LUT_LongHue		; Make The Hue Value.
+	MOVE.W	D0,(A3)+		; DeltaHUE.
+	MOVE.W	D1,(A3)+		; StartHue.
+*
+*	Make DeltaSATURATION, StartSATURATION.
+*
+	MOVEQ.L	#0,D0			; Make Starting Saturation.
+	MOVE.W	D5,D0			; Get Saturation Value.
+	ASR.W	#8,D0			; D0.L = Starting Saturation.
+	MOVEQ.L	#0,D1			; Make Ending Saturation.
+	MOVE.W	D6,D1			; Get Saturation Value.
+	ASR.W	#8,D1			; D1.L = Ending Saturation.
+	SUB.L	D0,D1			; D1.L = Delta Green.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Green.
+	MOVE.W	D1,(A3)+		; DeltaSATURATION.
+	MOVE.B	D0,(A3)+		; StartSATURATION.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaINTENSITY, StartINTENSITY.
+*
+	MOVEQ.L	#0,D0			; Make Starting Intensity.
+	MOVE.B	D5,D0			; D0.L = Starting Intensity.
+	MOVEQ.L	#0,D1			; Make Ending Intensity.
+	MOVE.B	D6,D1			; D1.L = Ending Intensity.
+	SUB.L	D0,D1			; D1.L = Delta Intensity.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Intensity.
+	MOVE.W	D1,(A3)+		; DeltaINTENSITY.
+	MOVE.B	D0,(A3)+		; StartINTENSITY.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Check Condition Of Loop.
+*
+	ADDQ.L	#3,A0			; Increment to Next.
+	ADDQ.L	#3,A1			; Increment to Next.
+	DBF	D2,SPECT1		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	SUBA.W	#4*(4+LUT_EditBufSz/3),A7 ; Make Internal Buffer.
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SPECT2	MOVEA.L	A3,A0			; A0.L = Address of Deltas.
+	LEA.L	4*2(A7),A1		; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D2	; Loop Counter.
+SPECT3	MOVE.W	(A0)+,D0		; Get DeltaHUE.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	SWAP.W	D0			; D0.L = HHA2.
+	MOVE.W	(A0)+,D0		; Get DeltaSATURATION.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	MOVE.W	(A0)+,D1		; Get DeltaINTENSITY.
+	ADD.W	(A0),D1			; D1.W = New Starting Position.
+	MOVE.W	D1,(A0)+		; Save Back New Starting Value.
+	LSR.W	#8,D1			; Put In Low Position.
+	MOVE.B	D1,D0			; D0.L = HHSI.
+	BSR	HSIRGB			; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D2,SPECT3		; Loop Until Done.
+*
+*	Set The Normal / Complement Offsets, Convert With Quads to Planes.
+*
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	MOVE.L	D4,D0			; Do Editor Phase Adjustment.
+	ADDQ.L	#LUT_PhaseAdd,D0	; We Moved a Line.
+	BTST.L	#1,D0			; In Complement Mode?
+	BEQ.S	SPECT4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+*
+*	Convert to Toaster Format.
+*
+SPECT4	MOVE.L	4*2(A7),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A7)			; Save 1/8 Value.
+	MOVE.L	D1,4(A7)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A7),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A7) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A7) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEQ.L	#LUT_EditBufSz/3,D0	; D0.L = Number  of Quads.
+	ADDQ.L	#4*2,A0			; Move Past First 2 Quads.
+	MOVEA.L	A0,A1			; A1.L = Address of Colored Area.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	4*2(A7),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A7)			; Save 1/8 Value.
+	MOVE.L	D1,4(A7)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A7),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A7) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A7) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SPECT5			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	ADDI.L	#TOPEDGE+296-MAXBUF,D0	; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To Toaster.
+*
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	2*bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SPECT5	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SPECT2			; Loop Until Done.
+	ADDA.W	#4*(4+LUT_EditBufSz/3)+8*4+12*LUT_EditBufSz/3,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendSpectrumDVE:						*
+*									*
+*	Sends the Current Color Map Out To the DVE0 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	    = Address of LUT Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Send to DVE0 Buffer.	*
+*	A5.L	    = Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE0 Buffer.			*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Made During File Write.		*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	480			; Window Height.
+MAXBUF	SET	48			; Maximum Buffer Size.
+BOXLEF	SET	16			; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendSpectrumDVE
+LUT_SendSpectrumDVE:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+*
+*	Build The DeltaRED,StartRED, DeltaGREEN,StartGREEN, DeltaBLUE,StartBLUE.
+*
+	SUBA.W	#12*LUT_EditBufSz,A7	; Internal Delta Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	MOVEQ.L	#LUT_EditBufSz-1,D2	; D2.L = Loop Counter.
+	MOVE.W	#WINHIG,D3		; D3.W = Value to Divide By.
+	MOVEQ.L	#-128,D4		; D4.B = 1/2 Value.
+	MOVEQ.L	#0,D7			; D7.L = Direction Flag.
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	LEA.L	LUT_EditBufBot(A4),A1	; Address of Bot Edit Buffer.
+*
+*	Make The Starting and Ending HSI Values.
+*
+SPCDV1	MOVE.B	(A0)+,D0		; Get Starting Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A0)+,D0		; Get Starting Green.
+	LSL.W	#8,D0			; Put In Middle Position.
+	MOVE.B	(A0)+,D0		; Get Starting Blue.
+	BSR	RGBHSI			; D0.L = HSI Value.
+	MOVE.L	D0,D5			; D5.L = Starting HSI Value.
+	MOVE.B	(A1)+,D0		; Get Ending Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A1)+,D0		; Get Ending Green.
+	LSL.W	#8,D0			; Put In Middle Position.
+	MOVE.B	(A1)+,D0		; Get Ending Blue.
+	BSR	RGBHSI			; D0.L = HSI Value.
+	MOVE.L	D0,D6			; D6.L = Ending HSI Value.
+*
+*	Make DeltaHUE, StartHUE.
+*
+	MOVE.L	D6,D0			; D0.L = Ending   Position.
+	MOVE.L	D5,D1			; D1.L = Starting Position.
+	CLR.W	D0			; Clear Low Bits.
+	SWAP.W	D0			; D0.L = Ending   Position.
+	CLR.W	D1			; Clear Low Bits.
+	SWAP.W	D1			; D1.L = Starting Position.
+	BSR	LUT_LongHue		; Make The Hue Value.
+	MOVE.W	D0,(A3)+		; DeltaHUE.
+	MOVE.W	D1,(A3)+		; StartHue.
+*
+*	Make DeltaSATURATION, StartSATURATION.
+*
+	MOVEQ.L	#0,D0			; Make Starting Saturation.
+	MOVE.W	D5,D0			; Get Saturation Value.
+	ASR.W	#8,D0			; D0.L = Starting Saturation.
+	MOVEQ.L	#0,D1			; Make Ending Saturation.
+	MOVE.W	D6,D1			; Get Saturation Value.
+	ASR.W	#8,D1			; D1.L = Ending Saturation.
+	SUB.L	D0,D1			; D1.L = Delta Green.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Green.
+	MOVE.W	D1,(A3)+		; DeltaSATURATION.
+	MOVE.B	D0,(A3)+		; StartSATURATION.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+*
+*	Make DeltaINTENSITY, StartINTENSITY.
+*
+	MOVEQ.L	#0,D0			; Make Starting Intensity.
+	MOVE.B	D5,D0			; D0.L = Starting Intensity.
+	MOVEQ.L	#0,D1			; Make Ending Intensity.
+	MOVE.B	D6,D1			; D1.L = Ending Intensity.
+	SUB.L	D0,D1			; D1.L = Delta Intensity.
+	ASL.W	#8,D1			; Make Delta Value.
+	DIVS.W	D3,D1			; D1.W = Delta Intensity.
+	MOVE.W	D1,(A3)+		; DeltaINTENSITY.
+	MOVE.B	D0,(A3)+		; StartINTENSITY.
+	MOVE.B	D4,(A3)+		; 1/2 Value.
+	DBF	D2,SPCDV1		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEA.L	A7,A3			; A3.L = Address of Delta, Start Buffer.
+	SUBA.W	#LUT_EditBufSz*4,A7	; Make Internal Buffer.
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SPCDV2	BSR	LUT_CheckLinear		; Check For Linear Ramp At End.
+	BEQ.S	SPCDV5			; Jump If On Last Line.
+	MOVEA.L	A3,A0			; A0.L = Address of Deltas.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz-1,D2	; Loop Counter.
+SPCDV3	MOVE.W	(A0)+,D0		; Get DeltaHUE.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	SWAP.W	D0			; D0.L = HHA2.
+	MOVE.W	(A0)+,D0		; Get DeltaSATURATION.
+	ADD.W	(A0),D0			; D0.W = New Starting Position.
+	MOVE.W	D0,(A0)+		; Save Back New Starting Value.
+	MOVE.W	(A0)+,D1		; Get DeltaINTENSITY.
+	ADD.W	(A0),D1			; D1.W = New Starting Position.
+	MOVE.W	D1,(A0)+		; Save Back New Starting Value.
+	LSR.W	#8,D1			; Put In Low Position.
+	MOVE.B	D1,D0			; D0.L = HHSI.
+	BSR	HSIRGB			; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D2,SPCDV3		; Loop Until Done.
+*
+*	Set The Normal / Complement Offsets, Convert With Quads to Planes.
+*
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	ADDQ.W	#1,D4			; For Phase Test.
+	BTST.L	#1,D4			; In Complement Mode?
+	BEQ.S	SPCDV4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+SPCDV4	SUBQ.W	#1,D4			; From Phase Test.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEQ.L	#LUT_EditBufSz,D0	; D0.L = Number  of Quads.
+	MOVEA.L	A0,A1			; A1.L = Address of Colored Area.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Duplicate the Left and Right Edges.
+*
+	MOVEQ.L	#MAXBUF*2,D0		; D0.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_DupEdges		; Duplicate the Edges.
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+SPCDV5	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SPCDV6			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	SUBI.L	#MAXBUF,D0		; D0.L = Adjust By Buffer Position.
+*
+*	Write Data Out To File.
+*
+	MOVEA.L	LTR_FramePtr(A4),A0	; A0.L = Address of Frame File.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height  of Box.
+	BSR	LUT_WriteFrameData	; Write Data Out To File.
+	BNE.S	SPCDV7			; Exit On File Write Error.
+*
+*	Write Data Out To Toaster.
+*
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write It To the Toaster?
+	BEQ.S	SPCDV6			; Skip If Don't Send It To Toaster.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset & DVE Bank #.
+	SUBA.L	A1,A1			; A1.L = Address of Interface BM.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SPCDV6	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SPCDV2			; Loop Until Done.
+	MOVEQ.L	#0,D0			; No Error, Set CC == Zero.
+SPCDV7	ADDA.W	#LUT_EditBufSz*4+8*4+12*LUT_EditBufSz,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendEditRotate:							*
+*									*
+*	Sends the Current Color Map Out To the DVE1 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= == 0 -> Rotate Right, != 0 -> Rotate Left.		*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE1 Buffer.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	96			; Window Height.
+MAXBUF	SET	8			; Maximum Buffer Size.
+BOXLEF	SET	(LEFTEDGE+120)/4	; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendEditRotate
+LUT_SendEditRotate:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Check For Left or Right Rotation.
+*
+	MOVEQ.L	#0,D6			; Rotate Left.
+	MOVE.L	#65536/3+1,D7		; Amount To Increment.
+	TST.L	D0			; Right Or Left?
+	BNE.S	SNEDR1			; Jump If Left.
+	MOVE.W	#65536-1,D6		; Rotate Right.
+	NEG.L	D7			; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+SNEDR1	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#4*(4+LUT_EditBufSz/3),A7 ;Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*2*LUT_EditBufSz/3,A7	; A7.L = Address of Shift Values.
+*
+*	Clear Starting Buffer to Black Value.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#MAXBUF*2,D1		; D1.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_FillPlanes		; Make Black Value.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D1	; Loop Counter.
+SNEDR2	ADDQ.L	#3,A0			; Move To Next Position.
+	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	SWAP.W	D0			; Make Comp Value.
+	MOVE.L	D0,(LUT_EditBufSz/3-1)*4(A1) ; Store Comp Value.
+	ADDQ.L	#3,A0			; Move To Next Position.
+	DBF	D1,SNEDR2		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNEDR3	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	MOVE.L	D4,D0			; Do Editor Phase Adjustment.
+	ADDQ.L	#LUT_PhaseAdd,D0	; We Moved a Line.
+	BTST.L	#1,D0			; In Complement Mode?
+	BEQ.S	SNEDR4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+*
+*	Convert to Toaster Format Normal.
+*
+SNEDR4	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	BSR	RotateLong		; Rotate The Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L= Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Convert to Toaster Format Complement.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	LEA.L	4*(LUT_EditBufSz/3)(A7),A0 ; A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	BSR	RotateLong		; Rotate The Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L=Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNEDR5			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	ADDI.L	#TOPEDGE+296-MAXBUF,D0	; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To Toaster.
+*
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	2*bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNEDR5	ADD.L	D7,D6			; Increment To Next Position.
+	BPL.S	SNEDR6			; Jump If Positive.
+	ADDI.L	#65536*LUT_EditBufSz/3,D6 ; Wrap Around.
+SNEDR6	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNEDR3			; Loop Until Done.
+	ADDA.W	#4*(4+LUT_EditBufSz/3)+8*4+4*2*(LUT_EditBufSz/3),A7 ;FixUp Stack
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendMapRotate:							*
+*									*
+*	Sends the Current Color Map Out To the DVE0 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	    = == 0 -> Rotate Right, != 0 -> Rotate Left.	*
+*	A4.L	    = Address of LUT Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Send to DVE0 Buffer.	*
+*	A5.L	    = Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE0 Buffer.			*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Made During File Write.		*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	480			; Window Height.
+MAXBUF	SET	WINHIG/10		; Maximum Buffer Size.
+BOXLEF	SET	16			; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendMapRotate
+LUT_SendMapRotate:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Check For Left or Right Rotation.
+*
+	MOVEQ.L	#0,D6			; Rotate Left.
+	MOVE.L	#65536/5+1,D7		; Amount To Increment.
+	TST.L	D0			; Right Or Left?
+	BNE.S	SNMPR1			; Jump If Left.
+	MOVE.W	#65536-1,D6		; Rotate Right.
+	NEG.L	D7			; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+SNMPR1	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#4*LUT_EditBufSz,A7	; Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*LUT_EditBufSz,A7	; A7.L = Address of Shift Values.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz-1,D1	; Loop Counter.
+SNMPR2	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D1,SNMPR2		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNMPR3	BSR	LUT_CheckLinear		; Check For Linear Ramp At End.
+	BEQ.S	SNMPR5			; Jump If On Last Line.
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	ADDQ.W	#1,D4			; For Phase Test.
+	BTST.L	#1,D4			; In Complement Mode?
+	BEQ.S	SNMPR4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+SNMPR4	SUBQ.W	#1,D4			; From Phase Test.
+*
+*	Convert to Toaster Format Normal.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	MOVEA.L	A3,A1			; A1.L = Address of Destination.
+	BSR	RotateLong		; Rotate The Values.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVEQ.L	#LUT_EditBufSz,D0	; D0.L = Number of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Duplicate the Left and Right Edges.
+*
+	MOVEQ.L	#MAXBUF*2,D0		; D0.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_DupEdges		; Duplicate the Edges.
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+SNMPR5	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNMPR6			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	SUBI.L	#MAXBUF,D0		; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To File.
+*
+	MOVEA.L	LTR_FramePtr(A4),A0	; A0.L = Address of Frame File.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height  of Box.
+	BSR	LUT_WriteFrameData	; Write Data Out To File.
+	BNE.S	SNMPR8			; Exit On File Write Error.
+*
+*	Write Data Out To Toaster.
+*
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write It To the Toaster?
+	BEQ.S	SNMPR6			; Skip If Don't Send It To Toaster.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset & DVE Bank #.
+	SUBA.L	A1,A1			; A1.L = Address of Interface BM.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNMPR6	ADD.L	D7,D6			; Increment To Next Position.
+	BPL.S	SNMPR7			; Jump If Positive.
+	ADDI.L	#65536*LUT_EditBufSz,D6 ; Wrap Around.
+SNMPR7	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNMPR3			; Loop Until Done.
+	MOVEQ.L	#0,D0			; No Error, Set CC == Zero.
+SNMPR8	ADDA.W	#4*LUT_EditBufSz+8*4+4*LUT_EditBufSz,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendEditNuke:							*
+*									*
+*	Sends the Current Color Map Out To the DVE1 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= == 0 -> Nuke Right, != 0 -> Nuke Left.		*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE1 Buffer.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	96			; Window Height.
+MAXBUF	SET	8			; Maximum Buffer Size.
+BOXLEF	SET	(LEFTEDGE+120)/4	; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendEditNuke
+LUT_SendEditNuke:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Check For Left or Right Rotation.
+*
+	MOVEQ.L	#0,D6			; Nuke Left.
+	MOVE.L	#2*65536/3+1,D7		; Amount To Increment.
+	TST.L	D0			; Right Or Left?
+	BNE.S	SNEDN1			; Jump If Left.
+	MOVE.W	#65536-1,D6		; Nuke Right.
+	NEG.L	D7			; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+SNEDN1	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#4*(4+LUT_EditBufSz/3),A7 ; Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*2*LUT_EditBufSz/3,A7	; A7.L = Address of Shift Values.
+*
+*	Clear Starting Buffer to Black Value.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#MAXBUF*2,D1		; D1.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_FillPlanes		; Make Black Value.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D1	; Loop Counter.
+SNEDN2	ADDQ.L	#3,A0			; Move To Next Position.
+	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	SWAP.W	D0			; Make Comp Value.
+	MOVE.L	D0,(LUT_EditBufSz/3-1)*4(A1) ; Store Comp Value.
+	ADDQ.L	#3,A0			; Move To Next Position.
+	DBF	D1,SNEDN2		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNEDN3	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	MOVE.L	D4,D0			; Do Editor Phase Adjustment.
+	ADDQ.L	#LUT_PhaseAdd,D0	; We Moved a Line.
+	BTST.L	#1,D0			; In Complement Mode?
+	BEQ.S	SNEDN4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+*
+*	Convert to Toaster Format Normal.
+*
+SNEDN4	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	BSR	NukeLong		; Nuke The Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L= Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Convert to Toaster Format Complement.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	LEA.L	4*LUT_EditBufSz/3(A7),A0 ;A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	BSR	NukeLong		; Nuke The Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L= Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNEDN5			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	ADDI.L	#TOPEDGE+296-MAXBUF,D0	; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To Toaster.
+*
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	2*bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNEDN5	ADD.L	D7,D6			; Increment To Next Position.
+	BPL.S	SNEDN6			; Jump If Positive.
+	ADDI.L	#2*65536*LUT_EditBufSz/3,D6 ; Wrap Around.
+SNEDN6	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNEDN3			; Loop Until Done.
+	ADDA.W	#4*(4+LUT_EditBufSz/3)+8*4+4*2*LUT_EditBufSz/3,A7 ;Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendMapNuke:							*
+*									*
+*	Sends the Current Color Map Out To the DVE0 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	    = == 0 -> Nuke Right, != 0 -> Nuke Left.		*
+*	A4.L	    = Address of LUT Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Send to DVE0 Buffer.	*
+*	A5.L	    = Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE0 Buffer.			*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Made During File Write.		*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	480			; Window Height.
+MAXBUF	SET	WINHIG/10		; Maximum Buffer Size.
+BOXLEF	SET	16			; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendMapNuke
+LUT_SendMapNuke:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Check For Left or Right Rotation.
+*
+	MOVEQ.L	#0,D6			; Nuke Left.
+	MOVE.L	#2*65536/5+1,D7		; Amount To Increment.
+	TST.L	D0			; Right Or Left?
+	BNE.S	SNMPN1			; Jump If Left.
+	MOVE.W	#65536-1,D6		; Nuke Right.
+	NEG.L	D7			; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+SNMPN1	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#4*LUT_EditBufSz,A7	; Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*LUT_EditBufSz,A7	; A7.L = Address of Shift Values.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz-1,D1	; Loop Counter.
+SNMPN2	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D1,SNMPN2		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNMPN3	BSR	LUT_CheckLinear		; Check For Linear Ramp At End.
+	BEQ.S	SNMPN5			; Jump If On Last Line.
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	ADDQ.W	#1,D4			; For Phase Test.
+	BTST.L	#1,D4			; In Complement Mode?
+	BEQ.S	SNMPN4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+SNMPN4	SUBQ.W	#1,D4			; From Phase Test.
+*
+*	Convert to Toaster Format Normal.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	MOVEA.L	A3,A1			; A1.L = Address of Destination.
+	BSR	NukeLong		; Nuke The Values.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVEQ.L	#LUT_EditBufSz,D0	; D0.L = Number of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Duplicate the Left and Right Edges.
+*
+	MOVEQ.L	#MAXBUF*2,D0		; D0.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_DupEdges		; Duplicate the Edges.
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+SNMPN5	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNMPN6			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	SUBI.L	#MAXBUF,D0		; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To File.
+*
+	MOVEA.L	LTR_FramePtr(A4),A0	; A0.L = Address of Frame File.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height  of Box.
+	BSR	LUT_WriteFrameData	; Write Data Out To File.
+	BNE.S	SNMPN8			; Exit On File Write Error.
+*
+*	Write Data Out To Toaster.
+*
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write It To the Toaster?
+	BEQ.S	SNMPN6			; Skip If Don't Send It To Toaster.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset & DVE Bank #.
+	SUBA.L	A1,A1			; A1.L = Address of Interface BM.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNMPN6	ADD.L	D7,D6			; Increment To Next Position.
+	BPL.S	SNMPN7			; Jump If Positive.
+	ADDI.L	#2*65536*LUT_EditBufSz,D6 ; Wrap Around.
+SNMPN7	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNMPN3			; Loop Until Done.
+	MOVEQ.L	#0,D0			; No Error, Set CC == Zero.
+SNMPN8	ADDA.W	#4*LUT_EditBufSz+8*4+4*LUT_EditBufSz,A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendPosterMap:							*
+*									*
+*	Sends the Current Color Map Out To the DVE1 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE1 Buffer.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	96			; Window Height.
+MAXBUF	SET	8			; Maximum Buffer Size.
+BOXLEF	SET	(LEFTEDGE+120)/4	; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+	XDEF	LUT_SendPosterMap
+LUT_SendPosterMap:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Set The Amount Of Rotation.
+*
+	MOVEQ.L	#0,D6			; Initilize Rotation.
+	MOVE.L	#256*65536/WINHIG,D7	; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+SNPOM1	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#4*(4+LUT_EditBufSz/3),A7 ; Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*2*LUT_EditBufSz/3,A7	; A7.L = Address of Shift Values.
+*
+*	Clear Starting Buffer to Black Value.
+*
+	MOVE.L	#QUADBlack,D0		; D0.L = Black Quad Value.
+	MOVEQ.L	#MAXBUF*2,D1		; D1.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_FillPlanes		; Make Black Value.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz/3-1,D1	; Loop Counter.
+SNPOM2	ADDQ.L	#3,A0			; Move To Next Position.
+	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	SWAP.W	D0			; Make Comp Value.
+	MOVE.L	D0,(LUT_EditBufSz/3-1)*4(A1) ; Store Comp Value.
+	ADDQ.L	#3,A0			; Move To Next Position.
+	DBF	D1,SNPOM2		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNPOM3	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	MOVE.L	D4,D0			; Do Editor Phase Adjustment.
+	ADDQ.L	#LUT_PhaseAdd,D0	; We Moved a Line.
+	BTST.L	#1,D0			; In Complement Mode?
+	BEQ.S	SNPOM4			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+*
+*	Convert to Toaster Format Normal.
+*
+SNPOM4	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	MOVEM.L	D2/A2,-(A7)		; Save Values.
+	MOVE.L	#LUT_THIRDQUANTIZELN,D2	; D2.L = Number  of Items.
+	LEA.L	LUT_THIRDQUANTIZE(PC),A2 ;A2.L = Address of Quantize Table.
+	BSR	LUT_DoQuadQuantize	; Quantize The Values.
+	MOVEM.L	(A7)+,D2/A2		; Return Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L= Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Convert to Toaster Format Complement.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz/3,D1	; D1.L = Maximum # of Long Words.
+	LEA.L	4*LUT_EditBufSz/3(A7),A0 ;A0.L = Address of Source Buffer.
+	LEA.L	4*2(A3),A1		; A1.L = Address of Destination.
+	MOVEM.L	D2/A2,-(A7)		; Save Values.
+	MOVE.L	#LUT_THIRDQUANTIZELN,D2	; D2.L = Number  of Items.
+	LEA.L	LUT_THIRDQUANTIZE(PC),A2 ;A2.L = Address of Quantize Table.
+	BSR	LUT_DoQuadQuantize	; Quantize The Values.
+	MOVEM.L	(A7)+,D2/A2		; Return Values.
+	MOVE.L	4*2(A3),D0		; Make Left Quad Values.
+	BSR	LUT_DotCrawlQuadLeft	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D0,(A3)			; Save 1/8 Value.
+	MOVE.L	D1,4(A3)		; Save 3/4 Value.
+	MOVE.L	4*(LUT_EditBufSz/3+1)(A3),D0 ; Make Right Quad Values.
+	BSR	LUT_DotCrawlQuadRight	; D0.L = 1/8 Value, D1.L = 3/4 Value.
+	MOVE.L	D1,4*(LUT_EditBufSz/3+2)(A3) ; Save 3/4 Value.
+	MOVE.L	D0,4*(LUT_EditBufSz/3+3)(A3) ; Save 1/8 Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#(4+LUT_EditBufSz/3)>>2,D1   ; D1.L= Words Wide.
+	MOVEA.L	A3,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNPOM5			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	ADDI.L	#TOPEDGE+296-MAXBUF,D0	; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To Toaster.
+*
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A1			; A1.L = Address of Internal Buffer.
+	BSR	LUT_SetInterfaceDoSafeWrite ; A1.L = Address of Interface BM.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	MOVEQ.L	#1,D2			; D2.L = DVE Bank Number.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	2*bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNPOM5	ADD.L	D7,D6			; Increment To Next Position.
+SNPOM6	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNPOM3			; Loop Until Done.
+	ADDA.W	#4*(4+LUT_EditBufSz/3)+8*4+4*2*LUT_EditBufSz/3,A7 ;Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendPosterDVE:							*
+*									*
+*	Sends the Current Color Map Out To the DVE0 Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	    = Address of LUT Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Send to DVE0 Buffer.	*
+*	A5.L	    = Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Color Map Is Send Out To DVE0 Buffer.			*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Made During File Write.		*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+WINHIG	SET	480			; Window Height.
+MAXBUF	SET	WINHIG/10		; Maximum Buffer Size.
+BOXLEF	SET	16			; Color Square Left Edge.
+BUFSIZ	SET	NUMQUADS*2*MAXBUF	; Sizeof One Pixel Buffer.
+*
+STEPLENGTH EQU	14			; LUT_STEPQUANTIZELN
+*
+	XDEF	LUT_SendPosterDVE
+LUT_SendPosterDVE:
+	MOVEM.L D0-D7/A0-A3,-(A7)	; Save Calling State.
+*
+*	Set The Amount Of Rotation.
+*
+	MOVEQ.L	#0,D6			; Initilize Rotation.
+	MOVE.L	#256*65536/WINHIG,D7	; Amount To Increment.
+*
+*	Use Bit Plane 6 & 7 of Extra Chip Memory.
+*
+	MOVEA.L	TB_CHIPMem+6*4(A5),A1	; A1.L = Address of Plane 6.
+	MOVEA.L	A1,A3			; High Order Nibbles.
+	ADDA.L	#3*BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 7.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 6.
+	SUBA.W	#BUFSIZ,A3
+	MOVE.L	A3,-(A7)		; Bit 5.
+	MOVE.L	A1,-(A7)		; Bit 4.
+	ADDA.L	#(3*BUFSIZ)+NUMQUADS/2,A1 ; Low Order Nibbles.
+	MOVE.L	A1,-(A7)		; Bit 3.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 2.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 1.
+	SUBA.W	#BUFSIZ,A1
+	MOVE.L	A1,-(A7)		; Bit 0.
+	MOVEA.L	A7,A2			; A2.L = Address of Planes Table.
+	SUBA.W	#LUT_EditBufSz*4*5,A7	; Make Internal Buffer.
+	MOVEA.L	A7,A3			; A3.L = Address of Quads Buffer.
+	SUBA.W	#4*LUT_EditBufSz,A7	; A7.L = Address of Shift Values.
+*
+*	Make The Starting Color Map.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Edit Buffer.
+	MOVEA.L	A7,A1			; Address of Destination.
+	MOVEQ.L	#LUT_EditBufSz-1,D1	; Loop Counter.
+SNPOD1	MOVE.B	(A0)+,D0		; D0.L = Red.
+	SWAP.W	D0			; In High Position.
+	MOVE.B	(A0)+,D0		; Make Green.
+	LSL.W	#8,D0			; In High Position.
+	MOVE.B	(A0)+,D0		; D0.L = 0RGB Value.
+	BSR	RGBYIQ			; D0.L = 0YIQ Value.
+	BSR	YIQQUAD			; D0.L = Quad Value.
+	MOVE.L	D0,(A1)+		; Save Quad Value.
+	DBF	D1,SNPOD1		; Loop Until Done.
+*
+*	Loop And Make The Colors.
+*
+	MOVEQ.L	#0,D4			; D4.L = Line Number.
+	MOVEQ.L	#0,D5			; D5.L = Index Into Planes.
+SNPOD2	BSR	LUT_CheckLinear		; Check For Linear Ramp At End.
+	BEQ	SNPOD8			; Jump If On Last Line.
+	MOVEQ.L	#BOXLEF>>1,D2		; D2.L = Normal Offset.
+	MOVE.L	#BOXLEF>>1+NUMQUADS,D3	; D3.L = Complement Offset.
+	ADDQ.W	#1,D4			; For Phase Test.
+	BTST.L	#1,D4			; In Complement Mode?
+	BEQ.S	SNPOD3			; Jump If Normal.
+	EXG.L	D2,D3			; Swap The Values.
+SNPOD3	SUBQ.W	#1,D4			; From Phase Test.
+*
+*	Convert to Toaster Format Normal.
+*
+	MOVE.L	D6,D0			; D0.L = Rotation Position.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Rotation Position.
+	MOVEQ.L	#LUT_EditBufSz,D1	; D1.L = Maximum # of Long Words.
+	MOVEA.L	A7,A0			; A0.L = Address of Source Buffer.
+	MOVEA.L	A3,A1			; A1.L = Address of Destination.
+	MOVEM.L	D2/A2,-(A7)		; Save Values.
+	MOVE.L	#LUT_STEPQUANTIZELN,D2	; D2.L = Number  of Items.
+	LEA.L	LUT_STEPQUANTIZE(PC),A2	; A2.L = Address of Quantize Table.
+	BSR	LUT_DoQuadQuantize	; Quantize The Values.
+	CMPI.L	#((3*256)/STEPLENGTH)*65536,D6	; Check For First 3 Positions.
+	BCS.S	SNPOD4			; Jump If First 3 Positions.
+	MOVE.L	D1,D0			; D0.L = Maximum # of Long Words.
+	MOVEA.L	A1,A0			; A0.L = Address of Quantize Buffer.
+	BSR	LUT_QuadAverageQuantize	; Average The Data.
+SNPOD4	MOVEM.L	(A7)+,D2/A2		; Return Values.
+*
+*	Average The Toaster Values.
+*
+	CMPI.L	#((1*256)/STEPLENGTH)*65536,D6	; Skip Over First Position.
+	BCS.S	SNPOD6			; Jump If First Position.
+	MOVEM.L	D2/A2-A4,-(A7)		; Save Calling State.
+	MOVE.W	#LUT_EditBufSz*4-1,D0	; Loop Counter.
+	MOVEA.L	A3,A0			; A0.L = Address of New Data.
+	LEA.L	04*LUT_EditBufSz(A3),A1	; A1.L = Address of Old Data.
+	LEA.L	08*LUT_EditBufSz(A3),A2	; A3.L = Address of Old Old Data.
+	LEA.L	12*LUT_EditBufSz(A3),A4	; A4.L = Address of Old Old Old Data.
+	ADDA.W	#16*LUT_EditBufSz,A3	; A3.L = Address of Destination.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+SNPOD5	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	(A0)+,D1		; D1.L = New Data.
+	MOVE.B	(A1)+,D2		; D2.L = Old Data.
+	ADD.W	D2,D1			; Average The Data.
+	MOVE.B	(A2)+,D2		; D2.L = Old Old Data.
+	ADD.W	D2,D1			; Average The Data.
+	MOVE.B	(A4)+,D2		; D2.L = Old Old Old Data.
+	ADD.W	D2,D1			; Average The Data.
+	LSR.W	#2,D1			; D1.L = Average Value.
+	MOVE.B	D1,(A3)+		; Save Result.
+	DBF	D0,SNPOD5		; Loop Until Done.
+	MOVEM.L	(A7)+,D2/A2-A4		; Return Calling State.
+	BRA.S	SNPOD7			; Skip Else Part.
+SNPOD6	MOVEQ.L	#LUT_EditBufSz,D0	; Number of Quads To Move.
+	MOVEA.L	A3,A0			; A0.L = Address of Source Buffer.
+	LEA.L	16*LUT_EditBufSz(A3),A1	; A1.L = Address of Destination Buffer.
+	BSR	MoveLong		; Move Over The Data.
+*
+*	Now Convert to Toaster Format.
+*
+SNPOD7	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D2,D0			; Adjust To Normal / Complement.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	LEA.L	16*LUT_EditBufSz(A3),A0	; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Generate the Comp Quad Values.
+*
+	MOVEA.L	A0,A1			; A0.L = Address of Buffer.
+	MOVEQ.L	#LUT_EditBufSz,D0	; D0.L = Number of Quads.
+	BSR	CompQUAD		; Generate The Comp Quad Value.
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADD.L	D3,D0			; Adjust To Complement / Normal.
+	MOVEQ.L	#LUT_EditBufSz>>2,D1	; D1.L = Words Wide.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Duplicate the Left and Right Edges.
+*
+	MOVEQ.L	#MAXBUF*2,D0		; D0.L = Buffer Size.
+	MOVEA.L	A2,A0			; A0.L = Address of Planes Table.
+	BSR	LUT_DupEdges		; Duplicate the Edges.
+*
+*	Copy Present Line To Old Buffer.
+*
+	MOVEQ.L	#LUT_EditBufSz,D0	; Number of Quads To Move.
+	LEA.L	12*LUT_EditBufSz(A3),A1	; A1.L = Address of Destination Buffer.
+	LEA.L	08*LUT_EditBufSz(A3),A0	; A0.L = Address of Source Buffer.
+	BSR	MoveLong		; Move Over The Data.
+	MOVEA.L	A0,A1			; A1.L = Address of Destination Buffer.
+	LEA.L	04*LUT_EditBufSz(A3),A0	; A0.L = Address of Source Buffer.
+	BSR	MoveLong		; Move Over The Data.
+	MOVEA.L	A0,A1			; A1.L = Address of Destination Buffer.
+	MOVEA.L	A3,A0			; A0.L = Address of Source Buffer.
+	BSR	MoveLong		; Move Over The Data.
+*
+*	If The Buffer Is Full, Write The Data Out to the Toaster.
+*
+SNPOD8	ADDQ.W	#1,D4			; Move To Next Position.
+	ADDI.L	#NUMQUADS*2,D5		; D5.L = Next Position In Plane Table.
+	CMPI.L	#NUMQUADS*2*MAXBUF,D5	; Buffer Full Yet?
+	BCS.S	SNPOD9			; Jump If Not Full.
+	MOVEQ.L	#0,D5			; Reset Buffer Pointer.
+	MOVE.L	D4,D0			; D0.L = Starting Line Number.
+	SUBI.L	#MAXBUF,D0		; D0.L = Adjust By Top Edge.
+*
+*	Write Data Out To File.
+*
+	MOVEA.L	LTR_FramePtr(A4),A0	; A0.L = Address of Frame File.
+	MOVEA.L	A2,A1			; A1.L = Address of Planes Table.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height  of Box.
+	BSR	LUT_WriteFrameData	; Write Data Out To File.
+	BNE.S	SNPODA			; Exit On File Write Error.
+*
+*	Write Data Out To Toaster.
+*
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write It To the Toaster?
+	BEQ.S	SNPOD9			; Skip If Don't Send It To Toaster.
+	SUBA.W	#bm_SIZEOF,A7		; Make Internal Buffer.
+	MOVEA.L	A7,A0			; A0.L = Address of Internal Buffer.
+	MOVEQ.L	#MAXBUF,D1		; D1.L = Height Of Box.
+	MOVEQ.L	#0,D2			; D2.L = Amount To Offset & DVE Bank #.
+	SUBA.L	A1,A1			; A1.L = Address of Interface BM.
+	BSR	LUT_SetSourceDoSafeWrite ;A0.L = Address of Source BM.
+	BSR	LUT_WriteDoSafeBlock	; Write Data Out To Toaster.
+	CALLTL	Wait4Top		; Wait For Top of Frame.
+	LEA.L	bm_SIZEOF(A7),A7	; Return Plane Table.
+*
+*	Check Condition Of Loop.
+*
+SNPOD9	ADD.L	D7,D6			; Increment To Next Position.
+	CMPI.W	#WINHIG,D4		; All Done?
+	BCS	SNPOD2			; Loop Until Done.
+	MOVEQ.L	#0,D0			; No Error, Set CC == Zero.
+SNPODA	ADDA.W	#(LUT_EditBufSz*4*5)+(8*4)+(4*LUT_EditBufSz),A7 ; Fix Up Stack.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D0-D7/A0-A3	; Return Calling State.
+	RTS
+	END

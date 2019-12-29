@@ -1,0 +1,2907 @@
+/* $Controls.c$ - Control Panels Themselves
+* $Id: controls.cx,v 2.147 1995/02/27 09:33:53 CACHELIN4000 Exp $
+* $Log: controls.cx,v $
+*Revision 2.147  1995/02/27  09:33:53  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.146  1995/02/24  16:14:12  pfrench
+*Color names for yellow/cyan transposed
+*
+*Revision 2.145  1995/02/24  11:48:35  CACHELIN4000
+*Fix stuff, add RT to CFX panel, start time/time mode order swap
+*
+*Revision 2.144  1995/02/22  10:32:07  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.143  1995/02/21  12:19:54  CACHELIN4000
+*Add TimeMode popup to Audio panel
+*
+*Revision 2.142  1995/02/20  12:28:13  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.141  1995/02/19  16:41:44  CACHELIN4000
+*Separate out PanData.c, PanFunctions.c to  make things link
+*
+*Revision 2.140  1995/02/19  11:35:29  pfrench
+*One more attempt at getting the data to a far section
+*
+*Revision 2.139  1995/02/19  11:27:06  pfrench
+*Cannot have static items that are FAR
+*
+*Revision 2.138  1995/02/19  01:03:41  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.137  1995/02/14  10:46:12  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.136  1995/02/14  10:27:50  CACHELIN4000
+*Add Rec Gain controls to RawRec, strip audio/video to Mark Clip
+*
+*Revision 2.135  1995/02/13  14:38:09  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.134  1995/02/11  17:52:59  CACHELIN4000
+*Add SMPTE, audio record level support
+*
+*Revision 2.133  1995/02/10  15:27:46  Kell
+*ES_RecordSource now doesn't have record audio volume parameters.
+*
+*Revision 2.132  1995/02/01  17:54:31  CACHELIN4000
+*Add Process button, fix cutting room jump from record panel
+*
+*Revision 2.131  1995/01/25  18:34:57  CACHELIN4000
+*Change TBC controls to scaled STEPSLIDE lines
+*
+*Revision 2.130  1995/01/24  18:05:37  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.129  1995/01/24  16:50:04  CACHELIN4000
+*Re-enable TBC inputs
+*
+*Revision 2.128  1995/01/24  11:19:50  CACHELIN4000
+*TBC panels, some cutting room additions
+*
+*Revision 2.127  1995/01/13  14:23:30  CACHELIN4000
+*Add Partner stuff to video control panel, DHD_Jog,Jump and Shuttle
+*Put in Play buttons/crouton button, fix CTRL_Play() to ahndel SWITCHER_MODE,
+*Add none to Audio channels again, add audio toggle to EZ video again,  etc.
+*
+*Revision 2.126  1995/01/12  12:03:52  CACHELIN4000
+*Framestore duration EZLEN-> EZTIME
+*
+*Revision 2.125  1995/01/06  22:16:54  CACHELIN4000
+*All Tables ARE even length now!
+*
+*Revision 2.124  1995/01/05  17:54:15  CACHELIN4000
+*Fix available time swap between Extended and Std. modes
+*
+*Revision 2.123  1995/01/04  23:40:23  CACHELIN4000
+*Fix Matte color bugs in DoFXAnimPanel()
+*
+*Revision 2.122  1995/01/04  17:36:29  CACHELIN4000
+*Quantize Audio sliders on Color Frame (add PL_CFRAME flag)
+*
+*Revision 2.121  1995/01/04  11:02:25  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.120  1994/12/31  02:05:06  CACHELIN4000
+*Fix AUDIO_ONLY avail time again, standardize Source setting, CurFlySource
+*
+*Revision 2.119  1994/12/30  21:22:20  CACHELIN4000
+*Fixed audio duration
+*
+*Revision 2.118  1994/12/30  13:09:58  CACHELIN4000
+*Add Audio only calc to BlocksToFrames(), CTRL_SetSource(), etc.
+*
+*Revision 2.117  1994/12/28  17:48:48  CACHELIN4000
+*add 1 b4 rounding down rcb->frame in DHD_Jog()
+*
+*Revision 2.116  1994/12/24  12:33:41  CACHELIN4000
+*fix bug with AUDIO_ONLY_SOURCE vs CurFlySource (add 1)
+*
+*Revision 2.115  1994/12/23  17:45:10  CACHELIN4000
+*change LENGTH_ADJUST to 0 so short clips have correct out points.. i hope
+*
+*Revision 2.114  1994/12/23  15:01:55  CACHELIN4000
+*Make GetTable() requests use 256byte buffer, instead of 255...
+*
+*Revision 2.113  1994/12/23  11:36:30  CACHELIN4000
+*Use PropEnd for string limits
+*
+*Revision 2.112  1994/12/23  10:08:47  CACHELIN4000
+*Add AUDIO_ONLY_SOURCE define, fix DHD_SetupRecord 'bug' for audio only initialization.
+*
+*Revision 2.111  1994/12/22  21:57:59  CACHELIN4000
+*fixes to Rexx panel
+*
+*Revision 2.110  1994/12/21  17:33:10  CACHELIN4000
+*add recordclip(), fix CTRL_Play, add play line to clip panel
+*
+*Revision 2.109  1994/12/16  21:02:36  CACHELIN4000
+*Add RecordClip Function
+*
+*Revision 2.108  1994/12/15  16:42:59  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.107  1994/12/09  16:42:17  CACHELIN4000
+*Use AUD_ENABLE flags for channels popup
+*
+*Revision 2.106  1994/12/08  16:08:38  CACHELIN4000
+*Reorganize Audio, video control panels (Yet Again), fix Streeo pan oversight
+*Add Start Time to Rexx panel, etc.
+*
+*Revision 2.105  1994/12/07  23:14:31  CACHELIN4000
+*Add Channels popup to XPVidClip, change volume num to slider (Sorry James, SKell said Tim siad to do it)
+*
+*Revision 2.104  1994/12/07  00:12:22  CACHELIN4000
+*Add SortFLyerDrives(), Audio drive tweaks and various cosmetics
+*
+*Revision 2.103  1994/12/05  20:06:38  CACHELIN4000
+*Use global CurCompMode for retain compression settings
+*
+*Revision 2.102  1994/12/05  19:21:30  CACHELIN4000
+*Add Quality popup to record panel.
+*
+*Revision 2.100  1994/12/03  18:36:24  CACHELIN4000
+*Add PanelMode tag check, quicktune gadgets, diff text placement
+*
+*Revision 2.99  1994/11/18  18:31:19  Kell
+*Changed Tag Synchronous to Asynchronous
+*
+*Revision 2.98  1994/11/18  16:51:52  CACHELIN4000
+*Add RexxPanel tags..
+*
+*Revision 2.97  1994/11/16  15:13:23  CACHELIN4000
+*Fix I/O point swap bug, add Rexx panel, make things far static to help linker (?)
+*
+*Revision 2.96  1994/11/15  21:41:24  CACHELIN4000
+*Fix initial clip length bug
+*
+*Revision 2.95  1994/11/10  00:31:47  CACHELIN4000
+*Remove FlyerIn, FlyerY/C sources from popup..
+*
+*Revision 2.94  1994/11/10  00:10:47  CACHELIN4000
+*Implement Audio source channels popup, CTRL_SetPan
+*
+*Revision 2.93  1994/11/09  18:50:38  CACHELIN4000
+*Fix New Audio Balance/Volume system... i hope
+*
+*Revision 2.92  94/11/09  15:33:40  CACHELIN4000
+*More mucking about.
+*
+*Revision 2.90  94/11/04  17:19:15  CACHELIN4000
+*Remove Rename from fileinfo, fix audio panel, etc.
+*
+*Revision 2.89  94/11/04  00:31:17  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.88  94/11/03  23:11:36  CACHELIN4000
+*CTRL_Play(), remove record tracks toggle, fix CTRL_SetSource, etc.
+*
+*Revision 2.87  94/11/03  11:08:07  CACHELIN4000
+*Limit Coarse tweak to 0-9, not 0-15
+*
+*Revision 2.86  94/11/02  20:23:11  CACHELIN4000
+*fix Balance/Volume setting, lack of render after DHD_Jog message,
+*monaural audio clip support with Pan, even volumes losing 1
+*
+*Revision 2.85  94/11/01  18:57:35  CACHELIN4000
+*Backup Tweak values..
+*
+*Revision 2.84  94/10/31  17:22:17  CACHELIN4000
+*Re-Do Tweak panel, etc.
+*
+*Revision 2.83  94/10/28  16:52:01  CACHELIN4000
+*Add Pedestal preset to Tweak
+*
+*Revision 2.82  94/10/28  15:25:40  CACHELIN4000
+*fix reversed Hack array
+*
+*Revision 2.81  94/10/28  11:57:26  CACHELIN4000
+*Fix Audio Fade bug.
+*
+*Revision 2.80  94/10/27  23:45:14  CACHELIN4000
+*Buffer Tweak panel, re-do VidClip controls to meet new spec, add CTRL_SetBalance
+*change PLine User-Function names to start with CTRL_ not DHD_
+*
+*Revision 2.79  94/10/25  20:01:18  CACHELIN4000
+*extend Tweak panel, check flyerbase before finding drives...
+*
+*Revision 2.78  94/10/25  18:08:29  CACHELIN4000
+*Fix Tweak panel to get flyer volumes
+*
+*Revision 2.77  94/10/24  17:20:32  CACHELIN4000
+*Insert MiniPanel call, fix inpoint/outpoint calculations
+*
+*Revision 2.76  94/10/24  12:21:50  CACHELIN4000
+*Update grazer after rename, etc.
+*
+*Revision 2.75  94/10/21  23:21:52  CACHELIN4000
+*Connect SetupPanel to new messages, structure
+*
+*Revision 2.74  94/10/20  11:53:44  CACHELIN4000
+*Switch to new PLine->UserFun for function calls, add setup panel
+*
+*Revision 2.73  94/10/14  13:39:08  CACHELIN4000
+*Add CheckFlyerDrives() to sort Audio drives and add 0xA2 as 1st byte of name
+*
+*Revision 2.71  94/10/12  17:34:59  CACHELIN4000
+*Use DuoSLider for VideoXP, Audio, AudioXP panels
+*
+*Revision 2.70  94/10/11  21:40:06  CACHELIN4000
+*DuoSlide for ClipPL
+*
+*Revision 2.69  94/10/07  11:36:39  CACHELIN4000
+*Fix HAck,RecTest f'ns
+*
+*Revision 2.66  1994/10/06  23:04:57  CACHELIN4000
+*Fix ANIMFX panels
+*
+*Revision 2.65  94/10/06  19:15:37  CACHELIN4000
+*Matte/Border awareness in DoANIMFXPanel() .. left ghost
+*
+*Revision 2.64  94/10/06  09:30:39  CACHELIN4000
+*Audio Duration ->RecFields.. bug fix
+*
+*Revision 2.63  94/10/06  01:02:19  CACHELIN4000
+*Fix RecTest for A/B channel, DHD_Shuttle not updating I/O point bug
+*
+*Revision 2.62  94/10/05  23:34:05  Kell
+*Fix Rec_Test stuff (AC)
+*
+*Revision 2.61  1994/10/05  16:29:07  CACHELIN4000
+*Open all Panels on multi-select...
+*
+*Revision 2.60  94/10/05  05:31:30  Kell
+*Fixed the Get/Put Table comment stuff.
+*
+*Revision 2.59  1994/10/05  02:40:14  Kell
+*PutTable now does correct ES_PutTable command.
+*
+*Revision 2.58  1994/10/05  01:06:35  CACHELIN4000
+*Diff add-ons, ES_Hack, DoTweakPanel, TweakPL, etc.
+*
+*Revision 2.57  94/10/04  18:13:53  CACHELIN4000
+*Remember Drive, Source, Tracks and Name between record panel invocations
+*
+*Revision 2.53  94/10/03  18:49:52  CACHELIN4000
+*Don't make icon for Audio clips, Update dir after record, XPClip volume=0 if audio off
+*un-reverse audio volume channel setting
+*
+*Revision 2.51  94/10/02  00:03:19  CACHELIN4000
+*Bullet-proof Clip control panel against missing tags.
+*
+*Revision 2.49  94/10/01  14:52:16  Kell
+*Fixed bugs related to saving / loading comments.
+*
+*Revision 2.48  1994/10/01  13:00:35  Kell
+*Now saves center icon of recorded clip.
+*DHD_FlyerClipInfo for getting length of recorded clip, etc.
+*
+*Revision 2.47  1994/10/01  01:03:29  Kell
+*Added DHD_MakeClipIcon. Currently puts up Wait sprite when making icon.
+*
+*Revision 2.46  1994/09/30  21:36:52  CACHELIN4000
+*assure even frame numbers in aduio, video panels
+*
+*Revision 2.45  94/09/30  13:17:47  pfrench
+*Removed doallnewdir from doinfopanel because the grazer
+*was traversing the list of selected files.
+*
+*Revision 2.44  1994/09/30  11:28:57  CACHELIN4000
+*Audio InPoints set on EZ Clip Adjust
+*
+*Revision 2.40  94/09/28  23:42:13  CACHELIN4000
+*Add DHD_Reorganize(), rearrange record panel again
+*
+*Revision 2.38  94/09/28  14:46:52  CACHELIN4000
+*BlocksToFrames added
+*
+*Revision 2.37  94/09/28  11:31:49  CACHELIN4000
+*add BuildFlyerList()
+*to NewClipPanel
+*
+*Revision 2.34  94/09/27  18:05:24  CACHELIN4000
+*Bag crashy FreeCrouton in DHD_InitRecord
+*
+*Revision 2.33  94/09/27  17:19:58  CACHELIN4000
+*Add POPUP f'ns (SetSource, SetDrive), tweak DHD_ functions for record panel,
+*add Drive popup to record panel, FlyerDriveInfo query
+*
+*Revision 2.32  94/09/25  16:34:27  Kell
+*Changes ES_StopSeq to ES_Stop
+*
+*Revision 2.30  94/09/23  10:33:05  CACHELIN4000
+*Record Panel, CutCLip Panel work.
+*
+*Revision 2.28  94/09/20  23:33:17  CACHELIN4000
+*FX Tags work, TAGNames added for EZ debuggery
+*
+* Copyright (c)1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+*********************************************************************/
+
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <intuition/sghooks.h>
+#include <graphics/gfxmacros.h>
+#include <graphics/gfxbase.h>
+#include <graphics/text.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <dos.h>
+#include <time.h>
+#include <editwindow.h>
+#include <project.h>
+#include <gadgets.h>
+#include <prophelp.h>
+#include <grazer.h>
+#include <edit:popup/popup.h>
+#include <editswit.h>
+#include <crouton_all.h>
+#include <request.h>
+#include <tags.h>
+#include <panel.h>
+#include <flyer.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+#include <proto/diskfont.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#else
+DrawBGFunc *DrawBG();
+#include "edit:proto/Pline.p"
+#include "edit:proto/PanFunctions.p"
+#include "edit:proto/PanData.p"
+#endif
+
+//#define SERDEBUG	1
+#include <serialdebug.h>
+
+#define CFAR __far
+
+#define CSTATIC
+
+extern struct PanelLine *CurPLine,*Start,*LastTime,*temp;
+extern struct Gadget *FirstG,*Down,*EZGad,*In,*Out,*Del,*Len;
+extern LONG	InOrOut,ft,Adder;
+extern ULONG	Ticks,WinFlags,GadInd;
+extern struct FastGadget *CurFG,*SKellFG;
+extern char TempCh[],TempC2[],*DTNames[];
+extern UBYTE *TempMem;
+extern ULONG CRuDTypes[];
+extern struct MsgPort *SwitPort;
+extern struct EditWindow *EditTop,*EditBottom;
+extern struct Library *FlyerBase;
+extern struct ESParams1 ESparams1;
+extern struct ESParams2 ESparams2;
+extern struct ESParams3 ESparams3;
+extern struct ESParams4 ESparams4;
+extern struct ESParams5 ESparams5;
+
+extern CFAR struct PanelLine ReqString_PL[];
+extern CFAR struct PanelLine ReqNum_PL[];
+extern CFAR struct PanelLine ReqTime_PL[];
+extern CFAR struct PanelLine ReqTell_PL[];
+extern CFAR struct PanelLine Setup_PL[];
+extern CFAR struct PanelLine Tweak_PL[];
+extern CFAR struct PanelLine TBC_PL[];
+extern CFAR struct PanelLine XPTBC_PL[];
+extern CFAR struct PanelLine Error_PL[];
+extern CFAR struct PanelLine RawRec_PL[];
+extern CFAR struct PanelLine MarkClip_PL[];
+extern CFAR struct PanelLine FileInfo_PL[];
+extern CFAR struct PanelLine Rexx_PL[];
+extern CFAR struct PanelLine Frame_PL[];
+extern CFAR struct PanelLine LumaKey_PL[];
+extern CFAR struct PanelLine Trails_PL[];
+extern CFAR struct PanelLine CFX_PL[];
+extern CFAR struct PanelLine Video_PL[];
+extern CFAR struct PanelLine XPVideo_PL[];
+extern CFAR struct PanelLine Effect_PL[];
+extern CFAR struct PanelLine XPEffect_PL[];
+extern CFAR struct PanelLine AnimFX_PL[];
+extern CFAR struct PanelLine XPAnimFX_PL[];
+extern CFAR struct PanelLine Clip_PL[];
+extern CFAR struct PanelLine XPClip_PL[];
+extern CFAR struct PanelLine AudClip_PL[];
+extern CFAR struct PanelLine XPAudClip_PL[];
+extern CFAR struct PanelLine Key_PL[];
+extern CFAR struct PanelLine XPKey_PL[];
+extern CFAR struct PanelLine Crawl_PL[];
+extern CFAR struct PanelLine Scroll_PL[];
+/*
+extern CFAR struct PanelLine Test_PL[];
+extern CFAR struct PanelLine Test_PL3[];
+extern CFAR struct PanelLine Test_PL2[];
+extern CFAR struct PanelLine XPTest_PL[];
+ */
+
+struct PanelLine *ReqStringPL = ReqString_PL;
+struct PanelLine *ReqNumPL = ReqNum_PL;
+struct PanelLine *ReqTimePL = ReqTime_PL;
+struct PanelLine *ReqTellPL = ReqTell_PL;
+struct PanelLine *SetupPL = Setup_PL;
+struct PanelLine *TweakPL = Tweak_PL;
+struct PanelLine *TBCPL = TBC_PL;
+struct PanelLine *XPTBCPL = XPTBC_PL;
+struct PanelLine *ErrorPL = Error_PL;
+struct PanelLine *RawRecPL = RawRec_PL;
+struct PanelLine *MarkClipPL = MarkClip_PL;
+struct PanelLine *FileInfoPL = FileInfo_PL;
+struct PanelLine *RexxPL = Rexx_PL;
+struct PanelLine *FramePL = Frame_PL;
+struct PanelLine *LumaKeyPL = LumaKey_PL;
+struct PanelLine *TrailsPL = Trails_PL;
+struct PanelLine *CFXPL = CFX_PL;
+struct PanelLine *VideoPL = Video_PL;
+struct PanelLine *XPVideoPL = XPVideo_PL;
+struct PanelLine *EffectPL = Effect_PL;
+struct PanelLine *XPEffectPL = XPEffect_PL;
+struct PanelLine *AnimFXPL = AnimFX_PL;
+struct PanelLine *XPAnimFXPL = XPAnimFX_PL;
+struct PanelLine *ClipPL = Clip_PL;
+struct PanelLine *XPClipPL = XPClip_PL;
+struct PanelLine *AudClipPL = AudClip_PL;
+struct PanelLine *XPAudClipPL = XPAudClip_PL;
+struct PanelLine *KeyPL = Key_PL;
+struct PanelLine *XPKeyPL = XPKey_PL;
+struct PanelLine *CrawlPL = Crawl_PL;
+struct PanelLine *ScrollPL = Scroll_PL;
+/*
+struct PanelLine *TestPL = Test_PL;
+struct PanelLine *XPTestPL = XPTest_PL;
+struct PanelLine *TestPL2 = Test_PL2;
+struct PanelLine *TestPL3 = Test_PL3;
+*/
+
+#define SWITCHER_MODE	( (!EditBottom) && (!EditTop || (EditTop->Height!=TOP_LARGE)) )
+#define EDITOR_MODE		(!SWITCHER_MODE)
+
+
+
+struct	AudioSet	CurAudioSet={0,0,0};
+struct FlyAudCtrl AudCtrl = {0,0,0,0,0,0,8,8,128,0,128,0,0,0,0,0,0,0,0,0};
+struct FastGadget *PlayFG=NULL;
+far static UBYTE CommentBuf[COMMENT_MAX+1];	//The Get/PutTable commands need an EVEN length!!!!!
+
+CFAR CSTATIC char Size[20],Name[MAX_STRING_BUFFER]="Clip.0",Dir[MAX_STRING_BUFFER];
+ULONG CurFlyDrive=0,CurFlySource=2,CurFlyTracks=1,CurCompMode=0;
+VOID DisplayWaitSprite(VOID);
+VOID DisplayNormalSprite(VOID);
+#define TWEAK_CHANNELS	3  // 4 when Record_B becomes real again
+CFAR struct Hack
+		HackA={HKF_PLAY_A,-29,1,14,7,0,0,60},*Hack=&HackA,
+		HackB={HKF_PLAY_B,-29,2,2,7,0,0,60},
+		HackC={HKF_RECORD_A|HKF_TESTREC,20,3,0,3,0,0,0},
+		HackD={HKF_RECORD_B|HKF_TESTREC,20,2,6,3,0,0,0},
+		*Hacks[]={&HackA,&HackB,&HackC,&HackD},
+		BakHackA={HKF_PLAY_A,-29,1,14,7,0,0,60},
+		BakHackB={HKF_PLAY_B,-29,2,2,7,0,0,60},
+		BakHackC={HKF_RECORD_A|HKF_TESTREC,20,3,0,3,0,0,0},
+		BakHackD={HKF_RECORD_B|HKF_TESTREC,20,2,6,3,0,0,0},
+		*BakHacks[]={&BakHackA,&BakHackB,&BakHackC,&BakHackD};
+
+struct SystemPrefs Config={0,0,0,0};
+struct TBCctrl		TBC_dat,TBC_bak;
+
+#define QUAL_NUM	3 		// number of entires in Qual array
+#define DEF_QUALITY	0 	// default quality
+#define COLOR_NUM	10		// number of entires in Colors array
+#define DEF_COLOR	2			// default color = Red
+#define SCROLL_NUM  2
+#define DEF_SCROLL 0
+#define CRAWL_NUM	3
+#define PNL_NUM	15
+#define FLY_SRC_NUM	7
+
+
+
+LONG PanType=PAN_EASY,FlyerDriveCount=0;
+
+UBYTE
+	FDrive[420], // (20x21)
+
+	*FlyerDrives[]={&FDrive[0],&FDrive[20],&FDrive[40],&FDrive[60],&FDrive[80],
+								&FDrive[100],&FDrive[120],&FDrive[140],&FDrive[160],&FDrive[180],
+								&FDrive[200],&FDrive[220],&FDrive[240],&FDrive[260],&FDrive[280],
+								&FDrive[300],&FDrive[320],&FDrive[340],&FDrive[360],&FDrive[380],&FDrive[400]};
+
+CFAR UBYTE
+	*FlyDrives[]={"-NONE-","Test2:"},
+	*Colors[] = {"Black","White","Red","Green","Blue","Yellow","Magenta","Cyan","Snow","Special",""},
+	*Scrolls[] = {"Scroll Once","Scroll Hold"},
+	*Crawls[] = {"Crawl Once","Crawl Repeat","Crawl Hold"},
+	*Pnls[] = { "ANIM","ILBM","ALGO","CHROMAFX","VIDEO","AUDIO","CONTROL",
+		"PROJECT","FRAMESTORE","KEY","SCROLL","CRAWL","ERROR","RAWREC","SETUP","TWEAK",""},
+	*Quals[] = {"Standard Play","Extended Play","Audio Only",""},
+	*CutTracks[] = {"Video  ","Audio  ",""},
+//	*TimeModes[] = {"Audio In","Delay",""},
+	*TimeModes[] = {"Clip","In Point",""},
+	*Tracks[] = {" Record Audio ",""},
+	*Sources[] = {"Flyer In","Flyer Y/C","Input 1","Input 2","Input 3","Input 4","Main Out",""},
+
+	SrcInd[] = {FLYS_VideoSource_NTSC,FLYS_VideoSource_SVHS,FLYS_VideoSource_VID1,
+		FLYS_VideoSource_VID2,FLYS_VideoSource_VID3,FLYS_VideoSource_VID4,FLYS_VideoSource_Main},
+
+//	*Sources[] = {"Input 1","Input 2","Main Out","Audio Only",""},
+	*Tweaks[] ={ "Play A","Play B","Record","Record B","Rec. Test"},
+	*Channels[] ={ "Stereo (L+R)", "Left Only" , "Right Only", "None"},
+//	*Inputs[] ={ "1  ","2  ","3  ","4  "},
+	*Inputs[] ={ "4  ","3  ","2  ","1  "},
+	*CFX_CModes[] ={ "Chroma","Chroma Strip"},
+	*CFX_DModes[] ={ "Filter","Transition"},
+	*CFX_Cycles[] ={ "1  ","2  ","3  ","4  "},
+	*FlyInputs[] ={ "Input 3","Input 4"},
+	*TBCSources[] = {"Composite"," Y/C ","Main Out","Fader",""},
+	*TBCTerm[] = {"Comp. ","Gen. ","TBC ","AFade","BFade",""},
+	*TBCDecoder[] = {"Mono. In","AGC","Chroma AGC",""},
+	*TBCEncoder[] = {"Bypass","Bars","Kill Color","Freeze",""},
+	*TBCKeyer[] = {"Fader Out","Channel B",""},
+	*TBCKeyModes[] = {"Fader","2 Level","4 Level",""},
+	TBC_KeyMode[] = {0,TBCKF_MODE0,TBCKF_MODE0|TBCKF_MODE1},
+	*GPI[] ={ "Off" , "Pulse Front", "Pulse Back"};
+
+far char RexxArgs[COMMENT_MAX+1],*Waits[]={"Wait for Return  ",""};
+far UBYTE 	TBC_Input[] = {TBCIN_COMP,TBCIN_YC,TBCIN_TMAIN,TBCIN_FADER};
+
+#ifdef PROTO_PASS
+	PanHandler	PanHandlers[50];
+#else
+CFAR PanHandler	PanHandlers[] = {
+  DoFXALGOPanel,						// CR_FXANIM
+  DoFXILBMPanel,						// CR_FXILBM
+  DoFXALGOPanel,						// CR_FXALGO
+  DoFXCRPanel,  						// CR_FXCR
+  DoVIDEOPanel, 						// CR_VIDEO
+  DoAUDIOPanel, 						// CR_AUDIO
+  DoCONTROLPanel,						// CR_CONTROL
+  NULL,											// CR_PROJECT
+  DoFRAMESTOREPanel,				// CR_FRAMESTORE
+  DoKEYPanel,       				// CR_KEY
+  DoSCROLLPanel,    				// CR_SCROLL
+  DoCRAWLPanel,     				// CR_CRAWL
+  DoFRAMESTOREPanel,				// CR_VIDEOANIM,
+  DoKEYPanel,								// CR_KEYEDANIM,
+  DoCONTROLPanel,						// CR_MAIN,
+  DoFRAMESTOREPanel,				// CR_STILL,
+	DoERRORPanel,     				// CR_ERROR
+  NULL,          						// CR_CGBOOK
+  NULL,          						// CR_IMAGE
+  NULL,          						// CR_LWSCENE
+  NULL,          						// CR_LWOBJ
+  NULL,          						// CR_LWSURF
+  NULL,          						// CR_LWMOT
+  NULL,          						// CR_LWENV
+  NULL,          						// CR_FONT
+  NULL,          						// CR_EPS
+  DoRexxPanel ,  						// CR_REXX
+  NULL,          						// CR_TEXT
+  NULL,          						// CR_UNKNOWN
+  DoNewClipPanel ,
+  DoSetupPanel ,
+  DoTweakPanel ,
+	NULL } ;
+#endif
+
+//*******************************************************************
+struct EditWindow *HandleNewClip(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	DoNewClipPanel(Edit,NULL);
+	DUMPMSG(" ...NewClip Handled.");
+	return(Edit);
+}
+
+//*******************************************************************
+BOOL DoStrReqPanel(char *Title, char *buff, int buffsize)
+{
+	ReqStringPL[0].Label = Title;
+	ReqStringPL[2].Param = (LONG *)buff;
+	ReqStringPL[2].PropEnd = (LONG)buffsize-1;
+	if(PAN_CANCEL==MiniPanel(NULL,ReqStringPL,TUNE_NONE))
+		return(FALSE);
+	return(TRUE);
+}
+
+//*******************************************************************
+int DoNumReqPanel(char *Title, int n, int min, int max)
+{
+	int Num=n;
+	ReqNumPL[0].Label = Title;
+	ReqNumPL[2].Param = (LONG *)&Num;
+	ReqNumPL[2].PropStart = min;
+	ReqNumPL[2].PropEnd = max;
+	if(PAN_CANCEL==MiniPanel(NULL,ReqNumPL,TUNE_NONE))
+		return(n);
+	return(Num);
+}
+
+//*******************************************************************
+BOOL DoTimeReqPanel(char *Title, char *timecode)
+{
+	ULONG t;
+	TimeToLong(timecode,&t);
+	ReqTimePL[0].Label = Title;
+	ReqTimePL[2].Param = (LONG *)&t;
+	ReqTimePL[2].PropStart = 0;
+	ReqTimePL[2].PropEnd = 65535<<4; // Big!
+	if(PAN_CANCEL==MiniPanel(NULL,ReqTimePL,TUNE_NONE))
+		return(FALSE);
+	LongToTime(&t,timecode);
+	return(TRUE);
+}
+
+//*******************************************************************
+BOOL DoTellReqPanel(char *Title, char *line1, char *line2, char *line3)
+{
+	ReqTellPL[0].Label = Title;
+	ReqTellPL[2].Label = line1;
+	ReqTellPL[3].Label = line2;
+	ReqTellPL[4].Label = line3;
+	if(PAN_CANCEL==MiniPanel(NULL,ReqTellPL,TUNE_NONE))
+		return(FALSE);
+	return(TRUE);
+}
+
+//*******************************************************************
+// This panel should also offer a way to save settings,
+// then load them on the fly in the sequence.
+BOOL DoTBCPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG bri,con,sat,hue,cphas,hphas,fade,KeyM,
+		dbri=0,dcon=63,dsat=63,dhue=0,dcphas=0x3FF,dhphas=870,dfade=127,
+		term=0,dec=0,enc=0,key=0,type=PAN_EASY;
+
+	ESparams2.Data1 =(LONG) HACK_TBCO;
+	ESparams2.Data2 =(LONG) &TBC_dat;
+	SendSwitcherReply(ES_Hack,&ESparams2);
+
+	ESparams2.Data1 =(LONG) HACK_TBCR;
+	ESparams2.Data2 =(LONG) &TBC_dat;
+	SendSwitcherReply(ES_Hack,&ESparams2);
+
+	bri = TBC_dat.Bright;
+	con = TBC_dat.Contrast;
+	sat = TBC_dat.Sat;
+	hue = TBC_dat.Hue;
+	cphas=TBC_dat.Phase;
+	hphas=TBC_dat.HorAdj;
+	fade = TBC_dat.Fader;
+
+	key=0;
+	if(TBC_dat.KeyerFlags&TBCKF_KEYONB)	key|=1<<1;
+	if(TBC_dat.KeyerFlags&TBCKF_FADEROUT)	key|=1;
+	KeyM=0;
+	if(TBC_dat.KeyerFlags&TBCKF_MODE0)
+		if(TBC_dat.KeyerFlags&TBCKF_MODE1)
+			KeyM=2;
+		else
+			KeyM=1;
+
+	term=0;
+	if(TBC_dat.Term&TBCTF_FADERB)	term|=1<<4;
+	if(TBC_dat.Term&TBCTF_FADERA)	term|=1<<3;
+	if(TBC_dat.Term&TBCTF_OUT)		term|=1<<2;
+	if(TBC_dat.Term&TBCTF_GENIN)	term|=1<<1;
+	if(TBC_dat.Term&TBCTF_COMPIN)	term|=1;
+	dec=0;
+	if(TBC_dat.DecFlags&TBCDF_CHROMAAGC)	dec|=1<<2;
+	if(TBC_dat.DecFlags&TBCDF_AGC)				dec|=1<<1;
+	if(TBC_dat.DecFlags&TBCDF_MONOCHROME)	dec|=1;
+	enc=0;
+	if(TBC_dat.EncFlags&TBCEF_KILLCOLOR)	enc|=1<<2;
+	if(TBC_dat.EncFlags&TBCEF_BARS)				enc|=1<<1;
+	if(TBC_dat.Flags&TBCGF_BYPASS)				enc|=1;
+	if(TBC_dat.Flags&TBCGF_FREEZE)				enc|=1<<3;
+
+	CopyMem(&TBC_dat,&TBC_bak,sizeof(struct TBCctrl));
+
+	TBCPL[2].Param	=&hphas;
+	TBCPL[2].Param2	=&dhphas;
+	TBCPL[2].PropStart	=0;
+	TBCPL[2].PropEnd	=909;
+	TBCPL[2].UserObj				= (APTR) TBC_HPHZ;
+	TBCPL[2].UserFun				= CTRL_TBCSet;
+
+	TBCPL[3].Param	=&cphas;
+	TBCPL[3].Param2	=&dcphas;
+	TBCPL[3].PropStart	=0;
+	TBCPL[3].PropEnd	=0x7FF;
+	TBCPL[3].UserObj				= (APTR) TBC_CPHZ;
+	TBCPL[3].UserFun				= CTRL_TBCSet;
+
+	TBCPL[4].Param	=&hue;
+	TBCPL[4].Param2	=&dhue;
+	TBCPL[4].PropStart	=-64;
+	TBCPL[4].PropEnd	=63;
+	TBCPL[4].UserObj				= (APTR) TBC_HUE;
+	TBCPL[4].UserFun				= CTRL_TBCSet;
+
+	TBCPL[5].Param	=&bri;
+	TBCPL[5].Param2	=&dbri;
+	TBCPL[5].PropStart	=-64;
+	TBCPL[5].PropEnd	=63;
+	TBCPL[5].UserObj				= (APTR) TBC_BRT;
+	TBCPL[5].UserFun				= CTRL_TBCSet;
+
+	dsat=63;
+	TBCPL[6].Param	=&sat;
+	TBCPL[6].Param2	=&dsat;
+	TBCPL[6].PropStart	=0;
+	TBCPL[6].PropEnd		=127;
+	TBCPL[6].UserObj				= (APTR) TBC_SAT;
+	TBCPL[6].UserFun				= CTRL_TBCSet;
+
+	dcon=63;
+	TBCPL[7].Param	=&con;
+	TBCPL[7].Param2	=&dcon;
+	TBCPL[7].PropStart	=0;
+	TBCPL[7].PropEnd		=127;
+	TBCPL[7].UserObj				= (APTR) TBC_CON;
+	TBCPL[7].UserFun				= CTRL_TBCSet;
+
+	TBCPL[8].Param	= &fade;
+	TBCPL[8].Param2	= &dfade;
+	TBCPL[8].PropStart	=0;
+	TBCPL[8].PropEnd		=255;
+	TBCPL[8].UserObj				= (APTR) TBC_FAD;
+	TBCPL[8].UserFun				= CTRL_TBCSet;
+
+	TBCPL[9].Param	= (long *)TBCSources;
+	TBCPL[9].PropStart	=TBC_Input[TBC_dat.InputSel];
+	TBCPL[9].PropEnd		=TBCSRC_NUM;
+	TBCPL[9].UserObj				= (APTR) TBC_INP;
+	TBCPL[9].UserFun				= CTRL_TBCSet;
+
+
+	XPTBCPL[2].Param	= (long *)TBCSources;
+	XPTBCPL[2].PropStart	=TBC_Input[TBC_dat.InputSel];
+	XPTBCPL[2].PropEnd		=TBCSRC_NUM;
+	XPTBCPL[2].UserObj				= (APTR) TBC_INP;
+	XPTBCPL[2].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[3].Param	= (long *)TBCKeyModes;
+	XPTBCPL[3].PropStart	=KeyM;
+	XPTBCPL[3].PropEnd		=TBCKEYM_NUM;
+	XPTBCPL[3].UserObj				= (APTR) TBC_KEYM;
+	XPTBCPL[3].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[4].Param	= &fade;
+	XPTBCPL[4].Param2	= &dfade;
+	XPTBCPL[4].PropStart	=0;
+	XPTBCPL[4].PropEnd		=255;
+	XPTBCPL[4].UserObj				= (APTR) TBC_FAD;
+	XPTBCPL[4].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[6].Param	=(ULONG *)term;
+	XPTBCPL[6].Param2	= (long *)TBCTerm;
+	XPTBCPL[6].PropStart	=0;
+	XPTBCPL[6].PropEnd		=TBCTERM_NUM;
+	XPTBCPL[6].UserObj				= (APTR) TBC_TRM;
+	XPTBCPL[6].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[8].Param	=(ULONG *)key;
+	XPTBCPL[8].Param2	= (long *)TBCKeyer;
+	XPTBCPL[8].PropStart	= 0;
+	XPTBCPL[8].PropEnd		= TBCKEY_NUM;
+	XPTBCPL[8].UserObj				= (APTR) TBC_KEY;
+	XPTBCPL[8].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[10].Param	=(ULONG *)enc;
+	XPTBCPL[10].Param2	= (long *)TBCEncoder;
+	XPTBCPL[10].PropStart	=0;
+	XPTBCPL[10].PropEnd		=TBCENCOD_NUM;
+	XPTBCPL[10].UserObj				= (APTR) TBC_ENC;
+	XPTBCPL[10].UserFun				= CTRL_TBCSet;
+
+	XPTBCPL[12].Param	=(ULONG *)dec;
+	XPTBCPL[12].Param2	= (long *)TBCDecoder;
+	XPTBCPL[12].PropStart	=0;
+	XPTBCPL[12].PropEnd		=TBCDECOD_NUM;
+	XPTBCPL[12].UserObj				= (APTR) TBC_DEC;
+	XPTBCPL[12].UserFun				= CTRL_TBCSet;
+
+	while(type > PAN_CONTINUE)
+	{
+		switch(type)
+		{
+			case PAN_EXPERT:
+				type = MiniPanel(Edit,XPTBCPL,TUNE_QUICK);
+				TBCPL[9].PropStart	=TBC_Input[TBC_dat.InputSel];
+				break;
+			case PAN_EASY:
+				type = MiniPanel(Edit,TBCPL,TUNE_FINE);
+				XPTBCPL[2].PropStart	=TBC_Input[TBC_dat.InputSel];
+				break;
+		}
+	}
+
+	if(type==PAN_CANCEL)
+	{
+		CopyMem(&TBC_bak,&TBC_dat,sizeof(struct TBCctrl));
+		ESparams2.Data1 =(LONG) HACK_TBCW;
+		ESparams2.Data2 =(LONG) &TBC_dat;
+		SendSwitcherReply(ES_Hack,&ESparams2);
+		ESparams2.Data1 =(LONG) HACK_TBCC;
+		ESparams2.Data2 =(LONG) &TBC_dat;
+		SendSwitcherReply(ES_Hack,&ESparams2);
+		return(FALSE);
+	}
+	ESparams1.Data1=(LONG)&Config;
+	SendSwitcherReply(ES_SavePrefs,&ESparams1);
+
+	ESparams2.Data1 =(LONG) HACK_TBCC;
+	ESparams2.Data2 =(LONG) &TBC_dat;
+	SendSwitcherReply(ES_Hack,&ESparams2);
+
+	return(TRUE);
+}
+
+//*******************************************************************
+BOOL DoTweakPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+//	char *sh[]={"Shift",""};
+	int i,type;
+	if(FlyerDriveCount==0) BuildFlyerList();
+	for(i=0;i<TWEAK_CHANNELS;i++)
+	{
+		Hack=Hacks[i];
+		Hack->hk_Flags |= HKF_READCALIB;
+		ESparams2.Data1 =(LONG) HACK_TWEAK;
+		ESparams2.Data2 =(LONG) Hack;  // Hack ptr
+		SendSwitcherReply(ES_Hack,&ESparams2);
+		Hack->hk_Flags &= ~HKF_READCALIB;
+		CopyMem(Hack,BakHacks[i],sizeof(struct Hack));
+	}
+	TweakPL[2].Param = (long *)Tweaks;// Popup
+	TweakPL[2].UserFun = CTRL_RecTest;// Popup f'n
+	TweakPL[2].PropStart=0;
+	Hack=Hacks[TweakPL[2].PropStart];
+	TweakPL[2].UserObj=(APTR)Hack;
+	TweakPL[2].PropEnd=TWEAK_CHANNELS;
+
+	TweakPL[3].Param = &(Hack->hk_Position) ;// EZ_NUM
+	TweakPL[3].UserFun = CTRL_Hack;
+	TweakPL[3].UserObj = (APTR)Hack;
+	TweakPL[3].PropStart=-910;
+	TweakPL[3].PropEnd=910;
+
+	TweakPL[4].Param =  &(Hack->hk_Clock) ;	// EZ_NUM
+	TweakPL[4].UserFun =CTRL_Hack;
+	TweakPL[4].UserObj =(APTR)Hack;
+	TweakPL[4].PropStart=0;
+	TweakPL[4].PropEnd=3;
+
+	TweakPL[5].Param = &(Hack->hk_Coarse) ;	// EZ_NUM
+	TweakPL[5].UserFun =CTRL_Hack;
+	TweakPL[5].UserObj=(APTR)Hack;
+	TweakPL[5].PropStart=0;
+	TweakPL[5].PropEnd=9;
+
+	TweakPL[6].Param = &(Hack->hk_Fine) ;	// EZ_NUM
+	TweakPL[6].UserFun =CTRL_Hack;
+	TweakPL[6].UserObj=(APTR)Hack;
+	TweakPL[6].PropStart=0;
+	TweakPL[6].PropEnd=7;
+
+//	TweakPL[7].Param = &(Hack->hk_Pedestal) ;	// EZ_NUM
+//	TweakPL[7].UserFun =CTRL_Hack;
+//	TweakPL[7].UserObj=(APTR)Hack;
+//	TweakPL[7].PropStart=0;
+//	TweakPL[7].PropEnd=255;
+
+//	TweakPL[8].Param=(long *)Hack->hk_Shift;
+//	TweakPL[8].Param2=(long *)sh;
+//	TweakPL[8].PropEnd=1;
+
+	type=MiniPanel(Edit,TweakPL,TUNE_NONE);
+	if(type==PAN_CANCEL)
+	{
+		for(i=0;i<TWEAK_CHANNELS;i++)
+		{
+			Hack=Hacks[i];
+			CopyMem(BakHacks[i],Hack,sizeof(struct Hack));
+			ESparams1.Data1 =(LONG) Hack;  // Hack ptr
+			SendSwitcherReply(ES_Hack,&ESparams1);
+		}
+	}
+	DHD_InitPlay("",0);
+	return(TRUE);
+}
+
+
+//*******************************************************************
+BOOL DoSetupPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG	I=0,M=0,T=0xF,trig=0,type=PanType,oM;
+
+	DUMPMSG("Enter Setup Panel");
+	ESparams1.Data1=(LONG)&Config;
+	SendSwitcherReply(ES_GetPrefs,&ESparams1);
+	DUMPHEXIL(" Got Prefs ",(LONG)&Config,"\\");
+	M=(Config.Flags1&(1<<spB_PrvwOLay)) ? 1:0 ;
+	oM=M;
+	if(Config.Flags1&(1<<spB_FlyerVID3))
+		I |= 1;
+	if(Config.Flags1&(1<<spB_FlyerVID4))
+		I |= 2;
+
+	T=(UBYTE) Config.Termination;
+	trig=(UBYTE) Config.GPI;
+	if( (type==PAN_EASY) || (type==PAN_EXPERT) )
+	{
+		SetupPL[2].Param =(LONG *)&M;
+		SetupPL[2].UserFun=CTRL_SetFace;
+		SetupPL[2].Flags=PL_SMREF; // requester with interface change
+
+		SetupPL[4].Param =(LONG *)T;
+		SetupPL[4].Param2 =(LONG *)Inputs;
+		SetupPL[4].PropEnd =4;
+		SetupPL[4].UserFun=CTRL_SetTermination;
+
+		SetupPL[6].Param =(LONG *)GPI;
+		SetupPL[6].PropStart =trig;
+		SetupPL[6].PropEnd =3;
+		SetupPL[6].UserFun=CTRL_SetGPI;
+
+		SetupPL[7].Param = (LONG *)I;
+		SetupPL[7].Param2 =(LONG *)FlyInputs;
+		SetupPL[7].PropEnd =2;
+		SetupPL[7].UserFun=CTRL_SetFlyOut;
+		if( !FlyerBase ) SetupPL[7].Type =PNL_SKIP;
+
+		type = MiniPanel(Edit,SetupPL,TUNE_NONE);
+	}
+
+	if(type==PAN_CONTINUE)
+	{
+		Config.GPI = (UBYTE) SetupPL[6].PropStart;
+		if((LONG)SetupPL[7].Param&1)
+			Config.Flags1 |= (1<<spB_FlyerVID3);
+		else Config.Flags1 &= ~(1<<spB_FlyerVID3);
+		if((LONG)SetupPL[7].Param&2)
+			Config.Flags1 |= (1<<spB_FlyerVID4);
+		else Config.Flags1 &= ~(1<<spB_FlyerVID4);
+		Config.Termination=(UBYTE)SetupPL[4].Param;
+		ESparams1.Data1=(LONG)&Config;
+		SendSwitcherReply(ES_SavePrefs,&ESparams1);
+		return(TRUE);
+	}
+	else
+	{
+		Config.Termination = (UBYTE)T;
+		Config.Flags1 = (UBYTE) ( oM!=0 ? (1<<spB_PrvwOLay):0);
+		if(I!=(Config.Flags1>>1)&0x3)
+		{
+			if(I&1) Config.Flags1 |= (1<<spB_FlyerVID3);
+			else Config.Flags1 &= ~(1<<spB_FlyerVID3);
+			if(I&2) Config.Flags1 |= (1<<spB_FlyerVID4);
+			else Config.Flags1 &= ~(1<<spB_FlyerVID4);
+		}
+		ESparams1.Data1=(LONG)&Config;
+		SendSwitcherReply(ES_SetPrefs,&ESparams1);
+		return(TRUE);
+	}
+
+	return(FALSE);
+}
+
+//*******************************************************************
+BOOL DoRexxPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	ULONG ow=0,DLay,B,TM=0;
+	*RexxArgs=0;
+	if(FG)
+	{
+		ow=GetValue(FG,TAG(Asynchronous));
+		DLay=(B=GetValue(FG,TAG(Delay)));
+		TM=GetValue(FG,TAG(TimeMode));
+		GetTable(FG,TAG_CommandLine,RexxArgs,COMMENT_MAX);
+	}
+	PutValue(FG,TAG(Asynchronous),0);
+	RexxPL[3].Type = PNL_SKIP;
+
+	RexxPL[2].Param = (LONG *)RexxArgs;
+	RexxPL[2].PropEnd = COMMENT_MAX;
+	RexxPL[2].PropStart = 0; // this changes when string does
+	RexxPL[2].G5 = (struct Gadget *)250; // Custom string width
+
+	RexxPL[3].Param = (LONG *)ow;
+	RexxPL[3].Param2 = (LONG *)Waits;
+	RexxPL[3].PropEnd = 1;
+
+	RexxPL[4].Param = (LONG *)TimeModes;
+	RexxPL[4].PropStart = TM;
+	RexxPL[4].PropEnd = 2;
+
+	RexxPL[5].Param = &DLay;
+	RexxPL[5].PropStart = 0;
+	RexxPL[5].PropEnd = 600;
+	RexxPL[5].Flags = PL_DEL;
+
+	if(PAN_CANCEL==MiniPanel(Edit,RexxPL,TUNE_NONE))
+		return(FALSE);
+	if(RexxPL[2].PropStart)
+		PutTable(FG,TAG_CommandLine,RexxArgs,COMMENT_MAX);
+	if((ULONG)RexxPL[3].Param!=ow)
+		PutValue(FG,TAG(Asynchronous),(LONG)RexxPL[3].Param);
+	if(DLay!=B)
+		PutValue(FG,TAG(Delay),DLay);
+	if(RexxPL[4].PropStart!=TM)
+		PutValue(FG,TAG(TimeMode),RexxPL[4].PropStart);
+	return(TRUE);
+}
+
+UBYTE FCM[] = {3,0,1,2};  // convert between wacky FCountMode and gadget
+UBYTE notFCM[] = {1,2,3,0};  // S,M,F,V -> 3,0,1,2 .. NotFCM[FCM[x]] == x
+#define MAX_DELAY 1800   // !!! arbitrary Delay Limit
+
+// CT_FXALGO
+//*******************************************************************
+BOOL DoFXALGOPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG B=2,t_In=300,type=PanType,Speed=1,S,SP[4]={45,30,15,9},D=0, Color=0,pmode=0;
+	char Label[MAX_PANEL_STR];
+	BOOL Matte=FALSE,Border=FALSE;
+	if(FG)
+	{
+		SP[3]=GetValue(FG,TAG(NumFramesVariable));
+		if(SP[3]==0)	return(DoFXANIMPanel(Edit,FG));  // Not Variable Speed
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Speed=GetValue(FG,TAG(FCountMode));
+		Speed&=0x00000003; // 3,0,1,2 == S,M,F,V
+		B=notFCM[Speed];	 // B=gadget button SMFV=0123
+	 	SP[0]=GetValue(FG,TAG(NumFramesSlow));
+		SP[1]=GetValue(FG,TAG(NumFramesMedium));
+		SP[2]=GetValue(FG,TAG(NumFramesFast));
+		pmode = GetValue(FG,TAG(PanelMode));
+		type = (pmode==1) ? PAN_EXPERT:PAN_EASY ;
+
+		if( (GetValue(FG,TAG(ForceDefaultMatte))==0) && (Color=GetValue(FG,TAG(MatteColor))) )
+		{
+			Color -= 1; // map 1-9 to 0-8 , or -1 -> -2 for CustomColor
+			if(Color>8) Color=8;
+			Matte=TRUE;
+		}
+		else if( GetValue(FG,TAG(AlgoFXborder)) && (Color=GetValue(FG,TAG(BorderColor))) )
+		{
+			Color -= 1; // map 1-8 to 0-7 , or -1 -> -2 for CustomColor
+			if(Color>7) Color=7;
+			Border=TRUE;
+		}
+		t_In=GetValue(FG,TAG(MaxDuration))>>1;
+	}
+	S=SP[notFCM[Speed]];
+
+	EffectPL[0].Label =Label;
+	EffectPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+
+	EffectPL[1].Label =""; // Label;
+
+	EffectPL[4].Param =&B;						// SMFV choice
+	EffectPL[4].Param2 =SP;						// Array of field counts
+	EffectPL[4].PropStart =(LONG)&EffectPL[5];	// PLine (time) to update
+
+	EffectPL[5].Param = &S;	// Time slider
+	EffectPL[5].Param2 = (LONG *)&EffectPL[4];	// FXSpeed gadg to set to V
+	EffectPL[5].PropStart = 1;
+	EffectPL[5].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+	EffectPL[5].Flags = PL_LEN;
+
+// ~~*~~*~~*~~| This fence separates the XP from the EZ, it doesn't do much but they feel better |~~~*~~~*~~~|
+
+	XPEffectPL[0].Label =Label;
+	XPEffectPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+
+	XPEffectPL[1].Label = ""; //Label;
+
+	XPEffectPL[4].Param =&B;						// SMFV choice
+	XPEffectPL[4].Param2 =SP;						// Array of field counts
+	XPEffectPL[4].PropStart =(LONG)&XPEffectPL[5];	// PLine (time) to update
+
+	XPEffectPL[5].Param = &S;	// Time slider
+	XPEffectPL[5].Param2 = (LONG *)&XPEffectPL[4];	// FXSpeed gadg to set to V
+	XPEffectPL[5].PropStart = 1;
+	XPEffectPL[5].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+	XPEffectPL[5].Flags = PL_LEN;
+
+	XPEffectPL[6].Type = PNL_SKIP;
+	if(Matte)
+	{
+		XPEffectPL[6].Type = PNL_POPUP;
+		XPEffectPL[6].Param = (long *)Colors;		// POPUP
+		XPEffectPL[6].PropEnd = COLOR_NUM - 1; // don't include "Special"
+		XPEffectPL[6].PropStart = Color<0 ? 0 : Color;
+		if((GetValue(FG,TAG(CustomMatteColor))!=0))
+		{
+			XPEffectPL[6].PropEnd = COLOR_NUM;
+			XPEffectPL[6].PropStart = Color<0 ? (COLOR_NUM - 1) : Color;
+		}
+	}
+	else if(Border)
+	{
+		XPEffectPL[6].Type = PNL_POPUP;
+		XPEffectPL[6].Param = (long *)Colors;		// POPUP
+		XPEffectPL[6].PropEnd = COLOR_NUM - 2; // don't include "Special"
+		XPEffectPL[6].PropStart = Color<0 ? 0 : Color;
+		if((GetValue(FG,TAG(CustomBorderColor))!=0))
+		{
+			XPEffectPL[6].PropEnd = COLOR_NUM -1 ; // should swap ptrs for "Snow" and Special" here
+			XPEffectPL[6].PropStart = Color<0 ? (COLOR_NUM - 2) : Color;
+		}
+	}
+
+	XPEffectPL[7].Param = &D;	// Start Time slider
+	XPEffectPL[7].PropStart = 1;
+	XPEffectPL[7].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+
+	while(type > PAN_CONTINUE)
+	{
+		switch(type)
+		{
+			case PAN_EXPERT:
+				pmode=1;
+				type = MiniPanel(Edit,XPEffectPL,TUNE_QUICK);
+				break;
+			case PAN_EASY:
+				pmode=0;
+				type = MiniPanel(Edit,EffectPL,TUNE_FINE);
+				break;
+		}
+	}
+
+	if(type==PAN_CONTINUE)
+	{
+		if(B!=notFCM[Speed])
+			PutValue(FG,TAG(FCountMode),FCM[B]); // FCM[3]=2 = variable
+		if( B==3 )
+			PutValue(FG,TAG(VariableFCount),S<<1);   // Frames -> Fields
+		if( Matte && Color!= XPEffectPL[6].PropStart )
+		{
+			PutValue(FG,TAG(MatteColor), (XPEffectPL[6].PropStart < COLOR_NUM -1) ? XPEffectPL[6].PropStart+1 : -1 );
+//			ESparams2.Data1=(LONG)FG;
+//			ESparams2.Data2=FGC_BORDER;
+//			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		else if( Border && Color!= XPEffectPL[6].PropStart )
+		{
+			PutValue(FG,TAG(BorderColor), (XPEffectPL[6].PropStart < COLOR_NUM -2) ? XPEffectPL[6].PropStart+1 : -2 );
+//			ESparams2.Data1=(LONG)FG;
+//			ESparams2.Data2=FGC_BORDER;
+//			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		ESparams2.Data1=(LONG)FG;
+		ESparams2.Data2=FGC_FCOUNT;
+		SendSwitcherReply(ES_FGcommand,&ESparams2);
+		PutValue(FG,TAG(PanelMode),pmode);  // ...just following orders
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+// CT_FXILBM
+BOOL DoFXANIMPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG A=0,B=2,t_In=900,type=PanType,Speed=1,S,SP[4]={45,30,15,9},D=0,
+			Color=0,pmode=0;
+	char Label[MAX_PANEL_STR];
+	BOOL Matte=FALSE,Border=FALSE;
+	if(FG)
+	{
+		SP[3]=GetValue(FG,TAG(NumFramesVariable));
+//		if(SP[3]!=0)	return(DoFXALGOPanel(Edit,FG));  // Variable Speed
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Speed=GetValue(FG,TAG(FCountMode));
+		Speed&=0x00000003; // 3,0,1,2 == S,M,F,V
+		B=notFCM[Speed];	 // B=gadget button SMFV=0123
+	 	SP[0]=GetValue(FG,TAG(NumFramesSlow));
+		SP[1]=GetValue(FG,TAG(NumFramesMedium));
+		SP[2]=GetValue(FG,TAG(NumFramesFast));
+		Color=GetValue(FG,TAG(MatteColor));
+		pmode = GetValue(FG,TAG(PanelMode));
+		type = (pmode==1) ? PAN_EXPERT:PAN_EASY ;
+		if( (GetValue(FG,TAG(ForceDefaultMatte))==0) && (Color!=0) )
+		{
+			Color -= 1; // map 1-9 to 0-8 , or -1 -> -2 for CustomColor
+			if(Color>8) Color=8;
+			Matte=TRUE;
+		}
+		else if( GetValue(FG,TAG(AlgoFXborder)) && (Color!=0) )
+		{
+			Color -= 1; // map 1-8 to 0-7 , or -1 -> -2 for CustomColor
+			if(Color>7) Color=7;
+			Border=TRUE;
+		}
+	}
+	S=SP[notFCM[Speed]];
+
+	AnimFXPL[0].Label =Label;
+	AnimFXPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+
+	AnimFXPL[1].Label =""; // Label;
+
+	AnimFXPL[4].Param =&B;						// SMFV choice
+	AnimFXPL[4].Param2 =SP;						// Array of field counts
+	AnimFXPL[4].PropStart =0 ;	// PLine (time) to update, 0 for FXTIME
+
+	AnimFXPL[5].Param = &S;	// Time slider
+	AnimFXPL[5].Param2 = &A;
+
+// ~~*~~*~~*~~| This fence separates the XP from the EZ, it doesn't do much but they feel better |~~~*~~~*~~~|
+
+	XPAnimFXPL[0].Label =Label;
+	XPAnimFXPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+
+	XPAnimFXPL[1].Label = ""; //Label;
+
+	XPAnimFXPL[4].Param =&B;						// SMFV choice
+	XPAnimFXPL[4].Param2 =SP;						// Array of field counts
+	XPAnimFXPL[4].PropStart = NULL;	// PLine (time) to update
+
+	XPAnimFXPL[5].Param = &S;	// Time slider
+	XPAnimFXPL[5].Param2 = &A;
+
+	XPAnimFXPL[6].Type = PNL_SKIP;
+	if(Matte)
+	{
+		XPAnimFXPL[6].Type = PNL_POPUP;
+		XPAnimFXPL[6].Param = (long *)Colors;		// POPUP
+		XPAnimFXPL[6].PropEnd = COLOR_NUM - 1; // don't include "Special"
+		XPAnimFXPL[6].PropStart = Color<0 ? 0 : Color;
+		if((GetValue(FG,TAG(CustomMatteColor))!=0))
+		{
+			XPAnimFXPL[6].PropEnd = COLOR_NUM;
+			XPAnimFXPL[6].PropStart = Color<0 ? (COLOR_NUM - 1) : Color;
+		}
+	}
+	else if(Border)
+	{
+		XPAnimFXPL[6].Type = PNL_POPUP;
+		XPAnimFXPL[6].Param = (long *)Colors;		// POPUP
+		XPAnimFXPL[6].PropEnd = COLOR_NUM - 2; // don't include "Special"
+		XPAnimFXPL[6].PropStart = Color<0 ? 0 : Color;
+		if((GetValue(FG,TAG(CustomBorderColor))!=0))
+		{
+			XPAnimFXPL[6].PropEnd = COLOR_NUM -1 ; // should swap ptrs for "Snow" and Special" here
+			XPAnimFXPL[6].PropStart = Color<0 ? (COLOR_NUM - 2) : Color;
+		}
+	}
+
+	XPAnimFXPL[7].Param = &D;	// Start Time slider
+	XPAnimFXPL[7].PropStart = 1;
+	XPAnimFXPL[7].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+
+	while(type > PAN_CONTINUE)
+		switch(type)
+		{
+			case PAN_EXPERT:
+				pmode=1;
+				type = MiniPanel(Edit,XPAnimFXPL,TUNE_QUICK);
+				break;
+			case PAN_EASY:
+				pmode=0;
+				type = MiniPanel(Edit,AnimFXPL,TUNE_FINE);
+				break;
+		}
+
+
+	if(type==PAN_CONTINUE)
+	{
+		if( Matte && Color!= XPAnimFXPL[6].PropStart )
+		{
+			PutValue(FG,TAG(MatteColor), (XPAnimFXPL[6].PropStart < COLOR_NUM -1) ? XPAnimFXPL[6].PropStart+1 : -1 );
+//			ESparams2.Data1=(LONG)FG;
+//			ESparams2.Data2=FGC_BG; // really Matte source.. duoooh!
+//			ESparams2.Data2=FGC_BORDER;
+//			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		else if( Border && Color!= XPAnimFXPL[6].PropStart )
+		{
+			PutValue(FG,TAG(BorderColor), (XPAnimFXPL[6].PropStart < COLOR_NUM -2) ? XPAnimFXPL[6].PropStart+1 : -1 );
+//			ESparams2.Data1=(LONG)FG;
+//			ESparams2.Data2=FGC_BORDER;
+//			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		if(B!=notFCM[Speed])
+		{
+			PutValue(FG,TAG(FCountMode),FCM[B]); // FCM[3]=2 = variable
+			ESparams2.Data1=(LONG)FG;
+			ESparams2.Data2=FGC_FCOUNT;
+			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		PutValue(FG,TAG(PanelMode),pmode);  // ...just following orders
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+
+// CT_FXILBM
+BOOL DoFXILBMPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	return(DoFXALGOPanel(Edit,FG));
+}
+
+// CT_FXCR
+BOOL DoFXCRPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG TBar=0,TBarb=0,B=2,t_In=300,type=PanType,Speed=1,S,SP[4]={45,30,15,9},
+		D=0, Cmod=0,Dmod=0, Cyc=0;
+	char Label[MAX_PANEL_STR];
+	struct TagMess	tagTBar={TAG(TBarPosition),NULL,4,0},
+		tagDmod={TAG(DataMode),NULL,4,0},
+		tagCmod={TAG(ColorMode),NULL,4,0},
+		tagCyc={TAG(CycleMode),NULL,4,0};
+	if(FG)
+	{
+		SP[3]=GetValue(FG,TAG(NumFramesVariable));
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Speed=GetValue(FG,TAG(FCountMode));
+		Speed&=0x00000003; // 3,0,1,2 == S,M,F,V
+		B=notFCM[Speed];	 // B=gadget button SMFV=0123
+	 	SP[0]=GetValue(FG,TAG(NumFramesSlow));
+		SP[1]=GetValue(FG,TAG(NumFramesMedium));
+		SP[2]=GetValue(FG,TAG(NumFramesFast));
+		D = GetValue(FG,TAG(Delay));
+		Cyc=GetValue(FG,TAG(CycleMode));
+		Cmod=GetValue(FG,TAG(ColorMode));
+		Dmod=GetValue(FG,TAG(DataMode));
+		TBar=(TBarb=GetValue(FG,TAG(TBarPosition)));
+		t_In=GetValue(FG,TAG(MaxDuration))>>1;
+	}
+	S=SP[notFCM[Speed]];
+
+	CFXPL[0].Label =Label;
+	CFXPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+
+	CFXPL[1].Label =""; // Label;
+
+	CFXPL[4].Param =&B;						// SMFV choice
+	CFXPL[4].Param2 =SP;						// Array of field counts
+	CFXPL[4].PropStart =(LONG)&CFXPL[5];	// PLine (time) to update
+
+	CFXPL[5].Param = &S;	// Time slider
+	CFXPL[5].Param2 = (LONG *)&CFXPL[4];	// FXSpeed gadg to set to V
+	CFXPL[5].PropStart = 1;
+	CFXPL[5].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+	CFXPL[5].Flags = PL_LEN;
+
+	CFXPL[6].Param = &D;	// Start Time slider
+	CFXPL[6].PropStart = 1;
+	CFXPL[6].PropEnd = t_In;	// (t_In>=330 ? t_In:330);
+
+	CFXPL[7].Param = (long *)CFX_Cycles;		// POPUP
+	CFXPL[7].PropEnd = 4;
+	CFXPL[7].PropStart = Cyc;
+	CFXPL[7].UserFun = CTRL_SetTag;
+	tagCyc.tm_Val = (ULONG *)&CFXPL[7].PropStart;
+	tagCyc.tm_FG = FG;
+	CFXPL[7].UserObj = (APTR)&tagCyc;
+
+	CFXPL[8].Param = &TBar;	// Start Time slider
+	CFXPL[8].PropStart = 1;
+	CFXPL[8].PropEnd = 511;
+	CFXPL[8].UserFun = CTRL_SetTag;
+	tagTBar.tm_Val = (ULONG *)CFXPL[8].Param;
+	tagTBar.tm_FG = FG;
+	CFXPL[8].UserObj = (APTR)&tagTBar;
+
+	CFXPL[9].Param = (long *)CFX_CModes;		// POPUP
+	CFXPL[9].PropEnd = 2;
+	CFXPL[9].PropStart = Cmod;
+	CFXPL[9].UserFun = CTRL_SetTag;
+	tagCmod.tm_Val = (ULONG *)&CFXPL[9].PropStart;
+	tagCmod.tm_FG = FG;
+	CFXPL[9].UserObj = (APTR)&tagCmod;
+
+	CFXPL[10].Param = (long *)CFX_DModes;		// POPUP
+	CFXPL[10].PropEnd = 2;
+	CFXPL[10].PropStart = Dmod;
+	CFXPL[10].UserFun = CTRL_SetTag;
+	tagDmod.tm_Val = (ULONG *)&CFXPL[10].PropStart;
+	tagDmod.tm_FG = FG;
+	CFXPL[10].UserObj = (APTR)&tagDmod;
+
+	while(type > PAN_CONTINUE)
+	{
+		switch(type)
+		{
+			case PAN_EXPERT:
+			case PAN_EASY:
+				type = MiniPanel(Edit,CFXPL,TUNE_NONE);
+				break;
+		}
+	}
+
+	if(type==PAN_CONTINUE)
+	{
+		if(B!=notFCM[Speed])
+			PutValue(FG,TAG(FCountMode),FCM[B]); // FCM[3]=2 = variable
+		if( B==3 )
+			PutValue(FG,TAG(VariableFCount),S<<1);   // Frames -> Fields
+
+		if(CFXPL[7].PropStart != Cyc)
+			PutValue(FG,TAG(CycleMode),CFXPL[7].PropStart);
+		if(CFXPL[9].PropStart != Cmod)
+			PutValue(FG,TAG(ColorMode),CFXPL[9].PropStart);
+		if(CFXPL[10].PropStart != Dmod)
+			PutValue(FG,TAG(DataMode),CFXPL[10].PropStart);
+		if(TBar!=TBarb)
+			PutValue(FG,TAG(TBarPosition),TBar);
+		PutValue(FG,TAG(Delay),D);
+
+		ESparams2.Data1=(LONG)FG;
+		ESparams2.Data2=FGC_FCOUNT;
+		SendSwitcherReply(ES_FGcommand,&ESparams2);
+		return(TRUE);
+	}
+	else
+	{
+		PutValue(FG,TAG(CycleMode),Cyc);
+		PutValue(FG,TAG(ColorMode),Cmod);
+		PutValue(FG,TAG(DataMode),Dmod);
+		PutValue(FG,TAG(TBarPosition),TBarb);
+	}
+	return(FALSE);
+}
+
+#define LENGTH_ADJUST		2
+
+// CT_AUDIO
+BOOL DoAUDIOPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG FadeIn=0,FadeOut=0,V=0,P=0,V1=0xFFC0,V2=0xFFC0,A=800,B,TM,TMb,
+	t_In=36,t_Out=69,type=PanType,Time,S=0,SP[12]={36,69,0,0},AudioOn=1,pmode=0,smpte=0;
+	char Label[MAX_PANEL_STR]="", *pan[]={"L","R"};
+	struct SMPTEinfo si;
+
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+// This is a constant value
+		Time = A = (GetValue(FG,TAG(RecFields))>>2)<<1 ;
+		if(A<2) Time=A=4;
+// Stash original values
+		SP[2] = GetValue(FG,TAG(Delay));
+		SP[3] = GetValue(FG,TAG(AudioStart));
+		if(!(SP[4] = GetValue(FG,TAG(AudioDuration)) )) SP[4]=A-SP[3];
+		SP[5] = GetValue(FG,TAG(AudioAttack));
+		SP[6] = GetValue(FG,TAG(AudioDecay));
+		SP[7] = V1 = GetValue(FG,TAG(AudioVolume1));
+		SP[8] = V2 = GetValue(FG,TAG(AudioVolume2));
+		pmode = GetValue(FG,TAG(PanelMode));
+		if(pmode==1) type=PAN_EXPERT;
+		TM=(TMb=GetValue(FG,TAG(TimeMode)));
+		if(GetTable(FG,TAG_SMPTEtime,(UBYTE *)&si,sizeof(struct SMPTEinfo)))
+		{
+			smpte = EVEN(SMPTEToLong(&si));
+//			smpte = SMPTEToLong(&si);
+			DUMPUDECB("SMPTE Start: ",si.SMPTEhours,":");
+			DUMPUDECB("",si.SMPTEminutes,":");
+			DUMPUDECB("",si.SMPTEseconds,":");
+			DUMPUDECB("",si.SMPTEframes,"  = ");
+			DUMPUDECL(" ",smpte," frames \\");
+		}
+
+		AudioOn = GetValue(FG,TAG(AudioOn));
+
+// These are values that are modified by the panel
+		SP[0] = t_In  = ((SP[3]>>2)<<1) + smpte;			 // In Frame
+		SP[1] = t_Out = (((SP[3]+SP[4]-4)>>2)<<1) + smpte;  // Out Frame
+		FadeIn = SP[5] >>1;
+		FadeOut= SP[6] >>1;
+		S = SP[2] >>1;
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+
+		CurAudioSet.AudioOn=AudioOn;
+		if( HAS_STEREO(AudioOn) && IS_STEREO(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_STEREO;
+			CurAudioSet.Pan1 = PAN_LEFT;
+			CurAudioSet.Pan2 = PAN_RIGHT;
+			PutValue(FG,TAG(AudioPan1),CurAudioSet.Pan1);
+			PutValue(FG,TAG(AudioPan2),CurAudioSet.Pan2);
+		}
+		else if( HAS_LEFT(AudioOn) || IS_LEFT(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_LEFT;
+			CurAudioSet.Pan1 = 0;
+			PutValue(FG,TAG(AudioPan1),CurAudioSet.Pan1);
+		}
+		else if( HAS_RIGHT(AudioOn) || IS_RIGHT(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_RIGHT;
+			CurAudioSet.Pan2 = 0;
+			PutValue(FG,TAG(AudioPan2),CurAudioSet.Pan2);
+		}
+//		else Haven't dealt with pathologic situations
+	}
+	else strncat(Label,"Canned Laughter",MAX_PANEL_STR);
+
+	DUMPHEXIW("Old Balance: ",CurAudioSet.Balance,"\\");
+
+	CurAudioSet.FG = FG;
+	CurAudioSet.V1 = V1;
+	CurAudioSet.V2 = V2;
+
+	P=GetBalance(&CurAudioSet);
+	V=GetVolume(&CurAudioSet);
+
+	DUMPHEXIW("New Balance: ",CurAudioSet.Balance,"\\");
+
+	AudClipPL[0].Label = Label;
+	AudClipPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+	AudClipPL[0].Param = (long *)CommentBuf;
+	AudClipPL[0].PropEnd = COMMENT_MAX;
+	AudClipPL[0].UserFun=CTRL_Play;
+	AudClipPL[0].UserObj=(APTR)FG;
+	AudClipPL[0].Flags=PL_PLAY;
+
+	AudClipPL[2].Param =  &t_Out;
+	AudClipPL[2].Param2 = &t_In;
+	AudClipPL[2].G5 =(struct Gadget *) 2; // diff add-on...
+	AudClipPL[2].PropStart = PANEL_LENGTHX<<16;
+	AudClipPL[2].PropStart += 12 + PIN_YOFF;
+	AudClipPL[2].UserObj = (APTR)1;
+
+	AudClipPL[3].Param = &t_In;
+	AudClipPL[3].Param2 = &t_Out;
+	AudClipPL[3].PropStart = smpte;
+	AudClipPL[3].PropEnd = smpte + A-LENGTH_ADJUST;  // Min length= 1 colorframe
+	AudClipPL[3].Flags = PL_IN | PL_AUD1 | PL_DUAL | PL_CFRAME;
+
+	AudClipPL[5].Param = (LONG *)TimeModes;
+	AudClipPL[5].PropStart = TM;
+	AudClipPL[5].PropEnd = 2;
+
+	AudClipPL[6].Param = &S;
+	AudClipPL[6].PropStart = 0;
+	AudClipPL[6].PropEnd = MAX_DELAY;
+	AudClipPL[6].Flags = PL_DEL;
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+	XPAudClipPL[0].Label = Label;
+	XPAudClipPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+	XPAudClipPL[0].Param = (long *)CommentBuf;
+	XPAudClipPL[0].PropEnd = COMMENT_MAX;
+	XPAudClipPL[0].UserFun=CTRL_Play;
+	XPAudClipPL[0].UserObj=(APTR)FG;
+	XPAudClipPL[0].Flags=PL_PLAY;
+
+	XPAudClipPL[2].Param = &t_Out;
+	XPAudClipPL[2].Param2 = &t_In;
+	XPAudClipPL[2].G5 =(struct Gadget *) 2; // diff add-on...
+	XPAudClipPL[2].PropStart = PANEL_LENGTHX<<16;
+	XPAudClipPL[2].PropStart += 12 + PIN_YOFF;
+	XPAudClipPL[2].UserObj = (APTR)1; // Flag for custom DIFF positioning
+
+	XPAudClipPL[3].Param = &t_In;
+	XPAudClipPL[3].Param2 = &t_Out;
+	XPAudClipPL[3].PropStart = smpte;
+	XPAudClipPL[3].PropEnd = smpte + A - LENGTH_ADJUST;
+	XPAudClipPL[3].Flags = PL_IN | PL_AUD1 | PL_DUAL | PL_CFRAME;
+
+	XPAudClipPL[5].Param = (LONG *)TimeModes;
+	XPAudClipPL[5].PropStart = TM;
+	XPAudClipPL[5].PropEnd = 2;
+
+	XPAudClipPL[6].Param = &S;
+	XPAudClipPL[6].PropStart = 0;
+	XPAudClipPL[6].PropEnd = MAX_DELAY;
+	XPAudClipPL[6].Flags = PL_DEL;
+
+	XPAudClipPL[7].Param = &CurAudioSet.Volume;
+//	XPAudClipPL[7].Param2 = (LONG *)&(XPAudClipPL[11]); // Balance PL
+	XPAudClipPL[7].PropStart = 0;
+	XPAudClipPL[7].PropEnd = 100;
+	XPAudClipPL[7].Flags = PL_AUD1|PL_AUD2;
+	XPAudClipPL[7].UserFun=CTRL_SetVolume;
+	XPAudClipPL[7].UserObj=(APTR)&CurAudioSet;
+
+//	XPAudClipPL[8].Param =&CurAudioSet.Volume;  // !!! Unnecessary in CTRL_SetBalance???
+	XPAudClipPL[8].Param2 = (long *) pan;
+//	XPAudClipPL[8].PropStart = CurAudioSet.Balance;
+	B=CurAudioSet.Balance;
+	XPAudClipPL[8].Param = &B;  // Should move initial value to Param
+	XPAudClipPL[8].UserFun= CTRL_SetBalance;
+	XPAudClipPL[8].UserObj=(APTR)&CurAudioSet;
+
+	XPAudClipPL[9].Param = &FadeIn;
+	XPAudClipPL[9].PropStart = 0;
+	XPAudClipPL[9].PropEnd = MAX_AUD_FADE;
+	XPAudClipPL[9].Flags = PL_AUD1;  // means Attack on EZLen types
+
+	XPAudClipPL[10].Param = &FadeOut;
+	XPAudClipPL[10].PropStart = 0;
+	XPAudClipPL[10].PropEnd = MAX_AUD_FADE;
+	XPAudClipPL[10].Flags = PL_AUD2;  // means Decay on EZLen types
+
+	XPAudClipPL[11].Param = (LONG *)Channels;
+	XPAudClipPL[11].PropStart = CurAudioSet.Mode;
+	XPAudClipPL[11].PropEnd = 3;
+	XPAudClipPL[11].UserFun=CTRL_SetPan;
+	XPAudClipPL[11].UserObj=(APTR)&CurAudioSet;
+
+	XPAudClipPL[12].Flags =  PL_AVAIL;
+
+	while(type > PAN_CONTINUE)
+	{
+		DUMPUDECL("B4 Type:	",type,"	");
+		DUMPUDECL("PanelMode: ",pmode,"\\ ");
+		switch(type)
+		{
+			case PAN_EXPERT:
+				pmode=1;
+				type = FlyPanel(Edit,XPAudClipPL,TUNE_QUICK);
+				TM = XPAudClipPL[5].PropStart;
+				break;
+			case PAN_EASY:
+				pmode=0;
+				type = FlyPanel(Edit,AudClipPL,TUNE_FINE);
+				TM = AudClipPL[5].PropStart;
+				break;
+			case PAN_PROCESS:
+				DoProcClipPanel(Edit,FG);
+				type=PAN_CANCEL;
+				break;
+
+		}
+		DUMPUDECL("After Type:	",type,"	");
+		DUMPUDECL("PanelMode: ",pmode,"\\ ");
+	}
+
+	if(type==PAN_CONTINUE) // Set non-real-time adjusted values
+	{
+		if(t_In!=SP[0])
+		{
+			PutValue(FG,TAG(AudioStart),(t_In-smpte)<<1);
+		 	PutValue(FG,TAG(AudioDuration),(t_Out+2-t_In)<<1);
+		}
+		else if(t_Out!=SP[1])
+		{
+		 	PutValue(FG,TAG(AudioDuration),(t_Out+2-t_In)<<1);
+		}
+		if(TMb != TM)
+			PutValue(FG,TAG(TimeMode),TM);
+		if( (SP[2]>>1)!=S )
+			PutValue(FG,TAG(Delay),S<<1);
+		if( (SP[5]>>1)!=FadeIn )
+			PutValue(FG,TAG(AudioAttack),FadeIn<<1);
+		if( (SP[6]>>1)!=FadeOut )
+			PutValue(FG,TAG(AudioDecay),FadeOut<<1);
+		if( (AudClipPL[0].PropStart) || (XPAudClipPL[0].PropStart) )
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		PutValue(FG,TAG(PanelMode),pmode);  // ...just following orders
+		return(TRUE);
+	}
+	else if(type==PAN_CANCEL)  // reset real-time adjusted values to old values
+	{
+		PutValue(FG,TAG(Delay),					SP[2]);
+		PutValue(FG,TAG(AudioStart),		SP[3]);
+		PutValue(FG,TAG(AudioDuration),	SP[4]);
+		PutValue(FG,TAG(AudioAttack),		SP[5]);
+		PutValue(FG,TAG(AudioDecay),		SP[6]);
+		PutValue(FG,TAG(AudioVolume1),	SP[7]);
+		PutValue(FG,TAG(AudioVolume2),	SP[8]);
+		PutValue(FG,TAG(AudioOn),AudioOn);
+		ESparams1.Data1 =(LONG) FG;
+		SendSwitcherReply(ES_ChangeAudio,&ESparams1);
+	}
+	return(FALSE);
+}
+
+// CT_VIDEO
+BOOL DoVIDEOPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG B,Vol=0,P,V1=0xFFFF,V2=0x8000,A=800,t_In=36,t_Out=69,A_In,A_Out,AFade_In=0,AFade_Out=0,
+		type=PanType,SP[16]={36,69,0,36},AudioOn=1,pmode=0,Relate=0,smpte=0;
+	char Label[MAX_PANEL_STR]="",*pan[]={"L","R"}, *aud[]={"Play Audio "};
+	BOOL Jam_On=TRUE;
+	struct SMPTEinfo si;
+
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+// This is a constant value
+		A = (GetValue(FG,TAG(RecFields))>>1);  // Clip Frame Length
+		if(A<2) A=4;
+// Stash original values
+		SP[3]= GetValue(FG,TAG(ClipStartField));
+		if( !(SP[4]= GetValue(FG,TAG(Duration))) ) SP[4]=A-SP[3];
+		SP[5]= GetValue(FG,TAG(AudioStart));
+		if( !(SP[6]= GetValue(FG,TAG(AudioDuration))) ) SP[6]=A-SP[5];
+		SP[9]  = V1 =GetValue(FG,TAG(AudioVolume1));
+		SP[10] = V2 =GetValue(FG,TAG(AudioVolume2));
+		SP[11] = GetValue(FG,TAG(AudioAttack));
+		SP[12] = GetValue(FG,TAG(AudioDecay));
+		AudioOn = GetValue(FG,TAG(AudioOn));
+		pmode = GetValue(FG,TAG(PanelMode));
+		if(pmode==1) type=PAN_EXPERT;
+		if(GetTable(FG,TAG_SMPTEtime,(UBYTE *)&si,sizeof(struct SMPTEinfo)))
+		{
+//			smpte = SMPTEToLong(&si);
+			smpte = EVEN(SMPTEToLong(&si));
+			DUMPUDECB("SMPTE Start: ",si.SMPTEhours,":");
+			DUMPUDECB("",si.SMPTEminutes,":");
+			DUMPUDECB("",si.SMPTEseconds,":");
+			DUMPUDECB("",si.SMPTEframes,"  = ");
+			DUMPUDECL(" ",smpte," frames \\");
+		}
+
+// These are values that are modified by the panel
+		SP[0] = t_In  = ((SP[3]>>2)<<1) + smpte;			 // In Frame
+		SP[1] = t_Out = (( (SP[3]+SP[4]-4)>>2 )<<1) + smpte;  // Out Frame
+		if(t_In > t_Out) t_Out = t_In+2;
+//		SP[2] = B     =((GetValue(FG,TAG(FadeInVideo)) !=0) ? 0:1); // FadeIn flag
+		SP[7]= A_In  = ((SP[5] >> 2)<<1)  + smpte;
+		SP[8]= A_Out = (((SP[5]+SP[6]-4)>>2)<<1) + smpte;
+    AFade_In = SP[11] >>1;
+    AFade_Out= SP[12] >>1;
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+
+		CurAudioSet.AudioOn=AudioOn;
+		if( HAS_STEREO(AudioOn) && IS_STEREO(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_STEREO;
+			CurAudioSet.Pan1 = PAN_LEFT;
+			CurAudioSet.Pan2 = PAN_RIGHT;
+			PutValue(FG,TAG(AudioPan1),CurAudioSet.Pan1);
+			PutValue(FG,TAG(AudioPan2),CurAudioSet.Pan2);
+		}
+		else if( HAS_LEFT(AudioOn) || IS_LEFT(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_LEFT;
+			CurAudioSet.Pan1 = 0;
+			PutValue(FG,TAG(AudioPan1),CurAudioSet.Pan1);
+		}
+		else if( HAS_RIGHT(AudioOn) || IS_RIGHT(AudioOn) )
+		{
+			CurAudioSet.Mode=AMODE_RIGHT;
+			CurAudioSet.Pan2 = 0;
+			PutValue(FG,TAG(AudioPan2),CurAudioSet.Pan2);
+		}
+		else if( !IS_ANYAUDIO(AudioOn) )
+		{
+			CurAudioSet.Mode= AMODE_NOAUDIO;
+		}
+	}
+	else
+	{
+		strncat(Label,"Kiki's Shower",MAX_PANEL_STR);
+		strcpy(CommentBuf,"No Comment At This Time");
+	}
+
+	DUMPHEXIW("Old Balance: ",CurAudioSet.Balance,"\\");
+	CurAudioSet.FG = FG;
+	CurAudioSet.V1 = V1;
+	CurAudioSet.V2 = V2;
+	P=GetBalance(&CurAudioSet);
+	Vol=GetVolume(&CurAudioSet);
+	DUMPHEXIW("New Balance: ",CurAudioSet.Balance,"\\");
+
+	ClipPL[0].Label = "";
+
+	ClipPL[1].Label = Label;
+	ClipPL[1].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+	ClipPL[1].Param = (long *)CommentBuf;
+	ClipPL[1].PropEnd = COMMENT_MAX ; // max string length
+	ClipPL[1].PropStart=0;		// set to non-zero if comment is changed...
+//	ClipPL[1].UserFun=CTRL_Play;
+	ClipPL[1].UserObj=(APTR)FG;
+
+	ClipPL[2].UserFun=CTRL_Play;
+	ClipPL[2].UserObj=(APTR)FG;
+	ClipPL[2].Flags=PL_PLAY;
+
+	ClipPL[3].Param = &t_Out; // out
+	ClipPL[3].Param2 = &t_In; // in
+	ClipPL[3].G5 = (struct Gadget *)2; // diff add-on
+	ClipPL[3].PropStart = PANEL_LENGTHX<<16;
+	ClipPL[3].PropStart += 12 + PIN_YOFF;
+	ClipPL[3].UserObj = (APTR) 1; // Flag for custom DIFF positioning
+
+	ClipPL[5].Param = &t_In;
+	ClipPL[5].Param2 = &t_Out;
+	ClipPL[5].PropStart = smpte;
+	ClipPL[5].PropEnd = smpte+A-LENGTH_ADJUST;
+	ClipPL[5].Flags = PL_IN | PL_DUAL | PL_FLYER | PL_CFRAME;
+
+	if(!HAS_ANYAUDIO(AudioOn))
+	{
+		ClipPL[7].Type = 0;
+	}
+	else
+	{
+		ClipPL[7].Param =(LONG *) (IS_ANYAUDIO(AudioOn) ? 1:0);
+		ClipPL[7].Param2 = (LONG *)aud;
+		ClipPL[7].PropEnd = 1;
+		ClipPL[7].UserFun=CTRL_SetAudio;
+		ClipPL[7].UserObj=(APTR)&CurAudioSet;
+	}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	XPClipPL[0].Label = ""; //Label;
+
+	XPClipPL[1].Label = Label;
+	XPClipPL[1].Param2 = (FG ? (long *)FG->Data:(long *)NULL); // icon bitmap
+	XPClipPL[1].Param = (long *)CommentBuf;
+	XPClipPL[1].PropEnd = COMMENT_MAX ; // max string length
+	XPClipPL[1].PropStart=0;		// set to non-zero if comment is changed...
+	XPClipPL[1].UserFun=CTRL_Play;
+	XPClipPL[1].UserObj=(APTR)FG;
+
+	XPClipPL[2].UserFun=CTRL_Play;
+	XPClipPL[2].UserObj=(APTR)FG;
+	XPClipPL[2].Flags=PL_PLAY;
+
+	XPClipPL[3].Param = &t_Out;
+	XPClipPL[3].Param2 = &t_In;
+	XPClipPL[3].G5 = (struct Gadget *)2; // diff
+	XPClipPL[3].PropStart = PANEL_LENGTHX<<16;
+	XPClipPL[3].PropStart += 12 + PIN_YOFF;
+	XPClipPL[3].UserObj = (APTR)1; // Flag for custom DIFF positioning
+
+	XPClipPL[5].Param = &t_In;
+	XPClipPL[5].Param2 = &t_Out;
+	XPClipPL[5].PropStart = smpte;
+	XPClipPL[5].PropEnd = smpte+A-LENGTH_ADJUST;
+	XPClipPL[5].Flags = PL_IN | PL_DUAL | PL_FLYER | PL_CFRAME;
+	XPClipPL[5].NumParts=0;
+
+	if(!HAS_ANYAUDIO(AudioOn))
+	{
+		XPClipPL[7].Type = 0;
+	}
+	else
+	{
+		XPClipPL[8].Param = &A_In;
+		XPClipPL[8].Param2 = &A_Out;
+		XPClipPL[8].PropStart = smpte;
+		XPClipPL[8].PropEnd = smpte+A-LENGTH_ADJUST;
+		XPClipPL[8].Flags = PL_AUDIO | PL_IN | PL_CFRAME | PL_DUAL;
+//		XPClipPL[8].UserFun=CTRL_DumpPLine;
+
+		XPClipPL[5].NumParts=1;  // Connect audio slider to video slider
+		Relate = PR_MIRROR;
+		XPClipPL[5].Relation=&Relate;
+		XPClipPL[5].Partners=&(XPClipPL[8]);
+
+		XPClipPL[10].Param = &CurAudioSet.Volume;
+//		XPClipPL[10].Param2 = (LONG *)&(XPClipPL[11]); // Balance PL
+		XPClipPL[10].PropStart = 0;
+		XPClipPL[10].PropEnd = 100;
+		XPClipPL[10].Flags =  PL_AUD1|PL_AUD2;
+		XPClipPL[10].UserFun=CTRL_SetVolume;
+		XPClipPL[10].UserObj=(APTR)&CurAudioSet;
+
+//		XPClipPL[11].Param = &CurAudioSet.Volume; // Overall volume control for "Balance"
+		XPClipPL[11].Param2 = (LONG *)pan;
+//		XPClipPL[11].PropStart = CurAudioSet.Balance;
+		B=CurAudioSet.Balance;
+		XPClipPL[11].Param = &B;
+		XPClipPL[11].UserFun= CTRL_SetBalance;
+		XPClipPL[11].UserObj=(APTR)&CurAudioSet;
+
+		XPClipPL[12].Param = &AFade_In;
+		XPClipPL[12].PropStart = 0;
+		XPClipPL[12].PropEnd = MAX_AUD_FADE;
+
+		XPClipPL[13].Param = &AFade_Out;
+		XPClipPL[13].PropStart = 0;
+		XPClipPL[13].PropEnd = MAX_AUD_FADE;
+
+		XPClipPL[14].Param = (LONG *)Channels;
+		XPClipPL[14].PropStart = CurAudioSet.Mode;
+		XPClipPL[14].PropEnd = 4;
+		XPClipPL[14].UserFun=CTRL_SetPan;
+		XPClipPL[14].UserObj=(APTR)&CurAudioSet;
+	}
+	XPClipPL[15].Flags =  PL_AVAIL;
+
+	while(type > PAN_CONTINUE)
+	{
+		switch(type)
+		{
+			case PAN_EASY:
+				ClipPL[7].Param =(LONG *) (IS_ANYAUDIO(CurAudioSet.AudioOn) ? 1:0);
+				type = FlyPanel(Edit,ClipPL,TUNE_FINE);
+				pmode=0;
+				if(t_In  != SP[0])  // Audio should match Video on easy panel
+				{
+					A_In = t_In;
+					SetAudioInPoint(FG,(A_In-smpte)<<1,(A_Out-smpte)<<1);
+				}
+				if(t_Out != SP[1])
+				{
+					A_Out = t_Out;
+					SetAudioOutPoint(FG,(A_In-smpte)<<1,(A_Out-smpte)<<1);
+				}
+				break;
+			case PAN_EXPERT:
+				pmode=1;
+				XPClipPL[14].PropStart = ( IS_ANYAUDIO(CurAudioSet.AudioOn) ? CurAudioSet.Mode:AMODE_NOAUDIO );
+				type = FlyPanel(Edit,XPClipPL,TUNE_QUICK);
+				break;
+			case PAN_PROCESS:
+				DoProcClipPanel(Edit,FG);
+				type=PAN_CANCEL;
+				break;
+		}
+	}
+	if(!(AudioOn&AUD_EXISTS))
+		XPClipPL[7].Type = PNL_DIVIDE;
+
+
+	if(type==PAN_CONTINUE)
+	{
+		if(AFade_In != SP[11] >>1)
+			PutValue(FG,TAG(AudioAttack),		AFade_In<<1);
+		if(AFade_Out!= SP[12] >>1)
+			PutValue(FG,TAG(AudioDecay),		AFade_Out<<1);
+		if( (XPClipPL[1].PropStart) || (ClipPL[1].PropStart) )
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		PutValue(FG,TAG(PanelMode),pmode);  // ...just following orders
+	}
+	else  // The Jog/Shuttle may have affected these values, so we restore them!!
+	{
+		PutValue(FG,TAG(FadeInVideo),		SP[2]^1);
+		PutValue(FG,TAG(ClipStartField),SP[3]);
+		PutValue(FG,TAG(Duration),			SP[4]);
+		PutValue(FG,TAG(AudioAttack),		SP[11]);
+		PutValue(FG,TAG(AudioDecay),		SP[12]);
+		PutValue(FG,TAG(AudioStart),		SP[5]);
+		PutValue(FG,TAG(AudioDuration),	SP[6]);
+		PutValue(FG,TAG(AudioVolume1),	SP[9]);
+		PutValue(FG,TAG(AudioVolume2),	SP[10]);
+		PutValue(FG,TAG(AudioOn),AudioOn);
+		Jam_On=FALSE;
+		ESparams1.Data1 =(LONG) FG;
+		SendSwitcherReply(ES_ChangeAudio,&ESparams1);
+	}
+	//Main2Blank();
+	return(Jam_On);
+}
+
+// CT_CONTROL
+BOOL DoCONTROLPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG A=0,B=1,t_In=1800,t_Out=1,type=PanType,Time=84;
+	char Label[MAX_PANEL_STR]="";
+
+	if(FG)
+	{
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Time=GetValue(FG,TAG(Duration))>>1; // Fields-->Frames
+		t_In=GetValue(FG,TAG(MaxDuration))>>1;
+		A=Time;
+		B=GetValue(FG,TAG(FadeInVideo));
+		B=((B!=0) ? 0:1);
+		t_Out=B;
+	}
+//	if(type==PAN_EASY)
+	{
+		VideoPL[1].Label =Label;
+		VideoPL[3].Param = &Time;	// Time slider
+		VideoPL[3].PropStart = 1;
+		VideoPL[3].PropEnd = (t_In>=900 ? t_In:1800);
+		VideoPL[4].Param = &B;
+		VideoPL[3].Flags = PL_LEN;
+//		type = MiniPanel(Edit,VideoPL,TUNE_FINE);
+	}
+//	if(type==PAN_EXPERT)
+	{
+		XPVideoPL[1].Label =Label;
+		XPVideoPL[3].Param = &Time;	// Time slider
+		XPVideoPL[3].PropStart = 1;
+		XPVideoPL[3].PropEnd = (t_In>=900 ? t_In:1800);
+		XPVideoPL[4].Param = &B;
+		XPVideoPL[3].Flags = PL_LEN;
+//		type = MiniPanel(Edit,XPVideoPL,TUNE_QUICK);
+	}
+
+	while(type > PAN_CONTINUE)
+		switch(type)
+		{
+			case PAN_EXPERT:
+				type = MiniPanel(Edit,XPVideoPL,TUNE_QUICK);
+				break;
+			case PAN_EASY:
+				type = MiniPanel(Edit,VideoPL,TUNE_FINE);
+				break;
+		}
+
+
+	if(type==PAN_CONTINUE)
+	{
+		if(A!=Time)
+			PutValue(FG,TAG(Duration),Time<<1);    // Frames -> Fields
+		if(B!=t_Out) PutValue(FG,TAG(FadeInVideo),B^1);
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+// CT_FRAMESTORE
+BOOL DoFRAMESTOREPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG A=69,t_In=100,type=PanType,Time=80;
+	char Label[MAX_PANEL_STR]="Still: ";
+
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Time=GetValue(FG,TAG(Duration))>>1; // Fields-->Frames
+		t_In=GetValue(FG,TAG(MaxDuration))>>1;
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+
+		A=Time;
+	}
+	if( (type==PAN_EASY) || (type==PAN_EXPERT) )
+	{
+		FramePL[0].Label =Label;
+		FramePL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+		FramePL[0].Param = (long *)CommentBuf;
+		FramePL[0].PropEnd = COMMENT_MAX;
+
+		FramePL[2].Param = &Time;	// Time slider
+		FramePL[2].PropStart = 1;
+		FramePL[2].PropEnd = (t_In>=900 ? t_In:1800);
+		FramePL[2].Flags = PL_LEN | PL_CFRAME;
+		type = MiniPanel(Edit, FramePL,TUNE_NONE);
+	}
+	if(type==PAN_CONTINUE)
+	{
+		if(A!=Time)
+			PutValue(FG,TAG(Duration),Time<<1);    // Frames -> Fields
+		if(FramePL[0].PropStart)
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+// CT_KEY
+BOOL DoKEYPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG A=0,B=2,t_In,t_Out,type=PanType,Speed=1,Time=69,DLay=12,FadeIn=15,
+		FadeOut=15,pmode=0,TM,TMb;
+	char Label[MAX_PANEL_STR]="Graphic Overlay ";
+
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Time=(A=GetValue(FG,TAG(Duration)));
+		DLay=(B=GetValue(FG,TAG(Delay)));
+		TM=(TMb=GetValue(FG,TAG(TimeMode)));
+		Speed=GetValue(FG,TAG(Speed)); // bit0 =fade in, bit1=fade out
+		FadeIn=GetValue(FG,TAG(FadeInDuration));
+		FadeOut=GetValue(FG,TAG(FadeOutDuration));
+		if(!(Speed&1)) FadeIn=0;
+		if(!(Speed&2)) FadeOut=0;
+		t_In = FadeIn;
+		t_Out = FadeOut;
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		pmode = GetValue(FG,TAG(PanelMode));
+		type = (pmode==1) ? PAN_EXPERT:PAN_EASY ;
+	}
+
+	KeyPL[0].Label =Label;
+	KeyPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+	KeyPL[0].Param = (long *)CommentBuf;
+	KeyPL[0].PropEnd = COMMENT_MAX;
+
+	KeyPL[2].Param = &Time;
+	KeyPL[2].PropStart = 1;
+	KeyPL[2].PropEnd = 3600;
+	KeyPL[2].Flags = PL_LEN | PL_CFRAME;
+
+	KeyPL[3].Param = (LONG *)TimeModes;
+	KeyPL[3].PropStart = TM;
+	KeyPL[3].PropEnd = 2;
+
+	KeyPL[4].Param = &DLay;
+	KeyPL[4].PropStart = 1;
+	KeyPL[4].PropEnd = 3600;
+	KeyPL[4].Flags = PL_DEL;
+
+	XPKeyPL[0].Label =Label;
+	XPKeyPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+	XPKeyPL[0].Param = (long *)CommentBuf;
+	XPKeyPL[0].PropEnd = COMMENT_MAX;
+
+	XPKeyPL[2].Param = &Time;
+	XPKeyPL[2].PropStart = 1;
+	XPKeyPL[2].PropEnd = 3600;
+	XPKeyPL[2].Flags = PL_LEN | PL_CFRAME;
+
+	XPKeyPL[3].Param = (LONG *)TimeModes;
+	XPKeyPL[3].PropStart = TM;
+	XPKeyPL[3].PropEnd = 2;
+
+	XPKeyPL[4].Param = &DLay;
+	XPKeyPL[4].PropStart = 1;
+	XPKeyPL[4].PropEnd = 3600;
+	XPKeyPL[4].Flags = PL_DEL;
+
+
+	XPKeyPL[6].Param = &FadeIn;
+	XPKeyPL[6].PropStart = 1;
+	XPKeyPL[6].PropEnd = A;
+	XPKeyPL[6].Flags = PL_IN;
+
+	XPKeyPL[7].Param = &FadeOut;
+	XPKeyPL[7].PropStart = 1;
+	XPKeyPL[7].PropEnd = A;
+	XPKeyPL[7].Flags = PL_OUT;
+
+
+	while(type > PAN_CONTINUE)
+		switch(type)
+		{
+			case PAN_EXPERT:
+				pmode=1;
+				type = MiniPanel(Edit, XPKeyPL,TUNE_QUICK);
+				TM=XPKeyPL[4].PropStart;
+				break;
+			case PAN_EASY:
+				pmode=0;
+				type = MiniPanel(Edit, KeyPL,TUNE_FINE);
+				TM=KeyPL[4].PropStart;
+				break;
+		}
+
+
+
+	if(type==PAN_CONTINUE)
+	{
+		if(A!=Time)
+		{
+			PutValue(FG,TAG(Duration),Time);
+			ESparams2.Data1=(LONG)FG;
+			ESparams2.Data2=FGC_FCOUNT;
+			SendSwitcherReply(ES_FGcommand,&ESparams2);
+		}
+		if(B!=DLay)
+			PutValue(FG,TAG(Delay),DLay);
+		if(t_In!=FadeIn)
+		{
+			Speed|=1;
+			PutValue(FG,TAG(FadeInDuration),FadeIn);
+		}
+		if(t_Out!=FadeOut)
+		{
+			Speed|=2;
+			PutValue(FG,TAG(FadeOutDuration),FadeOut);
+		}
+		if( (t_Out!=FadeOut) || (t_In!=FadeIn) )
+			PutValue(FG,TAG(Speed),Speed);
+		if( (KeyPL[0].PropStart) || (XPKeyPL[0].PropStart) )
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		PutValue(FG,TAG(PanelMode),pmode);  // ...just following orders
+		if(TMb != TM)
+			PutValue(FG,TAG(TimeMode),TM);
+
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+int SCSpeed[]={1,2,4,6,8}; //  lines/field
+int CRSpeed[]={2,4,8,16};  //  pixs/field
+#define PAGE_SCROLL		0
+#define PAGE_CRAWL		1
+// Fix field count for page based on new speed
+int NewDuration(int Dur, int OldSpeed, int NewSpeed, UBYTE PType)
+{
+	int n=0,dist;
+
+	if(OldSpeed==NewSpeed) return(Dur);
+	if(PType==PAGE_SCROLL)
+	{
+		if(OldSpeed) dist=SCSpeed[OldSpeed]*Dur;
+		else dist = Dur/2;
+		if(NewSpeed) n=dist/SCSpeed[NewSpeed];
+		else n=dist*2; // Slowest = 1/2 line/field
+	}
+	else if(PType==PAGE_CRAWL)
+	{
+		dist=CRSpeed[OldSpeed]*Dur;
+		n=dist/CRSpeed[NewSpeed];
+	}
+	DUMPSDECL("Duration: Old ",Dur,"   ");
+	DUMPSDECL("          New ",n,"\\");
+	DUMPSDECL("Speed:    Old ",OldSpeed,"   ");
+	DUMPSDECL("          New ",NewSpeed,"\\");
+	return(n);
+}
+
+// CT_CRAWL
+BOOL DoCRAWLPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG type=PanType,A=1,Speed=A,B=84,DLay=B,TM=0,Z=0,S=0,SP[5]={120,90,60,30,0};
+	char Label[MAX_PANEL_STR]="CG Crawl ";
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Speed=(A=GetValue(FG,TAG(Speed)));
+		SP[A]=(S=GetValue(FG,TAG(Duration)));
+		DLay=(B=GetValue(FG,TAG(Delay)));
+		TM=GetValue(FG,TAG(TimeMode));
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+	}
+	SP[0]=NewDuration(S,A,0,PAGE_CRAWL);
+	SP[1]=NewDuration(S,A,1,PAGE_CRAWL);
+	SP[2]=NewDuration(S,A,2,PAGE_CRAWL);
+	SP[3]=NewDuration(S,A,3,PAGE_CRAWL);
+	if( (type==PAN_EASY) || (type==PAN_EXPERT) )
+	{
+		CrawlPL[0].Label =Label;
+		CrawlPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+		CrawlPL[0].Param = (long *)CommentBuf;
+		CrawlPL[0].PropEnd = COMMENT_MAX;
+
+		CrawlPL[2].Param = &A;
+		CrawlPL[2].Param2 = SP;
+		CrawlPL[2].PropStart = 0;
+
+		CrawlPL[3].Param = &S;
+		CrawlPL[3].Param2 = &Z;
+		CrawlPL[3].PropEnd = -1;
+
+		CrawlPL[4].Param = (long *)TimeModes;		// POPUP
+		CrawlPL[4].PropStart = TM;
+		CrawlPL[4].PropEnd = 2;
+
+		CrawlPL[5].Param = &B;
+		CrawlPL[5].PropStart = 1;
+		CrawlPL[5].PropEnd = 3600;
+		CrawlPL[5].Flags = PL_DEL;
+
+		type = MiniPanel(Edit, CrawlPL,TUNE_NONE);
+	}
+	if( FG && (type==PAN_CONTINUE) )
+	{
+		if(Speed!=A)
+		{
+			PutValue(FG,TAG(Speed),A);
+			PutValue(FG,TAG(Duration),SP[A]);
+		}
+		if(DLay!=B) PutValue(FG,TAG(Delay),B);
+		if(CrawlPL[0].PropStart)
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		if(CrawlPL[4].PropStart!=TM)
+			PutValue(FG,TAG(TimeMode),CrawlPL[4].PropStart);
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+// CT_SCROLL
+BOOL DoSCROLLPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG type=PanType,A=1,Speed=A,B=84,DLay=B,C=120,Time=120,F=0,Fb=0,TM,S,SP[6]={120,90,60,30,15,0};
+	char Label[MAX_PANEL_STR]="";
+	CommentBuf[0]=0;
+	if(FG)
+	{
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		Speed=(A=GetValue(FG,TAG(Speed)));
+		SP[A]=(S=GetValue(FG,TAG(Duration)));
+		DLay=(B=GetValue(FG,TAG(Delay)));
+		Time=(C=GetValue(FG,TAG(NumFields)));
+		F=(Fb=GetValue(FG,TAG(FadeOutDuration)));
+		TM=GetValue(FG,TAG(TimeMode));
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+	}
+	SP[0]=NewDuration(S,A,0,PAGE_SCROLL);
+	SP[1]=NewDuration(S,A,1,PAGE_SCROLL);
+	SP[2]=NewDuration(S,A,2,PAGE_SCROLL);
+	SP[3]=NewDuration(S,A,3,PAGE_SCROLL);
+	SP[4]=NewDuration(S,A,4,PAGE_SCROLL);
+
+	if( (type==PAN_EASY) || (type==PAN_EXPERT) )
+	{
+		ScrollPL[0].Label =Label;
+		ScrollPL[0].Param2 = (FG ? (long *)FG->Data:(long *)NULL) ; // icon bitmap
+		ScrollPL[0].Param = (long *)CommentBuf;
+		ScrollPL[0].PropEnd = COMMENT_MAX;
+
+		ScrollPL[2].Param = &A;
+		ScrollPL[2].Param2 = SP;
+		ScrollPL[2].PropStart = 0;
+
+		ScrollPL[3].Param = &A;
+		ScrollPL[3].Param2 = SP;
+		ScrollPL[3].PropEnd = -1;
+
+		ScrollPL[4].Param = (long *)Scrolls;		// POPUP
+		ScrollPL[4].PropStart = DEF_SCROLL;
+		ScrollPL[4].PropEnd = SCROLL_NUM;
+
+		ScrollPL[5].Param = (LONG *)TimeModes;
+		ScrollPL[5].PropStart = TM;
+		ScrollPL[5].PropEnd = 2;
+
+		ScrollPL[6].Param = &B;
+		ScrollPL[6].PropStart = 1;
+		ScrollPL[6].PropEnd = 36000;
+		ScrollPL[6].Flags = PL_DEL;
+
+		ScrollPL[7].Param = &C;
+		ScrollPL[7].PropStart = 1;
+		ScrollPL[7].PropEnd = 36000;
+		ScrollPL[7].Flags = PL_LEN;
+
+		ScrollPL[8].Param = &F;
+		ScrollPL[8].PropStart = 1;
+		ScrollPL[8].PropEnd = 36000;
+
+		type = MiniPanel(Edit, ScrollPL,TUNE_NONE);
+	}
+	if( FG && (type==PAN_CONTINUE) )
+	{
+		if(Speed!=A)
+		{
+			PutValue(FG,TAG(Speed),A);
+			PutValue(FG,TAG(Duration),SP[A]);
+		}
+		if(DLay!=B) PutValue(FG,TAG(Delay),B);
+		if(Time!=C) PutValue(FG,TAG(NumFields),C);
+		if(F!=Fb) PutValue(FG,TAG(FadeOutDuration),Fb);
+		if(ScrollPL[5].PropStart != TM)
+			PutValue(FG,TAG(TimeMode),ScrollPL[5].PropStart);
+		if(ScrollPL[0].PropStart)
+			PutTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+BOOL DoNewClipPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG type=PAN_EASY,B=6660,C=B<<1,Z=0,F=0,T=0,LG=8,RG=8,NG=8,STOP=0,
+		Spot=0,types[16],smpte=0;
+	struct FlyerVolInfo *FVI=NULL;
+	char *FlyDrive;
+	struct SMPTEinfo si;
+
+	if(FlyerBase)
+	{
+		if(FlyerDriveCount==0) BuildFlyerList();
+		if(FlyerDriveCount && (FVI=GetFlyerInfo(FlyerDrives[CurFlyDrive])))
+		{
+			B=BlocksToFrames(FVI->Largest,0);
+			C=BlocksToFrames(FVI->Optimized,0);
+			if(B>C) C=B; // Don't let optimized be smaller!!!
+		}
+	}
+	DUMPHEXIL("Welcome to the New Clip Panel @",(LONG)&RawRecPL[0],"\\");
+	DUMPHEXIL(" RawRecPL->Create @",(LONG)RawRecPL[0].Create,"\\");
+	LG=GetRecGain();
+	RG=(LG&0xFF00)>>8;
+	LG=(LG&0x00FF);
+	while(!STOP)
+	{
+		switch(type)
+		{
+		case PAN_EASY:
+			if(FlyerDriveCount)
+			{
+				RawRecPL[3].Param = (long *)FlyerDrives;		// POPUP
+				RawRecPL[3].PropStart = CurFlyDrive;
+				RawRecPL[3].PropEnd = FlyerDriveCount;
+				RawRecPL[3].UserFun = CTRL_SetDrive;
+				RawRecPL[3].G4 = (struct Gadget *)B;
+				RawRecPL[3].G5 = (struct Gadget *)C;
+				RawRecPL[3].Flags = PL_FLYER|PL_PARTNER;
+				RawRecPL[3].Partners = &(RawRecPL[4]); // Mode->Audio Only popup
+			}
+			else
+			{
+				RawRecPL[3].Param = (long *)FlyDrives;		// POPUP
+				FlyDrives[0][0]=AUDIO_BYTE;
+				RawRecPL[3].PropStart = 0;
+				RawRecPL[3].PropEnd = 1;
+				RawRecPL[3].Param2 = NULL;
+				RawRecPL[3].G4 = (struct Gadget *)B;
+				RawRecPL[3].G5 = (struct Gadget *)C;
+				RawRecPL[3].Flags = PL_FLYER;
+			}
+
+			RawRecPL[4].Param = (long *)Quals;		// POPUP
+			RawRecPL[4].PropStart = CurCompMode;
+			RawRecPL[4].PropEnd = QUAL_NUM;
+			RawRecPL[4].UserFun = CTRL_SetCompression;
+			RawRecPL[4].UserObj = (APTR)&RawRecPL[3]; // PLine with Max and opt sizes
+
+			RawRecPL[6].Param = (LONG *)&(RawRecPL[3].G4);  // Diff
+			RawRecPL[6].Param2 = &Z;
+			RawRecPL[6].G5 = (struct Gadget *)2; // Diff
+
+			RawRecPL[7].Param = (LONG *)&(RawRecPL[3].G5);  // Diff
+			RawRecPL[7].Param2 = &Z;
+			RawRecPL[7].Flags = PL_AVAIL;
+
+			RawRecPL[9].Param = &T;     // Diff
+			RawRecPL[9].Param2 = &Z;
+			RawRecPL[9].Flags = PL_LEN;
+
+			RawRecPL[10].Param = (long *)Sources;		// POPUP
+			RawRecPL[10].UserFun = CTRL_SetSource;
+			RawRecPL[10].UserObj = (APTR)&RawRecPL[3]; // PLine with Max and opt sizes
+			RawRecPL[10].PropStart = CurFlySource;
+			RawRecPL[10].PropEnd = FLY_SRC_NUM; // 4; //6; (Audio Only moved...)
+			RawRecPL[10].Flags = PL_AUDIO;
+
+			RawRecPL[11].Param = (long *)&LG;
+			RawRecPL[11].Param2 = (long *)&NG;
+			RawRecPL[11].PropStart = 0;
+			RawRecPL[11].PropEnd = 15;
+			RawRecPL[11].UserFun = CTRL_SetRecGain;
+			RawRecPL[11].UserObj = &AudCtrl;
+			RawRecPL[11].Flags = PL_IN; // Flag so CTRL_function can set Left vs Right
+
+			RawRecPL[12].Param = (long *)&RG;
+			RawRecPL[12].Param2 = (long *)&NG;
+			RawRecPL[12].PropStart = 0;
+			RawRecPL[12].PropEnd = 15;
+			RawRecPL[12].UserFun = CTRL_SetRecGain;
+			RawRecPL[12].UserObj = &AudCtrl;
+
+			RawRecPL[13].PropStart = 36+8+PNL_DIV;  // Spacer
+
+			if(SWITCHER_MODE)
+			{
+//				types[1] = RawRecPL[1].Type;
+				types[2] = RawRecPL[2].Type;
+				types[5] = RawRecPL[5].Type;
+				types[7] = RawRecPL[7].Type;
+				types[8] = RawRecPL[8].Type;
+				types[11]= RawRecPL[11].Type;
+				types[12]= RawRecPL[12].Type;
+//				RawRecPL[1].Type  = PNL_SKIP;
+				RawRecPL[2].Type  = PNL_SKIP;
+				RawRecPL[5].Type  = PNL_SKIP;
+				RawRecPL[7].Type  = PNL_SKIP;
+				RawRecPL[8].Type  = PNL_SKIP;
+				RawRecPL[11].Type = PNL_SKIP;
+				RawRecPL[12].Type = PNL_SKIP;
+			}
+			type = 	NewClipPanel(Edit);
+			break;
+		case PAN_CONTINUE:
+			STOP=1;
+			break;
+		case PAN_EXPERT:
+
+			FlyDrive = FlyerDrives[CurFlyDrive];
+			if(*FlyDrive==AUDIO_BYTE)
+				FlyDrive+=2; // Skip speaker symbol char and space
+			strncpy(Name,FlyDrive,CLIP_PATH_MAX);
+			strncat(Name,TEMP_CLIP_NAME,CLIP_PATH_MAX);
+			ESparams2.Data1=(LONG)Name;
+			ESparams2.Data2=(LONG)1;
+
+			if(FlyerBase)
+				if( !(FG=(struct FastGadget *)SendSwitcherReply(ES_LoadCrouton,&ESparams2)) )
+				{
+					DUMPSTR("Load Failed On ");
+					DUMPMSG(Name);
+					STOP=TRUE;
+					break;
+				}
+				else
+				{
+					CurFG = FG;
+					T = (GetValue(FG,TAG(RecFields))>>1);  // Clip Frame Length
+					if(GetTable(FG,TAG_SMPTEtime,(UBYTE *)&si,sizeof(struct SMPTEinfo)))
+					{
+//						smpte = SMPTEToLong(&si);
+						smpte = EVEN(SMPTEToLong(&si));
+						DUMPUDECB("SMPTE Start: ",si.SMPTEhours,":");
+						DUMPUDECB("",si.SMPTEminutes,":");
+						DUMPUDECB("",si.SMPTEseconds,":");
+						DUMPUDECB("",si.SMPTEframes,"  = ");
+						DUMPUDECL(" ",smpte," frames \\");
+					}
+				}
+			ESparams1.Data1=(LONG)FG;
+			SendSwitcherReply(ES_PanelClose,&ESparams1);
+			SendSwitcherReply(ES_PanelOpen,&ESparams1);
+
+			B=smpte+T;
+			Z=smpte;
+			*Name=0;
+			MarkClipPL[2].Param = (long *)Name;  // Name String
+			MarkClipPL[2].PropEnd = CLIP_NAME_MAX;
+			MarkClipPL[2].Flags = PL_DEL;
+
+			MarkClipPL[3].Param = &B;  // Diff
+			MarkClipPL[3].Param2 = &Z;
+			MarkClipPL[3].G5 = (struct Gadget *)2; // Diff
+			MarkClipPL[3].Flags = PL_LEN;
+
+			MarkClipPL[4].Param = (long *)CommentBuf;  // Name String
+			MarkClipPL[4].PropEnd = COMMENT_MAX;
+			MarkClipPL[4].G5 = (struct Gadget *)300; // string gad width
+			MarkClipPL[4].Flags = PL_AVAIL;
+
+			MarkClipPL[5].Param = &Z;
+			MarkClipPL[5].Param2 = &B;
+			MarkClipPL[5].PropStart = smpte;
+			MarkClipPL[5].PropEnd = T + smpte;
+			MarkClipPL[5].Flags = PL_IN | PL_DUAL | PL_FLYER | PL_CFRAME;
+
+			MarkClipPL[7].PropStart = 32; // Gap for bar
+
+			F=T/2;
+			MarkClipPL[8].Param = &F;
+			MarkClipPL[8].PropStart = smpte;
+			MarkClipPL[8].PropEnd = T + smpte;
+			MarkClipPL[8].Flags = PL_IN | PL_FLYER | PL_CFRAME | PL_AUDIO;
+// Partnership between these last two is essential
+
+			MarkClipPL[9].Param = (long *)Spot;
+			MarkClipPL[9].PropEnd = 2;
+			MarkClipPL[9].Param2 =(long *)CutTracks;
+			MarkClipPL[9].Flags = PL_PLAY;
+
+			type = CutClipPanel(Edit);
+			break;
+		case PAN_CANCEL:
+		default:
+			STOP=2;
+			break;
+		}
+	}
+	if(SWITCHER_MODE)
+	{
+//		RawRecPL[1].Type  =types[1] ;
+		RawRecPL[2].Type  =types[2] ;
+		RawRecPL[5].Type  =types[5] ;
+		RawRecPL[7].Type  =types[7] ;
+		RawRecPL[8].Type  =types[8] ;
+		RawRecPL[11].Type =types[11];
+		RawRecPL[12].Type =types[12];
+	}
+	DoAllNewDir(Edit);
+	if(STOP==1) return(TRUE);
+	else return(FALSE);
+}
+
+
+BOOL DoProcClipPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	LONG type=PAN_EASY,B,Z,F=0,T=0,STOP=0, Spot=0, smpte=0;
+	char Label[MAX_PANEL_STR]="";
+	struct SMPTEinfo si;
+	if(FG)
+	{
+		strncat(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+		T = (GetValue(FG,TAG(RecFields))>>1);  // Clip Frame Length
+		if(T<2) T=4;
+		GetTable(FG,TAG_CommentList,CommentBuf,COMMENT_MAX);
+		if(GetTable(FG,TAG_SMPTEtime,(UBYTE *)&si,sizeof(struct SMPTEinfo)))
+		{
+			smpte = EVEN(SMPTEToLong(&si));
+			DUMPUDECB("SMPTE Start: ",si.SMPTEhours,":");
+			DUMPUDECB("",si.SMPTEminutes,":");
+			DUMPUDECB("",si.SMPTEseconds,":");
+			DUMPUDECB("",si.SMPTEframes,"  = ");
+			DUMPUDECL(" ",smpte," frames \\");
+		}
+	}
+	B=smpte+T;
+	Z=smpte;
+	while(!STOP)
+	{
+		switch(type)
+		{
+		case PAN_CONTINUE:
+			STOP=1;
+			break;
+		case PAN_EASY:
+		case PAN_EXPERT:
+			MarkClipPL[2].Param = (long *)Label;  // Name String
+			MarkClipPL[2].PropEnd = CLIP_NAME_MAX;
+			MarkClipPL[2].Flags = PL_DEL;
+
+			MarkClipPL[3].Param = &B;  // Diff
+			MarkClipPL[3].Param2 = &Z;
+			MarkClipPL[3].G5 = (struct Gadget *)2; // Diff
+			MarkClipPL[3].Flags = PL_LEN;
+
+			MarkClipPL[4].Param = (long *)CommentBuf;  // Name String
+			MarkClipPL[4].PropEnd = COMMENT_MAX;
+			MarkClipPL[4].G5 = (struct Gadget *)300; // string gad width
+			MarkClipPL[4].Flags = PL_AVAIL;
+
+			MarkClipPL[5].Param = &Z;
+			MarkClipPL[5].Param2 = &B;
+			MarkClipPL[5].PropStart = smpte;
+			MarkClipPL[5].PropEnd = T+ smpte;
+			MarkClipPL[5].Flags = PL_IN | PL_DUAL | PL_FLYER | PL_CFRAME;
+
+			MarkClipPL[7].PropStart = 32; // Gap for bar
+
+			F=T/2 + smpte;
+			MarkClipPL[8].Param = &F;
+			MarkClipPL[8].PropStart = smpte;
+			MarkClipPL[8].PropEnd = T + smpte;
+			MarkClipPL[8].Flags = PL_IN | PL_FLYER | PL_CFRAME | PL_AUDIO;
+
+			MarkClipPL[9].Param = (long *)Spot;
+			MarkClipPL[9].PropEnd = 2;
+			MarkClipPL[9].Param2 =(long *)CutTracks;
+			MarkClipPL[9].Flags = PL_PLAY;
+
+			type = CutClipPanel(Edit);
+			break;
+		case PAN_CANCEL:
+		default:
+			STOP=2;
+			break;
+		}
+	}
+	DoAllNewDir(Edit);
+	if(STOP==1) return(TRUE);
+	else return(FALSE);
+}
+
+// CT_ERROR
+BOOL DoERRORPanel(struct EditWindow *Edit, struct FastGadget *FG)
+{
+	char Label[MAX_PANEL_STR]="Barney in Bosnia", *Orig="VT_CDII:Gurm/Cucaracha's revenge",
+		*CurHome="GigI:StupidStuff/little/LostCrouton";
+	LONG type=PAN_EASY;
+	if(FG)
+	{
+		strncpy(Label,FilePart( ((struct ExtFastGadget *)FG)->FileName),MAX_PANEL_STR-1);
+	}
+	if( (type==PAN_EASY) || (type==PAN_EXPERT) )
+	{
+		ErrorPL[2].Label = Label;
+		ErrorPL[4].Label = Orig;
+		ErrorPL[5].Label = CurHome;
+		type = MiniPanel(Edit, ErrorPL,TUNE_NONE);
+	}
+	if(type==PAN_CONTINUE)
+	{
+		return(TRUE);
+	}
+	return(FALSE);
+}
+
+/*
+BOOL DoTestPanel(struct EditWindow *Edit)
+{
+	char Mystr[50]="Aboud's"; //,*ts="Test" ,*LR[]={"L","R"};
+	long	D=98,T=450,type=PAN_EXPERT;
+	BOOL Jam_On=TRUE;
+	struct FastGadget *FG=NULL;
+	PanHandler	PanelFun;
+
+	XPTestPL[2].Param = (long *)Mystr;	// STRING
+	XPTestPL[2].PropEnd = 50;
+
+	XPTestPL[3].Param = (long *)Pnls;		// POPUP
+	XPTestPL[3].PropStart = 6;
+	XPTestPL[3].PropEnd = PNL_NUM;
+
+	XPTestPL[4].Param = (long *)&D;			// NUMBER
+	XPTestPL[4].PropStart = 0;  // min
+	XPTestPL[4].PropEnd = 100;  // max
+
+	XPTestPL[5].Param = (long *)&T;			// PLAY
+	XPTestPL[5].UserFun = CTRL_Play;
+
+	while(Jam_On)
+	{
+		type = MiniPanel(Edit, XPTestPL,TUNE_NONE);
+		if(type == PAN_CANCEL) Jam_On=FALSE;
+		if(XPTestPL[5].Param)
+		{
+			if( (PanelFun=PanHandlers[XPTestPL[3].PropStart]) )  // check type for validity 1st!!!
+				Jam_On = PanelFun(Edit,FG);
+		}
+	}
+	return(Jam_On);
+}
+ */
+
+
+UWORD __asm DoInfoPanel(
+	REG(a0) char *Path,
+	REG(a1) char *File,
+	REG(a2) struct EditWindow *Edit,
+  REG(d0) UWORD type )
+{
+	char *MPtr[5],*c; // ,num[5];
+	struct FileInfoBlock *fib;
+	BPTR L;
+	UWORD result =0;
+	WORD i=1;
+	ULONG	sz,dec;
+
+//	if(type<=GT_EFFECT) i=0;
+//	else  type-=GT_EFFECT;
+	if(type<=CR_FXANIM) i=0;
+//	if(!SwitPort)
+//		DoTBCPanel(Edit,NULL);
+	if (L = Lock(Path,ACCESS_READ))
+	{
+		if (fib = SafeAllocMem(sizeof(struct FileInfoBlock),MEMF_CLEAR))
+		{
+			if (Examine(L,fib))
+			{
+				strncpy(Name,fib->fib_FileName,MAX_STRING_BUFFER-1);
+				FileInfoPL[2].Param=(LONG *)Name;
+				FileInfoPL[2].PropEnd=MAX_STRING_BUFFER;
+				FileInfoPL[3].Label = DTNames[type];
+				FileInfoPL[4].Label = fib->fib_Comment;
+				if (fib->fib_DirEntryType > 0)
+				{
+					FileInfoPL[3].Label = "";
+					strcpy(Size,"Directory");
+				}
+				else
+				{
+					sz=fib->fib_Size;
+					if( fib->fib_Size < 0)
+						sz=(ULONG)((fib->fib_Size&0x7FFFFFFF) + 0x80000000);
+					dec=sz;
+					if( (sz>>20)>=10 ) // greater than 10M
+					{
+						sz >>= 20;
+						dec = (dec<<12)>>(12+18);
+						if(dec)
+							sprintf(Size, "Size %d.%d Mb",sz,dec);
+						else
+							sprintf(Size, "Size %d Mb",sz);
+					}
+					else if( (sz>>10)>=50 ) // greater than 50K
+					{
+						sz >>= 10;
+						dec = (dec<<22)>>(22+8);
+						if(dec)
+							sprintf(Size, "Size %d.%d Kb",sz,dec);
+						else
+							sprintf(Size, "Size %d Kb",sz);
+					}
+					else
+						sprintf(Size, "Size %d bytes",fib->fib_Size);
+				}
+				FileInfoPL[5].Label = Size;
+				if (((ft=getft(Path)) != -1) && (strftime(TempCh,60,"%a, %b %d, %Y %I:%M %p",localtime(&ft))))
+					FileInfoPL[6].Label =TempCh;
+
+				FileInfoPL[7].Label = "";
+				FileInfoPL[8].Label = ""; // date...
+
+				if( result=(MiniPanel(Edit,FileInfoPL,TUNE_NONE) ? 1:0) )
+					if(strnicmp(Name,fib->fib_FileName,MAX_STRING_BUFFER) )
+					{
+						strncpy(Dir,Path,MAX_STRING_BUFFER);
+						c=FilePart(Dir);
+						*c=0;
+								MPtr[0] = "Renaming";
+								MPtr[1] = Path;
+								MPtr[2] = " To ";
+								MPtr[3] = Dir;
+								MPtr[4] = Name;
+						strncat(Dir,Name,119);
+						if(SimpleRequest(Edit->Window,MPtr,4,REQ_CENTER|REQ_H_CENTER|REQ_OK_CANCEL,NULL))
+							if ( !(result+=(Rename(Path,Dir) ? 1:0)) )
+							{
+								MPtr[0] = "Unable to rename";
+								MPtr[1] = Path;
+								MPtr[2] = IoErrToText(IoErr());
+								SimpleRequest(Edit->Window,MPtr,3,REQ_CENTER|REQ_H_CENTER,NULL);
+							}
+							else
+							{
+								DUMPSTR("Rename ");
+								DUMPSTR(Path);
+								DUMPSTR(" To ");
+								DUMPMSG(Dir);
+								strncpy(Name,Path,119);
+								strncat(Name,".i",119);
+								strncat(Dir,".i",119);
+								Rename(Name,Dir);
+								strncat(Name,"nfo",119);
+								strncat(Dir,"nfo",119);
+								Rename(Name,Dir);
+							}
+					}
+				*Name=0;
+			}
+			FreeMem(fib,sizeof(struct FileInfoBlock));
+		}
+	UnLock(L);
+	}
+	return(result);
+}
+
+
+ULONG CroutonIndex(ULONG Type)
+{
+	ULONG i;
+//	DUMPHEXIL(" Looking for Type: ",(LONG)Type," \\");
+	for(i=CR_FXANIM; i<= CR_UNKNOWN; i++)
+	{
+//		DUMPUDECL("CRuDTypes[ ",(LONG)i," ] =");
+//		DUMPHEXIL(" ",(LONG)CRuDTypes[i]," \\");
+		if(Type == CRuDTypes[i]) return(i);
+	}
+//	DUMPUDECL(" ",(LONG)i,"\\ ");
+	return(CR_UNKNOWN);
+}
+
+#define VALID_CTYPE(t)		((t<=CR_UNKNOWN)&&(t>=CR_FXANIM))
+//#define VALID_CTYPE(t)		((t<=CR_ERROR)&&(t>=CR_FXANIM))
+//*******************************************************************
+// Could really be called DoFGPanel
+struct EditWindow *HandlePanel(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	ULONG type,indx;
+	struct FastGadget *FG,*Next;
+	BOOL DontStop=TRUE;
+	PanHandler	PanelFun;
+
+	FG = *(((struct Project *)Edit->Special)->PtrPtr);
+
+	if( FlyerBase && (IntuiMsg->Qualifier&IEQUALIFIER_CONTROL) && (IntuiMsg->Qualifier&IEQUALIFIER_LSHIFT) )
+	{
+		DoTweakPanel(Edit,FG);
+		return(Edit);
+	}
+//	else if( FlyerBase && (IntuiMsg->Qualifier&IEQUALIFIER_CONTROL) && (IntuiMsg->Qualifier&IEQUALIFIER_LALT) )
+	else if( (IntuiMsg->Qualifier&IEQUALIFIER_CONTROL) && (IntuiMsg->Qualifier&IEQUALIFIER_LALT) )
+	{
+		DoTBCPanel(Edit,FG);
+		return(Edit);
+	}
+
+	while (FG && DontStop)
+	{
+		Next = FG->NextGadget;
+		if (FG->FGDiff.FGNode.Status == EN_SELECTED)
+		{
+			type=((struct ExtFastGadget *)FG)->ObjectType;
+			indx = CroutonIndex(type);
+			DUMPSTR(DTNames[indx]);
+			DUMPHEXIL(" has type ",type,"  ");
+			if(VALID_CTYPE(indx))
+			{
+				DUMPUDECL(" Valid type",indx,"\\");
+				CurFG=FG;
+				ESparams1.Data1=(LONG)FG;
+				SendSwitcherReply(ES_PanelOpen,&ESparams1);
+				if(IntuiMsg->Qualifier & IEQUALIFIER_CAPSLOCK)
+					PanType=PAN_EXPERT;
+				else
+					PanType=PAN_EASY;
+				if( (PanelFun=PanHandlers[indx]) )
+					DontStop = PanelFun(Edit,FG);
+				ESparams1.Data1=(LONG)FG;
+				SendSwitcherReply(ES_PanelClose,&ESparams1);
+			}
+		}
+		FG = Next;
+	}
+	return(Edit);
+}

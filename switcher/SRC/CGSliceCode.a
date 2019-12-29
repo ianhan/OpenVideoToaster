@@ -1,0 +1,2296 @@
+********************************************************************
+* cgslicecode.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: CGSliceCode.a,v 2.31 94/12/28 20:02:32 CACHELIN4000 Exp $
+*
+* $Log:	CGSliceCode.a,v $
+*Revision 2.31  94/12/28  20:02:32  CACHELIN4000
+*Bag some unnecessary stuff, kill key and redodisplay on CG return to switcher
+*
+*Revision 2.30  1994/07/27  19:30:06  Kell
+**** empty log message ***
+*
+*Revision 2.29  1994/07/22  20:32:09  Kell
+*Now using AmigaDOS's LoadSeg
+*
+*Revision 2.28  94/07/22  19:29:36  Kell
+**** empty log message ***
+*
+*Revision 2.27  94/07/22  18:53:13  Kell
+*Added some debug messages
+*
+*Revision 2.26  93/06/08  17:29:18  Hartford2
+*LoadCGBook now calls SelectStdEfx() if CG not active crouton
+*
+*Revision 2.25  93/06/07  01:46:58  Turcotte
+**** empty log message ***
+*
+*Revision 2.24  93/06/06  22:16:00  Turcotte
+**** empty log message ***
+*
+*Revision 2.23  93/06/06  17:30:47  Turcotte
+**** empty log message ***
+*
+*Revision 2.22  93/06/05  22:38:18  Turcotte
+**** empty log message ***
+*
+*Revision 2.21  93/06/04  21:41:19  Turcotte
+**** empty log message ***
+*
+*Revision 2.20  93/06/04  02:21:02  Turcotte
+**** empty log message ***
+*
+*Revision 2.19  93/06/03  21:28:31  Turcotte
+**** empty log message ***
+*
+*Revision 2.18  93/06/01  21:13:30  Turcotte
+**** empty log message ***
+*
+*Revision 2.17  93/05/29  16:06:33  Hartford2
+**** empty log message ***
+*
+*Revision 2.16  93/05/27  17:08:59  Turcotte
+**** empty log message ***
+*
+*Revision 2.15  93/05/24  07:59:32  Turcotte
+**** empty log message ***
+*
+*Revision 2.14  93/05/14  10:51:08  Turcotte
+**** empty log message ***
+*
+*Revision 2.13  93/05/13  17:39:00  Hartford2
+*Took that last one out.
+*
+*Revision 2.12  93/05/13  17:20:33  Hartford2
+*NUMVAL and SELECT no longer turn SoftSpriteOff
+*because CG might need to put err requesters on switcher screen
+*
+*Revision 2.11  93/04/19  17:13:36  Turcotte
+**** empty log message ***
+*
+*Revision 2.10  93/04/19  07:59:57  Turcotte
+**** empty log message ***
+*
+*Revision 2.9  93/04/17  16:32:57  Hartford2
+*bumped stack size to 20K
+*
+*Revision 2.8  93/04/16  04:01:03  Turcotte
+**** empty log message ***
+*
+*Revision 2.7  93/04/07  08:45:56  Kell
+*Added some code to handle TB_TBarTime, though not probably necessary.
+*
+*Revision 2.6  93/04/03  17:44:13  Hartford2
+*Modified error messages
+*
+*Revision 2.5  93/03/23  14:06:24  Hartford2
+**** empty log message ***
+*
+*Revision 2.4  93/02/27  17:43:37  Hartford2
+*Changed SoftSpriteAudios to SoftSprite for SoftSprite in CG
+*
+*Revision 2.3  93/01/29  16:16:44  Hart3000
+*Added CR
+*
+*Revision 2.2  93/01/21  04:17:07  Turcotte
+*Changes for new Grids
+*
+*Revision 2.1  92/12/29  17:10:37  Hart3000
+*EUC change
+*
+*Revision 2.0  92/05/18  21:09:00  Hartford
+**** empty log message ***
+*
+*********************************************************************
+
+********************************************************************
+* CGSliceCode.a - LoadCGBook, SaveCGBook, CG slice crouton,
+*		DisplayMessageAndWait,HandleCGError, DitchCG,
+*		GetFirstLine
+*	This is the intermediate code that directly monitors the CG Slice
+*	FastGadget system and supports the main CG code, if it was loaded.
+*
+* Copyright (c)1991 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* ??-??-89	Speier		Created this file
+* 01-09-90	Speier		Yet another update
+* 01-11-90	Speier		Added crouton system support
+*						and other bug fixes
+* 5-7-90	Speier		Added support for 512 tick movement TBar.
+* 6-7-90	Steve H.	Major rework for on/off switch
+* 6-8-90	Speier		More tidbits of work concerning the CG
+*						on/off switch
+* 10-15-90	Steve H.	Fixed button logic/rendering bugs
+* 11-15-90	Steve H.	WriteLineZero() added
+* 11-28-90	Speier		Search for replacement crouton enhanced to
+*				search all ToolBox FG lists.
+* 02-11-91	Speier		Added the SoftSprite wait pointer system
+*				which replaces just turning off the
+*				SoftSprite while the CG is loading.
+* 03-21-91	Speier		Added elementary nesting capability to
+*				wait pointer system.
+* 03-26-91	Speier		Added code to unload the CG when the CG slice
+*				button is mouse selected with either or both
+*				of the shift keys down.
+* 03-28-91	Speier		Small bug fix to accomodate Grid E and future
+*				grids(?) on crouton selection.
+* 04-16-91	Speier		FGC table index limit check added.
+* 05-03-91	Speier		Fix to the shift-mouse select code so that
+*				the CG code will not be loaded.
+* 04-09-91	Ken		Changed DosBase/LoadSeg to
+*				ToasterBase/NLoadSegment.
+* 9-26-91	Steve H.	Removed frame page render preview update,
+*				placed in CG to avoid flashing.
+* 11-24-91	Steve H.	Took RestoreBorderColor() out
+* 12-11-91	Ken		Changed NewProcessSaveButton
+* 12-12-91	Steve H.	FGC_SELECT now updates page string if CG
+*				selected numpad gadget
+* 1-3-92	Steve H.	CG now does WriteLineZero(),LUToff()
+* 1-7-92	Steve H.	DoCGRemove() for people who need to remove key
+*				Fixed TriMark, Fade problems
+* 1-26-92	Steve H.	If CG already in control, KillModes()
+*				now does nothing
+* 12-29-92	Steve H.	No change, just note that CG itself calls
+*						WaitSprite()/NormalSprite() for EUC version
+* 12-29-92	Steve H.	Last update
+*********************************************************************
+	include	"assembler.i"
+	include "graphics/gfx.i"
+	include	"instinct.i"
+	include "smallmacros.i"
+	include "cgmessage.i"
+	include "cgerror.i"
+	include "vtdebug.i"
+	include	"eflib.i"
+	include "serialdebug.i"
+
+	include	"lib/exec_lib.i"
+	include	"lib/dos_lib.i"
+	include "lib/graphics_lib.i"
+
+;;SERDEBUG	set	1
+
+;;CGSLICE	EQU 1
+
+*-------------------------------------
+
+BOX_XCENTER	equ	384
+BOX_Y1		equ	208
+BOX_HEIGHT	equ	64
+BOX_Y2		equ	BOX_Y1+BOX_HEIGHT-1
+LIGHT_PEN	equ	(1<<2)!1
+DARK_PEN	equ	(3<<2)!3
+BOX_PEN		equ	(0<<2)!0
+TEXT_PEN	equ	(3<<2)!3
+
+TEXT_XOFFSET	equ	8
+TEXT_YOFFSET	equ	4
+TEXT_HEIGHT		equ	12
+
+CG_STACK_SIZE	equ	20000
+CG_LOAD_TIMEOUT	equ	20	; in seconds
+
+MAX_COMMENT_SIZE	equ	12	; maximum characters in comment box
+MAX_BOOK_FILENAME	equ	100	; maximum book filename length
+
+*******************************************************
+	SECTION	CGSliceCode,CODE
+
+ XLABEL CGSliceCode
+	movem.l	4(sp),d0/a4/a5		; FGC_xxx command in D0
+								; FastGadget pointer in A4
+	DEBUGMSG	CGSLICE,<CGSliceCode:>
+								; ToasterBase in A5
+
+	cmp.l	#MAXTABLEINDEX,d0	; insure index is valid before
+	bhi.s	PNOP			; we go on
+
+	lea.l	LocalData,a3		; local data
+
+	move.l	d0,d1
+	add.l	d1,d1			; jump to the appropriate handler
+	add.l	d1,d1
+	move.l	Table(pc,d1.w),a0
+	jmp		(a0)
+
+	CNOP	0,4
+Table:
+	dc.l	PNOP			; Load command (on/off switch made this bogus)
+	dc.l	UnLoad			; UnLoad command
+	dc.l	SelectM			; Select command
+	dc.l	Remove			; Remove command
+	dc.l	Auto			; Auto command
+	dc.l	TBar			; TBar command
+	dc.l	PNOP			; Speedo/frame count command
+	dc.l	PNOP			; Gen FG command
+	dc.l	SelectQ			; Select Quiet command
+	dc.l	Remove			; Remove Quiet command
+	dc.l	NumVal			; Number Value command
+	dc.l	SelectK			; Select by RAWKEY command
+	dc.l	PNOP			; Update command
+	dc.l	PNOP			; RAWKEY command
+	dc.l	Take			; Take command
+	dc.l	Freeze			; Freeze command
+	dc.l	Overlay			; Overlay command
+	dc.l	Main			; Main command
+	dc.l	Preview			; Preview command
+	dc.l	Clip			; Clip command
+	dc.l	FrameLoad		; Frame Store Load
+	dc.l	FrameSave		; Frame Store Save
+	dc.l	PNOP			; future expansion
+	dc.l	PNOP			; future expansion
+PNOP:
+	rts
+
+MAXTABLEINDEX	EQU	(PNOP-Table)/4-1
+
+********************************************************************`
+* FGC_UNLOAD
+UnLoad
+	DEBUGMSG	CGSLICE,<FGC_UnLoad>
+
+	tst.b	CGLoaded(a3)		; is CG even loaded?
+	beq.s	.Exit				; no
+
+	bsr	WaitSprite
+
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	bne.s	.ShortCut			; if not - take the shortcut
+	bsr	SelectSomebodyElse	; select some other crouton
+.ShortCut
+
+	bsr	CGSliceOff
+	bsr	DisableNumeric
+	XCALL	DisableConfig	; disable "load book only" in config screen
+	bsr	UnLoadCGCode
+
+	XJSR	ResetCGPopupList
+	bsr	NormalSprite
+.Exit
+	rts
+
+********************************************************************`
+* Fix fade, trimark problems
+*
+* a4 = CG FG
+*
+KillModes
+	DEBUGMSG	CGSLICE,<KillModes>
+
+	move.l	d2,-(sp)
+	bsr	WasCGControl
+	tst.l	d2
+	bne.s	.Gurm	; CG already in control
+
+	CALLTL	DoTakeNoKey
+	CALLTL	LUToff
+.Gurm
+	move.l	(sp)+,d2
+	rts
+
+********************************************************************`
+* FGC_SELECT
+* d2 is whether the CG WAS in control before this message
+SelectM
+	DEBUGMSG	CGSLICE,<SelectM>
+
+	bsr.s	WasCGControl
+
+	move.l	a4,a0				; implement a release verify
+	move.l	TB_Window(a5),a1
+	sub.l	a2,a2
+	CALLTL	HiLiteBoolSelect
+	beq.s	.NotSelected		; skip out if not selected
+
+	lea.l	KeyMatrix(a3),a0	; see if user is actually requesting
+	XCALL	GetKbdState		; us to dump the CG
+	beq	SelectMainBody		; skip all of this on failure
+
+	and.b	#3,KeyMatrix+12(a3)	; get the status of the shift keys
+	beq	SelectMainBody		; if neither shift key down
+
+	tst.b	CGLoaded(a3)		; is CG even loaded?
+	bne	UnLoad			; if so - jump to do possible CG dump
+
+	bsr	ResetRender
+	bra.s	.Exit
+
+.NotSelected:
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	bne.s	.Exit				; if not - skip
+	bsr	SetRender			; else assure FG stays hilited
+								; and exit
+.Exit:	
+	rts
+
+WasCGControl
+	moveq.l	#FALSE,d2
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	bne.s	.Exit
+	moveq.l	#TRUE,d2
+.Exit
+	rts
+
+********************************************************************`
+* FGC_SELECTK
+SelectK
+	DEBUGMSG	CGSLICE,<SelectK>
+
+	bsr.s	WasCGControl
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	beq	SelectMainBody		; if so - FG lit - take a shortcut
+	bsr	SetRender
+	bra	SelectMainBody		; hilite button and start operations
+
+********************************************************************`
+* FGC_SELECTQ
+SelectQ
+	DEBUGMSG	CGSLICE,<SelectQ>
+
+	bsr	WasCGControl
+	move.w	#-1,RenderFlag(a3)	; denote rendering is off for quiet
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	beq.s	.ShortCut			; if so - FG lit - take a shortcut
+	bsr	SetRender			; process the FG
+
+.ShortCut:
+	bsr.s	SelectMainBody		; start and do operations
+	clr.w	RenderFlag(a3)		; denote rendering is on
+	rts							; and exit
+
+********************************************************************`
+* Do generic select processing
+SelectMainBody
+	DEBUGMSG	CGSLICE,<SelectMainBody>
+
+	tst.b	CGLoaded(a3)
+	bne.s	.DoSelect
+
+* turn CG "on"
+	CALL	WaitSprite
+	bsr	LoadCGCode
+	tst.l	d0			; successful?
+	beq.s	.LoadFail	; no
+	bsr	CGSliceOn
+	bsr	EnableNumeric
+	XCALL	EnableConfig	; enable "load book only" in config screen
+;;	CALLTL	InstallAVEI
+;; Comment out Book Load- AC Dec 28 1994
+;;	bsr	DoLoadCGBook	; load a book if one exists
+							; (error doesn't matter-we're just returning)
+	CALL	NormalSprite
+
+	tst.b	CGLoaded(a3)	; Don't try to go into cg if load failed.
+	beq.s	.LoadFail
+
+	cmp.l	#FGC_SELECTK,4(sp)	;into cg
+	bne.s	.DoSelect
+;	bra.s	.DoSelect
+.LoadFail
+	CALL	NormalSprite
+	bra.s	.Exit
+
+* already "on", go into CG edit mode
+.DoSelect
+	bsr	KillModes
+	move.l	a4,a0
+	CALLTL	DoHiLiteSelectQ		; do the normal crouton setup stuff
+					; WITHOUT further rendering!
+
+* main SELECT code begins here
+	clr.b	LastPageIntact(a3)
+
+	tst.b	TBarInUse(a3)
+	beq.s	.DoSel
+	bsr	TakeTBar
+.DoSel
+
+	CALLTL	SoftSpriteOff
+	moveq.l	#FGC_SELECT,d0
+	moveq.l	#0,d1
+	move.w	CGState(a3),d1	; send via tm_UserData
+	bsr	SendCGMessage
+
+	move.l	d0,a2
+	move.w	tm_CGState(a2),CGState(a3)
+	CALLTL	SoftSpriteOn
+	bsr	UpdateFlash
+
+	move.l	tm_CGReply(a2),d0 ; did SELECT return an error?
+	beq.s	.SelectOK
+	bsr	HandleCGError
+.SelectOK
+
+;; Skip this stuff --AC Dec 28 1994
+	bra.s	.ArnSezCGDone
+
+* Refresh string if needed
+	bsr.s	CGNumPad	; Is CG selected numpad?
+	tst.l	d0
+	beq.s	.PadDone
+* do it
+	moveq.l	#0,d0
+	move.w	TB_NumPadSec(a5),d0
+	bsr	GetFirstLine		; get string based on the page #
+	move.l	d0,a0			; place in comment string
+	move.l	TB_FCStringSec(a5),a1
+	XJSR	STRcopy
+
+.PadDone
+	XJSR	ResetCGPopupList
+
+;; Added by AC Dec 28 1994~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ArnSezCGDone
+	bsr DitchKey
+	CALLTL	SelectStdEfx
+	CALLTL	ReDoDisplay
+;;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	tst.l	tm_FastGadget(a2) 	; does CG want to be dumped?
+					; (user presses shift-escape)
+	beq.s	.Exit
+	bsr	UnLoad			; send CG FGC_UNLOAD
+.Exit
+	rts
+
+***********************************************************`
+* returns BOOL - is CG currently selected Numpad gadget?
+CGNumPad
+	DEBUGMSG	CGSLICE,<CGNumPad>
+
+	lea.l	TB_NumPadFGL(a5),a0
+	moveq.l	#CGSELID,d0
+	CALLTL	IndexFastG
+	tst.l	d0	
+	beq.s	.Exit
+	cmp.l	TB_CurrSelFG(a5),d0	; this FG the active on in the
+	bne.s	.NoExit
+	moveq.l	#TRUE,d0
+	bra.s	.Exit
+.NoExit
+	moveq.l	#FALSE,d0
+.Exit
+	rts
+
+***********************************************************`
+* FGC_NUMVAL
+NumVal
+	DEBUGMSG	CGSLICE,<NumVal>
+
+	tst.b	CGLoaded(a3)	; CG loaded?
+	beq.s	.Exit
+
+	bsr	KillModes
+	move.l	a4,a0		; standard crouton FGC_SELECTQ stuff
+	CALLTL	DoHiLiteSelectK	; via Key, so doesn't wait for mouse release
+
+	tst.b	TBarInUse(a3)
+	beq.s	.DoNumVal
+	bsr	TakeTBar
+
+.DoNumVal
+	CALLTL	SoftSpriteOff
+	moveq.l	#0,d2
+	move.w	CGState(a3),d2
+
+* check if page already rendered
+	tst.b	LastPageIntact(a3)	; is last page intact?
+	beq.s	.SendNum
+	move.w	TB_Number(a5),d0
+	cmp.w	LastPageRendered(a3),d0	; is it same page number?
+	bne.s	.SendNum
+
+	btst.l	#BIT_DIB_IN_USE,d2  ; is it already up?
+	bne.s	.SendNum		; if so, re-render (to put in other bank)
+	bset.l	#BIT_DIB_READY,d2
+	bra.s	.UpdateExit
+
+* send an FGC_NUMVAL command to CG process
+.SendNum
+	moveq.l	#FGC_NUMVAL,d0
+
+	move.l	d2,d1			; CGState
+	bsr	SendCGMessage
+	move.l	d0,a1
+	move.w	tm_CGState(a1),d2
+
+* setup key page for LastPageRemembered
+	clr.b	LastPageIntact(a3)
+	btst.l	#BIT_DIB_READY,d2	; did we render a DIB page?
+	beq.s	.UpdateExit
+	move.b	#TRUE,LastPageIntact(a3)
+	move.w	TB_Number(a5),LastPageRendered(a3)
+
+.UpdateExit
+	move.w	d2,CGState(a3)
+	CALLTL	SoftSpriteOn
+	bsr.s	UpdateFlash
+
+.Exit
+	rts
+
+***********************************************************`
+* make appropriate key row buttons flash, and clear others
+UpdateFlash
+	DEBUGMSG	CGSLICE,<UpdateFlash>
+
+	movem.l	d2/a2-a3,-(sp)
+	lea.l	TB_LumKeyFGL(a5),a2
+	move.w	CGState(a3),d2
+
+* clear/flash DV0
+	move.l	a2,a0
+	moveq.l	#SDV0INDEX,d0
+	CALLTL	IndexFastG
+	move.l	d0,a3
+
+	btst.l	#BIT_DIB_READY,d2
+	beq.s	.ClearDV0
+	btst.l	#BIT_READY_BANK,d2
+	bne.s	.ClearDV0
+	bsr.s	FlashButton
+	bra.s	.CheckDV1
+
+.ClearDV0
+	bsr		SolidButton
+
+* clear/flash DV1
+.CheckDV1
+	move.l	a2,a0
+	moveq.l	#SDV1INDEX,d0
+	CALLTL	IndexFastG
+	move.l	d0,a3
+
+	btst.l	#BIT_DIB_READY,d2
+	beq.s	.ClearDV1
+	btst.l	#BIT_READY_BANK,d2
+	beq.s	.ClearDV1
+	bsr.s	FlashButton
+	bra.s	.CheckKey
+
+.ClearDV1
+	bsr.s	SolidButton
+
+* clear/flash BKG
+.CheckKey
+	move.l	a2,a0
+	moveq.l	#SCOMPKEY,d0
+	CALLTL	IndexFastG
+	move.l	d0,a3
+
+	btst.l	#BIT_EFFECT_READY,d2
+	beq.s	.ClearKey
+	bsr.s	FlashButton
+	bra.s	.UpdateExit
+
+.ClearKey
+	bsr.s	SolidButton
+
+.UpdateExit
+	move.l	a2,a0
+	moveq.l	#SDV0INDEX,d0
+	CALLTL	IndexFastG
+	move.l	d0,a2			; ptr to first FG to update
+
+* only draw if switcher screen up
+	bsr		SwitcherScreenActive
+	tst.l	d0
+	beq.s	.GListOK
+
+* make render safe
+	CALLTL	SoftSpriteOff
+	move.l	a2,a0				; gadget
+	moveq.l	#3,d0				; count
+	moveq.l	#0,d1				; offset
+	move.l	TB_Window(a5),a1	; window
+	sub.l	a2,a2			; requestor
+	CALLTL	DrawFastGList
+	CALLTL	SoftSpriteOn
+
+.GListOK
+	movem.l	(sp)+,d2/a2-a3
+	rts
+
+* changes the imagery for the FastGadget in a3 to flashing
+FlashButton
+	clr.w	FG_HiLiteMask(a3)
+	move.w	#1,FG_PTRIndex(a3)
+	move.l	FG_PTRTable(a3),a0
+	move.l	4(a0),FG_Data(a3)
+;	move.w	#DISPLAYMODE0,FG_ModeType(a3)
+	rts
+
+* changes the imagery for the FastGadget in a3 to solid
+SolidButton
+	clr.w	FG_PTRIndex(a3)
+	move.l	FG_PTRTable(a3),a0
+	move.l	(a0),FG_Data(a3)
+;	move.w	#DISPLAYMODE2,FG_ModeType(a3)
+	rts
+
+***********************************************************`
+* Needed for other people who need to remove CG keys
+* during switcher operation
+ XLABEL	DoCGRemove
+	DEBUGMSG	CGSLICE,<DoCGRemove>
+
+	movem.l	d0-d1/a0-a4,-(sp)
+	lea.l	LocalData,a3
+
+* find CG slice gadget
+	lea.l	TB_SliceFGL(a5),a0
+	moveq.l	#CGSLICEID,d0
+	CALLTL	IndexFastG
+	tst.l	d0
+	beq.s	.Exit
+	move.l	d0,a4
+
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	bne.s	.Exit
+	bsr.s	DoRemove
+.Exit
+	movem.l	(sp)+,d0-d1/a0-a4
+	rts
+
+******************
+DoRemove
+	DEBUGMSG	CGSLICE,<DoRemove>
+
+	clr.b	LastPageIntact(a3)
+	tst.b	TBarInUse(a3)
+	beq.s	.DoRemove
+	bsr	TakeTBar
+	bra.s	.DoPartTwo	; TakeTBar does the part we're skipping
+
+* turn off DIB keying, reset all
+.DoRemove
+	bsr	DitchKey
+
+.DoPartTwo
+	bsr	ForgetAll
+	bsr	UpdateFlash
+	clr.w	TB_OLaySec(a5)
+	rts
+
+***********************************************************`
+* FGC_REMOVE command handler
+Remove
+	DEBUGMSG	CGSLICE,<Remove>
+
+	bsr	DoRemove
+	clr.w	FG_HiLiteMask(a4)	; get back un-selected imagery
+
+* only draw if switcher screen active
+	bsr	SwitcherScreenActive
+	tst.l	d0
+	beq.s	.GListOK
+
+	CALLTL	SoftSpriteOff
+	move.l	a4,a0
+	moveq.l	#1,d0				; count
+	moveq.l	#0,d1				; offset
+	move.l	TB_Window(a5),a1	; window
+	sub.l	a2,a2				; requestor
+	CALLTL	DrawFastGList
+	CALLTL	SoftSpriteOn
+.GListOK
+
+* setup elh for others
+	lea.l	TB_VTSetUp(a5),a0
+	move.w	TB_MainSec(a5),d0
+	move.w	d0,d1
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+	move.w	d1,d0
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+
+	ELHCLEAR_BRIDGE	a0
+	ELHSET_LINP	a0
+	ELHSET_LINR	a0
+	ELHSET_AFR	a0
+	ELHSET_AFP	a0
+	ELHPUT_CDS_I a0,VTI_CDS_CD	; no keying
+	ELHPUT_CD_I	 a0,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster
+
+	CALLTL	ReDoDisplay
+	CALLTL	InstallAVEI
+
+* restore chip mem for others
+	CALLTL	InitEFXChipMem
+	CALLTL	InitDVEFastMem	; we are sharing fast memory now
+	CALLTL	InitDVEChipMem
+	rts
+
+**********************************
+* remove any DIB key onscreen
+DitchKey
+	DEBUGMSG	CGSLICE,<DitchKey>
+
+	move.w	CGState(a3),d0
+	btst.l	#BIT_DIB_IN_USE,d0
+	beq.s	.DitchExit
+	bclr.l	#BIT_DIB_IN_USE,d0
+	move.w	d0,CGState(a3)
+	clr.w	TB_OLaySec(a5)	; erase any solid button (key in use)
+
+	lea.l	TB_VTSetUp(a5),a0
+	move.w	TB_MainSec(a5),d0
+	move.w	d0,d1
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+	move.w	d1,d0
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+	ELHPUT_CDS_I	a0,VTI_CDS_CD	; no keying
+	ELHPUT_CD_I		a0,VTI_CD_SHOWB
+	CALLTL	InstallAVEIdoELH
+*	CALLTL	SendELH2Toaster
+
+.DitchExit
+	rts
+
+***********************************************************`
+* FGC_AUTO
+Auto
+	DEBUGMSG	CGSLICE,<Auto>
+
+	tst.b	TBarInUse(a3)
+	beq.s	.DoAuto
+*	bsr		TakeTBar	; start auto from current tbar position
+	clr.w	TB_OLaySec(a5)
+	clr.b	TBarInUse(a3)
+
+.DoAuto
+	moveq.l	#0,d0
+	move.w	CGState(a3),d0
+	btst.l	#BIT_EFFECT_READY,d0
+	bne.s	Take	; AUTO for effects is same as TAKE
+
+* AUTO_FADE handles:
+*	1) BIT_DIB_IN_USE - fades key out
+*	2) BIT_DIB_READY  - fades key in
+*	3) nothing - fades main->preview
+	moveq.l	#FGC_DO_AUTO_FADE,d1
+	bsr		SendPrivate
+	rts
+
+***********************************************************`
+* FGC_TAKE
+Take
+	DEBUGMSG	CGSLICE,<Take>
+
+	tst.b	TBarInUse(a3)
+	beq.s	.DoTake
+	bsr		TakeTBar
+	rts
+
+.DoTake
+	move.w	CGState(a3),d0
+	btst.l	#BIT_EFFECT_READY,d0
+	beq.s	.CheckKey
+
+******************************
+* fake a press on BKG overlay button
+	move.w	TB_MainSec(a5),d1
+	move.w	TB_PrvwSec(a5),TB_MainSec(a5)
+	move.w	d1,TB_PrvwSec(a5)
+
+	move.w	#%01000000,TB_OLaySec(a5)
+	bra		DoEffect
+
+******************************
+.CheckKey
+	btst.l	#BIT_DIB_READY,d0
+	beq.s	.NoKeyToUse
+
+	move.w	TB_MainSec(a5),d1
+	move.w	TB_PrvwSec(a5),TB_MainSec(a5)
+	move.w	d1,TB_PrvwSec(a5)
+
+* fake a button press on the correct overlay button
+	move.w	#%00100000,TB_OLaySec(a5) 	; user hit DV2
+	btst.l	#BIT_READY_BANK,d0		; which bank?
+	bne.s	.FakeDV2
+	move.w	#%00010000,TB_OLaySec(a5) 	; user hit DV1
+.FakeDV2
+	bra	DoOverlay
+
+******************************
+.NoKeyToUse
+	clr.w	TB_OLaySec(a5)
+	bsr		DitchKey		; sets up VTSetup, does SendELH2Toaster
+	bsr		ForgetAlmostAll	; remember LastPageIntact
+	bsr		UpdateFlash
+	CALLTL	CookAndServeTake
+	rts
+
+***********************************************************`
+* FGC_OBUTTON
+Overlay
+	DEBUGMSG	CGSLICE,<Overlay>
+
+	tst.b	TBarInUse(a3)	; is fade in process
+	beq.s	.DoO			; no
+
+	lea.l	TB_VTSetUp(a5),a0	; fade from AM->BM
+	move.w	TB_OLaySec(a5),d0
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+	CALLTL	SendELH2Toaster
+	rts
+
+.DoO
+	move.w	CGState(a3),d0
+	btst.l	#BIT_EFFECT_READY,d0
+	bne.s	DoEffect
+	btst.l	#BIT_DIB_READY,d0
+	bne	DoOverlay
+
+OverlayAbort
+	bsr		DitchKey
+	bsr		ForgetAlmostAll
+	bsr		UpdateFlash
+	clr.w	TB_OLaySec(a5)
+	rts
+
+*********************************
+* check if scroll/crawl initiated
+DoEffect
+	DEBUGMSG	CGSLICE,<DoEffect>
+
+	bclr.l	#BIT_EFFECT_READY,d0
+
+	move.w	TB_OLaySec(a5),d1
+	clr.w	TB_OLaySec(a5)
+	cmp.w	#%01000000,d1
+	bne	OverlayAbort
+	moveq.l	#FGC_DO_EFFECT,d1
+	bsr	SendPrivate
+	rts
+
+*********************************
+* check if flip to key initiated
+DoOverlay
+	DEBUGMSG	CGSLICE,<DoOverlay>
+
+	bclr.l	#BIT_DIB_READY,d0
+
+* check if pressed on button which contained new key
+	move.w	TB_OLaySec(a5),d1
+	btst.l	#BIT_READY_BANK,d0	; which bank?
+	bne.s	CheckDV2
+
+	cmp.w	#%00010000,d1 ; did user hit DV1?
+	beq.s	DoDIB
+	bra	OverlayAbort
+
+CheckDV2
+	cmp.w	#%00100000,d1 ; did user hit DV2?
+	bne	OverlayAbort
+
+* send message to CG to DIB with MainSec and DIB_NEXT_BANK_BIT
+DoDIB
+	moveq.l	#FGC_FLIP_TO_DIB,d1	; private message
+	bsr.s	SendPrivate
+
+	move.w	CGState(a3),d0
+	rts
+
+*********************************
+* SendPrivate called from lots of places, just sends msg and updates CGStatus
+SendPrivate
+	DEBUGMSG	CGSLICE,<SendPrivate>
+
+	movem.l	d0-d1,-(sp)
+	CALLTL	SoftSpriteOff
+	movem.l	(sp)+,d0-d1
+
+	exg.l	d0,d1
+	bsr		SendCGMessage
+	move.l	d0,a1
+	move.w	tm_CGState(a1),CGState(a3)	; CG may have changed this
+
+	CALLTL	SoftSpriteOn
+	bsr		UpdateFlash
+	rts
+
+***********************************************************`
+* FGC_MAIN
+Main
+	DEBUGMSG	CGSLICE,<Main>
+
+	tst.b	TBarInUse(a3)
+	beq.s	.DoMain
+
+	lea.l	TB_VTSetUp(a5),a0
+	move.w	TB_MainSec(a5),d0
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+	CALLTL	SendELH2Toaster
+	rts
+
+.DoMain
+	XJSR	CookAndServeMain
+	rts
+
+***********************************************************`
+* FGC_PREVIEW
+Preview
+	DEBUGMSG	CGSLICE,<Preview>
+
+	XJUMP	CookAndServePrvw
+
+***********************************************************`
+* FGC_TBAR
+TBar
+	DEBUGMSG	CGSLICE,<Tbar>
+
+	move.w	CGState(a3),d1
+	and.w	#(MASK_DIB_IN_USE)!(MASK_DIB_READY)!(MASK_EFFECT_READY),d1
+	beq.s	.NormalTBar
+
+************************************
+* if DIB_READY,DIB_IN_USE, or EFFECT_READY, do nothing
+	bsr		Auto
+	lea.l	FakeTBarHandler(pc),a0
+	CALLTL	DoTBar
+	clr.w	TB_TValSec(a5)
+	clr.w	TB_TBarTime(a5)
+	rts
+
+**********************************
+* normal TBar fade - no DIBs
+.NormalTBar
+	tst.b	TBarInUse(a3)
+	bne.s	.NormalExit
+
+* setup for TBarFade
+	move.w	TB_PrvwSec(a5),d0
+	move.w	d0,TB_OLaySec(a5)
+
+	lea.l	TB_VTSetUp(a5),a0	; fade from AM->BM
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+	move.w	TB_MainSec(a5),d0
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+	ELHPUT_CDS_I a0,VTI_CDS_CD
+	ELHPUT_CD_I	 a0,VTI_CD_SHOWA
+	CALLTL	SendELH2Toaster
+
+	move.b	#TRUE,TBarInUse(a3)
+
+.NormalExit
+	CALLTL	InterruptsOff
+	lea.l	TBarHandler(pc),a0
+	CALLTL	DoTBar
+	CALLTL	InterruptsOn
+
+	move.w	TB_TValSec(a5),d0
+	cmp.w	#TValMax,d0
+	bhs.s	TBarHigh
+	tst.w	d0
+	beq.s	TBarLow
+	rts
+
+***********************************
+TBarHigh
+	DEBUGMSG	CGSLICE,<TBarHigh>
+
+	move.w	TB_MainSec(a5),TB_PrvwSec(a5)
+	move.w	TB_OLaySec(a5),TB_MainSec(a5)
+
+TBarLow
+	DEBUGMSG	CGSLICE,<TBarLow>
+
+	clr.w	TB_TValSec(a5)
+	clr.w	TB_TBarTime(a5)
+	CALLTL	UpdateTBar
+	bra	EndTBar
+
+***********************************
+TBarHandler
+	DEBUGMSG	CGSLICE,<TBarHandler>
+
+	lea.l	TB_VTSetUp(a5),a0
+*	move.w	TB_TValSec(a5),d0	; not necessary
+	lsr.w	#1,d0				; divide TBar value by 2 (0-255)
+
+*	SHOWWORD	a5,d0,#0	;!!!!!!!!!
+
+	ELHPUT_CD_R	a0,d0
+	CALLTL	SendELH2Toaster
+	CALLTL	UpdateTBar
+	rts
+
+***********************************
+FakeTBarHandler
+	DEBUGMSG	CGSLICE,<FakeTBarHandler>
+
+	clr.w	TB_TValSec(a5)
+	clr.w	TB_TBarTime(a5)
+	rts
+
+***********************************************************`
+* if TBar in use and something else pressed, forces a TAKE
+TakeTBar
+	DEBUGMSG	CGSLICE,<TakeTBar>
+
+	move.w	TB_PrvwSec(a5),d1
+	move.w	TB_MainSec(a5),d0
+	move.w	d0,TB_PrvwSec(a5)
+	move.w	d1,TB_MainSec(a5)
+	clr.w	TB_TValSec(a5)
+	clr.w	TB_TBarTime(a5)
+
+EndTBar
+	clr.w	TB_OLaySec(a5)
+	clr.b	TBarInUse(a3)
+	lea		TB_VTSetUp(a5),a0
+	move.w	TB_PrvwSec(a5),d0
+	CALLTL	Mask2PV
+	ELHPUT_PV_R	a0,d0
+	move.w	TB_MainSec(a5),d0
+	move.w	d0,d1
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+	move.w	d1,d0
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+	ELHPUT_CDS_I a0,VTI_CDS_CD
+	ELHPUT_CD_I	 a0,VTI_CD_SHOWB
+	CALLTL	SendELH2Toaster
+	CALLTL	Wait4Top
+	rts
+
+***********************************************************`
+* FGC_FSLOAD
+FrameLoad
+	DEBUGMSG	CGSLICE,<FrameLoad>
+
+	bsr		DitchKey
+	bsr		ForgetAll		; forget anything the CG has done thusfar
+	tst.b	TBarInUse(a3)
+	beq.s	.NotTBar
+	bsr		TakeTBar
+.NotTBar
+
+*	move.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec(a5)
+*	CALLTL	CookAndServeFreeze	
+*	CALLTL	SetLoadBank
+*	JUMPTL	ProcessLoadButton
+
+* code from keylogic.a, PEfload:
+	move.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec(a5)
+	CALLTL	CookFreeze
+	CALLTL	SetLoadBank
+	GET.w	TB_MainSec,d0
+	cmp.w	TB_PrvwSec(a5),d0
+	bne.s	20$
+	PUT.w	#M_ENCODER,TB_MainSec
+20$	move.w	d0,-(sp)
+	GET.w	TB_PrvwSec,-(sp)
+	PUT.w	#M_ENCODER,TB_PrvwSec
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain
+	CALLTL	ProcessLoadButton
+	PUT.w	(sp)+,TB_PrvwSec
+	PUT.w	(sp)+,TB_MainSec
+	CALLTL	CookPrvw
+	JUMPTL	CookAndServeMain
+	
+***********************************************************`
+* FGC_FSSAVE
+FrameSave
+	DEBUGMSG	CGSLICE,<FrameSave>
+
+	bsr		DitchKey
+	bsr		ForgetAll		; forget anything the CG has done thusfar
+	tst.b	TBarInUse(a3)
+	beq.s	.NotTBar
+	bsr		TakeTBar
+.NotTBar
+
+* saving routines need this memory initialized
+* restore chip mem for others
+	CALLTL	InitEFXChipMem
+	CALLTL	InitDVEFastMem	; we are sharing fast memory now
+	CALLTL	InitDVEChipMem
+
+* code from keylogic.a, PEfsave:
+10$	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	CALLTL	CookFreeze
+	CALLTL	SetSaveBank
+	CALLTL	CookAndServePrvw
+	moveq.l	#0,d0
+	JUMPTL	NewProcessSaveButton
+
+***********************************************************`
+* FGC_CLIP - never used while DIB key up or TBarInUse
+Clip
+	DEBUGMSG	CGSLICE,<Clip>
+
+	move.w	TB_ClipAPri(a5),TB_ClipASec(a5)
+	move.w	TB_KeyModePri(a5),TB_KeyModeSec(a5)
+	rts
+
+***********************************************************`
+* FGC_FREEZE - ignore while CG in control
+Freeze
+	DEBUGMSG	CGSLICE,<Freeze>
+
+	move.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec(a5)
+	rts
+
+*******************************************************************
+* SendCGMessage()
+*	sends a message to the CG and waits for a reply
+*
+* Upon Entry:
+*	d0 = ULONG FGC_Command
+*	d1 = ULONG tm_UserData (optional - only required if CG needs it)
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *) (optional - can be something else)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0 = (struct ToasterMessage *)ReplyMsg
+*	d1/a0-a1 trashed / all others preserved
+********************************************************************`
+SendCGMessage
+	DEBUGMSG	CGSLICE,<SendCGMessage>
+	DEBUGUDEC.W	CGSLICE,<  FGC=>,d0,<\>
+	DEBUGHEXI.l	CGSLICE,<  UserData=>,d1,<\>
+	DEBUGHEXI.l	CGSLICE,<  LocalData=>,a3,<\>
+	DEBUGHEXI.l	CGSLICE,<  FG=>,a4,<\>
+	DEBUGHEXI.l	CGSLICE,<  TB=>,a5,<\>
+
+	move.l	a6,-(sp)
+	move.l	TB_SYSBase(a5),a6
+	move.l	CGPort(a3),a0
+	move.l	TB_TBMsg(a5),a1
+	move.l	d0,tm_FGC_Command(a1)
+	move.l	d1,tm_UserData(a1)
+	move.l	a4,tm_FastGadget(a1)
+	move.l	a5,tm_ToasterBase(a1)
+
+	DEBUGHEXI.l	CGSLICE,<   CGPort=>,a0,<\>
+	DEBUGHEXI.l	CGSLICE,<   TB_TBMsg=>,a1,<\>
+	DEBUGHEXI.l	CGSLICE,<   Exec=>,a6,<\>
+
+;;	DUMPMSG <before putmsg>
+;;	WAIT4LMB
+
+	XSYS	PutMsg
+
+	move.l	TB_TBMsgPort(a5),a0		; get the reply and remove from queue
+	
+;;	DUMPMSG <before waitport>
+;;	WAIT4LMB
+
+	DEBUGHEXI.l	CGSLICE,<   TB_TBMsgPort=>,a0,<\>
+
+	XSYS	WaitPort
+
+	DEBUGMSG	CGSLICE,< After WaitPort>
+
+	move.l	TB_TBMsgPort(a5),a0
+	XSYS	GetMsg
+	move.l	(sp)+,a6
+
+	DEBUGHEXI.l	CGSLICE,< Reply=>,d0,<\>
+	rts
+
+*******************************************************************
+* LoadCGCode()
+*	Loads CG code and sends FGC_LOAD to the CG, waits for a reply
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0 = ULONG Success boolean
+*	d1/a0-a1 trashed / all others preserved
+********************************************************************`
+LoadCGCode
+	DEBUGMSG	CGSLICE,<LoadCGCode>
+
+	movem.l	d2-d4/a6,-(sp)
+	tst.b	CGLoaded(a3)	; is CG already loaded?
+	bne		.ValidExit		; yes
+
+* load the CG into memory
+	move.l	TB_BootLock(a5),d1		; assure we're to a valid directory
+	move.l	TB_DOSBase(a5),a6		; (Toaster ROOT)
+	XSYS	CurrentDir
+	move.l	d0,OldDirLock(a3)	; save the old directory lock
+
+	lea.l	CGCodeName(a3),a0
+	move.l	a0,d1
+	XSYS	LoadSeg
+
+***!!!! Need this if we want our own loadseg
+;;	move.l	#20000,d0		;buffersize
+;;	CALLTL	NLoadSegment
+
+	move.l	d0,CGCodeSegment(a3)
+
+	move.l	OldDirLock(a3),d1		; restore original directory
+	XSYS	CurrentDir
+	moveq.l	#-1,d0					; reset OldDirLock field
+	move.l	d0,OldDirLock(a3)
+
+	move.l	CGCodeSegment(a3),d0
+	beq	.UnLoadCG
+
+* create the CG process
+	lea.l	CGCodeName(a3),a0
+	move.l	a0,d1	; name
+	moveq.l	#0,d2	; pri
+	move.l	CGCodeSegment(a3),d3	; segment
+	move.l	#CG_STACK_SIZE,d4
+	XSYS	CreateProc
+
+;;	DUMPMSG	<after createproc>
+;;	WAIT4LMB
+	
+	move.l	d0,CGProcess(a3)
+	beq.s	.UnLoadCG
+
+* wait until we find the CG's message port, or timeout
+	moveq.l	#CG_LOAD_TIMEOUT-1,d2	; -1 for dbra
+
+.WaitLoop
+* give the CG some time
+	moveq.l	#50,d1	; one second
+	move.l	TB_DOSBase(a5),a6
+	XSYS	Delay
+
+* look for port
+	move.l	TB_SYSBase(a5),a6
+	lea.l	CGPortName(a3),a1
+	XSYS	FindPort
+	move.l	d0,CGPort(a3)
+	bne.s	.GotCGPort
+
+	dbra	d2,.WaitLoop
+	moveq.l	#0,d0
+	bra.s	.UnLoadCG
+
+* send the CG a FGC_LOAD command
+.GotCGPort
+	moveq.l	#FGC_LOAD,d0
+	bsr		SendCGMessage
+	move.l	d0,a1
+	move.l	tm_CGReply(a1),d0	; was CG able to initialize?
+	beq.s	.ValidExit			; (any error here is fatal)
+
+* error on FGC_LOAD is special case: CG cleans up and exits immediately,
+* so we don't send it FGC_UNLOAD
+
+* if error, display message and dump the CG
+.UnLoadCG
+	clr.l	CGPort(a3)
+	tst.l	d0
+	bne.s	.GotMsg
+	moveq.l	#CG_ERROR_INITIALIZE,d0
+.GotMsg
+	or.l	#FATAL,d0		; make sure send FATAL to HandleCGError
+	bsr		HandleCGError	; so UnLoadCGCode called
+
+.FailExit
+	moveq.l	#FALSE,d0
+	bra.s	.Exit
+
+.ValidExit
+	moveq.l	#TRUE,d0
+.Exit
+	DEBUGMSG	CGSLICE,<End of LoadCGCode>
+
+	move.b	d0,CGLoaded(a3)
+	movem.l	(sp)+,d2-d4/a6
+	rts
+
+*******************************************************************
+* UnLoadCGCode()
+*	if CG loaded, sends FGC_UNLOAD, UnLoadSegs CGCode
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed / all others preserved
+********************************************************************`
+UnLoadCGCode
+	DEBUGMSG	CGSLICE,<UnLoadCGCode>
+
+	move.l	a6,-(sp)
+
+* send CG FGC_UNLOAD message
+	tst.l	CGPort(a3)
+	beq.s	.NoPort
+	moveq.l	#FGC_UNLOAD,d0
+	bsr		SendCGMessage
+.NoPort
+
+* dump CG code
+	move.l	CGCodeSegment(a3),d1
+	beq.s	.NoCode
+	move.l	TB_DOSBase(a5),a6
+	XSYS	UnLoadSeg
+
+***!!!!***  We need this if we want to use our own loadseg
+;;	CALLTL	UnLoadSegment
+.NoCode
+
+.Exit
+	moveq.l	#0,d0
+	move.b	d0,CGLoaded(a3)
+	move.l	d0,CGPort(a3)
+	move.l	d0,CGCodeSegment(a3)
+	move.l	d0,CGProcess(a3)
+	move.l	(sp)+,a6
+	rts
+
+*******************************************************************
+* EnableNumeric()
+*	Enables numeric keypad CG gadget, allowing FGC_NUMVAL messages
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0 = ULONG Success (boolean)
+*	d1/a0-a1 trashed, all others preserved
+********************************************************************`
+EnableNumeric
+	DEBUGMSG	CGSLICE,<EnableNumeric>
+
+	move.l	a2,-(sp)
+
+	lea.l	TB_NumPadFGL(a5),a0
+	moveq.l	#CGSELID,d0
+	CALLTL	IndexFastG
+	tst.l	d0
+	beq.s	.Exit
+	move.l	d0,a2
+
+	moveq.l	#0,d0
+	move.b	d0,FG_MouseFlag(a2)		; activate gadget
+	move.w	d0,FG_HiLiteMask(a2) 	; (shouldn't be highlighted)
+
+* setup enabled gadget imagery
+	move.w	#1,FG_PTRIndex(a2)
+	move.l	FG_PTRTable(a2),a1
+	move.l	4(a1),FG_Data(a2)
+
+* draw new gadget imagery (if switcher screen up)
+	bsr		SwitcherScreenActive
+	tst.l	d0
+	beq.s	.NoSwitcher
+
+	CALLTL	SoftSpriteOff
+	move.l	a2,a0	; gadget
+	moveq.l	#1,d0	; count
+	moveq.l	#0,d1	; offset
+	move.l	TB_Window(a5),a1
+	sub.l	a2,a2	; requestor
+	CALLTL	DrawFastGList
+	CALLTL	SoftSpriteOn
+.NoSwitcher
+
+	moveq.l	#TRUE,d0	; success
+.Exit
+	move.l	(sp)+,a2
+	rts
+
+*******************************************************************
+* DisableNumeric()
+*	Disables numeric keypad CG gadget, disallowing FGC_NUMVAL messages
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0 = ULONG Success (boolean)
+*	d1/a0-a1 trashed, all others preserved
+********************************************************************`
+DisableNumeric
+	DEBUGMSG	CGSLICE,<DisableNumeric>
+
+	movem.l	d2/a2,-(sp)
+
+	lea.l	TB_NumPadFGL(a5),a0
+	moveq.l	#CGSELID,d0
+	CALLTL	IndexFastG
+	tst.l	d0
+	beq		.Exit
+	move.l	d0,a2
+	move.l	d0,d2			; another copy of FG address
+
+	moveq.l	#1,d0
+	move.b	d0,FG_MouseFlag(a2)		; deactivate gadget
+
+	moveq.l	#0,d0
+	move.w	d0,FG_HiLiteMask(a2) 	; (shouldn't be highlighted)
+
+* setup disabled gadget imagery
+	move.w	d0,FG_PTRIndex(a2)
+	move.l	FG_PTRTable(a2),a1
+	move.l	(a1),FG_Data(a2)
+
+* draw new gadget imagery (if switcher screen up)
+	bsr		SwitcherScreenActive
+	tst.l	d0
+	beq.s	.NoSwitcher
+
+	CALLTL	SoftSpriteOff
+	move.l	a2,a0	; gadget
+	moveq.l	#1,d0	; count	
+	moveq.l	#0,d1	; offset
+	move.l	TB_Window(a5),a1
+	sub.l	a2,a2	; requestor
+	CALLTL	DrawFastGList
+	CALLTL	SoftSpriteOn
+.NoSwitcher
+	move.w	TB_NumPadPri(a5),TB_CGSelVal(a5)	; Addendum 9/13/90:
+*							; save the current
+*							; number in the CG
+*							; numpad system
+
+	cmp.l	TB_CurrSelFG(a5),d2	; this FG the active on in the
+*					; NumPad system?
+	bne.s	.NoDeSelect		; nope - skip all the following
+
+	lea.l	TB_NumPadFGL(a5),a0	; attempt to select ToolBox
+	moveq.l	#TBSELID,d0		; numpad FG in its place
+	moveq.l	#FLSELID,d0		; numpad FG in its place
+	CALLTL	IndexFastG
+	tst.l	d0
+	beq.s	.NoTBFG			; this shouldn't happen - but....
+
+	move.l	d0,a2				; else install the ToolBox FG as
+	move.l	a2,TB_FGTarget(a5)		; active in the NumPad system
+	move.l	a2,TB_CurrSelFG(a5)
+
+	move.b	FG_HiLiteVal(a2),d0
+	move.b	d0,FG_HiLiteMask(a2)
+	move.b	d0,FG_HiLiteMask+1(a2)
+
+	bsr.s	SwitcherScreenActive
+	tst.l	d0
+	beq.s	.NoSwitcher2
+
+	CALLTL	SoftSpriteOff
+	move.l	a2,a0	; gadget
+	moveq.l	#1,d0	; count
+	moveq.l	#0,d1	; offset
+	move.l	TB_Window(a5),a1
+	sub.l	a2,a2	; requestor
+	CALLTL	DrawFastGList
+	CALLTL	SoftSpriteOn
+.NoSwitcher2
+	move.w	TB_TBSelVal(a5),TB_NumPadSec(a5)	; Addendum 9/13/90:
+*							; place remembered #
+*							; in TBFG numpad sys
+	CALLTL	UpDateFC
+	bra.s	.NoDeSelect
+
+.NoTBFG
+*					; assure that this FG is no longer
+	move.l	d0,TB_FGTarget(a5)		; active in the NumPad system
+	move.l	d0,TB_CurrSelFG(a5)
+
+	move.l	TB_FCStringSec(a5),a0	; assure any accompanying file
+	clr.b	(a0)			; comment is also removed
+*					; (when Switcher interface updated)
+
+.NoDeSelect:
+	moveq.l	#TRUE,d0	; success
+.Exit
+	movem.l	(sp)+,d2/a2
+	rts
+
+*******************************************************************
+* SwitcherScreenActive()
+*	returns boolean
+*
+* Upon Entry:
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0 = ULONG Active, TRUE only if switcher screen currently displayed
+*	d1/a0-a1 trashed, all others preserved
+********************************************************************`
+SwitcherScreenActive
+	DEBUGMSG	CGSLICE,<SwitcherScreenActive>
+
+	move.l	TB_Window(a5),a0
+	move.l	wd_FirstGadget(a0),a0
+	move.w	gg_GadgetID(a0),d0
+	cmp.w	#'SW',d0
+	beq.s	.SwitcherActive
+	moveq.l	#FALSE,d0
+	bra.s	.Exit
+.SwitcherActive
+	moveq.l	#TRUE,d0
+.Exit
+	rts
+
+*******************************************************************
+* CGSliceOff
+*	Changes CG slice imagery to reflect "off" state
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************`
+CGSliceOff
+	DEBUGMSG	CGSLICE,<CGSliceOff>
+
+* setup off gadget imagery
+	moveq.l	#0,d0
+	move.w	d0,FG_PTRIndex(a4)
+	move.l	FG_PTRTable(a4),a0
+	move.l	(a0),FG_Data(a4)
+
+* draw new gadget imagery (if switcher screen up)
+	bra		ResetRender
+
+*******************************************************************
+* CGSliceOn
+*	Changes CG slice imagery to reflect "on" state
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************`
+CGSliceOn
+	DEBUGMSG	CGSLICE,<CGSliceOn>
+
+* setup on gadget imagery
+	move.w	#1,FG_PTRIndex(a4)
+	move.l	FG_PTRTable(a4),a0
+	move.l	4(a0),FG_Data(a4)
+
+* draw new gadget imagery (if switcher screen up)
+	bra		ResetRender
+
+*******************************************************************
+* VOID DoLoadCGBook()
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	returns cgerror.i
+*
+*	If project number is < 0 then no book will be loaded.
+*
+*
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+DoLoadCGBook
+	DEBUGMSG	CGSLICE,<DoLoadCGBook>
+
+	movem.l	d2/a6,-(sp)
+
+
+* build book filename
+	moveq.l	#0,d0
+	move.w	TB_ProjectNumber(a5),d0 	; current project number
+	bmi.s	.Exit
+	move.l	TB_ProjStrings(a5),a0		; project string table
+	moveq.l	#14,d1
+	mulu.w	d0,d1
+	add.w	d1,a0
+	cmp.b	#-1,(a0)+	; valid entry?
+	beq.s	.Exit
+	moveq.l	#-1,d1				 ; denote type as BK - book
+	lea.l	BuildPath(a3),a1 ; destination string
+	CALLTL	BuildFileName	; a0 comment, d0 project #
+	beq.s	.Exit			; error on bad project #
+
+* lock project directory
+	CALLTL	LockProject
+	move.l	d0,d2			; hold on to lock
+	beq.s	.Exit			; error msg???!!!
+
+* attempt to load book
+	lea.l	BuildPath(a3),a0
+	move.l	d2,a1			; lock
+	bsr.s	LoadCGBook
+
+* unlock project directory
+.UnLockExit
+	move.l	d2,d1
+	move.l	TB_DOSBase(a5),a6
+	XSYS	UnLock
+
+.Exit
+	movem.l	(sp)+,d2/a6
+	rts
+
+*******************************************************************
+* ULONG LoadCGBook(char FileName[], struct Lock *, struct ToasterBase *);
+*   d0                a0                     a1              a5
+*
+* Summary
+*	returns cgerror.i - allows CG_ERROR_FIND_BOOK to pass as no error!!!
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL LoadCGBook
+	DEBUGMSG	CGSLICE,<LoadCGBook>
+
+	movem.l	d2/a3-a6,-(sp)
+
+
+	movem.l	a0-a1,-(sp)
+	DEA	TB_SliceFGL,a0		; get CG crouton
+	moveq	#CGSLICEID,d0
+	CALLTL	IndexIDFastG
+	movem.l	(sp)+,a0-a1
+	move.l	d0,a4
+
+* if CG not already active crouton, call SelectStdEfx to ditch
+* anims and large effects
+	bsr		WasCGControl
+	tst.w	d2
+	bne.s	.Yup
+	CALLTL	SelectStdEfx
+.Yup
+
+	lea.l	LocalData,a3
+	clr.b	LastPageIntact(a3) ; last page no longer intact
+	moveq.l	#FGC_LOAD_BOOK,d0
+	bsr.s	SendBookMessage
+	move.l	d0,d2	; save error code for later
+	beq.s	.Exit	; success
+	cmp.l	#CG_ERROR_FIND_BOOK,d2
+	beq.s	.Exit
+	bsr	HandleCGError
+.Exit
+	CALLTL	InitEFXChipMem
+	CALLTL	InitDVEFastMem	; we are sharing fast memory now
+	CALLTL	InitDVEChipMem
+	XJSR	ResetCGPopupList
+
+	move.l	d2,d0	; return error code to Speier
+	movem.l	(sp)+,d2/a3-a6
+	rts
+
+*******************************************
+SendBookMessage
+	DEBUGMSG	CGSLICE,<SendBookMessage>
+
+	movem.l	d2/a2-a6,-(sp)
+	lea.l	LocalData,a3
+	clr.l	Error1(a3)
+	clr.l	Error2(a3)
+
+	move.l	a1,a4	; not a fastgadget, but a Lock() on dir
+	move.l	a0,d1	; ptr to filename
+	bsr		SendCGMessage
+
+	move.l	d0,a2
+	move.l	tm_CGReply(a2),d0	; get error status
+	movem.l	(sp)+,d2/a2-a6
+	rts
+
+*******************************************************************
+* ULONG SaveCGBook(char FileName[],  struct Lock *, struct ToasterBase *);
+*   d0                a0                 a1                a5
+*
+* Summary
+*	returns cgerror.i
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL SaveCGBook
+	DEBUGMSG	CGSLICE,<SaveCGBook>
+
+	move.l	d2,-(sp)
+	moveq.l	#FGC_SAVE_BOOK,d0
+	bsr	SendBookMessage
+	move.l	d0,d2	; save error code for later
+	beq.s	.Exit	; success
+	bsr.s	HandleCGError
+.Exit
+	move.l	d2,d0	; return error code to Speier
+	move.l	(sp)+,d2
+	rts
+
+*******************************************************************
+* BOOL HandleCGError(ULONG Error, struct ToasterBase *)
+*   d0                    d0                a5
+*
+* Summary
+*	displays error requestor for Error (from CGError.i),
+*	returns FALSE if recoverable error, TRUE if fatal error,
+*	also calls DitchCG() if needed
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+HandleCGError
+	DEBUGMSG	CGSLICE,<HandleCGError>
+
+	movem.l	d2/a2-a3,-(sp)
+	lea.l	LocalData,a3
+	moveq.l	#FALSE,d2			; was error fatal?
+	cmp.l	#FATAL,d0
+	blo.s	.GotReturn
+	sub.l	#FATAL,d0
+	moveq.l	#TRUE,d2	; yes, CG was dumped
+	move.l	d0,-(sp)
+	bsr.s	DitchCG
+	move.l	(sp)+,d0
+
+.GotReturn
+	tst.l	d0
+	beq.s	.Exit
+
+* see if font error, if so, print font name
+	cmp.l	#CG_ERROR_FIND_FONT,d0
+	beq.s	.FontName
+	cmp.l	#CG_ERROR_LOAD_FONT,d0
+	bne.s	.FontDone
+.FontName
+	move.l	TB_TBMsg(a5),a0
+	move.l	tm_FastGadget(a0),FindFontName(a3) ; pointer to font name
+	move.l	tm_FastGadget(a0),LoadFontName(a3) ; pointer to font name
+.FontDone
+
+	subq.l	#1,d0
+	lsl.l	#3,d0
+	move.l	ErrorTable(a3,d0.l),a0
+	move.l	ErrorTable+4(a3,d0.l),a1
+	sub.l	a2,a2
+	tst.l	d2		; is error fatal?
+	beq.s	.DoIt	; no
+	tst.l	d0		; is error CG_ERROR_INITIALIZE?
+	beq.s	.DoIt	; if so, leave second line alone
+* AAR --
+	lea.l	ErrorMessed(a3),a1 ; yes, replace second line with fatal msg
+.DoIt	
+	lea.l	ContinueMessage(a3),a3
+	moveq.l	#0,d0
+	move.l	d0,d1
+
+	cmp.w	#-1,TB_SoftSprite+VBI_Nest(a5) ; is soft sprite on?
+	beq.s	.SoftOn
+	movem.l	d0-d1/a0-a1,-(sp)
+	CALLTL	SoftSpriteOn
+	movem.l	(sp)+,d0-d1/a0-a1
+	XJSR	DoSwitcherRequester
+	CALLTL	SoftSpriteOff
+	bra.s	.Exit
+.SoftOn
+	XJSR	DoSwitcherRequester
+
+.Exit
+	move.l	d2,d0
+	movem.l	(sp)+,d2/a2-a3
+	rts
+
+*******************************************************************
+* DitchCG
+*	if the CG can no longer function,
+*	this code ditches the CG, removes the gadget, and selects 
+*	another crouton to take control
+*
+* Upon Entry:
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+DitchCG
+	DEBUGMSG	CGSLICE,<DitchCG>
+
+	movem.l	d2-d7/a2-a6,-(sp)
+	lea.l	LocalData,a3
+
+* find CG slice gadget
+	lea.l	TB_SliceFGL(a5),a0
+	moveq.l	#CGSLICEID,d0
+	CALLTL	IndexFastG
+	tst.l	d0
+	beq.s	.Exit
+	move.l	d0,a4
+
+* select some other crouton if we're active
+	cmp.l	TB_EfxFG(a5),a4		; CG FG the active crouton?
+	bne.s	.ShortCut			; if not - take the shortcut
+	bsr.s	SelectSomebodyElse
+.ShortCut
+
+* get rid of CG
+	bsr		CGSliceOff
+	bsr		DisableNumeric
+	XCALL	DisableConfig	; disable "load book only" in config screen
+	bsr		UnLoadCGCode	; sends FGC_UNLOAD to CG
+
+.Exit
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+*******************************************************************
+* SelectSomebodyElse
+*	if the CG is selected, selects some other crouton
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+SelectSomebodyElse
+	DEBUGMSG	CGSLICE,<SelectSomebodyElse>
+
+	movem.l	d2-d7/a2-a6,-(sp)
+
+* see if CG selected
+	cmp.l	TB_EfxFG(a5),a4
+	bne.s	.CGNotSelected
+
+* if so, selects another crouton
+ IFD OLDSTUFF
+	move.l	TB_ToolBoxPTR(a5),a0	; attempt to insure that one of the
+	move.l	(a0),d0					; ToolBox FGs is selected and active
+	beq.s	.NoEffects		; no croutons in toolbox?!
+	move.l	d0,a0
+	move.l	FG_Function(a0),d0
+	beq.s	.NoEffects		; crouton doesn't have a function?!
+ ENDC	; OLDSTUFF
+
+ IFND OLDSTUFF
+	move.l	TB_ToolBoxGrids(a5),a1	; try to insure that one of the
+;	moveq	#TBFG_GRIDNUM-1,d1	; ToolBox FGs is selected and active
+	move.l	TB_NUMGRIDS(a5),d1
+	subq.l	#1,d1
+
+.SelectLoop:
+	move.l	(a1)+,d0
+	beq.s	.NoTBFG
+	bra.s	.SneakIn
+
+.InnerLoop:
+	move.l	FG_Function(a0),d0
+	bne.s	.DoSelect
+	move.l	(a0),d0
+
+.SneakIn:
+	move.l	d0,a0
+	bne.s	.InnerLoop
+
+.NoTBFG:
+	dbf	d1,.SelectLoop
+
+	bra.s	.NoEffects
+
+.DoSelect:
+ ENDC	; OLDSTUFF
+
+	movem.l	a3-a5,-(sp)	; fast gadget code may trash all registers
+	move.l	a5,-(sp)	; ToasterBase
+	move.l	a0,-(sp)	; FastGadget ptr
+	move.l	#FGC_SELECTQ,-(sp)	; fake a keyboard select
+	move.l	d0,a0
+	jsr		(a0)
+	lea.l	12(sp),sp
+	movem.l	(sp)+,a3-a5
+	move.w	#-1,TB_CleanUp(a5)
+
+.NoEffects
+.CGNotSelected
+.Exit
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+*******************************************************************`
+* UBYTE *GetFirstLine(ULONG PageNumber, struct ToasterBase *)
+*   d0                         d0              a5
+*
+* Summary:
+*	returns pointer to valid (12-char max) null-terminated string
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+ XLABEL GetFirstLine
+	DEBUGMSG	CGSLICE,<GetFirstLine>
+
+	movem.l	d2-d3/a2-a4,-(sp)
+	move.l	d0,d2
+
+	lea.l	LocalData,a3
+	lea.l	DefaultLineText(a3),a0
+	lea.l	FirstLineText(a3),a1
+	XJSR	StringCopy
+
+	moveq.l	#FGC_GET_FIRST_LINE,d0
+	move.l	d2,d1	; page number
+	sub.l	a4,a4
+	bsr		SendCGMessage
+	move.l	d0,a2	; message structure
+
+	move.l	tm_CGReply(a2),d0	; source
+	beq.s	.GotName	; null indicates no text on that page
+
+	mulu.w	#14,d2
+	add.l	d2,d0
+
+	move.l	d0,a0
+	moveq.l	#MAX_COMMENT_SIZE,d0
+	lea.l	FirstLineText(a3),a1
+	CALLTL	STRNcopy
+.GotName
+
+	lea.l	FirstLineText(a3),a0
+	move.l	a0,d0	; return ptr to string
+
+	movem.l	(sp)+,d2-d3/a2-a4
+	rts
+
+*******************************************************************`
+* UBYTE *GetFirstLineArray(ULONG PageNumber, struct ToasterBase *)
+*   d0                            d0              a5
+*
+* Summary:
+*	returns pointer to valid (12-char max) null-terminated string
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+ XLABEL GetFirstLineArray
+	DEBUGMSG	CGSLICE,<GetFirstLineArray>
+
+	movem.l	d2-d3/a2-a4,-(sp)
+	move.l	d0,d2
+
+	moveq.l	#0,d0
+	
+	lea.l	LocalData,a3
+
+	tst.b	CGLoaded(a3)
+	beq.s	.Exit
+
+	lea.l	DefaultLineText(a3),a0
+	lea.l	FirstLineText(a3),a1
+	XJSR	StringCopy
+
+	moveq.l	#FGC_GET_FIRST_LINE,d0
+	move.l	d2,d1	; page number
+	sub.l	a4,a4
+	bsr		SendCGMessage
+	move.l	d0,a2	; message structure
+
+	move.l	tm_CGReply(a2),d0	; source
+
+.Exit
+	movem.l	(sp)+,d2-d3/a2-a4
+	rts
+
+********************************************************************`
+* SetRender()
+*      Denote FG as hilited and render if Switcher screen active.
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+SetRender
+	DEBUGMSG	CGSLICE,<SetRender>
+
+	move.b	FG_HiLiteVal(a4),d0	; assure hiliting
+	move.b	d0,FG_HiLiteMask(a4)
+	move.b	d0,FG_HiLiteMask+1(a4)
+
+	bra.s	DoTheRender		; jump to do the rendering
+
+********************************************************************`
+* ResetRender()
+*      Denote FG as non-hilited and render if Switcher screen active.
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*	a4 = (struct FastGadget *)
+*	a5 = (struct ToasterBase *)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+ResetRender
+	clr.w	FG_HiLiteMask(a4)	; assure no hiliting
+
+DoTheRender
+	DEBUGMSG	CGSLICE,<DoTheRender>
+
+	tst.w	RenderFlag(a3)		; rendering enabled?
+	bne.s	.NoReDisplay		; if not skip the rest
+
+	bsr		SwitcherScreenActive
+	tst.l	d0
+	beq.s	.NoReDisplay		; if no interface up - no rendering
+
+	move.l	a2,-(sp)
+	CALLTL	SoftSpriteOff
+	moveq.l	#1,d0
+	moveq.l	#0,d1
+	move.l	a4,a0
+	move.l	TB_Window(a5),a1
+	move.l	d1,a2
+	CALLTL	DrawFastGList		; re-render the Slice FG
+	CALLTL	SoftSpriteOn
+	move.l	(sp)+,a2
+
+.NoReDisplay
+	rts				; return to caller
+
+********************************************************************`
+* ForgetAll()
+*      forget any rendered pages/effects ready
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+ForgetAll
+	DEBUGMSG	CGSLICE,<ForgetAll>
+
+	moveq.l	#0,d0
+	move.w	d0,CGState(a3)	; forget any key/FX ready bits
+	move.b	d0,LastPageIntact(a3)	; forget last rendered page
+	rts
+
+********************************************************************`
+* ForgetAlmostAll()
+*      forget any rendered pages/effects ready, but remember LastPageIntact
+*
+* Upon Entry:
+*	a3 = LocalData ptr
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************
+ForgetAlmostAll
+	DEBUGMSG	CGSLICE,<ForgetAlmostAll>
+
+	move.w	CGState(a3),d0
+	and.w	#~MASK_DIB_IN_USE_BANK,d0
+	move.w	d0,CGState(a3)	; forget any key/FX ready bits
+	rts
+
+*****************************************************************************
+
+WaitSprite:
+	DEBUGMSG	CGSLICE,<WaitSprite>
+
+	SAVE1	d0
+	XCALL	GetDisplaySprite
+	move.w	d0,SpriteFlag
+	bmi.s	.NoChangeNeeded
+
+;;	DUMPREG	<CGWAITSP>
+	XCALL	DisplayWaitSprite
+
+.NoChangeNeeded:
+	DEBUGMSG	CGSLICE,<End of WaitSprite>
+
+	REST1	d0
+	rts
+
+*****************************************************************************
+
+NormalSprite:
+	DEBUGMSG	CGSLICE,<NormalSprite>
+
+	tst.w	SpriteFlag
+	bmi.s	.NoChangeNeeded
+
+	XCALL	DisplayNormalSprite
+;;	DUMPREG	<CGNORMSP>
+	rts
+.NoChangeNeeded:
+	XCALL	DisplayWaitSprite
+;;	DUMPREG	<CGWAITSP>
+
+	rts
+
+SpriteFlag:
+	DS.w	1
+
+
+	ALLDUMPS
+
+*****************************************************************************
+
+*******************************************************`
+	SECTION	CGSliceData,DATA
+	cnop	0,4
+
+LocalData
+	DATASYM	CGCodeSegment,LocalData
+	dc.l	0			; LoadSeg of CG code
+	DATASYM	CGPort,LocalData
+	dc.l	0			; port of CG code
+	DATASYM	CGProcess,LocalData
+	dc.l	0
+	DATASYM	OldDirLock,LocalData
+	dc.l	0
+
+	DATASYM	Error1,LocalData
+	dc.l	0
+	DATASYM	Error2,LocalData
+	dc.l	0
+
+* two strings for each error code
+	DATASYM	ErrorTable,LocalData
+	dc.l	ErrorInitialize,0
+	dc.l	ErrorGraphicsLibrary,0
+	dc.l	ErrorIntuitionLibrary,0
+	dc.l	ErrorDiskFontLibrary,0
+	dc.l	ErrorDOSLibrary,0
+	dc.l	ErrorConsoleDevice,0
+	dc.l	ErrorInterfaceFont,0
+	dc.l	ErrorNoToaster,0
+	dc.l	ErrorCreatePort,0
+	dc.l	ErrorChipMemory,0
+	dc.l	ErrorAnyMemory,0
+	dc.l	ErrorFindFont
+	DATASYM FindFontName,LocalData
+	dc.l	0		; font name filled in at run time
+	dc.l	ErrorFindAnyFont,0
+	dc.l	ErrorLoadFont
+	DATASYM LoadFontName,LocalData
+	dc.l	0		; font name filled in at run time
+	dc.l	0,0	; (save font)
+	dc.l	ErrorFindBook,ErrorDefaultBook
+	dc.l	ErrorLoadBook,ErrorDefaultBook
+	dc.l	ErrorSaveBook,ErrorBookNotSaved
+
+	DATASYM	LastPageRendered,LocalData
+	dc.w	0
+
+	DATASYM	CGState,LocalData
+	dc.w	0		; bits defined in CGMessage.i
+
+	DATASYM	RenderFlag,LocalData
+	DC.w	0		; 0 denotes FG rendering enabled
+
+	DATASYM	KeyMatrix,LocalData
+	DS.b	16
+
+	DATASYM CGLoaded,LocalData
+	dc.b	0		; set if CG code loaded
+
+	cnop	0,2
+	DATASYM	CGCodeName,LocalData
+	dc.b	'CG',0
+
+	DATASYM	CGPortName,LocalData
+	dc.b	'ToasterCG.port',0
+
+	DATASYM	TBarInUse,LocalData
+	dc.b	0
+
+	DATASYM	LastPageIntact,LocalData
+	dc.b	0
+
+	DATASYM	ContinueMessage,LocalData
+	dc.b	"Continue",0
+
+	DATASYM	FirstLineText,LocalData
+	dcb.b	MAX_COMMENT_SIZE+1,0
+
+	DATASYM	DefaultLineText,LocalData
+	dc.b	"(empty page)",0
+
+* AAR --
+	DATASYM ErrorMessed,LocalData
+	dc.b	"CG unable to continue.",0
+
+	DATASYM	BuildPath,LocalData
+	dcb.b	MAX_BOOK_FILENAME,0
+
+**************************
+* absolute addressed data
+ErrorInitialize
+	dc.b	"Unable to load and initialize CG.",0
+ErrorGraphicsLibrary
+	dc.b	"Unable to open graphics library.",0
+ErrorIntuitionLibrary
+	dc.b	"Unable to open intuition library.",0
+ErrorDiskFontLibrary
+	dc.b	"Unable to open diskfont library.",0
+ErrorDOSLibrary
+	dc.b	"Unable to open DOS library.",0
+ErrorConsoleDevice
+	dc.b	"Unable to open console device.",0
+ErrorInterfaceFont
+	dc.b	"Unable to find CG interface font.",0
+ErrorNoToaster
+	dc.b	"Unable to find switcher's port.",0
+ErrorCreatePort
+	dc.b	"Unable to create CG's port.",0
+ErrorChipMemory
+	dc.b	"Ran out of chip memory.",0
+ErrorAnyMemory
+	dc.b	"Ran out of memory.",0
+ErrorFindFont
+	dc.b	"Unable to find font",0
+ErrorFindAnyFont
+	dc.b	"Unable to locate any CG fonts.",0
+ErrorLoadFont
+	dc.b	"Unable to load font",0
+ErrorFindBook
+	dc.b	"Unable to find book.",0
+ErrorLoadBook
+	dc.b	"Error while loading book.",0
+ErrorSaveBook
+	dc.b	"Error while saving book.",0
+ErrorBookNotSaved
+	dc.b	"Book not saved.",0
+ErrorDefaultBook
+	dc.b	"Default book loaded.",0
+
+	end
+* end of cgslicecode.a

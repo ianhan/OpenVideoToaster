@@ -1,0 +1,184 @@
+********************************************************************
+* LUTEqu.i
+*
+* Copyright ©1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LutEqu.i,v 2.1 93/02/23 15:13:00 Finch Exp $
+*
+* $Log:	LutEqu.i,v $
+*Revision 2.1  93/02/23  15:13:00  Finch
+**** empty log message ***
+*
+*Revision 2.0  92/05/19  00:03:36  Hartford
+**** empty log message ***
+*
+*
+*********************************************************************
+
+	PAGE
+*************************************************************************
+*									*
+*	LUTEqu:								*
+*									*
+*	Contains the Global Definitions for the LUT Procedure.		*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+TBCF_Enable	EQU	0		; Toaster Base Enable Flag.
+TBARSLIDESIZE	EQU	86		; Number of Units In TBar - 2.
+NUMQUADS	EQU	184		; Number of 280ns Pixels.
+*
+*	Number Text Position.
+*
+NUMBERTEXT_X	EQU	59		; Number Text x Position.
+NUMBERTEXT_Y	EQU	26		; Number Text y Position.
+*
+GRIDTEXT_Y	EQU	54		; Grid Text y  Position.
+GRIDTEXT_X1	EQU	317		; Grid Text x1 Position.
+GRIDTEXT_X2	EQU	GRIDTEXT_X1+48	; Grid Text x2 Position.
+GRIDTEXT_X3	EQU	GRIDTEXT_X2+48	; Grid Text x3 Position.
+GRIDTEXT_X4	EQU	GRIDTEXT_X3+48	; Grid Text x4 Position.
+*
+*	Window Flags.
+*
+LUT_IDCMP_FLAGS	EQU GADGETDOWN!MOUSEBUTTONS!RMBTRAP!RAWKEY!DISKINSERTED!DISKREMOVED
+LUT_PickLeft	EQU	64		; Pick Area Left Edge.
+*
+LUT_EditBufSz	EQU	96		; Number of Colors In Buffer.
+LUT_EditBufLn	EQU	LUT_EditBufSz*3	; Number of Bytes  In Buffer.
+*
+LUT_EditMarkBWd	EQU	LUT_EditBufSz+4	; Width of One Line In Bytes.
+LUT_EditMarkHi	EQU	8		; Number of Lines High.
+LUT_EditMarkLn	EQU	LUT_EditMarkBWd*LUT_EditMarkHi
+*
+*	Color Definitions.
+*
+IREBlack  EQU	071			; IRE  Black Level.
+YIQBlack  EQU	IREBlack<<16		; 0YIQ Black.
+YIQWhite  EQU	200<<16			; 0YIQ White.
+QUADBlack EQU	(IREBlack<<24)!(IREBlack<<16)!(IREBlack<<8)!IREBlack ;Quad Black
+*
+*	LUT Structure Constants.
+*
+LUT_CheckConst	EQU	('L'<<24)!('U'<<16)!('T'<<8)!1 ; LUT Check Value.
+*
+*	Display Mode Flags.
+*
+LUTM_SMF	EQU	$03		; SMF   Mask.
+LUTM_CYCLE	EQU	$0C		; Cycle Mask.
+LUTF_TRANSITION	EQU	5		; 1 = Transition, 0 = Filter.
+LUTF_FULLPOSTER	EQU	6		; No / Full Poster Flag.
+LUTF_BWVIDEO	EQU	7		; BW / Color Video Flag.
+*
+*	LUT Flags Structure.
+*
+LUTF_MapChange	EQU	0		; 0 = No Change,    1 = Change.
+LUTF_SendDVE0	EQU	1		; 0 = Don't Set,    1 = Send to DVE0.
+LUTF_GridAssign	EQU	2		; 0 = Was Not Just, 1 = Just Assigned.
+*
+*	LUT Base Structure.
+*
+LUT_CheckVal	EQU	0		; ( 4 ) LUT Check Value.
+LUT_PosterPos	EQU	LUT_CheckVal+4	; ( 1 ) Posterization Position 0 to 255.
+LUT_InterPos	EQU	LUT_PosterPos+1	; ( 1 ) Interplate Position 0 to 6.
+LUT_DisplayMode	EQU	LUT_InterPos+1	; ( 1 ) Display Mode, SMF, TBar, Line.
+LUT_Flags	EQU	LUT_DisplayMode+1 ;(1 ) Flags.
+LUT_LocalTBar	EQU	LUT_Flags+1	; ( 2 ) Current TBar Position.
+LUT_PAD		EQU	LUT_LocalTBar+2	; ( 14 ) Future Expansion.
+LUT_Comment	EQU	LUT_PAD+14	; ( 16 ) Comment.
+LUT_EditBufTop	EQU	LUT_Comment+16	; ( LUT_EditBufLn ) Edit Buffer Top.
+LUT_EditBufBot	EQU	LUT_EditBufTop+LUT_EditBufLn ; ( LUT_EditBufLn ) Bottom.
+LUT_EditBufPost	EQU	LUT_EditBufBot+LUT_EditBufLn ; ( LUT_EditBufLn ) Poster.
+LUT_Sizeof	EQU	LUT_EditBufPost+LUT_EditBufLn ;Sizeof LUT Crouton Data.
+*
+*	LUT Ram Work Area.
+*
+LTR_FramePtr	EQU	LUT_Sizeof	; ( 4 ) Frame File Pointer.
+LTR_DisplayMode	EQU	LTR_FramePtr+4	; ( 1 ) Temp Display Mode.
+LTR_PAD		EQU	LTR_DisplayMode+1 ; ( 3 ) PAD.
+LTR_Sizeof	EQU	LTR_PAD+3	; Sizeof LTR Frame Pointer Data.
+*
+*	LTE Flags Structure.
+*
+LTEF_EditChange	EQU	0		; 0 = No Change,	1 = Change.
+LTEF_DVE0Pure	EQU	1		; 0 = Send to DVE0,	1 = Don't Send.
+LTEF_DataLoaded	EQU	2		; 0 = Data Not Loaded,	1 = Loaded.
+*
+*	LUT Extension or Edit Structure.
+*
+LTE_EfBase	EQU	LTR_Sizeof	; ( 4 ) Effects Library Base.
+LTE_EditRGB	EQU	LTE_EfBase+4	; ( 4 ) Edit RGB Value.
+LTE_EditHSI	EQU	LTE_EditRGB+4	; ( 4 ) Edit HSI Value.
+LTE_PresentLUT	EQU	LTE_EditHSI+4	; ( 4 ) Pointer to Present Edit LUT.
+LTE_EditColor	EQU	LTE_PresentLUT+4 ;( 1 ) Edit Color.
+LTE_Flags	EQU	LTE_EditColor+1	; ( 1 ) Flags.
+LTE_RandomNu	EQU	LTE_Flags+1	; ( 2 ) Random Number Generator.
+LTE_PAD		EQU	LTE_RandomNu+2	; ( 2 ) PAD.
+LTE_PrvwSec	EQU	LTE_PAD+2	; ( 2 ) Prvw DAC Values.
+LTE_LULPtr	EQU	LTE_PrvwSec+2	; ( 4 ) Pointer to Head of LUL Struct.
+LTE_GridCrouton	EQU	LTE_LULPtr+4	; ( 4 ) Grid Crouton Assign Array.
+LTE_EditMark	EQU	LTE_GridCrouton+4 ;( LUT_EditMarkLn ) Image.
+LTE_Sizeof	EQU	LTE_EditMark+LUT_EditMarkLn  ; Sizeof LUT Base Struct.
+*
+*	LSU Startup Structure Constants.
+*
+LSU_CheckConst	EQU	('L'<<24)!('U'<<16)!('T'<<8)!0 ; LSU Check Value.
+LSU_RamANDMask	EQU	7		; LSU Ram Pointer Mask.
+*
+*	LSU Startup Structure.
+*
+LSU_CheckVal	EQU	0		; ( 4 ) L U T NULL
+LSU_RamPointer	EQU	LSU_CheckVal+4	; ( 4 ) Address of LUT Structure.
+LSU_FGPointer	EQU	LSU_RamPointer+4 ;( 4 ) Address of Fast Gadget.
+LSU_Sizeof	EQU	LSU_FGPointer+4	; Size of LSU Structure.
+*
+*	LUT Grid Structure Constants.
+*
+LSG_CheckConst	EQU	('L'<<24)!('U'<<16)!('T'<<8)!2 ; LSG Check Value.
+LSG_RamANDMask	EQU	7		; LSG Ram Pointer Mask.
+*
+*	LSG Structure.
+*
+LSG_GridNumber	EQU	0		; ( 2 ) Grid Number Value.
+LSG_PAD		EQU	LSG_GridNumber+2 ;( 6 ) Current Crouton Number.
+LSG_Sizeof	EQU	LSG_PAD+6	; Size of LSG Structure.
+*
+*	Library Vector Offsets.
+*
+_LVOLUT_GridEffect	EQU	-6	; Executes Crouton's Grid Effect.
+*
+*	LUT Link Structure.
+*
+LUL_Next	EQU	0		; ( 4 ) Pointer to Next In List.
+LUL_LUT		EQU	LUL_Next+4	; ( LUT_Sizeof ) Value of LUT Struct.
+LUL_Sizeof	EQU	LUL_LUT+LTR_Sizeof ; Size of LUT Link Structure.
+*
+*	File Error Message Numbers.
+*
+LUT_NoError		EQU	0
+LUT_ListError		EQU	1
+LUT_DirError		EQU	2
+LUT_OpenError		EQU	3
+LUT_ReadError		EQU	4
+LUT_WriteError		EQU	5
+LUT_ReadCroutonError	EQU	6
+LUT_WriteCroutonError	EQU	7
+*
+*	Capture Structure Definitions.
+*
+MaximumColors	EQU	64		; Maximum Number of Colors.
+MaximumPlanes	EQU	8		; Maximum Number of Planes.
+*
+cap_ViewModes	EQU	0		; ( 4 ) View Modes.
+cap_Width	EQU	cap_ViewModes+4	; ( 2 ) Width  of Bitmap in Bytes.
+cap_Height	EQU	cap_Width+2	; ( 2 ) Height of Bitmap in Lines.
+cap_PAD1	EQU	cap_Height+2	; ( 1 ) PAD1.
+cap_Depth	EQU	cap_PAD1+1	; ( 1 ) Depth  of Bitmap in Planes.
+cap_PAD2	EQU	cap_Depth+1	; ( 2 ) PAD2.
+cap_PlanesS	EQU	cap_PAD2+2		    ;(MaximumPlanes*4)BitPlane Pointers.
+cap_PlanesD	EQU	cap_PlanesS+4*MaximumPlanes ;(MaximumPlanes*4)BitPlane Pointers.
+cap_ColorTable	EQU	cap_PlanesD+4*MaximumPlanes ;(MaximumColors*4)Color Table.
+cap_Sizeof	EQU	cap_ColorTable+4*MaximumColors ; Sizeof Structure.

@@ -1,0 +1,4191 @@
+TABLE OF CONTENTS
+
+flyer.library/AbortAction
+flyer.library/AddAudEKey
+flyer.library/AddAudEnv
+flyer.library/AddClipCut
+flyer.library/AddSeqClip
+flyer.library/AppendFields
+flyer.library/BeginFindField
+flyer.library/ChangeAudio
+flyer.library/CheckAction
+flyer.library/CloseField
+flyer.library/CopyData
+flyer.library/CPUDMA
+flyer.library/Defaults
+flyer.library/DoFindField
+flyer.library/EasyOpenWriteField
+flyer.library/EndClipCutList
+flyer.library/EndFindField
+flyer.library/EndHeadList
+flyer.library/EndSequence
+flyer.library/EndSequenceNew
+flyer.library/Error2String
+flyer.library/FindDrives
+flyer.library/FindFieldAudio
+flyer.library/Firmware
+flyer.library/FlyerAudioCtrl
+flyer.library/FlyerCopyClip
+flyer.library/FlyerCopyClipNew
+flyer.library/FlyerCreateDir
+flyer.library/FlyerDeFrag
+flyer.library/FlyerDeFragNew
+flyer.library/FlyerDelete
+flyer.library/FlyerDirList
+flyer.library/FlyerDriveCheck
+flyer.library/FlyerDriveInfo
+flyer.library/FlyerFileClose
+flyer.library/FlyerFileExtend
+flyer.library/FlyerFileHSRead
+flyer.library/FlyerFileHSWrite
+flyer.library/FlyerFileOpen
+flyer.library/FlyerFileRead
+flyer.library/FlyerFileSeek
+flyer.library/FlyerFileWrite
+flyer.library/FlyerFormat
+flyer.library/FlyerInputSel
+flyer.library/FlyerNewFileRead
+flyer.library/FlyerNewFileWrite
+flyer.library/FlyerPlay
+flyer.library/FlyerQuit
+flyer.library/FlyerReadCalib
+flyer.library/FlyerReadLine
+flyer.library/FlyerRecord
+flyer.library/FlyerRename
+flyer.library/FlyerRenameDisk
+flyer.library/FlyerRunning
+flyer.library/FlyerSetBits
+flyer.library/FlyerSetComment
+flyer.library/FlyerSetDate
+flyer.library/FlyerStripAudio
+flyer.library/FlyerTermination
+flyer.library/FlyerWriteCalib
+flyer.library/FlyerWriteLine
+flyer.library/GetClipInfo
+flyer.library/GetFieldClock
+flyer.library/GetFrameHeader
+flyer.library/GetSMPTE
+flyer.library/InitFlyerForce
+flyer.library/InitFlyers
+flyer.library/Inquiry
+flyer.library/LocateField
+flyer.library/LockFlyVolList
+flyer.library/MakeClipHead
+flyer.library/MakeFlyerFile
+flyer.library/ModeSelect
+flyer.library/ModeSense
+flyer.library/NewSequence
+flyer.library/OpenReadField
+flyer.library/OpenWriteField
+flyer.library/PauseAction
+flyer.library/PlayMode
+flyer.library/PlaySequence
+flyer.library/PutFrameHeader
+flyer.library/Read10
+flyer.library/ReadSize
+flyer.library/ReadTest
+flyer.library/RecordMode
+flyer.library/ReqSense
+flyer.library/ResetFlyer
+flyer.library/SCSIinit
+flyer.library/SCSIreset
+flyer.library/SCSIseek
+flyer.library/SetFillColor
+flyer.library/SetFlooby
+flyer.library/SetFlyerTime
+flyer.library/SetSerDevice
+flyer.library/SkipLines
+flyer.library/StartClipCutList
+flyer.library/StartHeadList
+flyer.library/StillMode
+flyer.library/TBCcontrol
+flyer.library/ToasterMux
+flyer.library/UnLockFlyVolList
+flyer.library/VideoCompressModes
+flyer.library/VideoParams
+flyer.library/VoidAllHeads
+flyer.library/VoidCardHeads
+flyer.library/VoidClipHead
+flyer.library/WaitAction
+flyer.library/Write10
+flyer.library/WriteTest
+flyer.library/AbortAction                           flyer.library/AbortAction
+
+   NAME
+	AbortAction - abort a previously started action
+
+   SYNOPSIS
+	error = AbortAction(action)
+	D0                  A0
+
+	ULONG AbortAction(struct ClipAction *);
+
+   FUNCTION
+	Attempts to abort an action that was previously initiated.  Does
+	nothing if it has already finished.
+
+	If ClipAction ptr is NULL, aborts all pending operations to all
+	Flyers.
+
+   INPUTS
+	action - ptr to ClipAction structure used to start the action
+	    (or NULL to abort everything)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/AddAudEKey                             flyer.library/AddAudEKey
+
+   NAME
+	AddAudEKey - Adds an Audio Envelop key
+
+   SYNOPSIS
+	err=AddAudEKey(board,AUDEKEY)
+	D0              D0   A0
+
+	ULONG AddAudEKey(UBYTE,APTR);
+
+   INPUTS
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Now should only be called by AddAudEnv	
+	New for 4.2
+	
+   BUGS
+
+   SEE ALSO
+
+flyer.library/AddAudEnv                               flyer.library/AddAudEnv
+
+   NAME
+	AddAudEnv - Adds an Audio Envelop to a clip 
+
+   SYNOPSIS
+	err=AddAudEnv(board,AudioEnv)
+	D0              D0   A0
+
+	ULONG AddAudEnv(UBYTE,APTR);
+
+   INPUTS
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Must be sent right after clip is added it sequence	
+	New for 4.3
+
+   BUGS
+ 	Does not handle chan diff in vol or pan yet.
+
+   SEE ALSO
+			AddAudEKey
+flyer.library/AddClipCut                             flyer.library/AddClipCut
+
+   NAME
+	AddClipCut -- Add an entry to the ClipCut list
+
+   SYNOPSIS
+	error = AddClipCut(subclip)
+	D0                 A0
+
+	ULONG AddClipCut(struct ClipAction *);
+
+   FUNCTION
+	Add another sub-clip definition to the currently open ClipCut list.
+	The fields in this structure give specifics for this sub-clip,
+	including:
+
+	   Volume:Path/name for sub-clip
+	   Beginning and ending field numbers
+	   Contents (video and/or audio)
+
+	See StartClipCutList for a full description of this processing
+	mechanism.
+
+   INPUTS
+	subclip - a ClipAction structure specifying the new sub-clip.  The
+	          same structure may be used for each call, as all needed
+	          information is copied out of it before this function
+	          returns.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	The ClipAction fields AudStartField/VidStartField and
+	AudFieldCount/VidFieldCount must each match, regardless of the type
+	of clip specified to make.
+
+   BUGS
+
+   SEE ALSO
+	StartClipCutList
+	EndClipCutList
+
+flyer.library/AddSeqClip                             flyer.library/AddSeqClip
+
+   NAME
+	AddSeqClip - Add an entry to the Flyer sequence
+
+   SYNOPSIS
+	error = AddSeqClip(clip)
+	D0                 A0
+
+	ULONG AddSeqClip(struct ClipAction *);
+
+   FUNCTION
+	Add another event for the Flyer's internal sequencer to play.
+
+	Any combination of Video and Audio in/out points is supported
+	properly, including split audio.
+
+	See NewSequence for more info about the Flyer's sequencer.
+
+   INPUTS
+	clip - a ClipAction structure specifying the event.  The same
+	       structure may be used for each call, as all needed information
+	       is copied out of it before this function returns.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	EndSequence
+	EndSequenceNew
+	NewSequence
+	PlaySequence
+
+flyer.library/AppendFields                         flyer.library/AppendFields
+
+   NAME
+	AppendFields - Capture live video field(s) and append to Flyer clip
+
+   SYNOPSIS
+	error = AppendFields(clip)
+	D0                   A0
+
+	ULONG AppendFields(struct ClipAction *);
+
+   FUNCTION
+	Captures live video field(s) and appends them to the specified Flyer
+	video clip.  Creates a new clip if it does not already exist.
+	Grabs correct field(s) from the captured color frames so that any
+	number of fields may be grabbed without concern for color phase.
+
+	Number of fields to record is specified in clip->ca_VidFieldCount.
+
+	This function always captures a new color frame.  Also, if the number
+	of fields specified spans more than one color frame, a new one is
+	captured for every new field 1 needed.  For example, if the current
+	clip needs a field 4 to be appended next and this function is called
+	with fields=3, a color frame is captured, and field 4 is appended.
+	Then a NEW color frame is captured and fields 1 and 2 are appended.
+	If this function is then called again with fields=3, a NEW color
+	frame is captured and fields 3 and 4 are appended.
+
+   INPUTS
+	clip - a ClipAction structure specifying the clip.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	This function is not guaranteed to capture consecutive color frames,
+	as the processing delays incurred may prohibit this.  This may make
+	capturing more than 4 fields at a time somewhat useless, yet perhaps
+	interesting.
+
+	This function does not fully support the CAF_VIDEO and CAF_AUDIOL/R
+	flags.  It always captures video only without audio.  It is also not
+	currently capable of capturing audio only.
+
+	Be careful when appending fields onto a clip that was recorded
+	"live", as no checking is done to see that the attributes of appended
+	fields are correct for the rest of the clip (such as VIDEO and/or
+	AUDIO flags).  Since audio is not currently supported by this
+	function, just be sure that fields are appended only to video-only
+	clips (or just build new clips using this function).
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/BeginFindField                     flyer.library/BeginFindField
+
+   NAME
+	BeginFindField - Prepare to shuttle/jog a clip
+
+   SYNOPSIS
+	error = BeginFindField(clipaction)
+	D0                     A0
+
+	ULONG BeginFindField(struct ClipAction *);
+
+   FUNCTION
+	Prepares Flyer for a shuttle/jog session for the named clip.  Call
+	this when the user brings up the control panel for a clip.
+
+	You must prepare a ClipAction structure with the desired parameters
+	then pass a pointer to it to this routine, which allows the Flyer to
+	prepare itself internally.  All calls to DoFindField, FindFieldAudio,
+	and EndFindField must be passed this same structure pointer.
+
+	See also FindFieldAudio.
+
+	The fields which need setup prior to calling BeginFindField:
+	   ca_Volume       Ptr to FlyerVolume structure
+
+	   ca_Channel      Video channel to use during session
+
+	   ca_Flags        CAB_VIDEO to see found frames
+	                   CAB_AUDIO1 and/or 2 to hear found frames
+	                      (here it is legal to set none)
+
+	   ca_VolSust1
+	   ca_VolSust2     Volume for audio channels
+
+	   fv_Path         Name of clip -- if volume name is prepended,
+	                      then the next 3 fields can be left blank
+
+	   fv_Board        Flyer board number
+	   fv_SCSIchannel  SCSI channel on which clip resides (optional)
+	   fv_SCSIdrive    Drive on SCSI channel on which clip resides
+	                      (optional)
+
+
+
+	This call should always have a matching EndFindField call eventually.
+	Do not call this twice without an intervening call to EndFindField.
+
+	The result from this call should be checked.  A 0 value indicates all
+	went well, the Flyer is prepared for "DoFindField" calls.  Any non-0
+	value indicates a failure, most likely that the named file could not
+	be found on the specified drive (do not call EndFindField on it).
+
+   INPUTS
+	clipaction - specifies the name of the clip
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	This call does not return until ready for DoFindField calls (???)
+
+   BUGS
+
+   SEE ALSO
+	FindFieldAudio
+
+flyer.library/ChangeAudio                           flyer.library/ChangeAudio
+
+   NAME
+	ChangeAudio - Change audio parameters of a clip that is in progress
+
+   SYNOPSIS
+	error = ChangeAudio(clipaction)
+	D0                  A0
+
+	ULONG ChangeAudio(struct ClipAction *);
+
+   FUNCTION
+	This routine allows a clip that is in progress to have its audio
+	parameters adjusted.  Simply modify the audio field(s) desired
+	(or the CAB_AUDIO1/2 flags) in the structure used to initially start
+	the clip, then call this function with a pointer to that structure.
+
+   INPUTS
+	clipaction - pointer to same structure clip was initiated with
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/CheckAction                           flyer.library/CheckAction
+
+   NAME
+	CheckAction - Check progress of an actions
+
+   SYNOPSIS
+	status = CheckAction(action)
+	D0                   A0
+
+	ULONG CheckAction(struct ClipAction *);
+
+   FUNCTION
+	Checks if the operation associated with the provided ClipAction
+	pointer has finished or not.  Returns FERR_OKAY if the action has
+	finished, or FERR_BUSY if it is still in progress.
+
+	Also, starting with rev 4.08, updates the (new) ca_Status field with
+	current status for the command.  This data is only available with
+	certain commands that use ClipAction structures (still "RSN").
+
+   INPUTS
+	action - pointer to structure that was used to issue the original
+	         command
+
+   RESULT
+	status = FERR_OKAY or FERR_BUSY
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	WaitAction
+
+flyer.library/CloseField                             flyer.library/CloseField
+
+   NAME
+	CloseField - Closes an OpenReadField or (Easy)OpenWriteField
+
+   SYNOPSIS
+	error = CloseField(action)
+	D0                 A0
+
+	ULONG CloseField(struct ClipAction *);
+
+   FUNCTION
+	Closes the field which was previously opened using an OpenReadField,
+	OpenWriteField, or EasyOpenWriteField call.  In the case of a write
+	session being closed, any unwritten data is written to the clip.
+	Also, if less than a full field of scan lines was written, fills in
+	remainder with fill color (usually black).
+
+	Returns FERR_FULL if not enough room left in current field to write
+	any remaining data.
+
+	The only structure field which needs setup prior to calling
+	CloseField:
+	   ca_FldHandle   Field handle returned from successful
+	                  OpenReadField or (Easy)OpenWriteField call
+
+   INPUTS
+	action - pointer to structure which contains field handle to close
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	EasyOpenWriteField
+	OpenReadField
+	OpenWriteField
+	SetFillColor
+
+flyer.library/CopyData                                 flyer.library/CopyData
+
+   NAME
+	CopyData - Copy data from one location to another
+
+   SYNOPSIS
+	error = CopyData(srcvolume,destvolume,srcaddr,blocks,destaddr)
+	D0               A0        A1         D0      D1     D2
+
+	ULONG CopyData(struct FlyerVolume *,struct FlyerVolume *,ULONG,ULONG,
+	        ULONG);
+
+   FUNCTION
+	Copies a range of data from one drive to another.  This currently
+	works with a start block number and a block count.  The start
+	locations may be different on the src and dest drives.  This function
+	may also be used to move data on the same drive.  Handles making a
+	copy which overlaps original on same drive.
+
+	Can also read/write to/from a tape drive by simply using -1 for the
+	appropriate address (srcaddr or destaddr).
+
+   INPUTS
+	srcvolume - pointer to structure which describes a volume (used to
+	   pick specific Flyer card).
+
+	destvolume - pointer to structure which describes a volume (used to
+	   pick specific Flyer card).
+
+	srcaddr - SCSI block address on source drive
+
+	blocks - number of SCSI blocks to copy
+
+	destaddr - SCSI block address on destination drive
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	May copy slower than "real-time" playback rate if copying to and from
+	the same drive.
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/CPUDMA                                     flyer.library/CPUDMA
+
+   NAME
+	CPUDMA -- Transfer data between DMA memory and CPU memory
+
+   SYNOPSIS
+	error = CPUDMA(board,cpuptr,dmaptr,length,readflag)
+	D0             D0    A0     A1     D1     D2
+
+	ULONG CPUDMA(UBYTE,ULONG,ULONG,UWORD,UBYTE);
+
+   FUNCTION
+	This function transfers blocks of data between the Flyer's DRAM and SRAM
+	areas.  All pointers and sizes are in blocks (512 bytes).  "Writes" are
+	TO SRAM, "reads" are FROM SRAM.
+
+	CAUTION! These memory areas are highly private and dangerous to access.
+	Use only under advisement or based on sample code.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	cpuptr - CPU address (block)
+
+	dmaptr - DMA address (block)
+
+	length - length of transfer (in blocks)
+
+	readflag - 0=write, 1=read
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/Defaults                                 flyer.library/Defaults
+
+   NAME
+	Defaults - clear given ClipAction structure(s) to default values
+
+   SYNOPSIS
+	error = Defaults(clipaction)
+	D0               A0
+
+	VOID Defaults(struct ClipAction *);
+
+   FUNCTION
+	Clears the given ClipAction structure to default values, as well as
+	the attached FlyerVolume structure.  See structure documentation for
+	default values.
+
+   INPUTS
+	clipaction - pointer to a ClipAction structure.  Will also setup
+	   FlyerVolume structure, if attached.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	flyer.h
+
+flyer.library/DoFindField                           flyer.library/DoFindField
+
+   NAME
+	DoFindField - find a specific field in clip (and view/hear it)
+
+   SYNOPSIS
+	error = DoFindField(clipaction)
+	D0                  A0
+
+	ULONG DoFindField(struct ClipAction *);
+
+   FUNCTION
+	Finds the color frame that contains the field number specified in
+	ca_VidStartField.  If the CAB_VIDEO flag was set, the frame's video
+	will loop on the output channel.  Also, if the CAB_AUDIO1/2 flag(s)
+	were set, the frame's audio will be heard.
+
+	Currently, when the user stops in a particular spot, the color frame
+	loops repeatedly, but the audio (if on) is heard once per new frame
+	only.
+
+	If the return value is non-0, something went wrong (such as the
+	requested field number is out of range for the clip).
+
+   INPUTS
+	clipaction - same pointer as was used with BeginFindField
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/EasyOpenWriteField             flyer.library/EasyOpenWriteField
+
+   NAME
+	EasyOpenWriteField - Open a clip field for writing (easy version)
+
+   SYNOPSIS
+	error = EasyOpenWriteField(action,field,modes,quality)
+	D0                         A0     D0    D1    D2
+
+	ULONG EasyOpenWriteField(struct ClipAction *,ULONG,UBYTE,UBYTE);
+
+   FUNCTION
+	Provides an easier front-end for the more complicated OpenWriteField
+	call.
+
+	See the description under OpenWriteField for a full description of
+	field writing and the "action", "field", and "modes" arguments.
+
+   INPUTS
+	action - pointer to structure which describes a volume and the name
+	         of the clip to operate on.
+
+	field - field number of clip (starts at 0).  Is a don't care with
+	        some open modes
+
+	modes - flags describing how to handle writing field
+
+	quality - a number representing the video quality
+
+	     Currently supported modes, in order of decreasing video quality:
+
+	        0 (D2)  Best quality, worst compression
+	        1 (D2)
+	        2 (SN)
+	        3 (SN)
+	        4 (SN)  Worst quality, best compression
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	OpenReadField
+	OpenWriteField
+	FlyerWriteLine
+
+flyer.library/EndClipCutList                     flyer.library/EndClipCutList
+
+   NAME
+	EndClipCutList - Finalizes ClipCut list
+
+   SYNOPSIS
+	error = EndClipCutList(doit)
+	D0                     D0
+
+	ULONG EndClipCutList(UBYTE);
+
+   FUNCTION
+	Finalizes a ClipCut list that was opened with StartClipCutList.  If
+	the "doit" flag is set, the processing will begin.  Otherwise, the
+	list is thrown away and the original clip remains unchanged.
+
+	See StartClipCutList for a full description of this processing
+	mechanism.
+
+   INPUTS
+	doit - flag: 0 aborts and discards list, 1 starts clip processing
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	StartClipCutList
+	AddClipCut
+
+flyer.library/EndFindField                         flyer.library/EndFindField
+
+   NAME
+	EndFindField - Cleanup after a shuttle/jog session
+
+   SYNOPSIS
+	error = EndFindField(clipaction)
+	D0                   A0
+
+	ULONG EndFindField(struct ClipAction *);
+
+   FUNCTION
+	This call frees up resources allocated with a BeginFindField call.
+	Call when the control panel for a clip is put away.  You must pass
+	a pointer to the same structure as was passed to BeginFindField.
+	If CAF_USEMATTE flag is true in the ClipAction structure, this call
+	will also put up the specified matte color on the video channel.
+
+	A return value of 0 indicates all went well.
+
+   INPUTS
+	clipaction - same pointer as was used for entire shuttle/jog session.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Only matte black is currently supported for CAF_USEMATTE
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/EndHeadList                           flyer.library/EndHeadList
+
+   NAME
+	EndHeadList - Completes list of A/B heads
+
+   SYNOPSIS
+	error = EndHeadList(board,makeit)
+	D0                  D0    D1
+
+	ULONG EndHeadList(UBYTE,UBYTE);
+
+   FUNCTION
+	Completes list of A/B heads.  If 'makeit' is 0, the list is thrown
+	away (aborted).  Otherwise, the Flyer then begins creating heads.
+	It may use old clip heads that already exist or create new ones.
+	Any old heads that are not used in the list are deleted.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	makeit - flag
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/EndSequence                           flyer.library/EndSequence
+
+   NAME
+	EndSequence - Finalizes the Flyer's internal sequence
+
+   SYNOPSIS
+	error = EndSequence(board,doit)
+	D0                  D0    D1
+
+	ULONG EndSequence(UBYTE, UBYTE);
+
+   FUNCTION
+	Finalizes the sequence definition that was downloaded.  Post process-
+	ing occurs at this time, such as sequence optimization and temporary
+	data movement.  This call, therefore, may take a while to complete.
+	When it does, the sequence is ready to play (using PlaySequence).
+
+	If the "doit" flag is FALSE (0), no post processing is done, but the
+	sequence is closed (this is required as an "abort" during sequence
+	downloading).
+
+	See NewSequence for more info on Flyer sequencing.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	doit - flag: 0 aborts and discards sequence, 1 starts post-processing
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	AddSeqClip
+	EndSequenceNew
+	NewSequence
+	PlaySequence
+
+flyer.library/EndSequenceNew                     flyer.library/EndSequenceNew
+
+   NAME
+	EndSequenceNew -- Finalizes the Flyer's internal sequence (extra features)
+
+   SYNOPSIS
+	error = EndSequenceNew(action, doit)
+	D0                     A0      D0
+
+	ULONG EndSequenceNew(struct ClipAction *, UBYTE);
+
+   FUNCTION
+	Identical to EndSequence function, except that it uses a ClipAction structur
+e,
+	which specifies the Flyer board number.  This allows some enhanced things
+	during the sometimes lengthy sequence processing phase, such as the ability
+	to be run asynchronously, ability to be aborted, and the ability for the
+	application to obtain status during this phase.
+
+   INPUTS
+	clipaction - specifies the board number in the attached Volume structure
+
+	doit - flag: 0 aborts and discards sequence, 1 starts post-processing
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	AddSeqClip
+	EndSequence
+	NewSequence
+	PlaySequence
+
+flyer.library/Error2String                         flyer.library/Error2String
+
+   NAME
+	Error2String - Convert a Flyer error code into an error string
+
+   SYNOPSIS
+	desc = Error2String(error)
+	                    D0
+
+	char * Error2String(UBYTE);
+
+   FUNCTION
+	Gives an descriptive string for the supplied Flyer error code.
+	Simply returns a pointer to the string.  DO NOT MODIFY THE DATA IN
+	THIS STRING.
+
+   INPUTS
+	error - an error code returned by a Flyer call
+
+   RESULT
+	desc - pointer to a static string which describes the error condition
+
+   EXAMPLE
+
+   NOTES
+	Does not currently convert some of the more "internal" Flyer errors,
+	but just gives "???".
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FindDrives                             flyer.library/FindDrives
+
+   NAME
+	FindDrives -- Find responding drives on SCSI bus
+
+   SYNOPSIS
+	error = FindDrives(flyervolume,buffer)
+	D0                 A0          A1
+
+	ULONG FindDrives(struct FlyerVolume *,APTR);
+
+   FUNCTION
+	This function scans one of the Flyer's SCSI busses, looking for
+	drives at each of the possible unit numbers.  An array of data
+	is returned which gives some rudimentary information about which
+	unit numbers correspond to a present drive, as well as some info
+	which is helpful in getting more detailed data (with the Inquiry
+	command.
+
+   INPUTS
+	volume - pointer to structure which specifies bus to scan for drives
+
+	buffer - pointer to an 18 byte buffer which receives results
+
+   RESULT
+	Format of data array:
+
+	UBYTE DriveFlags;  // '1' bit at (1<<unit) for each drive present
+	UBYTE pad;
+	UBYTE Versions[8]; // SCSI versions of each drive found, [x] = unit
+	UBYTE InqLens[8];  // Inquiry lengths of each drive found, [x] = unit
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	Inquiry
+
+flyer.library/FindFieldAudio                     flyer.library/FindFieldAudio
+
+   NAME
+	FindFieldAudio - change audio parameters during shuttle/jog session
+
+   SYNOPSIS
+	error = FindFieldAudio(clipaction)
+	D0                     A0
+
+	ULONG FindFieldAudio(struct ClipAction *);
+
+   FUNCTION
+	This call allows you to change the status of the audio flag while in
+	the middle of a shuttle session (overrides the initial audioflag
+	specified in BeginFindField).  To effect the change, modify the
+	CAB_AUDIO flags in ca_Flags and pass the structure to this routine.
+	Call this as many times as needed (whenever the user clicks the audio
+	button on/off), but do not call it outside of the Begin/EndFindField
+	pair.
+
+	A return value of 0 indicates all went well.
+
+   INPUTS
+	clipaction - same pointer as was used for entire shuttle/jog session.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/Firmware                                 flyer.library/Firmware
+
+   NAME
+	Firmware - Download and run software on Flyer CPU
+
+   SYNOPSIS
+	error = Firmware(board,length,data,offset)
+	D0               D0    D1     A0   D2
+
+	ULONG Firmware(UBYTE,ULONG,APTR,ULONG);
+
+   FUNCTION
+	Downloads the provided binary file to the Flyer and executes it
+	as the controlling software.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	length - length of data provided
+
+	offset - offset address in shared SRAM
+
+	data - pointer to binary data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerAudioCtrl                     flyer.library/FlyerAudioCtrl
+
+   NAME
+	FlyerAudioCtrl - Sense/control audio rec level/aux input functions
+
+   SYNOPSIS
+	error = FlyerAudioCtrl(board,FlyAudCtrl,oper)
+	D0                     D0    A0         D1
+
+	ULONG FlyerAudioCtrl(UBYTE,struct FlyAudCtrl *,UBYTE);
+
+   FUNCTION
+	Provides access to the Flyer's audio subsystem.  This provides a
+	means of smartly setting the input gain on record, as well as control
+	over the Flyer's auxilliary audio inputs.
+
+	The "oper" flags describe which portions of the FlyAudCtrl structure
+	to apply.  This allows modification of individual values, and the
+	ability to sense input levels without changing any values.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	FlyAudCtrl - pointer to FlyAudCtrl structure
+
+	oper - various flags indicating what kind of operation(s) to perform:
+	   FACOF_SENSE   -- update LeftSense/RightSense values
+	   FACOF_SENSE8  -- update LeftSense/RightSense with 8-bit values
+	   FACOF_SETGAIN -- set input gain (for recording)
+	   FACOF_SETSRC  -- set the input selector mux
+	   FACOF_SETMIX  -- set auxilliary channel mixing values
+
+	   Any combination of these operations can be specified.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	The LeftSense and RightSense values from FACOF_SENSE are interpreted:
+	   0 -- over -1.0 dB underrange
+	   1 -- 0 to -1.0 dB underrange
+	   2 -- 0 to 1.0 dB overrange
+	   3 -- over 1.0 dB overrange
+	FACOF_SENSE8 causes Left/RightSense to contain 8 bit peak-reading
+	values (low 8 bits truncated off)
+
+   BUGS
+
+   SEE ALSO
+	flyer.h
+
+flyer.library/FlyerCopyClip                       flyer.library/FlyerCopyClip
+
+   NAME
+	FlyerCopyClip - Fast copy a flyer clip
+
+   SYNOPSIS
+	error = FlyerCopyClip(srcvolume,destvolume)
+	D0                    A0        A1
+
+	ULONG FlyerCopyClip(struct FlyerVolume *,struct FlyerVolume *);
+
+   FUNCTION
+	Makes a copy of a Flyer clip using high speed copying (independent of
+	Amiga host operating system).  Will fail if filename is not found
+	on the source volume or if the destination filename already exists on
+	the destination volume.  Will not create subdirectories for the
+	destination name, so ensure entire path exists before starting copy.
+
+	Source and destination volumes may be the same drive, but copying
+	will be slower.
+
+   INPUTS
+	srcvolume - pointer to structure which describes the source clip's
+	            path/name and the volume on which it is found.
+
+	destvolume - pointer to structure which describes the destination
+	             path/name and the volume on which to create it.  Must
+	             always contain the path/name, even if not renaming clip
+	             during copy.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Both source and destination volumes must be attached to the same
+	Flyer card.
+
+   BUGS
+
+   SEE ALSO
+	FlyerCopyClipNew
+
+flyer.library/FlyerCopyClipNew                 flyer.library/FlyerCopyClipNew
+
+   NAME
+	FlyerCopyClipNew -- Fast copy a flyer clip (w/status & abort capabilities)
+
+   SYNOPSIS
+	error = FlyerCopyClipNew(srcaction,destvolume)
+	D0                       A0        A1
+
+	ULONG FlyerCopyClipNew(struct ClipAction *,struct FlyerVolume *);
+
+   FUNCTION
+	Identical to FlyerCopyClip function, except that it uses a ClipAction struct
+ure
+	to specify the source, which adds the ability to run it asynchronously, abil
+ity
+	to be aborted, and the ability to obtain status during a copy.
+
+   INPUTS
+	srcaction - pointer to structure which describes the source volume and clip
+		    name.  "ReturnTime" and "Status" fields are also used.
+
+	destvolume - pointer to structure which describes the destination
+	             path/name and the volume on which to create it.  Must
+	             always contain the path/name, even if not renaming clip
+	             during copy.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Both source and destination volumes must be attached to the same
+	Flyer card.
+
+   BUGS
+
+   SEE ALSO
+	FlyerCopyClip
+
+flyer.library/FlyerCreateDir                     flyer.library/FlyerCreateDir
+
+   NAME
+	FlyerCreateDir -- create a sub-directory on a Flyer drive
+
+   SYNOPSIS
+	error = FlyerCreateDir(clipaction)
+	D0                     A0
+
+	ULONG FlyerCreateDir(struct ClipAction *);
+
+   FUNCTION
+
+   INPUTS
+	clipaction - specifies volume/path/name of the directory to create
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerDeFrag                           flyer.library/FlyerDeFrag
+
+   NAME
+	FlyerDeFrag - De-fragment hard drive
+
+   SYNOPSIS
+	error = FlyerDeFrag(volume)
+	D0                  A0
+
+	ULONG FlyerDeFrag(struct FlyerVolume *);
+
+   FUNCTION
+	Begins defragmentation process on specified drive.
+
+   INPUTS
+	volume - pointer to structure which describes the volume to defrag
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Currently accepts no parameters and cannot be interrupted
+
+   BUGS
+	Reports of bugs.  Unable to reproduce to date...
+
+   SEE ALSO
+	FlyerDeFragNew
+
+flyer.library/FlyerDeFragNew                     flyer.library/FlyerDeFragNew
+
+   NAME
+	FlyerDeFragNew -- De-fragment hard drive (extra features)
+
+   SYNOPSIS
+	error = FlyerDeFragNew(clipaction)
+	D0                     A0
+
+	ULONG FlyerDeFragNew(struct ClipAction *);
+
+   FUNCTION
+	Begins defragmentation process on specified drive.  This is identical to
+	FlyerDeFrag function, except that this one uses a ClipAction structure
+	to specifies the Flyer drive.  This allows some enhanced things during
+	defragmentation, such as the ability to be run asynchronously, ability
+	to be aborted, and the ability for the application to obtain status
+	while it's occurring.
+
+   INPUTS
+	clipaction - specifies the drive using an attached FlyerVolume structure
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerDeFrag
+
+flyer.library/FlyerDelete                           flyer.library/FlyerDelete
+
+   NAME
+	FlyerDelete -- Delete a file from a Flyer drive
+
+   SYNOPSIS
+	error = FlyerDelete(clipaction)
+	D0                  A0
+
+	ULONG FlyerDelete(struct ClipAction *);
+
+   FUNCTION
+
+   INPUTS
+	clipaction - specifies the path/name of the file to delete
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerDirList                         flyer.library/FlyerDirList
+
+   NAME
+	FlyerDirList -- return first/next entry in a directory
+
+   SYNOPSIS
+	error = FlyerDirList(flyervolume,grip,objinfoptr,firstflag,fsonly)
+	D0                   A0          D0   A1         D1        D2
+
+	ULONG FlyerDirList(struct FlyerVolume *,ULONG,struct ClipInfo *,
+	        UBYTE,UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	grip - grip of directory
+
+	objinfoptr - Pointer to ClipInfo structure to receive info
+
+	firstflag - 0 if first call, 1 for each additional
+
+	fsonly - 0 for full information, 1 for just FileSys info
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerDriveCheck                   flyer.library/FlyerDriveCheck
+
+   NAME
+	FlyerDriveCheck - check if the specified drive has anything in it
+
+   SYNOPSIS
+	error = FlyerDriveCheck(volume)
+	D0                      A0
+
+	ULONG FlyerDriveCheck(struct FlyerVolume *);
+
+   FUNCTION
+	Checks to see if the specified board/channel/drive has media loaded.
+	Note that you must use the FVF_USENUMS flags, since the use of a
+	volume name is not logical here.
+
+   INPUTS
+	volume - pointer to structure which describes a volume
+
+   RESULT
+	error - FERR_OKAY or FERR_VOLNOTFOUND
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerDriveInfo                     flyer.library/FlyerDriveInfo
+
+   NAME
+	FlyerDriveInfo - Return general information about a drive
+
+   SYNOPSIS
+	error = FlyerDriveInfo(volume,volinfo)
+	D0                     A0     A1
+
+	ULONG FlyerDriveInfo(struct FlyerVolume *,struct FlyerVolInfo *);
+
+   FUNCTION
+	This returns general information about the drive, including the
+	volume name, total number of blocks, number of blocks free,
+	size of largest contiguous block, and free block size if DeFrag
+	would be performed.
+
+	If volptr is NULL, just fills in info in FlyerVolume structure only.
+
+   INPUTS
+	volume - pointer to structure which specifies volume
+
+	volinfo - pointer to structure to receive information about volume
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileClose                     flyer.library/FlyerFileClose
+
+   NAME
+	FlyerFileClose -- close a file
+
+   SYNOPSIS
+	error = FlyerFileClose(flyervolume,fileID)
+	D0                     A0          D0
+
+	ULONG FlyerFileClose(struct FlyerVolume *,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerFileOpen
+
+flyer.library/FlyerFileExtend                   flyer.library/FlyerFileExtend
+
+   NAME
+	FlyerFileExtend -- Extend an open Flyer file without have to write data
+
+   SYNOPSIS
+	error = FlyerFileExtend(flyervolume,fileID,size)
+	D0                     A0          D0     D1  
+
+	ULONG FlyerFileExtend(struct FlyerVolume *,ULONG,ULONG,UBYTE *,
+	        ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	size - number of bytes to extend by.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileHSRead                   flyer.library/FlyerFileHSRead
+
+   NAME
+	FlyerFileHSRead -- read blocks from an open Flyer file
+
+   SYNOPSIS
+	error = FlyerFileHSRead(flyervolume,fileID,startblk,blkcount,buffer)
+	D0                      A0          D0     D1       D2		 A1    
+
+	ULONG FlyerFileHSRead(struct FlyerVolume *,ULONG,ULONG,ULONG,UBYTE *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	startblk - Block number to begin reading on
+	
+	blkcount - Number of blocks to read
+
+	buffer - pointer to buffer in amiga fastram
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileHSWrite                 flyer.library/FlyerFileHSWrite
+
+   NAME
+	FlyerFileHSWrite -- write to an open Flyer file
+
+   SYNOPSIS
+	error = FlyerFileHSWrite(flyervolume,fileID,startblk,blkcount,buffer)
+	D0                       A0          D0     D1       D2       A1
+
+	ULONG FlyerFileHSWrite(struct FlyerVolume *,ULONG,ULONG,ULONG,UBYTE *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	startblk - Block number to begin writing on
+	
+	blkcount - Number of blocks to write
+
+	buffer - pointer to buffer in amiga fastram
+
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileOpen                       flyer.library/FlyerFileOpen
+
+   NAME
+	FlyerFileOpen -- open a file on a Flyer drive for reading/writing
+
+   SYNOPSIS
+	error = FlyerFileOpen(clipaction)
+	D0                    A0
+
+	ULONG FlyerFileOpen(struct ClipAction *);
+
+   FUNCTION
+
+   INPUTS
+	clipaction - specifies the name of the file to open
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileRead                       flyer.library/FlyerFileRead
+
+   NAME
+	FlyerFileRead -- read from an open Flyer file
+
+   SYNOPSIS
+	error = FlyerFileRead(flyervolume,fileID,size,buffer,actual)
+	D0                    A0          D0     D1   A1     A2
+
+	ULONG FlyerFileRead(struct FlyerVolume *,ULONG,ULONG,UBYTE *,
+	        ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	size - number of bytes to read
+
+	buffer - pointer to buffer to receive data
+
+	actual - pointer to variable to receive count of actual bytes read
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFileSeek                       flyer.library/FlyerFileSeek
+
+   NAME
+	FlyerFileSeek -- seek to a given position in a file
+
+   SYNOPSIS
+	error = FlyerFileSeek(flyervolume,fileID,pos_ext,pos,mode,posptr,oldposptr)
+	D0                    A0          D0     D1      D2  D3   A1     A2
+
+	ULONG FlyerFileSeek(struct FlyerVolume *,ULONG,DLONG,UBYTE,DLONG *,
+	        DLONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	pos_ext - requested new file position (per 'mode' below)(high 32 bits)
+
+	pos - requested new file position (per 'mode' below)(low 32 bits)
+
+	mode - seek mode to apply to 'pos' (FLYER_POS_xxx)
+
+	posptr - pointer to variable to receive new file position
+
+	oldposptr - pointer to variable to receive old file position
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	I don't like passing individual ULONGs for the requested position
+	and pointers to DLONGS for the results, but our lack of address registers
+	means we can't do it the consistent way.  This way does have the advantage
+	of changing the prototype for the function enough to warn us if an older 
+	version of fileseek is being called
+
+   BUGS
+
+   SEE ALSO
+	flyer.h
+
+flyer.library/FlyerFileWrite                     flyer.library/FlyerFileWrite
+
+   NAME
+	FlyerFileWrite -- write to an open Flyer file
+
+   SYNOPSIS
+	error = FlyerFileWrite(flyervolume,fileID,size,buffer,actual)
+	D0                     A0          D0     D1   A1     A2
+
+	ULONG FlyerFileWrite(struct FlyerVolume *,ULONG,ULONG,UBYTE *,
+	        ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	size - number of bytes to write
+
+	buffer - pointer to buffer which contains data
+
+	actual - pointer to variable to receive count of actual bytes written
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerFormat                           flyer.library/FlyerFormat
+
+   NAME
+	FlyerFormat - High-level format a drive with the Flyer's filesystem
+
+   SYNOPSIS
+	error = FlyerFormat(volume,name,datestamp,blocks,flags)
+	D0                  A0     A1   A2        D0     D1
+
+	ULONG FlyerFormat(struct FlyerVolume *,char *,struct DateStamp *,
+	        ULONG,UBYTE);
+
+   FUNCTION
+	This function does a high-level format on a drive connected to the
+	Flyer.  Not all sectors are read/write tested, so this is a "quick"
+	format.  The format procedure normally uses the entire drive, but
+	this can be reduced to avoid using slower parts of the drive.
+
+   INPUTS
+	volume - NULL string, specifies drive to format
+
+	name - pointer to a null-terminated string to use for the volume name
+
+	datestamp - pointer to an AmigaDOS DateStamp structure to use as the
+	   drive's creation date
+
+	blocks - NULL for entire drive, or the number of sectors to use for
+	   video data.  WARNING!  This does not actually prohibit the
+	   Flyer from using the remaining space, but gives a cutoff
+	   point beyond which no video clips may be placed.  Non time-
+	   critical data may eventually be placed in this "slow" region.
+
+	flags - FVIF_xxx flags to request to be applied to this drive
+	   (specifically FVIF_VIDEOREADY and FVIF_AUDIOREADY).  FlyerFormat
+	   will test the speed of the drive and clear the video flag if it
+	   does not find it capable.  This allows drives to be targeted
+	   as data only, data/audio, or data/audio/video.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Do not use an fv_Path string to specify the drive.  Specify a NULL
+	string and specify the exact drive specifically with fv_SCSIdrive.
+	This will prevent formatting the wrong drive if two exist with
+	identical volume names!
+
+   BUGS
+
+   SEE ALSO
+	flyer.h
+
+flyer.library/FlyerInputSel                       flyer.library/FlyerInputSel
+
+   NAME
+	FlyerInputSel - Select Flyer video input sources
+
+   SYNOPSIS
+	error = FlyerInputSel(board,video,sync)
+	D0                    D0    D1    D2
+
+	ULONG FlyerInputSel(UBYTE,UBYTE,UBYTE);
+
+   FUNCTION
+	Specifies what video channel to use for recording to the Flyer and
+	where to get sync.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	video - video source to record
+	   FI_Camcorder   = Flyer camcorder input (TBC required)
+	   FI_SVHS        = Flyer SVHS input (TBC required)
+	   FI_Toaster1    = Toaster input 1
+	   FI_Toaster2    = Toaster input 2
+	   FI_ToasterMain = Toaster Main bus output
+	   FI_ToasterPV   = Toaster Preview bus output
+
+	sync - video source to use as a reference
+	   FS_ToasterMain = Toaster Main output
+	   FS_Toaster1    = Toaster input 1
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Any changes to video or sync source using this command should be
+	given sufficient time to "settle" before beginning to record.
+
+   BUGS
+
+   SEE ALSO
+	FlyerTermination
+	ToasterMux
+
+flyer.library/FlyerNewFileRead                 flyer.library/FlyerNewFileRead
+
+   NAME
+	FlyerNewFileRead -- read from an open Flyer file
+
+   SYNOPSIS
+	error = FlyerNewFileRead(flyervolume,fileID,size,buffer,actual)
+	D0                       A0          D0     D1   A1     A2
+
+	ULONG FlyerNewFileRead(struct FlyerVolume *,ULONG,ULONG,UBYTE *,
+	        ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	size - number of bytes to read
+
+	buffer - pointer to buffer to receive data
+
+	actual - pointer to variable to receive count of actual bytes read
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerNewFileWrite               flyer.library/FlyerNewFileWrite
+
+   NAME
+	FlyerNewFileWrite -- write to an open Flyer file
+
+   SYNOPSIS
+	error = FlyerFileHSWrite(flyervolume,fileID,size,buffer,actual)
+	D0                       A0          D0     D1   A1     A2
+
+	ULONG FlyerNewFileWrite(struct FlyerVolume *,ULONG,ULONG,UBYTE *,
+	        ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to same structure as passed to FlyerFileOpen
+
+	fileID - ID returned from FlyerFileOpen call
+
+	size - number of bytes to write
+
+	buffer - pointer to buffer which contains data
+
+	actual - pointer to variable to receive count of actual bytes written
+
+   RESULT
+	actual 	- passed in a2 is address to return actual amt written.
+	error	- error code is returned in d0.	
+
+   EXAMPLE
+
+   NOTES
+
+	more error conditions can be incountered here
+	
+	FERR_FULL,'Drive full'
+	FERR_CANTEXTEND,'Cannot extend file'
+
+  maybe but, scsi problems are real trouble and file shouldn't open for 
+    write if drive/file protected.
+	FERR_PROTECTED,'Drive write-protected'
+	FERR_INCOMPLETE,'SCSI tranfer not completed fully'
+	FERR_WRITEPROT,'File write-protected'
+	FERR_INUSE,'Disk/object in use'
+
+  REALLY should just check for errors when writing to file!
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerPlay                               flyer.library/FlyerPlay
+
+   NAME
+	FlyerPlay - Play a video/audio clip
+
+   SYNOPSIS
+	error = FlyerPlay(clipaction)
+	D0                A0
+
+	ULONG FlyerPlay(struct ClipAction *);
+
+   FUNCTION
+	Plays a video/audio clip as specified in the structure whose pointer
+	is given.  The definition of this structure is in "Flyer.h".
+
+	This call can be made to return at different times, depending on the
+	value of ReturnTime.
+
+	If the video channel or SCSI channel needed to accomplish this action
+	are in use when this clip needs to begin, the PermissFlags indicate
+	what actions the Flyer can take to free up the necessary resource(s).
+	CAPB_STEALOURVIDEO allows the Flyer to stop a clip on the video
+	channel specified for this new play.  CAPB_KILLOTHERVIDEO allows the
+	Flyer to stop clips on other video channels if needed to gain access
+	to the SCSI drive for this new clip.
+
+	If the CAPB_ERRIFBUSY flag is set, this call will return with error
+	FERR_CHANINUSE if the clip cannot be played without waiting for other
+	resources.  If this flag is not set, the Flyer will delay playback if
+	needed while waiting for resources it needs.
+
+	When using a ReturnTime of RTT_STOPPED, you may modify/recycle the
+	ClipAction structure once this call returns.  For RTT_IMMED and
+	RTT_STARTED, you must not modify the ClipAction structure until the
+	clip stops or is aborted.  Use AbortAction() to abort playback, and
+	CheckProgress(), CheckAction(), or WaitAction() to determine when
+	it's safe to reuse the structure.
+
+	If CAF_USEMATTE flag is true in the ClipAction structure, the video
+	channel this function uses will change to the matte color specified
+	in MatteY,MatteI,MatteQ fields when the clip finishes or is stopped.
+
+   INPUTS
+	clipaction - pointer to structure containing all information needed
+	   for playback, and to receive results when done.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Only matte black is currently supported for CAF_USEMATTE
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerQuit                               flyer.library/FlyerQuit
+
+   NAME
+	FlyerQuit -- Stop Flyer execution, return to boot ROM
+
+   SYNOPSIS
+	error = FlyerQuit(board)
+	D0           D0
+
+	ULONG FlyerQuit(UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerReadCalib                     flyer.library/FlyerReadCalib
+
+   NAME
+	FlyerReadCalib - Inspect the Flyer's calibration registers
+
+   SYNOPSIS
+	error = FlyerReadCalib(board,item,valueptr)
+	D0                     D0    D1   A0
+
+	ULONG FlyerReadCalib(UBYTE,UWORD,WORD *);
+
+   FUNCTION
+	Reads the specified Flyer calibration register.  See flyer.h for
+	the "item" values (CALIB_xxxx).  Value placed at pointer "valueptr".
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	item - which register to change (see flyer.h)
+
+	valueptr - pointer to a UWORD to fill in with the value
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerWriteCalib
+
+flyer.library/FlyerReadLine                       flyer.library/FlyerReadLine
+
+   NAME
+	FlyerReadLine - Read a scan line from a field previously opened
+
+   SYNOPSIS
+	error = FlyerReadLine(action,buffer)
+	D0                    A0     A1
+
+	ULONG FlyerReadLine(struct ClipAction *,UBYTE *);
+
+   FUNCTION
+	Decompresses next scan line from open field and transfers into
+	caller's buffer (must be big enough to receive 752 bytes).  NTSC line
+	21 is the first line read from the field, and 262 is the last.  Any
+	extra calls will fill the buffer with the fill color (usually black).
+
+	This function does software emulation of the Flyer's hardware which
+	converts VTASC-compressed data into D2 data, including FIR filtering.
+
+	The fields which need setup prior to calling FlyerReadLine:
+	   ca_FldHandle  - Field handle from successful OpenReadField
+	   ca_ReturnTime - RT_xxx value desired (not currently supported)
+
+   INPUTS
+	action - pointer to structure which contains the field handle to read
+	   from and the return time for this call.
+
+	buffer - buffer to receive composite scan line data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	OpenReadField
+	SetFillColor
+	FlyerWriteLine
+
+flyer.library/FlyerRecord                           flyer.library/FlyerRecord
+
+   NAME
+	FlyerRecord - Record a video/audio clip
+
+   SYNOPSIS
+	error = FlyerRecord(clipaction)
+	D0                  A0
+
+	ULONG FlyerRecord(struct ClipAction *);
+
+   FUNCTION
+	Records a video/audio clip as specified in the structure whose
+	pointer is given.  The definition of this structure is in "Flyer.h".
+
+	Except when ReturnTime = RTT_STOPPED, recording can be stopped at any
+	time with the AbortAction() command (see below).
+
+	Do not call with both CAB_AUDIO1/2 and CAB_VIDEO flags clear, as this
+	is nonsensical.
+
+	If the video channel or SCSI channel needed to accomplish this action
+	are in use when this clip needs to begin, the PermissFlags indicate
+	what actions the Flyer can take to free up the necessary resource(s).
+	CAPB_STEALOURVIDEO allows the Flyer to stop a clip on the video
+	channel specified for this new record.  CAPB_KILLOTHERVIDEO allows
+	the Flyer to stop clips on other video channels if needed to gain
+	access to the SCSI drive for this new clip.
+
+	If the CAPB_ERRIFBUSY flag is set, this call will return with error
+	FERR_CHANINUSE if the clip cannot be recorded without waiting for
+	other resources.  If this flag is not set, the Flyer will delay
+	recording if needed while waiting for resources it needs.
+
+	When using a ReturnTime of RTT_STOPPED, you may modify/recycle the
+	ClipAction structure once this call returns.  For RTT_IMMED and
+	RTT_STARTED, you must not modify the ClipAction structure until the
+	clip stops or is aborted.  Use AbortAction() to abort recording, and
+	CheckProgress(), CheckAction(), or WaitAction() to determine when
+	it's safe to reuse the structure.
+
+   INPUTS
+	clipaction - pointer to structure containing all information needed
+	   for recording, and to receive results when done.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerRename                           flyer.library/FlyerRename
+
+   NAME
+	FlyerRename -- rename a file/dir on a Flyer drive
+
+   SYNOPSIS
+	error = FlyerRename(oldclip,newgrip,newname)
+	D0                  A0      D0      A1
+
+	ULONG FlyerRename(struct ClipAction *,ULONG,char *);
+
+   FUNCTION
+
+   INPUTS
+	oldclip - specifies the path/name of the file to rename
+
+	newgrip - base grip to which 'newname' is relative
+
+	newname - new path/name for file (relative to 'newgrip')
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerRenameDisk                   flyer.library/FlyerRenameDisk
+
+   NAME
+	FlyerRenameDisk -- rename a Flyer drive volume
+
+   SYNOPSIS
+	error = FlyerRenameDisk(flyervolume,newname)
+	D0                      A0          A1
+
+	ULONG FlyerRenameDisk(struct FlyerVolume *,char *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	newname - pointer to new name string for volume
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerRunning                         flyer.library/FlyerRunning
+
+   NAME
+	FlyerRunning -- test if Flyer firmware is downloaded and running
+
+   SYNOPSIS
+	error = FlyerRunning(board)
+	D0                   D0
+
+	ULONG FlyerRunning(UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerSetBits                         flyer.library/FlyerSetBits
+
+   NAME
+	FlyerSetBits -- set protect bits for dir/file
+
+   SYNOPSIS
+	error = FlyerSetBits(flyervolume,grip,bits)
+	D0                   A0          D0   D1
+
+	ULONG FlyerSetBits(struct FlyerVolume *,ULONG,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive/path/name of file
+
+	grip - grip of file/dir
+
+	bits - new bits (32)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerSetComment                   flyer.library/FlyerSetComment
+
+   NAME
+	FlyerSetComment -- set comment for dir/file
+
+   SYNOPSIS
+	error = FlyerSetComment(flyervolume,grip,comment)
+	D0                      A0          D0   A1
+
+	ULONG FlyerSetComment(struct FlyerVolume *,ULONG,char *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive/path/name of file
+
+	grip - grip of file/dir
+
+	comment - new comment string
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerSetDate                         flyer.library/FlyerSetDate
+
+   NAME
+	FlyerSetDate -- set date for file/dir
+
+   SYNOPSIS
+	error = FlyerSetDate(flyervolume,grip,days,minutes,ticks)
+	D0                   A0          D0   D1   D2      D3
+
+	ULONG FlyerSetDate(struct FlyerVolume *,ULONG,ULONG,ULONG,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive/path/name of file
+
+	grip - grip of file/dir
+
+	days - date: days
+
+	minutes - date: minutes
+
+	ticks - date: ticks
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerStripAudio                   flyer.library/FlyerStripAudio
+
+   NAME
+	FlyerStripAudio - Strip audio from a clip, make an audio-only clip
+
+   SYNOPSIS
+	error = FlyerStripAudio(srcvolume,destvolume)
+	D0                      A0        A1
+
+	ULONG FlyerStripAudio(struct FlyerVolume *,struct FlyerVolume *);
+
+   FUNCTION
+	Creates a new clip containing only the audio from the source clip.
+	Will fail if the source clip is not found or does not contain audio.
+	Destination clip must not already exist on the destination volume, or
+	an error will result.
+
+	Both source and destination volumes must be attached to the same
+	Flyer card.
+
+   INPUTS
+	srcvolume - pointer to structure which describes the source clip name
+	   and the volume on which it is found.
+
+	destvolume - pointer to structure which describes the destination
+	   clip name and the volume on which to place it.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/FlyerTermination                 flyer.library/FlyerTermination
+
+   NAME
+	FlyerTermination - Set Flyer's video termination on/off
+
+   SYNOPSIS
+	error = FlyerTermination(board,flags)
+	D0                       D0    D1
+
+	ULONG FlyerTermination(UBYTE,UBYTE);
+
+   FUNCTION
+	Specifies which of the Flyer's 4 video terminators to turn on.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	flags - One flag for each of 4 terminators (0=off, 1=on)
+	   Bit 0 = Toaster Input 1 terminator
+	   Bit 1 = Toaster Input 3 terminator
+	   Bit 2 = Toaster Input 4 terminator
+	   Bit 3 = Toaster Main terminator
+
+	   Power-up default is Inputs 3 & 4 terminated, Main and Input 1 not
+	   terminated.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerInputSel
+	ToasterMux
+
+flyer.library/FlyerWriteCalib                   flyer.library/FlyerWriteCalib
+
+   NAME
+	FlyerWriteCalib - Manually set Flyer's calibration registers
+
+   SYNOPSIS
+	error = FlyerWriteCalib(board,item,value,saveflag)
+	D0                      D0    D1   D2    D3
+
+	ULONG FlyerWriteCalib(UBYTE,UWORD,WORD,UBYTE);
+
+   FUNCTION
+	Sets the value of one of the calibration registers.  See flyer.h for
+	the "item" values (CALIB_xxxx).  Starting with the Rev 4 board, these
+	values are kept in non-volatile memory on-board the Flyer.  To also
+	save the specified value to memory, set the "saveflag" argument.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	item - which register to change (see flyer.h)
+
+	value - item-specific value
+
+	saveflag - 0=just use value, 1=also save to non-volatile memory
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerReadCalib
+
+flyer.library/FlyerWriteLine                     flyer.library/FlyerWriteLine
+
+   NAME
+	FlyerWriteLine - Write a scan line to a field previously opened
+
+   SYNOPSIS
+	error = FlyerWriteLine(action,buffer)
+	D0                     A0     A1
+
+	ULONG FlyerWriteLine(struct ClipAction *,UBYTE *);
+
+   FUNCTION
+	Transfers scan line data from caller's buffer, compresses it, and
+	places in the open clip as specified in (Easy)OpenWriteField call.
+	Expects 752 bytes from caller's buffer.  NTSC line 21 is expected on
+	the first call to this function, and 262 on the last.  Any extra
+	calls will be ignored.
+
+	This function does software emulation of the Flyer's hardware which
+	converts D2 data into VTASC-compressed data, including FIR filtering.
+
+	The fields which need setup prior to calling FlyerWriteLine:
+	   ca_FldHandle   - Field handle from successful OpenWriteField
+	                       or EasyOpenWriteField.
+	   ca_ReturnTime  - RT_xxx value desired (not currently supported)
+
+	Returns FERR_FULL if out of room in current field
+
+   INPUTS
+	action - pointer to structure which contains the field handle to
+	   write to and the return time for this call.
+
+	buffer - contains composite scan line data (will be modified)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Currently modifies the data at the "buffer" pointer
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	EasyOpenWriteField
+	OpenWriteField
+	FlyerReadLine
+
+flyer.library/GetClipInfo                           flyer.library/GetClipInfo
+
+   NAME
+	GetClipInfo - get information about a specific clip
+
+   SYNOPSIS
+	error = GetClipInfo(volume,clipinfo)
+	D0                  A0     A1
+
+	ULONG GetClipInfo(struct FlyerVolume *,struct ClipInfo *);
+
+   FUNCTION
+	Fills in the provided ClipInfo structure with information about the
+	specified clip.  Of particuar interest are: ci_fields equals the
+	number of fields the clip contains, ci_flags describes the type of
+	data in the clip.  See OIB_HASVIDEO and OIB_HASAUDIO in "Flyer.h".
+	Data files (such as icons) will have neither flag set.
+
+	You MUST initialize ci_len to the value CI_sizeof before calling this
+	function.  This is to ensure that future Flyer software does not
+	break old application software.
+
+	A non-zero return code indicates a failure (structure is not filled
+	in).  This call does not return until complete.  The structure may be
+	modified or reused in any way after it returns.
+
+	This routine is useful for obtaining info about a clip which has no
+	icon.
+
+	Also retrieves any starting SMPTE time-code from the clip, which can
+	be read using GetSMPTE.
+
+   INPUTS
+	volume - pointer to a FlyerVolume structure which describes the clip
+
+	clipinfo - pointer to structure to contain clip information
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	GetSMPTE
+
+flyer.library/GetFieldClock                       flyer.library/GetFieldClock
+
+   NAME
+	GetFieldClock - Retrieve the Flyer's field counter
+
+   SYNOPSIS
+	error = GetFieldClock(clockptr)
+	D0                    A0
+
+	ULONG GetFieldClock(ULONG *);
+
+   FUNCTION
+	This returns the Flyer's internal field counter by plugging it into
+	the provided pointer to a ULONG.  If more than one Flyer exists, they
+	are automatically sync'd together by the flyer.library.  Therefore,
+	no board number or volume name is required for this function.
+
+   INPUTS
+	clockptr - pointer to ULONG to receive the clock value
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/GetFrameHeader                     flyer.library/GetFrameHeader
+
+   NAME
+	GetFrameHeader -- Read Frame Header structure from clip
+
+   SYNOPSIS
+	error = GetFrameHeader(action,buffer)
+	D0                     A0     A1
+
+	ULONG GetFrameHeader(struct ClipAction *,APTR);
+
+   FUNCTION
+	Retrieves a copy of a specific FrameHeader structure from an audio
+	or video clip.  FrameHeader chosen is the one that contains the field
+	number specified in ca_VidStartField (even for audio clips).
+	Places data at the structure pointed to by "buffer".
+
+	If the return value is not FERR_OKAY, something went wrong (such as
+	the clip was not found, or the requested field number is out of range).
+
+	Note: on success, clipaction->ca_StartBlk will contain the actual
+	block number where the frame header is found, and
+	clipaction->ca_Volume->fv_SCSIdrive will contain the actual drive number.
+
+   INPUTS
+	clipaction - specifies the volume/clip name and the desired field number
+
+	buffer - Pointer to caller's structure to fill in
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	PutFrameHeader
+
+flyer.library/GetSMPTE                                 flyer.library/GetSMPTE
+
+   NAME
+	GetSMPTE - Return SMPTE time code information
+
+   SYNOPSIS
+	error = GetSMPTE(board,SMPTEinfo)
+	D0               D0    A0
+
+	ULONG GetSMPTE(UBYTE,struct SMPTEinfo *);
+
+   FUNCTION
+	This returns the last SMPTE time code information retrieved from a
+	clip.
+
+	This is generally used after a "DoFindField" call to retrieve the
+	SMPTE information related to that field, or after a GetClipInfo call
+	to get the start SMPTE time for the clip.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	SMPTEinfo - pointer to SMPTEinfo structure to receive time code info
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/InitFlyerForce                     flyer.library/InitFlyerForce
+
+   NAME
+	InitFlyerForce - setup the Flyer card using a caller specified chipID
+
+   SYNOPSIS
+	error = InitFlyerForce(lock, id)
+	D0                 D0	 D5
+
+	ULONG InitFlyerForce(BPTR, ULONG);
+
+   FUNCTION
+	Perform setup on all Flyer boards present (programs all chips,
+	places all video channels in play mode, playing black).  Must be
+	called from a process so that library can access DOS functions.
+	Looks for all chip files needed in the directory which 'lock' is on,
+	with the given chipID
+
+   INPUTS
+	lock - lock on directory in which to look for chip files
+	id - ChipID to use to locate chip files to use in initializing the Flyer
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/InitFlyers                             flyer.library/InitFlyers
+
+   NAME
+	InitFlyers - setup all attached Flyer cards
+
+   SYNOPSIS
+	error = InitFlyers(lock)
+	D0                 D0
+
+	ULONG InitFlyers(BPTR);
+
+   FUNCTION
+	Perform setup on all Flyer boards present (programs all chips,
+	places all video channels in play mode, playing black).  Must be
+	called from a process so that library can access DOS functions.
+	Looks for all chip files needed in the directory which 'lock' is on.
+
+   INPUTS
+	lock - lock on directory in which to look for chip files
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/Inquiry                                   flyer.library/Inquiry
+
+   NAME
+	Inquiry -- Do SCSI Inquiry command
+
+   SYNOPSIS
+	error = Inquiry(flyervolume,buffersize,buffer)
+	D0              A0          D0         A1
+
+	ULONG Inquiry(struct FlyerVolume *,UBYTE,APTR);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	buffersize - size of buffer provided (in bytes)
+
+	buffer - pointer to buffer to receive Inquiry data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/LocateField                           flyer.library/LocateField
+
+   NAME
+	LocateField - find a specific field in clip
+
+   SYNOPSIS
+	error = LocateField(clipaction)
+	D0                  A0
+
+	ULONG LocateField(struct ClipAction *);
+
+   FUNCTION
+	Finds the color frame that contains the field number specified in
+	ca_VidStartField.  This differs from the Begin/Do/EndFindField calls
+	in that this function just locates the field -- it does not attempt
+	to play its video or audio.  Also, the Begin/Do/End trio are designed
+	for multiple calls on the same clip (such as for jog/shuttling),
+	whereas this function is much simpler for just one lookup operation.
+
+	If the return value is not FERR_OKAY, something went wrong (such as
+	the requested field number is out of range for the clip).
+
+   INPUTS
+	clipaction - structure that contains the following data
+	   ca_Volume         -- ptr to FlyerVolume structure which contains
+	                        the board, SCSI drive, and pathname for clip
+	   ca_VidStartField  -- field number to locate
+
+   RESULT
+	If ERR_OKAY returned, clipaction->ca_StartBlk will contain the
+	block number of the frame header for the color frame which
+	contains the requested field
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/LockFlyVolList                     flyer.library/LockFlyVolList
+
+   NAME
+	LockFlyVolList - obtain lock on internal Flyer volumes list
+
+   SYNOPSIS
+	ptr = LockFlyVolList()
+	D0
+
+	struct MinList *LockFlyVolList(void);
+
+   FUNCTION
+	Returns a pointer to a MinList containing the currently mounted Flyer
+	volumes.  Also locks this list so that you may safely inspect it.  No
+	modifications to the list are allowed.  Be sure to release lock using
+	UnLockFlyVolList.
+
+	A return value of 0 indicates a failure.
+
+   INPUTS
+
+   RESULT
+	ptr - pointer to a MinList of Flyer Volume Node structures
+	   (or 0 for failure)
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	UnLockFlyVolList
+
+flyer.library/MakeClipHead                         flyer.library/MakeClipHead
+
+   NAME
+	MakeClipHead - Define an A/B head for the specified clip
+
+   SYNOPSIS
+	error = MakeClipHead(clipaction)
+	D0                   A0
+
+	ULONG MakeClipHead(struct ClipAction *);
+
+   FUNCTION
+	Define an A/B head for the specified clip.  Use the ca_VidStartField,
+	ca_AudStartField, ca_VidFieldCount, and ca_AudFieldCount entries to
+	specify where the head should start and how long it should be.
+
+	This function can be used in two ways.  If used by itself, the A/B
+	head is made immediately.  If used between StartHeadList and
+	EndHeadList calls, the definition is just added to an internal list
+	which will be created when EndHeadList is called with makeit=1.  The
+	second method can optimize your A/B heads and can take advantage of
+	heads already in existence to shorten its work load.  The immediate
+	method of MakeClipHead cannot do any of these optimizations.
+
+   INPUTS
+	clipaction - specifies the clip and the in/out points
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	VoidAllHeads
+	VoidCardHeads
+	VoidClipHead
+
+flyer.library/MakeFlyerFile                       flyer.library/MakeFlyerFile
+
+   NAME
+	MakeFlyerFile - Create an empty file on a Flyer drive
+
+   SYNOPSIS
+	error = MakeFlyerFile(volume,blocks,startptr)
+	D0                    A0     D0     A1
+
+	ULONG MakeFlyerFile(struct FlyerVolume *,ULONG,ULONG *);
+
+   FUNCTION
+	Creates a file of a specified size on a Flyer drive and adds it to
+	the drive's filesystem.  The start block for the file data area is
+	returned to the caller, who may then fill the file with something
+	useful.
+
+	Previous library versions would only create files of a size which was
+	a multiple of 512.  Starting rev 4.04, MakeFlyerFile can be used to
+	create a file of any size, but for backward compatibility, here's how
+	you must specify the size:
+
+	   Write the byte size into the variable that 'startptr' points to
+	   Pass 'blocks' value of 0
+	   Call MakeFlyerFile()
+
+	The value pointed to by 'startptr' has the same meaning on return as
+	before.
+
+   INPUTS
+	volume - pointer to structure which describes a volume and name for
+	   new file
+
+	blocks - size of file in blocks (512 bytes each)
+
+	startptr - ptr to a ULONG to receive the start block reserved for
+	   file's data.  This ULONG also contains the byte size of the file
+	   to create, providing that 'blocks' is 0.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Errors will be returned if not enough contiguous space for the file,
+	or if a file of the same name already exists on that drive/path.
+
+   BUGS
+
+   SEE ALSO
+	FlyerCopyClip, FlyerCopyClipNew
+
+flyer.library/ModeSelect                             flyer.library/ModeSelect
+
+   NAME
+	ModeSelect -- Do SCSI ModeSelect command
+
+   SYNOPSIS
+	error = ModeSelect(flyervolume,buffersize,buffer,PFbyte)
+	D0                 A0          D0         A1     D1
+
+	ULONG ModeSelect(struct FlyerVolume *,UBYTE,APTR,UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	buffersize - size of buffer provided (in bytes)
+
+	buffer - pointer to buffer which contains ModeSelect data
+
+	PFbyte - SCSI PageFormat byte
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/ModeSense                               flyer.library/ModeSense
+
+   NAME
+	ModeSense -- Do SCSI ModeSense command
+
+   SYNOPSIS
+	error = ModeSense(flyervolume,buffersize,page,buffer)
+	D0                A0          D0         D1   A1
+
+	ULONG ModeSense(struct FlyerVolume *,UBYTE,UBYTE,APTR);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	buffersize - size of buffer provided (in bytes)
+
+	page - Mode page code to read
+
+	buffer - pointer to buffer to receive ModeSense data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/NewSequence                           flyer.library/NewSequence
+
+   NAME
+	NewSequence - Prepare Flyer for a sequence download
+
+   SYNOPSIS
+	error = NewSequence(board)
+	D0                  D0
+
+	ULONG NewSequence(UBYTE);
+
+   FUNCTION
+	Used to begin sending a sequence definition to the Flyer.  Then,
+	using other calls, each piece of the sequence is defined, the
+	sequence is "closed", and then it may be played with one call.  This
+	is allows the Flyer to do much more complicated sequences
+	successfully than by using FlyerPlay calls in a double-buffered
+	fashion (which is now only supported in a limited way).
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	AddSeqClip
+	EndSequence
+	EndSequenceNew
+	PlaySequence
+
+flyer.library/OpenReadField                       flyer.library/OpenReadField
+
+   NAME
+	OpenReadField - Open a field from a clip for reading
+
+   SYNOPSIS
+	error = OpenReadField(action,field,modes)
+	D0                    A0     D0    D1
+
+	ULONG OpenReadField(struct ClipAction *,ULONG,UBYTE);
+
+   FUNCTION
+	Locates specified field of named clip and prepares to decompress
+	and transfer each scan line of the field using the FlyerReadLine
+	call.
+
+	This function, if successful, places a valid ca_FldHandle in the
+	ClipAction structure provided.  This same structure must be used for
+	any other calls relating to this open field, or you must manually
+	copy the value in ca_FldHandle into the ClipAction structure you wish
+	to use.
+
+	No compression information is required, as this information is
+	embedded in the clips themselves.
+
+   INPUTS
+	action - pointer to structure which describes a volume and the name
+	   of the clip to operate on.
+
+	field - field number of clip (starts at 0)
+
+	modes - various flags
+	   FRF_HALFLINES - allows reading the half lines.  Without this
+	   flag set, half lines are skipped
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	EasyOpenWriteField
+	OpenWriteField
+	FlyerReadLine
+
+flyer.library/OpenWriteField                     flyer.library/OpenWriteField
+
+   NAME
+	OpenWriteField - Open a field from a clip for writing
+
+   SYNOPSIS
+	error = OpenWriteField(action,field,modes,compinfo)
+	D0                     A0     D0    D1    A1
+
+	ULONG OpenWriteField(struct ClipAction *,ULONG,UBYTE,
+	        struct VidCompInfo *);
+
+   FUNCTION
+	Prepares to transfer and compress each scan line of a field using the
+	FlyerWriteLine call.  How the new data is integrated into the clip
+	depends on the "modes" flags specified:
+
+	FWF_NEW (field = dont care)
+	   Writes the first field of a new clip (deletes old if exists)
+
+	FWF_APPEND (field = dont care)
+	   Appends another field onto the clip
+
+	FWF_REWRITE (field = n)
+	   Overwrites an existing field in the clip (must be same size or
+	   smaller)
+
+	FWF_APPEND + FWF_REWRITE (field = dont care)
+	   Replaces the last field.  Used for retrying with different
+	   compression
+
+	FWF_APPEND + FWF_REWRITE + FWF_FRAME (field = n)
+	   Rewrite multiple fields in the last color frame (each field
+	   sequentially).  Field must be in the last color frame.  Used
+	   for retrying entire color frame with different compression.
+
+	FWF_REWRITE + FWF_FRAME (field = n)
+	   Rewrite multiple fields in a color frame (each field
+	   sequentially).  Used for retrying entire color frame with
+	   different compression.
+
+	FWF_HALFLINES allows writing of half lines.  Without this flag set,
+	   half lines are skipped and padded.
+
+	"compinfo" points to a structure containing information about how to
+	compress the data.  If this pointer is NULL, the Flyer will default
+	to its best algorithm.
+
+	This function, if successful, places a valid ca_FldHandle in the
+	ClipAction structure provided.  This same structure must be used for
+	any other calls relating to this open field, or you must manually
+	copy the value in ca_FldHandle into the ClipAction structure you wish
+	to use.
+
+	This function may fail and return FERR_FULL if not enough contiguous
+	storage exists at the end of the clip to handle appending a field.
+
+	Also, field writing may fail if the data produced is too large for
+	the hardware to play.  An FERR_FULL error from FlyerWriteLine
+	indicates that the field needs to be compressed harder in order to
+	fit.  If this happens, the field should be closed and reopened using
+	a different level of compression or algorithm.  Also set the
+	FWF_REWRITE mode flag to indicate to replace the previous data.
+
+	When replacing fields in the middle of a clip, the compressed data
+	must be the same size or smaller, as no space insertion is currently
+	supported.  If an FERR_FULL occurs in this case, you must either
+	retry with a tighter compression method or write the original field
+	data back into the clip.  Otherwise, this field will flash
+	unpredictable data near the bottom when the clip is played back.
+
+	Always creates clips with integral color frames regardless of how
+	many fields are written.  If a clip is left with less than a full
+	color frame at the end, the remaining fields in the color frame are
+	temporariliy padded with NTSC black.  These pad fields are auto-
+	matically replaced when new fields are appended.
+
+   INPUTS
+	action - pointer to structure which describes a volume and the name
+	   of the clip to operate on.
+
+	field - field number of clip (starts at 0).  Is a don't care with
+	   some open modes (see below)
+
+	modes - flags describing how to handle writing field
+	   FWF_NEW     - Erase existing clip (if any), start new clip
+	   FWF_APPEND  - Append field to clip
+	   FWF_REWRITE - Re-write over field
+	   FWF_FRAME   - Re-write field (must redo all following fields in
+	                 the same color frame)
+
+	compinfo - pointer to a VidCompInfo structure (or null for defaults)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Replacing fields in the middle of clips not fully tested
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	EasyOpenWriteField
+	OpenReadField
+	FlyerWriteLine
+
+flyer.library/PauseAction                           flyer.library/PauseAction
+
+   NAME
+	PauseAction - pause/resume a previously started action
+
+   SYNOPSIS
+	error = PauseAction(action,pauseflag)
+	D0                  A0     D0
+
+	ULONG PauseAction(struct ClipAction *,UBYTE pauseflag);
+
+   FUNCTION
+	Pauses or resumes a Flyer action that has been previously started.
+	Provide a pointer to the ClipAction structure used to start the
+	action.  No error occurs if action is already in the state specified
+	(already paused, for example).  AbortAction can be used to terminate
+	a paused action.
+
+	Does nothing if the action has already finished.
+
+   INPUTS
+	action - ptr to ClipAction structure used to start the action
+
+	pauseflag - 1 to pause, 0 to resume
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Currently works only with FlyerRecord actions
+
+   BUGS
+
+   SEE ALSO
+	AbortAction
+
+flyer.library/PlayMode                                 flyer.library/PlayMode
+
+   NAME
+	PlayMode - Ready Flyer for playback
+
+   SYNOPSIS
+	error = PlayMode(board)
+	D0               D0
+
+	ULONG PlayMode(UBYTE);
+
+   FUNCTION
+	Readies the Flyer for playback.  This takes about 1/2 second.
+
+	Return value indicates success (0) or the error code on failure
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	You must currently ensure that no playing or recording is occurring
+	before calling this function
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/PlaySequence                         flyer.library/PlaySequence
+
+   NAME
+	PlaySequence - Play the Flyer's internal sequence
+
+   SYNOPSIS
+	error = PlaySequence(board,basetime)
+	D0                   D0    D1
+
+	ULONG PlaySequence(UBYTE, ULONG);
+
+   FUNCTION
+	Starts the sequence playing that was previously downloaded to the
+	Flyer.  "basetime" is the time (on the Flyer's clock) to begin.  All
+	components in the sequence are relative to this start time.
+
+	This call returns immediately so that takes, effects may be done
+	synchronous with the sequence.  No other interaction with the Flyer
+	is required (or recommended) for the sequence to play, other than
+	aborting the sequence early (with AbortSequence).
+
+	See NewSequence for more info on Flyer sequencing.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	AddSeqClip
+	EndSequence
+	EndSequenceNew
+	NewSequence
+
+flyer.library/PutFrameHeader                     flyer.library/PutFrameHeader
+
+   NAME
+	PutFrameHeader -- Write Frame Header structure back to clip
+
+   SYNOPSIS
+	error = PutFrameHeader(action,buffer)
+	D0                     A0     A1
+
+	ULONG PutFrameHeader(struct ClipAction *,APTR);
+
+   FUNCTION
+	Replaces a specific FrameHeader structure in an audio or video clip
+	with the data structure provided.  FrameHeader chosen is the one
+	that contains the field number specified in ca_VidStartField (even
+	for audio clips).
+
+	If the return value is not FERR_OKAY, something went wrong (such as
+	the clip was not found, or the requested field number is out of range).
+
+	CAUTION! This function is intended to be used to read/modify/write
+	a Frame Header (using GetFrameHeader).  It is dangerous and unwise
+	to hand-craft a header from scratch and plug it in.  Doing so
+	is very difficult and is bound to cause problems.  Also, be very
+	cautious when modifying data in this structure.  The only thing
+	that's safe/useful to modify is the SerData buffer and associated
+	control values.  All else is toxic, flammable, noxious, etc.
+
+   INPUTS
+	clipaction - specifies the volume/clip name and the desired field number
+
+	buffer - Pointer to caller's structure to fill in
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	GetFrameHeader
+
+flyer.library/Read10                                     flyer.library/Read10
+
+   NAME
+	Read10 -- Transfer data from SCSI drive to DMA memory
+
+   SYNOPSIS
+	error = Read10(action,blocks,lba,buffer)
+	D0             A0     D0     D1  D2
+
+	ULONG Read10(struct ClipAction *,WORD,ULONG,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	clipaction - specifies the volume and return method
+
+	blocks - blocks to transfer
+
+	lba - starting lba
+
+	buffer - DMA buffer start (block) to receive data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/ReadSize                                 flyer.library/ReadSize
+
+   NAME
+	ReadSize -- Read SCSI drive capacity
+
+   SYNOPSIS
+	error = ReadSize(flyervolume,countptr,lengthptr)
+	D0               A0          A1       A2
+
+	ULONG ReadSize(struct FlyerVolume *,ULONG *,ULONG *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	countptr - pointer to ULONG to receive drive size in blocks
+
+	lengthptr - pointer to ULONG to receive logical block size (bytes)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/ReadTest                                 flyer.library/ReadTest
+
+   NAME
+	ReadTest -- Do a read speed test on a Flyer SCSI drive
+
+   SYNOPSIS
+	error = ReadTest(flyervolume,blocks,repeat,lba,dblflag)
+	D0               A0          D0     D1     D2  D3
+
+	ULONG ReadTest(struct FlyerVolume *,ULONG,ULONG,ULONG,UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	blocks - size of each transfer (in blocks)
+
+	repeat - number of transfers to perform
+
+	lba - starting lba on drive
+
+	dblflag - 0=simple test, 1=double-buffered test
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/RecordMode                             flyer.library/RecordMode
+
+   NAME
+	RecordMode - Ready Flyer for recording
+
+   SYNOPSIS
+	error = RecordMode(board)
+	D0                 D0
+
+	ULONG RecordMode(UBYTE);
+
+   FUNCTION
+	Readies the Flyer for recording.  This takes about 1/2 second.
+
+	Return value indicates success (0) or the error code on failure
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	You must currently ensure that no playing or recording is occurring
+	before calling this function
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/ReqSense                                 flyer.library/ReqSense
+
+   NAME
+	ReqSense -- Do SCSI RequestSense command
+
+   SYNOPSIS
+	error = ReqSense(flyervolume,buffersize,buffer)
+	D0               A0          D0         A1
+
+	ULONG ReqSense(struct FlyerVolume *,UBYTE,APTR);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	buffersize - size of data buffer provided (in bytes)
+
+	buffer - pointer to buffer to receive Sense data
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/ResetFlyer                             flyer.library/ResetFlyer
+
+   NAME
+	ResetFlyer -- Reset Flyer to known state
+
+   SYNOPSIS
+	error = ResetFlyer(board,flags)
+	D0                 D0    D1
+
+	ULONG ResetFlyer(UBYTE,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	flags - misc flags (unused)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SCSIinit                                 flyer.library/SCSIinit
+
+   NAME
+	SCSIinit -- Test and Initialize SCSI bus on Flyer
+
+   SYNOPSIS
+	error = SCSIinit(flyervolume)
+	D0               A0
+
+	ULONG SCSIinit(struct FlyerVolume *);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies bus to init
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Set v_SCSIdrive to the SCSI bus number x 8
+	Also set 'FVF_USENUMS' in v_Flags
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SCSIreset                               flyer.library/SCSIreset
+
+   NAME
+	SCSIreset -- Hardware reset all SCSI busses on Flyer
+
+   SYNOPSIS
+	error = SCSIreset(board)
+	D0                D0
+
+	ULONG SCSIreset(UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SCSIseek                                 flyer.library/SCSIseek
+
+   NAME
+	SCSIseek -- Do SCSI seek command
+
+   SYNOPSIS
+	error = SCSIseek(flyervolume,lba)
+	D0               A0          D0
+
+	ULONG SCSIseek(struct FlyerVolume *,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	lba - lba to which to seek
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SetFillColor                         flyer.library/SetFillColor
+
+   NAME
+	SetFillColor - set fill color to use for blank video
+
+   SYNOPSIS
+	error = SetFillColor(action)
+	D0                   A0
+
+	ULONG SetFillColor(struct ClipAction *);
+
+   FUNCTION
+	Sets the specified Matte color as the fill color to use for blank
+	video, such as when skipping lines with SkipLines or closing the
+	write before all scan lines are transferred.
+
+	This color remains valid for the context of this field only.
+	Defaults to black when a new field is opened.
+
+	The fields which need setup prior to calling SetFillColor:
+	   ca_FldHandle  - Field handle returned from successful
+	      OpenReadField or (Easy)OpenWriteField call
+	   ca_ReturnTime - RT_xxx value desired (not currently supported)
+	   ca_MatteY     - Luminance value
+	   ca_MatteI     - Signed I value
+	   ca_MatteQ     - Signed Q value
+
+   INPUTS
+	action - pointer to structure which contains:
+	   The field handle with which to associate this fill color
+	   The fill color (in YIQ color space)
+	   The return time for this call
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	EasyOpenWriteField
+	OpenWriteField
+	FlyerWriteLine
+
+flyer.library/SetFlooby                               flyer.library/SetFlooby
+
+   NAME
+	SetFlooby - used to set various Flyer internal values
+
+   SYNOPSIS
+	error = SetFlooby(board,chan,item,value)
+	D0                D0    D1   D2   D3
+
+	ULONG SetFlooby(UBYTE,UBYTE,UBYTE,ULONG);
+
+   FUNCTION
+	Selectively changes Flyer internal parameters by specifying the
+	parameter number and its new value.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	chan - video channel (0 or 1)
+
+	item - the parameter number to change
+
+	value - the value to assign to the parameter
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	All parameters are currently private.
+	Name derived from the term "FloobyDust"
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SetFlyerTime                         flyer.library/SetFlyerTime
+
+   NAME
+	SetFlyerTime - sets the Flyer's internal clock to a preset date/time
+
+   SYNOPSIS
+	error = SetFlyerTime(datestamp)
+	D0                   A0
+
+	ULONG SetFlyerTime(struct DateStamp *);
+
+   FUNCTION
+	Sets the internal real-time clock of all attached Flyers to the date
+	and time specified in the structure whose pointer is given.  They
+	maintain this date/time for the purpose of date-stamping files.
+
+   INPUTS
+	datestamp - pointer to an AmigaDOS DateStamp structure
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SetSerDevice                         flyer.library/SetSerDevice
+
+   NAME
+	SetSerDevice - Select type of device attached to a Flyer serial port
+
+   SYNOPSIS
+	error = SetSerDevice(board,port,type,device)
+	D0                   D0    D1   D2   D3
+
+	ULONG SetSerDevice(UBYTE,UBYTE,UBYTE,UBYTE);
+
+   FUNCTION
+	Specifies the type and model of device which the user wishes to
+	attach to one of the Flyer's two serial ports.  These ports can be
+	used for a variety of things such as SMPTE read, SMPTE write, MIDI,
+	serial control, etc.  The Flyer will take care of details such as the
+	baud rate, format conversion, etc. for all devices defined in Flyer.h
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	port - specifies the serial port (0 = A, 1 = B)
+
+	type - type of serial device (SERDEVTYPE_xxx in Flyer.h)
+
+	device - device model (SERDEV_xxx in Flyer.h)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/SkipLines                               flyer.library/SkipLines
+
+   NAME
+	SkipLines - Seek past scan lines in a field previously opened
+
+   SYNOPSIS
+	error = SkipLines(action,lines)
+	D0                A0     D0
+
+	ULONG SkipLines(struct ClipAction *,UWORD);
+
+   FUNCTION
+	Seeks past a number of scan lines in a field previously opened.  If
+	opened for reading, skips over unwanted scan lines.  If opened for
+	writing, fills skipped lines with fillcolor (usually black).
+	Returns FERR_FULL if out of room in current field when writing.
+
+	The fields which need setup prior to calling SkipLines:
+	   ca_FldHandle   - Field handle returned from successful
+	                  - OpenReadField or (Easy)OpenWriteField call
+	   ca_ReturnTime  - RT_xxx value desired (not currently supported)
+
+   INPUTS
+	action - pointer to structure which contains the field handle to work
+	   with and the return time for this call.
+
+	lines - number of scan lines to skip
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CloseField
+	EasyOpenWriteField
+	OpenReadField
+	OpenWriteField
+	FlyerReadLine
+	SetFillColor
+	FlyerWriteLine
+
+flyer.library/StartClipCutList                 flyer.library/StartClipCutList
+
+   NAME
+	StartClipCutList - Prepares to perform clip cutting
+
+   SYNOPSIS
+	error = StartClipCutList(clip,flags)
+	D0                       A0   D0
+
+	ULONG StartClipCutList(struct ClipAction *,UBYTE);
+
+   FUNCTION
+	Used to begin clip cutting and processing for the clip specified.
+	After opening the list with this function, use AddClipCut to make
+	each subclip definition, then close the list using EndClipCutList.
+
+	Two major types of processing can currently be accomplished using
+	this mechanism: destructive and non-destructive.  The destructive
+	processing will make the listed sub-clips and delete any unused parts
+	of the original, doing a regional de-frag operation so as to not
+	fragment the drive.  The non-destructive operation leaves the
+	original intact and makes new sub-clips.
+
+   INPUTS
+	clip - specifies the master clip from which to make sub-clip(s)
+
+	flags - specifies the type of processing (see Flyer.h CCL_xxx flags)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Currently only one ClipCut list may be open at a time.
+
+   BUGS
+
+   SEE ALSO
+	AddClipCut
+	EndClipCutList
+
+flyer.library/StartHeadList                       flyer.library/StartHeadList
+
+   NAME
+	StartHeadList - Prepares Flyer for list of A/B heads
+
+   SYNOPSIS
+	error = StartHeadList(board)
+	D0                    D0
+
+	ULONG StartHeadList(UBYTE);
+
+   FUNCTION
+	Prepares specified Flyer to compose a list of A/B heads.
+	Create a list like this when opening an existing project.  This
+	will be more efficient than just submitting head definitions one
+	at a time, because it allows the Flyer to do some optimizations.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/StillMode                               flyer.library/StillMode
+
+   NAME
+	StillMode - Set video looping method for video channel
+
+   SYNOPSIS
+	error = StillMode(board,chan,mode)
+	D0                D0    D1   D2
+
+	ULONG StillMode(UBYTE,UBYTE,UBYTE);
+
+   FUNCTION
+	Used to specify the type of video looping to use on stilled video.
+	The default at power-up is MODE_FRAME.
+
+   INPUTS
+	volume - pointer to structure which describes a volume (used to
+	   pick specific Flyer card).
+
+	chan - video channel (0 or 1)
+
+	mode - video looping mode:
+
+	   MODE_FIELD - loops a single field of video
+	   MODE_PAIR - loops an interlaced pair of video fields
+	   MODE_FRAME - loops an entire color frame (default)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/TBCcontrol                             flyer.library/TBCcontrol
+
+   NAME
+	TBCcontrol - Sense/control TBC functions
+
+   SYNOPSIS
+	error = TBCcontrol(board,TBCctrl,oper)
+	D0                 D0    A0      D1
+
+	ULONG TBCcontrol(UBYTE,struct TBCctrl *,UBYTE);
+
+   FUNCTION
+	Provides access to the (optional) Flyer TBC module.
+
+	The "oper" flags describe which portions of the TBCctrl structure to
+	apply.  This allows somewhat simplified use of this command without
+	always needing to set all values for each call, as well as the
+	ability to check the TBC status flags without modifying anything.
+
+	To determine if the TBC module is present, use this function setting
+	only the TBCOF_STATUS oper flag, then check the "status" flags
+	returned for TBCSF_MODULE to indicate that one was detected.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	TBCctrl - pointer to TBCctrl structure
+
+	oper - various flags indicating what kind of operation(s) to perform:
+
+	   TBCOF_STATUS  -- get status flags
+	   TBCOF_MODES   -- set modes, flags, and muxes
+	   TBCOF_ADJUST  -- set adjustment values
+
+	   Any combination of these operations can be specified.
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	If no TBC module is present, an error will be reported if this
+	command is used for anything except to get status
+
+   BUGS
+
+   SEE ALSO
+	FlyerInputSel
+	flyer.h
+
+flyer.library/ToasterMux                             flyer.library/ToasterMux
+
+   NAME
+	ToasterMux - Set Flyer/Toaster multiplex switches
+
+   SYNOPSIS
+	error = ToasterMux(board,input3,input4,preview)
+	D0                 D0    D1     D2     D3
+
+	ULONG ToasterMux(UBYTE,UBYTE,UBYTE,UBYTE);
+
+   FUNCTION
+	Controls how the Flyer interacts with the Toaster's inputs 3 and 4
+	and preview output.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	input3 - video source fed to switcher input 3
+	   0 = Toaster input 3
+	   1 = Flyer video output (channel 0)
+
+	input4 - video source fed to switcher input 4
+	   0 = Toaster input 4
+	   1 = Flyer video output (channel 1)
+
+	preview - video fed to preview output
+	   0 = Toaster preview bus
+	   1 = Flyer camcorder input
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	FlyerInputSel
+	FlyerTermination
+
+flyer.library/UnLockFlyVolList                 flyer.library/UnLockFlyVolList
+
+   NAME
+	UnLockFlyVolList - release lock on Flyer volumes list
+
+   SYNOPSIS
+	error = UnLockFlyVolList(list)
+	D0                       A0
+
+	ULONG UnLockFlyVolList(struct MinList *);
+
+   FUNCTION
+	Releases the lock obtained using LockFlyVolList.
+
+	Like most other library functions, a return value of FERR_OKAY
+	indicates success.
+
+   INPUTS
+	list - pointer to list (previously obtained with LockFlyVolList)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	LockFlyVolList
+
+flyer.library/VideoCompressModes             flyer.library/VideoCompressModes
+
+   NAME
+	VideoCompressModes - set video compression modes and strategy
+
+   SYNOPSIS
+	error = VideoCompressModes(board,bestmode,worstmode,strategy)
+	D0                         D0    D1       D2        D3
+
+	ULONG VideoCompressModes(UBYTE,UBYTE,UBYTE,UBYTE);
+
+   FUNCTION
+	Sets the range of video compression qualities that the Flyer may use
+	when recording video.  The default is all modes.  But this may be
+	pared down by narrowing this range or one specific mode may be
+	forced.
+
+	Strategy picks the strategy the Flyer should use for auto-switching
+	between modes.  The only supported value currently is 0, which uses
+	compressed data size to switch modes.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	bestmode - specifies the best video compression quality mode to use
+	worstmode - specifies the worst video compression quality mode to use
+
+	     Currently supported modes, in order of decreasing video quality:
+
+	     0 (D2)  Best quality, worst compression
+	     1 (D2)
+	     2 (SN)
+	     3 (SN)
+	     4 (SN)  Worst quality, best compression
+
+	strategy - always 0 for now (size based strategy)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/VideoParams                           flyer.library/VideoParams
+
+   NAME
+	VideoParams - set video compression parameters
+
+   SYNOPSIS
+	err=VideoParams(board,vchan,mintol,maxtol,freq,vidlen,FIRset,special)
+	D0              D0    D1    D2     D3     D4   D5     D6     D7
+
+	ULONG VideoParams(UBYTE,UBYTE,UBYTE,UBYTE,UBYTE,UWORD,UBYTE,UBYTE);
+
+   FUNCTION
+	Sets the default video compression parameters for each video channel.
+	For auto-adjusting compression modes, this is only used for the first
+	field of video.
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+	vchan - video channel (0 or 1)
+
+	mintol - minimum tolerance mode (0 best, 6 worst)
+
+	maxtol - maximum tolerance mode
+
+	freq - random noise frequency
+
+	vidlen - desired length of compressed field data (in SCSI blocks)
+
+	FIRset - FIR presets to use
+	   0 = custom
+	   1 = 25%
+	   2 = 33%
+	   3 = 50%
+	   4 = 100%
+
+	special - for testing only
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+	Use only tolerance modes 0, 1, 4, 5, and 6
+
+	****** This may change as we finalize how the user's controls the
+	amount of compression ******
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/VoidAllHeads                         flyer.library/VoidAllHeads
+
+   NAME
+	VoidAllHeads - Remove all A/B heads from all Flyers
+
+   SYNOPSIS
+	error = VoidAllHeads()
+	D0
+
+	ULONG VoidAllHeads(void);
+
+   FUNCTION
+	Removes all A/B heads from all drives attached to all Flyers.
+
+   INPUTS
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	MakeClipHead
+	VoidCardHeads
+	VoidClipHead
+
+flyer.library/VoidCardHeads                       flyer.library/VoidCardHeads
+
+   NAME
+	VoidCardHeads - Remove all A/B heads for the Flyer card specified
+
+   SYNOPSIS
+	error = VoidCardHeads(board)
+	D0                    D0
+
+	ULONG VoidCardHeads(UBYTE board);
+
+   FUNCTION
+	Removes all A/B heads from drives attached to specified Flyer card
+
+   INPUTS
+	board - specifies the Flyer board (0-3)
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	MakeClipHead
+	VoidAllHeads
+	VoidClipHead
+
+flyer.library/VoidClipHead                         flyer.library/VoidClipHead
+
+   NAME
+	VoidClipHead - Remove an A/B head for the specified clip
+
+   SYNOPSIS
+	error = VoidClipHead(clipaction)
+	D0                   A0
+
+	ULONG VoidClipHead(struct ClipAction *);
+
+   FUNCTION
+	Removes an A/B head for the specified clip.  Must exactly match the
+	range of a previously defined head (with MakeClipHead) or this
+	does nothing.
+
+   INPUTS
+	clipaction - specifies clip and in/out points of head to remove
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	MakeClipHead
+	VoidAllHeads
+	VoidCardHeads
+
+flyer.library/WaitAction                             flyer.library/WaitAction
+
+   NAME
+	WaitAction - Wait for a previously issued action to complete
+
+   SYNOPSIS
+	error = WaitAction(action)
+	D0                 A0
+
+	ULONG WaitAction(struct ClipAction *);
+
+   FUNCTION
+	Does not return until the specified action is complete.
+
+   INPUTS
+	action - pointer to structure that was used to issue the original
+	   command
+
+   RESULT
+	error - return code (from command)
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+	CheckAction
+
+flyer.library/Write10                                   flyer.library/Write10
+
+   NAME
+	Write10 -- Transfer data from DMA memory to SCSI drive
+
+   SYNOPSIS
+	error = Write10(action,blocks,buffer,lba)
+	D0              A0     D0     D1     D2
+
+	ULONG Write10(struct ClipAction *,WORD,ULONG,ULONG);
+
+   FUNCTION
+
+   INPUTS
+	clipaction - specifies the volume and the return method
+
+	blocks - blocks to transfer
+
+	buffer - DMA buffer start (block) of data to write
+
+	lba - starting lba
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+flyer.library/WriteTest                               flyer.library/WriteTest
+
+   NAME
+	WriteTest -- Do a write speed test on a Flyer SCSI drive
+
+   SYNOPSIS
+	error = WriteTest(flyervolume,blocks,repeat,lba,dblflag)
+	D0                A0          D0     D1     D2  D3
+
+	ULONG WriteTest(struct FlyerVolume *,ULONG,ULONG,ULONG,UBYTE);
+
+   FUNCTION
+
+   INPUTS
+	volume - pointer to structure which specifies drive
+
+	blocks - size of each transfer (in blocks)
+
+	repeat - number of transfers to perform
+
+	lba - starting lba on drive
+
+	dblflag - 0=simple test, 1=double-buffered test
+
+   RESULT
+
+   EXAMPLE
+
+   NOTES
+
+   BUGS
+
+   SEE ALSO
+
+

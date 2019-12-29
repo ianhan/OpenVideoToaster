@@ -1,0 +1,63 @@
+********************************************************************
+* LUTRam.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lutram.a,v 2.3 1996/07/15 18:24:33 Holt Exp $
+*
+* $Log: lutram.a,v $
+*Revision 2.3  1996/07/15  18:24:33  Holt
+*made many changes to make luts work in sequenceing.
+*
+*Revision 2.2  1993/05/04  12:44:45  Finch2
+**** empty log message ***
+*
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUTRam"
+	section	LUT_bss,bss
+	include	"Assembler.i"
+	include	"Include.i"
+	include	"LUTEqu.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT Ram:							*
+*									*
+*	Contains all the Ram For LUT Mode.				*
+*									*
+*	07-Feb-1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_Base
+LUT_Base:
+	DS.B	LTE_Sizeof	; LUT Base Structure.
+*
+	XDEF	LUT_CycleLine
+LUT_CycleLine:
+	DS.B	4		; Current Position.
+*
+	XDEF	LUT_CycleSpeed
+LUT_CycleSpeed:
+	DS.B	4		; Current Speed.
+*
+	XDEF	LUT_EffectLUTBase
+LUT_EffectLUTBase:
+	DS.B	4		; Switcher TBar Routine, LUT Pointer.
+*
+	XDEF	LUT_EffectEfxBase
+LUT_EffectEfxBase:
+	DS.B	4		; Switcher TBar Routine, Effect Pointer.
+	
+	XDEF	LUT_mainorprev
+LUT_mainorprev:	
+	DS.B	1		; Put lut on up on main or preview.
+
+	XDEF	LUT_BUSS
+LUT_BUSS:
+	DS.B	4		; LUTBUSS
+	END

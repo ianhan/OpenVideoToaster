@@ -1,0 +1,223 @@
+*************************************************************************
+*************************************************************************
+	IFEQ 1
+*************************************************************************
+*									*
+*	LUTModeOn:							*
+*									*
+*	Turns On LUT Mode.						*
+*									*
+*	Input:								*
+*									*
+*	A2.L	= Address of LUT Base.					*
+*	A4.L	= Address of Effects Base.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Mode is Turned On.						*
+*									*
+*	24.Oct 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_LUTModeOn
+LUT_LUTModeOn:
+	MOVEM.L	D0-D2/A0-A2/A4,-(A7)	; Save Calling State.
+*
+*	Change From B/W <-> Color?
+*
+	DEA.L	TB_VTSetUp,A1		; A1.L = Address of VT Setup.
+	MOVEQ.L	#LUTMODE_BW,D0		; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A2)
+	BNE.S	LMODO1			; Jump If B/W.
+	MOVEQ.L	#LUTMODE_COLOR,D0	; Set Color or B/W Mode.
+LMODO1	CMP.B	TB_LutMode(A5),D0
+	BNE.S	LMODO2
+*
+*	Are We Currently in LUT Mode?
+*
+	ELHTEST_LUT	A1		; Is LUT Mode Enabled?
+	BNE	LMODO7			; Exit If LUT Mode Already On.
+LMODO2
+	BTST.B	#4,TB_DisplayRenderMode(a5)	; Are we sequencing ?
+	BNE.B	LMODO25
+	CALLTL	InstallAVEI		; Make Sure AVEI Copper List.
+LMODO25
+*
+*	Freeze the DVE Buffers.
+*
+	MOVEQ.L	#VIDEOTYPE_FREEZE4,D0	; D0.L = Type of Freeze.
+	CALLTL	FreezeThawDVE		; Install the Freeze.
+	MOVE.W	TB_PrvwSec(A5),D2	; -> Stops DV2 Problem.
+	CALLTL	CookFreeze		; Make Sure Freeze If Ok.
+	MOVE.W	D2,TB_PrvwSec(A5)	; -> This is Just a Kluge.
+*
+*	Set Up the LUT Bus.
+*
+	PUT.B	#M_LUTBUS_PRVW,TB_LutBus ;PRVW or MAIN
+	PUT.B	#LUTMODE_BW,TB_LutMode	; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A2)
+	BNE.S	LMODO3			; Jump If B/W.
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ;Set Color or B/W Mode.
+LMODO3	TST.W	TB_TValSec(A5)		; In The First Position?
+	BNE.S	LMODO4			; Jump If Not First Position.
+	MOVE.W	#-1,EF_OldTBar(A4)
+	MOVE.W	#-1,EF_OldStage(A4)
+*
+*	Set ELH Values For The Toaster.
+*
+LMODO4	DEA.L	TB_VTSetUp,A1		; A1.L = Address of VT Setup.
+	ELHCLEAR_LINP	A1
+	ELHSET_OBR	A1
+	ELHSET_LUT	A1		; Enable LUT Mode.
+*
+*	Get Index To Display Routine.
+*
+	EXG.L	A2,A4			; A4.L = Address of LUT Base.
+	BSR	LUT_SetDisplayModeLongIndexSw ; D0.L = Index To Image.
+*
+*	Start Color Cycling Routine.
+*
+	LEA.L	LUT_CyCroutonTb(PC),A0	; A0.L = Address of Table.
+	MOVEA.L	0(A0,D0.L),A0		; A0.L = Address of Routine.
+	MOVEQ.L	#M_LUTBUS_PRVW,D1	; D1.L = LUT BUS.
+	JSR	(A0)			; Execute Color Cycling Routine.
+	EXG.L	A2,A4			; A4.L = Address of Effects Base.
+*
+*	Start the Mode.
+*
+	MOVEA.L	LUT_ExCroutonTBarTb(PC,D0.L),A0 ; A0.L = Address of Function.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = Position Of TBar.
+	JSR	(A0)			; Execute The Function.
+*
+*	Make Sure No LIVE DVE
+*
+	MOVE.W	TB_MainSec(A5),D0	; Get Main Row.
+	ISLIVEDVEON	D0		; Does It Have Live DVE?
+	BEQ.S	LMODO5			; Jump If No Live DVE.
+	TURNLIVEDVEOFF	D0		; Force It Off.
+	MOVE.W	D0,TB_MainSec(A5)	; Save Result.
+LMODO5
+	MOVE.W	TB_PrvwSec(A5),D0	; Get Prvw Row.
+	ISLIVEDVEON	D0		; Does It Have Live DVE?
+	BEQ.S	LMODO6			; Jump If No Live DVE.
+	TURNLIVEDVEOFF	D0		; Force It Off.
+	MOVE.W	D0,TB_PrvwSec(A5)	; Save Result.
+LMODO6
+*
+*	Cook the Data, and Show It.
+*
+	CALLTL	CookMain		; Fix Up The Button.
+	CALLTL	CookAndServePrvw	; Establish LUT Mode.
+	BRA.S	LMODO8			; Exit Subroutine.
+*
+*	LUT Mode is Currently On.
+*	Get Index To Display Routine.
+*
+LMODO7	EXG.L	A2,A4			; A4.L = Address of LUT Base.
+	BSR	LUT_SetDisplayModeLongIndexSw ; D0.L = Index To Image.
+*
+*	Start Color Cycling Routine.
+*
+	LEA.L	LUT_CyCroutonTb(PC),A0	; A0.L = Address of Table.
+	MOVEA.L	0(A0,D0.L),A0		; A0.L = Address of Routine.
+	MOVEQ.L	#M_LUTBUS_PRVW,D1	; D1.L = LUT BUS.
+	JSR	(A0)			; Execute Color Cycling Routine.
+	EXG.L	A2,A4			; A4.L = Address of Effects Base.
+*
+*	Start the Mode.
+*
+	MOVEA.L	LUT_ExCroutonTBarTb(PC,D0.L),A0 ; A0.L = Address of Function.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = Position Of TBar.
+	JSR	(A0)			; Execute The Function.
+*
+*	Exit Subroutine.
+*
+LMODO8	MOVEM.L	(A7)+,D0-D2/A0-A2/A4	; Return Calling State.
+	RTS
+*
+*	Function Table For TBar.
+*
+	XDEF	LUT_ExCroutonTBarTb
+LUT_ExCroutonTBarTb:
+	DC.L	LUT_FilterTBar		; Filter     / Cycle None.
+	DC.L	DummyTBar		; Filter     / Cycle Forward.
+	DC.L	DummyTBar		; Filter     / Cycle Backward.
+	DC.L	DummyTBar		; Filter     / Cycle Both.
+	DC.L	LUT_TransitionTBar	; Transition / Cycle None.
+	DC.L	DummyTBar		; Transition / Cycle Forward.
+	DC.L	DummyTBar		; Transition / Cycle Backward.
+	DC.L	DummyTBar		; Transition / Cycle Both.
+*
+*	Function Table For Auto.
+*
+	XDEF	LUT_ExCroutonAutoTb
+LUT_ExCroutonAutoTb:
+	DC.L	LUT_FilterAuto		; Filter     / Cycle None.
+	DC.L	DummyAuto		; Filter     / Cycle Forward.
+	DC.L	DummyAuto		; Filter     / Cycle Backward.
+	DC.L	DummyAuto		; Filter     / Cycle Both.
+	DC.L	LUT_TransitionAuto	; Transition / Cycle None.
+	DC.L	DummyAuto		; Transition / Cycle Forward.
+	DC.L	DummyAuto		; Transition / Cycle Backward.
+	DC.L	DummyAuto		; Transition / Cycle Both.
+*
+*	Function Table For UnAuto.
+*
+	XDEF	LUT_ExCroutonUnAutoTb
+LUT_ExCroutonUnAutoTb:
+	DC.L	LUT_FilterUnAuto	; Filter     / Cycle None.
+	DC.L	DummyUnAuto		; Filter     / Cycle Forward.
+	DC.L	DummyUnAuto		; Filter     / Cycle Backward.
+	DC.L	DummyUnAuto		; Filter     / Cycle Both.
+	DC.L	LUT_TransitionUnAuto	; Transition / Cycle None.
+	DC.L	DummyUnAuto		; Transition / Cycle Forward.
+	DC.L	DummyUnAuto		; Transition / Cycle Backward.
+	DC.L	DummyUnAuto		; Transition / Cycle Both.
+*
+*	Function Table For Cycle.
+*
+	XDEF	LUT_CyCroutonTb
+LUT_CyCroutonTb:
+	DC.L	RETADR			; Filter     / Cycle None.
+	DC.L	LUT_GridCycleForward	; Filter     / Cycle Forward.
+	DC.L	LUT_GridCycleBackward	; Filter     / Cycle Backward.
+	DC.L	LUT_GridCycleBoth	; Filter     / Cycle Both.
+	DC.L	RETADR			; Transition / Cycle None.
+	DC.L	LUT_GridCycleForward	; Transition / Cycle Forward.
+	DC.L	LUT_GridCycleBackward	; Transition / Cycle Backward.
+	DC.L	LUT_GridCycleBoth	; Transition / Cycle Both.
+	PAGE
+*************************************************************************
+*
+DummyTBar:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	CALLTL	UpdateTBar		; Move The TBar.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+*
+DummyAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	DummyTBar(PC),A2	; A2.L = Address of TBar Routine.
+	MOVEQ.L	#0,D1			; D1.L = Flag For AUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+DummyUnAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	DummyTBar(PC),A2	; A2.L = Address of TBar Routine.
+	MOVEQ.L	#-1,D1			; D1.L = Flag For UNAUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+	ENDC
+*************************************************************************
+*************************************************************************

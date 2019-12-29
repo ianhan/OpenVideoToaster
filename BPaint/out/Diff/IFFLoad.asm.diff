@@ -1,0 +1,1535 @@
+26,28d25
+< 	include "ram:mod.i"
+< 
+< 
+31,32d27
+< 
+< 	include	"ps:assembler.i"
+42,43d36
+< 	include	"ps:serialdebug.i"
+< 
+97,103d89
+< 	xref FlagWholeHam_
+< 
+< 
+< 
+< ;;SERDEBUG	equ	1
+< 
+< 
+125,144d110
+< rset_addrbit:	MACRO	;codesize 20bytes
+< 	;not for static...;nxtrandom d6		;MACRO, compute another random #
+< 	;compute static dither
+< 	;AUG211990;move.B	(a0)+,d6
+< 	;;eor.B	d0,d6	;row constant, static dither	
+< 	;;and.W	#$003f,d6	;6 bits, only, for dither
+< 	move.b	d7,(a6)+	;s_PlotFlag
+< 	;AUG211990;move.b	d6,(a6)	;june22;d6,s_DitherThresh-s_PlotFlag(a6)
+< 	move.B	(a0)+,(a6)
+< 	;june22;lea	s_SIZEOF(a6),a6
+< 	lea	(s_SIZEOF-1)(a6),a6	;june22;s_SIZEOF(a6),a6
+< 	ENDM
+< rsnybble:	  MACRO
+< 	rset_addrbit
+< 	rset_addrbit
+< 	rset_addrbit
+< 	rset_addrbit
+< 	ENDM
+< 
+< 
+151,152c117,118
+< 	CALLIB	DOS,Read							;returns count#read in d0 (max buffer is 63K)
+< 	move.l	d0,d1								;DOS RESULT (exec settaskpri preserves d1)
+---
+> 	CALLIB	DOS,Read	;returns count#read in d0 (max buffer is 63K)
+> 	move.l	d0,d1	;DOS RESULT (exec settaskpri preserves d1)
+154c120
+< 	move.l	d1,BufferCount_(BP)						;12 cy (this goes to 0, NO CHANGE LEN)
+---
+> 	move.w	d1,BufferCount_(BP)	;12 cy (this goes to 0, NO CHANGE LEN)
+156c122
+< 	move.l	#1,BufferCount_(BP)						;funny way, handle bumping end-of-file
+---
+> 	move.w	#1,BufferCount_(BP)	;funny way, handle bumping end-of-file
+162c128
+< 	subq.l	#1,BufferCount_(BP)						;17 cy
+---
+> 	subq.w	#1,BufferCount_(BP)	;17 cy
+164c130
+< 	bsr	myread_stub							;ok waste time//save space since calling dos
+---
+> 	bsr	myread_stub	;ok waste time//save space since calling dos
+181,182c147,149
+< Uncompress_next_byte: macro ;register,label for 'dbf' instr. to endit  ;may NOT use d3,d4
+< 	tst.b	Nduplicate				;non zero means we are duplicating
+---
+> Uncompress_next_byte: macro ;register,label for 'dbf' instr. to endit
+> 			;may NOT use d3,d4
+> 	tst.b	Nduplicate	;non zero means we are duplicating
+189,190c156,157
+< 	tst.b	Nliteral				;literally use next 'n' bytes
+< 	beq.s	get_uncomp_case\@			;get next code
+---
+> 	tst.b	Nliteral	;literally use next 'n' bytes
+> 	beq.s	get_uncomp_case\@	;get next code
+194c161
+< 	bra.s	end_Uncompress\@			;we WANT short but it wont fit yet
+---
+> 	bra.s	end_Uncompress\@	;we WANT short but it wont fit yet
+198c165
+< 	cmpi.b	#-128,d0				;value of -128 is a noop
+---
+> 	cmpi.b	#-128,d0	;value of -128 is a noop
+213c180
+< 	endm 						;-----
+---
+> 	endm ;-----
+215,216d181
+< 
+< 
+219,220c184,185
+< *	and.W	#%00111111,d0		;strip mask (7th) bit, clean up word too
+< 	and.W	#%11111111,d0		;strip mask (7th) bit, clean up word too
+---
+> 	and.W	#%00111111,d0	;strip mask (7th) bit, clean up word too
+> 
+223,286c188,208
+< ;	bsr	sayHAM
+< ;we are plotting a ham file, using an existing palette
+< 	cmpi.b	#16,d0			;is our byte a ham modifier?
+< 	BCS.S	not_a_ham_file\@	;palette color, anyway
+< 	cmpi.b	#32,d0			;d0=HAM MODIFIER
+< 	bcc.s	_not_\@_blue
+< 	andi.b	#$0F,d0
+< 	asl.b	#2,d0
+< 	move.b	d0,Pblue_(BP)
+< 	bra.s	quickdet_\@
+< _not_\@_blue:
+< 	cmpi.b	#48,d0			
+< 	bcc.s	_not_\@_red
+< 	andi.b	#$0F,d0
+< 	asl.b	#2,d0
+< 	move.b	d0,Pred_(BP)
+< 	bra.s	quickdet_\@
+< _not_\@_red:
+< 	andi.b	#$0F,d0
+< 	asl.b	#2,d0
+< 	move.b	d0,Pgreen_(BP)
+< 	bra.s	quickdet_\@
+< not_a_ham_file\@:			;treat halfbrite (6 bitplanes) as requiring a 64 color
+< 					;color map, s/b consistent with the ibm pc2 and 'gif'
+< 	add.w	d0,d0			;=*2 palette #
+< 	add.w	d0,d0			;=*4
+< 
+<  ifeq 1					;normal loading.
+< 	move.l	0(a3,d0.w),Pred_(BP)	;(rgbj)  that we want to plot
+<  endc
+< ;	move.l	0(a3,d0.w),d0
+< 
+<  ifeq 0					;fix for loading problem, But makes stampdown not work!
+< 	move.b	0(a3,d0.w),d1		;process red.
+< 	asl.b	#2,d1
+< 	move.b	d1,Pred_(BP)
+< 
+< 	move.b	1(a3,d0.w),d1		;process green.
+< 	asl.b	#2,d1
+< 	move.b	d1,Pred_+1(BP)
+< 
+< 	move.b	2(a3,d0.w),d1		;process Blue.
+< 	asl.b	#2,d1
+< 	move.b	d1,Pred_+2(BP)
+< 
+< ;	lsl.l	#2,d0
+< ;	move.l	d0,Pred_(BP)		;jack-up the color 
+<  endc
+< quickdet_\@:
+< 	jsr	(a4)			;DetermineRtn ;return d0=6bit plotvalu and P(rgb)old
+< 	endm	;ComputeOnePixel
+< 
+< 
+< 
+<  ifeq 1
+< ************************************************************
+< 				;color map, s/b consistent with the ibm pc2 and 'gif'
+< 	add.w	d0,d0			;=*2 palette #
+< 	add.w	d0,d0			;=*4
+< 
+< ;	move.l	0(a3,d0.w),Pred_(BP)	;(rgbj)  that we want to plot
+< 	move.l	0(a3,d0.w),d0
+< 	lsl.l	#2,d0
+< 	move.l	d0,Pred_(BP)		;jack-up the color 
+---
+> 	;we are plotting a ham file, using an existing palette
+> 		cmpi.b	#16,d0	;is our byte a ham modifier?
+> 		BCS.S	not_a_ham_file\@	;palette color, anyway
+> 		cmpi.b	#32,d0		;d0=HAM MODIFIER
+> 		bcc.s	_not_\@_blue
+> 		andi.b	#$0F,d0
+> 		move.b	d0,Pblue_(BP)
+> 		bra.s	quickdet_\@
+> _not_\@_blue:	cmpi.b	#48,d0
+> 		bcc.s	_not_\@_red
+> 		andi.b	#$0F,d0
+> 		move.b	d0,Pred_(BP)
+> 		bra.s	quickdet_\@
+> _not_\@_red:	andi.b	#$0F,d0
+> 		move.b	d0,Pgreen_(BP)
+> 		bra.s	quickdet_\@
+> not_a_ham_file\@:	;treat halfbrite (6 bitplanes) as requiring a 64 color
+> 			;color map, s/b consistent with the ibm pc2 and 'gif'
+> 		add.w	d0,d0		;=*2 palette #
+> 		add.w	d0,d0		;=*4
+> 		move.l	0(a3,d0.w),Pred_(BP)	;(rgbj)  that we want to plot
+288c210
+< 	jsr	(a4)			;DetermineRtn ;return d0=6bit plotvalu and P(rgb)old
+---
+> 	jsr	(a4)	;DetermineRtn ;return d0=6bit plotvalu and P(rgb)old
+290,296d211
+< ************************************************************ 
+<  endc
+< 
+< 
+< sayHAM
+< 	DUMPMSG	<LOADING HAM FILE>
+< 	RTS
+298c213
+< ThresholdTable:	;gosh it's big..;----
+---
+> ThresholdTable:	;gosh it's big...;----
+328c243
+< 	xref	FlagLaceNEW_
+---
+> 	xref FlagLaceNEW_
+329a245
+> 
+354a271
+> 
+360,362c277
+< 	; a4 used by ReadOneByte as pointer into FileBufferPtr_(BP)
+< 
+< 	DUMPMSG	<IFF_Load>
+---
+> 	;a4	used by ReadOneByte as pointer into FileBufferPtr_(BP)
+364,366c279,281
+< 	xref FlagCancel_				;AUG311990...decodecomposite
+< 	sf	FlagCancel_(BP)				;AUG31...1990
+< 	sf	FlagPaleMatch_(BP)			;ASSUME NO MATCHING PALETTE?
+---
+> 	xref FlagCancel_		;AUG311990...decodecomposite
+> 	sf	FlagCancel_(BP)		;AUG31...1990
+> 	sf	FlagPaleMatch_(BP)	;ASSUME NO MATCHING PALETTE?
+370,371c285,286
+< 	st	FlagHamFile_(BP)			;JULY05...fixes remap 2x problem?
+< 	move.L	BigPicWt_(BP),d0			;remap, fake out a file same as picture
+---
+> 	st	FlagHamFile_(BP)	;JULY05...fixes remap 2x problem?
+> 	move.L	BigPicWt_(BP),d0	;remap, fake out a file same as picture
+375,377c290,292
+< 	move.l	#(16*3),d0				;len of colortableChunkLength_(BP),d0
+< 	;bra	do_grabfbuffer				;regular file load, grab buffer
+< 	bra	after_grabfbuffer			;remap_entry here<=
+---
+> 	move.l	#(16*3),d0	;len of colortableChunkLength_(BP),d0
+> 	;bra	do_grabfbuffer	;regular file load, grab buffer
+> 	bra	after_grabfbuffer	;remap_entry here<=
+379,383c294,307
+< 	xjsr	GrabLoadPlane0				;memories.o ;does an alloc' if needed
+< 	beq	Clup_EndLoad				;no buffer?
+< 		
+< 	move.l	#1,BufferCount_(BP)			;effectively clears it
+< 	move.l	#(8*64),d0 				;size to allow for top of file, bigger for odd chunks
+---
+> 
+> ;may21;
+> ;may21;	;ALWAYS close ham tool
+> ;may21;	xref FlagCloseWB_	;may07'89
+> ;may21;	tst.b	FlagCloseWB_(BP)	;lomem situ?
+> ;may21;	beq.s	2$			;nope
+> ;may21;	xjsr	GoodByeHamTool	;remove ham screen (free up chip)
+> ;may21;2$
+> 
+> 	xjsr	GrabLoadPlane0		;memories.o ;does an alloc' if needed
+> 	beq	Clup_EndLoad		;no buffer?
+> 
+> 	move.w	#1,BufferCount_(BP)	;effectively clears it
+> 	move.l	#(8*64),d0 ;size to allow for top of file, bigger for odd chunks
+385,386c309,310
+< 	xjsr	GrabFileBuffer				;memories.o ;does the alloc'
+< 	beq	NoMemory_Out				;Clup_EndLoad	;no buffer?
+---
+> 	xjsr	GrabFileBuffer		;memories.o ;does the alloc'
+> 	beq	NoMemory_Out	;Clup_EndLoad		;no buffer?
+388c312
+< 	sf	FlagError_(BP)				;err flag for FindChunk,Fread,SkipRead
+---
+> 	sf	FlagError_(BP)		;err flag for FindChunk,Fread,SkipRead
+390,392c314,316
+< 	bsr	FindILBMForm 				;find form ILBM/ACBM,get Form(Length,DataPos)
+< 	tst.b	FlagError_(BP)				;err status set in FRead and SkipRead
+< 	bne	Clup_EndLoad				;no open file?
+---
+> 	bsr	FindILBMForm 		;find form ILBM/ACBM,get Form(Length,DataPos)
+> 	tst.b	FlagError_(BP)		;err status set in FRead and SkipRead
+> 	bne	Clup_EndLoad		;no open file?
+395c319
+< 	bne	Clup_EndLoad				;skip camg, cmap read if composite file
+---
+> 	bne	Clup_EndLoad
+397c321,323
+<  
+---
+> 	;xjsr	DebugMe1	;KLUDGE
+> 
+> 		;skip camg, cmap read if composite file
+399c325
+< 	bne	end_of_reading_cmap			;no cmap? well, we'll live...
+---
+> 	bne	end_of_reading_cmap	;no cmap? well, we'll live...
+401c327,329
+< 	clr.l	CAMG_(BP)				;setclear FLAGS ham, lace (, hires)
+---
+> 	;xjsr	DebugMe2	;KLUDGE
+> 
+> 	clr.l	CAMG_(BP)	;setclear FLAGS ham, lace (, hires)
+403c331
+< 	bsr	FindChunk				;set variable ChunkLength_(BP)
+---
+> 	bsr	FindChunk	;set variable ChunkLength_(BP)
+406,408c334,336
+< 	bsr	ReadLong				;get the one long word of data
+< 	move.l	d0,FileCAMG_(BP)			;set//clear FLAGS ham, lace (, hires)
+< 	move.l	d0,CAMG_(BP)				;set//clear FLAGS ham, lace (, hires)
+---
+> 	bsr	ReadLong	;get the one long word of data
+> 	move.l	d0,FileCAMG_(BP)	;set//clear FLAGS ham, lace (, hires)
+> 	move.l	d0,CAMG_(BP)	;set//clear FLAGS ham, lace (, hires)
+410,411c338
+< 	bsr	InterpCAMG				;looks at bmhd if no cmap
+< 
+---
+> 	bsr	InterpCAMG	;looks at bmhd if no cmap
+413,415c340,342
+< ;Find and read the file's palette('cmap') (if any)
+< 	cmp.b	#21,bmhd_nplanes_(BP)			;skip cmap if rgb file (want, but somehow broken?)
+< 	bcc	end_of_reading_cmap			;no cmap? well, we'll live...
+---
+> 	;Find and read the file's palette('cmap') (if any)
+> 	cmp.b	#21,bmhd_nplanes_(BP)	;skip cmap if rgb file (want, but somehow broken?)
+> 	bcc	end_of_reading_cmap	;no cmap? well, we'll live...
+417c344
+< 	jsr	FindChunk				;set variable ChunkLength_(BP)
+---
+> 	jsr	FindChunk		;set variable ChunkLength_(BP)
+419c346
+< 	bne	end_of_reading_cmap			;no cmap? well, we'll live...
+---
+> 	bne	end_of_reading_cmap	;no cmap? well, we'll live...
+425c352
+< 	bsr	FRead					;read color table from file into FileBufferPtr_(BP)
+---
+> 	bsr	FRead	;read color table from file into FileBufferPtr_(BP)
+427,431c354,358
+< ;uncompress FileBufferPtr_(BP) into FileColorTable_(BP)
+< 	lea	FileColorTable_(BP),a0 			;fill here if using existing palette
+< 	move.l	FileBufferPtr_(BP),a1			;(96) CMAP data just read
+< 	move.l	ChunkLength_(BP),d0			;FRead result
+< 	cmp.w	#64*3,d0				;max #colors able to handle (halfbrite=6bitpl)
+---
+> 		;uncompress FileBufferPtr_(BP) into FileColorTable_(BP)
+> 	lea	FileColorTable_(BP),a0 ;fill here if using existing palette
+> 	move.l	FileBufferPtr_(BP),a1	 ;(96) CMAP data just read
+> 	move.l	ChunkLength_(BP),d0	;FRead result
+> 	cmp.w	#64*3,d0	;max #colors able to handle (halfbrite=6bitpl)
+435,437c362,364
+< 	divu	#3,d0					;3 bytes per color register
+< 	;cmp.w	#64,d0					;we COULD get 64 pallettes...(halfbrite//non-HAM)
+< 	cmp.w	#32,d0					;we COULD get 64 pallettes...(halfbrite//non-HAM)
+---
+> 	divu	#3,d0	;3 bytes per color register
+> 	;cmp.w	#64,d0	;we COULD get 64 pallettes...(halfbrite//non-HAM)
+> 	cmp.w	#32,d0	;we COULD get 64 pallettes...(halfbrite//non-HAM)
+439,443c366,369
+< 	;move.w	#64,d0					;max size color table we handle
+< 	move.w	#32,d0					;max size color table we handle
+< 09$	subq	#1,d0					;for dbf type loop...
+< 	bcs	no_colortable				;wha?
+< 
+---
+> 	;move.w	#64,d0	;max size color table we handle
+> 	move.w	#32,d0	;max size color table we handle
+> 09$	subq	#1,d0	;for dbf type loop...
+> 	bcs.s	no_colortable	;wha?
+446c372
+< 	asr.b	#4,d2		;shift right 4x for actual use
+---
+> 	asr.b	#4,d2	; shift right 4x for actual use
+454c380
+< 	asr.b	#4,d2		;shift right 4x for actual use
+---
+> 	asr.b	#4,d2	; shift right 4x for actual use
+462c388
+< 	asr.b	#4,d2		;shift right 4x for actual use
+---
+> 	asr.b	#4,d2	; shift right 4x for actual use
+489,493d414
+< ****************************************
+< 	lea	FileColorTable_(BP),a0 	
+< 	DUMPMEM	<colortable>,(A0),#64
+< ****************************************
+< 
+495,501c416,426
+< ;	;ALWAYS close ham tool 		;MAY21....(moved "here")
+< ;	xref FlagCloseWB_		;may07'89
+< ;	tst.b	FlagCloseWB_(BP)	;lomem situ?
+< ;	beq.s	2$			;nope
+< ;	xjsr	GoodByeHamTool		;remove ham screen (free up chip)
+< ;2$
+< 					;if a brush load, ALWAYS use EXISTING palette
+---
+> 
+> 
+> 	;ALWAYS close ham tool ;MAY21....(moved "here")
+> 	xref FlagCloseWB_	;may07'89
+> 	tst.b	FlagCloseWB_(BP)	;lomem situ?
+> 	beq.s	2$			;nope
+> 	xjsr	GoodByeHamTool	;remove ham screen (free up chip)
+> 2$
+> 
+> 
+> 		;if a brush load, ALWAYS use EXISTING palette
+505c430
+< 	bra	Continue_Load		;branch when brush, zero/current flag
+---
+> 	bra.s	Continue_Load		;branch when brush, zero/current flag
+507c432
+< 					;if COMPOSITE file, ALWAYS use EXISTING palette
+---
+> 		;if COMPOSITE file, ALWAYS use EXISTING palette
+511c436
+< 	bra	Continue_Load		;branch when brush, zero/current flag
+---
+> 	bra.s	Continue_Load		;branch when brush, zero/current flag
+513,514c438
+< 	DUMPMSG	<AFTER NOTCOMP>
+< 					;NEED a palette, anyway? If so, don't ask palette question.
+---
+> 		;NEED a palette, anyway? If so, don't ask palette question.
+523c447
+< 	bcc	Continue_Load		;yep...dont use file's palette
+---
+> 	bcc.s	Continue_Load		;yep...dont use file's palette
+525d448
+< 	DUMPMSG	<Really use pal from file!>
+527c450
+< 	bra	usepal_fromfile
+---
+> 	bra.s	usepal_fromfile
+530c453
+< ;AUG151990....no hires shrink, no new palette if rgb mode...
+---
+> 	;AUG151990....no hires shrink, no new palette if rgb mode...
+537c460
+< ;no hires shrink, no new palette if rgb file
+---
+> 	;no hires shrink, no new palette if rgb file
+552c475
+< 					;...setus up gadgets, then back to 'main loop'...
+---
+> 		;...setus up gadgets, then back to 'main loop'...
+556d478
+< 	DUMPMSG	<CONTINUE_LOAD>
+558,561c480,483
+< 	tst.l	FileHandle_(BP) 
+< 	beq	Clup_EndLoad		;alternate//error ending point for iffload
+< 	tst.B	FlagOpen_(BP)		;sup for 'opening' file?
+< 	beq	Clup_EndLoad		;alternate//error ending point for iffload
+---
+> 	tst.l	FileHandle_(BP)
+> 	beq	Clup_EndLoad	;alternate//error ending point for iffload
+> 	tst.B	FlagOpen_(BP)	;sup for 'opening' file?
+> 	beq	Clup_EndLoad	;alternate//error ending point for iffload
+565d486
+< 	DUMPMSG	<FlagFilePalette_(BP)>
+600,601c521,522
+< 	bra	end_of_colortable
+< ham_copy_colortable:			;we got a ham file colors, so...
+---
+> 	bra.s	end_of_colortable
+> ham_copy_colortable:	;we got a ham file colors, so...
+605c526
+< 	asl.b	d1,d0			;# colors
+---
+> 	asl.b	d1,d0	;# colors
+610c531
+< just_copy_colortable:			;we had < 32 colors, so...
+---
+> just_copy_colortable:	;we had < 32 colors, so...
+614,617c535,538
+< 	asl.b	d1,d0			;# colors
+< 	cmpi.b	#4,d0			;4 color file, using palette from file?
+< 	bne.s	1$			;nope
+< 	bsr	Compute4To16			;build 16 palette colors from 4 in file
+---
+> 	asl.b	d1,d0	;# colors
+> 	cmpi.b	#4,d0	;4 color file, using palette from file?
+> 	bne.s	1$	;nope
+> 	bsr	Compute4To16	;build 16 palette colors from 4 in file
+619,621c540,542
+< 1$	cmpi.b	#2,d0			;2 color file, using palette from file?
+< 	bne.s	2$			;nope
+< 	bsr	Compute2To16		;build 16 palette colors from 4 in file
+---
+>    1$:	cmpi.b	#2,d0	;2 color file, using palette from file?
+> 	bne.s	2$	;nope
+> 	bsr	Compute2To16	;build 16 palette colors from 4 in file
+623,625c544,546
+< 2$	cmpi.b	#8,d0			;8 color file, using palette from file?
+< 	bne.s	go_copy_table		;nope...just take the 16 colors?
+< 	bsr	Compute8To16		;build 16 palette colors from 4 in file
+---
+>    2$:	cmpi.b	#8,d0	;8 color file, using palette from file?
+> 	bne.s	go_copy_table	;nope...just take the 16 colors?
+> 	bsr	Compute8To16	;build 16 palette colors from 4 in file
+628,631c549,552
+< 	subq.b	#1,d0			;dbf type loop...
+< 	cmpi.b	#15,d0			;only copying colors 2..15 if weird #colors, like 3 or 7
+< 	bcc.s	move_fct_lct		;>= 16 colors total, copy them all
+< 	lea	8(a1),a1		;ensures if <16 colors, we don't destroy 0,1
+---
+> 	subq.b	#1,d0	;dbf type loop...
+> 	cmpi.b	#15,d0	;only copying colors 2..15 if weird #colors, like 3 or 7
+> 	bcc.s	move_fct_lct	;>= 16 colors total, copy them all
+> 	lea	8(a1),a1	;ensures if <16 colors, we don't destroy 0,1
+634c555
+< 	move.l	(a0)+,(a1)+		;strait copy color table
+---
+> 	move.l	(a0)+,(a1)+	;strait copy color table
+640c561
+< 	;xjsr	FreeOneVariable		;forces OpenBigPic redo colormap, redetermine
+---
+> 	;xjsr	FreeOneVariable	;forces OpenBigPic redo colormap, redetermine
+642c563
+< 	st	FlagCDet_(BP)		;'ask' for create determine to happen
+---
+> 	st	FlagCDet_(BP)	;'ask' for create determine to happen
+644c565,567
+< 	move.l	#512*2*16,d0 		;size to allow for top of file, bigger for odd chunks
+---
+> 	;xjsr	DebugMe3	;KLUDGE
+> 
+> 	move.l	#512*2*16,d0 ;size to allow for top of file, bigger for odd chunks
+647c570
+< 	beq	NoMemory_Out		;Clup_EndLoad		;no buffer?
+---
+> 	beq	NoMemory_Out	;Clup_EndLoad		;no buffer?
+649c572
+< 	bsr	SetupCTBL		;find/load CTBL chunk (DigiView 4.0) DigiPaint PI
+---
+> 	bsr	SetupCTBL	;find/load CTBL chunk (DigiView 4.0) DigiPaint PI
+653a577,580
+> 
+> 
+> 
+> 
+656a584,585
+> 	;xjsr	DebugMe4	;KLUDGE
+> 
+659a589
+> 	;xjsr	DebugMe5	;KLUDGE
+663c593
+< 	tst.b	FlagBrush_(BP)		;loading a brush? (dont chg scr size...)
+---
+> 	tst.b	FlagBrush_(BP)	;loading a brush? (dont chg scr size...)
+666c596
+< 	sf	FlagHires_(BP)		;dont shrink brushes
+---
+> 	sf	FlagHires_(BP)	;dont shrink brushes
+669c599
+< 					;d0=wt,d1=ht from 'bmhd' (non-zero, now)
+---
+> 		;d0=wt,d1=ht from 'bmhd' (non-zero, now)
+676a607
+> 		;MAY03'89
+678c609
+< 	tst.b	FlagHires_(BP)			;shrinking?
+---
+> 	tst.b	FlagHires_(BP)	;shrinking?
+684c615,616
+< 	cmp.w	BigPicWt_W_(BP),d0		;may04;
+---
+> 
+> 	cmp.w	BigPicWt_W_(BP),d0	;may04;
+689c621
+< ;rule: if x,y of screen same as file, use interlace from file
+---
+> 		;rule: if x,y of screen same as file, use interlace from file
+691c623
+< 	move.b	FlagLace_(BP),d0		;current interlace
+---
+> 	move.b	FlagLace_(BP),d0	;current interlace
+694a627
+> 
+696,697c629,630
+< 	tst.l	ScreenPtr_(BP)			;have a bigpic
+< 	beq.s	yea_open			;no scr, so go open it
+---
+> 	tst.l	ScreenPtr_(BP)		;have a bigpic
+> 	beq.s	yea_open		;no scr, so go open it
+699,700c632,633
+< ;toaster mode...double check...ignore question if
+< ;.rgb file is a "hires file"
+---
+> 		;toaster mode...double check...ignore question if
+> 		;.rgb file is a "hires file"
+704c637
+< 	cmp.w	#1024/2+1,d0		;width, hires?
+---
+> 	cmp.w	#1024/2+1,d0	;width, hires?
+708c641
+< 	bne.s	endtoasttest		;want size change
+---
+> 	bne.s	endtoasttest	;want size change
+711c644
+< endtoasttest	
+---
+> endtoasttest
+713c646
+< ;JULY191990....disable size change question if in RGB mode
+---
+> 		;JULY191990....disable size change question if in RGB mode
+724c657
+< 	cmp.w	#1024/2+1,d0		;width, hires?
+---
+> 	cmp.w	#1024/2+1,d0	;width, hires?
+726c659
+< 	asr.w	#1,d0			;hires width----> lores width for ham
+---
+> 	asr.w	#1,d0		;hires width----> lores width for ham
+729,730c662,663
+< 	tst.b	FlagHires_(BP)		;shrinking?
+< 	beq.s	noshrinkinput		;NewSizeX_(BP)
+---
+> 	tst.b	FlagHires_(BP)	;shrinking?
+> 	beq.s	noshrinkinput	;NewSizeX_(BP)
+733c666
+< 	and.w	#~31,d0			;round up, even 32 widths
+---
+> 	and.w	#~31,d0	;round up, even 32 widths
+742c675
+< 	cmp.b	#21,bmhd_nplanes_(BP) 	;LoadDepth_(BP)	;loading rgb file?
+---
+> 	cmp.b	#21,bmhd_nplanes_(BP) ;LoadDepth_(BP)	;loading rgb file?
+756,757c689,690
+< 	xref FlagToast_			;toaster/hires mode?
+< 	tst.B	FlagToast_(BP)		;toaster/hires mode?
+---
+> 	xref FlagToast_		;toaster/hires mode?
+> 	tst.B	FlagToast_(BP)	;toaster/hires mode?
+759,762c692,695
+< 	cmp.w	#512+1,d0		;width is hires?
+< 	bcs.s	111$			;no...else, if hires, then use 1/2 width as arg
+< 	asr.w	#1,d0			;1/2 width for HAM bitmaps...
+< 111$	xjsr	AllocRGB		;rgb rtns (doubles width, anyway, if toaster)
+---
+> 	cmp.w	#512+1,d0	;width is hires?
+> 	bcs.s	111$		;no...else, if hires, then use 1/2 width as arg
+> 	asr.w	#1,d0		;1/2 width for HAM bitmaps...
+> 111$	xjsr	AllocRGB	;rgb rtns (doubles width, anyway, if toaster)
+765c698
+< 	;bne	normal_done		;ok....got it, kill file requestor
+---
+> 	;bne	normal_done	;ok....got it, kill file requestor
+768,769d700
+< 
+< 
+809c740
+< 	beq	reallyopen
+---
+> 	beq.s	reallyopen
+855c786,789
+< 	DUMPMSG	<BODY>			;set dos-file-read pointer to real "start of BODY" chunk
+---
+> 
+> 	;xjsr	DebugMe6	;KLUDGE
+> 
+> 		;set dos-file-read pointer to real "start of BODY" chunk
+864c798
+< 					;july 10...ok if no body... (help w/startup...)
+---
+> 		;july 10...ok if no body... (help w/startup...)
+868a803
+> 
+869a805,806
+> 	;xjsr	DebugMe7	;KLUDGE
+> 
+875c812
+< 	move.l	#1,BufferCount_(BP)	;effectively clears it
+---
+> 	move.w	#1,BufferCount_(BP)	;effectively clears it
+877c814,822
+< 	DUMPMSG	<LOADING A BRUSH>
+---
+> 	;xjsr	GrabLoadPlane0		;memories.o ;does an alloc' if needed
+> 	;beq	Clup_EndLoad		;no buffer? ...april27
+> 
+> ;july01;		;MAY21
+> ;july01;	xjsr	GrabExtraChip		;memories.o MAY21....
+> ;july01;	bne.s	123$
+> ;july01;	move.l	#1024,BufferLen_(BP)		;if no extra chip, use min buffer
+> ;july01;123$:
+> 
+885d829
+< 	DUMPMSG	<AFTER CLEARBRUSHMASK>
+915,916c859,860
+< 	bsr	ReadBody			;MAIN line-by-line routine
+< 	DUMPMSG	<AFTER READBODY>	
+---
+> 
+> 
+917a862,863
+> 	bsr	ReadBody	;MAIN line-by-line routine
+> 
+922a869,876
+> 	;;KLUDGE...DEBUGGERS...prints wt/ht used
+> 	;moveq	#0,d0
+> 	;move.w	bmhd_rastwidth_(BP),d0
+> 	;xjsr	debug_print_longword
+> 	;moveq	#0,d0
+> 	;move.w	bmhd_rastheight_(BP),d0
+> 	;xjsr	debug_print_longword
+> 
+925,926c879,880
+< 	bne	Clup_EndLoad_FlagLines ;AUG281990	;not finish ok....dont close file req
+< 	bsr	Clup_EndLoad
+---
+> 	bne.s	Clup_EndLoad_FlagLines ;AUG281990	;not finish ok....dont close file req
+> 	bsr.s	Clup_EndLoad
+937,939c891,893
+< ;AUG281990...allow deluxepaint, etc brushes 2b loaded
+< ;...flagcutloadbrush wouldn't necessarily be set, then
+< 	cmp.b	#7,LoadDepth_(BP)			;bmhd_nplanes_(BP)
+---
+> 		;AUG281990...allow deluxepaint, etc brushes 2b loaded
+> 		;...flagcutloadbrush wouldn't necessarily be set, then
+> 	cmp.b	#7,LoadDepth_(BP)	;bmhd_nplanes_(BP)
+942,946c896,900
+< ;cut out loaded brush (?) kludgey...may mess up arexx?
+< 	xref FlagCutLoadBrush_				;bleah....logical kludge, accessed in main loop, iffload.24.i
+< 	lea	FlagCutLoadBrush_(BP),a0		;bleah....logical kludge, accessed in main loop, iffload.24.i
+< 	tst.b	(a0)					;test flag (set in iffload.24.i, if mask//brush load)
+< 	beq	_endfilerequ
+---
+> 		;cut out loaded brush (?) kludgey...may mess up arexx?
+> 	xref FlagCutLoadBrush_	;bleah....logical kludge, accessed in main loop, iffload.24.i
+> 	lea	FlagCutLoadBrush_(BP),a0	;bleah....logical kludge, accessed in main loop, iffload.24.i
+> 	tst.b	(a0)		;test flag (set in iffload.24.i, if mask//brush load)
+> 	beq.s	_endfilerequ
+949,952c903,905
+<  xref OKGadget_IntuiText				;AUG281990...defined in ShowFReq.asm...used by ShowTxt....
+< 	DUMPMSG	<OK GADGET? LOADING BRUSH? CUT IT OUT!>	
+< 	move.l	#OKGadget_IntuiText,a0			;relocatable, from showfreq
+< 	move.l	it_IText(a0),a0				;'Load/Save Brush/RGB/Frame'
+---
+>  xref OKGadget_IntuiText	;AUG281990...defined in ShowFReq.asm...used by ShowTxt....
+> 	move.l	#OKGadget_IntuiText,a0	;relocatable, from showfreq
+> 	move.l	it_IText(a0),a0		;'Load/Save Brush/RGB/Frame'
+955c908
+< 	bne	_endfilerequ				;dont cut out if not in 'load brush'...AUG281990
+---
+> 	bne.s	_endfilerequ	;dont cut out if not in 'load brush'...AUG281990
+957,959d909
+< 	sf	FlagCutLoadBrush_(BP)			;AUG281990;(a0)		;clear flag (only place in prog)
+< 	DUMPMSG	<SET FlagCutLoadBrush_(BP) OFF, WHY?>	
+< 	st	FlagText_(BP)				;stops 'cut' from flooding
+960a911,913
+> 	sf	FlagCutLoadBrush_(BP)	;AUG281990;(a0)		;clear flag (only place in prog)
+> 	st	FlagText_(BP)	;stops 'cut' from flooding
+> 
+974d926
+< 	DUMPMSG	<JUMPING TO CutLoadedBrush>
+976a929,937
+> 
+> 	;xjsr	DoInlineAction
+> 	;dc.w	'Sc'
+> 	;dc.w	'is'
+> 	;xjsr	DoInlineAction
+> 	;dc.w	'Re'
+> 	;dc.w	'do'
+> 	;rts
+> 
+978c939
+< 	DUMPMSG	<_endfilerequ>		;flag lines to be re-rendered upon an 'undo'...AUG281990
+---
+> 		;flag lines to be re-rendered upon an 'undo'...AUG281990
+987d947
+< 	DUMPMSG	<AFTER EndFileRequ>
+996c956,958
+< ;flag lines to be re-rendered upon an 'undo'...AUG281990
+---
+> 		;flag lines to be re-rendered upon an 'undo'...AUG281990
+> 	;xref LastRepaintY_
+> 	;xref LastRepaintHt_
+1002a965
+> 	;april30;xjsr	EnsureExtraChip		;de-alloc extra (incase nofilebuff)
+1005a969,970
+> 	;MAY23;move.b	FlagLaceDefault_(BP),FlagLace_(BP)	;'other' MAY18
+> 
+1009a975,997
+> 
+> ;		;re-instated SEP201990
+> ;		;SEP191990...bug fix for linedraw, etc.
+> ;		;IF in 'drawing lines' mode
+> ;		;...then reset for circles,
+> ;		;...then reset back to line mode
+> ;		;NOTE: IFFLoad clears 'open' status....so need this B4 test....
+> ;	xref	FlagLine_
+> ; 	tst.b	FlagLine_(BP)
+> ;	beq.s	011$
+> ;	xjsr	DoInlineAction
+> ;	dc.w	'Dr'
+> ;	dc.w	'ci'		;draw circles
+> ;	xjsr	ReDoHires	;tool.code.i
+> ;		;xjsr	DoInlineAction
+> ;		;dc.w	'Ug'
+> ;		;dc.w	'ad'
+> ;	xjsr	DoInlineAction
+> ;	dc.w	'Dr'
+> ;	dc.w	'ln'		;draw lines
+> ;011$
+> 
+> 
+1236a1225,1228
+> 
+> 
+> 
+> 
+1263a1256,1261
+> 
+> 
+> 
+> 
+> 
+> 
+1308,1310c1306,1309
+< ReadBody:						;read (buffered) file 'body' and display on screen
+< 	DUMPMSG	<: ReadBody>
+< 	sf	FlagBitMapSaved_(BP)			;set 'undo' status (not saved)
+---
+> ReadBody:	;read (buffered) file 'body' and display on screen
+> 
+> ;;  xjsr DebugMe1
+> 	sf	FlagBitMapSaved_(BP)	;set 'undo' status (not saved)
+1312a1312,1313
+> 
+> 		;handle remap MAY23
+1315a1317
+> 
+1318,1321c1320,1323
+< 12$:							;MAY23....for remap
+< 	add.w	#15,d0					;round up
+< 	asr.w	#4,d0					;/16 = #words of bits on a scan line
+< 	add.w	d0,d0					;*2=number of bytes of bits on a scan line
+---
+> 12$:			;MAY23....for remap
+> 	add.w	#15,d0		;round up
+> 	asr.w	#4,d0		;/16 = #words of bits on a scan line
+> 	add.w	d0,d0		;*2=number of bytes of bits on a scan line
+1325c1327,1329
+< 	move.w	bytes_row_less1_W_(BP),d0		;ham screen bpr
+---
+> 
+> 		;digipaint PI
+> 	move.w	bytes_row_less1_W_(BP),d0	;ham screen bpr
+1328c1332
+< 	sf	FlagDPID_(BP)				;was file saved by digipaint?
+---
+> 	sf	FlagDPID_(BP)		;was file saved by digipaint?
+1330,1333c1334,1338
+< 	xjsr	InitBitNumSA 				;scratch.o; SaveArray, inits s_BitNumber fields
+< 	move.b	bmhd_nplanes_(BP),LoadDepth_(BP) 	;read_one_comp_...wants this
+< 	beq	end_of_reading_lines			;JULY10...help w/"0" bitplanes in bmhd
+< 	
+---
+> 
+> 	xjsr	InitBitNumSA ;scratch.o; SaveArray, inits s_BitNumber fields
+> 	move.b	bmhd_nplanes_(BP),LoadDepth_(BP) ;read_one_comp_...wants this
+> 	beq	end_of_reading_lines	;JULY10...help w/"0" bitplanes in bmhd
+> 
+1335,1345c1340,1348
+< 	beq.s	start_reading_lines			;get going, no mask plane
+< 	cmp.b	#1,d0					;"hasmaskplane" type?
+< 	bne.s	start_reading_lines			;get going, no mask plane
+< 							;if d0=2="hastranspcolor" THEN should 'build a mask'
+< 	cmp.b	#7,LoadDepth_(BP)			;'old' digipaint brush? (digipaint1.0)
+< 	beq.s	start_reading_lines			;yep, mask accounted for
+< 	cmp.b	#21,LoadDepth_(BP)			;'old digiview' rgb file?
+< 	beq.s	start_reading_lines			;yep, mask accounted for
+< 	addq.B	#1,LoadDepth_(BP)			;do this if "has mask" 24->25 depth
+< 	
+< 	DUMPMEM	<LOADDEPTH>,LoadDepth_(BP),#5
+---
+> 	beq.s	start_reading_lines		;get going, no mask plane
+> 	cmp.b	#1,d0			;"hasmaskplane" type?
+> 	bne.s	start_reading_lines	;get going, no mask plane
+> 		;if d0=2="hastranspcolor" THEN should 'build a mask'
+> 	cmp.b	#7,LoadDepth_(BP)	;'old' digipaint brush? (digipaint1.0)
+> 	beq.s	start_reading_lines	;yep, mask accounted for
+> 	cmp.b	#21,LoadDepth_(BP)	;'old digiview' rgb file?
+> 	beq.s	start_reading_lines	;yep, mask accounted for
+> 	addq.B	#1,LoadDepth_(BP)	;do this if "has mask" 24->25 depth
+1347,1348c1350,1351
+< start_reading_lines:					;fix for 'unmatched palettes'
+< 	DUMPMSG	<start_reading_lines>
+---
+> start_reading_lines:
+> 		;fix for 'unmatched palettes'
+1352,1353c1355,1356
+< 	
+< 	cmp.b	#21,LoadDepth_(BP)			;ignore speedup if it's an RGB file
+---
+> 
+> 	cmp.b	#21,LoadDepth_(BP)	;ignore speedup if it's an RGB file
+1355c1358,1359
+< 							;if we're loading iff picture into rgb arrays, then "no speed"
+---
+> 
+> 	;if we're loading iff picture into rgb arrays, then "no speed"
+1358,1360c1362,1364
+< 	xref	Datared_				;rgb array alloc'd ?
+< 	tst.l	Datared_(BP)				;rgb array alloc'd ?
+< 	bne.s	nospeed					;yep....don't go "real quick"...take time to decode color
+---
+> 	xref	Datared_	;rgb array alloc'd ?
+> 	tst.l	Datared_(BP)	;rgb array alloc'd ?
+> 	bne.s	nospeed		;yep....don't go "real quick"...take time to decode color
+1362c1366,1367
+< 							;fix for 'no speedup' if have to calculate a mask
+---
+> 
+> 		;fix for 'no speedup' if have to calculate a mask
+1364c1369
+< 	beq.s	begin_readlines				;not loading brush
+---
+> 	beq.s	begin_readlines	;not loading brush
+1366c1371
+< 	beq.s	begin_readlines				;have mask to load
+---
+> 	beq.s	begin_readlines	;have mask to load
+1368c1373
+< 	bne.s	begin_readlines				;no transparency, anyway
+---
+> 	bne.s	begin_readlines	;no transparency, anyway
+1370c1375
+< 	sf	FlagDPID_(BP)				;else no speedup
+---
+> 	sf	FlagDPID_(BP)	;else no speedup
+1378c1383
+< 	tst.l	Datared_(BP)				;already HAVE rgb buffers?
+---
+> 	tst.l	Datared_(BP)		;already HAVE rgb buffers?
+1383c1388
+< 	movem.l	d0-d7/a0-a6,-(sp)			;YUCK, KLEAN UP
+---
+> 	movem.l	d0-d7/a0-a6,-(sp)		;YUCK, KLEAN UP
+1385c1390
+< 	movem.l	(sp)+,d0-d7/a0-a6			;YUCK, KLEAN UP
+---
+> 	movem.l	(sp)+,d0-d7/a0-a6		;YUCK, KLEAN UP
+1387,1388c1392,1393
+< 	;bne	normal_done				;ok....got it, kill file requestor
+< 	beq	end_of_reading_lines			;done, couldn't allocate arrays
+---
+> 	;bne	normal_done	;ok....got it, kill file requestor
+> 	beq	end_of_reading_lines	;done, couldn't allocate arrays
+1391,1392d1395
+< 
+< 
+1395c1398
+< 		;works to here...;BRA	end_of_reading_lines	;KLUDGE....make it this far?
+---
+> 	;works to here...;BRA	end_of_reading_lines	;KLUDGE....make it this far?
+1396a1400,1401
+> ;;  xjsr DebugMe2
+> 
+1401d1405
+< 
+1403a1408
+> ;;  xjsr DebugMe3
+1404a1410
+> ;;  xjsr DebugMe4
+1408d1413
+< 	bsr	GrabCTBLEntry		;setup "file's palette" for current line DigiPaint PI
+1409a1415
+> 	bsr	GrabCTBLEntry	;setup "file's palette" for current line DigiPaint PI
+1411c1417,1418
+< ;...fill in SaveArray records with the appro' dither thresh values
+---
+> 
+> 	;...fill in SaveArray records with the appro' dither thresh values
+1414a1422
+> 	;digipaint pi;beq.s	endof_dithersetup	;no 'new' dither to do
+1420,1421c1428,1430
+< 	beq.s	dosetupr		;SETUP DITHER FROM MATRIX
+< ;	movem.l	d4/a0/a1/a6,-(sp)	;SssssSTACK
+---
+> 	beq.s	dosetupr
+> 			;SETUP DITHER FROM MATRIX
+> 		;movem.l	d4/a0/a1/a6,-(sp)	;SssssSTACK
+1423,1424c1432,1433
+< 	andi.w	#7,d4			;use line # mod 8
+< 	asl.w	#3,d4			;*8	
+---
+> 	andi.w	#7,d4		;use line # mod 8
+> 	asl.w	#3,d4		;*8
+1426,1429c1435,1438
+< 	lea	0(a0,d4.w),a0		;reset to this 'start of a line of 8 byte values'
+< 	move.l	a0,a1			;re-setup threshold ptr
+< 	lea	SaveArray_(BP),a6 	;use the save table as source
+< 	lea	s_DitherThresh(a6),a6 	;use the save table as source
+---
+> 	lea	0(a0,d4.w),a0	;reset to this 'start of a line of 8 byte values'
+> 	move.l	a0,a1		;re-setup threshold ptr
+> 	lea	SaveArray_(BP),a6 ;use the save table as source
+> 	lea	s_DitherThresh(a6),a6 ;use the save table as source
+1431c1440
+< tdbyte:	moveq	#8-1,d5			;db' type # bitsinabyte
+---
+> tdbyte:	moveq	#8-1,d5		;db' type # bitsinabyte
+1433c1442
+< 	move.B  (a1)+,(a6)		;byte from table, into savearray thresh'
+---
+> 	move.B  (a1)+,(a6)	;byte from table, into savearray thresh'
+1437c1446
+< 	move.l	a0,a1			;re-setup threshold ptr
+---
+> 	move.l	a0,a1	;re-setup threshold ptr
+1439c1448
+< ;	movem.l	(sp)+,d4/a0/a1/a6	;De-SssssSTACK
+---
+> 		;movem.l	(sp)+,d4/a0/a1/a6	;De-SssssSTACK
+1443,1446c1452,1453
+< 
+< 
+<  ifeq 1	;...using "new" dither...
+< 	;movem.ld4/a0/a1/a6,-(sp)	;SssssSTACK
+---
+>   ifc 't','f' ;...using "new" dither...
+> 		;movem.l	d4/a0/a1/a6,-(sp)	;SssssSTACK
+1452c1459,1460
+< rbit:	MOVE.W	random_seed_(BP),D0	;compute next random seed (longword)
+---
+> rbit:
+> 	MOVE.W	random_seed_(BP),D0	;compute next random seed (longword)
+1460a1469
+> 
+1464,1465c1473,1479
+< 	;movem.l(sp)+,d4/a0/a1/a6	;De-SssssSTACK
+<  endc
+---
+> 		;movem.l	(sp)+,d4/a0/a1/a6	;De-SssssSTACK
+>   endc
+> rset_addrbit:	MACRO	;codesize 20bytes
+> 	;not for static...;nxtrandom d6		;MACRO, compute another random #
+> 		;compute static dither
+> 	;AUG211990;move.B	(a0)+,d6
+> 	;;eor.B	d0,d6	;row constant, static dither	
+1466a1481
+> 	;;and.W	#$003f,d6	;6 bits, only, for dither
+1467a1483,1494
+> 	move.b	d7,(a6)+	;s_PlotFlag
+> 	;AUG211990;move.b	d6,(a6)	;june22;d6,s_DitherThresh-s_PlotFlag(a6)
+> 	move.B	(a0)+,(a6)
+> 	;june22;lea	s_SIZEOF(a6),a6
+> 	lea	(s_SIZEOF-1)(a6),a6	;june22;s_SIZEOF(a6),a6
+> 	ENDM
+> rsnybble:	  MACRO
+> 	rset_addrbit
+> 	rset_addrbit
+> 	rset_addrbit
+> 	rset_addrbit
+> 	ENDM
+1495a1523
+> 
+1547,1548d1574
+< 
+< 
+1551,1553c1577,1581
+< 	;COPY SCREEN HAM LINE to SaveArray rgb'type fields
+< 	;...this is both for remap'ing AND keeping rightedge ok
+< 	;(not needed if bigpicwt=loadpicwt)
+---
+> 
+> 
+> 		;COPY SCREEN HAM LINE to SaveArray rgb'type fields
+> 		;...this is both for remap'ing AND keeping rightedge ok
+> 		;(not needed if bigpicwt=loadpicwt)
+1556,1563c1584,1594
+< 	tst.b	FlagRemap_(BP)
+< 	;may01...only unplot if not remapping...no picture kleanup...
+< 	;bne.s	noskipunp
+< 	;cmp.w	bmhd_rastwidth_(BP),d0
+< 	;bcs.s	skipunp		;loadpic is wider
+< 	beq.s	skipunp		;loadpic is same width (else skinnier)
+< 	tst.b	FlagCompositeFile_(BP)
+< 	bne.s	skipunp		;skip "unplot" when it's an ACBM
+---
+> 
+> 		tst.b	FlagRemap_(BP)
+> 		;may01...only unplot if not remapping...no picture kleanup...
+> 		;bne.s	noskipunp
+> 		;cmp.w	bmhd_rastwidth_(BP),d0
+> 		;bcs.s	skipunp		;loadpic is wider
+> 		beq.s	skipunp		;loadpic is same width (else skinnier)
+> 	;xjsr	DebugMe8	;KLUDGE
+> 		tst.b	FlagCompositeFile_(BP)
+> 		bne.s	skipunp		;skip "unplot" when it's an ACBM
+> 	;xjsr	DebugMe9	;KLUDGE
+1573,1574c1604
+< 	;MAY23...dupl loop...sup paint red, too
+< 
+---
+> 		;MAY23...dupl loop...sup paint red, too
+1582,1583d1611
+< 
+< 
+1585a1614
+> 
+1591a1621,1622
+> 
+> 
+1599d1629
+< 	DUMPMSG	<testing bmhd_compression_(BP)>
+1613a1644,1645
+> 
+> 
+1628d1659
+< 	DUMPMSG	<read_comp_planes>
+1631,1635d1661
+< 	DUMPMSG	<Do load iff.24.i>	
+< 	INCLUDE "ps:IFFLoad.24.i"
+< 
+< 
+< 
+1636a1663
+> 	INCLUDE "ps:IFFLoad.24.i"
+1676c1703,1704
+< end_read_compr_planeS:
+---
+> 
+> 
+1679a1708,1709
+> end_read_compr_planeS:
+> 
+1681c1711
+< *	DUMPMSG	<ROTATE PLANES>
+---
+> 
+1756d1785
+< *	DUMPMEM <LOADDEPTH>,LoadDepth_(BP),#1
+1788d1816
+< ;	DUMPMSG	<COP>	
+1791,1795c1819,1822
+< 
+< ;	move.l	Predold_(BP),(a6)	;save "Real" r.b,g.b,b.b,lastplot.b
+< ;FEB91;move.l	Predold_(BP),d0		;JAN171991...Want move.l Pred_(BP),d0
+< 	move.l	Pred_(BP),d0		;JAN171991...Want move.l Pred_(BP),d0
+< 	xref 	LastPlot_
+---
+> 	;move.l	Predold_(BP),(a6)	;save "Real" r.b,g.b,b.b,lastplot.b
+> 	;FEB91;move.l	Predold_(BP),d0	;JAN171991...Want move.l Pred_(BP),d0
+> 	move.l	Pred_(BP),d0	;JAN171991...Want move.l Pred_(BP),d0
+> 	xref LastPlot_
+1798,1801c1825,1826
+< 	ASL.L	#2,D0					****!!!!
+< ;	asl.L	#4,d0					****!!!!
+< 
+< 	and.l	#$f0f0f000,d0				****!!!!
+---
+> 	asl.L	#4,d0
+> 	and.l	#$f0f0f000,d0
+1808c1833
+< 	bne	do_plot_pixel
+---
+> 	bne.s	do_plot_pixel
+1811a1837
+> 
+1815,1816c1841
+< 	DUMPMSG	<Compresshires!>
+< 	bsr	CompressHires			;SHRINKS IT hires-->ham pixel widths
+---
+> 	bsr	CompressHires		;SHRINKS IT hires-->ham pixel widths
+1818c1843
+< ;THEN RECOMPUTE WHAT TO PLOT
+---
+> 		;THEN RECOMPUTE WHAT TO PLOT
+1824c1849
+< 	moveq	#0,d3				;for each pixel on a line...
+---
+> 	moveq	#0,d3			;for each pixel on a line...
+1827c1852
+< 	move.w	d0,-(sp)			;STACK LOOP COUNTER,compute plot 6bit pixels
+---
+> 	move.w	d0,-(sp)	;STACK LOOP COUNTER,compute plot 6bit pixels
+1831c1856
+< 	jsr	(a4)				;DetermineRtn ;return d0=6bit plotvalu and P(rgb)old
+---
+> 	jsr	(a4)	;DetermineRtn ;return d0=6bit plotvalu and P(rgb)old
+1833c1858
+< 	move.W	(a6),s_Paintred(a6)		;putrgb arg, digipaint pi
+---
+> 	move.W	(a6),s_Paintred(a6)	;putrgb arg, digipaint pi
+1836c1861
+< 	lea	s_SIZEOF(a6),a6			;next record in SaveArray
+---
+> 	lea	s_SIZEOF(a6),a6	;next record in SaveArray
+1839,1841c1864,1866
+< 	lea	2(sp),sp			;DESTACK loop counter
+< 	
+< 	bra	end_of_plotpixels		;digipaint pi
+---
+> 	lea	2(sp),sp	;DESTACK loop counter
+> 
+> 	bra	end_of_plotpixels	;digipaint pi
+1845c1870
+< ;reloop, moving loaded rgb<<4
+---
+> 		;reloop, moving loaded rgb<<4
+1847c1872
+< 	addq.w	#3,d0			;round up bytes per row to 'even' longwords
+---
+> 	addq.w	#3,d0	;round up bytes per row to 'even' longwords
+1849c1874
+< 	asl.w	#3,d0			;<<3=*8 bytes to pixels
+---
+> 	asl.w	#3,d0	;<<3=*8 bytes to pixels
+1864c1889
+< 	move.l	d1,s_Paintred(a6)	;8 bit paint value
+---
+> 	move.l	d1,s_Paintred(a6)		;8 bit paint value
+1867a1893
+> 
+1878a1905,1912
+> 	ComputeOnePixel	;Pixel_number_w=Pixel# d3=byte#_in_line
+> 		cmp.b	#7,LoadDepth_(BP) ;bmhd_nplanes_(BP)	;ok we have a mask, is it in the 7th plane?
+> 		beq	nosetmask	;...yes, we already have our mask
+> 
+> 		move.l	a0,-(sp)	;STACK
+> 		move.w	d0,-(sp)	;STACK
+> 		cmp.b	#2,bmhd_masking_(BP)	;if bmhd_masking of 2 = transp color
+> 		bne.s	setup_mask_bits
+1880,1890d1913
+< *	DUMPMSG	<ComputeOnePixel-BRUSH>
+< 	ComputeOnePixel				;Pixel_number_w=Pixel# d3=byte#_in_line
+< *	DUMPREG	<d0 - return? 6 bit pixel?>
+< 	cmp.b	#7,LoadDepth_(BP) 		;bmhd_nplanes_(BP);ok we have a mask, is it in the 7th plane?
+< 	beq	nosetmask			;yes, we already have our mask
+< 
+< 	move.l	a0,-(sp)			;STACK
+< 	move.w	d0,-(sp)			;STACK
+< 	cmp.b	#2,bmhd_masking_(BP)		;if bmhd_masking of 2 = transp color
+< 	bne	setup_mask_bits
+< 
+1892,1907c1915,1928
+< 	move.l	BB1Ptr_(BP),a0			;brush bitmap
+< 	moveq	#7,d0
+< 	moveq	#0,d1				;clear upper word (adr use inamoment)
+< 	move.w	pxnumber_w_(BP),d1
+< 	sub.w	d1,d0				;d0=pixel#
+< 	asr.w	#3,d1				;x/8=byte addr off
+< 	add.l	ldlineoffset_(BP),d1		;d0=bit#, d1=bitplane offset
+< 
+< 	move.W	bmhd_tpcolor_(BP),d2
+< 
+< ;xref LastPlot_
+< ;19DEC91;	cmp.b	s_Paintred(a6),d2 ;LastPlot_(BP),d2 ;color//pixel = transp?
+< ;19DEC91;;xref LastPlot_
+< ;19DEC91;	cmp.b	s_Paintred(a6),d2 ;LastPlot_(BP),d2 ;color//pixel = transp?
+< ;have to actually check the RGB (not palette #) values....
+< 
+---
+> 		move.l	BB1Ptr_(BP),a0	;brush bitmap
+> 		moveq	#7,d0
+> 		moveq	#0,d1		;clear upper word (adr use inamoment)
+> 		move.w	pxnumber_w_(BP),d1
+> 		sub.w	d1,d0		;d0=pixel#
+> 		asr.w	#3,d1		;x/8=byte addr off
+> 		add.l	ldlineoffset_(BP),d1	;d0=bit#, d1=bitplane offset
+> 
+> 		move.W	bmhd_tpcolor_(BP),d2
+> 	;xref LastPlot_
+> 	;19DEC91;	cmp.b	s_Paintred(a6),d2 ;LastPlot_(BP),d2 ;color//pixel = transp?
+> 	;19DEC91;;xref LastPlot_
+> 	;19DEC91;	cmp.b	s_Paintred(a6),d2 ;LastPlot_(BP),d2 ;color//pixel = transp?
+> 		;have to actually check the RGB (not palette #) values....
+1909c1930
+< 	add.w	d2,d2				
+---
+> 	add.w	d2,d2
+1913,1915c1934,1935
+< 	asl.L	#4,d2				
+< ;	DUMPMSG	<HERE>
+< 	move.B	3+s_Paintred(a6),d2		****!!!!	comout as test	Had problem with MASKHERE. loading IFF bruhses
+---
+> 	asl.L	#4,d2
+> 	move.B	3+s_Paintred(a6),d2
+1917,1923c1937
+< ;	DUMPREG	<d2 is color to check>
+< ;	DUMPMEM	<checking aganst>,s_Paintred(a6),#16
+< 
+< 	move.l	BB1Ptr_(BP),a0			;brush bitmap (->a-register doesn't affect flags
+< 
+< 	bne	set_a_mask_bit
+< 	bra	no_mask_bit
+---
+> 	move.l	BB1Ptr_(BP),a0	;brush bitmap (->a-register doesn't affect flags
+1924a1939,1940
+> 		bne.s	set_a_mask_bit
+> 		bra.s	no_mask_bit
+1926,1945d1941
+< setup_mask_bits:				;regular masking (no mask bitplane)
+< 	move.l	BB1Ptr_(BP),a0			;brush bitmap
+< 	moveq	#7,d0
+< 	moveq	#0,d1				;clear upper word (adr use inamoment)
+< 	move.w	pxnumber_w_(BP),d1
+< 	sub.w	d1,d0				;d0=pixel#
+< 	asr.w	#3,d1				;x/8=byte addr off
+< 	add.l	ldlineoffset_(BP),d1
+< 
+< 	xref	FlagSkipTransparency_
+< 	xref	Transpred_
+< 	xref	Transpgreen_
+< 	xref	Transpblue_
+< *	DUMPMSG	<SETUP TRANS>
+< 	tst.b	FlagSkipTransparency_(BP)
+< 	bne.s	set_a_mask_bit			;no transp, alway sup mask
+< 
+< ;build mask bits, P(rgb) set, d0=lastplot
+< ;tst.b	1(sp)	;palette #0? ("6bitpixl to plot" saved on stack)
+< ;beq.s	no_mask_bit
+1947,1963c1943,1974
+< *	DUMPMSG	<MASK BIT>
+< 	
+< 	move.b	Pred_(BP),d2			;check r,g,b for black 0,0,0
+< 	cmp.b	Transpred_(BP),d2
+< 	bne.s	set_a_mask_bit
+< 	move.b	Pgreen_(BP),d2
+< 	cmp.b	Transpgreen_(BP),d2
+< 	bne.s	set_a_mask_bit
+< 	move.b	Pblue_(BP),d2
+< 	cmp.b	Transpblue_(BP),d2
+< 	beq.s	no_mask_bit			;black (r=0,g=0,b=0)
+< 						;ok, set the mask bit
+< set_a_mask_bit:	
+< 	bset	d0,0(a0,d1.L)			;set bit indicating not transparent
+< 	bra.s	after_mask_set
+< no_mask_bit:	
+< 	bclr	d0,0(a0,d1.L)			;set bit indicating not transparent
+---
+> setup_mask_bits:	;regular masking (no mask bitplane)
+> 		move.l	BB1Ptr_(BP),a0	;brush bitmap
+> 		moveq	#7,d0
+> 		moveq	#0,d1		;clear upper word (adr use inamoment)
+> 		move.w	pxnumber_w_(BP),d1
+> 		sub.w	d1,d0		;d0=pixel#
+> 		asr.w	#3,d1		;x/8=byte addr off
+> 		add.l	ldlineoffset_(BP),d1
+> 
+> 	xref FlagSkipTransparency_
+> 	xref Transpred_
+> 	xref Transpgreen_
+> 	xref Transpblue_
+> 		tst.b	FlagSkipTransparency_(BP)
+> 		bne.s	set_a_mask_bit	;no transp, alway sup mask
+> 
+> 			;build mask bits, P(rgb) set, d0=lastplot
+> 		;tst.b	1(sp)	;palette #0? ("6bitpixl to plot" saved on stack)
+> 		;beq.s	no_mask_bit
+> 		move.b	Pred_(BP),d2		;check r,g,b for black 0,0,0
+> 		cmp.b	Transpred_(BP),d2
+> 		bne.s	set_a_mask_bit
+> 		move.b	Pgreen_(BP),d2
+> 		cmp.b	Transpgreen_(BP),d2
+> 		bne.s	set_a_mask_bit
+> 		move.b	Pblue_(BP),d2
+> 		cmp.b	Transpblue_(BP),d2
+> 		beq.s	no_mask_bit	;black (r=0,g=0,b=0)
+> 			;ok, set the mask bit
+> set_a_mask_bit:	bset	d0,0(a0,d1.L)	;set bit indicating not transparent
+> 		bra.s	after_mask_set
+> no_mask_bit:	bclr	d0,0(a0,d1.L)	;set bit indicating not transparent
+1965,1966c1976,1977
+< 	move.w	(sp)+,d0
+< 	move.l	(sp)+,a0			;STACK
+---
+> 		move.w	(sp)+,d0
+> 		move.l	(sp)+,a0	;STACK
+1968,1975c1979,1986
+< 	 addq.l #4,a6 ;no?;move.lPred_(BP),(a6)+;Pred_(BP),(a6);save rgb for this pixel...in case we wanna do?
+< ;NO?;move.lPred_(BP),(a6);MAR91.KLUDGE.SETUP PAINT COLORS, TOO?
+< ;NO?;move.b d0,-1(a6) ;d0,s_LastPlot(a6)
+< 
+< 	;;MAR91....brushes helper?
+< 	;move.l	Pred_(BP),d3
+< 	;asl.w	#4,d3
+< 	;move.l	d3,(a6)	;save s_Paint(rgb) for this pixel...in case we wanna do?
+---
+>  addq.l #4,a6 ;no?;		move.l	Pred_(BP),(a6)+  ;Pred_(BP),(a6)	;save rgb for this pixel...in case we wanna do?
+> ;NO?; move.l Pred_(BP),(a6) ;MAR91...KLUDGE...SETUP PAINT COLORS, TOO?
+> ;NO?;		move.b	d0,-1(a6)	;d0,s_LastPlot(a6)
+> 
+> 	; ;MAR91....brushes helper?
+> 	; move.l	Pred_(BP),d3
+> 	; asl.w	#4,d3
+> 	; move.l	d3,(a6)	;save s_Paint(rgb) for this pixel...in case we wanna do?
+1977,1979c1988,1990
+< 	;;;noneed;;;move.w	d1,(a6)+	;d1,s_PlaneAdr(a6)  MAY06....WORD???
+< 	;;;lea	(s_SIZEOF-6)(a6),a6
+< 	lea	(s_SIZEOF-4)(a6),a6
+---
+> 		;;;noneed;;;move.w	d1,(a6)+	;d1,s_PlaneAdr(a6)  MAY06....WORD???
+> 		;;;lea	(s_SIZEOF-6)(a6),a6
+> 		lea	(s_SIZEOF-4)(a6),a6
+1984c1995
+< 	bcs 	do_plot_brush_pixel
+---
+> 	bcs do_plot_brush_pixel
+1990,1992c2001,2006
+< handle_composite:				;LATEMAY1990////fixes what I gave ken...(?)
+< 	MOVE.L	a4,-(sp)			;file input buffer ptr (gonna be determinertn)
+< 	move.l	DetermineRtn_(BP),a4		;...a4 also used again, before re-loop
+---
+> handle_composite:
+> 		;LATEMAY1990////fixes what I gave ken...(?)
+> 	MOVE.L	a4,-(sp)	;file input buffer ptr (gonna be determinertn)
+> 	move.l	DetermineRtn_(BP),a4	;...a4 also used again, before re-loop
+> 
+> 	;xjsr	DebugMe10	;KLUDGE...this prints "debugme10" on cli
+1994c2008
+< 	bsr	ReadComposite			;"XJSR ReadComposite" is acceptable
+---
+> 	bsr	ReadComposite		;"XJSR ReadComposite" is acceptable
+1996c2010
+< 	;beq	end_of_reading_lines		;fails upon ZERO status
+---
+> 	;beq	end_of_reading_lines	;fails upon ZERO status
+1998,1999c2012,2013
+< 	;tst.b	FlagCancel_(BP)			;setup in readbody->decodecomposite.asm
+< 	;bne	end_of_reading_lines		;fails upon ZERO status
+---
+> 	;tst.b	FlagCancel_(BP)		;setup in readbody->decodecomposite.asm
+> 	;bne	end_of_reading_lines	;fails upon ZERO status
+2001,2003c2015,2017
+< 	beq	cancel_reading_lines		;fails upon ZERO status
+< 	tst.b	FlagCancel_(BP)			;setup in readbody->decodecomposite.asm
+< 	bne	cancel_reading_lines		;fails upon ZERO status
+---
+> 	beq	cancel_reading_lines	;fails upon ZERO status
+> 	tst.b	FlagCancel_(BP)		;setup in readbody->decodecomposite.asm
+> 	bne	cancel_reading_lines	;fails upon ZERO status
+2006,2007c2020
+< 	move.l	(sp)+,a4			;clup stack, file input buffer...
+< 
+---
+> 	move.l	(sp)+,a4		;clup stack, file input buffer...
+2011,2016c2024,2027
+< *	movem.l	d0-d6/a0-a6,-(sp)		;overdo redraw test!!!091294
+< *	st	FlagWholeHam_(BP)
+< *	xjsr	WholeHam
+< *	movem.l	(sp)+,d0-d6/a0-a6
+< 	
+< ;"putrgb"->rgb 24 bit arrays
+---
+> 
+> 
+> 
+> 		;"putrgb"->rgb 24 bit arrays
+2032,2034c2043,2045
+< 	;AUG151990
+< 
+< 	;AUG15....compare against RGB width....
+---
+> 		;AUG151990
+> 	
+> 		;AUG15....compare against RGB width....
+2043a2055,2057
+> 
+> 
+> 
+2047a2062
+> 
+2055,2058c2070,2073
+< 	;d0=row#
+< 	;d1=pixel# (even multiple of 32)
+< 	;d2=#pixels
+< 	;a0=savearray
+---
+> 		;d0=row#
+> 		;d1=pixel# (even multiple of 32)
+> 		;d2=#pixels
+> 		;a0=savearray
+2070d2084
+< *	DUMPMSG	<HAMDETERMINE>
+2077c2091
+< 	;copy SaveArray to output window
+---
+> 		;copy SaveArray to output window
+2091c2105,2107
+< 					;AUG15....compare against RGB width....
+---
+> 
+> 	
+> 		;AUG15....compare against RGB width....
+2093,2094c2109,2110
+< 	xref BigPicRGB_ 
+< 	tst.l	Datared_(BP)		;rgb mode?
+---
+> 	xref BigPicRGB_
+> 	tst.l	Datared_(BP)	;rgb mode?
+2115d2130
+< 	DUMPMSG	<LinePlot_SaveArray>
+2119c2134
+< 	MOVE.L	(sp)+,a4		;file input buffer ptr (WAS determinertn)
+---
+> 
+2120a2136,2137
+>   MOVE.L	(sp)+,a4	;file input buffer ptr (WAS determinertn)
+> 
+2133c2150
+< 	bcs 	read_a_line
+---
+> 	bcs read_a_line
+2134a2152
+> 	;xjsr	DebugMe12	;KLUDGE
+2140,2151c2158
+< *	DUMPMSG	<ALLDONE>
+< 
+< 
+< 
+<  ifeq 1	
+< 	movem.l	d0-d6/a0-a6,-(sp)		;overdo redraw test!!!091294
+< 	st	FlagWholeHam_(BP)
+< 	xjsr	WholeHam
+< 	movem.l	(sp)+,d0-d6/a0-a6
+<  endc
+< 
+< 	rts 		;--- ReadBody -----
+---
+> 	rts ;--- ReadBody -----
+2178c2185
+< 	xref 	FlagPaleMatch_	;iffload.o, ComparePalette result, file=curt?
+---
+> 	xref FlagPaleMatch_	;iffload.o, ComparePalette result, file=curt?
+2187c2194
+< 	xref BufferCount_	;ds.w	it's current count//ptr NOW CAN BE LONG!
+---
+> 	xref BufferCount_	;ds.w	it's current count//ptr
+2224,2227d2230
+< 	ALLDUMPS
+< 
+< 
+< 
+2281,2284d2283
+< 
+< 
+< 
+< 

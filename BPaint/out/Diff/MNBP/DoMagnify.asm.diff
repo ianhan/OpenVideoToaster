@@ -1,0 +1,1382 @@
+7c7
+< 				;timer'd to max 30 times/second, DrawBrush, Repaint
+---
+> 		;timer'd to max 30 times/second, DrawBrush, Repaint
+9,11c9,11
+< 				;does it, ignores//resets timer
+< 	XDEF MagMove_rt		;"magmove" rtns called from key rtns...
+< 	XDEF MagMove_lt		;...to "shift" mag view by one pixel
+---
+> 		;does it, ignores//resets timer
+> 	XDEF MagMove_rt	;"magmove" rtns called from key rtns...
+> 	XDEF MagMove_lt	;...to "shift" mag view by one pixel
+15,25c15,17
+< 	include "ram:mod.i"
+< 
+< 
+< MAGWT		SET 640
+< MAGWTBPR	SET (MAGWT/8)
+< MAGMODULO	SET 10
+< 
+< 
+< NORMALMAGHT	set 400
+< SHORTMAGHT	set  88			;#lines on magnify screen when "lo mem" condition
+< SHORT2MAGHT	set  56			;#lines on magnify screen when really "lo mem" condition
+---
+> NORMALMAGHT	set 200
+> SHORTMAGHT	set  88	;#lines on magnify screen when "lo mem" condition
+> SHORT2MAGHT	set  56	;#lines on magnify screen when really "lo mem" condition
+35,37d26
+< 	include	"ps:serialdebug.i"
+< 	
+< 	
+39d27
+< 
+50,52c38,40
+< 	xref FlagMenu_	
+< 	xref FlagNeedMagnify_		;clear global flag, since DOING it
+< 	xref FlagNeedGadRef_		;clear global flag, since DOING it
+---
+> 	xref FlagMenu_
+> 	xref FlagNeedMagnify_	;clear global flag, since DOING it
+> 	xref FlagNeedGadRef_	;clear global flag, since DOING it
+54c42
+< 	xref IntuitionLibrary_		;only lib we use, this rtn.
+---
+> 	xref IntuitionLibrary_	;only lib we use, this rtn.
+58,65c46,53
+< 	xref MagnifyOffsetY_	
+< 	xref MagnifyFactor_		;1=no mag, no use, 2,4,8 valid
+< 	xref MagnifyTablePtr_		;2k table, expanded bytes
+< 	xref MagRgbArray_		;ds.l 25 ;(rgb)=3bytes+1junk, 25 lines
+< 	xref MagXShift_	
+< 	xref MScreenPtr_		;magnify screen
+< 	xref MWindowPtr_		;a 'big window' on magnify screen
+< 	xref MCBWindowPtr_		;close box on magnify screen
+---
+> 	xref MagnifyOffsetY_
+> 	xref MagnifyFactor_	;1=no mag, no use, 2,4,8 valid
+> 	xref MagnifyTablePtr_	;2k table, expanded bytes
+> 	xref MagRgbArray_	;ds.l 25 ;(rgb)=3bytes+1junk, 25 lines
+> 	xref MagXShift_
+> 	xref MScreenPtr_	;magnify screen
+> 	xref MWindowPtr_	;a 'big window' on magnify screen
+> 	xref MCBWindowPtr_	;close box on magnify screen
+70c58
+< 	xref RemagTick_			;last 'tick time' we magnified (domagnify.o)
+---
+> 	xref RemagTick_		;last 'tick time' we magnified (domagnify.o)
+74c62
+< 	xref Ticker_			;always running timer....
+---
+> 	xref Ticker_		;always running timer....
+77,79d64
+< ;SERDEBUG	equ	1
+< 
+< 
+81,83c66,68
+< ;      there is data
+< ;      (AND Magnify screen exists) (...assumed)
+< ;      AND FlagMagnifyStart not set
+---
+> ;	there is data
+> ;	(AND Magnify screen exists) (...assumed)
+> ;	AND FlagMagnifyStart not set
+86c71
+< DoMinMagnify:				;enforce minimum timing on mag scr update
+---
+> DoMinMagnify:	;enforce minimum timing on mag scr update
+97,98c82,83
+< 	sub.L	#12,d0			;(ntsc=1/5sec, pal=~1/4)
+< 	bcc.s	DoMagnify		;nn or so ticks happended, go do it
+---
+> 	sub.L	#12,d0		;(ntsc=1/5sec, pal=~1/4)
+> 	bcc.s	DoMagnify	;nn or so ticks happended, go do it
+101,106d85
+< 
+< ************************************************
+< *
+< * 	DoMagnify
+< *
+< ************************************************
+112,113c91,92
+< 1$	;cmp.w	MaxTick_(BP),d0		;ticker is a 'long'...'max'var is .w
+< 	subq	#1,d0			;remagnify goes a bit slower (text is +1 more)
+---
+> 1$	;cmp.w	MaxTick_(BP),d0	;ticker is a 'long'...'max'var is .w
+> 	subq	#1,d0		;remagnify goes a bit slower (text is +1 more)
+119,124d97
+< 
+< ************************************************
+< *
+< * 	roomformenu
+< *
+< ************************************************
+126,127c99,100
+< 	xjsr	EnsureExtraChip		;memories.o, 10k
+< 	bne.s	zmagrts			;ok
+---
+> 	xjsr	EnsureExtraChip	;memories.o, 10k
+> 	bne.s	zmagrts		;ok
+131,136d103
+< 
+< ************************************************
+< *
+< * 	roomformagnify
+< *
+< ************************************************
+139c106
+< 	bne.s	zmagrts			;ok
+---
+> 	bne.s	zmagrts		;ok
+143,149c110
+< 
+< ************************************************
+< *
+< * 	ReallyDoMagnify
+< *
+< ************************************************
+< ReallyDoMagnify:			 ; expand onto the magnify screen
+---
+> ReallyDoMagnify: ; expand onto the magnify screen
+153a115,117
+> 
+> 	;;;;;;;;;;;RTS	;KLUDGEOUT	
+> 
+158,159c122,123
+< 	xjsr	GraphicsWaitBlit 	;wait for (oldstyle slow nomem cutpaste display)
+< 	move.l	Ticker_(BP),RemagTick_(BP) ;save 'clocktime' magnified
+---
+> 	xjsr	GraphicsWaitBlit ;wait for (oldstyle slow nomem cutpaste display)
+> 	move.l	Ticker_(BP),RemagTick_(BP)	;save 'clocktime' magnified
+161c125,129
+< 	movem.l d0-d7/a0-a4,-(sp)
+---
+>  ;point past end of 6 start-of-bitplane addresses
+>  ; do this so magnify upper/higher/pallette/lighter bits first
+> 
+>   MOVEM.L d0-d7/a0-a4,-(sp)
+> 
+172c140
+< 	asr.w	#2,d4			;/4 for i-lace#lines
+---
+> 	asr.w	#2,d4		;/4 for i-lace#lines
+175,178c143,150
+< ;REST OF MAGNIFY CODE IS CLONED FOR INTERLACE
+< ;...SAME TOTAL HT(200), EACH LINE4xTALL (non lace magscrn allow)
+< ;	tst.b	FlagLace_(BP)
+< ;	bne	DoMagLace		;d4= #-source-lines to magnify
+---
+> 
+> 	;REST OF MAGNIFY CODE IS CLONED FOR INTERLACE
+> 	;...SAME TOTAL HT(200), EACH LINE4xTALL (non lace magscrn allow)
+> 
+> 	tst.b	FlagLace_(BP)
+> 	bne	DoMagLace	;d4= #-source-lines to magnify
+> 
+> 	;;;moveq	#25-1,d4		;number of lines
+187c159
+< get_color:
+---
+> get_color:	
+189,193d160
+< 
+< *	MOVE.W	#128,D0
+< *	MOVE.W	#128,MagnifyOffsetX_(BP)
+< *	DUMPREG	<D0 OFFSET>
+< 
+197c164
+< 	movem.l	d3/d4/a2/A3,-(sp)	;only need .w of d4
+---
+> 	movem.l	d3/d4/a2/A3,-(sp)		;only need .w of d4
+199c166
+< 	tst.l	DoubleBitMap_Planes_(BP);have a double?
+---
+> 	tst.l	DoubleBitMap_Planes_(BP)	;have a double?
+207,208c174,176
+< 	;xjsr	QuickGetOldBM		;from bitmap, getold.o
+< ;BIGBUG FIX....JULY171990;move.l -8(a3),a3 ;bitmap ptr
+---
+> 
+> 	;xjsr	QuickGetOldBM	;from bitmap, getold.o
+> 	;BIGBUG FIX....JULY171990;move.l	-8(a3),a3		;bitmap ptr
+215,216c183
+< 	ori.l	#$80C04000,d0		;add in modifier high bits ham8
+< *	ori.l	#$20301000,d0		;add in modifier high bits ham6
+---
+> 	ori.l	#$20301000,d0		;add in modifier high bits
+223a191
+> 
+225,227c193,194
+< *	SUB.L	#10,d1			;#bytes magnify (5bytes=40bits,*8=320pixels)
+< *					;(note: '-1' in '(5-1)' becuz a4 not ++ last time)
+< 	SUB.L	#MAGMODULO,d1		;^^^^^
+---
+> 	SUB.L	#5,d1	;#bytes magnify (5bytes=40bits,*8=320pixels)
+> 			;(note: '-1' in '(5-1)' becuz a4 not ++ last time)
+229,230d195
+< 	move.w	MagXShift_(BP),-(SP)	;#times to shift before mag'
+< *	DUMPMEM	<MAG SHIFT>,MagXShift_(BP),#10
+232c197,198
+< 	move.l	d1,-(SP)		;MODULO offs to next source line, subr use.
+---
+> 	move.w	MagXShift_(BP),-(SP)	;#times to shift before mag'
+> 	move.l	d1,-(SP)		;offs to next source line, subr use.
+235,236c201,202
+< ;sup&stack #lines to expand
+< ;	moveq	#(200/8)-1,d1		;number of lines to expand
+---
+> 		;sup&stack #lines to expand
+> 	;moveq	#(200/8)-1,d1	;number of lines to expand
+239,241c205,207
+< 	sub.w	#11,d1			;title bar allowance
+< 	asr.w	#3,d1			;/3 lines, #dest rows per source row
+< 	subq	#1,d1			;for db' type loop
+---
+> 	sub.w	#11,d1		;title bar allowance
+> 	asr.w	#3,d1		;/3 lines, #dest rows per source row
+> 	subq	#1,d1		;for db' type loop
+249c215,216
+< ;	move.l	MScreenPtr_(BP),a6
+---
+> 
+> 	;move.l	MScreenPtr_(BP),a6
+252c219
+< 	tst.l	DoubleBitMap_Planes_(BP) ;have a double?
+---
+> 	tst.l	DoubleBitMap_Planes_(BP)	;have a double?
+258c225
+< 865$	lea	ScreenBitMap_Planes_(a5),a5 ;<<= Messes up A5=BP=BasePage
+---
+> 865$	lea	ScreenBitMap_Planes_(a5),a5	;<<= Messes up A5=BP=BasePage
+261,262c228,230
+< 	lea	(8*4)(a6),a6		;pt->end of table of 8 bitplane addresses
+< 	lea	(8*4)(a5),a5	
+---
+> 	lea	(6*4)(a6),a6	;pt->end of table of 6 bitplane addresses
+> 	lea	(6*4)(a5),a5
+> 
+264c232
+< 	MOVE.W	#8,-(SP)		;x8 loop counter
+---
+> 	MOVE.W	#6,-(SP)	;x6 loop counter
+266,275c234,241
+< ; uses registers d1-d7,a2-a4,a5,a6 NO BASEPAGE USE
+< ; STACKNOTE: 0(word counter) 2(screenoffsettobyte) 6(bytesperrow) 10(XSHIFT)
+< ; A4=from pointer,A3=to pointer
+< 
+< 	move.l	-(a5),a4 		;source address / main screen
+< 	move.l	-(a6),a3 		;start of magnify screen plane address
+< 
+< 	adda.l	2+2(sp),a4		;upper left corner, byte on source (bigpic)
+< 	lea	(11*MAGWTBPR)(a3),a3	;skip title bar on mag screen
+< 	move.w	2(sp),d1		;#lines to expand
+---
+> 	; uses registers d1-d7,a2-a4,a5,a6 NO BASEPAGE USE
+> 	;STACKNOTE: 0(word counter) 2(screenoffsettobyte) 6(bytesperrow) 10(XSHIFT)
+> 	;A4=from pointer,	A3=to pointer
+> 
+> 	move.l	-(a5),a4 ;source address / main screen
+> 	move.l	-(a6),a3 ;start of magnify screen plane address
+> 	adda.l	2+2(sp),a4	;upper left corner, byte on source (bigpic)
+> 	lea	(11*40)(a3),a3	;skip title bar on mag screen
+276a243
+> 	move.W	2(sp),d1	;#lines to expand
+278,279c245,247
+< ;fill leftside of 8 lines, 1st 20 bytes of screen line
+< 	moveq	#0,d2			;only fills byte, clear higher bits
+---
+> 
+> 	; fill leftside of 8 lines, 1st 20 bytes of screen line
+> 	moveq	#0,d2		;only fill byte, clear higher bits
+282,285c250,253
+< 	move.b	(a4)+,d2		;byte to expand
+< 	move.b	(a4)+,d0		;2nd byte to expand
+< 	move.b	(a4)+,d7		;3rd byte to expand
+< 	move.w	10+2(sp),d6		;MagXShift_(BP),d6
+---
+> 	move.b	(a4)+,d2	;    byte to expand
+> 	move.b	(a4)+,d0	;2nd byte to expand
+> 	move.b	(a4)+,d7	;3rd byte to expand
+> 	move.w	10+2(sp),d6	;MagXShift_(BP),d6
+287c255,256
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+---
+> 	move.b	(a4),D5		;another extra, for 'rolls' into d7 (3rd)
+> ;7$:	roxl.b	#1,D5
+289c258,262
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+---
+> 	;roxl.b	#1,d7	;shift bits BEFORE magnify'g
+> 	;roxl.b	#1,d0
+> 	;roxl.b	#1,d2
+> 
+> 	addx.b	d7,d7	;shift bits BEFORE magnify'g
+291a265
+> 
+294d267
+< 
+296c269
+< 	asl.w	#3,d2			;calc address *8 ...doin' an 8*8 expansion
+---
+> 	asl.w	#3,d2		;calc address *8 ...doin' an 8*8 expansion
+298,302c271,277
+< ;dont overwrite 3pixel ham modifiers that are already on-screen
+< 	andi.l	#$1FFFFFFF,d3		;strip off 1st 3 bits
+< 	move.l	(a3),d5			;get what's already on screen
+< 	andi.l	#$E0000000,d5		;strip all but 1st 3 pixels
+< 	or.l	d5,d3			;put screen's 1st 3 pixels into output
+---
+> 
+> 	;dont overwrite 3pixel ham modifiers that are already on-screen
+> 	andi.l	#$1FFFFFFF,d3	;strip off 1st 3 bits
+> 	move.l	(a3),d5		;what's already there
+> 	andi.l	#$E0000000,d5	;strip all but 1st 3 pixels
+> 	or.l	d5,d3		;put screen's 1st 3 pixels into output
+> 
+307,308c282,293
+< 	exg 	d0,d7
+< 	movem.l	d3-d7,(a3)		;write 20 bytes onto screen LEFT half
+---
+> 		
+> 	exg d0,d7
+> 	movem.l	d3-d7,(a3)	;write 20 bytes onto screen LEFT half
+> 	;movem.l	d3-d7,(1*40)(a3)	;write 20 bytes onto screen
+> 	;movem.l	d3-d7,(2*40)(a3)	;write 20 bytes to 2nd line
+> 	;movem.l	d3-d7,(3*40)(a3)
+> 	;movem.l	d3-d7,(4*40)(a3)
+> 	;movem.l	d3-d7,(5*40)(a3)
+> 	;movem.l	d3-d7,(6*40)(a3)
+> 	;movem.l	d3-d7,(7*40)(a3)
+> 
+> 	exg d0,d3
+310,313c295
+< ** next 20
+< *	exg d0,d3
+< 	move.l	d0,d3	
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+---
+> 	moveq	#0,d6		;only fill byte, clear higher bits
+315,317c297,299
+< 	move.b	(a4)+,d6		;    byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+---
+> 	move.b	(a4)+,d6	;    byte to expand
+> 	move.b	(a4)+,d7	;2nd byte to expand
+> 	move.w	10+2(sp),d4	;MagXShift_(BP),d4
+319c301,304
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+---
+> 	move.b	(a4),D5		;another extra, for 'rolls' into d7 (3rd)
+> ;17$:	roxl.b	#1,D5
+> ;	roxl.b	#1,d7	;shift bits BEFORE magnify'g
+> ;	roxl.b	#1,d6
+321c306
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+---
+> 	addx.b	d7,d7	;shift bits BEFORE magnify'g
+322a308
+> 
+326c312
+< 	asl.w	#3,d6			;calc address *8
+---
+> 	asl.w	#3,d6		;calc address *8
+328c314
+< 	asl.w	#3,d7			;calc address *8
+---
+> 	asl.w	#3,d7		;calc address *8
+330,340d315
+< 	movem.l	d3-d7,(0*MAGWTBPR+20)(a3)	;write 20 bytes onto screen
+< 
+< 
+< *
+< ** 2nd half of screen.
+< *
+< ** next 20
+< *	exg d0,d3
+< 	moveq	#0,d2			;only fill byte, clear higher bits
+< 	moveq	#0,d0
+< 	moveq	#0,d7
+342,386c317,324
+< 	move.b	(a4)+,d2		;    byte to expand
+< 	move.b	(a4)+,d0		;2nd byte to expand
+< 	move.b	(a4)+,d7	
+< 
+< 	move.w	10+2(sp),d6		;MagXShift_(BP),d6
+< 	beq.s	28$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 27$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d0,d0
+< 	addx.b	d2,d2
+< 	subq.w	#1,d6
+< 	bne.s	27$
+< 28$:
+< 	asl.w	#3,d2			;calc address *8
+< 	movem.l	0(a2,d2.w),d3/d4	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d0			;calc address *8
+< 	movem.l	0(a2,d0.w),d5/d6	;expand 4 bits (8*4)=32bits=1longwords
+< 	asl.w	#3,d7
+< 	movem.l	0(a2,d7.w),d0/d7	
+< 	exg	d0,d7
+< *	move.l	#$FFFFFFFF,d3
+< *	move.l	#$FFFFFFFF,d4
+< 	movem.l	d3-d7,(0*MAGWTBPR+40)(a3)	;write 20 bytes onto screen
+< 
+< ** next 20
+< 	exg d0,d3
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+< 	moveq	#0,d7
+< 	move.b	(a4)+,d6		;    byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+< 	beq.s	38$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 37$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d6,d6
+< 	subq.w	#1,d4
+< 	bne.s	37$
+< 38$:
+< 	asl.w	#3,d6			;calc address *8
+< 	movem.l	0(a2,d6.w),d4/d5	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d7			;calc address *8
+< 	movem.l	0(a2,d7.w),d6/d7	;expand 4 bits (8*4)=32bits=1longwords
+< 	movem.l	d3-d7,(0*MAGWTBPR+60)(a3)	;write 20 bytes onto screen
+---
+> 	movem.l	d3-d7,(0*40+20)(a3)	;write 20 bytes onto screen
+> 	;movem.l	d3-d7,(1*40+20)(a3)	;write 20 bytes to 2nd line
+> 	;movem.l	d3-d7,(2*40+20)(a3)
+> 	;movem.l	d3-d7,(3*40+20)(a3)
+> 	;movem.l	d3-d7,(4*40+20)(a3)
+> 	;movem.l	d3-d7,(5*40+20)(a3)
+> 	;movem.l	d3-d7,(6*40+20)(a3)
+> 	;movem.l	d3-d7,(7*40+20)(a3)
+387a326,327
+> 	lea	(8*40)(a3),a3	;point to next OUTPUT line
+> 	adda.l	6+2(sp),a4	;next SOURCE line, bytes_per_row_(BP),a4
+389,390d328
+< 	lea	(8*MAGWTBPR)(a3),a3	;point to next OUTPUT line
+< 	adda.l	6+2(sp),a4		;next SOURCE line, bytes_per_row_(BP),a4
+396,397c334
+< 	ADDQ.L	#2,sp			;DESTACK remove "2" bytes for counter
+< 
+---
+> 	ADDQ.L	#2,sp	;DESTACK remove "2" bytes for counter
+400,401c337,338
+< 	move.l	#(11*MAGWTBPR),d1	;starting offset on mag screen
+< 	move.L	d1,-(sp)		;offset to each line (skip by 8)
+---
+> 	move.l	#(11*40),d1	;starting offset on mag screen
+> 	move.L	d1,-(sp)	;offset to each line (skip by 8)
+403,404c340,341
+< 	addq.w	#1,d1			;="true" # lines (not -1) loopend checks zero
+< 	move.w	d1,-(sp)		;#lines-1 (adjusted for short screen)
+---
+> 	addq.w	#1,d1		;="true" # lines (not -1) loopend checks zero
+> 	move.w	d1,-(sp)	;#lines-1 (adjusted for short screen)
+406c343
+< 	lea	(8*4)(a6),a6		;pt->end of table of 8 bitplane addresses  CHANGE TO 8 071294
+---
+> 	lea	(6*4)(a6),a6	;pt->end of table of 6 bitplane addresses
+408c345
+< 	MOVEq	#(8-1),d1		;x8 (bitplanes) loop counter CHANGE TO 8 071294
+---
+> 	MOVEq	#(6-1),d1	;x6 (bitplanes) loop counter
+410,412c347,349
+< 	move.l	-(a6),a3		;start of magnify screen ONE bitplane address
+< 	;lea	(11*MAGWTBPR)(a3),a3	;skip title bar on mag screen
+< 	add.l	2(sp),a3		;offset to 'this' line (by 8s)
+---
+> 	move.l	-(a6),a3	;start of magnify screen ONE bitplane address
+> 	;lea	(11*40)(a3),a3	;skip title bar on mag screen
+> 	add.l	2(sp),a3	;offset to 'this' line (by 8s)
+415,448c352,359
+< 	movem.l	d3-d7,(1*MAGWTBPR)(a3)	;write 20 bytes onto screen
+< 	movem.l	d3-d7,(2*MAGWTBPR)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(3*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+20)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+20)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+20)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+40)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+40)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+40)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+60)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+60)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+60)(a3)
+---
+> 	movem.l	d3-d7,(1*40)(a3)	;write 20 bytes onto screen
+> 	movem.l	d3-d7,(2*40)(a3)	;write 20 bytes to 2nd line
+> 	movem.l	d3-d7,(3*40)(a3)
+> 	movem.l	d3-d7,(4*40)(a3)
+> 	movem.l	d3-d7,(5*40)(a3)
+> 	movem.l	d3-d7,(6*40)(a3)
+> 	movem.l	d3-d7,(7*40)(a3)
+> 
+449a361,368
+> 	movem.l	(0*40+20)(a3),d3-d7	;GRAB 20 bytes from screen
+> 	movem.l	d3-d7,(1*40+20)(a3)	;write 20 bytes to 2nd line
+> 	movem.l	d3-d7,(2*40+20)(a3)
+> 	movem.l	d3-d7,(3*40+20)(a3)
+> 	movem.l	d3-d7,(4*40+20)(a3)
+> 	movem.l	d3-d7,(5*40+20)(a3)
+> 	movem.l	d3-d7,(6*40+20)(a3)
+> 	movem.l	d3-d7,(7*40+20)(a3)
+452c371
+< 	add.l	#(MAGWTBPR*8),2(sp)	;nice that we can 'long/word' align
+---
+> 	add.l	#(40*8),2(sp)	;nice that we can 'long/word' align
+455c374
+< 	lea	6(sp),sp		;m1->7 word loop counter, longword offset
+---
+> 	lea	6(sp),sp	;m1->7 word loop counter, longword offset
+459,461c378,382
+< 	;LEA	2(sp),sp		;destack x6 loop counter
+< 	;LEA	(4+4)(sp),sp		;destack MagnifyAdrOffset_(BP), bytes per row
+< 	;LEA	2(sp),sp		;x shift
+---
+> 
+> 
+> 	;LEA	2(sp),sp	;destack x6 loop counter
+> 	;LEA	(4+4)(sp),sp	;destack MagnifyAdrOffset_(BP), bytes per row
+> 	;LEA	2(sp),sp	;x shift
+464c385
+< 	move.l	(sp),a5			;no de-stack("+"), just retrieve a5=basepage
+---
+> 	move.l	(sp),a5		;no de-stack("+"), just retrieve a5=basepage
+468,470d388
+< 	movem.l (sp)+,d0-d7/a0-a4
+< 
+< 	rts	;ReallyDoMagnify
+471a390
+>   MOVEM.L (sp)+,d0-d7/a0-a4
+472a392
+> 	rts	;ReallyDoMagnify
+474,479d393
+<  ifeq	1		;com out 072694
+< ************************************************
+< *
+< * 	DoMagLace
+< *
+< ************************************************
+494c408
+< 	movem.l	d3/d4/a2/A3,-(sp)	;only need .w of d4
+---
+> 	movem.l	d3/d4/a2/A3,-(sp)		;only need .w of d4
+496c410
+< 	tst.l	DoubleBitMap_Planes_(BP) ;have a double?
+---
+> 	tst.l	DoubleBitMap_Planes_(BP)	;have a double?
+505,506c419,420
+< 	;xjsr	QuickGetOldBM		;from bitmap, getold.o
+< ;BIGBUG FIX....JULY171990;move.l -8(a3),a3 ;bitmap ptr
+---
+> 	;xjsr	QuickGetOldBM	;from bitmap, getold.o
+> 	;BIGBUG FIX....JULY171990;move.l	-8(a3),a3		;bitmap ptr
+512,513c426
+< 	ori.l	#$80C04000,d0		;add in modifier high bits
+< *	ori.l	#$20301000,d0		;add in modifier highNO LOW bits
+---
+> 	ori.l	#$20301000,d0		;add in modifier high bits
+515c428
+< 	addq.W	#1,d3			;move "Y" down screen
+---
+> 	addq	#1,d3			;move "Y" down screen
+523,524c436,437
+< 	SUB.L	#5,d1			;#bytes magnify (5bytes=40bits,*8=320pixels)
+< 					;(note: '-1' in '(5-1)' becuz a4 not ++ last time)
+---
+> 	SUB.L	#5,d1	;#bytes magnify (5bytes=40bits,*8=320pixels)
+> 			;(note: '-1' in '(5-1)' becuz a4 not ++ last time)
+532,533c445,446
+< ;sup&stack #lines to expand
+< 	;moveq	#(200/4)-1,d1		;number of lines to expand
+---
+> 		;sup&stack #lines to expand
+> 	;moveq	#(200/4)-1,d1	;number of lines to expand
+536,538c449,451
+< 	sub.w	#11,d1			;title bar allowance
+< 	asr.w	#2,d1			;/4 lines, #dest rows per source row
+< 	subq	#1,d1			;for db' type loop
+---
+> 	sub.w	#11,d1		;title bar allowance
+> 	asr.w	#2,d1		;/4 lines, #dest rows per source row
+> 	subq	#1,d1		;for db' type loop
+549c462
+< 	tst.l	DoubleBitMap_Planes_(BP) ;have a double?
+---
+> 	tst.l	DoubleBitMap_Planes_(BP)	;have a double?
+558,559c471,472
+< 	lea	(8*4)(a6),a6		;pt->end of table of 6 bitplane addresses *8 bitplanes
+< 	lea	(8*4)(a5),a5
+---
+> 	lea	(6*4)(a6),a6	;pt->end of table of 6 bitplane addresses
+> 	lea	(6*4)(a5),a5
+562c475
+< 	MOVE.W	#8,-(SP)		;x6 loop counter  x8 loop count
+---
+> 	MOVE.W	#6,-(SP)	;x6 loop counter
+564,571c477,484
+< ; uses registers d1-d7,a2-a4,a5,a6 NO BASEPAGE USE
+< ;STACKNOTE: 0(word counter) 2(screenoffsettobyte) 6(bytesperrow) 10(XSHIFT)
+< ;A4=from pointer,	A3=to pointer
+< 
+< 	move.l	-(a5),a4 		;source address / main screen
+< 	move.l	-(a6),a3 		;start of magnify screen plane address
+< 	adda.l	2+2(sp),a4		;upper left corner, byte on source (bigpic)
+< 	lea	(11*MAGWTBPR)(a3),a3	;skip title bar on mag screen
+---
+> 	; uses registers d1-d7,a2-a4,a5,a6 NO BASEPAGE USE
+> 	;STACKNOTE: 0(word counter) 2(screenoffsettobyte) 6(bytesperrow) 10(XSHIFT)
+> 	;A4=from pointer,	A3=to pointer
+> 
+> 	move.l	-(a5),a4 ;source address / main screen
+> 	move.l	-(a6),a3 ;start of magnify screen plane address
+> 	adda.l	2+2(sp),a4	;upper left corner, byte on source (bigpic)
+> 	lea	(11*40)(a3),a3	;skip title bar on mag screen
+574a488
+> 
+576c490
+< 	moveq	#0,d2			;only fill byte, clear higher bits
+---
+> 	moveq	#0,d2		;only fill byte, clear higher bits
+579,582c493,496
+< 	move.b	(a4)+,d2		;    byte to expand
+< 	move.b	(a4)+,d0		;2nd byte to expand
+< 	move.b	(a4)+,d7		;3rd byte to expand
+< 	move.w	10+2(sp),d6		;MagXShift_(BP),d6
+---
+> 	move.b	(a4)+,d2	;    byte to expand
+> 	move.b	(a4)+,d0	;2nd byte to expand
+> 	move.b	(a4)+,d7	;3rd byte to expand
+> 	move.w	10+2(sp),d6	;MagXShift_(BP),d6
+584c498
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+---
+> 	move.b	(a4),D5		;another extra, for 'rolls' into d7 (3rd)
+586c500
+< ;	roxl.b	#1,d7			;shift bits BEFORE magnify'g
+---
+> ;	roxl.b	#1,d7	;shift bits BEFORE magnify'g
+591c505
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+---
+> 	addx.b	d7,d7	;shift bits BEFORE magnify'g
+598c512
+< 	asl.w	#3,d2			;calc address *8 ...doin' an 8*8 expansion
+---
+> 	asl.w	#3,d2		;calc address *8 ...doin' an 8*8 expansion
+601,605c515,519
+< ;dont overwrite 3pixel ham modifiers that are already on-screen
+< 	andi.l	#$1FFFFFFF,d3		;strip off 1st 3 bits
+< 	move.l	(a3),d5			;what's already there
+< 	andi.l	#$E0000000,d5		;strip all but 1st 3 pixels
+< 	or.l	d5,d3			;put screen's 1st 3 pixels into output
+---
+> 	;dont overwrite 3pixel ham modifiers that are already on-screen
+> 	andi.l	#$1FFFFFFF,d3	;strip off 1st 3 bits
+> 	move.l	(a3),d5		;what's already there
+> 	andi.l	#$E0000000,d5	;strip all but 1st 3 pixels
+> 	or.l	d5,d3		;put screen's 1st 3 pixels into output
+613,616c527,530
+< 	movem.l	d3-d7,(a3)		;write 20 bytes onto screen LEFT half
+< 	;movem.l d3-d7,(1*40)(a3)	;write 20 bytes onto screen
+< 	;movem.l d3-d7,(2*40)(a3)	;write 20 bytes to 2nd line
+< 	;movem.l d3-d7,(3*40)(a3)
+---
+> 	movem.l	d3-d7,(a3)	;write 20 bytes onto screen LEFT half
+> 	;movem.l	d3-d7,(1*40)(a3)	;write 20 bytes onto screen
+> 	;movem.l	d3-d7,(2*40)(a3)	;write 20 bytes to 2nd line
+> 	;movem.l	d3-d7,(3*40)(a3)
+620c534
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+---
+> 	moveq	#0,d6		;only fill byte, clear higher bits
+622,624c536,538
+< 	move.b	(a4)+,d6		;byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+---
+> 	move.b	(a4)+,d6	;    byte to expand
+> 	move.b	(a4)+,d7	;2nd byte to expand
+> 	move.w	10+2(sp),d4	;MagXShift_(BP),d4
+626c540
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+---
+> 	move.b	(a4),D5		;another extra, for 'rolls' into d7 (3rd)
+628c542
+< ;	roxl.b	#1,d7			;shift bits BEFORE magnify'g
+---
+> ;	roxl.b	#1,d7	;shift bits BEFORE magnify'g
+632c546
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+---
+> 	addx.b	d7,d7	;shift bits BEFORE magnify'g
+638c552
+< 	asl.w	#3,d6			;calc address *8
+---
+> 	asl.w	#3,d6		;calc address *8
+640c554
+< 	asl.w	#3,d7			;calc address *8
+---
+> 	asl.w	#3,d7		;calc address *8
+644,646c558,560
+< 	;movem.l d3-d7,(1*40+20)(a3)	;write 20 bytes to 2nd line
+< 	;movem.l d3-d7,(2*40+20)(a3)
+< 	;movem.l d3-d7,(3*40+20)(a3)
+---
+> 	;movem.l	d3-d7,(1*40+20)(a3)	;write 20 bytes to 2nd line
+> 	;movem.l	d3-d7,(2*40+20)(a3)
+> 	;movem.l	d3-d7,(3*40+20)(a3)
+648,649c562,563
+< 	lea	(4*40)(a3),a3		;point to next OUTPUT line
+< 	adda.l	6+2(sp),a4		;next SOURCE line, bytes_per_row_(BP),a4
+---
+> 	lea	(4*40)(a3),a3	;point to next OUTPUT line
+> 	adda.l	6+2(sp),a4	;next SOURCE line, bytes_per_row_(BP),a4
+656c570
+< 	ADDQ	#2,sp			;destack line counter
+---
+> 	ADDQ	#2,sp		;destack line counter
+660,664c574,578
+< 	move.l	#(11*MAGWTBPR),d1	;starting offset on mag screen
+< 	move.L	d1,-(sp)		;offset to each line (skip by 4s)
+< 	move.w	4(sp),d1	
+< 	addq.w	#1,d1			;="true" # lines (not -1) loopend checks zero
+< 	move.w	d1,-(sp)		;#lines-1 (adjusted for short screen)
+---
+> 	move.l	#(11*40),d1	;starting offset on mag screen
+> 	move.L	d1,-(sp)	;offset to each line (skip by 4s)
+> 	move.w	4(sp),d1
+> 	addq.w	#1,d1		;="true" # lines (not -1) loopend checks zero
+> 	move.w	d1,-(sp)	;#lines-1 (adjusted for short screen)
+666,667c580,582
+< 	lea	(8*4)(a6),a6		;pt->end of table of 6 bitplane addressesCHANGE TO 8 071294
+< 	MOVEq	#(8-1),d1		;x6 (bitplanes) loop counterCHANGE TO 8 071294
+---
+> 	lea	(6*4)(a6),a6	;pt->end of table of 6 bitplane addresses
+> 
+> 	MOVEq	#(6-1),d1	;x6 (bitplanes) loop counter
+669,671c584,586
+< 	move.l	-(a6),a3		;start of magnify screen ONE bitplane address
+< 	;lea	(11*MAGWTBPR)(a3),a3	;skip title bar on mag screen
+< 	add.l	2(sp),a3		;offset to 'this' line (by 8s)
+---
+> 	move.l	-(a6),a3	;start of magnify screen ONE bitplane address
+> 	;lea	(11*40)(a3),a3	;skip title bar on mag screen
+> 	add.l	2(sp),a3	;offset to 'this' line (by 8s)
+684c599
+< 	add.l	#(40*4),2(sp)		;nice that we can 'long/word' align
+---
+> 	add.l	#(40*4),2(sp)	;nice that we can 'long/word' align
+687c602
+< 	lea	6(sp),sp		;m1->7 word loop counter, longword offset
+---
+> 	lea	6(sp),sp	;m1->7 word loop counter, longword offset
+691,693c606,611
+< 	;LEA	2(sp),sp		;destack x6 loop counter
+< 	;LEA	(4+4)(sp),sp		;destack MagnifyAdrOffset_(BP), bytes per row
+< 	;LEA	2(sp),sp		;x shift
+---
+> 
+> 
+> 
+> 	;LEA	2(sp),sp	;destack x6 loop counter
+> 	;LEA	(4+4)(sp),sp	;destack MagnifyAdrOffset_(BP), bytes per row
+> 	;LEA	2(sp),sp	;x shift
+696c614,615
+< 	move.l	(sp),a5			;no de-stack("+"), just retrieve a5=basepage
+---
+> 	move.l	(sp),a5		;no de-stack("+"), just retrieve a5=basepage
+> 
+698a618
+> 
+699a620
+> 
+701d621
+<  endc 
+705,709d624
+< ************************************************
+< *
+< * 	CheckBegMagnify
+< *
+< ************************************************
+720,722c635,640
+< ;may15LATE;xjsr	EndIDCMP	;main.msg.i ...stops 'multiple m-keys'
+< ;may15
+< ;instead of ending the idcmp, scan for rawkeys
+---
+> 
+> 
+> 
+> 	;may15LATE;xjsr	EndIDCMP	;main.msg.i ...stops 'multiple m-keys'
+> 		;may15
+> 		;instead of ending the idcmp, scan for rawkeys
+729a648,649
+> 
+> 
+739,740c659,660
+< 	;MAY13;st	FlagFrbx_(BP)	;scr arrange apro' time
+< ;...(open mag screen) start doing // showing magnified area, set pointer
+---
+> 	;MAY13;st	FlagFrbx_(BP)		;scr arrange apro' time
+> 	;...(open mag screen) start doing // showing magnified area, set pointer
+755c675
+< 	move.w	#11+NORMALMAGHT,d0	;scr ht
+---
+> 	move.w	#11+NORMALMAGHT,d0		;scr ht
+761c681
+< 	;;;xjsr	CleanupMemory		;closes hamtools if in "cleanup" mode
+---
+> 	;;;xjsr	CleanupMemory	;closes hamtools if in "cleanup" mode
+790,796d709
+< 
+< 
+< ************************************************
+< *
+< * 	tryallocmag
+< *
+< ************************************************
+801,802c714,715
+< ;may15...very late, after backup
+< ;instead of ending the idcmp, scan for rawkeys
+---
+> 		;may15...very late, after backup
+> 		;instead of ending the idcmp, scan for rawkeys
+810a724
+> ;;  ifc 't','f' ;july01
+816,819c730,733
+< 	mulu	#40*8,d0			;bytes per row, * 6 bitplanes, total chip
+< ;june29late...;add.l	#(26*1024)+2048,d0
+< ;july01;add.l	#(12*1024)+2048,d0		;12k for system, 2kfor table june29late
+< 	add.l	#(10*1024)+2048,d0		;10k for system, 2kfor table july01late
+---
+> 	mulu	#40*6,d0		;bytes per row, * 6 bitplanes, total chip
+> 	;june29late...;add.l	#(26*1024)+2048,d0
+> 	;july01;add.l	#(12*1024)+2048,d0	;12k for system, 2kfor table june29late
+> 	add.l	#(10*1024)+2048,d0	;10k for system, 2kfor table july01late
+823c737
+< 	add.l	#((42*80*8)+4096),d0		;hamtools ht*width(bytes)*6bitplanes
+---
+> 	add.l	#((42*40*6)+4096),d0	;hamtools ht*width(bytes)*6bitplanes
+826a741
+> ;;  endc ;july01
+842,844c757,759
+< 	move.l	XTScreenPtr_(BP),d0		;HIRES toolbox
+< 	beq	EndMagnify			;tactical nuke pruf
+< 	move.l	d0,a1				;a1=palette=hamtools screenptr
+---
+> 	move.l	XTScreenPtr_(BP),d0	;HIRES toolbox
+> 	beq	EndMagnify		;tactical nuke pruf
+> 	move.l	d0,a1			;a1=palette=hamtools screenptr
+847c762
+< 	;JULY311990;lea	mscr_title(pc),a1 	;:dc.b	'DigiPaint Magnify',0
+---
+> 	;JULY311990;lea	mscr_title(pc),a1 ;:	dc.b	'DigiPaint Magnify',0
+860a776
+> 	;move.l	MScreenPtr_(BP),nw_Screen(a0)
+871,872c787,788
+< 	move.l	MCBWindowPtr_(BP),d0		;close box on magnify screen
+< 	bne.s	59$	
+---
+> 	move.l	MCBWindowPtr_(BP),d0	;close box on magnify screen
+> 	bne.s	59$
+877a794
+> 
+879,887c796,808
+< 	lea	MagnifyTablePtr_(BP),a0		;prev alloc'd memory// ADR OF VAR
+< 	xjsr	FreeOneVariable			;....frees it (memories.o)
+< 	move.l	#(2*1024),d0			;WATCHIT D3 TEMP
+< 	xjsr	IntuitionAllocMain		;tries for Fast first
+< 	move.l	d0,MagnifyTablePtr_(BP)	
+< 	beq	AbortMagnify			;EndMagnify;no memory for table?
+< 	move.l	d0,a0				;MagnifyTablePtr_(BP),a0
+< 	moveq	#0,d0				;counter for pre-expanded value (0-255)
+< 	move.w	#(256-1),d2			;db' type loop counter
+---
+> 
+> ;;;;;  IFC 'T','F'
+> 
+> 		;alloc a 2k table for storing expanded bytes
+> 	lea	MagnifyTablePtr_(BP),a0	;prev alloc'd memory// ADR OF VAR
+> 	xjsr	FreeOneVariable		;....frees it (memories.o)
+> 	move.l	#(2*1024),d0		;WATCHIT D3 TEMP
+> 	xjsr	IntuitionAllocMain	;tries for Fast first
+> 	move.l	d0,MagnifyTablePtr_(BP)
+> 	beq	AbortMagnify	;EndMagnify	;no memory for table?
+> 	move.l	d0,a0		;MagnifyTablePtr_(BP),a0
+> 	moveq	#0,d0		;counter for pre-expanded value (0-255)
+> 	move.w	#(256-1),d2	;db' type loop counter
+889c810
+< 	moveq	#(8-1),d1			;ano' db' type loop, # bits in byte to expand
+---
+> 	moveq	#(8-1),d1		;ano' db' type loop, # bits in byte to expand
+891,892c812,813
+< 	btst	d1,d0				;this bit...
+< 	sne	(a0)+				;...fills a byte with zeros or ones...
+---
+> 	btst	d1,d0		;this bit...
+> 	sne	(a0)+		;...fills a byte with zeros or ones...
+894c815
+< 	addq	#1,d0				;counter 0..255, 'source' for 'expanded bits'
+---
+> 	addq	#1,d0		;counter 0..255, 'source' for 'expanded bits'
+896a818,829
+> ;;;   ENDC
+> 
+> ;june14;		;may13
+> ;june14;	moveq	#4,d1	;2/50s of a second (two PAL fields....)
+> ;june14;	CALLIB	DOS,Delay
+> 
+> ;july03;		;re-instated JUNE29...magnify frag, etc probs?
+> ;july03;		;may13
+> ;july03;	moveq	#4,d1	;2/50s of a second (two PAL fields....)
+> ;july03;	CALLIB	DOS,Delay
+> 
+> 
+898c831
+< ;may14;	st	FlagNeedGadRef_(BP)		;redohires->brushshow->redrawbrushes
+---
+> ;may14;	st	FlagNeedGadRef_(BP)	;redohires->brushshow->redrawbrushes
+900a834,842
+>   ifc 't','f' ;july03
+> DeFragMemory:
+> 	;;;;;;;;;;;;;;;;;;;RTS ;KLUDGEOUT....it bites?
+> 
+> 	;moveq	#4,d1	;4/50s of a second
+> 	;CALLIB	DOS,Delay
+> ;july03;		;june29...reinstated
+> ;july03;	moveq	#4,d1	;4/50s of a second
+> ;july03;	CALLIB	DOS,Delay
+901a844,849
+> 	xjmp	CleanupMemory
+> 
+> 	;CALLIB	Intuition,RethinkDisplay	;MAY12'89
+> 	;xjmp	CleanupMemory			;un-frag where possible
+> 	;rts
+>   endc
+903,907d850
+< ************************************************
+< *
+< * 	CheckKillMagnify
+< *
+< ************************************************
+915a859,864
+>  ifc 't','f' ;july03
+> 		;MAY15....eliminate menu bar on hires when killing
+> 	beq.s	9$
+> ;may15LATE;	xjsr	EndMenu		;kill menu so's idcmp dont messup display
+> ;	xref 	BeginMenu
+> ;may15late....handled in 'main'	pea	BeginMenu
+916a866,873
+> 	;bra.s	EndMagnify
+> 		;only "really end" if not drawing...JUNE
+> 	xref FlagNeedRepaint_
+> 	tst.b	FlagNeedRepaint_(BP)	;drawing started?
+> 	;bra.s	EndMagnify
+> 	;bra.s	EndMagnify
+> 	beq.s	EndMagnify
+> 	sf	FlagCheckKillMag_(BP)	;kill "end-magnify-please" mode
+917a875,876
+> 9$	rts
+>   endc
+919,923d877
+< ************************************************
+< *
+< * 	AbortMagnify - EndMagnify
+< *
+< ************************************************
+925a880
+> 
+977a933
+> 
+979a936,937
+> 
+> 
+983,988d940
+< 
+< ************************************************
+< *
+< * 	MagMove_rt
+< *
+< ************************************************
+992,994c944,946
+< 	cmp.w	#752,d1			768	;2.0
+< 	bls.s	1$	
+< 	move.w	#752,d1			752
+---
+> 	cmp.w	#768,d1		;2.0
+> 	bne.s	1$
+> 	move.w	#752,d1
+996c948
+< 	sub.w	#(MAGWT/8),d1	;offset by 1 magnify screen/bit width
+---
+> 	sub.w	#(320/8),d1	;offset by 1 magnify screen/bit width
+1022c974
+<  	sub.w	#(NORMALMAGHT/8),d1	;offset by 1 magnify screen/bit height
+---
+>  	sub.w	#(200/8),d1	;offset by 1 magnify screen/bit height
+1025c977
+< 	sub.w	#(NORMALMAGHT/8),d1	;offset by 1 magnify screen/bit height
+---
+> 	sub.w	#(200/8),d1	;offset by 1 magnify screen/bit height
+1035a988,991
+> 
+> 
+> 
+> 
+1046,1052d1001
+< 
+< 
+< ************************************************
+< *
+< * 	cleanup_mm
+< *
+< ************************************************
+1073,1074c1022
+< 		
+< 	xjsr	FastPlot_GotAdr8
+---
+> 	xjsr	FastPlot_GotAdr
+1077,1082d1024
+< 
+< ************************************************
+< *
+< * 	MagnifyColorCorrect
+< *
+< ************************************************
+1084c1026
+< ;;	rts	
+---
+> 	move.l	#(4*40),d1	;4 lines @, * 40 bytes/row
+1086,1089d1027
+< *	DUMPREG	<MagnifyColorCorrect>	
+< 	
+< 	move.l	#(4*MAGWTBPR),d1	;4 lines @, * 40 bytes/row
+< 
+1099c1037
+< 	move.l	#(8*MAGWTBPR),d1	;linestep on magscreen, 8 lines * 40 bytes/row
+---
+> 	move.l	#(8*40),d1	;linestep on magscreen, 8 lines * 40 bytes/row
+1108a1047,1048
+> 
+> 
+1115d1054
+< 	movem.l	(6*4)(a5),d3/d4	;prepare for FastPlot
+1118,1119c1057
+< 
+< 	move.l	#(11*MAGWTBPR),d1	;offset to start of plane (5th big line)
+---
+> 	move.l	#(11*40),d1	;offset to start of plane (5th big line)
+1121c1059
+< 	move.w	2(sp),d5	;q	#25-1,d5	;number of rgb's
+---
+> 	move.w	2(sp),d3	;q	#25-1,d3	;number of rgb's
+1126,1127c1064,1065
+< 	dbf	d5,big_reds
+< 	
+---
+> 	dbf	d3,big_reds
+> 
+1132c1070
+< 	move.l	#(11*MAGWTBPR),d1	;offset to start of plane (5th big line)
+---
+> 	move.l	#(11*40),d1	;offset to start of plane (5th big line)
+1134c1072
+< 	move.w	2(sp),d5	;moveq	#25-1,d5	;number of rgb's
+---
+> 	move.w	2(sp),d3	;moveq	#25-1,d3	;number of rgb's
+1139c1077
+< 	dbf	d5,big_greens
+---
+> 	dbf	d3,big_greens
+1145c1083
+< 	move.l	#(11*MAGWTBPR),d1	;offset to start of plane (5th big line)
+---
+> 	move.l	#(11*40),d1	;offset to start of plane (5th big line)
+1147c1085
+< 	move.w	2(sp),d5	;moveq	#25-1,d5	;number of rgb's
+---
+> 	move.w	2(sp),d3	;moveq	#25-1,d3	;number of rgb's
+1152c1090
+< 	dbf	d5,big_blues
+---
+> 	dbf	d3,big_blues
+1158,1161c1096,1097
+< 	ALLDUMPS
+< 
+< 	cnop 0,4		;i believe this struct needs longword align
+< 				;(for graphics easy BCPL pointer conversion)
+---
+> 	cnop 0,4	;i believe this struct needs longword align
+> 			; (for graphics easy BCPL pointer conversion)
+1165,1166d1100
+< Screenmode 	EQU	V_LACE!V_HIRES!V_HAM 
+< ;Screenmode	EQU	V_HAM
+1169,1176c1103,1110
+< 	dc.w	0,0,MAGWT,NORMALMAGHT+11	;WORDs sc_LeftEdge,top,wt,ht
+< 	dc.w	8		;Depth /// # bit planes			*changed 071294
+< 	dc.b	1		;DetailPen color / gadgets and text in title bar
+< 	dc.b	2		;BlockPen  /// Bar color
+< 	dc.w 	Screenmode	;ViewModes
+< 	dc.w	CUSTOMSCREEN!ScreenBehind ;!ScreenQuiet!ScreenBehind ;Type
+< 	dc.l	0		;MyFont	;APTR struct Text *Font ;* what weir werkin on
+< 	dc.l	0,0,0		;screentitle,gadgets,custombitmap
+---
+> 	dc.w   0,0,320,211	;WORDs sc_LeftEdge,top,wt,ht
+> 	dc.w 6		;Depth /// # bit planes
+> 	dc.b 1		;DetailPen color / gadgets and text in title bar
+> 	dc.b 2		;BlockPen  /// Bar color
+> 	dc.w V_HAM	;ViewModes
+> 	dc.w  CUSTOMSCREEN!ScreenBehind ;!ScreenQuiet!ScreenBehind ;Type
+> 	dc.l	0	;MyFont	;APTR struct Text *Font ;* what weir werkin on
+> 	dc.l	0,0,0	;screentitle,gadgets,custombitmap
+1185,1188c1119,1124
+< 	;dc.w 0,0,MAGWT,NORMALMAGHT	;GW_x,GW_y,GW_width,GW_height
+< 	dc.w 0,11,MAGWT,NORMALMAGHT	;GW_x,GW_y,GW_width,GW_height
+< 	dc.b 1,0 		;Detail,Block Pens BLOCK makes visible border on shortscreen
+< 	dc.l 0			;IDCMP flags
+---
+> 	;dc.w 0,0,320,200	;GW_x,GW_y,GW_width,GW_height
+> 	dc.w 0,11,320,199	;GW_x,GW_y,GW_width,GW_height
+> 	dc.b 1,0 	;Detail,Block Pens BLOCK makes visible border on shortscreen
+> 	dc.l 0		;IDCMP flags
+> 		;dc.l NoCareRefresh!Simple_Refresh ;Gadgets & Features
+> 	;;;dc.l mywinf!Simple_Refresh!BORDERLESS  ;!ACTIVATE ;Gadgets & Features
+1190,1194c1126,1130
+< 	dc.l 0,0,0		;0,CheckMark,0 ;*FirstGadget,*CheckMark,*Title
+< 	dc.l 0			;*Screen
+< 	dc.l 0			;*BitMap
+< 	dc.w 320,199,MAGWT,NORMALMAGHT	;Min(Width,Height),Max(W,H)
+< 	dc.w CUSTOMSCREEN 	;Screen Type
+---
+> 	dc.l 0,0,0	;0,CheckMark,0 ;*FirstGadget,*CheckMark,*Title
+> 	dc.l 0		;*Screen
+> 	dc.l 0		;*BitMap
+> 	dc.w 320,199,320,199	;Min(Width,Height),Max(W,H)
+> 	dc.w CUSTOMSCREEN ;Screen Type
+1202,1208c1138,1147
+< 	dc.b 1,15		;Detail,Block Pens 2=black,1=ltgray
+< 	dc.l 0			;IDCMP flags
+< mwflags set NoCareRefresh!Simple_Refresh!WINDOWCLOSE!BORDERLESS ;Gadgets & Features
+< 	dc.l mwflags		;Gadgets & Features
+< 	dc.l 0,0,0		;0,CheckMark,0 ;*FirstGadget,*CheckMark,*Title
+< 	dc.l 0			;*Screen
+< 	dc.l 0			;*BitMap
+---
+> 	dc.b 1,15	;Detail,Block Pens 2=black,1=ltgray
+> 	dc.l 0		;IDCMP flags
+> mwflags set NoCareRefresh!Simple_Refresh!WINDOWCLOSE ;Gadgets & Features
+> ;mwflags set mwflags!ACTIVATE	;user selection enable april27
+> mwflags set mwflags!BORDERLESS	;MAY13
+> 
+> 	dc.l mwflags	;Gadgets & Features
+> 	dc.l 0,0,0	;0,CheckMark,0 ;*FirstGadget,*CheckMark,*Title
+> 	dc.l 0		;*Screen
+> 	dc.l 0		;*BitMap
+1210,1386c1149
+< 	dc.w CUSTOMSCREEN 	;Screen Type
+< 
+< mscr_title:	dc.b	'ToasterPaint Magnify',0
+< 	END
+< 
+< **************************************************************************************
+< 
+< magnify_1_line:
+< ;fill leftside of 8 lines, 1st 20 bytes of screen line
+< 	moveq	#0,d2			;only fills byte, clear higher bits
+< 	moveq	#0,d0
+< 	moveq	#0,d7
+< 	move.b	(a4)+,d2		;byte to expand
+< 	move.b	(a4)+,d0		;2nd byte to expand
+< 	move.b	(a4)+,d7		;3rd byte to expand
+< 	move.w	10+2(sp),d6		;MagXShift_(BP),d6
+< 	beq.s	8$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 7$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d0,d0
+< 	addx.b	d2,d2
+< 	subq.w	#1,d6
+< 	bne.s	7$
+< 
+< 8$:
+< 	asl.w	#3,d2			;calc address *8 ...doin' an 8*8 expansion
+< 	movem.l	0(a2,d2.w),d3/d4	;expand 8 bits (8*8)=64bits=2longwords
+< ;dont overwrite 3pixel ham modifiers that are already on-screen
+< 	andi.l	#$1FFFFFFF,d3		;strip off 1st 3 bits
+< 	move.l	(a3),d5			;get what's already on screen
+< 	andi.l	#$E0000000,d5		;strip all but 1st 3 pixels
+< 	or.l	d5,d3			;put screen's 1st 3 pixels into output
+< 	asl.w	#3,d0			;calc address *8 ...doin' 8*8 expansion
+< 	movem.l	0(a2,d0.w),d5/d6	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d7			;calc address *8
+< 	movem.l	0(a2,d7.w),d0/d7	;expand 4 bits (8*4)=32bits=1longwords
+< 	exg d0,d7
+< 	movem.l	d3-d7,(a3)		;write 20 bytes onto screen LEFT half
+< 
+< ** next 20
+< *	exg d0,d3
+< 	move.l	d0,d3	
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+< 	moveq	#0,d7
+< 	move.b	(a4)+,d6		;    byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+< 	beq.s	18$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 17$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d6,d6
+< 	subq.w	#1,d4
+< 	bne.s	17$
+< 18$:
+< 	asl.w	#3,d6			;calc address *8
+< 	movem.l	0(a2,d6.w),d4/d5	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d7			;calc address *8
+< 	movem.l	0(a2,d7.w),d6/d7	;expand 4 bits (8*4)=32bits=1longwords
+< 	movem.l	d3-d7,(0*MAGWTBPR+20)(a3)	;write 20 bytes onto screen
+< *
+< ** 2nd half of screen.
+< *
+< ** next 20
+< *	exg d0,d3
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+< 	moveq	#0,d7
+< 	move.b	(a4)+,d6		;    byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+< 	beq.s	28$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 27$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d6,d6
+< 	subq.w	#1,d4
+< 	bne.s	27$
+< 28$:
+< 	asl.w	#3,d6			;calc address *8
+< 	movem.l	0(a2,d6.w),d4/d5	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d7			;calc address *8
+< 	movem.l	0(a2,d7.w),d6/d7	;expand 4 bits (8*4)=32bits=1longwords
+< *	exg d0,d7
+< *	movem.l	d3-d7,(0*MAGWTBPR+40)(a3)	;write 20 bytes onto screen
+< 
+< ** next 20
+< *	exg d0,d3
+< 	moveq	#0,d6			;only fill byte, clear higher bits
+< 	moveq	#0,d7
+< 	move.b	(a4)+,d6		;    byte to expand
+< 	move.b	(a4)+,d7		;2nd byte to expand
+< 	move.w	10+2(sp),d4		;MagXShift_(BP),d4
+< 	beq.s	38$
+< 	move.b	(a4),D5			;another extra, for 'rolls' into d7 (3rd)
+< 37$:	addx.b	d5,D5
+< 	addx.b	d7,d7			;shift bits BEFORE magnify'g
+< 	addx.b	d6,d6
+< 	subq.w	#1,d4
+< 	bne.s	37$
+< 38$:
+< 	asl.w	#3,d6			;calc address *8
+< 	movem.l	0(a2,d6.w),d4/d5	;expand 8 bits (8*8)=64bits=2longwords
+< 	asl.w	#3,d7			;calc address *8
+< 	movem.l	0(a2,d7.w),d6/d7	;expand 4 bits (8*4)=32bits=1longwords
+< *	movem.l	d3-d7,(0*MAGWTBPR+60)(a3)	;write 20 bytes onto screen
+< 
+< 
+< 	lea	(8*MAGWTBPR)(a3),a3	;point to next OUTPUT line
+< 	adda.l	6+2(sp),a4		;next SOURCE line, bytes_per_row_(BP),a4
+< 	dbf	d1,magnify_1_line
+< 
+< 	SUBQ.W	#1,(SP)
+< 	BNE	Mplaneloop
+< 
+< 	ADDQ.L	#2,sp			;DESTACK remove "2" bytes for counter
+< 
+< ;**********************
+< 	;moveq	#0,d1
+< 	move.l	#(11*MAGWTBPR),d1	;starting offset on mag screen
+< 	move.L	d1,-(sp)		;offset to each line (skip by 8)
+< 	move.w	4(sp),d1
+< 	addq.w	#1,d1			;="true" # lines (not -1) loopend checks zero
+< 	move.w	d1,-(sp)		;#lines-1 (adjusted for short screen)
+< m7agnify_1_line:
+< 	lea	(8*4)(a6),a6		;pt->end of table of 8 bitplane addresses  CHANGE TO 8 071294
+< 
+< 	MOVEq	#(8-1),d1		;x8 (bitplanes) loop counter CHANGE TO 8 071294
+< M7planeloop:
+< 	move.l	-(a6),a3		;start of magnify screen ONE bitplane address
+< 	;lea	(11*MAGWTBPR)(a3),a3	;skip title bar on mag screen
+< 	add.l	2(sp),a3		;offset to 'this' line (by 8s)
+< 
+< 	movem.l	(a3),d3-d7 ;d3-d7,(a3)	;GRAB 20 bytes from screen LEFT half
+< 	movem.l	d3-d7,(1*MAGWTBPR)(a3)	;write 20 bytes onto screen
+< 	movem.l	d3-d7,(2*MAGWTBPR)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(3*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+20)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+20)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+20)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+20)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+40)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+40)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+40)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+40)(a3)
+< 
+< 	movem.l	(0*MAGWTBPR+60)(a3),d3-d7	;GRAB 20 bytes from screen
+< 	movem.l	d3-d7,(1*MAGWTBPR+60)(a3)	;write 20 bytes to 2nd line
+< 	movem.l	d3-d7,(2*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(3*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(4*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(5*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(6*MAGWTBPR+60)(a3)
+< 	movem.l	d3-d7,(7*MAGWTBPR+60)(a3)
+< 
+< 
+< 	dbf	d1,M7planeloop
+< 	add.l	#(MAGWTBPR*8),2(sp)	;nice that we can 'long/word' align
+< 	SUBQ.W	#1,(SP)
+< 	BNE	m7agnify_1_line
+< 	lea	6(sp),sp		;m1->7 word loop counter, longword offset
+< 
+< ;**********************
+---
+> 	dc.w CUSTOMSCREEN ;Screen Type
+1387a1151,1152
+> mscr_title:	dc.b	'  DigiPaint Magnify',0
+>  END

@@ -1,0 +1,1285 @@
+********************************************************************
+* LUT2.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lut2.a,v 2.0 1992/05/18 23:58:20 Hartford Exp $
+*
+* $Log: lut2.a,v $
+*Revision 2.0  1992/05/18  23:58:20  Hartford
+**** empty log message ***
+*
+*
+*********************************************************************
+
+	NOLIST
+	idnt	"LUT2"
+	section	LUT_text,code
+;;	LIST
+	PAGE
+*************************************************************************
+*									*
+*	RGBHSI:								*
+*									*
+*	Converts RGB Value to HSI Values.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of RGB Values ( 0RGB ), 8 Bit Unsigned Numbers.	*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of HSI Values ( HHSI ).				*
+*									*
+*	Hue is a 16 Bit Unsigned Number, Saturation and Intensity are	*
+*	8 Bit Unsigned Numbers.						*
+*									*
+*	05.Mar 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	RGBHSI
+RGBHSI:	MOVEM.L	D1-D7,-(A7)		; Save Calling State.
+*
+*	Make Working Values, 12 Bits.
+*
+	MOVEQ.L	#1<<3,D5		; 1/2 Value, 12 Bits - 8 Bits / 2.
+	MOVE.L	D0,D2			; D2.L = Working Red Value.
+	SWAP.W	D2			; Place in Low Position.
+	ANDI.W	#$00FF,D2		; Only Red Value.
+	LSL.W	#4,D2			; Working Red Value.
+	OR.W	D5,D2			; 1/2 Value.
+	MOVE.W	D0,D3			; D3.L = Working Green Value.
+	LSR.W	#4,D3			; Place in Low Position.
+	ANDI.W	#$0FF0,D3		; Only Green Value.
+	OR.W	D5,D3			; 1/2 Value.
+	MOVE.W	D0,D4			; D4.L = Working Blue Value.
+	ANDI.W	#$00FF,D4		; Only Blue Value.
+	LSL.W	#4,D4			; Working Blue Value.
+	OR.W	D5,D4			; 1/2 Value.
+*
+*	Find Minimum & Maximum Values.
+*
+	MOVE.W	D2,D5			; D5 = Minimum Value.
+	CMP.W	D3,D5			; Is Green the Minimum?
+	BCS.S	RGBHS1			; Jump If Not.
+	MOVE.W	D3,D5			; Green Is Minimum.
+RGBHS1	CMP.W	D4,D5			; Is Blue the Minimum?
+	BCS.S	RGBHS2			; Jump If Not.
+	MOVE.W	D4,D5			; Blue Is Minimum.
+RGBHS2	MOVE.W	D2,D6			; D6 = Maximum Value.
+	CMP.W	D3,D6			; Is Green the Maximum?
+	BCC.S	RGBHS3			; Jump If Not.
+	MOVE.W	D3,D6			; Green Is Maximum.
+RGBHS3	CMP.W	D4,D6			; Is Blue the Maximum?
+	BCC.S	RGBHS4			; Jump If Not.
+	MOVE.W	D4,D6			; Blue Is Maximum.
+RGBHS4	MOVE.W	D6,D7			; Make Difference.
+	SUB.W	D5,D7			; D7 = Differential.
+*
+*	Set the Saturation.
+*
+	TST.W	D6			; Maximum Not Equal To Zero?
+	BEQ.S	RGBHS6			; Jump If Maximum Is Zero.
+	CMP.W	D7,D6			; Differential == Maximum?
+	BEQ.S	RGBHS5			; Jump If At Maximum.
+	MOVEQ.L	#0,D1			; Make the Saturation.
+	MOVE.W	D7,D1			; D1 Differential.
+	SWAP.W	D1			; Differential * 65536.
+	DIVU.W	D6,D1			; Differential * 65536 / Maximum.
+	BRA.S	RGBHS7			; Skip Else Parts.
+RGBHS5	MOVEQ.L	#-1,D1			; Saturation at Maximum, $FFFF.
+	BRA.S	RGBHS8			; Skip Else Part.
+RGBHS6	MOVEQ.L	#0,D1			; Saturation at Zero.
+*
+*	Set the Hue.
+*
+RGBHS7	TST.W	D1			; Saturation == Zero?
+	BNE.S	RGBHS8			; Jump If Non-Zero Saturation.
+	MOVEQ.L	#0,D0			; Hue Is Also Zero.
+	BRA.S	RGBHSD			; Exit & Return Values.
+*
+*	Hue Red Value.
+*
+RGBHS8	CMP.W	D2,D6			; Maximum At Red?
+	BNE.S	RGBHS9			; Jump If Maximum Not At Red.
+	MOVE.W	D3,D0			; Make Green Part.
+	BSR.S	RGBHSE			; D0 = Green Part.
+	MOVE.W	D0,D3			; D3 = Green Part.
+	MOVE.W	D4,D0			; Make Blue Part.
+	BSR.S	RGBHSE			; D0 = Blue Part.
+	SUB.W	D3,D0			; D0 = Blue Part - Green Part.
+	BRA.S	RGBHSB			; Skip Else Parts.
+*
+*	Hue Green Value.
+*
+RGBHS9	CMP.W	D3,D6			; Maximum At Green.
+	BNE.S	RGBHSA			; Jump If Maximum Not At Green.
+	MOVE.W	D4,D0			; Make Blue Part.
+	BSR.S	RGBHSE			; D0 = Blue Part.
+	MOVE.W	D0,D4			; D4 = Blue Part.
+	MOVE.W	D2,D0			; Make Red Part.
+	BSR.S	RGBHSE			; D0 = Red Part.
+	SUB.W	D4,D0			; D0 = Red Part - Blue Part.
+	ADDI.W	#$2000,D0		; Add in $2000.
+	BRA.S	RGBHSB			; Skip Else Part.
+*
+*	Hue Blue Value.
+*
+RGBHSA	MOVE.W	D2,D0			; Make Red Part.
+	BSR.S	RGBHSE			; D0 = Red Part.
+	MOVE.W	D0,D2			; D2 = Red Part.
+	MOVE.W	D3,D0			; Make Green Part.
+	BSR.S	RGBHSE			; D0 = Green Part.
+	SUB.W	D2,D0			; D0 = Green Part - Red Part.
+	ADDI.W	#$4000,D0		; Add in $4000.
+*
+*	Adjust Value For Return.
+*
+RGBHSB	TST.W	D0			; Check Hue For < Zero.
+	BPL.S	RGBHSC			; Jump If Hue >= Zero.
+	ADD.W	#$6000,D0		; Hue += $6000.
+RGBHSC	MULU.W	#$AAAB,D0		; Time 16 / 6 = $2AAAA.
+	LSL.L	#2,D0			; Times 2,AAAC.
+	SWAP.W	D0			; Put in Low Word.
+*
+*	Build HSI into One Value for Return.
+*
+*	D6.W	= 12 Bits I.
+*	D1.W	= 16 Bits S.
+*	D0.W	= 16 Bits H.
+*
+RGBHSD	CLR.B	D1			; D1 is S * 256.
+	LSR.W	#4,D6			; D6 is I.
+	ANDI.W	#$00FF,D6		; Remove Extra Bits.
+	OR.W	D6,D1			; D1 is SI.
+	SWAP.W	D0			; D0 is HH * 256.
+	MOVE.W	D1,D0			; Return Value of HHSI.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1-D7		; Exit Subroutine.
+	RTS
+*
+*	Makes the RGB Part Value, Part to Make In/Out in D0.
+*	((max - workrgb) << 12) / differential
+*
+RGBHSE:	NEG.W	D0			; - Working Value.
+	ADD.W	D6,D0			; Max - Working Value.
+	SWAP.W	D0			; D0 << 16.
+	CLR.W	D0			; Clear Low Bits.
+	LSR.L	#4,D0			; D0 << 12.
+	DIVU.W	D7,D0			; Divide by Differential.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	HSIRGB:								*
+*									*
+*	Converts HSI Value to RGB Values.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of HSI Values ( HHSI ).				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of RGB Values ( 0RGB ), 8 Bit Unsigned Numbers.	*
+*									*
+*	05.Mar 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	HSIRGB
+HSIRGB:	MOVEM.L	D3-D7,-(A7)		; Save Calling State.
+*
+*	Shift the SI Values into Proper Position.
+*
+	MOVE.W	D0,D3			; Place in Saturation.
+	NOT.W	D3			; Inverse Saturation.
+	CLR.B	D3			; D3 = Saturation.
+	ORI.W	#1<<7,D3		; 1/2 Value.
+	MOVE.W	D0,D4			; Make Intensity.
+	LSL.W	#8,D4			; D4 = Intensity.
+	ORI.W	#1<<7,D4		; 1/2 Value.
+*
+*	Make 1/6 the Hue, and Vector to One of the Six Values.
+*
+	SWAP.W	D0			; Remove Unwanted Bits.
+	MULU.W	#6,D0			; Remainder Low, 1/6 High.
+	MOVE.L	D0,D6			; D6.W = Rising Value.
+	SWAP.W	D0			; D0.W = 1/6 The Hue.
+	MOVE.B	HSIRGT(PC,D0.W),D0	; Get Address Offset to Vector To.
+	JMP	HSIRGJ(PC,D0.W)		; Go to Table Value.
+HSIRGJ					; Jump Vector Base Address.
+HSIRGT	DC.B	HSIRG0-HSIRGJ,HSIRG1-HSIRGJ,HSIRG2-HSIRGJ	; Case Table.
+	DC.B	HSIRG3-HSIRGJ,HSIRG4-HSIRGJ,HSIRG5-HSIRGJ
+*
+*	Case 0.
+*
+HSIRG0	MULU.W	D4,D6			; Rising * I.
+	SWAP.W	D6			; Green = Rising.
+	MOVE.W	D4,D5			; Red   = I.
+	MOVEQ.L	#0,D7			; Blue  = 0.
+	BRA.S	HSIRG6			; Skip Else Part.
+*
+*	Case 1.
+*
+HSIRG1	MOVE.W	D6,D5			; Make Falling Value.
+	NOT.W	D5			; D5 = Falling Value.
+	MULU.W	D4,D5			; Falling * I.
+	SWAP.W	D5			; Red   = Falling.
+	MOVE.W	D4,D6			; Green = I.
+	MOVEQ.L	#0,D7			; Blue  = 0.
+	BRA.S	HSIRG6			; Skip Else Part.
+*
+*	Case 2.
+*
+HSIRG2	MOVE.W	D6,D7			; D7 = Rising Value.
+	MULU.W	D4,D7			; Rising * I.
+	SWAP.W	D7			; Blue  = Rising.
+	MOVEQ.L	#0,D5			; Red   = 0.
+	MOVE.W	D4,D6			; Green = I.
+	BRA.S	HSIRG6			; Skip Else Part.
+*
+*	Case 3.
+*
+HSIRG3	NOT.W	D6			; D6 = Falling Value.
+	MULU.W	D4,D6			; Falling * I.
+	SWAP.W	D6			; Green = Falling.
+	MOVEQ.L	#0,D5			; Red   = 0.
+	MOVE.W	D4,D7			; Blue  = I.
+	BRA.S	HSIRG6			; Skip Else Part.
+*
+*	Case 4.
+*
+HSIRG4	MOVE.W	D6,D5			; D5 = Rising Value.
+	MULU.W	D4,D5			; Rising * I.
+	SWAP.W	D5			; Red   = Rising.
+	MOVEQ.L	#0,D6			; Green = 0.
+	MOVE.W	D4,D7			; Blue  = I.
+	BRA.S	HSIRG6			; Skip Else Part.
+*
+*	Case 5.
+*
+HSIRG5	MOVE.W	D6,D7			; Make Falling Value.
+	NOT.W	D7			; D7 = Falling Value.
+	MULU.W	D4,D7			; Falling * I.
+	SWAP.W	D7			; Blue  = Falling.
+	MOVE.W	D4,D5			; Red   = I.
+	MOVEQ.L	#0,D6			; Green = 0.
+*
+*	The Closer Saturation is to Zero, The Closer Red, Green, and Blue
+*	Should be to Luminance.
+*
+HSIRG6	MOVE.W	D4,D0			; Adjust the Red.
+	SUB.W	D5,D0			; reddiff.
+	MULU.W	D3,D0			; reddiff * invertsaturation.
+	SWAP.W	D0			; reddiff * invertsaturation >> 16.
+	ADD.W	D0,D5			; red = red + (diff*inverts) >> 16.
+	MOVE.W	D4,D0			; Adjust the Green.
+	SUB.W	D6,D0			; greendiff.
+	MULU.W	D3,D0			; greendiff * invertsaturation.
+	SWAP.W	D0			; greendiff * invertsaturation >> 16.
+	ADD.W	D0,D6			; green = green + (diff*inver) >> 16.
+	MOVE.W	D4,D0			; Adjust the Blue.
+	SUB.W	D7,D0			; bluediff.
+	MULU.W	D3,D0			; bluediff * invertsaturation.
+	SWAP.W	D0			; bluediff * invertsaturation >> 16.
+	ADD.W	D7,D0			; blue = blue + (diff*invert) >> 16.
+*
+*	Fix Up the Value for Return.
+*
+*	D0.W	= 16 Bits Blue.
+*	D6.W	= 16 Bits Green.
+*	D5.W	= 16 Bits Red.
+*
+	LSR.W	#8,D0			; Blue  Value.
+	CLR.B	D6			; Green Value.
+	OR.W	D6,D0			; Blue, Green Value.
+	LSR.W	#8,D5			; Red   Value.
+	SWAP.W	D0			; Blue, Green High.
+	MOVE.W	D5,D0			; Low Red, Blue, Green High.
+	SWAP.W	D0			; Return Value 0RGB.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D3-D7		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RGBYIQ:								*
+*									*
+*	Converts 0RGB Values to 0YIQ Values.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of RGB Values ( 0RGB ), 8 Bit Unsigned Numbers.	*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of YIQ Values ( 0YIQ ).				*
+*									*
+*	Y is 8 Bits Unsigned, I is 8 Bits Signed, Q is 8 Bits Signed.	*
+*									*
+*	12.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+*	RGB Input    Values Range from 0 to 255.
+*	RGB Equation Values Range from 0 to 92.5 IRE, From a Scale of
+*	    7.5 to 100 IRE, Adjusted Down 7.5 IRE to Zero.
+*
+*	Y = .299R + .587G + .114B	Note: 1 = .299 + .587 + .114
+*	I = .596R - .275G - .321B	      0 = .596 - .275 - .321
+*	Q = .212R - .523G + .311B	      0 = .212 - .523 + .311
+*
+*	ToasterDAC = ( IRE + 40 ) * 196/140 + 4 = 1.4 * IRE + 60
+*	Add 7.5 IRE = 10.5 ToasterDAC To Result, Which Was Subtracted Earlier.
+*
+*	Don't Apply + ( 60 + 10.5 ) = 70.5 ToasterDAC to IQ Equations.
+*
+R0	EQU	09951	; .299 * 65536 * 92.5 / 255 * 1.4	Maximum 200.
+R1	EQU	19537	; .587 * 65536 * 92.5 / 255 * 1.4	Minimum  71.
+R2	EQU	03794	; .114 * 65536 * 92.5 / 255 * 1.4
+*
+G0	EQU	19836	; .596 * 65536 * 92.5 / 255 * 1.4	Maximum  77.
+G1	EQU	09153	; .275 * 65536 * 92.5 / 255 * 1.4	Minimum -78.
+G2	EQU	10683	; .321 * 65536 * 92.5 / 255 * 1.4
+*
+B0	EQU	07056	; .212 * 65536 * 92.5 / 255 * 1.4	Maximum  68.
+B1	EQU	17407	; .523 * 65536 * 92.5 / 255 * 1.4	Minimum -69.
+B2	EQU	10351	; .311 * 65536 * 92.5 / 255 * 1.4
+*
+*	Resulting ToasterDAC Range is 32 to 240, 240 Occures at 02 FF FF RGB.
+*
+*	Black =  71 ToasterDAC, Verified.
+*	White = 200 ToasterDAC, Verified.
+*
+*	Minumum ToasterDAC  32, IRE -20.	No Clipping Here, Were Ok.
+*	Maximum ToasterDAC 221, IRE 115.	We Can Be 19 ToaterDAC Over.
+*
+	XDEF	RGBYIQ
+RGBYIQ:	MOVEM.L	D1-D5,-(A7)		; Save Calling State.
+*
+*	Strip The RGB Values Into D0, D1, and D2.
+*
+	MOVEQ.L	#0,D2			; Make Blue Value.
+	MOVE.B	D0,D2			; D2.L = Blue Value.
+	LSR.L	#8,D0			; Move Down.
+	MOVEQ.L	#0,D1			; Make Green Value.
+	MOVE.B	D0,D1			; D1.L = Green Value.
+	LSR.L	#8,D0			; Move Down.
+	ANDI.W	#$00FF,D0		; Make Red Value.
+*
+*	Make the Y Value.
+*
+	MOVE.L	D0,D3			; Build Into D0.
+	MULU.W	#R0,D0			; .299 * R.
+	MOVE.L	D1,D4			; Do Second Variable.
+	MULU.W	#R1,D4			; .587 * G.
+	ADD.L	D4,D0			; .299 * R + .587 * G.
+	MOVE.L	D2,D4			; Do Third  Variable.
+	MULU.W	#R2,D4			; .114 * B.
+	ADD.L	D4,D0			; .299 * R + .587 * G + .114 * B.
+	ADDI.L	#71*65536,D0		; Offset By Toaster DAC, Plus .5 Round.
+	CLR.W	D0			; Clear The Low Bits.
+*
+*	Make the I Value.
+*
+	MOVE.L	D3,D4			; Build Into D4.
+	MULU.W	#G0,D4			; .596 * R.
+	MOVE.L	D1,D5			; Do Second Variable.
+	MULU.W	#G1,D5			; .275 * G.
+	SUB.L	D5,D4			; .596 * R - .275 * G.
+	MOVE.L	D2,D5			; Do Third  Variable.
+	MULU.W	#G2,D5			; .321 * B.
+	SUB.L	D5,D4			; .596 * R - .275 * G - .321 * B.
+	ASR.L	#8,D4			; Move Into Position.
+	BPL.S	RGBYI1			; Jump If Positive.
+	SUBI.W	#256/2,D4		; Round Number by .5.
+	BRA.S	RGBYI2			; Skip Else Part.
+RGBYI1	ADDI.W	#256/2,D4		; Round Number by .5.
+RGBYI2	CLR.B	D4			; Leave Only I Bits.
+	OR.W	D4,D0			; D0.L = YI Value.
+*
+*	Make the Q Value.
+*
+	MOVE.L	D3,D4			; Build Into D4.
+	MULU.W	#B0,D4			; .212 * R.
+	MULU.W	#B1,D1			; .523 * G.
+	SUB.L	D1,D4			; .212 * R - .523 * G.
+	MULU.W	#B2,D2			; .311 * B.
+	ADD.L	D2,D4			; .212 * R - .523 * G + .311 * B.
+	BPL.S	RGBYI3			; Jump If Positive.
+	SUBI.L	#65536/2,D4		; Round Number by .5.
+	BRA.S	RGBYI4			; Skip Else Part.
+RGBYI3	ADDI.L	#65536/2,D4		; Round Number by .5.
+RGBYI4	SWAP.W	D4			; Put In Low Position.
+	ANDI.W	#$00FF,D4		; Remove Extra Bits.
+	OR.W	D4,D0			; D0.L = YIQ Value.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1-D5		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	YIQQUAD:							*
+*									*
+*	Generates Normal Quad Values ( Y - I, Y - Q, Y + I, Y + Q ).	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of 0YIQ Values.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of Quad Normal Pixel ( 280ns Pixel ).		*
+*									*
+*	To Generate The Complement  ( Y + I, Y + Q, Y - I, Y - Q )	*
+*	Values, Do a SWAP D0 After The Call.				*
+*									*
+*	19.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	YIQQUAD
+YIQQUAD	MOVEM.L	D1-D6,-(A7)		; Save Calling State.
+*
+*	Strip YIQ into Y I Q.
+*
+	MOVE.B	D0,D2			; D2.B = Q.
+	MOVE.W	D0,D1			; Make I Value.
+	ASR.W	#8,D1			; D1.W = I.
+	SWAP.W	D0			; D0.W = Y.
+	MOVE.W	#221,D5			; D5.W = Maximum Value of YIQ.
+	MOVEQ.L	#32,D6			; D6.L = Minimun Value of YIQ.
+*
+*	Make Y - I.
+*
+	MOVE.B	D0,D3			; Y - I.
+	SUB.B	D1,D3			; D3.B = Y - I.
+	CMP.B	D5,D3			; At Maximum Value?
+	BCS.S	YIQUA1			; Jump If < Maximum.
+	MOVE.W	D5,D3			; Else Set to Maximum.
+	BRA.S	YIQUA2			; Skip Else Part.
+YIQUA1	CMP.B	D6,D3			; At Minimum Value?
+	BCC.S	YIQUA2			; Jump If >= Minimum Value.
+	MOVE.W	D6,D3			; Else Set to Mimimun.
+YIQUA2	LSL.W	#8,D3			; D3.L = XXX XXX Y-I XXX.
+*
+*	Make Y - Q Value.
+*
+	MOVE.B	D0,D4			; Y - Q.
+	SUB.B	D2,D4			; D4.B = Y - Q.
+	CMP.B	D5,D4			; At Maximum Value?
+	BCS.S	YIQUA3			; Jump If < Maximum.
+	MOVE.W	D5,D4			; Else Set to Maximum.
+	BRA.S	YIQUA4			; Skip Else Part.
+YIQUA3	CMP.B	D6,D4			; At Minimum Value?
+	BCC.S	YIQUA4			; Jump If >= Minimum Value.
+	MOVE.W	D6,D4			; Else Set to Mimimun.
+YIQUA4	MOVE.B	D4,D3			; D3.L = XXX XXX Y-I Y-Q.
+	SWAP.W	D3			; D3.L = Y-I Y-Q XXX XXX.
+*
+*	Make Y + I Value.
+*
+	MOVE.B	D0,D3			; Y + I.
+	ADD.B	D1,D3			; D3.B = Y + I.
+	CMP.B	D5,D3			; At Maximum Value?
+	BCS.S	YIQUA5			; Jump If < Maximum.
+	MOVE.W	D5,D3			; Else Set to Maximum.
+	BRA.S	YIQUA6			; Skip Else Part.
+YIQUA5	CMP.B	D6,D3			; At Minimum Value?
+	BCC.S	YIQUA6			; Jump If >= Minimum Value.
+	MOVE.W	D6,D3			; Else Set to Mimimun.
+YIQUA6	LSL.W	#8,D3			; D3.L = Y-I Y-Q Y+I XXX.
+*
+*	Make Y + Q Value.
+*
+	ADD.B	D2,D0			; Y + Q.
+	CMP.B	D5,D0			; At Maximum Value?
+	BCS.S	YIQUA7			; Jump If < Maximum.
+	MOVE.W	D5,D0			; Else Set to Maximum.
+	BRA.S	YIQUA8			; Skip Else Part.
+YIQUA7	CMP.B	D6,D0			; At Minimum Value?
+	BCC.S	YIQUA8			; Jump If >= Minimum Value.
+	MOVE.W	D6,D0			; Else Set to Mimimun.
+YIQUA8	MOVE.B	D0,D3			; D3.L = Y-I Y-Q Y+I Y+Q.
+	MOVE.L	D3,D0			; D0.L = QUAD, 280ns Pixel.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L (A7)+,D1-D6		; Exit Subroutine.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FillLong:							*
+*									*
+*	Fills a Memory Area With a Long Word Value.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value to Fill Memory Area With.			*
+*	D1.L	= Number  of Long  Words To Fill Memory Area With.	*
+*	A0.L	= Address of Memory Area To Fill.			*
+*									*
+*	Output:								*
+*									*
+*	Memory Area Is Filled With Value.				*
+*									*
+*	19.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FillLong
+FillLong: MOVEM.L D1-D2/A0,-(A7)	; Save Calling State.
+*
+*	Loop and Fill the Memory Area.
+*
+	MOVE.W	D1,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D1			; D1.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	FILLO2(PC,D2.W)		; Start Looping.
+FILLO1	MOVE.L	D0,(A0)+		; Store The Values.
+	MOVE.L	D0,(A0)+		;  1
+	MOVE.L	D0,(A0)+		;  2
+	MOVE.L	D0,(A0)+		;  3
+	MOVE.L	D0,(A0)+		;  4
+	MOVE.L	D0,(A0)+		;  5
+	MOVE.L	D0,(A0)+		;  6
+	MOVE.L	D0,(A0)+		;  7
+	MOVE.L	D0,(A0)+		;  8
+	MOVE.L	D0,(A0)+		;  9
+	MOVE.L	D0,(A0)+		; 10
+	MOVE.L	D0,(A0)+		; 11
+	MOVE.L	D0,(A0)+		; 12
+	MOVE.L	D0,(A0)+		; 13
+	MOVE.L	D0,(A0)+		; 14
+	MOVE.L	D0,(A0)+		; 15
+	MOVE.L	D0,(A0)+		; 16
+	MOVE.L	D0,(A0)+		; 17
+	MOVE.L	D0,(A0)+		; 18
+	MOVE.L	D0,(A0)+		; 19
+	MOVE.L	D0,(A0)+		; 20
+	MOVE.L	D0,(A0)+		; 21
+	MOVE.L	D0,(A0)+		; 22
+	MOVE.L	D0,(A0)+		; 23
+	MOVE.L	D0,(A0)+		; 24
+	MOVE.L	D0,(A0)+		; 25
+	MOVE.L	D0,(A0)+		; 26
+	MOVE.L	D0,(A0)+		; 27
+	MOVE.L	D0,(A0)+		; 28
+	MOVE.L	D0,(A0)+		; 29
+	MOVE.L	D0,(A0)+		; 30
+	MOVE.L	D0,(A0)+		; 31
+FILLO2	DBF	D1,FILLO1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1-D2/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MoveLong:							*
+*									*
+*	Moves a Memory Area Using Long Word Move Instructions.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Long Words To Move.			*
+*	A0.L	= Address of Source      Memory Area To Move From.	*
+*	A1.L	= Address of Destination Memory Area To Move To.	*
+*									*
+*	Output:								*
+*									*
+*	Memory Area Is Moved in Decending Order.			*
+*									*
+*	19.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	MoveLong
+MoveLong: MOVEM.L D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Loop and Move the Memory Area.
+*
+	MOVE.W	D0,D1			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D1			; D1.L = Jump Index.
+	LSR.L	#5,D0			; D0.L = Adjusted Outer Loop Counter.
+	ADD.W	D1,D1			; Times 2 For Size of Opcode.
+	NEG.W	D1			; Go Into Reverse.
+	JMP	MOVEL2(PC,D1.W)		; Start Looping.
+MOVEL1	MOVE.L	(A0)+,(A1)+		; Store The Values.
+	MOVE.L	(A0)+,(A1)+		;  1
+	MOVE.L	(A0)+,(A1)+		;  2
+	MOVE.L	(A0)+,(A1)+		;  3
+	MOVE.L	(A0)+,(A1)+		;  4
+	MOVE.L	(A0)+,(A1)+		;  5
+	MOVE.L	(A0)+,(A1)+		;  6
+	MOVE.L	(A0)+,(A1)+		;  7
+	MOVE.L	(A0)+,(A1)+		;  8
+	MOVE.L	(A0)+,(A1)+		;  9
+	MOVE.L	(A0)+,(A1)+		; 10
+	MOVE.L	(A0)+,(A1)+		; 11
+	MOVE.L	(A0)+,(A1)+		; 12
+	MOVE.L	(A0)+,(A1)+		; 13
+	MOVE.L	(A0)+,(A1)+		; 14
+	MOVE.L	(A0)+,(A1)+		; 15
+	MOVE.L	(A0)+,(A1)+		; 16
+	MOVE.L	(A0)+,(A1)+		; 17
+	MOVE.L	(A0)+,(A1)+		; 18
+	MOVE.L	(A0)+,(A1)+		; 19
+	MOVE.L	(A0)+,(A1)+		; 20
+	MOVE.L	(A0)+,(A1)+		; 21
+	MOVE.L	(A0)+,(A1)+		; 22
+	MOVE.L	(A0)+,(A1)+		; 23
+	MOVE.L	(A0)+,(A1)+		; 24
+	MOVE.L	(A0)+,(A1)+		; 25
+	MOVE.L	(A0)+,(A1)+		; 26
+	MOVE.L	(A0)+,(A1)+		; 27
+	MOVE.L	(A0)+,(A1)+		; 28
+	MOVE.L	(A0)+,(A1)+		; 29
+	MOVE.L	(A0)+,(A1)+		; 30
+	MOVE.L	(A0)+,(A1)+		; 31
+MOVEL2	DBF	D0,MOVEL1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CompQUAD:							*
+*									*
+*	Creates the Complement Quad Values from One Buffer and Stores	*
+*	The Values Into Another Buffer.					*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Long Words Quad Values to Complement.	*
+*	A0.L	= Address of Source      Memory Area to Comp From.	*
+*	A1.L	= Address of Destination Memory Area to Comp To.	*
+*									*
+*	Output:								*
+*									*
+*	Memory Area is Complemented And Stored Into Destination.	*
+*									*
+*	20.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	CompQUAD
+CompQUAD: MOVEM.L D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Loop and Move the Memory Area.
+*
+	MOVE.W	D0,D1			; Lets Send Out 16 At A Time.
+	ANDI.W	#$0F,D1			; D1.L = Jump Index.
+	LSR.L	#4,D0			; D0.L = Adjusted Outer Loop Counter.
+	MULS	#-6,D1			; D1.L = 6 Times for Opcodes, Rev.
+	JMP	COMPQ2(PC,D1.W)		; Start Looping.
+COMPQ1	MOVE.L	(A0)+,D1		; 0
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 1
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 2
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 3
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 4
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 5
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 6
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 7
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 8
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 9
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 10
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 11
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 12
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 13
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 14
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+	MOVE.L	(A0)+,D1		; 15
+	SWAP.W	D1
+	MOVE.L	D1,(A1)+
+COMPQ2	DBF	D0,COMPQ1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RotateLong:							*
+*									*
+*	Rotates The Values Through The Array.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Position To Rotate To.				*
+*	D1.L	= Number  of Long Words In Rotation Array.		*
+*	A0.L	= Address of Long Words Source.				*
+*	A1.L	= Address of Long Words Destination.			*
+*									*
+*	Output:								*
+*									*
+*	The Data At A0.L is Rotated By D0.L Amount And Stored At A1.L.	*
+*									*
+*	06.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	RotateLong
+RotateLong:
+	MOVEM.L	D0-D2/A0-A2,-(A7)	; Save Calling State.
+*
+*	Set The Amount To Copy.
+*
+	SUB.L	D0,D1			; D1.L = First Loop Counter.
+	MOVE.L	D0,D2			; Make Long Word Index.
+	LSL.L	#2,D2			; Long Word Index.
+	LEA.L	0(A0,D2.L),A2		; A2.L = Address of Source.
+	MOVE.L	D1,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D1			; D1.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	ROTLO2(PC,D2.W)		; Start Looping.
+ROTLO1	MOVE.L	(A2)+,(A1)+		; Copy Data.
+	MOVE.L	(A2)+,(A1)+		;  1
+	MOVE.L	(A2)+,(A1)+		;  2
+	MOVE.L	(A2)+,(A1)+		;  3
+	MOVE.L	(A2)+,(A1)+		;  4
+	MOVE.L	(A2)+,(A1)+		;  5
+	MOVE.L	(A2)+,(A1)+		;  6
+	MOVE.L	(A2)+,(A1)+		;  7
+	MOVE.L	(A2)+,(A1)+		;  8
+	MOVE.L	(A2)+,(A1)+		;  9
+	MOVE.L	(A2)+,(A1)+		; 10
+	MOVE.L	(A2)+,(A1)+		; 11
+	MOVE.L	(A2)+,(A1)+		; 12
+	MOVE.L	(A2)+,(A1)+		; 13
+	MOVE.L	(A2)+,(A1)+		; 14
+	MOVE.L	(A2)+,(A1)+		; 15
+	MOVE.L	(A2)+,(A1)+		; 16
+	MOVE.L	(A2)+,(A1)+		; 17
+	MOVE.L	(A2)+,(A1)+		; 18
+	MOVE.L	(A2)+,(A1)+		; 19
+	MOVE.L	(A2)+,(A1)+		; 20
+	MOVE.L	(A2)+,(A1)+		; 21
+	MOVE.L	(A2)+,(A1)+		; 22
+	MOVE.L	(A2)+,(A1)+		; 23
+	MOVE.L	(A2)+,(A1)+		; 24
+	MOVE.L	(A2)+,(A1)+		; 25
+	MOVE.L	(A2)+,(A1)+		; 26
+	MOVE.L	(A2)+,(A1)+		; 27
+	MOVE.L	(A2)+,(A1)+		; 28
+	MOVE.L	(A2)+,(A1)+		; 29
+	MOVE.L	(A2)+,(A1)+		; 30
+	MOVE.L	(A2)+,(A1)+		; 31
+ROTLO2	DBF	D1,ROTLO1		; Loop And Copy Data.
+*
+*	Copy Second 1/2 of Data.
+*
+	MOVE.L	D0,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D0			; D0.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	ROTLO4(PC,D2.W)		; Start Looping.
+ROTLO3	MOVE.L	(A0)+,(A1)+		; Copy Data.
+	MOVE.L	(A0)+,(A1)+		;  1
+	MOVE.L	(A0)+,(A1)+		;  2
+	MOVE.L	(A0)+,(A1)+		;  3
+	MOVE.L	(A0)+,(A1)+		;  4
+	MOVE.L	(A0)+,(A1)+		;  5
+	MOVE.L	(A0)+,(A1)+		;  6
+	MOVE.L	(A0)+,(A1)+		;  7
+	MOVE.L	(A0)+,(A1)+		;  8
+	MOVE.L	(A0)+,(A1)+		;  9
+	MOVE.L	(A0)+,(A1)+		; 10
+	MOVE.L	(A0)+,(A1)+		; 11
+	MOVE.L	(A0)+,(A1)+		; 12
+	MOVE.L	(A0)+,(A1)+		; 13
+	MOVE.L	(A0)+,(A1)+		; 14
+	MOVE.L	(A0)+,(A1)+		; 15
+	MOVE.L	(A0)+,(A1)+		; 16
+	MOVE.L	(A0)+,(A1)+		; 17
+	MOVE.L	(A0)+,(A1)+		; 18
+	MOVE.L	(A0)+,(A1)+		; 19
+	MOVE.L	(A0)+,(A1)+		; 20
+	MOVE.L	(A0)+,(A1)+		; 21
+	MOVE.L	(A0)+,(A1)+		; 22
+	MOVE.L	(A0)+,(A1)+		; 23
+	MOVE.L	(A0)+,(A1)+		; 24
+	MOVE.L	(A0)+,(A1)+		; 25
+	MOVE.L	(A0)+,(A1)+		; 26
+	MOVE.L	(A0)+,(A1)+		; 27
+	MOVE.L	(A0)+,(A1)+		; 28
+	MOVE.L	(A0)+,(A1)+		; 29
+	MOVE.L	(A0)+,(A1)+		; 30
+	MOVE.L	(A0)+,(A1)+		; 31
+ROTLO4	DBF	D0,ROTLO3		; Loop And Copy Data.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	NukeLong:							*
+*									*
+*	Nukes The Values Through The Array.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Position To Nuke To, Can Be As Large As 2 * D1.L - 1.	*
+*	D1.L	= Number  of Long Words In Nuke Array.			*
+*	A0.L	= Address of Long Words Source.				*
+*	A1.L	= Address of Long Words Destination.			*
+*									*
+*	Output:								*
+*									*
+*	The Data At A0.L is Nuked By D0.L Amount And Stored At A1.L.	*
+*									*
+*	15.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	NukeLong
+NukeLong:
+	MOVEM.L	D0-D2/A0-A1,-(A7)	; Save Calling State.
+*
+*	Find Direction Of Nuke.
+*
+	CMP.L	D1,D0			; If Starting in Normal
+	BCC	NUKEL5			; Ends in Comp.
+	SUB.L	D0,D1			; Count to End of Table.
+*
+*	Ok Loop and Copy Normal to Complement.
+*
+	MOVE.L	D0,D2			; Times Four, Long Sized Data.
+	LSL.L	#2,D2
+	ADDA.L	D2,A0
+	MOVE.L	D1,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D1			; D1.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	NUKEL2(PC,D2.W)		; Start Looping.
+NUKEL1	MOVE.L	(A0)+,(A1)+		; End of Table Copy.
+	MOVE.L	(A0)+,(A1)+		;  1
+	MOVE.L	(A0)+,(A1)+		;  2
+	MOVE.L	(A0)+,(A1)+		;  3
+	MOVE.L	(A0)+,(A1)+		;  4
+	MOVE.L	(A0)+,(A1)+		;  5
+	MOVE.L	(A0)+,(A1)+		;  6
+	MOVE.L	(A0)+,(A1)+		;  7
+	MOVE.L	(A0)+,(A1)+		;  8
+	MOVE.L	(A0)+,(A1)+		;  9
+	MOVE.L	(A0)+,(A1)+		; 10
+	MOVE.L	(A0)+,(A1)+		; 11
+	MOVE.L	(A0)+,(A1)+		; 12
+	MOVE.L	(A0)+,(A1)+		; 13
+	MOVE.L	(A0)+,(A1)+		; 14
+	MOVE.L	(A0)+,(A1)+		; 15
+	MOVE.L	(A0)+,(A1)+		; 16
+	MOVE.L	(A0)+,(A1)+		; 17
+	MOVE.L	(A0)+,(A1)+		; 18
+	MOVE.L	(A0)+,(A1)+		; 19
+	MOVE.L	(A0)+,(A1)+		; 20
+	MOVE.L	(A0)+,(A1)+		; 21
+	MOVE.L	(A0)+,(A1)+		; 22
+	MOVE.L	(A0)+,(A1)+		; 23
+	MOVE.L	(A0)+,(A1)+		; 24
+	MOVE.L	(A0)+,(A1)+		; 25
+	MOVE.L	(A0)+,(A1)+		; 26
+	MOVE.L	(A0)+,(A1)+		; 27
+	MOVE.L	(A0)+,(A1)+		; 28
+	MOVE.L	(A0)+,(A1)+		; 29
+	MOVE.L	(A0)+,(A1)+		; 30
+	MOVE.L	(A0)+,(A1)+		; 31
+NUKEL2	DBF	D1,NUKEL1		; Do For Size.
+	MOVE.L	D0,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D0			; D0.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	NUKEL4(PC,D2.W)		; Start Looping.
+NUKEL3	MOVE.L	-(A0),(A1)+		; Backware Copy of Table.
+	MOVE.L	-(A0),(A1)+		;  1
+	MOVE.L	-(A0),(A1)+		;  2
+	MOVE.L	-(A0),(A1)+		;  3
+	MOVE.L	-(A0),(A1)+		;  4
+	MOVE.L	-(A0),(A1)+		;  5
+	MOVE.L	-(A0),(A1)+		;  6
+	MOVE.L	-(A0),(A1)+		;  7
+	MOVE.L	-(A0),(A1)+		;  8
+	MOVE.L	-(A0),(A1)+		;  9
+	MOVE.L	-(A0),(A1)+		; 10
+	MOVE.L	-(A0),(A1)+		; 11
+	MOVE.L	-(A0),(A1)+		; 12
+	MOVE.L	-(A0),(A1)+		; 13
+	MOVE.L	-(A0),(A1)+		; 14
+	MOVE.L	-(A0),(A1)+		; 15
+	MOVE.L	-(A0),(A1)+		; 16
+	MOVE.L	-(A0),(A1)+		; 17
+	MOVE.L	-(A0),(A1)+		; 18
+	MOVE.L	-(A0),(A1)+		; 19
+	MOVE.L	-(A0),(A1)+		; 20
+	MOVE.L	-(A0),(A1)+		; 21
+	MOVE.L	-(A0),(A1)+		; 22
+	MOVE.L	-(A0),(A1)+		; 23
+	MOVE.L	-(A0),(A1)+		; 24
+	MOVE.L	-(A0),(A1)+		; 25
+	MOVE.L	-(A0),(A1)+		; 26
+	MOVE.L	-(A0),(A1)+		; 27
+	MOVE.L	-(A0),(A1)+		; 28
+	MOVE.L	-(A0),(A1)+		; 29
+	MOVE.L	-(A0),(A1)+		; 30
+	MOVE.L	-(A0),(A1)+		; 31
+NUKEL4	DBF	D0,NUKEL3		; Do For Size.
+	BRA	NUKELA			; Exit Subroutine.
+*
+*	Ok Loop and Copy Complement to Normal.
+*
+NUKEL5	SUB.L	D1,D0			; Adjust to 1/2 Value.
+	SUB.L	D0,D1			; Count to End of Table.
+	MOVE.L	D1,D2			; Times Four, Long Sized Data.
+	LSL.L	#2,D2
+	ADDA.L	D2,A0
+	MOVE.L	D1,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D1			; D1.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	NUKEL7(PC,D2.W)		; Start Looping.
+NUKEL6	MOVE.L	-(A0),(A1)+		; Copy The Data Backwards.
+	MOVE.L	-(A0),(A1)+		;  1
+	MOVE.L	-(A0),(A1)+		;  2
+	MOVE.L	-(A0),(A1)+		;  3
+	MOVE.L	-(A0),(A1)+		;  4
+	MOVE.L	-(A0),(A1)+		;  5
+	MOVE.L	-(A0),(A1)+		;  6
+	MOVE.L	-(A0),(A1)+		;  7
+	MOVE.L	-(A0),(A1)+		;  8
+	MOVE.L	-(A0),(A1)+		;  9
+	MOVE.L	-(A0),(A1)+		; 10
+	MOVE.L	-(A0),(A1)+		; 11
+	MOVE.L	-(A0),(A1)+		; 12
+	MOVE.L	-(A0),(A1)+		; 13
+	MOVE.L	-(A0),(A1)+		; 14
+	MOVE.L	-(A0),(A1)+		; 15
+	MOVE.L	-(A0),(A1)+		; 16
+	MOVE.L	-(A0),(A1)+		; 17
+	MOVE.L	-(A0),(A1)+		; 18
+	MOVE.L	-(A0),(A1)+		; 19
+	MOVE.L	-(A0),(A1)+		; 20
+	MOVE.L	-(A0),(A1)+		; 21
+	MOVE.L	-(A0),(A1)+		; 22
+	MOVE.L	-(A0),(A1)+		; 23
+	MOVE.L	-(A0),(A1)+		; 24
+	MOVE.L	-(A0),(A1)+		; 25
+	MOVE.L	-(A0),(A1)+		; 26
+	MOVE.L	-(A0),(A1)+		; 27
+	MOVE.L	-(A0),(A1)+		; 28
+	MOVE.L	-(A0),(A1)+		; 29
+	MOVE.L	-(A0),(A1)+		; 30
+	MOVE.L	-(A0),(A1)+		; 31
+NUKEL7	DBF	D1,NUKEL6		; Do For Size.
+	MOVE.L	D0,D2			; Lets Send Out 32 At A Time.
+	ANDI.W	#$1F,D2			; D2.L = Jump Index.
+	LSR.L	#5,D0			; D0.L = Adjusted Outer Loop Counter.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	NUKEL9(PC,D2.W)		; Start Looping.
+NUKEL8	MOVE.L	(A0)+,(A1)+		; Start of Table Copy.
+	MOVE.L	(A0)+,(A1)+		;  1
+	MOVE.L	(A0)+,(A1)+		;  2
+	MOVE.L	(A0)+,(A1)+		;  3
+	MOVE.L	(A0)+,(A1)+		;  4
+	MOVE.L	(A0)+,(A1)+		;  5
+	MOVE.L	(A0)+,(A1)+		;  6
+	MOVE.L	(A0)+,(A1)+		;  7
+	MOVE.L	(A0)+,(A1)+		;  8
+	MOVE.L	(A0)+,(A1)+		;  9
+	MOVE.L	(A0)+,(A1)+		; 10
+	MOVE.L	(A0)+,(A1)+		; 11
+	MOVE.L	(A0)+,(A1)+		; 12
+	MOVE.L	(A0)+,(A1)+		; 13
+	MOVE.L	(A0)+,(A1)+		; 14
+	MOVE.L	(A0)+,(A1)+		; 15
+	MOVE.L	(A0)+,(A1)+		; 16
+	MOVE.L	(A0)+,(A1)+		; 17
+	MOVE.L	(A0)+,(A1)+		; 18
+	MOVE.L	(A0)+,(A1)+		; 19
+	MOVE.L	(A0)+,(A1)+		; 20
+	MOVE.L	(A0)+,(A1)+		; 21
+	MOVE.L	(A0)+,(A1)+		; 22
+	MOVE.L	(A0)+,(A1)+		; 23
+	MOVE.L	(A0)+,(A1)+		; 24
+	MOVE.L	(A0)+,(A1)+		; 25
+	MOVE.L	(A0)+,(A1)+		; 26
+	MOVE.L	(A0)+,(A1)+		; 27
+	MOVE.L	(A0)+,(A1)+		; 28
+	MOVE.L	(A0)+,(A1)+		; 29
+	MOVE.L	(A0)+,(A1)+		; 30
+	MOVE.L	(A0)+,(A1)+		; 31
+NUKEL9	DBF	D0,NUKEL8		; Do For Size.
+*
+*	Exit Subroutine.
+*
+NUKELA	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RUBinToAsc:							*
+*									*
+*	Converts an Unsigned Binary Number to Ascii, Right Justified.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value   of Binary Number.				*
+*	D1.L	= Number  of Bytes In Resulting Buffer.			*
+*	D2.B	= Value   of Character To Pad High Part Of String,	*
+*		  ( i.e. ' ' or '0' ).					*
+*	A0.L	= Address of Result.					*
+*									*
+*	Output:								*
+*									*
+*	Number is Converted to Binary And Store In Ascii Buffer.	*
+*									*
+*	01.Nov 1989 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	RUBINTOASC
+RUBINTOASC MOVEM.L D0-D1/D3/A0,-(A7)	; Save Calling State.
+	MOVE.L	D1,D3			; No Bytes?
+	BEQ.S	RUBINT3			; Exit If No Number.
+*
+*	Go to End Of Buffer & Build Number.
+*
+	ADDA.L	D3,A0			; Last Character In Buffer.
+	CLR.B	-(A0)			; Set Last To Null.
+	SUBQ.L	#1,D3			; Last Character?
+	BEQ.S	RUBINT3			; Exit If All Done.
+*
+*	Loop And Build The Number.
+*
+RUBINT1	MOVEQ.L	#10,D1			; Value To Divide By.
+	BSR.S	UDIV32			; D0.L = Next #, D1.L = Remainder.
+	ADDI.W	#'0',D1			; D1.L = Ascii Character.
+	MOVE.B	D1,-(A0)		; Store Character.
+	SUBQ.L	#1,D3			; Last Character?
+	BEQ.S	RUBINT3			; Exit If All Done.
+	TST.L	D0			; Number Still There?
+	BNE.S	RUBINT1			; Jump Back If More Left.
+*
+*	Clear Rest of Sting With Blanks or Zero's.
+*
+	SUBQ.L	#1,D3			; Loop Counter - 1.
+RUBINT2	MOVE.B	D2,-(A0)		; Store Blank Character.
+	DBF	D3,RUBINT2		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+RUBINT3	MOVEM.L	(A7)+,D0-D1/D3/A0	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	UDiv32:								*
+*									*
+*	Performer a Unsigned 32 Bit Division.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Number on Top.				*
+*	D1.L	= Value of Number on Bottom.				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of Result.					*
+*	D1.L	= Value of Remainder.					*
+*									*
+*	09.May 1989 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	UDIV32
+UDIV32:	MOVEM.L	D2-D4,-(A7)		; Save Calling State.
+*
+*	Set Up For Loop.
+*
+	MOVE.L	D1,D2			; D2.L = Value of Number On Bottom.
+	NEG.L	D2			; D2.L = Two Comp Of Number On Bottom.
+	MOVEQ.L	#0,D1			; D1.L = Value of Remainder.
+	MOVEQ.L	#33-1,D4		; D4.L = Value of Loop Counter.
+UDIV31	MOVE.L	D1,D3			; D3.L = Save Value of Remainder.
+	ADD.L	D2,D1			; D1.L = Sum in Value to Remainder.
+	BCS.S	UDIV33			; Jump If Using New Value.
+	MOVE.L	D3,D1			; Get Old Value of Remainder.
+UDIV33	ADDX.L	D0,D0			; Rotate Through Carry.
+	ADDX.L	D1,D1			; Rotate Into Result.
+	DBF	D4,UDIV31		; Do Until Done.
+	ROXR.L	#1,D1			; Rebuild Remainder.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D2-D4		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AscInt:								*
+*									*
+*	Converts an Ascii String to Integer.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of String to Convert to Integer.		*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of Integer String.				*
+*									*
+*	White Space, -, and + is Permitted at Start of String.		*
+*									*
+*	21.Aug 1988 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	ASCINT
+ASCINT:	MOVE.L	A0,-(A7)		; Save Calling State.
+*
+*	Check For White Space, -, and +.
+*
+	BSR.S	SKIPBS			; Skip Any Leading Blank Space.
+	CMPI.B	#'-',(A0)		; Negative #?
+	BNE.S	ASCIN1			; Jump If Not Negative.
+	ADDQ.L	#1,A0			; Go To Next String Position.
+	BSR.S	SKIPBS			; Skip Any Leading Blank Space.
+	BSR.S	ASCBIN			; Convert to Binary.
+	NEG.L	D0			; Negative Result.
+	BRA.S	ASCIN3			; Exit Subroutine.
+ASCIN1	CMPI.B	#'+',(A0)		; Positive #?
+	BNE.S	ASCIN2			; Jump If No +.
+	ADDQ.L	#1,A0			; Go To Next String Position.
+ASCIN2	BSR.S	SKIPBS			; Skip Any Leading Blank Space.
+	BSR.S	ASCBIN			; Convert to Binary.
+*
+*	Exit Subroutine.
+*
+ASCIN3	MOVE.L	(A7)+,A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SkipBS:								*
+*									*
+*	Skips the Blank Space in a String.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of String to Skip Blank Space In.		*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of String Past the Blank Space.		*
+*									*
+*	21.Aug 1988 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	SKIPBS
+SKIPBS:	CMPI.B	#' ',(A0)		; Was It a Space?
+	BEQ.S	SKIPB1			; Jump If Blank Space.
+	CMPI.B	#9,(A0)			; TAB?
+	BNE.S	SKIPB2			; Exit If Not Tab.
+SKIPB1	ADDQ.L	#1,A0			; Increment to Next Char Position.
+	BRA.S	SKIPBS			; Check Next Character.
+SKIPB2	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AscBin:								*
+*									*
+*	Converts an Ascii String to Binary.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of String to Convert to Binary.		*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Value of Binary String.				*
+*									*
+*	Conversion is Stoped When a Non-Numberic Character is Found.	*
+*									*
+*	21.Aug 1988 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	ASCBIN
+ASCBIN:	MOVEM.L	A0/D1-D2,-(A7)		; Save Calling State.
+*
+*	Initilize Result, Loop Until Non-Number Char Found.
+*
+	MOVEQ.L	#0,D0			; Initial Result.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+ASCBI1	MOVE.B	(A0)+,D1		; Char We Are On.
+	SUBI.B	#'0',D1			; Base at Zero.
+	BCS.S	ASCBI2			; Exit If Not Numberic.
+	CMPI.B	#10,D1			; Within Range 0 to 9?
+	BCC.S	ASCBI2			; Exit If Not in Range.
+	MOVE.L	D0,D2			; Make 10 Times Result.
+	ADD.L	D0,D0			; Times  2.
+	ADD.L	D0,D0			; Times  4.
+	ADD.L	D2,D0			; Times  5.
+	ADD.L	D0,D0			; Times 10.
+	ADD.L	D1,D0			; Sum Into Result.
+	BRA.S	ASCBI1			; Check Next Number.
+*
+*	Exit Subroutine.
+*
+ASCBI2	MOVEM.L	(A7)+,A0/D1-D2		; Return Calling State.
+	RTS
+	END

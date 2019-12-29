@@ -1,0 +1,366 @@
+8a9
+>  XDEF BlackFont
+10c11
+< 	include "ram:mod.i"
+---
+> 
+18,20c19,23
+< ;;	xref MyFontLocal	;startup.asm
+< ;;	xref FontFileName	;startup.asm
+< ;;	xref PlainFontFileName	;startup.asm
+---
+> 	xref MyFontLocal	;startup.asm
+> 	xref FontFileName	;startup.asm
+> 	xref PlainFontFileName	;startup.asm
+> 
+> OpenDefaultFont:
+21a25
+> 		;'cd' to the toaster directory, if any
+25a30,41
+> 	tst.b	FlagToasterAlive_(BP)
+> 	beq.s	notoast
+> 	move.l	ToastDirLock_(BP),d1
+> 	bra.s	dodir
+> notoast	tst.b	FlagWBench_(BP)
+> 	beq.s	skipdir
+> 	move.l	ProgDir_(BP),d1	;setup in iconstuff, TOOL's directory
+> dodir:	move.l	a1,-(sp)
+> 	CALLIB	DOS,CurrentDir	;lock is a handle, now actually go there
+> 	move.l	(sp)+,a1	;name ptr
+> 	;NO!!!!;MOVE.L	d0,-(sp)	;STACK old current dir
+> skipdir:
+26a43
+> 	;lea	FontFileName,a1	;startup.asm
+31,60c48,51
+< 	xref	Sext
+< 	xref	TCStrExt
+< 
+< OpenDefaultFont:
+< 	lea	Font1,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	move.l	FI_TextFont(a0),Sext	;font to be used for all string gadgets
+< 	lea	Font2,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	lea	Font3,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	lea	Font4,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	lea	Font5,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	lea	Font6,a0
+< 	bsr	OpenOneDefaultFont
+< 	bne.s	1$
+< 	move.l	FI_TextFont(a0),TCStrExt
+< 1$
+< 	rts
+< 
+< OpenOneDefaultFont:
+< 
+< 	movem.l	d1/a0-a3,-(sp)
+---
+> 	move.l	ProgNamePtr_(BP),a1	;string "dir:dir/prog",0
+> 	tst.b	FlagToasterAlive_(BP)
+> 	beq.s	notoastname
+> 	lea	ProgramNameBuffer_(BP),a1
+62c53
+< 	move.l	a0,a3			;fontinit
+---
+> notoastname:
+64,74d54
+< 		;'cd' to the toaster directory, if any
+< 
+< 	move.l	ToastDirLock_(BP),d1
+< 	CALLIB	DOS,CurrentDir	;lock is a handle, now actually go there
+< 
+< ;	lea	ProgramNameBuffer_(BP),a1
+< 	xdef	Toastername
+< 	lea	Toastername,a1
+< 
+< 
+< 
+76d55
+< 
+77a57
+> 	;;;lea	ProgramNameBuffer_(BP),a1
+80,82c60,66
+< ;	lea	FontFileName,a1		;startup.asm
+< ;;	move.l	8(sp),a1		;font name
+< 	move.l	FI_FileName(a3),a1
+---
+> 59$
+> 	lea	FontFileName,a1		;startup.asm
+> 	tst.b	FlagToasterAlive_(BP)
+> 	bne.s	usetoastname
+> 	lea	PlainFontFileName,a1		;startup.asm
+> usetoastname:
+> 
+84a69
+> 	;lea	FontFileName,a1		;startup.asm
+88,90c73,78
+< ;;	move.l	d0,FontSeg_xxx
+< 	move.l	d0,FI_FontSeg(a3)
+< 	beq	notfont_err
+---
+> 	move.l	d0,FontSeg_xxx
+> 	bne.s	gotsegfile
+> unf_errout:			;JUNE04
+> 	;;xjsr	FontErrorRtn	;canceler.o (no file loaded)
+> 	moveq	#-1,d0	;set NE flag
+> 	rts
+93a82,83
+> 	;;xjsr	DebugMe1
+> 
+113a104,114
+> 	;?;cmp.w	BigPicHt_(BP),d0
+> 	;?;bcc.s	fonttoo_tall
+> 
+> 	;AUG021990,DONT CARE;move.b	tf_Flags(a1),d0
+> 	;AUG021990,DONT CARE;and.b	#(64!32!2),d0	;64=designed,32=proportional,2=revpath
+> 	;AUG021990,DONT CARE;move.b	d0,tf_Flags(a1)
+> 	;clr.b	tf_Flags(a1)	;KLUDGE TEST messes with flags (revpath, etc?)
+> 	;clr.b	tf_Style(a1)	;"all disk files contain $0f" valu?
+> 				;note...this BLOWS AWAY the colortext flag
+> 
+> 	;;;lea	FontNameBuffer_(BP),a0
+115,116c116
+< ;;	lea	InUseName(pc),a0
+< 	move.l	FI_USENAME(a3),a0
+---
+> 	lea	InUseName(pc),a0
+121,122c121
+< ;;	move.l	a1,DiskFont_xxx
+< 	move.l	a1,FI_DiskFont(a3)
+---
+> 	move.l	a1,DiskFont_xxx
+125a125
+> 	;;xjsr	DebugMe2
+128,131c128,130
+< ;;	MOVE.L	DiskFont_xxx,a1		;move.l	DiskFont_(BP),a1
+< 	MOVE.L	FI_DiskFont(a3),a1		;move.l	DiskFont_(BP),a1
+< ;;	lea	MyFontLocal,a0			; STRUCTURE  TextAttr,0
+< 	move.l	FI_TextAtt(a3),a0
+---
+> 	;JUL251990;lea	DiskFont_xxx,a1		;move.l	DiskFont_(BP),a1
+> 	MOVE.L	DiskFont_xxx,a1		;move.l	DiskFont_(BP),a1
+> 	lea	MyFontLocal,a0			; STRUCTURE  TextAttr,0
+133a133,134
+> 	;JULY251990, SUP FOR COLORTEXT;move.b	tf_Style(a1),ta_Style(a0)	;UBYTE    ta_Style
+> 	;AUG021990,DONT CARE;bset	#6,tf_Style(a1)		;flag this as a color font, please
+134a136
+> 	;AUG021990,DONT CARE;or.b	#$40,d0		;setup #FSF_COLORFONT
+137a140
+> 	;move.b	#%011,ta_Flags(a0)	;just rom or disk?
+140,141c143
+< ;;	move.l	d0,TextFont_xxx	;needs to be "close"font'd
+< 	move.l	d0,FI_TextFont(a3)	;needs to be "close"font'd
+---
+> 	move.l	d0,TextFont_xxx	;needs to be "close"font'd
+144,145c146
+< 	moveq	#0,d1		;flag zero, worked ok
+< 	movem.l	(sp)+,d1/a0-a3
+---
+> 	;;xjsr	DebugMe3
+146a148
+> 	moveq	#0,d1		;flag zero, worked ok
+149a152
+> 	;xjsr	FontFileErrorRtn	;canceler.o, 'file not font.'
+151,153c154
+< 	movem.l	(sp)+,d1/a0-a3
+< 	rts			;OpenDefaultFont
+< 
+---
+> 	rts	;OpenDefaultFont
+154a156,159
+> ;?;fonttoo_tall:
+> ;?;	;xjsr	FontTallErrorRtn
+> ;?;	moveq	#-1,d0
+> ;?;	rts	;OpenDefaultFont
+156d160
+< CloseDefaultFont:
+158,167d161
+< 	lea	Font1,a0
+< 	bsr	EndFonts
+< 	lea	Font2,a0
+< 	bsr	EndFonts
+< 	lea	Font3,a0
+< 	bsr	EndFonts
+< 	lea	Font4,a0
+< 	bsr	EndFonts
+< 	lea	Font5,a0
+< 	bsr	EndFonts
+169d162
+< 	rts
+170a164
+> CloseDefaultFont:
+173,177c167
+< 	movem.l	a3,-(sp)
+< 	move.l	a0,a3
+< 
+< ;;	lea	TextFont_xxx,a0	;adr of basepage var
+< 	lea	FI_TextFont(a3),a0	;adr of basepage var
+---
+> 	lea	TextFont_xxx,a0	;adr of basepage var
+183a174
+> 	;;xjsr	DebugMe4
+186,187c177
+< ;;	lea	DiskFont_xxx,a0	;TextFont_(BP),a0
+< 	lea	FI_DiskFont(a3),a0	;TextFont_(BP),a0
+---
+> 	lea	DiskFont_xxx,a0	;TextFont_(BP),a0
+189a180
+> 	;MAY30;clr.l	(a0)	;clear so don't close it 2x
+192c183,193
+< 	bne.s	eacmf
+---
+>   ifc 't','f' ;june 14
+> 	beq.s	oktorem
+> 	move.l	a1,-(sp)
+> 	xjsr	CheckCancel		;remove 'extra' mousemoves
+> 	xjsr	SetLowerPriority	;'go slow to wait' (rtns d0=prev pri)
+> 	xjsr	ExecSetTaskPri		;reset to prev/existing pri
+> 	move.l	(sp)+,a1
+> 	bra.s	checka		;check again, everyone close font?
+> oktorem:
+>   endc
+> 	bne.s	bum_unload		;june14
+194,195c195,198
+< ;	clr.l	DiskFont_xxx		;clear so don't remfont it 2x ;MAY30;
+< 	clr.l	FI_DiskFont(a3)
+---
+> 
+> 	;;xjsr	DebugMe5
+> 
+> 	clr.l	DiskFont_xxx		;clear so don't remfont it 2x ;MAY30;
+197,198c200
+< ;	lea	FontSeg_xxx,a0
+< 	lea	FI_FontSeg(a3),a0
+---
+> 	lea	FontSeg_xxx,a0
+204,207c206,207
+< eacmf:
+< 	movem.l	(sp)+,a3
+< 	rts
+< 
+---
+> 	;;xjsr	DebugMe6
+> eacmf:	rts
+210,221c210,217
+< InUseName:	dc.b	'DigiPaint_BlackB',0
+< InUseName2:	dc.b	'DigiPaint_BlackL',0
+< InUseName3:	dc.b	'DigiPaint_White',0
+< InUseName4:	dc.b	'DigiPaint_BlackNP',0
+< InUseName5:	dc.b	'DigiPaint_BlackBNP',0	
+< InUseName6:	dc.b	'DigiPaint_LightNP',0	
+< FontFileName:	dc.b	'_Support/FontOnDark',0
+< FontFileName2:	dc.b	'_Support/FontOnLight',0
+< FontFileName3:	dc.b	'_Support/FontWhiteOnDark',0
+< FontFileName4:	dc.b	'_Support/FontBlackNP',0
+< FontFileName5:	dc.b	'_Support/FontOnDarkNP',0
+< FontFileName6:	dc.b	'_Support/FontOnLightNP',0
+---
+> bum_unload:	;comes here when couldn't RemFont because...june14
+> 		;someone else open'd it...net effect is to never free
+> 		;...i.e., don't unloadseg, the in-use font...
+> 	moveq	#0,d0
+> 	move.l	d0,FontSeg_xxx	;instead of unloading it, just 'forget it'
+> 	move.l	d0,DiskFont_xxx ;instead of 'remfont'ing it...
+> 	rts
+> 	rts	;CloseDefaultFont
+223c219
+< Toastername	dc.b	'Toasterpaint',0
+---
+> InUseName:	dc.b	'DigiPaint_Black',0
+226,239c222,224
+< 
+< 
+< 	STRUCTURE	FontInit,0
+< 	LONG		FI_FontSeg
+< 	LONG		FI_DiskFont
+< 	LONG		FI_TextFont
+< 	LONG		FI_TextAtt
+< 	LONG		FI_FileName
+< 	LONG		FI_USENAME
+< 
+< 
+< Font1:
+< FontSeg_xxx:	dc.l	0		;YECH!!! a non-resident-ablereference...				;bad habits picked up while at newtek...
+< DiskFont_xxx	dc.l	0		;Fix.....
+---
+> FontSeg_xxx:	dc.l	0	;YECH!!! a non-resident-ablereference...
+> 				;bad habits picked up while at newtek...
+> DiskFont_xxx	dc.l	0	;Fix.....
+241,306c226,227
+< 		dc.l	MyFontLocal
+< 		dc.l	FontFileName
+< 		dc.l	InUseName
+< 
+< 
+< Font2:		dc.l	0
+< 		dc.l	0
+< 		dc.l	0
+< 		dc.l	MyFontLocal2
+< 		dc.l	FontFileName2
+< 		dc.l	InUseName2
+< 
+< Font3:		dc.l	0
+< 		dc.l	0
+< 		dc.l	0
+< 		dc.l	MyFontLocal3
+< 		dc.l	FontFileName3
+< 		dc.l	InUseName3
+< 
+< Font4:		dc.l	0
+< 		dc.l	0
+< 		dc.l	0
+< 		dc.l	MyFontLocal4
+< 		dc.l	FontFileName4
+< 		dc.l	InUseName4
+< 
+< Font5:		dc.l	0
+< 		dc.l	0
+< 		dc.l	0
+< 		dc.l	MyFontLocal5
+< 		dc.l	FontFileName5
+< 		dc.l	InUseName5
+< 
+< Font6:		dc.l	0
+< 		dc.l	0
+< 		dc.l	0
+< 		dc.l	MyFontLocal6
+< 		dc.l	FontFileName6
+< 		dc.l	InUseName6
+< 
+< 
+< 
+< 	xdef	_TCFont
+< _TCFont		dc.l	0
+< 
+< 	xdef	__CXD22	
+< __CXD22		dc.l	0
+< 
+< 		cnop	0,4
+< 		xdef	MyFontLocal
+< MyFontLocal	ds.b	ta_SIZEOF
+< 		cnop	0,4
+< 		xdef	MyFontLocal2
+< MyFontLocal2	ds.b	ta_SIZEOF
+< 		cnop	0,4
+< 		xdef	MyFontLocal3
+< MyFontLocal3	ds.b	ta_SIZEOF
+< 		cnop	0,4
+< 		xdef	MyFontLocal4
+< MyFontLocal4	ds.b	ta_SIZEOF
+< 		cnop	0,4
+< 		xdef	MyFontLocal5
+< MyFontLocal5	ds.b	ta_SIZEOF
+< 		cnop	0,4
+< 		xdef	MyFontLocal6
+< MyFontLocal6	ds.b	ta_SIZEOF
+---
+> BlackFont	equ	TextFont_xxx	;xdef'd
+> 

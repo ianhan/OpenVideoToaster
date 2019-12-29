@@ -1,0 +1,1745 @@
+head	5.15;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+5.15
+date	95.01.03.23.00.12;	author pfrench;	state Exp;
+branches;
+next	5.14;
+
+5.14
+date	95.01.03.22.39.10;	author pfrench;	state Exp;
+branches;
+next	5.13;
+
+5.13
+date	95.01.03.22.32.47;	author pfrench;	state Exp;
+branches;
+next	5.12;
+
+5.12
+date	95.01.03.21.27.54;	author pfrench;	state Exp;
+branches;
+next	5.11;
+
+5.11
+date	95.01.03.21.01.03;	author pfrench;	state Exp;
+branches;
+next	5.10;
+
+5.10
+date	94.12.23.21.49.35;	author pfrench;	state Exp;
+branches;
+next	5.9;
+
+5.9
+date	94.12.23.20.44.59;	author pfrench;	state Exp;
+branches;
+next	5.8;
+
+5.8
+date	94.12.22.21.25.31;	author pfrench;	state Exp;
+branches;
+next	5.7;
+
+5.7
+date	94.12.19.22.39.51;	author pfrench;	state Exp;
+branches;
+next	5.6;
+
+5.6
+date	94.12.02.14.10.16;	author pfrench;	state Exp;
+branches;
+next	5.5;
+
+5.5
+date	94.11.30.23.42.32;	author pfrench;	state Exp;
+branches;
+next	5.4;
+
+5.4
+date	94.11.29.13.07.16;	author pfrench;	state Exp;
+branches;
+next	5.3;
+
+5.3
+date	94.11.28.20.38.25;	author pfrench;	state Exp;
+branches;
+next	5.2;
+
+5.2
+date	94.11.28.14.47.48;	author pfrench;	state Exp;
+branches;
+next	5.1;
+
+5.1
+date	94.11.23.13.53.07;	author pfrench;	state Exp;
+branches;
+next	5.0;
+
+5.0
+date	94.11.23.13.17.59;	author pfrench;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+5.15
+log
+@Jeezo! was incorrectly overwriting the source filename that
+the file's bitmap was located in
+@
+text
+@/********************************************************************
+* $iconfile.c$
+* $Id: iconfile.c,v 5.14 1995/01/03 22:39:10 pfrench Exp pfrench $
+* $Log: iconfile.c,v $
+*Revision 5.14  1995/01/03  22:39:10  pfrench
+*Making sure we call croutonlib with the data file name
+*
+*Revision 5.13  1995/01/03  22:32:47  pfrench
+*Now call croutonlib if crouton type undetermined after scanning
+*files and finding images but not CrUD chunks
+*
+*Revision 5.12  1995/01/03  21:27:54  pfrench
+*Now will delete allicons file if error on write
+*
+*Revision 5.11  1995/01/03  21:01:03  pfrench
+*Maybe fixed tiny bug in allicons generation, found that most
+*of the problems were actually in the icon files themselves,
+*many of them didn't have CrUD chunks, which is a major no-no
+*
+*Revision 5.10  1994/12/23  21:49:35  pfrench
+*Decided to put those tags back in.  I'll re-enable buffering
+*in proof.library when it works.
+*
+*Revision 5.9  1994/12/23  20:44:59  pfrench
+*Temporarily removing buffered io from iconfile build routines.
+*
+*Revision 5.8  1994/12/22  21:25:31  pfrench
+*Fixed bug where cdrom check was messing up directory parsing
+*if there was an .allicons file, but the date wasn't recent
+*enough.  Fixed by re-examine()ing the dirlock
+*
+*Revision 5.7  1994/12/19  22:39:51  pfrench
+*Modified for now shared-code proof.library.
+*
+*Revision 5.6  1994/12/02  14:10:16  pfrench
+*changed ".allicons" to ".allicons.i" and using new buffer sizes.
+*
+*Revision 5.5  1994/11/30  23:42:32  pfrench
+*fixed a couple of parsing errors.
+*
+*Revision 5.4  1994/11/29  13:07:16  pfrench
+*put in some defines to allow allicons utility to link
+*with little extra code.
+*
+*Revision 5.3  1994/11/28  20:38:25  pfrench
+*First working version.
+*
+*Revision 5.2  1994/11/28  14:47:48  pfrench
+*Got everything compiling correctly, ready to test.
+*
+*Revision 5.1  1994/11/23  13:53:07  pfrench
+*Code still untested. added crouton scanning code.
+*
+*Revision 5.0  1994/11/23  13:17:59  pfrench
+*FirstCheckIn
+*
+* Copyright (c)1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <dos/dos.h>
+#include <dos/dosextens.h>
+#include <string.h>
+#include <iffp/ilbm.h>
+
+#include <crouton_all.h>
+
+#include <filelist.h>
+#include <grazer.h>
+
+#ifndef CLASSBASE_H
+#include "classbase.h"
+#endif
+
+#ifndef PROOF_LIB_H
+#include <proof_lib.h>
+#endif
+
+#ifndef PROOF_STREAM_H
+#include "stream.h"
+#endif
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#endif
+
+extern struct Library	*ProofBase;
+extern struct ClassBase	*ClassBase;
+
+extern UBYTE AAMachine;
+
+#define BUILD_ICONFILE	TRUE
+
+#define CDROM_BYTESPERBLOCK		(2 * 1024)
+
+#define CROUTON_WIDTH		80
+#define CROUTON_HEIGHT		50
+
+extern LONG KPrintF( STRPTR fmt, ... );
+
+extern __asm struct BitMap *AllocIconBM(
+	register __d0 LONG width,
+	register __d1 LONG height,
+	register __d2 LONG depth );
+
+LONG IsCDROMDirectory( BPTR dirlock, struct FileInfoBlock *fib );
+LONG BuildFileListFromCDROM( struct List *list, BPTR dirlock, struct FileInfoBlock *fib );
+struct GrazerNode *ife_GetEntry( struct IconFileEntry *ife, APTR fh );
+struct BitMap *LoadIconBitMap( APTR fh );
+
+ULONG ob_SeekUp2IconsBitMap( APTR fh );
+ULONG ob_Seek2IconsBitMap( APTR fh );
+
+ULONG ob_IsGoodIconBM( APTR fh );
+
+ULONG ob_SeekUp2Form( APTR fh, ULONG form_id );
+ULONG ob_Seek2Form( APTR fh, ULONG form_id );
+
+ULONG ob_SeekPrevForm( APTR fh );
+ULONG ob_SeekNextForm( APTR fh );
+LONG BuildIconFile( STRPTR dirname );
+LONG WriteIconFile( struct IconBuildHeader *ibh, APTR fh );
+LONG IsCroutonFile( struct FileInfoBlock *fib );
+LONG ibn_GetCroutonInfo( struct IconBuildNode *ibn );
+LONG ExamineCroutonFile( struct IconBuildNode *ibn, APTR fh, LONG direction );
+
+
+struct IconFileEntry
+{
+	UBYTE					ife_filename[32];		/* filename w/in the directory */
+
+	UBYTE					ife_flags;				/* flag bits for IconFileEntry */
+	UBYTE					ife_pad[3];				/* padding for filename (long align) */
+
+	/* Info extracted from CroutonInfo and ".i" files */
+	ULONG					ife_cr_type;			/* Crouton Type */
+	ULONG					ife_cr_offset;			/* offset from beginning of file */
+	ULONG					ife_cr_size;			/* size of captured ".i" file */
+
+	/* These store the information on where the ".i" file for this 
+	 *	filename is in this in this larger group of icons.
+	 */
+
+	/* Info to fill out GrazerNodes with */
+	ULONG					ife_gn_filesize;		/* size of _actual_ file, _not_ '.i' */
+	ULONG					ife_gn_protection;	/* from fib_Protection */
+	struct DateStamp	ife_gn_ds;				/* from fib_Date (last modified) */
+	UWORD					ife_gn_dosclass;
+	UWORD					ife_gn_type;
+};
+
+#define IFEF_GETDEFAULT		0x01		/* Use Default image for type */
+
+#define ICONFILE_NAME		".allicons.i"
+
+#define ICONFILE_ID			MAKE_ID('I','A','L','L')
+#define ICONFILE_VERSION	1
+
+struct IconFileHeader
+{
+	ULONG		ifh_ID;				/* MUST == ICONFILE_ID */
+
+	UWORD		ifh_version;		/* version of icon file creation software */
+
+	UWORD		ifh_numentries;	/* how many icons are stored here */
+
+	/* structure is allocation extended */
+
+	struct IconFileEntry	ifh_ife[0];
+
+};
+
+#ifndef ICONFILE_WRITE_ONLY
+LONG IsCDROMDirectory( BPTR dirlock, struct FileInfoBlock *fib )
+{
+	LONG			result = FALSE;
+	BPTR			icon;
+
+	if ( icon = Lock(ICONFILE_NAME,ACCESS_READ) )
+	{
+#ifdef ALLICON_CDROMS_ONLY
+		struct InfoData	*id;
+
+		if ( id = AllocMem( sizeof(struct InfoData),MEMF_PUBLIC|MEMF_CLEAR) )
+		{
+			if ( Info(dirlock, id) )
+			{
+				if ( id->id_DiskState == ID_WRITE_PROTECTED )
+				{
+					if ( id->id_BytesPerBlock == CDROM_BYTESPERBLOCK )
+					{
+						result = TRUE;
+					}
+				}
+			}
+
+			FreeMem(id,sizeof(*id));
+		}
+#else
+		struct DateStamp	 ds = fib->fib_Date;
+
+		if ( Examine(icon,fib) )
+		{
+			/* If ".allicons" date >= directory date */
+			if (	(fib->fib_Date.ds_Days		>= ds.ds_Days) &&
+					(fib->fib_Date.ds_Minute	>= ds.ds_Minute) &&
+					(fib->fib_Date.ds_Tick		>= ds.ds_Tick) )
+			{
+				result = TRUE;
+			}
+		}
+
+		/* MUST re-examine the directory lock */
+		Examine(dirlock,fib);
+#endif
+
+		UnLock(icon);
+	}
+
+	return(result);
+}
+
+LONG BuildFileListFromCDROM(
+	struct List *list,
+	BPTR dirlock,
+	struct FileInfoBlock *fib )
+{
+	LONG		result = 0;
+	APTR		all_fh;
+
+	if ( all_fh = ob_NewObject( NULL,FILESTREAMCLASS,
+						FSTMA_FileName, ICONFILE_NAME,
+						TAG_DONE) )
+	{
+		struct IconFileHeader	*ifh;
+		LONG							 len;
+
+		ob_Seek(all_fh,0,OFFSET_END);
+		len = ob_Seek(all_fh,0,OFFSET_BEGINNING);
+
+		if ( ifh = (struct IconFileHeader *) ob_AllocMemObj(ClassBase->cb_allocator_ob,len) )
+		{
+			/* Read Entire icon file into memory!!! */
+			if ( ob_Read(all_fh,ifh,len) == len )
+			{
+				if ( ifh->ifh_ID == ICONFILE_ID )
+				{
+					if ( ifh->ifh_version <= ICONFILE_VERSION )
+					{
+						APTR			mem;
+
+						if ( mem = ob_NewObject( NULL, MEMSTREAMCLASS,
+										MEMSTMA_Buf,	ifh,
+										MEMSTMA_Len,	1,
+										TAG_DONE) )
+						{
+							WORD			i;
+
+							for ( i=0; i < ifh->ifh_numentries; i++ )
+							{
+								struct GrazerNode		*gn;
+
+								/* Set the memory stream attrs to the buffered ".i" file */
+								ob_SetAttrs(mem,
+									MEMSTMA_Buf,	(char *)ifh + ifh->ifh_ife[i].ife_cr_offset,
+									MEMSTMA_Len,	ifh->ifh_ife[i].ife_cr_size,
+									TAG_DONE);
+
+								if ( gn = ife_GetEntry(&ifh->ifh_ife[i],mem) )
+								{
+									AddTail(list,(struct Node *)gn);
+								}
+								else break;
+							}
+
+							/* did we get all the entries ??? */
+							if ( i == ifh->ifh_numentries )
+							{
+								result = TRUE;
+							}
+
+							ob_Dispose(mem);	/* dispose memory stream */
+						}
+					}
+				}
+			}
+
+			ob_Dispose(ifh);	/* Dispose the icon header */
+		}
+
+		ob_Dispose(all_fh);
+	}
+
+	return(result);
+}
+
+struct GrazerNode *ife_GetEntry( struct IconFileEntry *ife, APTR fh )
+{
+	struct GrazerNode		*gn = NULL;
+	struct SmartString	*ss;
+
+	if ( ss = AllocSmartString(ife->ife_filename,NULL) )
+	{
+		gn = (struct GrazerNode *)AllocGrazerNode(ss);
+		FreeSmartString(ss);
+
+		if ( gn )
+		{
+			gn->FileSize	= ife->ife_gn_filesize;
+			gn->Protection	= ife->ife_gn_protection;
+			gn->DateStamp	= ife->ife_gn_ds;
+			gn->DOSClass	= ife->ife_gn_dosclass;
+			gn->Type			= ife->ife_gn_type;
+
+			//if( ife->ife_cr_type != CT_UNSEEN )
+			//	gn->Type=CRuDToCR( ife->ife_cr_type );
+			//else
+			//	gn->Type=CR_UNKNOWN;
+
+			/* Set up behavior of the node */
+			gn->EditNode.Behavior = EN_DRAGGABLE;
+			if ( gn->DOSClass == EN_DIRECTORY )
+				gn->EditNode.Behavior |= EN_DOUBLE_ACTION;
+
+			switch(gn->Type)
+			{
+				case CR_VIDEO:
+				case CR_CONTROL:
+				case CR_AUDIO:
+				case CR_FXANIM:
+				case CR_FXILBM:
+				case CR_FXALGO:
+				case CR_FXCR:
+				case CR_PROJECT:
+				case CR_REXX:
+				case CR_FRAMESTORE:
+				case CR_KEY:
+					gn->EditNode.Behavior |= EN_DOUBLE_ACTION;
+			}
+
+			if ( ife->ife_flags & IFEF_GETDEFAULT )
+			{
+				gn->BitMap = GetDefaultBitmap(gn->Type);
+			}
+			else
+			{
+				/* seek to end of crouton ".i" file */
+				ob_Seek(fh,0,OFFSET_END);
+
+				if ( ob_SeekUp2IconsBitMap(fh) )
+				{
+					gn->BitMap = LoadIconBitMap(fh);
+				}
+
+				if ( !gn->BitMap )
+				{
+					/* seek to beginning of crouton ".i" file */
+					ob_Seek(fh,0,OFFSET_BEGINNING);
+		
+					if ( ob_Seek2IconsBitMap(fh) )
+					{
+						gn->BitMap = LoadIconBitMap(fh);
+					}
+				}
+				
+			}
+		}
+	}
+
+	return(gn);
+}
+#endif /* ICONFILE_WRITE_ONLY */
+
+struct FORMHeader
+{
+	ULONG			fh_ID;
+	ULONG			fh_len;
+};
+
+struct FORMHeaderForward
+{
+	ULONG			fh_ID;
+	ULONG			fh_len;
+	ULONG			fh_type;
+};
+
+struct PUSChunk
+{
+	struct FORMHeader	pc_fh;				/* Always == { ID_FORM, 0x10 } */
+	ULONG					pc_ID;				/* Always == ID_PUS */
+	ULONG					pc_prevID;			/* previous FORM type */
+	ULONG					pc_formlen;			/* Always == 4 */
+	ULONG					pc_prevlen;			/* size of previous form */
+};
+
+#define ID_PUS			MAKE_ID(' ','P','U','S')
+#define ID_CrUD		MAKE_ID('C','r','U','D')
+#define ID_TYPE		MAKE_ID('T','Y','P','E')
+
+#ifndef ICONFILE_WRITE_ONLY
+struct BitMap *LoadIconBitMap( APTR fh )
+{
+	struct BitMap			*bm = NULL;
+	LONG						oldpos;
+	BOOL						gotit = FALSE, err = 0;
+
+	LONG						dat[2];
+
+	/* seek past [FORM....ILBM] */
+
+	oldpos = ob_Seek(fh,3*sizeof(ULONG),OFFSET_CURRENT);
+
+	while ( !gotit && !err )
+	{
+		/* Read two longs, chunk_id and chunk_len */
+
+		if ( ob_Read(fh,dat,sizeof(dat)) == sizeof(dat) )
+		{
+			if ( dat[0] == ID_BMHD )
+			{
+				BitMapHeader	bmh;
+
+				/* read the chunk length */
+				if ( (dat[0] = ob_Read(fh,&bmh,sizeof(bmh))) == sizeof(bmh) )
+				{
+					bm = AllocIconBM(bmh.w,bmh.h,bmh.nPlanes);
+				}
+				else err = TRUE;
+
+				/* seek to end of chunk (size of chunk - amount read) */
+				ob_Seek(fh,dat[1]-dat[0],OFFSET_CURRENT);
+			}
+			else if ( dat[0] == ID_BODY )
+			{
+				if ( bm )
+				{
+					LONG			bp_offset = 0;
+					WORD			row;
+
+					for ( row = 0; row < bm->Rows; row++ )
+					{
+						WORD	plane;
+
+						for ( plane = 0; plane < bm->Depth ; plane++ )
+						{
+							if ( ob_Read(fh,((char *)bm->Planes[plane])+bp_offset,
+									bm->BytesPerRow) != bm->BytesPerRow )
+							{
+								err = TRUE;
+								break;
+							}
+						}
+
+            		if (err)	break;
+
+						bp_offset += bm->BytesPerRow;
+					}
+
+					if ( !err )
+						gotit = TRUE;
+				}
+			}
+			else
+			{
+				/* skip this chunk, move on to next chunk */
+				ob_Seek(fh,dat[1],OFFSET_CURRENT);
+			}
+		}
+		else err = TRUE;	/* read error */
+	}
+
+	/* return to beginning of FORM */
+	ob_Seek(fh,oldpos,OFFSET_BEGINNING);
+
+	if ( !gotit && bm )
+	{
+		FreeIconBM(bm);
+		bm = NULL;
+	}
+
+	return(bm);
+}
+
+ULONG ob_SeekUp2IconsBitMap( APTR fh )
+{
+	ULONG			retval = 0;
+
+	while ( retval = ob_SeekUp2Form(fh,ID_ILBM) )
+	{
+		if ( ob_IsGoodIconBM(fh) )
+		{
+			break;
+		}
+	}
+
+	return(retval);
+}
+
+ULONG ob_Seek2IconsBitMap( APTR fh )
+{
+	ULONG								retval = 0;
+
+	while ( !retval )
+	{
+		LONG								len;
+		struct FORMHeaderForward	fhf;
+
+		/* Read FORMHeader */
+		if ( (len = ob_Read(fh,&fhf,sizeof(fhf))) > 0 )
+		{
+			/* Is this a 'FORM....ILBM' ? */
+			if (	(len == sizeof(fhf)) &&
+					(fhf.fh_ID == ID_FORM) &&
+					(fhf.fh_type == ID_ILBM) )
+			{
+				retval = fhf.fh_ID;	/* Just try it */
+			}
+
+			/* back to beginning of form */
+			ob_Seek(fh,-len,OFFSET_CURRENT);
+		}
+		else break;
+
+		if ( retval )
+		{
+			if ( !ob_IsGoodIconBM(fh) )
+				retval = NULL;
+		}
+
+		if ( !retval )
+		{
+			if (len == sizeof(fhf))
+			{
+				/* Seek to next FORM */
+				ob_Seek(fh,fhf.fh_len + sizeof(struct FORMHeader),OFFSET_CURRENT);
+			}
+			else break;
+		}
+	}
+
+	return(retval);
+}
+
+ULONG ob_IsGoodIconBM( APTR fh )
+{
+	ULONG				retval = 0;
+	ULONG				len;
+	BitMapHeader	bmh;
+
+	/* seek past [FORM....ILBMBMHD....] */
+
+	ob_Seek(fh,5*sizeof(ULONG),OFFSET_CURRENT);
+	
+	if ( (len = ob_Read(fh,&bmh,sizeof(bmh))) == sizeof(bmh) )
+	{
+		if (	(bmh.w == CROUTON_WIDTH) &&
+				(bmh.h == CROUTON_HEIGHT) &&
+				(bmh.compression == cmpNone) )
+		{
+			if (	(bmh.nPlanes == 3) ||
+					((AAMachine) ? (bmh.nPlanes == 6) : (bmh.nPlanes == 2)) )
+			{
+				retval = TRUE;
+			}
+		}
+	}
+
+	/* Seek back to beginning of the FORM */
+	ob_Seek(fh,-((5*sizeof(ULONG))+len),OFFSET_CURRENT);
+
+	return(retval);
+}
+
+ULONG ob_SeekUp2Form( APTR fh, ULONG form_id )
+{
+	ULONG					retval = 0;
+
+	while ( retval = ob_SeekPrevForm(fh) )
+	{
+		/* retval now == the form id */
+
+		if ( retval == form_id )
+		{
+			break;	/* just return form_id */
+		}
+	}
+
+	return(retval);
+}
+#endif /* ICONFILE_WRITE_ONLY */
+
+ULONG ob_SeekPrevForm( APTR fh )
+{
+	ULONG					formtype = 0;
+
+	struct PUSChunk	pc;
+
+	/* Seek back one PUS chunk size */
+	if ( ((LONG)ob_Seek(fh,-sizeof(pc),OFFSET_CURRENT)) >= 0 )
+	{
+		/* Read it */
+		if ( ob_Read(fh,&pc,sizeof(pc)) == sizeof(pc) )
+		{
+			/* Is this is a ' PUS' chunk ? */
+			if ( (pc.pc_fh.fh_ID == ID_FORM) && (pc.pc_ID == ID_PUS) )
+			{
+				LONG				offset;
+
+				/* how far (with direction) do we want to seek */
+				offset = -(pc.pc_prevlen+sizeof(pc)+sizeof(struct FORMHeader));
+
+				/* Seek back to previous FORM */
+				if ( ((LONG)ob_Seek(fh,offset,OFFSET_CURRENT)) >= 0 )
+				{
+					/* return previous FORM ID */
+					formtype = pc.pc_prevID;
+				}
+			}
+		}
+	}
+
+	/* Return what type of FORM the pus chunk said this was. */
+	return(formtype);
+}
+
+ULONG ob_SeekNextForm( APTR fh )
+{
+	ULONG								formtype = 0;
+	LONG								len;
+	struct FORMHeaderForward	fhf;
+
+	/* Read it */
+	if ( (len = ob_Read(fh,&fhf,sizeof(fhf))) == sizeof(fhf) )
+	{
+		/* Is this a 'FORM' ? */
+		if ( fhf.fh_ID == ID_FORM )
+		{
+			/* return this FORM ID */
+			formtype = fhf.fh_type;
+		}
+	}
+
+	if ( len > 0 )
+	{
+		/* seek back to beginning of the FORM */
+		ob_Seek(fh,-len,OFFSET_CURRENT);
+	}
+
+	/* Return what type of FORM the pus chunk said this was. */
+	return(formtype);
+}
+
+#ifdef BUILD_ICONFILE
+
+struct IconBuildHeader
+{
+	struct MinList				ibh_lh;
+	struct IconFileHeader	ibh_ifh;
+};
+
+struct IconBuildNode
+{
+	struct MinNode			ibn_mn;
+
+	char						ibn_filename[32];
+
+	LONG						ibn_filepos;
+
+	struct IconFileEntry	ibn_ife;
+};
+
+LONG BuildIconFile( STRPTR dirname )
+{
+	LONG							result = 0;
+	BPTR							dirlock;
+	struct IconBuildHeader	ibh;
+
+	NewList( (struct List *) &ibh.ibh_lh );
+	ibh.ibh_ifh.ifh_ID = ICONFILE_ID;
+	ibh.ibh_ifh.ifh_version = ICONFILE_VERSION;
+	ibh.ibh_ifh.ifh_numentries = 0;
+
+	if (dirlock = Lock(dirname,ACCESS_READ))
+	{
+		struct FileInfoBlock		*fib;
+
+		if (fib = AllocMem(sizeof(struct FileInfoBlock),MEMF_PUBLIC|MEMF_CLEAR))
+		{
+			if (Examine(dirlock, fib))
+			{
+				if (fib->fib_DirEntryType >= 0)
+				{
+					BPTR				olddir;
+
+					result = TRUE;
+
+					olddir = CurrentDir(dirlock);
+
+					while (ExNext(dirlock,fib))
+					{
+						if ( IsCroutonFile(fib) )
+						{
+							struct IconBuildNode	*ibn;
+
+							if ( ibn = (struct IconBuildNode	*)ob_AllocMemObj(ClassBase->cb_allocator_ob,sizeof(*ibn)) )
+							{
+								strcpy(ibn->ibn_ife.ife_filename,fib->fib_FileName);
+								ibn->ibn_ife.ife_gn_filesize = fib->fib_Size;
+								ibn->ibn_ife.ife_gn_protection = fib->fib_Protection;
+								ibn->ibn_ife.ife_gn_ds = fib->fib_Date;
+
+								if (fib->fib_DirEntryType >= 0)
+								{
+									ibn->ibn_ife.ife_gn_dosclass = EN_DIRECTORY;
+									ibn->ibn_ife.ife_cr_type = CT_DIR;
+									ibn->ibn_ife.ife_gn_type = CRuDToCR(CT_DIR);
+								}
+								else
+								{
+									ibn->ibn_ife.ife_gn_dosclass = EN_FILE;
+								}
+
+								ibn_GetCroutonInfo( ibn );
+
+								// Now, add the item to the list
+								ibh.ibh_ifh.ifh_numentries++;
+								AddTail( (struct List *) &ibh.ibh_lh, (struct Node *) ibn );
+							}
+							else
+							{
+								result = FALSE;
+								break;
+							}
+						}
+					}
+
+					if ( result )
+					{
+						APTR				ifh;
+
+						/* Write out the ".allicons" file in this directory */
+						if ( ifh = ob_NewObject( NULL,STREAMBUFFERCLASS,
+											STMBUFA_BufSize,	(1024 * 4),
+											STMBUFA_StmClassName, FILESTREAMCLASS,
+											FSTMA_FileName,	ICONFILE_NAME,
+											FSTMA_OpenMode,	MODE_NEWFILE,
+											TAG_DONE) )
+						{
+							if ( WriteIconFile(&ibh,ifh) )
+							{
+								result = FALSE;
+							}
+
+							ob_Dispose(ifh);
+						}
+
+						if ( !result )
+						{
+							DeleteFile(ICONFILE_NAME);
+						}
+					}
+
+					CurrentDir(olddir);
+
+				}	// is a directory
+
+			} // examine
+
+			FreeMem(fib,sizeof(*fib));
+		} // alloc mem
+
+		UnLock(dirlock);
+	}
+
+	/* No conditions, just free the directory list */
+	{
+		struct Node	*node;
+
+		/* free entries in reverse order to reduce fragmentation */
+		while ( node = RemTail((struct List *) &ibh.ibh_lh) )
+		{
+			ob_Dispose(node);
+		}
+	}
+
+	return(result);
+}
+
+LONG WriteIconFile( struct IconBuildHeader *ibh, APTR fh )
+{
+	LONG			err = 0;		/* This function returns an error!!!! */
+
+	/* Write the header */
+	if ( ob_Write(fh,&ibh->ibh_ifh,sizeof(struct IconFileHeader)) == sizeof(struct IconFileHeader) )
+	{
+		struct IconBuildNode	*ibn;
+		LONG						 offset;
+
+		offset = sizeof(struct IconFileHeader) +
+					(sizeof(struct IconFileEntry) * ibh->ibh_ifh.ifh_numentries);
+
+		/* We need to pre-compute the file offsets that will be written to disk */
+		for ( ibn = (struct IconBuildNode *)ibh->ibh_lh.mlh_Head;
+				ibn->ibn_mn.mln_Succ;
+				ibn = (struct IconBuildNode *)ibn->ibn_mn.mln_Succ )
+		{
+			if ( ibn->ibn_ife.ife_cr_size )
+			{
+				/* offset withing large icon file */
+				ibn->ibn_ife.ife_cr_offset = offset;
+				offset += ibn->ibn_ife.ife_cr_size;
+			}
+		}
+
+		/* Now, write all of the struct IconFileEntry's to disk */
+		for ( ibn = (struct IconBuildNode *)ibh->ibh_lh.mlh_Head;
+				ibn->ibn_mn.mln_Succ;
+				ibn = (struct IconBuildNode *)ibn->ibn_mn.mln_Succ )
+		{
+			if ( ob_Write(fh,&ibn->ibn_ife,sizeof(ibn->ibn_ife)) != sizeof(ibn->ibn_ife) )
+			{
+				err = TRUE;
+				break;
+			}
+		}
+
+		if ( !err )
+		{
+			/* concatenate all of the extracted ".I" files to this file */
+			for ( ibn = (struct IconBuildNode *)ibh->ibh_lh.mlh_Head;
+					ibn->ibn_mn.mln_Succ;
+					ibn = (struct IconBuildNode *)ibn->ibn_mn.mln_Succ )
+			{
+				/* There was some crud in this file */
+				if ( ibn->ibn_ife.ife_cr_size )
+				{
+					APTR			buf;
+
+					if ( buf = (APTR)ob_AllocMemObj(ClassBase->cb_allocator_ob,ibn->ibn_ife.ife_cr_size) )
+					{
+						APTR			icon_fh;
+
+						/* ibn_filename will either be the source file or the ".i" file */
+
+						if ( icon_fh = ob_NewObject( NULL,FILESTREAMCLASS,
+											FSTMA_FileName, ibn->ibn_filename,
+											TAG_DONE) )
+						{
+							ob_Seek(icon_fh,ibn->ibn_filepos,OFFSET_BEGINNING);
+
+							/* Read into the buffer */
+							if ( ob_Read(icon_fh,buf,ibn->ibn_ife.ife_cr_size) == ibn->ibn_ife.ife_cr_size )
+							{
+								/* concatenate on to the iconfile */
+								if ( ob_Write(fh,buf,ibn->ibn_ife.ife_cr_size) != ibn->ibn_ife.ife_cr_size )
+									err = TRUE;
+							}
+							else err = TRUE;
+
+							ob_Dispose(icon_fh);
+						}
+						else err = TRUE;
+
+						ob_Dispose(buf);
+					}
+					else err = TRUE;
+				}
+
+				if ( err ) break;
+			}
+		}
+		
+		if ( !err )
+		{
+			/* Write out a pad to prevent this file from being
+			 *	parsed backwards via the " PUS" chunk of the last
+			 * included ".i" file.
+			 */
+
+			/* This pad could be anything, but this time it's a ULONG
+			 * that will contain the "IALL" longword in the header
+			 */
+			if ( ob_Write(fh,&ibh->ibh_ifh,sizeof(ULONG)) != sizeof(ULONG) )
+			{
+				err = TRUE;
+			}
+		}
+	}
+	else err = TRUE;
+
+	return(err);
+}
+
+LONG IsCroutonFile( struct FileInfoBlock *fib )
+{
+	LONG			result = FALSE;
+	LONG			len;
+
+	if ( len = strlen(fib->fib_FileName) )
+	{
+		result = TRUE;
+
+      if (!(stricmp(".i",&fib->fib_FileName[len-2])) )
+      	result = FALSE;
+		else if ( !(stricmp(".info",&fib->fib_FileName[len-5])) )
+			result = FALSE;
+	}
+
+	return(result);
+}
+
+LONG ibn_GetCroutonInfo( struct IconBuildNode *ibn )
+{
+	LONG			result = 0;
+	APTR			fh;
+
+	/*	Plan of attack
+	 *
+	 *		A.	Examine the crouton Icon (.i) file, else
+	 *		B.	Examine the crouton file, extract the ".i" else
+	 *		C.	Use CroutonLib to determine file type,etc.
+	 *
+	 */
+
+	/* append ".i" to filename */
+
+	strcpy(ibn->ibn_filename,ibn->ibn_ife.ife_filename);
+	strcat(ibn->ibn_filename,".i");
+
+	if ( fh = ob_NewObject( NULL, STREAMBUFFERCLASS,
+						STMBUFA_BufSize,	1024 * 2,
+						STMBUFA_StmClassName, FILESTREAMCLASS,
+						FSTMA_FileName, ibn->ibn_filename,
+						TAG_DONE) )
+	{
+		/* parse the ".i" file forwards only */
+		ob_Seek(fh,0,OFFSET_BEGINNING);
+
+		if ( ExamineCroutonFile(ibn,fh,1) )
+		{
+			result = TRUE;
+		}
+
+		ob_Dispose(fh);
+	}
+
+	/* use original filename */
+
+	if ( !result )
+	{
+		strcpy(ibn->ibn_filename,ibn->ibn_ife.ife_filename);
+
+		if ( fh = ob_NewObject( NULL, STREAMBUFFERCLASS,
+							STMBUFA_BufSize,	1024 * 2,
+							STMBUFA_StmClassName, FILESTREAMCLASS,
+							FSTMA_FileName, ibn->ibn_filename,
+							TAG_DONE) )
+		{
+			ob_Seek(fh,0,OFFSET_END);
+
+			if ( ExamineCroutonFile(ibn,fh,0) )
+			{
+				result = TRUE;
+			}
+
+			ob_Dispose(fh);
+		}
+	}
+
+	if ( !result || !ibn->ibn_ife.ife_cr_type )
+	{
+		// non-zero members won't be filled
+		struct CroutonInfo ci={CT_UNSEEN,0,(char *)1, 1, (APTR)1, (struct BitMap *) 1};
+
+		/* see if the crouton library can be of any help */
+		GetCroutonInfo(ibn->ibn_ife.ife_filename,&ci);
+
+		if ( ibn->ibn_ife.ife_gn_dosclass != EN_DIRECTORY )
+		{
+			if ( ci.CroutonType == CT_UNSEEN )
+				ibn->ibn_ife.ife_gn_type = CR_UNKNOWN;
+			else
+				ibn->ibn_ife.ife_gn_type = CRuDToCR(ci.CroutonType);
+
+			ibn->ibn_ife.ife_cr_type = ci.CroutonType;
+		}
+
+		/* If we didn't get a bitmap from scanning the file earlier */
+		if ( !result )
+		{
+			ibn->ibn_ife.ife_cr_offset = 0;
+			ibn->ibn_ife.ife_cr_size = 0;
+			ibn->ibn_ife.ife_flags = IFEF_GETDEFAULT;
+		}
+
+		result = TRUE;
+	}
+
+	return(result);
+}
+
+LONG ExamineCroutonFile( struct IconBuildNode *ibn, APTR fh, LONG direction )
+{
+	LONG			retval = 0;
+	ULONG			type;
+	LONG			pos;
+	BOOL			found_ilbm = 0;
+
+	pos = ob_Seek(fh,0,OFFSET_CURRENT);
+
+	if ( ibn->ibn_ife.ife_gn_dosclass == EN_DIRECTORY )
+	{
+		retval = TRUE;
+	}
+
+	while ( type = ((direction>0)? ob_SeekNextForm(fh):ob_SeekPrevForm(fh)) )
+	{
+		BOOL			err = 0;
+
+		if ( type == ID_CrUD )
+		{
+			LONG			oldpos;
+			LONG			dat[2];
+
+			/* seek past [FORM....CrUD] */
+
+			oldpos = ob_Seek(fh,3*sizeof(ULONG),OFFSET_CURRENT);
+
+			while ( !retval && !err )
+			{
+				/* Read two longs, chunk_id and chunk_len */
+
+				if ( ob_Read(fh,dat,sizeof(dat)) == sizeof(dat) )
+				{
+					if ( dat[0] == ID_TYPE )
+					{
+						ULONG			crud[2];
+
+						/* read two longs from the chunk */
+						if ( (dat[0] = ob_Read(fh,crud,sizeof(crud))) == sizeof(crud) )
+						{
+							ibn->ibn_ife.ife_cr_type = crud[0];
+							ibn->ibn_ife.ife_gn_type = CRuDToCR(crud[0]);
+							retval = TRUE;
+						}
+						else err = TRUE;
+
+						/* seek to end of chunk (size of chunk - amount read) */
+						if ( dat[1] != dat[0] )
+							ob_Seek(fh,dat[1]-dat[0],OFFSET_CURRENT);
+					}
+					else
+					{
+						/* skip this chunk, move on to next chunk */
+						ob_Seek(fh,dat[1],OFFSET_CURRENT);
+					}
+				}
+				else err = TRUE;
+			}
+
+			ob_Seek(fh,oldpos,OFFSET_BEGINNING);
+		}
+		else if ( type == ID_ILBM )
+		{
+			LONG				oldpos;
+			BitMapHeader	bmh;
+
+			/* seek past [FORM....ILBMBMHD....] */
+
+			oldpos = ob_Seek(fh,5*sizeof(ULONG),OFFSET_CURRENT);
+
+			if ( ob_Read(fh,&bmh,sizeof(bmh)) == sizeof(bmh) )
+			{
+				if (	(bmh.w == CROUTON_WIDTH) &&
+						(bmh.h == CROUTON_HEIGHT) &&
+						(bmh.compression == cmpNone) )
+				{
+					/* Does not discern between AA and old chipsets */
+					if (	(bmh.nPlanes == 3) ||
+							(bmh.nPlanes == 6) ||
+							(bmh.nPlanes == 2) )
+					{
+						found_ilbm = TRUE;
+					}
+				}
+			}
+
+			ob_Seek(fh,oldpos,OFFSET_BEGINNING);
+		}
+
+		if ( direction > 0 )
+		{
+			LONG			dat[2];
+
+			/* Read [FORM....] */
+
+			if ( ob_Read(fh,dat,sizeof(dat)) == sizeof(dat) )
+			{
+				ob_Seek(fh,dat[1],OFFSET_CURRENT);
+			}
+			else err = TRUE;
+		}
+
+		if (err) break;
+	}
+
+	/* get length by seeking to starting position */
+
+	if ( direction > 0 )
+	{
+		ibn->ibn_filepos = pos;						/* beginning position */
+		pos = ob_Seek(fh,pos,OFFSET_CURRENT);	/* ending position */
+	}
+	else
+	{
+		ibn->ibn_filepos = ob_Seek(fh,pos,OFFSET_BEGINNING);
+	}
+
+	ibn->ibn_ife.ife_cr_size = pos - ibn->ibn_filepos;
+
+	return( retval || found_ilbm );
+}
+
+#endif /* BUILD_ICONFILE */
+@
+
+
+5.14
+log
+@Making sure we call croutonlib with the data file name
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.13 1995/01/03 22:32:47 pfrench Exp pfrench $
+d5 3
+a979 3
+		/* Get data file name */
+		strcpy(ibn->ibn_filename,ibn->ibn_ife.ife_filename);
+
+d981 1
+a981 1
+		GetCroutonInfo(ibn->ibn_filename,&ci);
+@
+
+
+5.13
+log
+@Now call croutonlib if crouton type undetermined after scanning
+files and finding images but not CrUD chunks
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.12 1995/01/03 21:27:54 pfrench Exp pfrench $
+d5 4
+d976 3
+@
+
+
+5.12
+log
+@Now will delete allicons file if error on write
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.11 1995/01/03 21:01:03 pfrench Exp pfrench $
+d5 3
+d968 1
+a968 1
+	if ( !result )
+d986 9
+a994 3
+		ibn->ibn_ife.ife_cr_offset = 0;
+		ibn->ibn_ife.ife_cr_size = 0;
+		ibn->ibn_ife.ife_flags = IFEF_GETDEFAULT;
+@
+
+
+5.11
+log
+@Maybe fixed tiny bug in allicons generation, found that most
+of the problems were actually in the icon files themselves,
+many of them didn't have CrUD chunks, which is a major no-no
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.10 1994/12/23 21:49:35 pfrench Exp pfrench $
+d5 5
+d750 5
+@
+
+
+5.10
+log
+@Decided to put those tags back in.  I'll re-enable buffering
+in proof.library when it works.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.9 1994/12/23 20:44:59 pfrench Exp pfrench $
+d5 4
+d957 2
+a958 1
+		struct CroutonInfo  ci = {CT_UNSEEN,0,0,0,0,0};
+d1028 2
+a1029 1
+						ob_Seek(fh,dat[1]-dat[0],OFFSET_CURRENT);
+@
+
+
+5.9
+log
+@Temporarily removing buffered io from iconfile build routines.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.8 1994/12/22 21:25:31 pfrench Exp pfrench $
+d5 3
+d728 1
+a728 1
+						if ( ifh = ob_NewObject( NULL,/* STREAMBUFFERCLASS,
+d730 1
+a730 1
+											STMBUFA_StmClassName, */ FILESTREAMCLASS,
+d911 1
+a911 1
+	if ( fh = ob_NewObject( NULL,/* STREAMBUFFERCLASS,
+d913 1
+a913 1
+						STMBUFA_StmClassName, */ FILESTREAMCLASS,
+d934 1
+a934 1
+		if ( fh = ob_NewObject( NULL,/* STREAMBUFFERCLASS,
+d936 1
+a936 1
+							STMBUFA_StmClassName, */ FILESTREAMCLASS,
+@
+
+
+5.8
+log
+@Fixed bug where cdrom check was messing up directory parsing
+if there was an .allicons file, but the date wasn't recent
+enough.  Fixed by re-examine()ing the dirlock
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.7 1994/12/19 22:39:51 pfrench Exp pfrench $
+d5 5
+d492 9
+a500 1
+		len = ob_Read(fh,&fhf,sizeof(fhf));
+d502 2
+a503 6
+		/* Is this a 'FORM....ILBM' ? */
+		if (	(len == sizeof(fhf)) &&
+				(fhf.fh_ID == ID_FORM) &&
+				(fhf.fh_type == ID_ILBM) )
+		{
+			retval = fhf.fh_ID;	/* Just try it */
+d505 1
+a505 3
+
+		/* back to beginning of form */
+		ob_Seek(fh,-len,OFFSET_CURRENT);
+d725 1
+a725 2
+						if ( ifh = ob_NewObject( NULL,STREAMBUFFERCLASS,
+											STMBUFA_StmClassName, FILESTREAMCLASS,
+d727 1
+d908 1
+a908 2
+	if ( fh = ob_NewObject( NULL,STREAMBUFFERCLASS,
+						STMBUFA_StmClassName, FILESTREAMCLASS,
+d910 1
+d931 1
+a931 2
+		if ( fh = ob_NewObject( NULL,STREAMBUFFERCLASS,
+							STMBUFA_StmClassName, FILESTREAMCLASS,
+d933 1
+@
+
+
+5.7
+log
+@Modified for now shared-code proof.library.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.6 1994/12/02 14:10:16 pfrench Exp pfrench $
+d5 3
+d190 3
+@
+
+
+5.6
+log
+@changed ".allicons" to ".allicons.i" and using new buffer sizes.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.5 1994/11/30 23:42:32 pfrench Exp pfrench $
+d5 3
+a42 3
+#include "object.h"
+#include "stream.h"
+
+d47 8
+d62 1
+d64 1
+@
+
+
+5.5
+log
+@fixed a couple of parsing errors.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.4 1994/11/29 13:07:16 pfrench Exp pfrench $
+d5 3
+d119 1
+a119 1
+#define ICONFILE_NAME		".allicons"
+d704 1
+a861 2
+		else if ( !(stricmp(ICONFILE_NAME,fib->fib_FileName)) )
+			result = FALSE;
+d887 1
+d910 1
+@
+
+
+5.4
+log
+@put in some defines to allow allicons utility to link
+with little extra code.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.3 1994/11/28 20:38:25 pfrench Exp pfrench $
+d5 4
+d600 5
+a604 2
+	/* seek back to beginning of the FORM */
+	ob_Seek(fh,-len,OFFSET_CURRENT);
+d698 3
+a700 2
+						/* Write out the ".i" file in this directory */
+						if ( ifh = ob_NewObject( NULL,FILESTREAMCLASS,
+d883 2
+a884 1
+	if ( fh = ob_NewObject( NULL,FILESTREAMCLASS,
+d905 2
+a906 1
+		if ( fh = ob_NewObject( NULL,FILESTREAMCLASS,
+d951 1
+d1026 1
+a1026 1
+						retval = TRUE;
+d1064 1
+a1064 1
+	return(retval);
+@
+
+
+5.3
+log
+@First working version.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.2 1994/11/28 14:47:48 pfrench Exp $
+d5 3
+d131 1
+a131 1
+
+d135 1
+a135 1
+	BPTR			iconfile;
+d137 1
+a137 1
+	if ( iconfile = Open(ICONFILE_NAME,MODE_OLDFILE) )
+d139 1
+a139 1
+#ifdef LATER
+d158 12
+a169 1
+		result = TRUE;
+d172 1
+a172 1
+		Close(iconfile);
+d327 1
+d355 1
+d543 1
+d637 1
+a637 1
+		if (fib = AllocMem(sizeof(struct FileInfoBlock),MEMF_CLEAR))
+a861 8
+	/* These are the values we need to fill out
+			ife->ife_gn_type = ;
+			ife->ife_cr_type = ;
+			ife->ife_cr_offset = ;
+			ife->ife_cr_size = ;
+			ife->ife_flags = ;
+	 */
+
+d991 27
+@
+
+
+5.2
+log
+@Got everything compiling correctly, ready to test.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.1 1994/11/23 13:53:07 pfrench Exp $
+d5 3
+d54 2
+d65 1
+d67 2
+d70 1
+d72 2
+d75 1
+d80 1
+a80 1
+LONG ExamineCroutonFile( struct IconBuildNode *ibn, APTR fh );
+d109 1
+a109 1
+#define ICONFILE_NAME		".i"
+d136 1
+d154 3
+d295 12
+d320 7
+d438 43
+a510 2
+// if((ExamineCroutonIconFile(GetCString(Node->EditNode.Node.Name),&CI)!=CrI_OK)
+
+d562 24
+d640 1
+a640 1
+								CopyMem(fib->fib_FileName,ibn->ibn_ife.ife_filename,32);
+d646 1
+d648 3
+d652 1
+d654 1
+d798 16
+d833 2
+d870 2
+a871 1
+		ob_Seek(fh,0,OFFSET_END);
+d873 1
+a873 1
+		if ( ExamineCroutonFile(ibn,fh) )
+d893 1
+a893 1
+			if ( ExamineCroutonFile(ibn,fh) )
+d909 9
+a917 4
+		if ( ci.CroutonType == CT_UNSEEN )
+			ibn->ibn_ife.ife_gn_type = CR_UNKNOWN;
+		else
+			ibn->ibn_ife.ife_gn_type = CRuDToCR(ci.CroutonType);
+a918 1
+		ibn->ibn_ife.ife_cr_type = ci.CroutonType;
+d927 1
+a927 1
+LONG ExamineCroutonFile( struct IconBuildNode *ibn, APTR fh )
+d935 6
+a940 1
+	while ( type = ob_SeekPrevForm(fh) )
+d942 2
+a946 1
+			BOOL			gotit = FALSE,err = 0;
+d953 1
+a953 1
+			while ( !gotit && !err )
+d968 1
+a968 1
+							gotit = TRUE;
+d986 15
+d1005 9
+a1013 1
+	ibn->ibn_filepos = ob_Seek(fh,pos,OFFSET_BEGINNING);
+@
+
+
+5.1
+log
+@Code still untested. added crouton scanning code.
+@
+text
+@d3 1
+a3 1
+* $Id: iconfile.c,v 5.0 1994/11/23 13:17:59 pfrench Exp pfrench $
+d5 3
+d44 2
+d51 20
+d97 1
+a97 1
+#define ICONFILE_NAME		".iconsall"
+d119 1
+a119 1
+	LONG			result = 0;
+d134 1
+a134 1
+						retval = TRUE;
+d191 1
+a191 1
+									MEMSTMA_Len,	ifh->ifh_ife[i].ife_cr_len,
+d204 1
+a204 1
+								retval = TRUE;
+d229 1
+a229 1
+		gn = (struct GrazerNode *)AllocGrazerNode(ss,NULL);
+d240 4
+a243 4
+			if(ife->ife_cr_type != CT_UNSEEN)
+				gn->Type=CRuDToCR(ife->ife_cr_type);
+			else
+				gn->Type=CR_UNKNOWN;
+d294 1
+a294 1
+	struct FormHeader	pc_fh;				/* Always == { ID_FORM, 0x10 } */
+d303 1
+d325 1
+a325 1
+				struct BitMapHeader	bmh;
+d392 1
+a392 1
+	while ( retval = SeekUp2Form(fh,ID_ILBM) )
+d405 3
+a407 3
+	ULONG						retval = 0;
+	ULONG						len;
+	struct BitMapHeader	bmh;
+d420 1
+a420 1
+					((AAMachine) ? (bmh.nPlanes == 6) : (bmh.nPlanes == 2))
+a490 2
+	LONG							ibh_curoffset;
+
+d497 5
+a514 1
+	ibh.ibh_ifh.ifh_curoffset = sizeof(ibh_ifh);
+d516 1
+a516 1
+	if (dirlock = Lock(GetCString(Path),ACCESS_READ))
+d538 1
+a538 1
+							if ( ibn = ob_AllocMemObj(ClassBase->cb_allocator_ob,sizeof(*ibn)) )
+d550 1
+a550 1
+								GetCroutonInfo( &ibn->ibn_ife );
+a552 1
+								ibh.ibh_ifh.ifh_curoffset += sizeof(struct IconFileEntry);
+d561 2
+a562 6
+#ifdef FILELIST_CODE
+							if (TempString = AllocSmartString(Fib->fib_FileName,NULL))
+							{
+								SmartNode = CreateNode(TempString);
+								FreeSmartString(TempString);
+								if (!SmartNode) goto ErrorExit;
+d564 3
+a566 1
+								NodeFIB(SmartNode,Fib,0);
+d568 9
+a576 10
+								if ( LoadNodeImage((struct GrazerNode *)SmartNode) )
+								{
+									AddTail(List,(struct Node *)SmartNode);
+								}
+								else
+								{
+									if( ((struct GrazerNode *)SmartNode)->BitMap )
+										FreeIconBM(((struct GrazerNode *)SmartNode)->BitMap);
+									FreeSmartNode(SmartNode);
+								}
+d578 2
+a579 1
+#endif
+d595 11
+d609 89
+d716 1
+a716 1
+LONG GetCroutonInfo( struct IconFileEntry *ife )
+d739 3
+d743 1
+a743 1
+						FSTMA_FileName, ife->ife_filename,
+d747 46
+d798 1
+a798 1
+LONG ExamineCroutonFile( struct IconFileEntry *ife, APTR fh )
+d831 2
+a832 1
+							ife->ife_cr_type = crud[0];
+d855 1
+a855 1
+	pos -= ob_Seek(fh,pos,OFFSET_BEGINNING);
+d857 1
+a857 1
+	ife->ife_cr_size = pos;
+@
+
+
+5.0
+log
+@FirstCheckIn
+@
+text
+@d2 5
+a6 3
+* $DirCache.c$
+* $Id: DirCache.c,v 2.7 1994/11/18 16:29:15 pfrench Exp $
+* $Log: DirCache.c,v $
+a37 1
+
+d500 2
+a503 2
+					result = TRUE;
+
+d594 1
+d604 17
+d622 63
+@

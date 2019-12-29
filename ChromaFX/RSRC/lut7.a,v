@@ -1,0 +1,1660 @@
+head     2.0;
+branch   ;
+access   ;
+symbols  ;
+locks    ; strict;
+comment  @*@;
+
+
+2.0
+date     92.05.18.23.59.10;  author Hartford;  state Exp;
+branches ;
+next     ;
+
+
+desc
+@@
+
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* LUT7.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id$
+*
+* $Log$
+*
+*********************************************************************
+
+	NOLIST
+	idnt	"LUT7"
+	section	LUT_text,code
+
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT0.i"
+	Include	"LUT1.i"
+	Include	"LUT2.i"
+	Include	"LUT3.i"
+	Include	"LUT4.i"
+	Include	"LUT5.i"
+	Include	"LUT6.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTB.i"
+	Include	"LUTBits.i"
+;;	LIST
+	PAGE
+*************************************************************************
+*									*
+*	TstSendEdit:							*
+*									*
+*	Checks To See If The Current Position Is Visable In Edit Area.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value Of Position To Check.				*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> This Position Is Visable.			*
+*	CC	!= Zero -> This Position Is Not Visable.		*
+*									*
+*	18.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_TstSendEdit
+LUT_TstSendEdit:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+	DIVU.W	#3,D0			; Are We In The 2nd Position.
+	SWAP.W	D0			; Get Modulus.
+	SUBQ.W	#1,D0			; In 2nd Position?
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoSpread:							*
+*									*
+*	Does a Spread Between Two Points.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	Spread Is Performed Between Two Points.				*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoSpread
+LUT_DoSpread:
+	MOVE.L	A1,-(A7)		; Save Calling State.
+	LEA.L	LUT_Spread(PC),A1	; Address of Spread Subroutine.
+	BSR.S	LUT_DoRainbow		; Draw The Spread.
+	MOVEA.L	(A7)+,A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoSpectrum:							*
+*									*
+*	Does a Spectrum Between Two Points.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	Spectrum Is Performed Between Two Points.			*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoSpectrum
+LUT_DoSpectrum:
+	MOVE.L	A1,-(A7)		; Save Calling State.
+	LEA.L	LUT_Spectrum(PC),A1	; Address of Sprectum Subroutine.
+	BSR.S	LUT_DoRainbow		; Draw The Sprecturm.
+	MOVEA.L	(A7)+,A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoRandom:							*
+*									*
+*	Does a Random Spread Between Two Points.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	Random Spread Is Performed Between Two Points.			*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoRandom
+LUT_DoRandom:
+	MOVE.L	A1,-(A7)		; Save Calling State.
+	LEA.L	LUT_RandomSpread(PC),A1	; Address of Spread Subroutine.
+	BSR.S	LUT_DoRainbow		; Draw The Sprecturm.
+	MOVEA.L	(A7)+,A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoSnow:								*
+*									*
+*	Does a Snow Spread Between Two Points.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	Snow Spread Is Performed Between Two Points.			*
+*									*
+*	26.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoSnow
+LUT_DoSnow:
+	MOVE.L	A1,-(A7)		; Save Calling State.
+	LEA.L	LUT_SnowSpread(PC),A1	; Address of Spread Subroutine.
+	BSR.S	LUT_DoRainbow		; Draw The Sprecturm.
+	MOVEA.L	(A7)+,A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoRainbow:							*
+*									*
+*	Does a Rainbow Between Two Points.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A1.L	= Address of Spread / Spectrum / Random Subroutine.	*
+*									*
+*	Output:								*
+*									*
+*	Rainbow Is Performed Between Two Points.			*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoRainbow
+LUT_DoRainbow:
+	MOVEM.L	D0-D2/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	High Light The Image, and Wait For Ending Pick.
+*
+	BSR	LUT_HighLightGadget	; High Light The Image.
+	BEQ	DORANA			; Exit If Canceled.
+	MOVE.L	A0,-(A7)		; Save Pointer To Gadget.
+*
+*	Wait For The User To Pick Ending Range.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_ReadMessage		; A0.L = Address of Gadget.
+	CMPI.L	#GADGETDOWN,D1		; Did They Press Down?
+	BNE	DORAN9			; Exit If Not.
+	CMPA.L	#LUT_EditColorsFG,A0	; Did They Pick Edit Color?
+	BNE	DORAN9			; Exit If Not Picked.
+*
+*	Make Mouse Position, and Do The Rainbow.
+*
+	LEA.L	TB_SoftSprite(A5),A0	; Address of Structure.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	VBI_MouseX(A0),D0	; Get Mouse X Position.
+	MOVEM.L	D0/A1,-(A7)		; Save Calling State.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+	MOVEM.L	(A7)+,D0/A1		; Return Calling State.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DORAN1			; Jump If >= 0.
+	MOVEQ.L	#0,D0			; Else Set To Zero.
+	BRA.S	DORAN2			; Skip Else Part.
+DORAN1	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DORAN2			; Jump If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz-1)<<2,D0 ;Else Set To Maximum.
+DORAN2	LSR.W	#2,D0			; Scale The Input.
+	MOVEQ.L	#0,D1			; Make Stating Position.
+	MOVE.B	LTE_EditColor(A4),D1	; D1.L = Starting Position.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New as Old.
+*
+*	Loop Showing Color In Edit Area Until Another Message Shows Up.
+*
+	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEON		; Turn On Mouse Message.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_MakeEditLine	; Make The New Edit Line.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+DORAN3	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_MOVMSG		; D0.L = Mouse xy Position.
+	BNE.S	DORAN6			; Exit If No Message.
+	SWAP.W	D0			; Put In Proper Range.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DORAN4			; Exit If >= Left Edge.
+	MOVEQ.L	#0,D0			; Else < Left Edge.
+	BRA.S	DORAN5			; Skip Else Part.
+DORAN4	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DORAN5			; Exit If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz<<2)-1,D0 ;Else Set To Maximum.
+DORAN5	LSR.W	#2,D0			; Scale The Input.
+	CMP.B	LTE_EditColor(A4),D0	; Did The Color Change?
+	BEQ.S	DORAN3			; Jump If Color Did Not Change.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New Edit Color.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_MakeEditLine	; Make The New Edit Line.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	BRA.S	DORAN3			; Show New Color.
+DORAN6	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEOFF		; Turn Off Mouse Messages.
+*
+*	Now Do The Rainbow.
+*
+	MOVEQ.L	#0,D0			; Need To Get To The Color
+	MOVE.B	LTE_EditColor(A4),D0	; That We Are On.
+	CMP.B	D1,D0			; New Color == Old Color??
+	BEQ.S	DORAN8			; Exit If New == Old.
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	DORAN7			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+DORAN7	JSR	(A1)			; Do The Rainbow.
+DORAN8	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	MOVEQ.L	#-1,D0			; Send Only One Indicator.
+	CLR.W	D0			; Make The One Position.
+	MOVE.B	LTE_EditColor(A4),D0	; D0.L = Indicator Position.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Arrow.
+DORAN9	MOVEA.L	(A7)+,A0		; Return Pointer To Gadget.
+	BSR	LUT_HighLightOff	; Turn Off The High Lighting.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+DORANA	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D2/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickColorBW:							*
+*									*
+*	Selects the Color or Black & White Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	New Color or Black & White Fast Gadet Is Picked.		*
+*									*
+*	22.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickColorBW
+LUT_PickColorBW:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#2,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_BAWFG,A1		; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	PICOBW2			; Exit If Nothing Picked.
+*
+*	Set the Flag Based On B&W or Color Picked.
+*
+	BCLR.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4) ; Clear The Flag.
+	TST.W	FG_HiLiteMask(A1)		  ; Is Black & White Selected?
+	BEQ.S	PICOBW1				  ; Jump If Color.
+	BSET.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4) ; Else If B&W.
+*
+*	Build Sprite At Current Position.
+*
+PICOBW1	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+	BSET.B	#LTEF_EditChange,LTE_Flags(A4)	; We Have An Edit Change.
+	BSR	LUT_ShowCurrent		; CC != Zero -> Hardware Has Sprite.
+*
+*	Exit Subroutine.
+*
+PICOBW2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickTransitionFilter:						*
+*									*
+*	Selects the Transition or Filter Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	New Transition or Filter, Fast Gadget Is Selected.		*
+*									*
+*	23.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickTransitionFilter
+LUT_PickTransitionFilter:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#2,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_TransitionFG,A1	; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	PTRFI2			; Exit If Nothing Picked.
+*
+*	Set the Current Display Mode Position.
+*
+	ANDI.B	#~(1<<LUTF_TRANSITION),LUT_DisplayMode(A4) ;Get Rid Of Old Mode.
+	MOVEQ.L	#1<<LUTF_TRANSITION,D0	; Assume Transition.
+	CMPA.L	A0,A1			; Was Transition Picked?
+	BEQ.S	PTRFI1			; Jump If Transition.
+	MOVEQ.L	#0,D0			; Else Filter.
+PTRFI1	OR.B	D0,LUT_DisplayMode(A4)	; Set In New Mode.
+*
+*	Build Sprite At Current Position.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+;;;;	BSET.B	#LUTF_MapChange,LUT_Flags(A4)	; Map Has Changed.
+	BSET.B	#LTEF_EditChange,LTE_Flags(A4)	; We Have An Edit Change.
+	BSR	LUT_ShowCurrent		; CC != Zero -> Hardware Has Sprite.
+*
+*	Exit Subroutine.
+*
+PTRFI2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CycleArrowImage:						*
+*									*
+*	Changes The Image In the Cycle LUT Image Arrow.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	New Arrow In Cycle LUT Is Picked.				*
+*									*
+*	23.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CycleArrowImage
+LUT_CycleArrowImage:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	BSR	LUT_SetHiLite		; HiLite The Image.
+	MOVE.L	#LUT_AROWLN,D0		; Maximum Number of Images.
+	LEA.L	LUT_AROWTB(PC),A1	; A1.L = Address of First Gadget.
+	BSR	LUT_CycleImage		; Cycle The Image Pointers.
+*
+*	Set the Current Cycle Image Position.
+*
+	MOVE.W	#LUT_AROWLN-1,D0	; Loop Counter.
+	MOVEQ.L	#0,D1			; Index To Image.
+	LEA.L	LUT_AROWTB(PC),A0	; Address Of Image Table.
+	MOVEA.L	LUT_CycleArrowFG+FG_Data,A1 ; Address Of Image.
+CYARI1	CMPA.L	(A0)+,A1		; Found Image?
+	BEQ.S	CYARI2			; Jump If Image Found.
+	ADDQ.W	#1,D1			; Move To Next Position.
+	DBF	D0,CYARI1		; Loop Until Found.
+	MOVEQ.L	#0,D1			; No Position Found.
+CYARI2	ANDI.B	#~LUTM_CYCLE,LUT_DisplayMode(A4) ; Remove Old Cycle Position.
+	LSL.W	#2,D1			; Move Into Position.
+	OR.B	D1,LUT_DisplayMode(A4)	; Save Result.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+	BSET.B	#LTEF_EditChange,LTE_Flags(A4)	; We Have An Edit Change.
+*
+*	If In First Position, No Arrows, Nothing HiLited.
+*
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	TST.W	D1			; In First Position?
+	BNE.S	CYARI5			; Jump If Not First Position.
+	JSR	_LVOForbid(A6)		; Forbid All Other Tasks from Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+*
+*	DeHiLite All 4 Images.
+*
+	LEA.L	LUT_CycleArrowFG,A0	; A0.L = Address of First Image.
+	MOVEA.L	A0,A1			; A1.L = Address of First Image.
+	MOVEQ.L	#4-1,D0			; Loop Counter.
+CYARI3	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not HiLighted.
+	MOVEA.L	gg_NextGadget(A1),A1	; Point To Next Gadget In List.
+	DBF	D0,CYARI3		; Loop Until Done.
+*
+*	Redraw The Gadget On the Screen.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#4,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+*
+*	If the TBar is not in the LocalTBar Position, Then Move It There.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	LUT_LocalTBar(A4),D0	; D0.L = Current TBar Position.
+	CMP.W	TB_TValSec(A5),D0	; Do They Differ?
+	BEQ.S	CYARI4			; Jump If Already In That Position.
+	MOVE.W	D0,TB_TValSec(A5)	; Move To LocalTBar Position.
+	LSL.L	#7,D0			; D0.L = Scaled to $FFFF Size.
+	BSR	LUT_UpDateTBar		; Redraw TBar on Screen.
+CYARI4	CALLTL	SoftSpriteBPLCON0On	; Turn On The Sprite.
+	JSR	_LVOPermit(A6)		; Permit All Other Tasks To Run.
+	BRA.S	CYARIA			; Skip Else Part.
+*
+*	If None of the Pannel Buttons SMF are Lite, Light One Of Them.
+*
+CYARI5	LEA.L	LUT_CycleSFG,A2		; A2.L = Address of Slow Gadget.
+	MOVEQ.L	#3-1,D0			; D0.L = Loop Counter.
+	MOVEA.L	A2,A0			; A0.L = Address of First Gadget.
+CYARI6	TST.W	FG_HiLiteMask(A0)	; This Gadget Highlighted?
+	BNE.S	CYARIA			; Exit If Highlighted.
+	MOVEA.L	gg_NextGadget(A0),A0	; A0.L = Next Gadget In List.
+	DBF	D0,CYARI6		; Loop Until Done.
+*
+*	None Of The Pannel SMF Are Highlighted.
+*
+	JSR	_LVOForbid(A6)		; Forbid All Other Tasks from Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+	MOVE.B	LUT_DisplayMode(A4),D0	; HiLite Last Image.
+	ANDI.W	#LUTM_SMF,D0		; Get Rid Of Extra Bits.
+	MOVEA.L	A2,A0			; Address of First Gadget.
+	BRA.S	CYARI8			; Start Looping.
+CYARI7	MOVEA.L	gg_NextGadget(A0),A0	; Next Link In List.
+CYARI8	DBF	D0,CYARI7		; Loop Until Gadget Found.
+	BSR	LUT_SetHiLite		; HiLite The Image.
+*
+*	Redraw The Gadget On the Screen.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+*
+*	If the TBar is not in the First Position, Then Move It There.
+*
+	TST.W	TB_TValSec(A5)		; TBar in First Position?
+	BEQ.S	CYARI9			; Jump If Already In First Position.
+	MOVEQ.L	#0,D0			; Set to First Position.
+	MOVE.W	D0,TB_TValSec(A5)	; Move To First Position.
+	BSR	LUT_UpDateTBar		; Redraw TBar on Screen.
+CYARI9	CALLTL	SoftSpriteBPLCON0On	; Turn On The Sprite.
+	JSR	_LVOPermit(A6)		; Permit All Other Tasks To Run.
+*
+*	If We Are Currently Color Cycling, Goto the New Cycle Routine.
+*
+CYARIA	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Can We Cycle The Colors?
+	BNE.S	CYARIB				; Exit If Not Possable.
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Bank No Longer Pure?
+	BEQ.S	CYARIB				; Jump If Bank Not Pure.
+	BSR	LUT_SetDisplayModeLongIndexEd	; D0.L = Index To Image.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Address of Table.
+	MOVEA.L	0(A0,D0.L),A0		; A0.L = Address of Function.
+	JSR	(A0)			; Set The Current Color Cycle Mode.
+	TST.L	TB_ColorCycle(A5)	; Any Color Cycling Going On?
+	BNE.S	CYARIB			; Jump If Color Cycling.
+	BSR	LUT_ShowCurrent		; CC != Zero -> Hardware Has Sprite.
+*
+*	Exit Subroutine.
+*
+CYARIB	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ClearArrowSMF:							*
+*									*
+*	Put the Arrow and SMF Gadgets into an Initial State.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Arrow and SMF Gadgets are De-HiLighted.			*
+*									*
+*	29.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ClearArrowSMF
+LUT_ClearArrowSMF:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Remove the Color Cycle Mode From Data Area.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; HiLite Last Image.
+	ANDI.W	#LUTM_CYCLE,D0		; Check For Color Cycling.
+	BEQ.S	CLARS2			; Exit If Not Cycleing.
+	ANDI.B	#~LUTM_CYCLE,LUT_DisplayMode(A4) ; Get Rid of Cycle Bits.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+*
+*	DeHiLite All 4 Images.
+*
+	LEA.L	LUT_CycleArrowFG,A0	; A0.L = Address of First Image.
+	MOVE.L	#LUT_NOCYCLEARROW_BT,FG_Data(A0) ; Save Pointer to Image.
+	MOVEA.L	A0,A1			; A1.L = Address of First Image.
+	MOVEQ.L	#4-1,D0			; Loop Counter.
+CLARS1	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not HiLighted.
+	MOVEA.L	gg_NextGadget(A1),A1	; Point To Next Gadget In List.
+	DBF	D0,CLARS1		; Loop Until Done.
+*
+*	Redraw The Gadget On the Screen.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#4,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Sprite.
+*
+*	Exit Subroutine.
+*
+CLARS2	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickCycleSMF:							*
+*									*
+*	Selects the Cycle (SMF) Slow, Medium, Fast, Fast Gadget.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	New Cycle (SMF) Slow, Medium, Fast, Fast Gadget Is Selected.	*
+*									*
+*	22.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickCycleSMF
+LUT_PickCycleSMF:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#3,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_CycleSFG,A1		; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+*
+*	Save the State Of Last Buttons.
+*
+	MOVEQ.L	#3-1,D0			; Loop Counter.
+	MOVEQ.L	#0,D1			; Index to Setting.
+	LEA.L	LUT_CycleSFG,A0		; A0.L = Address of Slow Gadget.
+PICYL1	TST.W	FG_HiLiteMask(A0)	; Check For Highlighting.
+	BNE.S	PICYL2			; Jump If Set.
+	ADDQ.L	#1,D1			; Move To Next Position.
+	MOVEA.L	gg_NextGadget(A0),A0	; Next Link In List.
+	DBF	D0,PICYL1		; Loop Until Done.
+	BRA.S	PICYL3			; Nothing Set.
+PICYL2	ANDI.B	#~LUTM_SMF,LUT_DisplayMode(A4) ; Remove Old Data.
+	OR.B	D1,LUT_DisplayMode(A4)	; Save Position For Next Time.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+	BSET.B	#LTEF_EditChange,LTE_Flags(A4)	; We Have An Edit Change.
+*
+*	Change The Cycle Speed.
+*
+	LSL.W	#2,D1			; Make Index Into Table.
+	LEA.L	LUT_SMF_Speeds,A0	; A0.L = Address of Table.
+	MOVE.L	0(A0,D1.W),LUT_CycleSpeed ; Save The New Speed.
+*
+*	Make Sure Cycle Arrow Gadget Is Picked.
+*
+PICYL3	LEA.L	LUT_CycleArrowFG,A0	; Address of Cycle Gadget.
+	MOVEA.L	A0,A2			; Save Address Of Gadget.
+	CMPI.L	#LUT_NOCYCLEARROW_BT,FG_Data(A0) ; Is Their An Arrow Picked?
+	BNE.S	PICYL4			; Exit If Arrow Picked.
+*
+*	Select Left Arrow And Write It On The Screen.
+*
+	ANDI.B	#~LUTM_CYCLE,LUT_DisplayMode(A4) ; Get Rid of Cycle Bits.
+	ORI.B	#1<<2,LUT_DisplayMode(A4)	 ; Add in Arrow Cycleing.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbit All Other Tasks from Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+	MOVEA.L	A2,A0			; A0.L = Address of Gadget.
+	BSR	LUT_SetHiLite		; HiLite The Image.
+	MOVE.L	#LUT_LEFTCYCLEARROW_BT,FG_Data(A0) ; Save New Bit Map Pointer.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Sprite.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOPermit(A6)		; Permit All Other Tasks To Run.
+*
+*	If We Are Currently Color Cycling, Goto the New Cycle Routine.
+*
+PICYL4	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Can We Cycle The Colors?
+	BNE.S	PICYL5				; Exit If Not Possable.
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Bank No Longer Pure?
+	BEQ.S	PICYL5				; Jump If Bank Not Pure.
+	BSR	LUT_SetDisplayModeLongIndexEd	; D0.L = Index To Image.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Address of Table.
+	MOVEA.L	0(A0,D0.L),A0		; A0.L = Address of Function.
+	JSR	(A0)			; Set The Current Color Cycle Mode.
+	TST.L	TB_ColorCycle(A5)	; Any Color Cycling Going On?
+	BNE.S	PICYL5			; Jump If Color Cycling.
+	BSR	LUT_ShowCurrent		; CC != Zero -> Hardware Has Sprite.
+*
+*	Exit Subroutine.
+*
+PICYL5	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoNormal:							*
+*									*
+*	Creates a Normal Video Map In Edit Colors.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Normal Video Map Is Created In Edit Colors.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoNormal
+LUT_DoNormal:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do Normal Color Map.
+*
+	BSR	LUT_DoHighLiteOnOff	; Highlite The Button.
+	BEQ.S	DONOR2			; Exit On Zero.
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	DONOR1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+DONOR1	BSR	LUT_GenerateNormal	; Make Normal Color.
+*
+*	Make Sure Edit Colors Are Ok.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+DONOR2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoNegative:							*
+*									*
+*	Creates a Negative Video Map In Edit Colors.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	A4.L	= Address of Toaster Base.				*
+*	Output:								*
+*									*
+*	Negative Video Map Is Created In Edit Colors.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoNegative
+LUT_DoNegative:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do Negative Color Map.
+*
+	BSR	LUT_DoHighLiteOnOff	; Highlite The Button.
+	BEQ.S	DONEG2			; Exit On Zero.
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	DONEG1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+DONEG1	BSR	LUT_GenerateNegative	; Make Negative Color.
+*
+*	Make Sure Edit Colors Are Ok.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+DONEG2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickPoster:							*
+*									*
+*	Selects the Poster Type to Full or None.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	New Poster Type Is Set.						*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickPoster
+LUT_PickPoster:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#2,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_FULLPOSTERFG,A1	; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	PIKPS3			; Exit If Nothing Picked.
+*
+*	Save Setting Of Full Poster or No Poster.
+*
+	MOVE.B	LUT_DisplayMode(A4),D1	; Which One Picked?
+	BCLR.B	#LUTF_FULLPOSTER,LUT_DisplayMode(A4) ; Assume No Poster.
+	TST.W	FG_HiLiteMask(A1)	; Full Poster Set?
+	BEQ.S	PIKPS1			; Jump If Not Full Poster.
+	BSET.B	#LUTF_FULLPOSTER,LUT_DisplayMode(A4) ; Then Set It.
+PIKPS1	MOVE.B	LUT_DisplayMode(A4),D0	; Save It Back.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Mode.
+*
+*	If The Flag Changed, and Posteriation Is Not Zero, Rewrite Poster Area.
+*
+	EOR.B	D1,D0			; Did The Flag Change.
+	ANDI.B	#1<<LUTF_FULLPOSTER,D0	; Flag Changed?
+	BEQ.S	PIKPS3			; Exit If Flag Did Not Change.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LUT_PosterPos(A4),D0	; Get Current Poster Position.
+	BEQ.S	PIKPS3			; Exit If Nothing There.
+	BSR	LUT_DoQuantize		; Redo The Quantize Area.
+	BTST.L	#LUTF_FULLPOSTER,D1	; Do We Need To Average?
+	BNE.S	PIKPS2			; This Flag Is In Reverse Direction.
+	BSR	LUT_AverageQuantize	; Average The Data.
+*
+*	Redraw Colors On Screen.
+*
+PIKPS2	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	CALLTL	SoftSpriteBPLCON0Off	; Remove Arrow From Screen.
+	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top Of Screen.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Put Arrow Back On Screen.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+PIKPS3	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickSpreadInt:							*
+*									*
+*	Selects the Spread Interpilation Type.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickSpreadInt
+LUT_PickSpreadInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKSP1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_SendEditMap		; Redo The Spectrum Area.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKSP1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickSpectrumInt:						*
+*									*
+*	Selects the Spectrum Interpilation Type.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickSpectrumInt
+LUT_PickSpectrumInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKSC1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_SendSpectrumMap	; Set To Hardware.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKSC1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickRightRotateInt:						*
+*									*
+*	Selects the Right Rotate Interpilation Type.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickRightRotateInt
+LUT_PickRightRotateInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKRR1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVEQ.L	#0,D0			; Rotate Right Flag.
+	BSR	LUT_SendEditRotate	; Redo The Spectrum Area.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKRR1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickLeftRotateInt:						*
+*									*
+*	Selects the Left Rotate Interpilation Type.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickLeftRotateInt
+LUT_PickLeftRotateInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR.S	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKLR1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVEQ.L	#-1,D0			; Rotate Left Flag.
+	BSR	LUT_SendEditRotate	; Redo The Spectrum Area.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKLR1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickRightNukeInt:						*
+*									*
+*	Selects the Right Nuke Interpilation Type.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickRightNukeInt
+LUT_PickRightNukeInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR.S	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKRN1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVEQ.L	#0,D0			; Nuke Right Flag.
+	BSR	LUT_SendEditNuke	; Redo The Spectrum Area.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKRN1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickLeftNukeInt:						*
+*									*
+*	Selects the Left Nuke Interpilation Type.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickLeftNukeInt
+LUT_PickLeftNukeInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR.S	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKLN1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVEQ.L	#-1,D0			; Nuke Left Flag.
+	BSR	LUT_SendEditNuke	; Redo The Spectrum Area.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKLN1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickPosterInt:							*
+*									*
+*	Selects the Poster Interpilation Type.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickPosterInt
+LUT_PickPosterInt:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR.S	LUT_PickInterpilation	; Do The Pick Logic.
+	BEQ.S	PIKPO1			; Exit If Nothing Picked.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_SendPosterMap	; Set To Hardware.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+PIKPO1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickInterpilation:						*
+*									*
+*	Selects the Interpilation Type, Spread, Right, Left, Poster.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Interpilation Type Is Set.					*
+*									*
+*	CC == Zero -> Nothing Was Picked.				*
+*	CC != Zero -> New Pannel Was Picked.				*
+*									*
+*	07.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickInterpilation
+LUT_PickInterpilation:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#7,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_INT_SPREADFG,A1	; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	PIKIN4			; Exit If Nothing Picked.
+*
+*	Which One Is Highlighted?
+*
+	MOVEQ.L	#0,D0			; Index To Image.
+	MOVEQ.L	#7-1,D1			; Loop Counter.
+	LEA.L	LUT_INT_SPREADFG,A0	; Address of First Gadget.
+PIKIN1	TST.W	FG_HiLiteMask(A0)	; This Gadget Hi-Lighted?
+	BNE.S	PIKIN2			; Jump If Hi-Lighted.
+	ADDQ.W	#1,D0			; Move To Next Position.
+	MOVEA.L	gg_NextGadget(A0),A0	; Next Gadget In List.
+	DBF	D1,PIKIN1		; Loop Intil Done.
+	MOVEQ.L	#0,D0			; If None, Set To First.
+*
+*	If New is Differant Than Old, Change to New One.
+*
+PIKIN2	CMP.B	LUT_InterPos(A4),D0	; Does New == Old??
+	BEQ.S	PIKIN4			; Exit If New == Old.
+	MOVE.B	D0,LUT_InterPos(A4)	; Save New Value.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbit All Other Tasks from Running.
+	LEA.L	LUT_INTPIK(PC),A0	; Address of Pick Table.
+	MOVE.B	0(A0,D0.W),D0		; D0.L = Pick Value.
+	BSR	LUT_LowerRangeArrowOnOff ;Remove It From Gadget List.
+	BEQ.S	PIKIN3			; Exit If Nothing Changed.
+*
+*	ReDraw the Screen.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+	LEA.L	LUT_UpperRangeArrowFG,A0 ;A0.L = Address of Frist Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#3,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Sprite.
+PIKIN3	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOPermit(A6)		; Permit All Other Tasks To Run.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+	MOVEQ.L	#-1,D0			; Make Picked.
+*
+*	Exit Subroutine.
+*
+PIKIN4	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickUpperLowerRangeArrow:					*
+*									*
+*	Selects the Upper Lower Range Arrow Fast Gadget.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*									*
+*	Output:								*
+*									*
+*	New Upper Lower Range Arrow, Fast Gadget Is Selected.		*
+*									*
+*	23.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickUpperLowerRangeArrow
+LUT_PickUpperLowerRangeArrow:
+	MOVEM.L	D0/A1,-(A7)		; Save Calling State.
+*
+*	Do The New Gadget.
+*
+	MOVEQ.L	#2,D0			; Maximum Number of Gadgets.
+	TST.W	LUT_LowerRangeArrowFG+gg_Width ; Lower Range Active?
+	BNE.S	PIULR1			; Jump If Lower Range Active.
+	MOVEQ.L	#1,D0			; Else Only One In List.
+PIULR1	LEA.L	LUT_UpperRangeArrowFG,A1 ;A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	PIULR2			; Exit If Nothing Picked.
+*
+*	Make Sure Edit Colors Are Ok.
+*
+	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+*
+*	Exit Subroutine.
+*
+PIULR2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0/A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PickUpDownRangeArrow:						*
+*									*
+*	When The Up/Down Arrow Gadet Is Picked, Swaps Top and Bottom.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget.				*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	The Top and Bottom Arrows May Be Swaped.			*
+*									*
+*	17.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PickUpDownRangeArrow
+LUT_PickUpDownRangeArrow:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Hi-Lite The Fast Gadget.
+*
+	BSR	LUT_DoHighLiteOnOff	; Turn On and Off The Gadget.
+	BEQ.S	PUPDN2			; Exit Subroutine.
+	TST.W	LUT_LowerRangeArrowFG+gg_Width ; Lower Range Active?
+	BEQ.S	PUPDN2			; Exit If Lower Range Not Active.
+*
+*	Exchange Upper And Lower Lines.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A1	; Address of Bottom Buffer.
+	MOVEQ.L	#((3*LUT_EditBufSz)/4)-1,D0 ; Loop Counter.
+PUPDN1	MOVE.L	(A0),D1			; Get Top Value.
+	MOVE.L	(A1),(A0)+		; Swap Value.
+	MOVE.L	D1,(A1)+		; Bottom Value.
+	DBF	D0,PUPDN1		; Loop Until Done.
+*
+*	Exchange Upper For Lower Arrows.
+*
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbit All Other Tasks from Running.
+	LEA.L	LUT_UpperRangeArrowFG,A2 ;Address Of Upper Gadget.
+	MOVEA.L	gg_NextGadget(A2),A1	; Address Of Lower Gadget.
+	MOVE.W	FG_HiLiteMask(A2),D0	; Swap Values.
+	MOVE.W	FG_HiLiteMask(A1),FG_HiLiteMask(A2)
+	MOVE.W	D0,FG_HiLiteMask(A1)	; End Of Exchange.
+*
+*	Redraw Arrows On The Screen.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Sprite.
+	MOVEA.L	A2,A0			; A0.L = Address of Frist Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#2,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw The Gadget On The Screen.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOPermit(A6)		; Permit All Other Tasks To Run.
+*
+*	Rewrite The Edit Area.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Sprite.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+PUPDN2	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LowerRangeArrowOnOff:						*
+*									*
+*	Turns On or Off the Lower Range Arrow On the Screen.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	== Zero -> Turn Off Lower Range Arrow.			*
+*		!= Zero -> Turn On  Lower Range Arrow.			*
+*									*
+*	Output:								*
+*									*
+*	Lower Range Arrow Function Is Turned On or Off.			*
+*									*
+*	CC	== Zero -> Image Was Not Changed.			*
+*	CC	!= Zero -> Image Was Changed.				*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_LowerRangeArrowOnOff
+LUT_LowerRangeArrowOnOff:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Check For On Or Off.
+*
+	MOVEQ.L	#0,D1			; D1.L = Send To Toaster Flag.
+	LEA.L	LUT_LowerRangeArrowFG,A0 ;A0.L = Address of Lower Arrow Gadget.
+	LEA.L	LUT_UpDownArrowFG,A1	; A1.L = Address of Up/Down Arrow Gadget
+	TST.L	D0			; On or Off?
+	BEQ.S	LOWRA1			; Jump If Turn Off.
+	TST.W	gg_Width(A0)		; Already On?
+	BNE.S	LOWRA4			; Exit If Already On.
+	MOVE.W	#32,gg_Width(A0)	; Set Gadget Width.
+	MOVE.W	#16,gg_Height(A0)	; Set Gadget Height.
+	MOVE.L	#LUT_LEFTARROW_BT,FG_Data(A0) ; Set Image Pointer.
+	MOVE.W	#32,gg_Width(A1)	; Set Gadget Width.
+	MOVE.W	#22,gg_Height(A1)	; Set Gadget Height.
+	MOVE.L	#LUT_UPDOWNARROWS_BT,FG_Data(A1) ; Set Image Pointer.
+	BRA.S	LOWRA2			; Skip Else Part.
+LOWRA1	TST.W	gg_Width(A0)		; Already Off?
+	BEQ.S	LOWRA4			; Exit If Already Off.
+	CLR.W	gg_Width(A0)		; Set Gadget Width.
+	CLR.W	gg_Height(A0)		; Set Gadget Height.
+	MOVE.L	#LUT_ERASEARROW_BT,FG_Data(A0) ; Set Image Pointer.
+	CLR.W	gg_Width(A1)		; Set Gadget Width.
+	CLR.W	gg_Height(A1)		; Set Gadget Height.
+	MOVE.L	FG_Data(A0),FG_Data(A1) ; Set Image Pointer.
+	MOVE.W	FG_HiLiteMask(A0),D1	; D1.L = Set the Send To Toaster Flag.
+*
+*	Always High Light the Top Image.
+*
+LOWRA2	CLR.W	FG_HiLiteMask(A0)	; Un-Highlight the Lower Image.
+	LEA.L	LUT_UpperRangeArrowFG,A0 ;A0.L = Address of Upper Arrow Gadget.
+	BSR	LUT_SetHiLite		; HiLite The Image.
+*
+*	Redraw The Edit Colors.
+*
+	TST.W	D1			; Do We Need To Send To Toaster?
+	BEQ.S	LOWRA3			; Skip If Not.
+	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+*
+*	Set Return Codes For Change.
+*
+LOWRA3	MOVEQ.L	#-1,D0			; Set CC != Zero, Image Changed.
+	BRA.S	LOWRA5			; Exit Subroutine.
+LOWRA4	MOVEQ.L	#0,D0			; Set CC == Zero, Image Not Changed.
+*
+*	Exit Subroutine.
+*
+LOWRA5	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ToggleRGBHSI:							*
+*									*
+*	Toggles Between RGB and HSI Mode.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget to Highlight.			*
+*	A4.L	= Address of LUT     Base.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	When Mode Changes, Toggles Between RGB and HSI.			*
+*									*
+*	23.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ToggleRGBHSI
+LUT_ToggleRGBHSI:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	See If They Release Over the Gadget.
+*
+	MOVEQ.L	#2,D0			; Maximum Number of Gadgets.
+	LEA.L	LUT_RGBBoxFG,A1		; A1.L = Address of First Gadget.
+	BSR	LUT_PannelSelect	; Highligh New Gadget.
+	BEQ.S	TOGRG3			; Exit If Sliped Off Gadget.
+*
+*	Toggle Between The Two.
+*
+	MOVEA.L	A1,A2			; A2.L = Address of First Gadget.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of System Base.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+*
+*	Do The Toggle.
+*
+	LEA.L	LUT_RGBHSITextFG,A0	; A0.L = Address of Text Gadget.
+	TST.W	FG_HiLiteMask(A2)	; In RGB Mode?
+	BNE.S	TOGRG1			; Jump If RGB Mode.
+*
+*	We Are Changing From RGB to HSI.
+*
+	MOVE.L	#LUT_HSITEXT_BT,FG_Data(A0) ; Normal-Text Image.
+	MOVE.L	LTE_EditRGB(A4),D0	; Need To Make Current HSI.
+	BSR	RGBHSI			; D0.L = HHSI Value.
+	MOVE.L	D0,LTE_EditHSI(A4)	; Save New HHSI Value.
+	MOVEQ.L	#-1,D1			; Set Flag to HHSI.
+	BRA.S	TOGRG2			; Skip Else Part.
+*
+*	We Are Changing From HSI to RGB.
+*
+TOGRG1	MOVE.L	#LUT_RGBTEXT_BT,FG_Data(A0) ; Alt-Text Image.
+	MOVE.L	LTE_EditRGB(A4),D0	; D0.L = RGB Value.
+	MOVEQ.L	#0,D1			; Set Flag to 0RGB.
+TOGRG2	BSR	LUT_SetRGBHSIBarPosition ;Set the 3 Bar Images.
+*
+*	Redraw Gadgets On The Screen.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#4,D0			; D0.L = Number of Gadget.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw the Fast Gadget.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On Arrow Sprite.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks to Run.
+*
+*	Exit Subroutine.
+*
+TOGRG3	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ToEditBuf:							*
+*									*
+*	Stores an RGB Value Into The Edit Buffer At Current Position.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= 0RGB Value To Store Into The Edit Buffer.		*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	RGB Value is Stored Into Edit Buffer.				*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ToEditBuf
+LUT_ToEditBuf:
+	MOVEM.L	D0-D1/A0,-(A7)		; Save Calling State.
+*
+*	Make Index, and Store Color Into Array.
+*
+	MOVEQ.L	#0,D1			; Make Index to Color.
+	MOVE.B	LTE_EditColor(A4),D1	; D1.L = Index to Color.
+	LEA.L	LUT_EditBufTop+3(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	TOEDB1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot+3(A4),A0	; Else Bottom Buffer.
+TOEDB1	ADDA.W	D1,A0			; Index To Element.
+	ADDA.W	D1,A0			; Times 2.
+	ADDA.W	D1,A0			; Times 3.
+	MOVE.B	D0,-(A0)		; Save Blue.
+	LSR.W	#8,D0			; Get Green.
+	MOVE.B	D0,-(A0)		; Save Green.
+	SWAP.W	D0			; Get Red.
+	MOVE.B	D0,-(A0)		; Save Red.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FromEditBuf:							*
+*									*
+*	Return The RGB Value From The Edit Buffer At Current Position.	*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= 0RGB Value Returned From The Edit Buffer.		*
+*									*
+*	RGB Value is Returned From the Edit Buffer.			*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FromEditBuf
+LUT_FromEditBuf:
+	MOVE.L	A0,-(A7)		; Save Calling State.
+*
+*	Make Index To Color and Return It.
+*
+	MOVEQ.L	#0,D0			; Make Index to Color.
+	MOVE.B	LTE_EditColor(A4),D0	; D0.L = Index to Color.
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	FMEDB1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+FMEDB1	ADDA.W	D0,A0			; Index To Element.
+	ADDA.W	D0,A0			; Times 2.
+	ADDA.W	D0,A0			; Times 3.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Red.
+	SWAP.W	D0			; To High Position.
+	MOVE.B	(A0)+,D0		; Get Green.
+	LSL.W	#8,D0			; To High Position.
+	MOVE.B	(A0)+,D0		; Get Blue.
+*
+*	Exit Subroutine.
+*
+	MOVEA.L	(A7)+,A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	UpDateEditColor:						*
+*									*
+*	Updates the Edit Color Bar On the Top Of the Screen, After	*
+*	The Color Was Changed By Sliding RGB or HSI Bars.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Color Edit Bar Is Updated.					*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_UpDateEditColor
+LUT_UpDateEditColor:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Put Up Color Bar On Top Of Screen.
+*
+	MOVE.L	LTE_EditRGB(A4),D0	; Get 0RGB Value.
+	BSR	LUT_ToEditBuf		; Store It In The Buffer.
+	MOVEQ.L	#0,D0			; Make Top/Bottom Value.
+	MOVE.W	LUT_UpperRangeArrowFG+FG_HiLiteMask,D0
+	NOT.W	D0			; Go Other Way Around.
+	BSR	LUT_MakeEditColors	; Make The Edit Colors.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ReWriteEditColor:						*
+*									*
+*	Writes the Current Edit Colors and Slider Bars On The Screen.	*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Top Edit Colors, Color Square, and Sliders Are Written On	*
+*	The Screen.							*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ReWriteEditColor
+LUT_ReWriteEditColor:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Get New Color.
+*
+	BSR	LUT_FromEditBuf		; D0.L = New Value To Edit.
+	MOVE.L	D0,LTE_EditRGB(A4)	; Save New RGB Color.
+	BSR	RGBHSI			; Make HSI Value.
+	MOVE.L	D0,LTE_EditHSI(A4)	; Save New HSI Color.
+*
+*	Restore the RGB, HSI Bars.
+*
+	MOVE.L	LTE_EditRGB(A4),D0	; Current RGB Value.
+	BSR	LUT_MakeColorSquare	; Put Up The Color Square.
+	MOVEQ.L	#0,D1			; Set Flag to 0RGB.
+	CMPI.L	#LUT_RGBTEXT_BT,LUT_RGBHSITextFG+FG_Data ; In RGB Mode?
+	BEQ.S	REWEC1			; Jump If RGB Mode.
+	MOVE.L	LTE_EditHSI(A4),D0	; Get HSI Value.
+	MOVEQ.L	#-1,D1			; Set Flag to HHSI.
+REWEC1	BSR	LUT_SetRGBHSIBarPosition ;Set the 3 Bar Images.
+*
+*	Draw the Gadgets On the Window.
+*
+	LEA.L	LUT_RHSliderFG,A0	; A0.L = Address of Quit Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#3,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset Into Image.
+	CALLTL	DrawFastGList		; Draw Gadget On Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	END
+@

@@ -1,0 +1,6859 @@
+head	2.221;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.221
+date	95.06.30.15.32.50;	author Flick;	state Exp;
+branches;
+next	2.220;
+
+2.220
+date	95.05.03.14.53.46;	author pfrench;	state Exp;
+branches;
+next	2.219;
+
+2.219
+date	95.04.28.13.32.11;	author pfrench;	state Exp;
+branches;
+next	2.218;
+
+2.218
+date	95.03.16.11.17.07;	author CACHELIN4000;	state Exp;
+branches;
+next	2.217;
+
+2.217
+date	95.02.20.23.33.28;	author Kell;	state Exp;
+branches;
+next	2.216;
+
+2.216
+date	95.02.16.20.39.33;	author Kell;	state Exp;
+branches;
+next	2.215;
+
+2.215
+date	95.02.12.05.13.28;	author Kell;	state Exp;
+branches;
+next	2.214;
+
+2.214
+date	95.02.11.17.17.54;	author Kell;	state Exp;
+branches;
+next	2.213;
+
+2.213
+date	95.02.09.18.47.19;	author Kell;	state Exp;
+branches;
+next	2.212;
+
+2.212
+date	95.02.09.09.56.49;	author Kell;	state Exp;
+branches;
+next	2.211;
+
+2.211
+date	95.02.01.18.55.25;	author Kell;	state Exp;
+branches;
+next	2.210;
+
+2.210
+date	95.02.01.15.58.21;	author Kell;	state Exp;
+branches;
+next	2.209;
+
+2.209
+date	95.01.31.17.02.39;	author Kell;	state Exp;
+branches;
+next	2.208;
+
+2.208
+date	95.01.26.22.11.17;	author Kell;	state Exp;
+branches;
+next	2.207;
+
+2.207
+date	95.01.24.12.08.38;	author Kell;	state Exp;
+branches;
+next	2.206;
+
+2.206
+date	95.01.04.16.22.55;	author Kell;	state Exp;
+branches;
+next	2.205;
+
+2.205
+date	94.12.30.02.39.49;	author Kell;	state Exp;
+branches;
+next	2.204;
+
+2.204
+date	94.12.29.11.27.05;	author Kell;	state Exp;
+branches;
+next	2.203;
+
+2.203
+date	94.12.24.09.56.28;	author Kell;	state Exp;
+branches;
+next	2.202;
+
+2.202
+date	94.12.23.03.30.07;	author Kell;	state Exp;
+branches;
+next	2.201;
+
+2.201
+date	94.12.17.14.34.18;	author Kell;	state Exp;
+branches;
+next	2.200;
+
+2.200
+date	94.12.17.04.57.44;	author Kell;	state Exp;
+branches;
+next	2.199;
+
+2.199
+date	94.12.15.17.44.59;	author Kell;	state Exp;
+branches;
+next	2.198;
+
+2.198
+date	94.12.14.16.02.41;	author pfrench;	state Exp;
+branches;
+next	2.197;
+
+2.197
+date	94.12.09.22.16.45;	author Kell;	state Exp;
+branches;
+next	2.196;
+
+2.196
+date	94.12.09.15.47.46;	author pfrench;	state Exp;
+branches;
+next	2.195;
+
+2.195
+date	94.12.06.23.36.27;	author Kell;	state Exp;
+branches;
+next	2.194;
+
+2.194
+date	94.12.06.07.15.13;	author Kell;	state Exp;
+branches;
+next	2.193;
+
+2.193
+date	94.12.05.18.41.32;	author Holt;	state Exp;
+branches;
+next	2.192;
+
+2.192
+date	94.12.05.13.04.47;	author Kell;	state Exp;
+branches;
+next	2.191;
+
+2.191
+date	94.12.03.06.18.57;	author Kell;	state Exp;
+branches;
+next	2.190;
+
+2.190
+date	94.11.23.16.36.06;	author Kell;	state Exp;
+branches;
+next	2.189;
+
+2.189
+date	94.11.18.08.55.25;	author Kell;	state Exp;
+branches;
+next	2.188;
+
+2.188
+date	94.11.17.15.41.09;	author Kell;	state Exp;
+branches;
+next	2.187;
+
+2.187
+date	94.11.15.15.44.49;	author Kell;	state Exp;
+branches;
+next	2.186;
+
+2.186
+date	94.11.10.02.53.12;	author Kell;	state Exp;
+branches;
+next	2.185;
+
+2.185
+date	94.11.09.14.41.15;	author Kell;	state Exp;
+branches;
+next	2.184;
+
+2.184
+date	94.11.04.08.47.00;	author Kell;	state Exp;
+branches;
+next	2.183;
+
+2.183
+date	94.11.04.03.27.17;	author Kell;	state Exp;
+branches;
+next	2.182;
+
+2.182
+date	94.11.02.11.26.50;	author Kell;	state Exp;
+branches;
+next	2.181;
+
+2.181
+date	94.11.02.05.33.30;	author Kell;	state Exp;
+branches;
+next	2.180;
+
+2.180
+date	94.10.28.13.02.52;	author Kell;	state Exp;
+branches;
+next	2.179;
+
+2.179
+date	94.10.27.13.58.01;	author Kell;	state Exp;
+branches;
+next	2.178;
+
+2.178
+date	94.10.25.07.09.39;	author Kell;	state Exp;
+branches;
+next	2.177;
+
+2.177
+date	94.10.21.12.44.58;	author Kell;	state Exp;
+branches;
+next	2.176;
+
+2.176
+date	94.10.13.17.55.57;	author Kell;	state Exp;
+branches;
+next	2.175;
+
+2.175
+date	94.10.12.00.34.14;	author Kell;	state Exp;
+branches;
+next	2.174;
+
+2.174
+date	94.10.05.05.54.27;	author Kell;	state Exp;
+branches;
+next	2.173;
+
+2.173
+date	94.09.30.21.40.45;	author Holt;	state Exp;
+branches;
+next	2.172;
+
+2.172
+date	94.09.30.20.08.10;	author Holt;	state Exp;
+branches;
+next	2.171;
+
+2.171
+date	94.09.29.15.28.20;	author Kell;	state Exp;
+branches;
+next	2.170;
+
+2.170
+date	94.09.28.21.52.23;	author Kell;	state Exp;
+branches;
+next	2.169;
+
+2.169
+date	94.09.28.19.05.26;	author Kell;	state Exp;
+branches;
+next	2.168;
+
+2.168
+date	94.09.27.04.23.18;	author Kell;	state Exp;
+branches;
+next	2.167;
+
+2.167
+date	94.09.23.08.32.38;	author Kell;	state Exp;
+branches;
+next	2.166;
+
+2.166
+date	94.09.22.05.48.27;	author Kell;	state Exp;
+branches;
+next	2.165;
+
+2.165
+date	94.09.22.05.03.58;	author Kell;	state Exp;
+branches;
+next	2.164;
+
+2.164
+date	94.09.21.19.25.46;	author Kell;	state Exp;
+branches;
+next	2.163;
+
+2.163
+date	94.09.15.18.53.11;	author pfrench;	state Exp;
+branches;
+next	2.162;
+
+2.162
+date	94.09.14.02.18.50;	author Kell;	state Exp;
+branches;
+next	2.161;
+
+2.161
+date	94.09.13.21.38.30;	author Holt;	state Exp;
+branches;
+next	2.160;
+
+2.160
+date	94.09.13.18.54.54;	author Holt;	state Exp;
+branches;
+next	2.159;
+
+2.159
+date	94.09.08.19.24.49;	author Kell;	state Exp;
+branches;
+next	2.158;
+
+2.158
+date	94.09.02.08.36.48;	author Kell;	state Exp;
+branches;
+next	2.157;
+
+2.157
+date	94.08.27.07.12.32;	author Kell;	state Exp;
+branches;
+next	2.156;
+
+2.156
+date	94.08.08.23.35.33;	author Kell;	state Exp;
+branches;
+next	2.155;
+
+2.155
+date	94.08.05.16.56.26;	author Holt;	state Exp;
+branches;
+next	2.154;
+
+2.154
+date	94.08.03.06.41.31;	author Kell;	state Exp;
+branches;
+next	2.153;
+
+2.153
+date	94.07.28.11.24.52;	author Holt;	state Exp;
+branches;
+next	2.152;
+
+2.152
+date	94.07.27.19.29.51;	author Kell;	state Exp;
+branches;
+next	2.151;
+
+2.151
+date	94.07.17.17.15.32;	author Holt;	state Exp;
+branches;
+next	2.150;
+
+2.150
+date	94.07.14.00.58.41;	author Holt;	state Exp;
+branches;
+next	2.149;
+
+2.149
+date	94.07.01.12.59.22;	author Kell;	state Exp;
+branches;
+next	2.148;
+
+2.148
+date	94.06.04.04.04.47;	author Kell;	state Exp;
+branches;
+next	2.147;
+
+2.147
+date	94.05.24.22.07.45;	author Kell;	state Exp;
+branches;
+next	2.146;
+
+2.146
+date	94.04.21.17.28.15;	author Kell;	state Exp;
+branches;
+next	2.145;
+
+2.145
+date	94.03.31.13.11.45;	author Kell;	state Exp;
+branches;
+next	2.144;
+
+2.144
+date	94.03.19.00.37.34;	author Kell;	state Exp;
+branches;
+next	2.143;
+
+2.143
+date	94.03.18.17.21.47;	author Kell;	state Exp;
+branches;
+next	2.142;
+
+2.142
+date	94.03.18.09.36.04;	author Kell;	state Exp;
+branches;
+next	2.141;
+
+2.141
+date	94.03.18.09.20.42;	author Kell;	state Exp;
+branches;
+next	2.140;
+
+2.140
+date	94.03.15.23.49.47;	author Kell;	state Exp;
+branches;
+next	2.139;
+
+2.139
+date	94.03.15.17.04.02;	author Kell;	state Exp;
+branches;
+next	2.138;
+
+2.138
+date	94.03.15.14.16.34;	author Kell;	state Exp;
+branches;
+next	2.137;
+
+2.137
+date	94.03.15.14.14.08;	author Kell;	state Exp;
+branches;
+next	2.136;
+
+2.136
+date	94.03.11.20.55.09;	author Kell;	state Exp;
+branches;
+next	2.135;
+
+2.135
+date	94.03.11.14.59.46;	author Kell;	state Exp;
+branches;
+next	2.134;
+
+2.134
+date	94.03.10.16.24.09;	author Kell;	state Exp;
+branches;
+next	2.133;
+
+2.133
+date	94.03.10.13.02.03;	author Kell;	state Exp;
+branches;
+next	2.132;
+
+2.132
+date	94.03.08.06.14.32;	author Kell;	state Exp;
+branches;
+next	2.131;
+
+2.131
+date	94.03.07.22.28.40;	author Kell;	state Exp;
+branches;
+next	2.130;
+
+2.130
+date	94.03.07.08.18.26;	author Kell;	state Exp;
+branches;
+next	2.129;
+
+2.129
+date	94.03.07.06.27.16;	author Kell;	state Exp;
+branches;
+next	2.128;
+
+2.128
+date	94.03.06.16.52.45;	author Kell;	state Exp;
+branches;
+next	2.127;
+
+2.127
+date	94.02.23.14.46.51;	author Kell;	state Exp;
+branches;
+next	2.126;
+
+2.126
+date	94.02.23.14.33.51;	author CACHELIN4000;	state Exp;
+branches;
+next	2.125;
+
+2.125
+date	94.02.17.12.33.47;	author Kell;	state Exp;
+branches;
+next	2.124;
+
+2.124
+date	94.02.07.18.30.20;	author Kell;	state Exp;
+branches;
+next	2.123;
+
+2.123
+date	94.02.07.15.55.24;	author Kell;	state Exp;
+branches;
+next	2.122;
+
+2.122
+date	94.01.08.01.46.39;	author Kell;	state Exp;
+branches;
+next	2.121;
+
+2.121
+date	94.01.07.14.29.48;	author Kell;	state Exp;
+branches;
+next	2.120;
+
+2.120
+date	93.12.09.02.43.49;	author Turcotte;	state Exp;
+branches;
+next	2.119;
+
+2.119
+date	93.12.07.02.14.28;	author Kell;	state Exp;
+branches;
+next	2.118;
+
+2.118
+date	93.12.04.00.06.12;	author Turcotte;	state Exp;
+branches;
+next	2.117;
+
+2.117
+date	93.11.29.16.22.03;	author Turcotte;	state Exp;
+branches;
+next	2.116;
+
+2.116
+date	93.11.19.17.57.11;	author Turcotte;	state Exp;
+branches;
+next	2.115;
+
+2.115
+date	93.11.16.02.17.44;	author Kell;	state Exp;
+branches;
+next	2.114;
+
+2.114
+date	93.11.06.08.42.51;	author Kell;	state Exp;
+branches;
+next	2.113;
+
+2.113
+date	93.11.05.20.35.59;	author Turcotte;	state Exp;
+branches;
+next	2.112;
+
+2.112
+date	93.11.05.18.45.31;	author Turcotte;	state Exp;
+branches;
+next	2.111;
+
+2.111
+date	93.11.03.23.14.24;	author Turcotte;	state Exp;
+branches;
+next	2.110;
+
+2.110
+date	93.11.03.23.10.29;	author Turcotte;	state Exp;
+branches;
+next	2.109;
+
+2.109
+date	93.10.29.03.35.49;	author Kell;	state Exp;
+branches;
+next	2.108;
+
+2.108
+date	93.10.28.15.49.10;	author Turcotte;	state Exp;
+branches;
+next	2.107;
+
+2.107
+date	93.10.26.15.14.17;	author Kell;	state Exp;
+branches;
+next	2.106;
+
+2.106
+date	93.10.26.13.18.18;	author Kell;	state Exp;
+branches;
+next	2.105;
+
+2.105
+date	93.10.25.20.40.36;	author Kell;	state Exp;
+branches;
+next	2.104;
+
+2.104
+date	93.10.25.14.35.12;	author Kell;	state Exp;
+branches;
+next	2.103;
+
+2.103
+date	93.10.23.05.14.38;	author Kell;	state Exp;
+branches;
+next	2.102;
+
+2.102
+date	93.10.19.18.11.37;	author Turcotte;	state Exp;
+branches;
+next	2.101;
+
+2.101
+date	93.09.30.16.17.11;	author Turcotte;	state Exp;
+branches;
+next	2.100;
+
+2.100
+date	93.09.30.16.02.47;	author Turcotte;	state Exp;
+branches;
+next	2.99;
+
+2.99
+date	93.09.05.01.19.59;	author Kell;	state Exp;
+branches;
+next	2.98;
+
+2.98
+date	93.08.25.00.32.54;	author Kell;	state Exp;
+branches;
+next	2.97;
+
+2.97
+date	93.06.19.10.41.39;	author Kell;	state Exp;
+branches;
+next	2.96;
+
+2.96
+date	93.06.10.19.38.07;	author Kell;	state Exp;
+branches;
+next	2.95;
+
+2.95
+date	93.06.09.17.35.24;	author Turcotte;	state Exp;
+branches;
+next	2.94;
+
+2.94
+date	93.06.09.16.14.57;	author Turcotte;	state Exp;
+branches;
+next	2.93;
+
+2.93
+date	93.06.09.16.01.24;	author Kell;	state Exp;
+branches;
+next	2.92;
+
+2.92
+date	93.06.09.06.45.34;	author Turcotte;	state Exp;
+branches;
+next	2.91;
+
+2.91
+date	93.06.08.19.49.06;	author Kell;	state Exp;
+branches;
+next	2.90;
+
+2.90
+date	93.06.07.16.14.34;	author Kell;	state Exp;
+branches;
+next	2.89;
+
+2.89
+date	93.06.07.15.42.11;	author Kell;	state Exp;
+branches;
+next	2.88;
+
+2.88
+date	93.06.06.17.31.46;	author Turcotte;	state Exp;
+branches;
+next	2.87;
+
+2.87
+date	93.06.06.00.43.15;	author Turcotte;	state Exp;
+branches;
+next	2.86;
+
+2.86
+date	93.06.05.07.41.56;	author Kell;	state Exp;
+branches;
+next	2.85;
+
+2.85
+date	93.06.04.21.37.08;	author Turcotte;	state Exp;
+branches;
+next	2.84;
+
+2.84
+date	93.06.04.17.06.23;	author Kell;	state Exp;
+branches;
+next	2.83;
+
+2.83
+date	93.06.04.02.23.10;	author Turcotte;	state Exp;
+branches;
+next	2.82;
+
+2.82
+date	93.06.03.21.29.30;	author Turcotte;	state Exp;
+branches;
+next	2.81;
+
+2.81
+date	93.06.01.21.40.23;	author Kell;	state Exp;
+branches;
+next	2.80;
+
+2.80
+date	93.05.30.13.09.14;	author Kell;	state Exp;
+branches;
+next	2.79;
+
+2.79
+date	93.05.29.04.16.40;	author Kell;	state Exp;
+branches;
+next	2.78;
+
+2.78
+date	93.05.27.17.53.02;	author Hartford2;	state Exp;
+branches;
+next	2.77;
+
+2.77
+date	93.05.27.17.09.59;	author Turcotte;	state Exp;
+branches;
+next	2.76;
+
+2.76
+date	93.05.24.22.40.01;	author Turcotte;	state Exp;
+branches;
+next	2.75;
+
+2.75
+date	93.05.24.16.54.03;	author Turcotte;	state Exp;
+branches;
+next	2.74;
+
+2.74
+date	93.05.22.11.06.06;	author Kell;	state Exp;
+branches;
+next	2.73;
+
+2.73
+date	93.05.21.06.28.10;	author Turcotte;	state Exp;
+branches;
+next	2.72;
+
+2.72
+date	93.05.21.05.14.30;	author Kell;	state Exp;
+branches;
+next	2.71;
+
+2.71
+date	93.05.15.04.29.48;	author Turcotte;	state Exp;
+branches;
+next	2.70;
+
+2.70
+date	93.05.13.23.07.44;	author Kell;	state Exp;
+branches;
+next	2.69;
+
+2.69
+date	93.05.13.21.39.44;	author Turcotte;	state Exp;
+branches;
+next	2.68;
+
+2.68
+date	93.05.13.20.14.10;	author Kell;	state Exp;
+branches;
+next	2.67;
+
+2.67
+date	93.05.12.17.22.15;	author Hartford;	state Exp;
+branches;
+next	2.66;
+
+2.66
+date	93.05.12.17.18.53;	author Turcotte;	state Exp;
+branches;
+next	2.65;
+
+2.65
+date	93.05.12.09.37.10;	author Kell;	state Exp;
+branches;
+next	2.64;
+
+2.64
+date	93.05.08.19.02.52;	author Kell;	state Exp;
+branches;
+next	2.63;
+
+2.63
+date	93.05.08.15.01.48;	author Kell;	state Exp;
+branches;
+next	2.62;
+
+2.62
+date	93.05.07.00.12.55;	author Kell;	state Exp;
+branches;
+next	2.61;
+
+2.61
+date	93.05.06.04.03.29;	author Kell;	state Exp;
+branches;
+next	2.60;
+
+2.60
+date	93.05.06.01.33.39;	author Kell;	state Exp;
+branches;
+next	2.59;
+
+2.59
+date	93.05.05.20.32.46;	author Kell;	state Exp;
+branches;
+next	2.58;
+
+2.58
+date	93.05.05.02.16.10;	author Turcotte;	state Exp;
+branches;
+next	2.57;
+
+2.57
+date	93.04.27.21.39.09;	author Kell;	state Exp;
+branches;
+next	2.56;
+
+2.56
+date	93.04.27.20.55.11;	author Turcotte;	state Exp;
+branches;
+next	2.55;
+
+2.55
+date	93.04.27.02.48.31;	author Kell;	state Exp;
+branches;
+next	2.54;
+
+2.54
+date	93.04.18.07.11.55;	author Kell;	state Exp;
+branches;
+next	2.53;
+
+2.53
+date	93.04.17.21.10.56;	author Turcotte;	state Exp;
+branches;
+next	2.52;
+
+2.52
+date	93.04.17.04.19.35;	author Kell;	state Exp;
+branches;
+next	2.51;
+
+2.51
+date	93.04.16.04.10.34;	author Turcotte;	state Exp;
+branches;
+next	2.50;
+
+2.50
+date	93.04.16.04.05.10;	author Turcotte;	state Exp;
+branches;
+next	2.49;
+
+2.49
+date	93.04.07.08.46.56;	author Kell;	state Exp;
+branches;
+next	2.48;
+
+2.48
+date	93.04.07.00.11.27;	author Kell;	state Exp;
+branches;
+next	2.47;
+
+2.47
+date	93.04.06.03.27.18;	author Kell;	state Exp;
+branches;
+next	2.46;
+
+2.46
+date	93.04.02.00.05.18;	author Turcotte;	state Exp;
+branches;
+next	2.45;
+
+2.45
+date	93.04.01.18.02.55;	author Kell;	state Exp;
+branches;
+next	2.44;
+
+2.44
+date	93.04.01.05.39.23;	author Kell;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	93.04.01.00.48.13;	author Kell;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	93.04.01.00.39.26;	author Kell;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	93.04.01.00.31.34;	author Kell;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	93.03.31.23.56.35;	author Turcotte;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	93.03.31.23.48.45;	author Kell;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	93.03.25.06.26.09;	author Kell;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	93.03.22.22.37.45;	author Hartford2;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	93.03.18.17.18.37;	author Hartford2;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	93.03.17.16.30.48;	author Kell;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	93.03.16.21.07.40;	author Kell;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	93.03.16.12.49.57;	author Kell;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	93.03.15.15.34.30;	author Hartford2;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	93.03.10.05.38.18;	author Kell;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	93.03.10.05.36.01;	author Kell;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	93.03.06.18.50.41;	author Kell;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	93.03.04.19.41.13;	author Finch;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	93.03.03.02.46.58;	author Kell;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	93.03.02.23.04.37;	author Kell;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	93.03.02.15.19.58;	author Turcotte;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	93.03.01.16.48.46;	author Kell;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	93.02.28.02.54.20;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	93.02.27.21.09.23;	author Turcotte;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	93.02.27.17.45.00;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	93.02.25.20.34.18;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	93.02.25.10.45.58;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	93.02.24.15.46.18;	author Turcotte;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	93.02.24.04.04.40;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	93.02.24.03.57.17;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	93.02.24.03.43.58;	author Kell;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	93.02.24.03.28.56;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	93.02.13.22.24.06;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	93.02.13.14.26.51;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	93.02.05.00.44.48;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.01.22.10.39.38;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.01.21.04.19.37;	author Turcotte;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.01.20.20.44.57;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.01.20.16.09.34;	author Turcotte;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	92.12.17.17.51.17;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	92.12.02.17.28.37;	author Finch;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	92.10.07.17.41.27;	author Finch;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	92.09.18.03.35.57;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	92.09.15.14.26.38;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.09.12.02.08.32;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.21.17.08;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.221
+log
+@Added FGC_InterpTagsCommand
+@
+text
+@*********************************************************************
+* switcher.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: switcher.a,v 2.220 1995/05/03 14:53:46 pfrench Exp Flick $
+*
+* $Log: switcher.a,v $
+*Revision 2.220  1995/05/03  14:53:46  pfrench
+*Reverted back to 2.218 code for multiple-copy run
+*
+*Revision 2.218  1995/03/16  11:17:07  CACHELIN4000
+*Add things to toastbase to let loopingFX abort (in animfxhandler.a)
+*
+*Revision 2.217  1995/02/20  23:33:28  Kell
+*Hacked sence of AGA TBC setting before write.
+*
+*Revision 2.216  1995/02/16  20:39:33  Kell
+*New TB_CurrentAlpha.... functions.  New TempChipBM for alpha keys.
+*
+*Revision 2.215  1995/02/12  05:13:28  Kell
+*Some grays changed from $666 to $555 to match the current color01.
+*
+*Revision 2.214  1995/02/11  17:17:54  Kell
+*Now sets up TBC setting after HS has been read, just before Switcher is up.
+*
+*Revision 2.213  1995/02/09  18:47:19  Kell
+*New TB WaitTolerance and WaitError fields for handling run time sequence errors.
+*
+*Revision 2.212  1995/02/09  09:56:49  Kell
+*Added new TB Queue FGC command
+*
+*Revision 2.211  1995/02/01  18:55:25  Kell
+**** empty log message ***
+*
+*Revision 2.210  1995/02/01  15:58:21  Kell
+*Now XDEFing TBflags2
+*
+*Revision 2.209  1995/01/31  17:02:39  Kell
+*_CroutonBase defined
+*
+*Revision 2.208  1995/01/26  22:11:17  Kell
+*New SetUpShallowAVEInterface() in TB.
+*
+*Revision 2.207  1995/01/24  12:08:38  Kell
+*Now initializes the TBC on startup.
+*New hardcoded BMs for Alpha in Chip or Fast.
+*Uses CHIPBLOCKSIZE (or whatever it's called) instead of equation.
+*
+*Revision 2.206  1995/01/04  16:22:55  Kell
+*Internal dummy crouton now has a name.
+*
+*Revision 2.205  1994/12/30  02:39:49  Kell
+**** empty log message ***
+*
+*Revision 2.204  1994/12/29  11:27:05  Kell
+*New TB_Flags4 field
+*
+*Revision 2.203  1994/12/24  09:56:28  Kell
+*Changed VID4 loopback to VID2 so it can work with the Flyer.
+*
+*Revision 2.202  1994/12/23  03:30:07  Kell
+*New default TAGs for the hardcoded crouton.
+*
+*Revision 2.201  1994/12/17  14:34:18  Kell
+*New TB functions for making I Vector test frames & clips.
+*Now supports partial autohue (only Digital Phase)
+*
+*Revision 2.200  1994/12/17  04:57:44  Kell
+*New TB_FlyerVolumes field for keeping track of a Flyer volume table.
+*
+*Revision 2.199  1994/12/15  17:44:59  Kell
+*Removed NullSoftIntHandler stuff.  New TB_CopListIntreq, and AVE_BIT.
+*
+*Revision 2.198  1994/12/14  16:02:41  pfrench
+*re-wrote input handler to eat amiga-m/n's is moving to
+*or away from the switcher screen, at which time it will
+*signal the switcher task to do a screen change.  This
+*eliminates race conditions between the switcher task
+*and the input handler.
+*
+*Revision 2.197  1994/12/09  22:16:45  Kell
+*More singlesteps
+*
+*Revision 2.196  1994/12/09  15:47:46  pfrench
+*fixed switcher screen to front stuff from hotkey
+*
+*Revision 2.195  1994/12/06  23:36:27  Kell
+*New GrabIQ and DoneGrabIQ functions added to TB
+*
+*Revision 2.194  1994/12/06  07:15:13  Kell
+*Now frees any SystemTags that were loaded.
+*
+*Revision 2.193  1994/12/05  18:41:32  Holt
+*added fs2clip and clip2fs to toastbase
+*
+*Revision 2.192  1994/12/05  13:04:47  Kell
+*Fixed Enforcer hit with the CDROM determination code.
+*
+*Revision 2.191  1994/12/03  06:18:57  Kell
+*Now supports CDROMs, and a S:ToasterPrefs.HS file.
+*
+*Revision 2.190  1994/11/23  16:36:06  Kell
+*New FGC_FCount & UnSavable Commands added to TB.
+*Flyer_ functions for reading/writing fields added to TB.
+*
+*Revision 2.189  1994/11/18  08:55:25  Kell
+*New WaitForReplyMessage() TB function.
+*Now opens/closes RexxSysBase.  Creates one RexxMsg.
+*
+*Revision 2.188  1994/11/17  15:41:09  Kell
+*Wait4TopNoDisable added to TB
+*
+*Revision 2.187  1994/11/15  15:44:49  Kell
+*New TB functions
+*
+*Revision 2.186  1994/11/10  02:53:12  Kell
+*Now calling InitFlyerPlay function to set input sync, and Play mode at startup.
+*
+*Revision 2.185  1994/11/09  14:41:15  Kell
+**** empty log message ***
+*
+*Revision 2.184  1994/11/04  08:47:00  Kell
+*Make the LoadedSlices a UWORD value.
+*
+*Revision 2.183  1994/11/04  03:27:17  Kell
+*Added to TB a pointer to TB_SystemTabs, and GetTheDefaultPath & FindTheFile functions.
+*
+*Revision 2.182  1994/11/02  11:26:50  Kell
+*New IsEitherButtonDown() added to TB.
+*
+*Revision 2.181  1994/11/02  05:33:30  Kell
+*Calls to the Dummy Crouton Handler don't destroy registers now.
+*
+*Revision 2.180  1994/10/28  13:02:52  Kell
+*Now creates a NULL Software interrupt handler, that remains in memory even after the switcher exits.  New TB_NullSoftIntHandler field.
+*
+*Revision 2.179  1994/10/27  13:58:01  Kell
+*Added some masterclock debugging code to check for spurious interrupts, missing counts, double counts etc.
+*
+*Revision 2.178  1994/10/25  07:09:39  Kell
+*Moved the InitFlyer and PlayMode calls to after TB_BootLock has been defined.
+*
+*Revision 2.177  1994/10/21  12:44:58  Kell
+*Removed big Allocmems because they were crashing on Todds
+*
+*Revision 2.176  1994/10/13  17:55:57  Kell
+*VTA can now be in the Switcher_Support drawer.
+*
+*Revision 2.175  1994/10/12  00:34:14  Kell
+*VTLogo/VT4000 and VTI/VTA files can now be in the Switcher_Support drawer.
+*
+*Revision 2.174  1994/10/05  05:54:27  Kell
+*Renamed MakeTagListsOld to MakeTagListsSaved
+*
+*Revision 2.173  1994/09/30  21:40:45  Holt
+*added AppendClipIcon
+*/
+*
+*Revision 2.172  94/09/30  20:08:10  Holt
+*Added MakeClipIcon
+*
+*Revision 2.171  94/09/29  15:28:20  Kell
+*TB_TimeAtStart added.
+*Now MasterClock checks mouse buttons correctly every field.
+*
+*Revision 2.170  1994/09/28  21:52:23  Kell
+*Now sets Flyer clock after InitFlyer
+*
+*Revision 2.169  1994/09/28  19:05:26  Kell
+*Added some counter to the Masterclock for sequencing.
+*
+*Revision 2.168  1994/09/27  04:23:18  Kell
+*RestoreMattColor() changed to RestoreMatteColor.
+*Added SetMatteColor() to TB.
+*
+*Revision 2.167  1994/09/23  08:32:38  Kell
+*New fields in TB for keeping track of large mouse moves (TB_BigMouseX/Y).
+*MasterClock routine now looks at mouse position & buttons.  This will always occur, so it hows the button be looked at when the mechine is busy doing something else.
+*
+*Revision 2.166  1994/09/22  05:48:27  Kell
+*New fields for dealing with clips StartField during sequencing,
+*and -> to WaitTime abort function.
+*
+*Revision 2.165  1994/09/22  05:03:58  Kell
+*Fixes to project saving (correct length for FS_Dev name.
+*New error message on Flyer_PlayMode failure.
+*
+*Revision 2.164  1994/09/21  19:25:46  Kell
+*Now using the correct length for the default RAM: FS & Project devices.
+*
+*Revision 2.163  1994/09/15  18:53:11  pfrench
+*Added low memory handler LVOs
+*
+*Revision 2.162  1994/09/14  02:18:50  Kell
+*Added unfinished Load/SaveClipField() and ExpandField() functions to TB.
+*
+*Revision 2.161  1994/09/13  21:38:30  Holt
+**** empty log message ***
+*
+*Revision 2.160  94/09/13  18:54:54  Holt
+*added MakeIcon and AppendIcon
+*,
+*
+*Revision 2.159  94/09/08  19:24:49  Kell
+*New FGC_UpdateTag/TagInfo commands and AddValue2FGtags functions added to TB.
+*
+*Revision 2.158  1994/09/02  08:36:48  Kell
+*New PostError functions.  New TB_LastError and TB_OurDelayError fields.
+*Now Key Repeats always remain enabled.
+*
+*Revision 2.157  1994/08/27  07:12:32  Kell
+*Added fields so we can locate VTSetUp and EffectsBase if they ever move.
+*
+*Revision 2.156  1994/08/08  23:35:33  Kell
+*Now load/unloads DefaultPaths for content.
+*
+*Revision 2.155  1994/08/05  16:56:26  Holt
+*added new icon maker funtions StopSavePIcon644 and StopSaveRGBPIcon644
+*
+*Revision 2.154  94/08/03  06:41:31  Kell
+*Added AddString2FGtags function to TB
+*
+*Revision 2.153  1994/07/28  11:24:52  Holt
+*ADDED ICONCOPYLINES FOR CG USE.
+*
+*Revision 2.152  94/07/27  19:29:51  Kell
+**** empty log message ***
+*
+*Revision 2.151  1994/07/17  17:15:32  Holt
+*added mkpicon, Grabicon to Toastbase
+*
+*Revision 2.150  94/07/14  00:58:41  Holt
+*added PIcon funtions
+*
+*Revision 2.149  94/07/01  12:59:22  Kell
+*Added new binary to ascii conversion routines to TB.
+*Added some requester related functions to TB.
+*Added FGC_O/M/P button commands to TB.
+*Now opens Flyer library (instead of using FlyerLink.o)
+*
+*Revision 2.148  94/06/04  04:04:47  Kell
+*Initially now defaults to switcher in control of display Top.
+*Added TB_RequesterResult field.
+*
+*Revision 2.147  94/05/24  22:07:45  Kell
+*TB_WaitTime field added to TB.  Many FGC_....Commands rename to this new naming convention.
+*
+*Revision 2.146  94/04/21  17:28:15  Kell
+*Added TB_GUImode field to TB
+*
+*Revision 2.145  94/03/31  13:11:45  Kell
+*New TB functions
+*
+*Revision 2.143  94/03/18  17:21:47  Kell
+*New TB field for TB_VideoDuration
+*
+*Revision 2.141  94/03/18  09:20:42  Kell
+*New fields for flyer starttime.  Inits Flyer.
+*
+*Revision 2.140  94/03/15  23:49:47  Kell
+*New SendFGC2Crouton routine added to TB
+*
+*Revision 2.139  94/03/15  17:04:02  Kell
+*Killed "No usable currentproject file" warning.
+*
+*Revision 2.138  94/03/15  14:16:34  Kell
+*Disabled reading initial current project.
+*
+*Revision 2.137  94/03/15  14:14:08  Kell
+*ReadDefaultProject now used ReadProject.
+*
+*Revision 2.136  94/03/11  20:55:09  Kell
+*Added DefaultCroutonHandler.
+*
+*Revision 2.135  94/03/11  14:59:46  Kell
+*Now has NoED flag on switcher startup for No ProjectEditor/Grazer.
+*
+*Revision 2.130  94/03/07  08:18:26  Kell
+*New code to open/close the Crouton.library.
+*
+*Revision 2.128  94/03/06  16:52:45  Kell
+*New ToastBase functions.
+*
+*Revision 2.125  94/02/17  12:33:47  Kell
+*Removed error when no effects can load.  This is now OK.
+*
+*Revision 2.123  94/02/07  15:55:24  Kell
+*Various changes to support the new 4.0 croutons & projects.
+*
+*Revision 2.122  94/01/08  01:46:39  Kell
+*New LoadAnimHeader function added to TB
+*
+*Revision 2.121  94/01/07  14:29:48  Kell
+*New field that works with FGC_LOAD during project loading.
+*
+*Revision 2.119  93/12/07  02:14:28  Kell
+*Fixed crashy bug when selecting internal dummy crouton.
+*
+*Revision 2.115  93/11/16  02:17:44  Kell
+*Bringing ScreenToFront before ReinstallCurrentCopList to prevent AmigaDOS 3.1
+*
+*Revision 2.114  93/11/06  08:42:51  Kell
+*Fixed to work with EF_EffectsLogic, EF_EffectsTable, EF_TimeVariables and EF_VariableResults no longer being embedded within EFXBase.
+*
+*Revision 2.112  93/11/05  18:45:31  Turcotte
+*Changes to make switcher interface 6 bitplanes
+*And added loading of project editor
+*
+*Revision 2.109  93/10/29  03:35:49  Kell
+*New Mouse button & position functions added to TB
+*New InstallAVE/C noWait functions added to TB
+*
+*Revision 2.107  93/10/26  15:14:17  Kell
+*Fixed button logic problems with BUFFERLESS version of Switcher
+*
+*Revision 2.106  93/10/26  13:18:18  Kell
+*Avoids loading TIO on 68000 machines, which was causing a crash.
+*
+*Revision 2.103  93/10/23  05:14:38  Kell
+*Now does AutoMatte with correct non-AutoHue patches.
+*Many new STEPMSGs now at Switcher startup, for single stepping debugging.
+*
+*Revision 2.102  93/10/19  18:11:37  Turcotte
+*Added new routines for Popup Menu
+*
+*Revision 2.101  93/09/30  16:17:11  Turcotte
+*Just to force make
+*
+*Revision 2.100  93/09/30  16:02:47  Turcotte
+*Bump revison number.
+*
+*Revision 2.99  93/09/05  01:19:59  Kell
+*AutoHue now uses an old and new patch.  New error messages.
+*
+*Revision 2.98  93/08/25  00:32:54  Kell
+*Some MOVEMs around AutoMatte call
+*
+*Revision 2.97  93/06/19  10:41:39  Kell
+*Fixed TOASTERLESS version, new SLAVE & MASTER versions
+*
+*Revision 2.96  93/06/10  19:38:07  Kell
+*Fix to VT.Logo on A2000/3000
+*
+*Revision 2.86  93/06/05  07:41:56  Kell
+*
+*
+*
+*DoSafeWriteRGB and SimpleBMcoplistRGB data fields added to TB
+*
+*Revision 2.84  93/06/04  17:06:23  Kell
+*AutoHue now fills bank DV0 with bars on exit.
+*
+*Revision 2.81  93/06/01  21:40:23  Kell
+*Changed windows Detail/Block pen colors so prop slider use 2 for bkg
+*
+*Revision 2.80  93/05/30  13:09:14  Kell
+*New TB fields for substituting custom TBar rendering routines.
+*
+*
+*Revision 2.79  93/05/29  04:16:40  Kell
+*Added SomeInterruptsOn/Off to TB
+*
+*Revision 2.72  93/05/21  05:14:30  Kell
+*Fixed crashes when running switcher again, or doing AutoHue.
+*
+*Revision 2.65  93/05/12  09:37:10  Kell
+*Fixed some things in the DummyICrouton.
+*
+*Revision 2.64  93/05/08  19:02:52  Kell
+*Once again we're loading Bars & a still at startup time.
+*
+*Revision 2.63  93/05/08  15:01:48  Kell
+*Added DVElutoff function to TB
+*
+*Revision 2.62  93/05/07  00:12:55  Kell
+*New SetupAndInstallSSBM() function added to TB
+*
+*Revision 2.60  93/05/06  01:33:39  Kell
+*Added TB_DoTBarYMouse, TB_NumFieldsSlow/Medium/Fast data fields to TB
+*and added ForceDoTBar2Top() function.
+*
+*Revision 2.59  93/05/05  20:32:46  Kell
+*Added TB_StashCount field to TB
+*
+*Revision 2.57  93/04/27  21:39:09  Kell
+*Added AnimFXHandler() to TB
+*
+*Revision 2.55  93/04/27  02:48:31  Kell
+*Now supports 3 versions: A4000, 3.0 new board, 3.0 old board
+*
+*Revision 2.54  93/04/18  07:11:55  Kell
+*Added audio function to TB.
+*
+*Revision 2.52  93/04/17  04:19:35  Kell
+*Added TB_BGColorFGL to toasterbase.
+*
+*Revision 2.48  93/04/07  00:11:27  Kell
+*Added TB_TBarTime field into ToasterBase
+*
+*Revision 2.47  93/04/06  03:27:18  Kell
+*Added GetFileLoadName and GetFileSaveName functions that use the ASL file requester.
+*
+*Revision 2.46  93/04/02  00:05:18  Turcotte
+*Added new routines for ham animation, and bumped library version to 3.
+*
+*Revision 2.44  93/04/01  05:39:23  Kell
+*Fixed logic in MasterTimer vertb server logic.
+*
+*Revision 2.39  93/03/31  23:48:45  Kell
+*Added countdown timer to MasterClock for processing one event / field.
+*
+*Revision 2.38  93/03/25  06:26:09  Kell
+*SetupSBMCopListAA & SetupSSBM functions added to ToastBase.
+*
+*Revision 2.37  93/03/22  22:37:45  Hartford2
+*Added dosbuffer routines
+*
+*Revision 2.36  93/03/18  17:18:37  Hartford2
+*Added SendRGBExtBeginRegion()
+*
+*Revision 2.35  93/03/17  16:30:48  Kell
+*Added Draw/Comp CroutonImage functions to TB.
+*
+*Revision 2.34  93/03/16  21:07:40  Kell
+*elhlistconf now includes all the headers.
+*
+*Revision 2.32  93/03/15  15:34:30  Hartford2
+*Added SendRGBExtInit()
+*
+*Revision 2.31  93/03/10  05:38:18  Kell
+*New TB_InterfaceDepth field initialized.
+*
+*Revision 2.29  93/03/06  18:50:41  Kell
+*Attempts to fix sync write failures.
+*
+*Revision 2.28  93/03/04  19:41:13  Finch
+*Added New Anim Vectors
+*
+*
+*Revision 2.27  93/03/03  02:46:58  Kell
+*Error message spell checked
+*
+*Revision 2.25  93/03/02  15:19:58  Turcotte
+*Added HamAnimFunctions to ToastBase
+*
+*Revision 2.24  93/03/01  16:48:46  Kell
+*Added InstallSBM**** & InstallAVE***doELHlist functions to ToastBase
+*
+*Revision 2.23  93/02/28  02:54:20  Kell
+*Now supports patching on OLD & new AA Toasters on non-
+*AA machines.
+*
+*Revision 2.22  93/02/27  21:09:23  Turcotte
+*Added SoftSpriteAudioOnScreen.
+*
+*Revision 2.19  93/02/25  10:45:58  Kell
+*Added many new error messages, and reworded some of the old ones.
+*
+*Revision 2.18  93/02/24  15:46:18  Turcotte
+*Added SoftSpriteOnScreen to ToastBase
+*
+*Revision 2.14  93/02/24  03:28:56  Kell
+*New logic to handle AA Toasters with filtered Main connnected to
+*IS_EXT.  Added some funtions.  Default Ped/Gain values changed.
+*
+*Revision 2.13  93/02/13  22:24:06  Kell
+*TOASTERLESS VERSION
+*
+*Revision 2.12  93/02/13  14:26:51  Kell
+*New assembler conditional flags.  Double Long Word aligned Chip chunk.
+*
+*Revision 2.10  93/01/22  10:39:38  Kell
+*Added DoSyncWrite() function to ToastBase
+*
+*Revision 2.9  93/01/21  04:19:37  Turcotte
+*Changes for new Grids
+*
+*Revision 2.8  93/01/20  20:44:57  Kell
+*Added InitReadScanLine funtion
+*
+*Revision 2.6  92/12/17  17:51:17  Kell
+*BPLCON0 hacks for A2000/4000
+*
+*Revision 2.5  92/12/02  17:28:37  Finch
+*Fix for 3.0 include files KT.
+*
+*Revision 2.4  92/10/07  17:41:27  Finch
+*Removed Unused AnimWipe Vectors, Added Free Vectors 1 to 5
+*
+*Revision 2.3  92/09/18  03:35:57  Kell
+*Changed screen depth to 2, & TB_BGColor to 1.
+*
+*Revision 2.2  92/09/15  14:26:38  Kell
+*Killed flashing LED debug stuff.
+*
+*Revision 2.1  92/09/12  02:08:32  Kell
+*Added MasterClock server.
+*
+*********************************************************************
+*+*******
+*+
+*+ Switcher
+*+
+*+ This is the main driver program for the Video Toaster which initializes
+*+ the Video Toaster and its support environment, provides the backbone of
+*+ resource control over the AMIGA and the Video Toaster in the form of the
+*+ main interface/switcher, and finally when the time comes, it will
+*+ de-allocate the Video Toaster and its support environment.
+*+
+*+*******
+
+
+*====	Needed include files.
+
+	INCLUDE	'assembler.i'
+;;	INCLUDE	'RAM:conditional.i'
+
+	INCLUDE	'intuition/intuition.i'
+	INCLUDE	'exec/memory.i'
+	INCLUDE	'exec/execbase.i'
+	INCLUDE	'exec/alerts.i'
+	INCLUDE	'hardware/custom.i'
+	INCLUDE	'hardware/intbits.i'
+	INCLUDE	'libraries/dosextens.i'
+	INCLUDE	'workbench/startup.i'
+
+	INCLUDE	"lib/intuition_lib.i"
+	INCLUDE	"lib/graphics_lib.i"
+	INCLUDE	"lib/exec_lib.i"
+	INCLUDE	"lib/dos_lib.i"
+	INCLUDE	"lib/diskfont_lib.i"
+	INCLUDE	"rexx/rxslib.i"
+
+	INCLUDE	'vthand.i'
+	INCLUDE	'instinct.i'
+	INCLUDE	'macros.i'
+	INCLUDE	'elh.i'
+	INCLUDE	'vtdebug.i'	;!!!!!!
+	INCLUDE	'eflib.i'
+	INCLUDE	'hardsets.i'
+	INCLUDE	'croutons.i'
+	INCLUDE 'crouton_lib.i'
+	INCLUDE	'CommonRGB.i'
+	INCLUDE 'flyer.i'
+	INCLUDE 'DelayErr.i'
+	include	"custom.i"
+	include "cop.i"
+
+	include	'serialdebug.i'
+
+	xdef	TheTextAttr2
+
+;;SERDEBUG	SET	1
+;;CLIDEBUG	SET 1
+
+;;SINGLESTEPSWITCHER SET	1	;requires SERDEBUG, see below
+
+;;$$
+;;	INCLUDE	'extras/serialdebug_lib.i'
+;;SERIALDEBUGFLAG	SET	1
+;;$$
+
+;;DBDIC	SET	1		;When defined, debug DummyICrouton
+;;DBCRD SET	1	;Debug CreateDisplay
+
+;;MASTERCLOCKTEST	set	1
+
+***********************************************************
+;;TOASTERLESS	SET	1		; This flag allows running the
+					; Toaster code, even if there isn't
+					; a Toaster present.
+
+;;NOBUFFERFILL	SET	1		; Set for no picture load or bars
+;;NOAUTOCAL	SET	1		; Set to avoid PedGain & AutoMatte
+;;NOSYNCWRITE	SET	1		; Set to avoid SyncWrite
+
+;;NO_CALIREADSCANLINE	equ 1		; Addendum 6/19/91: define if you
+*					; want to avoid the CaliReadScanLine					
+*					; calls.  Allows execution of buggy
+*					; patches that fail on read/writing.
+*
+***********************************************************
+
+	IFD	SINGLESTEPSWITCHER
+SERDEBUG	SET	1
+	ENDC
+
+*--------------------------------
+STEPMSG	MACRO	
+	IFD	SINGLESTEPSWITCHER
+	DUMPMSG	<\1>
+	WAIT4LMB
+	ENDC
+	ENDM
+*--------------------------------
+
+V20	SET	1	;not version 1.0, so don't auto open LUTlibrary
+
+*--------------------------------
+
+* 6-16-93 We'll define this value externally in the MakeFile
+;;MASTER_VERSION	SET	1	; Addendum 10/19/90:
+*					; define to make a special version
+*					; of the Switcher for in-house
+*					; Toaster testing
+
+* 6-16-93 We'll define this value externally in the MakeFile
+;;SLAVE_VERSION	SET	1		; Addendum 12/07/90: define if you
+*					; want to create a SLAVE version.
+*					; Used for Testing Toasters
+*					; NOTE: Only switcher.a is special.
+
+;;SPECIAL_DEBUG	SET	1		; Addendum 11/28/90: define if you
+*					; want the HOT KEY inputhandler to
+*					; not check what screen and window
+*					; your currently at
+
+;;KILLKEYREPEATS SET 1			; Reenabled key repeats 9/2/94
+
+*---------------------
+	IFND	AACHIPS
+NUMINTERFACEPLANES	SET	2
+	ENDC
+	IFD	AACHIPS
+NUMINTERFACEPLANES	SET	6
+	ENDC
+*---------------------
+
+*====	Macros and constants not in the include files above.
+
+TwoOVersion	EQU	36	; Addendum 4/27/91: 2.0 support
+
+TB_DEBUG	EQU	1	; allow this symbol to be defined for
+*				; hotkey WB/debug support
+*				; Addendum 12/5/89:
+*				; This needs to be left in as of now since
+*				; the input.device structures defined
+*				; privately within the Switcher code will be
+*				; needed to implement the ToasterBase
+*				; function MoveSoftSpriteREL() and
+*				; MoveSoftSpriteABS().
+
+   IFD	TB_DEBUG
+	INCLUDE	'devices/input.i'
+   ENDC
+
+	XCODE	CleanAndExit
+
+*====	Start of executable program code.
+
+	SECTION	SwitcherCode,CODE
+
+SwitcherCode:
+	lea	DataPool,a5		; establish addressing to private
+*					; data pool and ToasterBase with A5
+	PUT.l	sp,InitialSP		; save initial SP for exits/aborts
+	PUT.l	ABSSYSBASE,TB_SYSBase	; place ExecBase pointer
+
+	CALL	InitializeAll		; get us initialized and started
+
+	move.l	TB_SwitcherTask(a5),a0
+	move.l	pr_CLI(a0),d0
+	beq.s	.nohandle
+
+	move.l	TB_DOSBase(a5),a6
+	XSYS	Output
+	move.l	d0,d1
+	beq.s	.nohandle
+	XLEA	VersionMessage,a0
+	move.l	a0,d2
+	moveq.l	#-1,d3			;findlength
+1$	addq.l	#1,d3
+	move.b	(a0)+,d0
+	bne.s	1$
+	XSYS	Write
+
+	XSYS	Output
+	XJSR	ShowVersion		;
+
+.nohandle
+
+	move.l	TB_Window(a5),a0	;before we do anything make sure
+	move.l	TB_ITUBase(a5),a6	;our window is active.
+	XSYS	ActivateWindow
+
+;;	XJSR	LoadInternalCroutons
+
+	XJSR	BringUpProjectEditor
+
+.DontWantGrazer
+	XCALL	MBDispatch		; monitors IDCMP and does what it is
+*					; directed to do - exited by user
+;;	XJSR	FreeInternalCroutons
+	CALLTL	SelectStdEfx		;make sure anims are not selected
+
+	CLEAR	d0			; force clean bill of health
+
+*====	Grand exit and cleanup routine.
+
+CleanAndExit:
+
+	move.l	d0,d7
+;;$$
+;;	PDUMP
+;;	SAVE	d0/d1/a0/a1/a6
+;;	GET.l	TB_SYSBase,a6
+;;	CLEARA	a1
+;;	CALLROM	FindTask
+;;	move.l	d0,a0
+;;	moveq	#TC_SIZE,d0
+;;	move.l	SDBBase(pc),a6
+;;	CALLROM	MDump
+;;	REST	d0/d1/a0/a1/a6
+;;	PUTS	<Started CleanAndExit()>
+;;$$
+
+	CALL	BootErrMsg		; display error message
+
+	STEPMSG	<before CloseSwitcherGPI>
+	
+	moveq	#-1,d0
+	XCALL	ReValidate		; Addendum 3/2/90: assure that the
+*					; user's floppies are safe
+*					; (works only on floppy devices
+*					;  known to the Toaster system)
+
+	GET.l	InitialSP,sp		; assure stack cleared off
+
+	XCALL	CloseSwitcherGPI	; Addendum 8/6/90: for Switcher GPI
+
+*					; the following code will need
+*					; DOSBase and other fields, which
+*					; seems risky - but if any external
+*					; FastGadgets, certain internal
+*					; FastGadgets, or auxillary libraries
+*					; are found - DOSBase among other
+*					; must have been needed and used,
+*					; and of course, therefore valid
+
+	STEPMSG	<before UnloadToolBox>
+	
+	XCALL	UnLoadToolBox		; remove ToolBox FastGadgets
+
+	XLEA	CommonRGBBuffer,a0
+	moveq.l	#-1,d0
+	move.w	d0,CRGB_OpenCount(a0)	; should not be needed 
+
+	STEPMSG	<before KillCommonRGB>
+
+	CALLTL	KillCommonRGB		; Addendum 3/28/91: Ken
+
+	STEPMSG	<before PreviewCrouton>
+	
+	XLEA	PreviewCrouton,a0	;Free any animations if loaded
+	CALL	1$	
+
+	XLEA	PostviewCrouton,a0	;Free any animations if loaded
+	CALL	1$	
+
+
+	STEPMSG	<before MainFGL>
+	
+	GET.l	TB_MainFGL,a0
+	CALL.s	1$
+	GET.l	TB_PrvwFGL,a0
+	CALL.s	1$
+	GET.l	TB_LumKeyFGL,a0
+	CALL.s	1$
+	GET.l	TB_GridSelFGL,a0
+	CALL.s	1$
+	GET.l	TB_TransFGL,a0
+	CALL.s	1$
+	GET.l	TB_SliceFGL,a0
+	CALL.s	1$
+	GET.l	TB_NumPadFGL,a0
+	CALL.s	1$
+	GET.l	TB_ClipFGL,a0
+	CALL.s	1$
+	GET.l	TB_TBarFGL,a0
+	CALL.s	1$
+	GET.l	TB_FMCountFGL,a0
+	CALL.s	1$
+	GET.l	TB_MiscFGL,a0
+	pea	5$(pc)
+
+1$:
+	move.l	a0,d0			; FastGadget pointer NULL?
+	bne.s	2$			; if not - skip on
+	rts				; else ignore this code
+
+2$:
+	move.l	(a0),d2			; get link to next FG
+	move.b	FG_LoadFlag(a0),d3	; get load flag
+
+	move.l	FG_Function(a0),d0	; the FG have a function to call?
+	beq.s	3$			; if not - skip the FGC_xxxx command
+
+	SAVE	d2/d3/d7/a0/a5		; save registers we can't lose
+	move.l	a5,-(sp)
+	move.l	a0,-(sp)
+	move.l	#FGC_UNLOAD,-(sp)
+	move.l	d0,a0
+	jsr	(a0)			; ask the FG to prepare for removal
+	lea	12(sp),sp
+	REST	d2/d3/d7/a0/a5		; restore registers
+
+3$:
+	move.b	d3,d3			; FastGadget internal?
+	beq.s	4$			; if so - skip on
+	XCALL	UnLoadFastG		; remove the FastGadget if external
+
+4$:
+	move.l	d2,d2			; another FG?
+	move.l	d2,a0
+	bne.s	2$			; if so - reloop
+	rts				; else return to caller
+
+5$:
+;;!!!!!!!!!!!!!!!!!!! EffectsLibrary and LUTlibrary Hack !!!!!!!!!!!!!!!
+	GET.l	TB_SYSBase,a6		; pointer to ExecBase
+	XLEA	EffectsLibrary,a2	; HACK - effects.library is linkable
+ IFND V20
+	XLEA	LUTLibrary,a3		; Addendum 6/11/90: so is LUTLibrary
+ ENDC
+	GET.l	TB_LibList,a1		; Addendum 3/9/90: assure libraries
+*					; linked in are now removed!!
+
+.CheckLoop:
+	move.l	(a1),d2
+	beq.s	.EndOfTheList
+
+	cmp.l	a1,a2
+ IFND V20
+	beq.s	.DoTheRemove
+	cmp.l	a1,a3
+ ENDC
+	bne.s	.NotLinkedLib
+ IFND V20
+.DoTheRemove:
+ ENDC
+	STEPMSG	<before Remove1>
+	
+	CALLROM	Remove			; library was linked in -
+*					; DON'T let it be unloaded!!!!
+
+.NotLinkedLib:
+	move.l	d2,a1
+	bra.s	.CheckLoop
+
+.EndOfTheList:
+	GET.l	TB_LibList,a0		; get first entity in the private
+*					; ToasterBase library list
+
+6$:
+	move.l	(a0),d2			; are we at the end of the list?
+	beq.s	7$				; if so - exit the loop
+	bset.b	#LIBB_DELEXP,LIB_FLAGS(a0)	; else assure that library
+*						; will be removed
+	STEPMSG	<before RemoveAuxLib>
+
+	XCALL	RemoveAuxLib		; remove the library - don't bother
+*					; to check if we succeeded - nothing
+*					; we could do anyway at this point
+	move.l	d2,a0			; address next list entity
+	bra.s	6$			; and reloop till done
+
+7$:
+	GET.w	TB_InList,d0		; ToasterBase installed in Exec
+*					; library list?
+	beq.s	8$			; if not - skip on
+	GET.l	TB_SYSBase,a6		; else remove it from the list
+	CALLROM	Forbid
+	move.l	a5,a1
+
+	STEPMSG	<before Remove2>
+	
+	CALLROM	Remove
+	CALLROM	Permit
+
+8$:
+
+*					; shutdown the SoftSprite system
+	STEPMSG	<before CloseSoftSprite>
+	
+	XCALL	CloseSoftSprite		; - if open
+
+	GET.l	TB_Window,d0		; got an open window?
+	beq.s	10$			; if not - skip on
+	move.l	d0,a0			; else remove the window
+	GET.l	TB_ITUBase,a6
+
+	STEPMSG	<before CloseWindow>
+
+	CALLROM	CloseWindow
+
+10$:
+	GET.l	TB_Screen,d0		; got a open screen?
+	beq.s	15$			; if not - skip on
+	move.l	d0,a0			; else remove the screen
+	GET.l	TB_ITUBase,a6
+
+	STEPMSG	<before CloseScreen>
+	
+	CALLROM	CloseScreen
+
+15$:
+* Addendum 5/29/90: latest stuff for ColorText.
+
+	STEPMSG	<before RemoveText>
+	
+	XCALL	RemoveText		; not a public ToasterBase function
+*					; - safe to call even if earlier
+*					; install function failed or not
+*					; called
+
+	GET.l	TB_Font,d0		; Addendum 10/26/89:
+	beq.s	16$			; close our default font?
+	move.l	d0,a1
+	GET.l	TB_GFXBase,a6
+
+	STEPMSG	<before CloseFont>
+	
+	CALLROM	CloseFont
+
+16$:					; Addendum 6/14/90
+ ifeq 1
+	GET.l	TB_LightFont,d0
+	beq.s	177$
+	move.l	d0,a1
+	GET.l	TB_GFXBase,a6
+	CALLROM	CloseFont
+
+177$:					; Addendum 6/14/90:
+ endc
+
+	GET.w	TB_ToastActive,d0	; Toaster been opened and active?
+	beq	9$			; if not - skip on
+
+* Shutdown the Toaster - Put it in genlock mode
+	STEPMSG	<before DoTakeNoKey>
+	
+	CALLTL	DoTakeNoKey
+
+	STEPMSG	<before InstallAVE>
+	
+	CALLTL	InstallAVE	;just to make sure not in Digital mode
+	
+	DEA	TB_VTSetUp,a0
+	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	beq.s	11$
+	TURNLIVEDVEOFF	d0
+11$	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0	;could be encoder!
+	ELHPUT_BM_I	a0,VTI_BM_ENCODER
+	ELHPUT_PV_I	a0,VTI_PV_ENCODER
+	ELHPUT_CDS_I	a0,VTI_CDS_PIXELSW
+	ELHPUT_CD_I	a0,VTI_CD_SHOWB
+	ELHCLEAR_USERON	a0
+	ELHCLEAR_PVMUTE	a0
+	ELHCLEAR_WERB	a0
+	ELHCLEAR_MATTE	a0
+	ELHSET_LINR	a0
+	ELHSET_LINP	a0
+	ELHSET_NOPAIRS	a0
+	ELHCLEAR_LUT	a0
+	ELHCLEAR_BMWIPE	a0
+	ELHCLEAR_ISWIPE	a0
+	ELHCLEAR_AMWIPE	a0
+
+	move.l	#VIDEOTYPE_FREEZE4,d0
+
+	STEPMSG	<before FreezeThawDVE>
+	
+	CALLTL	FreezeThawDVE
+
+	ELHCLEAR_NOLOCK a0
+* because it will be frozen, ELH2Sprite0 will turn WERB off also. Since
+* EH4 will be the last sent, turning on the LOCK, the final EH0 will never
+* be seen, but it won't matter, because we want to leave WERB off anyway!
+* Transparency in UNLOCK will be avoided because CDS = 1, and CD = $FF.
+
+	STEPMSG	<before SendELH2Toaster>
+	
+	CALLTL	SendELH2Toaster
+	CALLTL	Wait4Top	;necessary???
+
+9$
+	STEPMSG	<before RestoreCopperList>
+	
+	CALLTL	RestoreCopperList	; shut off Toaster
+
+*-------------- Free SystemTags
+* 1st node is always "LoadSeged" - Do Not Free this!
+	GET.l	TB_SYSBase,a6
+	GET.l	TB_SystemTags,a2
+	move.l	(a2),a2			;-> possible node to deallocate
+.nxtsystag:
+	move.l	a2,d0			
+	beq	.systagsfree		;jmp if no more allocated TagLists
+
+	move.l	d0,a1		;->block
+	move.l	TLN_Size(a2),d0	;size
+	move.l	(a2),a2			;get next link pointer before FreeMem
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem an SystemTags TagList >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem	
+	bra	.nxtsystag	
+*--------------	
+
+.systagsfree
+	STEPMSG	<before CloseKbdState>
+	
+	XCALL	CloseKbdState		; Addendum 3/25/91:
+
+*					; Addendum 10/31/90:
+	GET.l	TB_VBIntServer,d0	; close down VB server - if any
+	beq.s	.NoVBInt
+
+	move.l	d0,a0
+
+	STEPMSG	<before DeleteInterrupt1>
+	
+	XCALL	DeleteInterrupt
+
+.NoVBInt:
+
+*---------	SKELL 9/11/92
+	GET.l	TB_MasterClock,d0	; close down Master Clock server - if any
+	beq.s	.NoMCInt
+
+	move.l	d0,a0
+
+	STEPMSG	<before DeleteInterrupt2>
+
+	XCALL	DeleteInterrupt
+*---------
+
+.NoMCInt:
+
+	GET.l	TB_ARexxPort,d0		; ARexx support port to free?
+	beq.s	.NoARexxPort		; if not - skip on
+	move.l	d0,a0			; else free it up
+
+	STEPMSG	<before DeletePort1>
+	
+	XCALL	DeletePort
+
+.NoARexxPort:
+	GET.l	TB_TBMsg,d0		; Toaster public message to free?
+	beq.s	17$			; if not - skip on
+	move.l	d0,a1			; else free it up
+	move.l	#TBM_SIZ,d0
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before FreeMem1>
+	
+	CALLROM	FreeMem
+
+17$:
+	GET.l	TB_TBMsgPort,d0		; Toaster public port to free?
+	beq.s	20$			; if not - skip on
+	move.l	d0,a0			; else remove it
+
+	STEPMSG	<before DeletePort2>
+	
+
+	XCALL	DeletePort
+
+20$:
+	STEPMSG	<before RemFloppyDiskPort>	
+
+	XCALL	RemFloppyDiskPort	; remove floppy system message port
+*					; system - if there
+*					; Addendum 2/13/90:
+
+   IFD	TB_DEBUG
+
+*====	Close down the input handler. (private to Switcher code)
+
+	GET.w	InputDevFlag,d0		; Input device open and an input
+*					; handler present?
+	beq.s	.NoInputStuff		; if not - skip on
+	DEA	DeviceRequest,a1	; snatch grab StdIOReq message
+	GET.l	TB_SYSBase,a6		; and pointer tp ExecBase
+	bmi.s	.NoInputHandler		; if no input handler - skip on
+
+	clr.b	IO_FLAGS(a1)		; else remove input handler
+	move.w	#IND_REMHANDLER,IO_COMMAND(a1)
+	DEA	InputHandlerIS,a0
+	move.l	a0,IO_DATA(a1)
+	CALLROM	DoIO
+
+	DEA	DeviceRequest,a1	; get StdIOReq message pointer again
+
+.NoInputHandler:
+	CALLROM	CloseDevice		; close the input device
+
+.NoInputStuff:
+	DEA	DeviceIOPort,a1		; get device StdIOReq port
+	move.b	MP_SIGBIT(a1),d2	; was it intitialized and installed?
+	bmi.s	.NoPort			; if not - skip this
+
+	GET.l	TB_SYSBase,a6		; else remove the port
+	CALLROM	RemPort
+	move.b	d2,d0			; then free up the port signal
+	CALLROM	FreeSignal
+
+.NoPort:
+
+   ENDC
+
+*---------
+	GET.l	TB_RexxMsg,d0
+	beq	80$
+	movea.l	d0,a0
+	GET.l	TB_RexxSysBase,a6 ;will be OK, because we have TB_RexxMsg
+
+	moveq.l	#16,d0		  ;clear all arg strings
+	STEPMSG	<before ClearRexxMsg>	
+	CALLROM	ClearRexxMsg
+
+82$	GET.l	TB_RexxMsg,a0
+	STEPMSG	<before DeleteRexxMsg>	
+	CALLROM	DeleteRexxMsg
+
+*---------
+80$
+	STEPMSG	<before CloseGreet>	
+
+	XCALL	CloseGreet		; Addendum 2/22/91:
+*					; close down and de-alocate Greet
+*					; - if not already done so
+
+	GET.l	TB_FASTMem,d0		; FAST memory to free up?
+	beq.s	21$			; if not - skip it
+	move.l	d0,a1			; else free it up
+	GET.l	TB_FASTMemSIZE,d0
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before FreeMem2>
+
+	CALLROM	FreeMem
+
+21$:
+	move.l	CHIPMemActualStart(pc),d0 ; CHIP memory to free up?
+	beq.s	22$			  ; if not - skip it
+	move.l	d0,a1			  ; else free it up
+	GET.l	TB_CHIPMemSIZE,d0
+	addq.l	#8,d0			; bump up size by 8!
+
+* WE ARE GOING TO MAKE THE PUBLIC TB_CHIPMem VALUE DOUBLE LONG WORD ALIGNED.
+* BUT WHY DO WE ACTUALLY ALLOCATE 2 BYTES MORE THAN WE NEED?
+* MY GUESS IS WE NEEDED A CLEARED WORD UNDER THE FIRST LINE OF THE
+* TOASTER CONTROL SPRITES.  SKell 2-10-93
+
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before FreeMem3>
+	
+	CALLROM	FreeMem
+
+22$:
+	GET.l	TB_DOSBase,d0		; dos open?
+	beq	25$			; if not - skip it
+
+* (if dos.library open - then intuition.library must be open)
+
+	GET.l	TB_ITUBase,a6
+;; Bug 3.0 Crash	CALLROM	OpenWorkBench
+
+	STEPMSG	<before WBenchToFront>
+	
+	CALLROM	WBenchToFront
+
+	GET.l	TB_SYSBase,a6		; Addendum 5/11/90: assure that WB
+	CALLROM	Forbid			; application is installed in system
+
+	GET.l	TB_ITUBase,a0		; find the WB screen
+	lea	ib_FirstScreen(a0),a0	; get pointer to start of screen list
+	bra.s	.SCSneakIn		; sneak in to search loop
+
+.SCLoop:
+	move.l	d0,a0				; address the screen
+	move.w	sc_Flags(a0),d0			; get screen flags
+	and.w	#SCREENTYPE,d0			; isolate to screen type
+	cmp.w	#WBENCHSCREEN,d0		; WB screen?
+	beq.s	.FoundWB			; yup - skip out
+
+.SCSneakIn:
+	move.l	(a0),d0			; get next screen in list
+	bne.s	.SCLoop			; if one exists - reloop
+
+.LoadWB:
+	CALLROM	Permit			; try to load the WB application
+
+	GET.l	TB_DOSBase,a6		; first assure we're in a valid
+	GET.l	TB_BootLock,d1		; directory
+	CALLROM	CurrentDir
+
+	lea	.LoadWBStr(pc),a0	; then attempt to load the WB
+	move.l	a0,d1			; application
+	CLEAR	d2
+	CLEAR	d3
+	pea	.CloseDOSDown(pc)
+	JUMPROM	Execute
+
+.LoadWBStr:
+	DC.b	'LoadWB',0
+	CNOP	0,2
+
+.FoundWB:
+	move.l	sc_FirstWindow(a0),d0	; window on WB screen denoting that
+*					; the WB application is alive?
+	beq	.LoadWB			; if none - go try to load WB
+
+	CALLROM	Permit			; else just do an OpenWorkBench to
+*					; insure WB screen active
+
+	GET.l	TB_DOSBase,a6
+
+.CloseDOSDown:
+;;;;	move.l	d0,a6
+	GET.l	OldDirLock,d1		; directory to go back to?
+	bmi.s	23$			; if not - skip on
+	CALLROM	CurrentDir
+23$:
+;;	move.b	d7,d0			; display error message
+;;	CALL	BootErrMsg
+
+	move.l	a6,a1			; close the library
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before CloseLibrary>
+	
+	CALLROM	CloseLibrary
+
+25$:
+	GET.l	TB_ITUBase,d0		; intuition open?
+	beq	30$			; if not - skip it
+;;;;	move.l	d0,a6			; else first assure WB screen open
+;;;;	CALLROM	OpenWorkBench
+
+;;	move.l	#pf_KeyRptDelay+TV_SIZE,d0	; Addendum 2/3/90: restore
+;;	sub.l	d0,sp				; key delay in preferences
+;;	move.l	sp,a0
+;;	CALLROM	GetPrefs
+;;	GET.l	KeyRptDelay,pf_KeyRptDelay+TV_SECS(sp)
+;;	move.l	sp,a0
+;;	move.l	#pf_KeyRptDelay+TV_SIZE,d0
+;;	moveq	#-1,d1
+;;	CALLROM	SetPrefs
+;;	lea	pf_KeyRptDelay+TV_SIZE(sp),sp
+
+	STEPMSG	<before EnableKeyRepeat>
+
+	CALL	EnableKeyRepeat		; Addendum 6/5/90:
+
+	STEPMSG	<before AutoRequestEnable>
+
+	CALL	AutoRequestEnable	; Addendum 3/21/90: re-arm the
+*					; AutoRequest function
+*--------------------------
+	GET.l	TB_TioBase,d0
+	move.l	d0,a1
+	beq.s	29$
+	GET.l	TB_SYSBase,a6		; and then close the library
+
+	STEPMSG	<before CloseLibrary2>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+29$:	GET.l	TB_ITUBase,a1
+	GET.l	TB_SYSBase,a6		; and then close the library
+
+	STEPMSG	<before CloseLibrary3>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+30$:	GET.l	TB_GFXBase,d0		; graphics open?
+	beq.s	40$			; if not - skip it
+	move.l	d0,a1			; else close it
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before CloseLibrary4>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+40$:	GET.l	TB_CroutonBase,d0	; croutons open?
+	beq.s	45$			; if not - skip it
+
+	movea.l	d0,a6
+	CALLROM	FreeDefaultPaths
+	
+	movea.l	a6,a1			; else close it
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before CloseLibrary5>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+45$:	GET.l	TB_FlyerBase,d0
+	beq.s	47$
+	move.l	d0,a1
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before CloseLibrary5.5>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+47$:	GET.l	TB_RexxSysBase,d0
+	beq.s	50$
+	move.l	d0,a1
+	GET.l	TB_SYSBase,a6
+
+	STEPMSG	<before CloseLibrary5.6>
+
+	CALLROM	CloseLibrary
+
+*--------------------------
+50$:	GET.l	TB_SwitcherTask,a0		; get our Process
+	GET.l	OldWindowPtr,pr_WindowPtr(a0)	; and restore default DOS
+*						; error window
+
+	GET.l	VTStartUpMsg,d2		; did we come from WB?
+	beq.s	99$			; if not - skip the following
+
+	GET.l	TB_SYSBase,a6
+	CALLROM	Forbid			; first keep WB from unloading us
+	move.l	d2,a1
+
+	STEPMSG	<before ReplyMsg>
+
+	CALLROM	ReplyMsg		; then send back startup message
+
+99$:
+;;	GET.l	TB_SYSBase,a6
+;;	cmp.w	#TwoOVersion,LIB_VERSION(a6)
+;;	bcc.s	189$
+
+	
+*---------------------------------------------
+***!!!! Removed pre 4.0 because BIG allocmems were hanging on some systems.
+	IFD	MEMORYPANIC
+*					; try to insure that "dead" objects
+	move.l	#$7FFFFF00,d0		; in memory - fonts, libraries, etc.
+	CLEAR	d1			; are removed by causing a memory
+
+	STEPMSG	<before big AllocMem>
+
+	CALLROM	AllocMem		; panic
+	move.l	d0,d0
+	beq.s	189$			; skip on if we somehow got the mem
+
+	move.l	d0,a1			; else turn around and release it
+	move.l	#$7FFFFF00,d0
+
+	STEPMSG	<before big FreeMem>
+
+	CALLROM	FreeMem
+
+	ENDC	;MEMORYPANIC
+*---------------------------------------------
+
+
+189$:
+
+;;$$
+;;	PUTS	<Exiting CleanAndExit()>
+;;	PAUSE
+;;	CLEAR	d1
+;;	lea	SDBBase(pc),a0
+;;	move.l	d1,(a0)
+;;	CLOSESERDEBUG
+;;$$
+
+	STEPMSG	<before rts>
+
+	move.l	d7,d0			; restore return code
+	rts				; and exit the program
+
+*====	Initialize everything stub routine.
+
+InitializeAll:
+	SAVE	d2/d3/a2/a3/a6
+
+	move.l	a0,a2			; save possible CLI command line args
+	move.l	d0,d2
+
+	XLEA	EffectsLibrary,a1
+	PUT.l	a1,TB_EFXbase
+
+*	At one time this happened right before project loading.
+
+*					; ToasterBase should be initialized
+*					; - make it public by installing its
+	GET.l	TB_SYSBase,a6		; node in the Exec library list
+	CALLROM	Forbid
+	lea	LibList(a6),a0
+	move.l	a5,a1
+	CALLROM	AddTail
+	CALLROM	Permit
+	PUT.w	#-1,TB_InList		; denote ToasterBase installed in
+					; Exec's library list
+	STEPMSG	<before FindTask>
+
+	GET.l	TB_SYSBase,a6		; get our Process address - note that
+	CLEARA	a1			; we MUST be a process - not a task
+	CALLROM	FindTask		; 'cuz we use DOS
+	PUT.l	d0,TB_SwitcherTask	; save this Process address
+
+	move.l	d0,a0			; insure that DOS doesn't ever put up
+*						; a requester on errors
+	PUT.l	pr_WindowPtr(a0),OldWindowPtr	; save old window pointer
+	move.l	#-1,pr_WindowPtr(a0)		; now patch in overide
+
+	DEA	SwitcherTaskName,a1	; set task name to a known name
+	move.l	a1,LN_NAME(a0)
+
+	move.l	pr_CLI(a0),d0		; get ancestor
+	beq.s	.FromWB			; jump if from WB
+
+	PUT.l	a2,CMDLinePtr		; save command line args just in case
+	PUT.l	d2,CMDLineLen
+
+*					; Addendum 11/28/90: AutoHue support
+	GET.l	TB_FileBuff,a1
+
+.CLILoop:
+	move.b	(a2)+,d0		; get a copy of the first parameter
+	cmp.b	#' '+1,d0		; on the command line
+	bcc.s	.CLIOKChar
+
+	CLEAR	d0
+
+.CLIOKChar:
+	move.b	d0,(a1)+
+	bne.s	.CLILoop
+
+	move.l	pr_CurrentDir(a0),d2	; get boot lock of current CLI dir
+	bra	.Continue
+
+.FromWB:
+	STEPMSG	<before WaitPort>
+
+	lea	pr_MsgPort(a0),a0	; address DOS message port
+	move.l	a0,a2			; and get WB StartUp message
+	CALLROM	WaitPort
+	move.l	a2,a0
+	CALLROM	GetMsg
+	PUT.l	d0,VTStartUpMsg		; save message for later return
+
+	move.l	d0,a0			; get the associated lock for boot
+	move.l	sm_ArgList(a0),d2	; assign - if any
+	beq.s	.NoLock
+	move.l	d2,a1
+	move.l	wa_Lock(a1),d2
+	bne.s	.WBContinue
+
+.NoLock:
+	SETERR	5
+	ABORT	CleanAndExit(pc)
+
+*					; Addendum 11/28/90: AutoHue support
+.WBContinue:
+	cmp.l	#2,sm_NumArgs(a0)
+	bcs.s	.NoAutoHue
+
+	move.l	wa_SIZEOF+wa_Name(a1),a0	; get second WB arg name
+	GET.l	TB_FileBuff,a1			; and copy it
+	XCALL	STRcopy
+
+.Continue:
+	GET.l	TB_FileBuff,a0		; assure string parameter is in
+	XCALL	StringToUpper		; uppercase
+
+	lea	AutoHueString(pc),a1	; see if AutoHue has been specified
+	XCALL	STRcmp
+	bne.s	.NoAutoHue		; if not
+	move.b	#-1,AutoHueFlag		; denote AutoHue specified	
+	bra.s	.lookedatparam
+
+.NoAutoHue:
+	lea	NoGrazerString(pc),a1	; see if NoGrazer has been specified
+	XCALL	STRcmp
+	bne.s	.lookedatparam		; if not
+	move.b	#1,NoGrazerFlag
+	
+.lookedatparam
+;;	PUT.w	#NUMINTERFACEPLANES,TB_InterfaceDepth ;NOW HARD CODED INITIAL DEFAULT
+
+	STEPMSG	<before OpenAllLibs>
+
+	CALL	OpenAllLibs		; open graphics, intuition, and DOS
+
+;;$$
+;;	OPENSERDEBUG
+;;	PUTS	<Switcher startup>
+;;	PUTS	<At program startup - installing guru handler - 68000 only>
+;;	SET_TRAP	ALL
+;;	SERDEBUGBASE
+;;	lea	SDBBase(pc),a0
+;;	move.l	a6,(a0)
+;;	move.l	sp,a0
+;;	moveq	#64,d0
+;;	CALLROM	MDump
+;;$$
+
+	STEPMSG	<before CurrentDir>
+
+	move.l	d2,d1
+	GET.l	TB_DOSBase,a6		; move to our new dir
+	CALLROM	CurrentDir
+	PUT.l	d0,OldDirLock		; save previous dir lock
+	PUT.l	d2,TB_BootLock		; place where we are now - TB root
+
+	STEPMSG	<before Info>
+
+	move.l	d2,d1
+	move.l	#MyInfoData,d2
+	CALLROM	Info
+	tst.l	d0
+	beq.s	31$			;jump if error
+
+	STEPMSG	<Info OK>
+
+	movea.l	d2,a0
+	cmpi.l	#ID_WRITE_PROTECTED,id_DiskState(a0)
+	bne.s	31$			;jump if Switcher was on write enabled media
+	bset.b	#CDROMSTART_BIT,TB_Flags3(a5)
+
+*-----------------------------------------
+31$	tst.l	TB_FlyerBase(a5)
+	beq	40$
+
+36$
+	STEPMSG	<before InitFlyers>
+
+  	XJSR	Flyer_InitFlyers
+	beq	37$
+	STEPMSG	<before Flyer_InitFlyers failed>
+
+	lea	InitFlyerErrNumber(pc),a0
+	CALLTL	SignedLong2ASCII
+	lea	InitFlyerErrMessage(pc),a0
+	lea	InitFlyerErrCode(pc),a1
+	CALLTL	RetryOrCancel
+	bgt	36$
+	bra	40$
+
+37$
+ 	STEPMSG	<before InitFlyerPlay>
+
+ 	XJSR	InitFlyerPlay
+	beq.s	39$
+	STEPMSG	<InitFlyerPlay failed>
+
+	lea	PlayModeErrNumber(pc),a0
+	CALLTL	SignedLong2ASCII
+	lea	PlayModeErrMessage(pc),a0
+	lea	PlayModeErrCode(pc),a1
+	CALLTL	RetryOrCancel
+	bgt	37$
+	bra.s	40$
+
+39$
+	STEPMSG	<before Flyer_InitFlyers failed>
+
+	XJSR	Flyer_SetClock
+
+*-----------------------------------------
+40$	STEPMSG	<before FindPort>
+
+	GET.l	TB_SYSBase,a6		; see if Switcher program is already
+	CALLROM	Forbid			; running - no more than 1 copy can
+*					; be allowed to run
+
+	DEA	DevHPortName,a1
+	CALLROM	FindPort
+	move.l	d0,d2
+
+	STEPMSG	<before Permit>
+
+	CALLROM	Permit
+
+	move.l	d2,d2			; a copy already running?
+	beq.s	.FirstCopy		; if not - we should be the first
+
+	SETERR	7
+	ABORT	CleanAndExit(pc)
+
+.FirstCopy:
+
+	STEPMSG	<before GetALLMemory>
+
+	CALL	GetALLMemory		; obtain All memory
+
+	STEPMSG	<before FindTask>
+
+	lea	FrontEndName(pc),a1	; Addendum 5/16/91:
+	CALLROM	FindTask		; see if we were launched from a
+	tst.l	d0			; frontend program that also puts
+	bne.s	.NoGreetNeeded		; a greet screen
+
+	STEPMSG	<before OpenGreet>
+
+	XCALL	OpenGreet		; Addendum 1/28/91:
+	SAVE1	a6
+	GET.l	TB_DOSBase,a6
+	moveq	#100,d1
+	CALLROM	Delay
+	REST1	a6
+
+.NoGreetNeeded:
+
+   IFD	TB_DEBUG
+
+	CALL	SetUpInputHandler	; install the hotkey input handler
+
+   ENDC
+
+	STEPMSG	<before ReadCurrentProject>
+
+
+****!!!!!****** KILL CHECK FOR CURRENT PROJECT
+;;	XCALL	ReadCurrentProject	; get info for Project environment
+;;	bpl	.OKCurrentProject	; if read OK - skip on
+
+	GET.l	TB_ProjStrings,a0	; invalidate all string table entries
+	move.w	#$FF00,d0		; in project string table
+	move.w	#1000-1,d1
+
+.ClearLoop:
+	move.w	d0,(a0)
+	lea	14(a0),a0
+	dbf	d1,.ClearLoop
+
+****!!!!!********  KILL CHECK FOR CURRENT PROJECT
+	bra.s	.BadFileRead
+
+
+	CLEAR	d0			; put up a warning telling of tales
+	CLEAR	d1			; of a bad CurrentProject
+	lea	.Warning1(pc),a0
+	lea	.Warning2(pc),a1
+	lea	.Quit(pc),a2
+	lea	.Cancel(pc),a3
+	XCALL	DoSwitcherRequester
+	ble.s	.BadFileRead
+	CLEAR	d0
+	bra	CleanAndExit
+
+.Warning1:
+	DC.b	'WARNING: No usable CurrentProject',0
+.Warning2:
+	DC.b	'"CONTINUE" to continue with defaults',0
+.Quit:
+	DC.b	'QUIT',0
+.Cancel:
+	DC.b	'CONTINUE',0
+
+	CNOP	0,2
+
+;;	bmi.s	.BadFileRead		; if not OK - skip on
+;;*					; and leave project # bogus
+
+;;	bpl.s	.OKCurrentProject	; if all OK - skip on
+
+;;	SETERR	9
+;;	ABORT	CleanAndExit(pc)
+
+.OKCurrentProject:
+	PUT.w	d0,TB_CurrentPJNumber	; else save the initial Project #
+*					; in ToasterBase
+
+.BadFileRead:
+
+*					; Addendum 2/15/90: added the above
+*					; CurrentProject support
+
+	STEPMSG	<before FloppyDiskTest>
+
+
+	XCALL	FloppyDiskTest		; check what floppy drives exist
+*					; Addendum 2/13/90:
+	bpl.s	.DMOK			; skip on if all went OK
+
+	SETERR	60
+	ABORT	CleanAndExit(pc)
+
+.DMOK:
+	PUT.w	d0,TB_FloppyAlloc	; place floppy drive allocation mask
+
+	STEPMSG	<before GetPortEnviro>
+
+	CALL	GetPortEnviro		; get Toaster port and message
+
+*					; Addendum 10/31/90:
+	STEPMSG	<before CreatInterrupt 1>
+
+	moveq	#INTB_VERTB,d0		; add a VB server for LUT color
+	moveq	#15,d1			; cycling support
+	DEA	VBIntServName,a0
+	move.l	a5,a1
+	lea	VBIntServCode(pc),a2
+	XCALL	CreateInterrupt
+	PUT.l	d0,TB_VBIntServer
+	bne.s	.GotVBInt
+
+	SETERR	61
+	ABORT	CleanAndExit(pc)
+
+.GotVBInt:
+
+*---------	SKELL 9/11/92
+	STEPMSG	<before CreatInterrupt 2>
+
+	moveq	#INTB_VERTB,d0		;PaulaBit
+	move.l	#127,d1			;Priority	
+	DEA	MasterClockName,a0	;Name
+	move.l	a5,a1			;Data ->TB
+	lea	MasterClock(pc),a2	;Code
+	XCALL	CreateInterrupt
+	PUT.l	d0,TB_MasterClock
+	bne.s	.GotMCInt
+
+	SETERR	61
+	ABORT	CleanAndExit(pc)
+
+.GotMCInt:
+*---------
+
+	STEPMSG	<before OpenKbdState>
+
+	XCALL	OpenKbdState		; Addendum 3/25/91:
+
+
+	STEPMSG	<before OpenSwitcherGPI>
+
+	XCALL	OpenSwitcherGPI		; Addendum 8/6/90: for Switcher GPI
+	beq.s	.GPI_OK
+
+;;	SETERR	81
+	moveq	#81,d0
+	bra	CleanAndExit
+
+.GPI_OK:
+
+* !!!!!!!!!!! Hack Code so I can Link effects.library with Switcher !!!!!!!!!
+	GET.l	TB_SYSBase,a6	
+	DEA	TB_LibList,a0
+;;	XLEA	EffectsLibrary,a1
+;;	PUT.l	a1,TB_EFXbase
+	GET.l	TB_EFXbase,a1
+
+	CALLROM	AddTail
+
+ IFND V20
+* !!!!!!!!!!! Hack Code to Link LUT.library with Switcher !!!!!!!!!
+* Addendum 6/11/90:
+
+	DEA	TB_LibList,a0
+	XLEA	LUTLibrary,a1
+	CALLROM	AddTail
+ ENDC
+
+	STEPMSG	<before LoadDefaultPaths>
+	XCALL	LoadDefaultPaths
+
+	STEPMSG	<before ReadHardSets>
+
+* Need to do this before InitDVEChipMem() (which does a InitReadScanLineBMs)
+* This was after CreateDisplay() below, before 10-23-93
+	XREF	ToasterConfig
+	PUT.l	#ToasterConfig,TB_ToasterConfig	;so croutons can see it
+
+	XCALL	ReadHardSets		; get hardware configuration
+* NOTE!!!!! Not handling errors 
+
+	STEPMSG	<before InitEFX>
+
+	XCALL	InitEFX			; Addendum 11/29/90:
+
+	STEPMSG	<before InitEFXChipMem>
+
+	XCALL	InitEFXChipMem
+
+	STEPMSG	<before InitDVEFastMem>
+
+	XCALL	InitDVEFastMem		; Addendum 12/19/90:
+
+	STEPMSG	<before InitDVEChipMem>
+
+	XCALL	InitDVEChipMem		; Does an InitReadScanLineBMs
+
+	STEPMSG	<before CreateDisplay>
+
+	CALL	CreateDisplay		; custom screen and window and fonts
+
+	lea	DummyICrouton,a0	; Addendum 12/19/90: use dummy
+	PUT.l	a0,TB_EfxFG		; internal crouton for autocal etc.
+*					; until the ToolBox is loaded
+
+***********************************************************
+	IFND	TOASTERLESS	;1
+ 	IFND	SLAVE_VERSION	;SLAVE1
+***********************************************************
+
+	moveq	#-1,d2
+	move.b	AutoHueFlag(pc),d0	; does user want to force an AutoHue?
+	bne.s	.DoAutoHueStuff
+
+.ahnotasked4:
+
+	lea	ToasterConfig,a0	; setting up
+	move.w	HueDP(a0),d2
+	cmp.w	#64,d2			;-1=never did it, -2=had canceled before
+	bcs	.NoAutoHueNeeded	;else old 0 <= HueDP <= 63              
+
+* Clicked on AutoHue icon, or using CLI AutoHue parameter
+* Or first time you ever booted, or had previously canceled out
+.DoAutoHueStuff:
+	move.w	#-1,Pedestal(a0)	;force AutoCal
+ 
+* Patch with the standard patches for the sake of AutoCalibration
+	STEPMSG	<before LoadPatches 1>
+
+	lea	VTInitialize(pc),a0
+	XCALL	LoadPatches		; load patch file directly
+	move.l	d0,d0
+	beq	.BadLoadPatches
+
+	CLEAR	d0			; now do the standard patching
+
+	IFND	OLDTOASTER
+	moveq	#1,d1		;patch new AA Toaster on AA or non AA machine
+	ENDC
+
+	IFD	OLDTOASTER
+	moveq	#0,d1		;patch old Pre-AA Toaster
+	ENDC
+
+	STEPMSG	<before ProgramChips 1>
+
+	XCALL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	STEPMSG	<before InstallToaster 1>
+
+	moveq	#1,d0			; bank 0 only
+	XJSR	InstallToaster		; open and initialize the VToaster
+
+;;	XCALL	InstallAVE
+	moveq	#0,d0		;don't necessarily force whole calibration
+
+  IFND NO_CALIREADSCANLINE
+	STEPMSG	<before CaliReadScanLine 1>
+
+	XCALL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+  ENDC	;no_calireadscanline
+
+	STEPMSG	<before TestMain2EXT 1>
+
+	CALLTL	TestMain2EXT		;what version of Toaster?
+	
+	IFND	NOAUTOCAL
+	STEPMSG	<before AutoCalibrate 1>
+
+	CALLTL	AutoCalibrate		;what about error message ????
+	ENDC
+
+;;	tst.l	d0
+;;	bne.s	.BadToaster
+
+*---------------------------------------------
+
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	STEPMSG	<before LoadPatches 2>
+
+	lea	VTAutoHue(pc),a0
+	XCALL	LoadPatches		; Addendum 11/29/90:
+*					; load patch file directly
+	move.l	d0,d0
+	bne.s	.SeemsOK		; if the Patch seemed to load - jump
+
+	SETERR	6
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.BadLoadPatches:
+	SETERR	9
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.BadLoadPatches2:
+	SETERR	14
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.SeemsOK:
+	CLEAR	d0			; now do the standard patching
+
+	IFND	OLDTOASTER
+	moveq	#1,d1		;patch new AA Toaster on AA or non AA machine
+	ENDC
+
+	IFD	OLDTOASTER
+	moveq	#0,d1		;patch old Pre-AA Toaster
+	ENDC
+
+	STEPMSG	<before ProgramChips 2>
+
+	XCALL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+;;	XCALL	InstallAVE
+	moveq	#0,d0		;don't necessarily force whole calibration
+
+  IFND NO_CALIREADSCANLINE
+	STEPMSG	<before CaliReadScanLine 2>
+
+	XCALL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+  ENDC	;no_calireadscanline
+
+* Clicked on AutoHue icon, or using CLI AutoHue parameter
+* Or first time you ever booted, or had previously canceled out
+* d2 = -1=never did it, -2=had canceled before, else old 0 <= HueDP <= 63              
+* Actually, correct value of DP will never execute this code.
+* If >0 but also >64, then canceled before and only did DP adjustment,
+* so we still want to prompt for autohue if camera is connected.
+	tst.w	d2
+	bpl.s	.onlyDPdone		;jump if >= 64
+
+	cmp.w	#-2,d2			; are we forced?
+	bne.s	.preAHSetUpLoop		; yup...
+
+* Had canceled out before or only partial autohue (digital only)
+.onlyDPdone
+	STEPMSG	<before TestVid1Camera 1>
+
+ 	XCALL	TestVid1Camera		; test for video 1
+	tst.l	d0
+	beq	.ContinueOn		; if not there - no AutoHue
+
+*--------------------------------------------------------------
+* Clicked on AutoHue icon, or using CLI AutoHue parameter
+* Or first time you ever booted, or now have camera after previous cancels.
+.preAHSetUpLoop
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)	;we're on a new A4000 toaster
+	bne.s	.AHstart	;jump if using new Toaster
+
+	STEPMSG	<before TestMain2Vid4 2>
+
+	XCALL	TestMain2Vid4	; Toaster configured for AutoHue?
+	beq.s	.AHSetUpLoop	; jump if cables need hooking up
+
+* Main->EXT or Main->VID2
+.AHstart
+	XCALL	TestVid1Camera		; test for video 1
+	tst.l	d0
+	bne	.UserContinue		;jump if cables hooked up OK
+
+* Need to hook up cable, or no camera is hooked up
+.AHSetUpLoop:
+	CLEAR	d0			; put up done requester to allow user
+	CLEAR	d1			; to properly configure his Toaster
+	lea	AHDoIt1new(pc),a0		; Assume A4000 AutoHue
+	lea	AHDoIt2new(pc),a1
+
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne.s	.GotA4000
+
+* Old A2000 Toaster
+	lea	AHDoIt1(pc),a0
+	lea	AHDoIt2(pc),a1
+
+.GotA4000:
+	lea	AHOK(pc),a2
+	lea	AHCancel(pc),a3
+	XCALL	DoSwitcherRequester
+	bpl	.preAHSetUpLoop	 ;NOTE!!!! if can't open request = OK
+				 ;!!!!!!!! THIS COULD BE AN INFINITE LOOP ???
+* Cancel Clicked
+	lea	ToasterConfig,a0
+	move.w	#-2,HueDP(a0)
+
+	STEPMSG	<before WriteHardSets 1>
+
+	XCALL	WriteHardSets	;flag this cancel for future boots
+* NOTE!!!!! Not handling errors 
+
+	bra	.SkipOnWard
+
+* Main->is_EXT or Main->Vid2 Cable is OK
+.UserContinue:
+	XCALL	AutoHue			; perform the AutoHue
+
+	IFND	OLDTOASTER
+************************************************************
+	movem.l	d1-d7,-(sp)
+
+	tst.l	d1
+	bpl.s	8861$
+	neg.l	d1
+8861$	tst.l	d2
+	bpl.s	8862$
+	neg.l	d2
+
+8862$	DEA.l	TB_VTSetUp,a0
+	ELHGET_EP	a0,d3
+	ELHGET_DP	a0,d4
+	swap	d3
+	move.w	d4,d3
+
+	movem.l	d0-d3,-(sp)	;save old patches results
+
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	STEPMSG	<before LoadPatches 3>
+
+	lea	VTAutoHue2(pc),a0
+	XCALL	LoadPatches		; Addendum 11/29/90:
+*					; load patch file directly
+	move.l	d0,d0
+	bne.s	.SeemsOK2		; if the Patch seemed to load - jump
+
+	SETERR	13
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.SeemsOK2:
+	CLEAR	d0			; now do the standard patching
+
+	STEPMSG	<before ProgramChips 3>
+
+	moveq	#1,d1			;patch new AA Toaster on AA or non AA machine
+	XCALL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+;;	XCALL	InstallAVE
+	moveq	#0,d0		;don't necessarily force whole calibration
+
+  IFND NO_CALIREADSCANLINE
+	STEPMSG	<before CaliReadScanLine 3>
+
+	XCALL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+  ENDC	;no_calireadscanline
+
+	XCALL	AutoHue			; perform the AutoHue
+
+	tst.l	d1
+	bpl.s	8851$
+	neg.l	d1
+8851$	tst.l	d2
+	bpl.s	8852$
+	neg.l	d2
+
+8852$	DEA.l	TB_VTSetUp,a0
+	ELHGET_EP	a0,d3
+	ELHGET_DP	a0,d4
+	swap	d3
+	move.w	d4,d3	
+
+	movem.l	(sp)+,d4-d7	;restore old results
+	add.w	d4,d4
+	add.w	d4,d4
+	or.w	d0,d4		;error flags
+	add.w	d4,d4
+	add.w	d4,d4
+	
+	lea	.BestPatchTBL,a0
+	move.l	0(a0,d4.w),a0		
+	jsr	(a0)
+
+	lea	ToasterConfig,a0	; setting up
+	move.w	d1,HueDP(a0)
+	move.l	d1,d2
+	swap	d1
+	move.w	d1,HueEP(a0)
+
+	tst.w	d0
+	beq.s	8856$
+	bset.b	#7,HueEP(a0)		;bit 15 set if new patches
+
+8856$	DEA.l	TB_VTSetUp,a0
+	ELHPUT_DP_R	a0,d2
+	ELHPUT_EP_R	a0,d1
+
+	movem.l	(sp)+,d1-d7
+	bra	.GotBestPhase
+
+*----------------
+* d1=NewEPerror d2=NewDPerror d3=NewEPDP
+* d5=OldEPerror d6=OldDPerror d7=OldEPDP
+
+.PickOld
+	moveq	#0,d0
+	move.l	d7,d1
+	rts
+
+.PickNew
+	moveq	#1,d0
+	move.l	d3,d1
+	rts
+
+.PickBestDP
+	moveq	#0,d0	;assume use old
+	move.l	d7,d1
+	cmp.l	d2,d6
+	bcs.s	8883$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d1
+8883$	rts
+
+.PickBestEP
+	moveq	#0,d0	;assume use old
+	cmp.l	d1,d5
+	bcs.s	8884$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8884$	move.l	d7,d1
+	rts
+
+.PickBestEPDP	;EP old or DP new
+	moveq	#0,d0	;assume use old
+	cmp.l	d2,d5
+	bcs.s	8885$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8885$	move.l	d7,d1
+	rts
+
+.PickBestDPEP	;DP old or EP new
+	moveq	#0,d0	;assume use old
+	cmp.l	d1,d6
+	bcs.s	8886$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8886$	move.l	d7,d1
+	rts
+
+*----------------
+* This table helps us pick the best choice of patches, when both fail
+* or both are good, depending on AutoHues returned error codes.
+.BestPatchTBL	dc.l	.PickBestDP
+		dc.l	.PickOld
+		dc.l	.PickOld
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickBestEP
+		dc.l	.PickBestEPDP
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickBestDPEP
+		dc.l	.PickBestDP
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickNew
+		dc.l	.PickNew
+		dc.l	.PickBestDP
+
+.GotBestPhase
+		ENDC	;;IFND OLDTOASTER
+*******************************************************
+	lea	ToasterConfig,a0	; Toaster public memory
+	bset.b	#7,RedCynMP(a0)		; Force AutoMatte
+
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne	.SkipOnWard	;skip AutoMatte until later if VT4000 board
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	; Send out EP/DP for old Toasters
+
+* WE CAN'T DO AUTOMATTE HERE ON NEW TOASTERS BECAUSE THE CORRECT PATCHES
+* MAY NOT BE INSTALLED.  ON OLD TOASTER WE ASSUME THE AUTOHUE PATCHES
+* WORK JUST LIKE THE STANDARD PATCHES, IN TERMS OF AUTOMATTE!!!
+	STEPMSG	<before AutoMatte 1>
+
+	movem.l	d2-d5,-(sp)
+	XCALL	AutoMatte
+	movem.l	(sp)+,d2-d5
+
+	STEPMSG	<before RestoreMatteColor 1>
+
+	CALLTL	RestoreMatteColor
+
+;;$$
+;;	tst.l	d0
+;;	beq.s	.OKAutoHue
+;;	SAVE	d0/d1/a0/a1/a6
+;;	lea	.AHFormat(pc),a0
+;;	SAVE	d0-d2
+;;	move.l	sp,a1
+;;	move.l	SDBBase(pc),a6
+;;	CALLROM	Printf
+;;	lea	12(sp),sp
+;;	REST	d0/d1/a0/a1/a6
+;;	bra.s	.OKAutoHue
+;;.AHFormat:
+;;	DC.b	'Error code -> %ld',10,13
+;;	DC.b	'EP         -> %ld',10,13
+;;	DC.b	'DP         -> %ld',10,13,0
+;;	CNOP	0,2
+;;.OKAutoHue:
+;;$$
+;;	tst.l	d0
+;;	bne	.BadToaster		; ...on failure
+
+	STEPMSG	<before WriteHardSets 2>
+
+	XCALL	WriteHardSets		; write out the changes
+* NOTE!!!!! Not handling errors 
+
+;;	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+;;	bne.s	.SkipOnWard
+
+	CLEAR	d0			; put up done requester to allow user
+	CLEAR	d1			; to re-configure his Toaster
+	lea	AHDone1(pc),a0
+	lea	AHDone2(pc),a1
+	move.l	d0,a2
+	lea	AHOK(pc),a3
+	XCALL	DoSwitcherRequester
+
+* Canceled AutoHue, or AutoHue/AutoMatte is done
+.SkipOnWard
+;;	move.b	AutoHueFlag(pc),d0	; was AutoHue specifically asked for?
+;;	beq.s	.ContinueOn		; ... if not
+
+;;;;	XCALL	RestoreCopperList	; restore AMIGA's display
+
+;;	CLEAR	d0			; exit the program
+;;	bra	CleanAndExit
+
+*--------------------------------------------------------
+* Never have done AutoHue, but have canceled before, and never got camera
+* or AutoHue/AutoMatte is done
+.ContinueOn:
+	STEPMSG	<before InitReadScanLineBMs 1>
+
+	CALLTL	InitReadScanLineBMs	;since messed up by Vid1Camera etc.  
+
+* Have done AutoHue before, so don't need to do it again.
+.NoAutoHueNeeded:
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	lea	VTInitialize(pc),a0	;assume old patches
+
+**********************************
+	IFND	OLDTOASTER
+
+	lea	ToasterConfig,a1	; setting up
+	tst.w	HueEP(a1)
+	bpl.s	8888$
+	lea	VTInitialize2(pc),a0	;assume old patches
+8888$
+	ENDC	;;IFND OLDTOASTER
+**********************************
+
+	STEPMSG	<before LoadPatches 4>
+
+	XCALL	LoadPatches		; load patch file directly
+	move.l	d0,d0
+	bne.s	8889$
+
+	IFND	OLDTOASTER
+	lea	ToasterConfig,a0	; setting up
+	tst.w	HueEP(a0)
+	bmi	.BadLoadPatches2
+	ENDC	;;IFND OLDTOASTER
+
+	bra	.BadLoadPatches
+
+8889$	CLEAR	d0			; now do the standard patching
+
+	IFND	OLDTOASTER
+	moveq	#1,d1		;patch new AA Toaster on AA or non AA machine
+	ENDC
+
+	IFD	OLDTOASTER
+	moveq	#0,d1		;patch old Pre-AA Toaster
+	ENDC
+
+	STEPMSG	<before ProgramChips 4>
+
+	XCALL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+*---------
+	IFND	NOSYNCWRITE
+
+	STEPMSG	<before InstallToaster 4>
+
+	moveq	#3,d0			;both banks
+	XJSR	InstallToaster		; open and initialize the VToaster
+
+	ENDC	;NOSYNCWRITE
+*---------
+
+*------------------------------
+	IFND	NOAUTOCAL
+
+;;	XCALL	InstallAVE
+	moveq	#0,d0		;don't necessarily force whole calibration
+
+  IFND NO_CALIREADSCANLINE
+	STEPMSG	<before CaliReadScanLine 4>
+
+	XCALL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+  ENDC	;no_calireadscanline
+
+	STEPMSG	<before TestMain2EXT 4>
+
+	CALLTL	TestMain2EXT		;what version of Toaster?
+
+	lea	ToasterConfig,a0
+	tst.w	Gain(a0)
+	bmi	.useuserPedGain
+
+	STEPMSG	<before AutoCalibrate 4>
+	CALLTL	AutoCalibrate		;what about error message ????
+
+;;	tst.l	d0
+;;	bne.s	.BadToaster
+.useuserPedGain
+
+	lea	ToasterConfig,a0	; Toaster public memory
+	tst.w	RedCynMP(a0)
+	bge	.NoAutoMatte
+
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5) ;may have canceled out of AutoHue
+	bne	.AMSetUpLoop2	;we already know we're on a new A4000 toaster
+
+.preAMsetup:
+	STEPMSG	<before TestMain2Vid4 4>
+
+	XCALL	TestMain2Vid4	; Toaster configured for AutoHue?
+	tst.w	d0
+	bne.s	.AMSetUpLoop2	;need cable
+	
+* Need to hook up a cable
+.AMSetUpLoop:
+	CLEAR	d0			; put up requester to allow user
+	CLEAR	d1			; to properly configure his Toaster
+	lea	AMDoIt1(pc),a0		; for AutoMatte
+	lea	AMDoIt2(pc),a1
+	lea	AMOK(pc),a2
+	lea	AMCancel(pc),a3
+	XCALL	DoSwitcherRequester
+	ble	.SkipAutoMatte	    ; skip if CANCEL or can't open requester
+	bra	.preAMsetup
+
+.AMSetUpLoop2:
+	STEPMSG	<before AutoMatte 2>
+
+	movem.l	d2-d5,-(sp)
+	XCALL	AutoMatte
+	movem.l	(sp)+,d2-d5
+
+	STEPMSG	<before RestoreMatteColor 2>
+
+	CALLTL	RestoreMatteColor
+
+	STEPMSG	<before WriteHardSets 3>
+
+	XCALL	WriteHardSets		; write out the changes
+* NOTE!!!!! Not handling errors 
+
+	btst.b	#MAINFEEDBACK_BIT,TB_Flags2(a5)
+	bne.s	.SkipAutoMatte
+
+	CLEAR	d0			; put up done requester to allow user
+	CLEAR	d1			; to re-configure his Toaster
+	lea	AMDone1(pc),a0
+	lea	AMDone2(pc),a1
+	move.l	d0,a2
+	lea	AMOK(pc),a3
+	XCALL	DoSwitcherRequester
+
+.SkipAutoMatte
+	STEPMSG	<before InitReadScanLineBMs 2>
+
+	CALLTL	InitReadScanLineBMs	;since messed up by TestMain2Vid4 etc.  
+
+  ENDC	;NOAUTOCAL
+
+.NoAutoMatte
+	move.b	AutoHueFlag(pc),d0	; was AutoHue specifically asked for?
+	beq	.notautohue		; ... if not
+
+	STEPMSG	<before CookAndServeFreeze>
+
+	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	XCALL	CookAndServeFreeze	;was CookFreeze pre 1-8-92
+
+***********************************************************
+	IFND	NOBUFFERFILL
+
+	PUT.w	#M_VIDEO1,TB_MainSec
+	PUT.w	#M_DV0,TB_PrvwSec
+
+	STEPMSG	<before SMPTEbars>
+
+	XCALL	SMPTEbars
+
+	ENDC	;NOBUFFERFILL
+***********************************************************
+
+	CLEAR	d0			; exit the program
+	bra	CleanAndExit
+
+***********************************************************
+	ENDC	;SLAVE1
+  	ENDC	;IFND TOASTERLESS	;1
+***********************************************************
+
+.notautohue
+	XCALL	InstallAVE
+
+	STEPMSG	<before CloseGreet>
+
+	XCALL	CloseGreet		; Addendum 1/28/91:
+
+*-----------
+	IFD	SLAVE_VERSION	;5
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	STEPMSG	<before InstallToaster 5>
+
+	moveq	#3,d0			;both banks
+	XJSR	InstallToaster		; open and initialize the VToaster
+					; NOTE!!!!! Not handling errors 
+	ENDC	;SLAVE_VERSION	;5
+*-----------
+
+;;!!!!	CALL	CreateDisplay		; custom screen and window and fonts
+
+	PUT.w	#-1,TB_ToastActive	; denote the VToaster open
+*					; and active
+
+;;;;	CALL	InstallSoftSprite	; install the VB server
+
+	STEPMSG	<before AddFastGadgets>
+
+	CALL	AddFastGadgets		; add in the initial FastGadgets -
+*					; assure that they are initialized
+
+;;;;	CALL	LoadToolBoxFGs		; install the ToolBox grid FGs
+
+;;	lea	DummyICrouton,a0	; Addendum 10/18/90: use dummy
+;;	PUT.l	a0,TB_EfxFG		; internal crouton for autocal etc.
+;;*					; until the ToolBox is loaded
+
+***********************************************************
+  	IFND 	TOASTERLESS		;2
+  	IFND	SLAVE_VERSION		;SLAVE2
+***********************************************************
+
+	STEPMSG	<before RestoreBorderColor>
+
+	CALLTL	RestoreBorderColor
+
+	STEPMSG	<before Test68000Grab>
+
+	CALLTL	Test68000Grab
+	beq.s	.ValidToaster		;assume don't use
+	bset.b	#GRAB68000_OK_BIT,TB_Flags(a5)	;68000 routines are OK
+
+	bra.s	.ValidToaster
+
+.BadToaster:
+	SETERR	80
+	ABORT	CleanAndExit(pc)
+
+.BadToaster2:
+	SETERR	82
+	ABORT	CleanAndExit(pc)
+
+.ValidToaster:
+***********************************************************
+  	ENDC	;IFND SLAVE_VERSION	;SLAVE2
+  	ENDC	;IFND TOASTERLESS	;2
+***********************************************************
+
+	moveq	#-1,d0
+	XCALL	ReValidate		; Addendum 4/4/90: assure that the
+*					; user's floppies are safe
+*					; (works only on floppy devices
+*					;  known to the Toaster system)
+
+	STEPMSG	<before InstallSoftSprite>
+
+	CALL	InstallSoftSprite	; install the VB server
+
+	STEPMSG	<before SoftSpriteBPLCON0Off>
+
+	XCALL	SoftSpriteBPLCON0Off
+
+***********************************************************
+ 	IFND	MASTER_VERSION
+ 	IFND	SLAVE_VERSION	;SLAVE3
+***********************************************************
+
+*	Addendum 10/17/90: Display the Toaster Logo on preview....
+
+	STEPMSG	<before CookAndServeFreeze 2>
+
+	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	XCALL	CookAndServeFreeze	;was CookFreeze pre 1-8-92
+
+	PUT.w	#M_DV0,TB_PrvwSec
+	XCALL	SetLoadBank
+
+	STEPMSG	<before CookAndServePrvw>
+
+	PUT.w	#M_ENCODER,TB_PrvwSec
+	XCALL	CookAndServePrvw
+
+***********************************************************
+  	IFND 	TOASTERLESS	;3
+	IFND	NOBUFFERFILL
+***********************************************************
+
+	GET.l	TB_DOSBase,a6		; get DOS base
+
+*+	IFD	CRAP
+*+
+*+	GET.l	TB_BootLock,d2		; start at Toaster Root dir and
+*+*					; bubble up to root device
+*+
+*+.LockLoop:
+*+	move.l	d2,d1			; tranverse the parents of each lock
+*+	CALLROM	ParentDir		; till we get a NULL parent of a
+*+	move.l	d2,d1			; lock - that lock should be the
+*+	move.l	d0,d2			; root device
+*+	beq.s	.AtTheDevice
+*+
+*+	cmp.l	TB_BootLock(a5),d1	; we always check for the Toaster
+*+	beq.s	.LockLoop		; Boot lock and NEVER unlock it
+*+
+*+	CALLROM	UnLock
+*+	bra.s	.LockLoop
+*+
+*+.AtTheDevice:
+*+	move.l	d1,d3			; make root device the current dir
+*+	CALLROM	CurrentDir
+*+
+*+	lea	FrameStoreName(pc),a0	; now see if a dirctory of the name
+*+	move.l	a0,d1			; "FrameStore" exists
+*+	move.l	#ACCESS_READ,d2
+*+	CALLROM	Lock
+*+	move.l	d0,d2
+*+	beq	.SkipTheLoadUp		; ...if not
+*+
+*+*					; if we got the dir(?)
+*+	move.l	d2,d1			; - make it the current dir
+*+	CALLROM	CurrentDir
+*+
+*+	cmp.l	TB_BootLock(a5),d3	; free the previous root lock - if OK
+*+	beq.s	.NoUnLock1
+*+
+*+	move.l	d3,d1
+*+	CALLROM	UnLock
+*+
+*+
+*+	ENDC
+
+
+	GET.l	TB_BootLock,d1
+	CALLROM	CurrentDir
+
+.NoUnLock1:
+	STEPMSG	<before FrameLoad>
+
+	lea	ToasterLogoName(pc),a0
+	XCALL	FrameLoad
+	tst.l	d0	
+
+*+	move.l	d0,d3			;save result flag
+*+
+*+	GET.l	TB_BootLock,d1		; go back to the Toaster Root dir
+*+	CALLROM	CurrentDir
+*+	cmp.l	TB_BootLock(a5),d2	; free up the framestore lock - if OK
+*+	beq.s	.NoUnLock2
+*+	move.l	d2,d1
+*+	CALLROM	UnLock
+*+
+*+.NoUnLock2:
+*+	tst.l	d3
+
+	beq	.GoodFrameLoad		; if the Frame Load was OK
+
+.SkipTheLoadUp:
+	STEPMSG	<before SMPTEbars 2>
+
+	XCALL	SMPTEbars		; Addendum 12/5/90: if Frame Load
+*					; failed - fill with color bars
+*					; instead
+
+.GoodFrameLoad:
+	STEPMSG	<before SMPTEbars 3>
+
+	PUT.w	#M_DV0,TB_MainSec
+	PUT.w	#M_DV1,TB_PrvwSec
+
+	XCALL	SMPTEbars
+
+
+***********************************************************
+	ENDC	;NOBUFFERFILL
+  	ENDC	;IFND TOASTERLESS	;3
+***********************************************************
+
+	STEPMSG	<before CookPrvw & CookAndServeMain>
+
+	PUT.w	#M_DV1,TB_PrvwSec
+	PUT.w	#M_DV0,TB_MainSec
+	XCALL	CookPrvw
+
+	XCALL	CookAndServeMain
+
+	lea	FrontEndName(pc),a1	;added to bring back "please wait"
+	move.l	(4).w,a6
+	XSYS	FindTask
+	move.l	d0,d0
+	beq.s	.nobootcode
+	move.l	d0,a1
+	move.l	TC_Userdata(a1),d0
+
+	STEPMSG	<before Signal>
+
+	XSYS	Signal
+.nobootcode
+
+;;	XCALL	ReDoDisplay		; remake display in CHIP memory
+
+***********************************************************
+ 	ENDC	;IFND	SLAVE_VERSION	;SLAVE3
+ 	ENDC	;IFND	MASTER_VERSION
+***********************************************************
+
+	CLEAR	d0			; remove internal crouton
+	PUT.l	d0,TB_EfxFG
+
+	lea	DummyICrouton,a0
+	move.l	TB_ToolBoxGrids(a5),a1
+	move.l	a0,(a1)
+					; Addendum 11/28/90: place dummy
+*					; crouton in ToolBox grid so the
+*					; system can work even if the ToolBox
+*					; grid doesn't get loaded and is
+*					; seemingly empty
+	CALLTL	FGC_SelectCommand	; install the dummy crouton properly
+
+	STEPMSG	<before CheckCIAA_TOD>
+
+	CALL	CheckCIAA_TOD		; Addendum 1/25/91: determine
+*					; clock frequency to CIAA_TOD
+	beq.s	.Clock_60HZ		; if at 60HZ
+
+	bset.b	#CIAA_TOD_ONOFF_BIT,TB_Flags(a5)	; denote 30HZ
+
+.Clock_60HZ:
+
+*	At one time ToastBase was added to the Lib list at this point.
+
+* opening the TIO library crashes on 68000 A2000s, so this is
+* hack code to branch around the bug.
+	GET.l	TB_SYSBase,a6
+	btst.b	#AFB_68010,AttnFlags+1(a6)
+	beq.s	.on68000		;jump if on a 68000
+
+	STEPMSG	<before OpenLibrary TIO>
+
+	CLEAR	d0			; open up tio library
+	DEA	TIOBaseName,a1
+	CALLROM	OpenLibrary
+	move.l	d0,TB_TioBase(a5)	;if it is not there who cares
+.on68000
+
+	STEPMSG	<before ScreenToFront>
+
+	GET.l	TB_ITUBase,a6		; even though it won't show up
+	GET.l	TB_Screen,a0		; (display has been taken over)
+	CALLROM	ScreenToFront		; move our screen up to the
+
+
+	STEPMSG	<before SoftSpriteBPLCON0On>
+
+	CALLTL	SoftSpriteBPLCON0On
+
+	STEPMSG	<before LoadToolBoxFGs>
+	CALL	LoadToolBoxFGs		; install the ToolBox grid FGs
+	CALLTL	SoftSpriteBPLCON0Off
+*					; setting up the background color
+*					; and border color
+;;;;	XCALL	InstallAVE
+
+	STEPMSG	<before ReDoDisplay>
+
+	XCALL	ReDoDisplay		; insure everything displayed
+*					; properly
+*-------------
+	IFD	TOASTERLESS		;4
+	 IFD	AACHIPS	 ;THIS WAS IFND pre 3.1 !!!!!!
+	 btst.b	#AACHIPS_BIT,TB_Flags2(a5)
+	 beq.s	.noloadview	;jump if running on a ECS machine
+
+	 move.l	TB_GFXBase(a5),a6	;fix for amiga 4000
+	 sub.l	a1,a1
+
+	 CALLROM LoadView
+	 CALLROM WaitTOF
+.noloadview
+	 ENDC	;AACHIPS
+	ENDC	;IFD	TOASTERLESS	;4
+
+*-------------
+
+	STEPMSG	<before InstallAVEI>
+
+	XCALL	InstallAVEI		; Bring up Linear (Analog) Interface
+*					; - if not already up
+	GET.l	TB_SYSBase,a6
+	CALLROM	Forbid
+
+	GET.l	TB_Screen,a0
+	sub.w	#SCREENFUDGEX,sc_LeftEdge(a0)	; reposition mouse in
+	sub.w	#SCREENFUDGEY,sc_TopEdge(a0)	; relation to the screen
+*					; note that these extreme settings
+*					; seem to intefere with the proper
+*					; operation of other screen when this
+*					; strange screen is not totally
+*					; covering others - may need to
+*					; reset these value before allowing
+*					; this screen to interact with
+*					; others in the system
+
+	PUT.w	#-1,TB_InterfaceOn	; Addendum 3/12/90: for error
+*					; handling systems - denotes that
+*					; there is a user interface to
+*					; display error messsages on when
+*					; this field is non-0 - also used by
+*					; the inputhandler system to denote
+*					; when it is safe to allow the
+*					; hotkey to become active
+
+ ifeq 1
+*					; ToasterBase should be initialized
+*					; - make it public by installing its
+	lea	LibList(a6),a0		; node in the Exec library list
+	move.l	a5,a1
+	CALLROM	AddTail
+	CALLROM	Permit
+	PUT.w	#-1,TB_InList		; denote ToasterBase installed in
+*					; Exec's library list
+ endc
+	CALLROM	Permit
+
+ ifeq 0
+	GET.l	TB_ITUBase,a6		; even though it won't show up
+	GET.l	TB_Screen,a0		; (display has been taken over)
+	CALLROM	ScreenToFront		; move our screen up to the
+ endc
+*					; front to keep intuition happy
+*					; and functioning on the input
+*					; end of things
+
+  IFND	SLAVE_VERSION
+	move.w	#DISPLAYWIDTH/2-30,d0	; Addendum 12/7/89:
+	move.w	#DISPLAYHEIGHT/2-2,d1	; center the SoftSprite in the
+  ENDC
+  IFD		SLAVE_VERSION	
+	move.w	#DISPLAYWIDTH/2-300,d0	; Addendum 12/7/89:
+	move.w	#DISPLAYHEIGHT/2-150,d1	; center the SoftSprite in the
+  ENDC
+
+	XCALL	SoftSpriteBPLCON0On
+
+	STEPMSG	<before MoveSoftSpriteABS>
+
+	CALL	MoveSoftSpriteABS	; Switcher display
+
+*---------------------------------------------------
+	GET.l	TB_FlyerBase,d0
+	beq	666$			;JUMP BELOW!!
+	movea.l	d0,a6
+	XLEA	TBCsettings,a0
+	moveq	#0,d0		;only Board 0 *****!!!!!!
+	move.l	#TBCOF_STATUS!TBCOF_MODES!TBCOF_ADJUST,d1
+	bchg.b	#TBCDB_AGC,tbc_DecFlags(a0)	;***!! change sense
+	XJSR	Flyer_TBCcontrol
+	bchg.b	#TBCDB_AGC,tbc_DecFlags(a0)	;***!! restore sense
+
+*-------
+**+ * Create a dummy NULL Software Interrupt handler.
+**+* This will remain in memory, even after the Switcher is Exited ****!!!!!
+**+
+**+	move.l	(_AbsExecBase).w,a6
+**+	move.l	#NullSoftIntHandlerEnd-NullSoftIntHandler,d0
+**+	moveq	#0,d1
+**+	CALLROM	AllocMem
+**+
+**+	PUT.l	d0,TB_NullSoftIntHandler
+**+	bne.s	600$
+**+	PUT.l	#NullSoftIntHandler,TB_NullSoftIntHandler	;default if can't allocmem, though this may crash when switcher is exited ***!!!!
+**+	bra.s	666$
+**+
+**+600$	movea.l	d0,a0
+**+	lea	NullSoftIntHandler(pc),a1
+**+	move.l	#((NullSoftIntHandlerEnd-NullSoftIntHandler)/2)-1,d0
+**+	
+**+610$	move.w	(a1)+,(a0)+
+**+	dbra	d0,610$
+**+	
+**+	CALLROM	CacheClearU		;make sure it's flushed from cache
+
+*********** SWITCHER NOW UP AND RUNNING WAITING FOR USER INPUT *******
+
+666$	REST	d2/d3/a2/a3/a6
+	rts				; return to caller
+
+**+ NullSoftIntHandler:
+**+	move.w	#INTF_SOFTINT,_custom+intreq ;clear it out
+**+	RTS
+**+ NullSoftIntHandlerEnd:
+
+*******************************************************************
+
+DummysLoadedFlag dc.b	0
+
+AutoHueFlag:
+	DC.b	0
+
+	XDEF	NoGrazerFlag
+NoGrazerFlag:
+	DC.b	0
+
+AutoHueString:
+	DC.b	'AUTOHUE',0
+
+NoGrazerString:
+	DC.b	'NOED',0
+
+*-------------
+AHDone1:
+	DC.b	'AutoHue completed. Please re-configure',0
+
+AHDone2:
+	DC.b	'Toaster Inputs/Outputs before continuing.',0
+
+AHDoIt1:
+	DC.b	'AutoHue - Connect Input 1 to a video source and',0
+
+AHDoIt2:
+	DC.b	'connect Program output to Input 2 before continuing.',0
+
+AHDoIt1new:
+	DC.b	'AutoHue:',0
+
+AHDoIt2new:
+	DC.b	'Connect Input 1 to a video source before continuing.',0
+
+AHOK:
+	DC.b	'OK',0
+
+AHCancel:
+	DC.b	'Cancel',0
+
+*-------------
+AMDoIt1:
+	DC.b	'AutoMatte - The background colors need adjustment.',0
+
+AMDoIt2:
+	DC.b	'Connect Program output to Input 2 before continuing.',0
+
+AMDone1:
+	DC.b	'AutoMatte completed. Please re-configure',0
+
+AMDone2:
+	DC.b	'Toaster Inputs/Outputs before continuing.',0
+
+AMOK:
+	DC.b	'OK',0
+
+AMCancel:
+	DC.b	'Cancel',0
+
+VTAutoHue:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTA.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTA',0
+	 ENDC
+
+VTInitialize:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTI.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTI',0
+	 ENDC
+
+	IFND	OLDTOASTER
+VTAutoHue2:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTA2.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTA2',0
+	 ENDC
+
+VTInitialize2:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTI2.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTI2',0
+	 ENDC
+	ENDC
+
+*-------------
+elhlistconf
+;;	dc.b	EH5,EH6A,EH6B,EHEND
+	dc.b	EH1,EH2,EH3,EH4,EH5,EH68,EH69,EH6A,EH6B,EHEND
+
+FrontEndName:	DC.b	'FrontEnd',0
+
+*	Addendum 10/17/90:
+
+ToasterLogoName:
+
+	IFD	OLDTOASTER
+	DC.b	'Switcher_Support/StartupFrames/VTLogo',0
+	ENDC
+
+	IFND	OLDTOASTER
+	DC.b	'Switcher_Support/StartupFrames/VT4000',0
+	ENDC
+
+;;FrameStoreName:
+;;	DC.b	'FrameStore',0
+
+	CNOP	0,2
+
+;;.DoToastPatch:
+;;	DC.b	'run >NIL: Patcher Mom GVG',0
+
+;;	CNOP	0,2
+
+;;$$
+;;	XDEF	SDBBase
+;;SDBBase:
+;;	DC.l	0
+;;$$
+
+*====	Open up all of the needed libraries.
+
+OpenAllLibs:
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+
+	SETERR	1			; error codes start at 1
+
+	CLEAR	d0			; open up graphics library
+	DEA	GFXBaseName,a1
+	GET.l	TB_SYSBase,a6
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_GFXBase
+	bne.s	10$			; if opened OK - jump on
+
+	SETERR	1
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+*------------------------
+10$:	CLEAR	d0			; open up intuition library
+	DEA	ITUBaseName,a1
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_ITUBase
+	bne.s	20$			; if opened OK - jump on
+
+	SETERR	2
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+*------------------------
+20$:
+
+*** KILLED DISABELING KEYREPEATS 9/2/94
+     IFD	KILLKEYREPEATS
+	move.l	d0,a6				; Addendum 2/3/90:
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0	; disable key repeat
+	sub.l	d0,sp				; alloc local copy off stack
+	move.l	sp,a0
+	CALLROM	GetPrefs			; get a copy of preferences
+
+	PUT.l	pf_KeyRptDelay+TV_SECS(sp),KeyRptDelay	; save original
+*							; key delay value
+
+	moveq	#-1,d1					; load disable value
+	move.l	d1,pf_KeyRptDelay+TV_SECS(sp)		; we'll use
+
+	move.l	sp,a0
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0
+;;	moveq	#-1,d1
+ 	CALLROM	SetPrefs			; send out new preferences
+
+	lea	pf_KeyRptDelay+TV_SIZE(sp),sp	; restore stack
+     ENDC	;KILLKEYREPEATS
+*------------------------
+
+	CALL	AutoRequestDisable	; Addendum 3/21/90: disarm the
+*					; AutoRequest function
+
+*------------------------
+	CLEAR	d0			; open up dos library
+	GET.l	TB_SYSBase,a6
+	DEA	DOSBaseName,a1
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_DOSBase
+	bne.s	30$			; if opened OK - jump on
+
+	SETERR	3
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+*------------------------
+30$:	CLEAR	d0			; open up graphics library
+	DEA	CroutonBaseName,a1
+;;	GET.l	TB_SYSBase,a6
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_CroutonBase
+	bne.s	35$			; if opened OK - jump on
+
+	SETERR	90
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+*------------------------
+* If can't open Flyer, this isn't fatal!
+35$:	CLEAR	d0			; open up flyer library
+	DEA	FlyerBaseName,a1
+;;	GET.l	TB_SYSBase,a6
+
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_FlyerBase
+	
+*------------------------
+* If can't open Rexx, this isn't fatal!
+	move.l	#36,d0		; open up RexxSys library
+	DEA	RexxSysBaseName,a1
+;;	GET.l	TB_SYSBase,a6
+
+	CALLROM	OpenLibrary
+	PUT.l	d0,TB_RexxSysBase
+
+*------------------------
+
+	movem.l	(sp)+,d0-d1/a0-a1/a6
+	rts
+
+InitFlyerErrMessage	dc.b	'Unable to initialize the Flyer',0
+
+PlayModeErrCode:
+InitFlyerErrCode	dc.b	'Error Code = '
+
+PlayModeErrNumber:
+InitFlyerErrNumber	dc.b	'-1234567890',0
+
+PlayModeErrMessage	dc.b	'Unable to setup Flyer Play mode',0
+	CNOP	0,4
+
+*====	Get ALL of the needed memory.
+
+GetALLMemory:
+	SETERR	10			; error codes start at 10
+	SAVE1	a6
+	SAVE1	d2
+
+
+	GET.l	TB_ITUBase,a6		; shut down WB screen if we can -
+;; Bug 3.0 Crash	CALLROM	CloseWorkBench		; don't bother to see if we
+*					; succeeded or not
+
+	GET.l	TB_SYSBase,a6		; shut down tasking to insure memory
+	CALLROM	Forbid			; inquiries are valid
+
+;;	cmp.w	#TwoOVersion,LIB_VERSION(a6)
+;;	bcc.s	.NoFasty
+
+
+*---------------------------------------------
+***!!!! Removed pre 4.0 because BIG allocmems were hanging on some systems.
+***!!!! WE REALLY SHOULD FIND OUT WHY THIS WAS HANGING ON TODD MACHINE
+	IFD	MEMORYPANIC
+
+	move.l	#$7FFFFF00,d0		; first attempt to de-fragment ALL
+	move.l	#MEMF_CHIP,d1		; memory - CHIP and FAST (if exists)
+	CALLROM	AllocMem
+	move.l	d0,d0
+	beq.s	.NoChippy
+
+	move.l	d0,a1
+	move.l	#$7FFFFF00,d0
+	CALLROM	FreeMem
+
+.NoChippy:
+	move.l	#$7FFFFF00,d0
+	CLEAR	d1
+	CALLROM	AllocMem
+	move.l	d0,d0
+	beq.s	.NoFasty
+
+	move.l	d0,a1
+	move.l	#$7FFFFF00,d0
+	CALLROM	FreeMem
+.NoFasty:
+
+	ENDC	;MEMORYPANIC
+*---------------------------------------------
+
+;;$$	move.l	#MEMF_CHIP,d1
+;;$$	CALLROM	AvailMem		; give us a cushion of CHIP memory
+;;$$	sub.l	TB_CHIPMemSIZE(a5),d0
+;;$$	cmp.l	#80*1024,d0
+;;$$	bcs.s	.NotEnoughCHIP
+
+	GET.l	TB_CHIPMemSIZE,d0			; get CHIP memory
+	addq.l	#8,d0					; bump up by 8!
+
+	move.l	#MEMF_CHIP+MEMF_PUBLIC+MEMF_CLEAR,d1
+;;	GET.l	TB_SYSBase,a6
+	CALLROM	AllocMem
+	move.l	d0,d0
+	bne.s	5$			; if we got the memory - skip on
+
+.NotEnoughCHIP:
+	CALLROM	Permit
+
+	SETERR	10
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+5$:
+	lea	CHIPMemActualStart(pc),a0
+	move.l	d0,(a0)			; save actual start
+
+	addq.l	#2,d0			; adjust pointer past first word
+					; Makes sure cleared under sprite
+
+	addq.l	#6,d0			; Assumes it was WORD aligned
+	andi.l	#~7,d0			; Double Long Word Aligned
+
+	DEA	TB_CHIPMem,a0
+	move.l	d0,(a0)+		; Addendum 11/30/89:
+
+	move.l	#TB_CHIPMEMBLOCKSIZE,d2
+	moveq	#6,d1
+6$:
+	add.l	d2,d0
+	move.l	d0,(a0)+
+	dbra	d1,6$
+
+* Initialize the Temp BM planes
+* This is temporarily when bringing in a new Alpha Key
+* It occupies the same memory as the userinterface, so use AVE or
+* some Keyed BM w/o Interface, when rendering to this BM.
+	move.l	TB_CHIPMem+0*4(a5),d0
+	lea	TempChipBM+bm_Planes,a0	
+	move.l	#TB_CHIPMEMBLOCKSIZE,d1		
+	move.l	d0,(a0)+			
+	add.l	d1,d0				
+	move.l	d0,(a0)+			
+	add.l	d1,d0				
+	move.l	d0,(a0)+			
+	add.l	d1,d0
+	move.l	d0,(a0)
+
+* Initialize the Alpha Chip BM planes
+	move.l	TB_CHIPMem+7*4(a5),d0		;start at top and work down
+	lea	AlphaChipBM+bm_Planes,a0	
+	move.l	#TB_CHIPMEMBLOCKSIZE,d1		
+	move.l	d0,(a0)+			
+	sub.l	d1,d0				
+	move.l	d0,(a0)+			
+	sub.l	d1,d0				
+	move.l	d0,(a0)+	;will run into interface on AA machine !!!		
+	sub.l	d1,d0
+	move.l	d0,(a0)		;will run into interface on AA machine !!!
+
+	move.l	#MEMF_CHIP+MEMF_LARGEST,d1	; Addendum 4/25/90:
+	CALLROM	AvailMem			; give us a cushion of linear
+	cmp.l	#64*1024,d0			; CHIP memory for requester
+	bcc.s	.EnoughCHIP			; system
+
+	lea	CHIPMemActualStart(pc),a0
+	move.l	(a0),a1			; else free CHIP memory so
+	clr.l	(a0)
+	clr.l	TB_CHIPMem(a5)
+	GET.l	TB_CHIPMemSIZE,d0	; requesters will work
+	addq.l	#8,d0			; bump up size by 2!
+	CALLROM	FreeMem
+	bra	.NotEnoughCHIP		; denote CHIP memory failure
+
+.EnoughCHIP:
+
+	IFD	NEEDED			; the CG check code removed 6/4/90:
+
+;;*SBS*	Addendum 11/26/89:
+;; The following is a special addon to insure the Toaster system runs on
+;; machine with only a meg by not allowing the CG to run.
+
+	CLEAR	d1
+	CALLROM	AvailMem
+	move.l	#1024*1024,d1		; only a 1 meg machine or a heavily
+	sub.l	TB_CHIPMemSIZE(a5),d1	; loaded machine would have this
+	cmp.l	d1,d0			; memory amount or less left
+*					; to allocate
+	bhi.s	.BigMachine		; if we seem to have alot of memory -
+*					; then we certainly have enough for
+*					; the following FAST memory
+*					; allocation below - skip on
+
+	sub.l	TB_FASTMemSIZE(a5),d0	; give us a cushion of memory
+	cmp.l	#64*1024,d0
+	bcs.s	.NotEnoughFAST
+
+	moveq	#CGSLICEID,d0		; else we have a small machine -
+	DEA	TB_SliceFGL,a0		; first insure that the CG is shut
+	XCALL	IndexFastG		; down
+	bne.s	.FoundCGFG
+
+.NotEnoughFAST:
+	CALLROM	Permit
+
+	SETERR	11
+	ABORT	CleanAndExit(pc)	; if we couldn't find CG slice FG -
+*					; what gives?
+
+.FoundCGFG:
+	move.l	d0,a0			; remove CG FG from Slice FG list
+	moveq	#1,d0			; Note: CG must be tailend slice
+	DEA	TB_SliceFGL,a1		; in order to not effect ordering
+	XCALL	RemoveFastGList
+
+*					; fall on down to continue
+
+.BigMachine:
+
+	ENDC	; NEEDED
+
+	GET.l	TB_FASTMemSIZE,d0			; get FAST memory
+	move.l	d0,d2
+	move.l	#MEMF_PUBLIC+MEMF_CLEAR,d1
+	CALLROM	AllocMem
+	lea	TB_FASTMem(a5),a0
+	move.l	d0,(a0)+
+	bne.s	10$			; if we got the memory - skip on
+
+	CALLROM	Permit
+
+	SETERR	11
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+10$:	lsr.l	#3,d2
+	moveq	#6,d1
+12$	add.l	d2,d0
+	move.l	d0,(a0)+
+	dbra	d1,12$
+
+* Initialize the Alpha Fast BM planes
+	GET.l	TB_FASTMem,d0
+	add.l	#EFD_SIZEOF,d0
+	lea	AlphaFastBM+bm_Planes,a0
+	move.l	#TB_CHIPMEMBLOCKSIZE,d1		;=Plane size	
+	move.l	d0,(a0)+		
+	add.l	d1,d0			
+	move.l	d0,(a0)+		
+	add.l	d1,d0			
+	move.l	d0,(a0)+		
+	add.l	d1,d0
+	move.l	d0,(a0)
+
+	move.l	#MEMF_CHIP+MEMF_LARGEST,d1	; Addendum 4/25/90:
+	CALLROM	AvailMem			; give us a cushion of linear
+	cmp.l	#64*1024,d0			; CHIP memory for requester
+	bcc.s	.EnoughCHIP2			; system
+
+	lea	CHIPMemActualStart(pc),a0
+	move.l	(a0),a1			; else free CHIP memory so
+	clr.l	(a0)
+	clr.l	TB_CHIPMem(a5)
+	GET.l	TB_CHIPMemSIZE,d0	; requesters will work
+	addq.l	#8,d0			; bump up size by 2!
+	CALLROM	FreeMem
+
+	CALLROM	Permit
+
+	SETERR	10
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.EnoughCHIP2:
+	CALLROM	Permit
+
+	REST1	d2
+	REST1	a6
+	rts
+
+CHIPMemActualStart	dc.l	0
+
+*====	Get Toaster system message port system.
+*====	Get ARexx support port also - Addendum 6/14/90:
+
+GetPortEnviro:
+	movem.l	d0-d1/a0-a2/a6,-(sp)
+
+	SETERR	20			; error codes start at 20
+
+	DEA	ToastPortName,a0	; name of the public port
+	CLEAR	d0			; port priority
+	XCALL	CreatePort		; get the port
+	bne.s	10$			; if we got the port - jump on
+
+	SETERR	23
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+10$:
+	PUT.l	d0,TB_TBMsgPort		; port address in ToasterBase
+
+	move.l	#TBM_SIZ,d0			; get the single message to
+	move.l	#MEMF_PUBLIC+MEMF_CLEAR,d1	; be predominantly used with
+	GET.l	TB_SYSBase,a6			; with the ToasterBase port
+	CALLROM	AllocMem
+	PUT.l	d0,TB_TBMsg		; place address of the message
+	bne.s	20$			; if we got the message - jump on
+
+	SETERR	21
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+20$:
+	move.l	d0,a0			; else fill out the pertinent read-
+	DEA	ToastMsgName,a1		; only fields of the message:
+	move.b	#NT_MESSAGE,LN_TYPE(a0)	; place message node type as message
+	move.l	a1,LN_NAME(a0)			; place message node name
+	GET.l	TB_TBMsgPort,MN_REPLYPORT(a0)	; Toaster port is the
+*						; reply port
+	move.w	#TBM_SIZ,MN_LENGTH(a0)	; place length of the message
+	move.l	a5,TBM_TB(a0)		; place ToasterBase pointer in the
+*					; message
+
+* this code section added 6/14/90: get ARexx support port.
+
+	DEA	ARexxPortName,a0
+	CLEAR	d0
+	XCALL	CreatePort
+	bne.s	30$
+
+	SETERR	22
+ 	ABORT	CleanAndExit(pc)
+
+30$:	PUT.l	d0,TB_ARexxPort
+
+*-------
+
+	movea.l	d0,a0		;->TB_ARexxPort for replys
+	GET.l	TB_RexxSysBase,d1
+	beq.s	666$
+	move.l	d1,a6		
+	suba.l	a1,a1		;no file name extension
+	moveq.l	#0,d0		;no special host
+	CALLROM	CreateRexxMsg
+	PUT.l	d0,TB_RexxMsg
+
+666$	movem.l	(sp)+,d0-d1/a0-a2/a6
+	rts
+
+*====	Create an intuition based display.
+
+CreateDisplay:
+	SAVE	d2-d4/a2/a6
+
+	DEBUGMSG DBCRD,<CreateDisplay:>	
+
+	DEA	TheBitMap,a0		; fully initialize a custom bitmap
+	GET.w	TB_InterfaceDepth,d0	; Was MAXDISPLAYDEPTH, structure for use
+	ext.l	d0
+	move.l	#DISPLAYWIDTH,d1
+	move.l	#DISPLAYHEIGHT,d2
+	GET.l	TB_GFXBase,a6
+
+	DEBUGMSG DBCRD,<1a>	
+	CALLROM	InitBitMap
+	DEBUGMSG DBCRD,<1b>	
+
+	GET.l	TB_CHIPMem,d0
+	DEA	TheBitMap+bm_Planes,a0		; now sub-divide the CHIP
+	move.l	#DISPLAYWIDTH/8*DISPLAYHEIGHT,d1; memory into the interface
+	move.l	d0,(a0)+			; display bitplanes in the
+	add.l	d1,d0				; temporary custom bitmap
+	move.l	d0,(a0)+			; structure until after we
+	add.l	d1,d0				; install it in our custom
+	move.l	d0,(a0)+			; screen we will open
+	add.l	d1,d0
+	move.l	d0,(a0)+
+
+	add.l	d1,d0				; new planes added for 4.0
+	move.l	d0,(a0)+
+	add.l	d1,d0
+	move.l	d0,(a0)+
+
+* Addendum 10/26/89: set the default font of the interface/switcher display.
+
+	DEA	TheTextAttr,a0		; see if font we want is resident
+	GET.l	TB_GFXBase,a6
+
+	DEBUGMSG DBCRD,<2a>	
+	CALLROM	OpenFont
+	DEBUGMSG DBCRD,<2b>	
+
+	PUT.l	d0,TB_Font
+	bne	.SkipAll		; if font obtained - skip the rest
+
+	DEA	FNTBaseName,a1		; else open the disk font library
+	CLEAR	d0
+	GET.l	TB_SYSBase,a6
+
+	DEBUGMSG DBCRD,<3a>	
+	CALLROM	OpenLibrary
+	DEBUGMSG DBCRD,<3b>	
+
+	move.l	d0,d0
+;;;;	beq.s	.SkipAll		; if disk font library did not open -
+;;;;*					; skip this section - keep system
+;;;;*					; default font
+	bne.s	.DiskFontLibOpen
+
+	SETERR	4
+	ABORT	CleanAndExit(pc)
+
+.DiskFontLibOpen:
+	DEA	TheTextAttr,a0		; open up the desired font -
+	move.l	d0,a6			; from disk or memory
+
+	DEBUGMSG DBCRD,<4a>	
+	CALLROM	OpenDiskFont
+	DEBUGMSG DBCRD,<4b>	
+
+	PUT.l	d0,TB_Font		; don't bother to check yet
+
+	move.l	a6,a1			; first close the disk font library
+	GET.l	TB_SYSBase,a6
+
+	DEBUGMSG DBCRD,<5a>	
+	CALLROM	CloseLibrary
+	DEBUGMSG DBCRD,<5b>	
+
+	GET.l	TB_Font,d0		; did we get the Switcher font?
+	bne.s	.SkipAll		; yup - continue on
+
+	SETERR	31
+	ABORT	CleanAndExit(pc)
+
+.SkipAll:
+
+ ifeq 1
+	DEA	TheTextAttr2,a0		; see if font we want is resident
+	GET.l	TB_GFXBase,a6
+	CALLROM	OpenFont
+	PUT.l	d0,TB_LightFont
+	bne.s	.SkipAll2		; if font obtained - skip the rest
+
+
+	DEA	FNTBaseName,a1		; else open the disk font library
+	CLEAR	d0
+	GET.l	TB_SYSBase,a6
+	CALLROM	OpenLibrary
+	move.l	d0,d0
+;;;;	beq.s	.SkipAll2		; if disk font library did not open -
+;;;;*					; skip this section - keep system
+;;;;*					; default font
+	bne.s	.DiskFontLibOpen2
+
+	SETERR	4
+	ABORT	CleanAndExit(pc)
+
+.DiskFontLibOpen2:
+	DEA	TheTextAttr2,a0		; open up the desired font -
+	move.l	d0,a6			; from disk or memory
+	CALLROM	OpenDiskFont
+	PUT.l	d0,TB_LightFont		; don't bother to check yet
+
+	move.l	a6,a1			; first close the disk font library
+	GET.l	TB_SYSBase,a6
+	CALLROM	CloseLibrary
+
+	GET.l	TB_LightFont,d0		; did we get the Switcher font?
+	bne.s	.SkipAll2		; yup - continue on
+
+	SETERR	31
+	ABORT	CleanAndExit(pc)
+
+.SkipAll2:
+
+ endc
+
+;;	lea	.InstallCT(pc),a0	; attempt to install ColorText -
+;;	move.l	a0,d1			; if not already installed
+;;	CLEAR	d2
+;;	CLEAR	d3
+;;	GET.l	TB_DOSBase,a6
+;;	CALLROM	Execute
+;;	move.l	d0,d0
+;;	bne.s	.SeemsOK		; if it seemed to have run - jump on
+;;
+;;	ABORT	CleanAndExit(pc)	; else denote the error
+;;
+;;.SeemsOK:
+
+;;$$
+	IFD	OLD_COLORTEXT
+;;$$
+
+*----	Addendum 5/4/90: Added code to run ColorText....
+
+	lea	.StartUpMsg(pc),a2		; we'll assume that we're
+*						; CurrentDir()ed to Toaster
+*						; ROOT - address the WB
+*						; startup message we'll be
+*						; passing to ColorText....
+
+	lea	.ColorTextName(pc),a0		; LoadSeg the ColorText code
+	move.l	a0,d2
+	move.l	d2,d1
+	GET.l	TB_DOSBase,a6
+
+	DEBUGMSG DBCRD,<6a>	
+	CALLROM	LoadSeg
+	DEBUGMSG DBCRD,<6b>	
+
+	move.l	d0,sm_Segment(a2)
+	beq.s	.BadColorText			; if we didn't load the code
+*						; - abort
+
+	move.l	d2,d1				; now create the ColorText
+	CLEAR	d2				; process
+	move.l	d0,d3
+	move.l	#3000,d4
+
+	DEBUGMSG DBCRD,<7a>	
+	CALLROM	CreateProc
+	DEBUGMSG DBCRD,<7b>	
+
+	move.l	d0,sm_Process(a2)
+	bne.s	.OKColorText			; if all went OK - jump on
+
+	move.l	d3,d1				; else unload the dead code
+
+	DEBUGMSG DBCRD,<8a>	
+	CALLROM	UnLoadSeg
+	DEBUGMSG DBCRD,<8b>	
+
+.BadColorText:
+	SETERR	32	;OLD CODE
+	ABORT	CleanAndExit(pc)		; denote an error and abort
+
+.OKColorText:
+	GET.l	TB_TBMsgPort,MN_REPLYPORT(a2)	; finish setting up the WB
+	move.l	sm_ArgList(a2),a0		; startup message
+	GET.l	TB_BootLock,wa_Lock(a0)
+
+	move.l	d0,a0				; send the startup message
+	move.l	a2,a1
+	GET.l	TB_SYSBase,a6
+
+	DEBUGMSG DBCRD,<9a>	
+	CALLROM	PutMsg
+	DEBUGMSG DBCRD,<9b>	
+
+	moveq	#27,d1				; delay a bit to give
+	GET.l	TB_DOSBase,a6			; ColorText a chance to catch
+
+	DEBUGMSG DBCRD,<10a>	
+	CALLROM	Delay
+	DEBUGMSG DBCRD,<10b>	
+
+	GET.l	TB_SYSBase,a6
+
+.CTLoop:
+	GET.l	TB_TBMsgPort,a0			; now check to see if
+
+	DEBUGMSG DBCRD,<11a>	
+	CALLROM	GetMsg				; ColorText has returned the
+	DEBUGMSG DBCRD,<11b>	
+*						; startup message
+
+	move.l	d0,d0				; did we get a message?
+	beq.s	.CTQuit				; if not - skip out
+
+	cmp.l	d0,a2				; startup message returned?
+	bne.s	.CTLoop				; if not - reloop
+
+	move.l	d3,d1				; else ColorText has probably
+	GET.l	TB_DOSBase,a6			; run before - unload the
+
+	DEBUGMSG DBCRD,<12a>	
+	CALLROM	UnLoadSeg			; dead code
+	DEBUGMSG DBCRD,<12b>	
+
+	GET.l	TB_SYSBase,a6			; reloop till port cleared
+	bra.s	.CTLoop				; out
+
+.CTQuit:
+
+*----	End of ColorText code....
+
+;;$$
+	ENDC	; OLD_COLORTEXT
+;;$$
+
+* Addendum 5/29/90: latest stuff to do ColorText
+
+;;$$
+;;	GET.l	TB_GFXBase,a0
+;;	lea	_LVOText+2(a0),a0
+;;	XREF	OrgTextVector,a1
+;;	lea	OrgTextVector,a1
+;;	move.l	(a0),(a1)
+;;$$
+
+	DEBUGMSG DBCRD,<13a>	
+	XCALL	InstallText		; not a public function in
+	DEBUGMSG DBCRD,<13b>	
+*					; ToasterBase - we also don't care
+*					; if it fails, just keep going
+
+	DEA	ANewScreen,a0		; obtain a custom screen
+	GET.w	TB_InterfaceDepth,ns_Depth(a0)
+	DEA	TheBitMap,a1		; (first sneak in a pointer to our
+	move.l	a1,ns_CustomBitMap(a0)	; custom bitmap we're supplying)
+	GET.l	TB_ITUBase,a6
+
+	DEBUGMSG DBCRD,<14a>	
+	CALLROM	OpenScreen
+	DEBUGMSG DBCRD,<14b>	
+
+	PUT.l	d0,TB_SoftSprite+VBI_Screen
+	bne.s	10$				; skip on if we got it OK
+
+	SETERR	32
+	ABORT	CleanAndExit(pc)		; else denote the error
+
+10$:
+	PUT.l	d0,TB_Screen
+	move.l	d0,a0			; get the bitmap of the screen
+	lea	sc_BitMap(a0),a0
+	PUT.l	a0,TB_BitMap
+
+	DEA	ANewWindow,a0		; obtain a window
+	move.l	d0,nw_Screen(a0)
+
+	DEBUGMSG DBCRD,<15a>	
+	CALLROM	OpenWindow
+	DEBUGMSG DBCRD,<15b>	
+
+	PUT.l	d0,TB_Window
+	bne.s	20$			; skip on if we got it OK
+
+	SETERR	33
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+20$:
+	move.l	d0,a0
+	PUT.l	wd_RPort(a0),TB_RastPort	; save RastPort pointer
+	PUT.l	wd_UserPort(a0),TB_MsgPort	; save MsgPort pointer
+
+	XREF	SwitcherWGList		; Addendum 9/18/90:
+	lea	SwitcherWGList,a1	; add Switcher's collecting window
+	CLEARA	a2			; gadget list here instead of later
+	moveq	#-1,d0
+	moveq	#-1,d1
+
+	DEBUGMSG DBCRD,<16a>	
+	CALLROM	AddGList
+	DEBUGMSG DBCRD,<16b>	
+
+	GET.l	TB_Screen,a0			; hide screen's title bar
+	CLEAR	d0
+
+	DEBUGMSG DBCRD,<17a>	
+	CALLROM	ShowTitle
+	DEBUGMSG DBCRD,<17b>	
+
+	GET.l	TB_Screen,a0		; Addendum 1/4/91: set system screen
+	lea	sc_ViewPort(a0),a0	; to black
+	lea	.ScreenColors(pc),a1
+	moveq	#1<<MAXDISPLAYDEPTH,d0	;might be more than we need
+	GET.l	TB_GFXBase,a6
+
+	DEBUGMSG DBCRD,<18a>	
+	CALLROM	LoadRGB4
+	DEBUGMSG DBCRD,<18b>	
+
+	REST	d2-d4/a2/a6
+	rts
+
+.ScreenColors:
+	DCB.w	1<<MAXDISPLAYDEPTH,0
+
+;;.InstallCT:
+;;	DC.b	'Run >NIL: ColorText >NIL:',0
+;;
+;;	CNOP	0,2
+
+;;$$
+	IFD	OLD_COLORTEXT
+;;$$
+
+.StartUpMsg:
+	DS.l	1		; LN_SUCC
+	DS.l	1		; LN_PRED
+	DC.b	NT_MESSAGE	; LN_TYPE
+	DC.b	0		; LN_PRI
+	DC.l	.CTMsgName	; LN_NAME
+
+	DS.l	1		; MN_REPLYPORT
+	DC.w	sm_SIZEOF	; MN_LENGTH
+
+	DS.l	1		; sm_Process
+	DS.l	1		; sm_Segment
+	DC.l	1		; sm_NumArgs
+	DC.l	0		; sm_ToolWindow
+	DC.l	.CT_WB_Args	; sm_ArgList
+
+.CT_WB_Args:
+	DS.l	1		; wa_Lock
+	DC.l	.ColorTextName	; wa_Name
+
+.ColorTextName:
+	DC.b	'ColorText',0
+
+.CTMsgName:
+	DC.b	'ColorText WB StartUp Message',0
+
+	CNOP	0,2
+
+;;$$
+	ENDC	; OLD_COLORTEXT
+;;$$
+
+***********************************************************
+
+*====	Install the SoftSprite vertical blank interrupt server.
+
+InstallSoftSprite:
+
+*					; open up the SoftSprite system
+	move.w	#VBEAMSYNCH,d0		; synch audio channel 0 to specified
+*					; scan line
+	XCALL	OpenSoftSprite
+	beq.s	10$			; jump on if all went OK
+
+	SETERR	40			; error codes start at 40
+	ABORT	CleanAndExit(pc)	; else denote an error and exit
+
+10$:
+	rts
+
+*====	Load the ToolBox grid FGs.
+
+*+ Addendum 11/17/89: Added code to load the ToolBox FastGadgets.
+*+ Addendum 2/2/90: Only works with external ToolBox FastGadgets.
+*+ Addendum 2/20/90: Now using ReadProject() and DOS environment.
+*+ Addendum 3/16/90: Now will attempt to load the default project if
+*+          ReadProject() fails.
+*+ Addendum 3/26/90: Added more error handling stuff.
+*+ Addendum 4/26/90: More of the same.
+*+ Addendum 11/28/90: Now ask you if want to load the DefaultProject since
+*+                    an empty ToolBox grid is now allowable.
+
+LoadToolBoxFGs:
+	SAVE	d1/a0-a2/a3
+
+	GET.w	TB_CurrentPJNumber,d0	; CurrentProject give us a Project #?
+	cmp.w	#1000,d0		; if CurrentProject not processed -
+	bcc.s	.DoDefault		; then do the default with no further
+*					; messages or questions
+
+	PUT.w	d0,TB_ProjectNumber	; denote as active Project #
+*					; Addendum 6/26/90:
+
+.Retry:
+	CLEAR	d0			; attempt to read in the Project file
+	GET.w	TB_CurrentPJNumber,d0
+
+
+*****!!!!!****** Disabled reading of current project!!!!!
+;;	XCALL	ReadProject		;fill list 0
+;;	tst.l	d0
+;;	bpl	.OK			; skip on out if all was OK
+
+.DoDefault:  ****!!!!!***
+	XCALL	ReadDefaultProject
+	bpl	.OK			; skip on out if all was OK
+		
+	NOP	;NO ERROR HANDLING !!!!!!!
+
+.OK	REST	d1/a0-a2/a3
+	rts
+
+	CNOP	0,4
+
+.MsgTable:
+	DC.l	.BadFileNameString
+	DC.l	.BadPJLockString
+	DC.l	.BadOpenString
+	DC.l	.BadReadString
+	DC.l	.BadReadString
+	DC.l	.BadTBFGLoadString
+
+.OtherStrings:
+	DC.l	.DInfoString
+	DC.l	.RetryString
+	DC.l	.CancelString
+
+.MsgTable1:
+	DC.l	.BadDOpenString
+	DC.l	.BadDReadString
+	DC.l	.BadDReadString
+	DC.l	.BadDTBFGLoadString
+
+.OtherStrings1:
+	DC.l	.DInfoString
+	DC.l	.RetryString
+	DC.l	.CancelString
+
+.RetryString:
+	DC.b	'RETRY',0
+.OKString:
+	DC.b	'OK',0
+.CancelString:
+	DC.b	'CANCEL',0
+;;.InfoString:
+;;	DC.b	'RETRY or CANCEL for defaults',0
+.DInfoString:
+	DC.b	'RETRY or CANCEL to quit',0
+.BadFileNameString:
+	DC.b	'Project was not found on ',0
+.BadPJLockString:
+	DC.b	'Project directory not found on ',0
+.BadOpenString:
+	DC.b	'Could not open Project on ',0
+.BadReadString:
+	DC.b	'Could not read Project from ',0
+.BadTBFGLoadString:
+	DC.b	'No Effects were loaded from ',0
+.BadDOpenString:
+	DC.b	'Could not open DefaultProject on Toaster ROOT',0
+.BadDReadString:
+	DC.b	'Could not read DefaultProject from Toaster ROOT',0
+.BadDTBFGLoadString:
+	DC.b	'No Effects were loaded from Toaster ROOT',0
+.DPPromptString:
+	DC.b	'Load the Default Project?',0
+
+	CNOP	0,2
+
+*====	Show the initial interface display of FastGadgets.
+
+AddFastGadgets:
+	SAVE	d2-d7/a2-a6
+
+;;	GET.l	TB_ToolBox1FGL,a0 ;; done now by LoadToolBoxFGs() - 12/21/89:
+;;	CALL.s	1$
+;;	GET.l	TB_ToolBox2FGL,a0
+;;	CALL.s	1$
+;;	GET.l	TB_ToolBox3FGL,a0
+;;	CALL.s	1$
+;;	GET.l	TB_ToolBox4FGL,a0
+;;	CALL.s	1$
+	GET.l	TB_MainFGL,a0
+	CALL.s	1$
+	GET.l	TB_PrvwFGL,a0
+	CALL.s	1$
+	GET.l	TB_LumKeyFGL,a0
+	CALL.s	1$
+	GET.l	TB_GridSelFGL,a0
+	CALL.s	1$
+	GET.l	TB_TransFGL,a0
+	CALL.s	1$
+	GET.l	TB_SliceFGL,a0
+	CALL.s	1$
+	GET.l	TB_NumPadFGL,a0
+	CALL.s	1$
+	GET.l	TB_ClipFGL,a0
+	CALL.s	1$
+	GET.l	TB_TBarFGL,a0
+	CALL.s	1$
+	GET.l	TB_FMCountFGL,a0
+	CALL.s	1$
+	GET.l	TB_MiscFGL,a0
+	pea	4$(pc)
+
+1$:
+	move.l	a0,d0			; FastGadget pointer NULL?
+	bne.s	2$			; if not - skip on
+	rts				; else ignore this code
+
+2$:
+	move.l	(a0),d2			; get link to next FG
+
+	move.l	FG_Function(a0),d0	; the FG have a function to call?
+	beq.s	3$			; if not - skip the FGC_xxxx command
+
+	SAVE	d2/a0/a5		; save registers we can't lose
+	move.l	a5,-(sp)
+	move.l	a0,-(sp)
+	move.l	#FGC_LOAD,-(sp)
+	move.l	d0,a0
+	jsr	(a0)
+	lea	12(sp),sp
+	REST	d2/a0/a5		; restore registers
+
+3$:
+	move.l	d2,d2			; another FG?
+	move.l	d2,a0
+	bne.s	2$			; if so - reloop
+	rts				; else return to caller
+
+4$:
+	DEA	TB_NumPadFGL,a0		; attempt to make the TBFG selector
+;	moveq	#TBSELID,d0		; of the NumPad system the active
+	moveq	#FLSELID,d0		; of the NumPad system the active
+	XCALL	IndexFastG		; numpad input recipient
+	beq.s	.NoTBSEL
+	move.l	d0,a0
+	move.l	FG_Function(a0),d0
+	beq.s	.NoTBSEL
+	SAVE1	a5
+	move.l	a5,-(sp)
+	move.l	a0,-(sp)
+	move.l	#FGC_SELECTQ,-(sp)
+	move.l	d0,a0
+	jsr	(a0)
+	lea	12(sp),sp
+	REST1	a5
+
+.NoTBSEL:
+;;	XCALL	ReDoDisplay		; display everything as well as
+*					; setting up the background color
+
+	REST	d2-d7/a2-a6
+	rts
+
+   IFD	TB_DEBUG
+
+*====	Open up the input device and set an input handler into motion.
+
+SetUpInputHandler:
+
+	SAVE1	a6			; save the work register
+
+	moveq	#-1,d0			; try to get a signal for StdIOReq
+	GET.l	TB_SYSBase,a6		; message port
+	CALLROM	AllocSignal
+	DEA	DeviceIOPort,a1
+	move.b	d0,MP_SIGBIT(a1)
+	bpl.s	.GotTheSignal		; skip on if we got the signal OK
+
+	SETERR	50			; error codes start at 50
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.GotTheSignal:
+	GET.l	TB_SwitcherTask,MP_SIGTASK(a1)	; place the task to be
+*						; signaled
+	CALLROM	AddPort			; add the port to the system list
+
+	DEA	InputDeviceName,a0	; attempt to open the input device
+	DEA	DeviceRequest,a1
+	CLEAR	d0
+	CLEAR	d1
+	CALLROM	OpenDevice
+	move.l	d0,d0			; did input device open?
+	beq.s	.InputDevOpen		; if it did - jump on
+
+	SETERR	51
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.InputDevOpen:
+	PUT.w	#-1,InputDevFlag	; denote the input device open
+
+	DEA	DeviceRequest,a1	; get StdIOReq message
+	DEA	InputHandlerIS,a0	; interrupt structure with the
+*					; goodies to set up a working
+*					; input handler
+	move.l	a0,IO_DATA(a1)			; link in interrupt structure
+	move.w	#IND_ADDHANDLER,IO_COMMAND(a1)	; command to install handler
+	clr.b	IO_FLAGS(a1)			; set flags to 0
+	CALLROM	DoIO			; attempt the input handler install
+	move.l	d0,d0			; installed?
+	beq.s	.HandlerInstalled	; if it was - jump on
+
+	SETERR	52
+	ABORT	CleanAndExit(pc)	; else denote the error
+
+.HandlerInstalled:
+	PUT.w	#1,InputDevFlag		; denote input device open AND
+*					; input handler installed
+
+	REST1	a6			; restore the work register
+	rts				; return to caller
+
+*====	This is the input handler.
+
+InputHandler:
+	tst.w	TB_ToastActive(a1)	; Toaster copper list installed?
+	bne.s	.IActive		; if so - keep going
+
+.ExitQuickly:
+	move.l	a0,d0			; else exit quick
+	rts
+
+.IActive:
+
+	btst.b	#MASKDOSSPECIAL_BIT,TB_Flags(a1)
+	beq.s	.isHKon
+
+	cmp.b	#IECLASS_RAWKEY,ie_Class(a0)	; rawkey input event?
+	bne.s	.isHKon
+
+	move.w	ie_Qualifier(a0),d0	; Don't allow Alt/Ctrl/Amiga combinations
+	and.w	#IEQUALIFIER_LALT!IEQUALIFIER_RALT!IEQUALIFIER_LCOMMAND!IEQUALIFIER_RCOMMAND!IEQUALIFIER_CONTROL,d0
+	bne.s	.strip
+
+* filter out stuff that's illegal in file names???
+	cmp.b	#$29,ie_Code+1(a0)
+	beq.s	.strip			; filter out ":" or ";" press
+
+	cmp.b	#$3a,ie_Code+1(a0)
+	bne.s	.nostrip
+	move.w	ie_Qualifier(a0),d0
+	and.w	#IEQUALIFIER_LSHIFT!IEQUALIFIER_RSHIFT,d0
+	bne.s	.isHKon			;filter out "?" press
+.strip
+	move.b	#IECLASS_NULL,ie_Class(a0)	;strip here
+.nostrip
+
+.isHKon
+	SAVE	a0/a2			; save pointer to start of input
+*					; event(s) and a work register
+
+	move.l	a0,d0			; startup the main loop....
+	bra	.SneakInHere		; (shouldn't need this check for
+*					;  NULL - but just in case....)
+
+.Loop:
+	cmp.b	#IECLASS_RAWKEY,ie_Class(a0)	; rawkey input event?
+	bne	.IgnoreIt			; if not - ignore it
+
+	move.w	ie_Qualifier(a0),d0		; left command on
+	btst	#IEQUALIFIERB_LCOMMAND,d0
+	beq	.IgnoreIt
+
+	btst	#IEQUALIFIERB_REPEAT,d0		; Ignore repeats
+	bne	.IgnoreIt
+
+	move.b	ie_Code+1(a0),d1		; get byte from code
+
+	cmp.b	#$36,d1				; Left AMIGA - N (WBToFront)
+	beq	.DoScreenChange
+	cmp.b	#$37,d1				; Left AMIGA - M (ScrToBack)
+	beq	.DoScreenChange
+
+	bra	.IgnoreIt
+
+**********************************************************************
+.DoScreenChange:
+	SAVE	a0/a1/a3/a5/a6		; save extra work registers
+
+*	We have a left-amiga-M or N we're going to eat before intuition
+*	Gets it's hands on it and tries to do the same.
+
+	move.l	a1,a5			; Get ToastBase
+	GET.l	TB_ITUBase,a6		; Get IntuitionBase
+
+	move.b	#IECLASS_NULL,ie_Class(a0)	; tell OS to ignore event
+
+	cmp.b	#$36,d1			; Left AMIGA - N (WBToFront)
+	bne	.ScrToBack
+
+.WBForward:
+	suba.l	a3,a3			; Clear screen pointer (means WorkBench)	
+	bra	.EndPickScreen
+
+.ScrToBack:
+	move.l	ib_FirstScreen(a6),a3	; Get screen currently on top
+	tst.l	sc_NextScreen(a3)	; Get the one behind it, the one
+	beq	.EndPickScreen		; we will go to after scrswap
+
+	move.l	sc_NextScreen(a3),a3	; This is the screen we'll be bringing
+					; to the front
+.EndPickScreen:
+
+*	Next first_screen pointer in a3 - NULL if workbench
+
+	cmp.l	TB_Screen(a5),a3	; Are we going to the toaster screen??
+	bne.s	.GotoOtherScreen	;
+
+**********************************************************************
+* We're going to the toaster screen!!
+
+	tst.w	TB_DisplayState(a5)	; determine to what display state
+*					; we're to be going to
+
+	beq.s	.Continue		; is it already up?
+*					; else to Toaster display
+	bra.s	.SignalScreenChange
+
+**********************************************************************
+.GotoOtherScreen:
+
+	move.l	ib_FirstScreen(a6),a0	; get current screen
+	cmp.l	TB_Screen(a5),a0	; Are we leaving the toaster screen?
+	bne	.GiveToIntuition	; if switcher not up..
+
+.SignalScreenChange:
+
+	btst.b	#TOWB_ONOFF_BIT,TB_Flags(a5)	; to WB already pending?
+	bne.s	.Continue			; ...if so - skip out
+
+	bset.b	#TOWB_ONOFF_BIT,TB_Flags(a5)	; denote that TOWB pending
+
+	GET.l	TB_MsgPort,a1		; insure that the Switcher task
+	move.b	MP_SIGBIT(a1),d1	; "wakes up" and does the WB copper
+	CLEAR	d0			; list install, even if it is not
+	bset.l	d1,d0			; the currently active window
+	move.l	MP_SIGTASK(a1),a1
+	GET.l	TB_SYSBase,a6
+	CALLROM	Signal
+	bra.s	.Continue
+
+.GiveToIntuition:
+	move.l	(sp),a0			; positioned properly
+	move.b	#IECLASS_RAWKEY,ie_Class(a0)
+
+**********************************************************************
+
+.Continue:
+	REST	a0/a1/a3/a5/a6		; restore work registers
+
+.IgnoreIt:
+	move.l	(a0),d0			; get next input event
+	move.l	d0,a0
+
+.SneakInHere:
+	bne	.Loop			; reloop if another input event
+
+	REST	d0/a2			; restore pointer to input event
+*					; chain in D0 and work register
+	rts				; exit the handler
+
+   ENDC
+
+	IFD	TB_DEBUG
+
+*+*******
+*+
+*+ MoveSoftSpriteREL
+*+
+*+ This function offsets the SoftSprite according to the specified X,Y
+*+ relative offsets within the Switcher interface window.
+*+
+*+ void MoveSoftSpriteREL( XOffset, YOffset );
+*+                          D0       D1
+*+
+*+ LONG XPos:
+*+   Low signed 16 bits is used to denote new X offset of the SoftSprite.
+*+ LONG YPos:
+*+   Low signed 16 bits is used to denote new Y offset of the SoftSprite.
+*+
+*+ Notes:
+*+   Uses a relative X,Y offset system within the Switcher interface
+*+   window only, no absolute movement. Trashes D0,D1,A0,A1, and the
+*+   condition codes. Returns nothing. Requires a pointer to ToasterBase in
+*+   A5 and is tied closely to Switcher display system. This function cannot
+*+   be used within interrupt code and should not be used in Forbidden code
+*+   (tied to the input.device)
+*+
+*+   Another important note is that this function MUST NOT be called before
+*+   the Switcher interface code has installed its internal input handler
+*+   above the intuition handler, or else the potential for a big crash
+*+   will most definately exist. This most directly impacts FG systems that
+*+   are installed at Switcher program load time. They should not try to use
+*+   this function when processing their FGC_LOAD command.
+*+
+*+ Addendum 12/5/89:
+*+
+*+ Notes:
+*+   The above restriction of FG systems using this function during their
+*+   FGC_LOAD routines has been removed as the input handler installation is
+*+   now one of the first bootstrap functions of the Switcher program.
+*+
+*+ Addendum 1/19/90:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_MoveSoftSpriteREL
+_MoveSoftSpriteREL:
+	movem.l	4(sp),d0/d1
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	MoveSoftSpriteREL
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	MoveSoftSpriteREL
+MoveSoftSpriteREL:	; entry: XOffset, YOffset
+*				  D0       D1
+	SAVE1	a6
+
+	GET.l	TB_SYSBase,a6		; get execbase
+	DEA	DeviceRequest,a1	; address STDIO request
+	DEA	SSInputEvent,a0		; address dummy input event to force
+*					; the SoftSprite move
+
+	move.w	#IND_WRITEEVENT,IO_COMMAND(a1)	; fill out STDIO request
+	clr.b	IO_FLAGS(a1)
+	move.l	#ie_SIZEOF,IO_LENGTH(a1)
+	move.l	a0,IO_DATA(a1)
+
+	clr.l	ie_NextEvent(a0)		; fill out the input event
+	move.b	#IECLASS_RAWMOUSE,ie_Class(a0)
+	clr.b	ie_SubClass(a0)
+	move.w	#IECODE_NOBUTTON,ie_Code(a0)
+	move.w	#IEQUALIFIER_RELATIVEMOUSE,ie_Qualifier(a0)
+	move.w	d0,ie_X(a0)
+	move.w	d1,ie_Y(a0)
+
+	CALLROM	DoIO			; send out the event
+
+	REST	a6
+	rts
+
+*+*******
+*+
+*+ MoveSoftSpriteABS
+*+
+*+ This function positions the SoftSprite according to the specified X,Y
+*+ absolute coordinates within the Switcher interface window.
+*+
+*+ void MoveSoftSpriteABS( XCoord, YCoord );
+*+                          D0      D1
+*+
+*+ LONG XPos:
+*+   Low unsigned 16 bits is used to denote new X coordinate of SoftSprite.
+*+ LONG YPos:
+*+   Low unsigned 16 bits is used to denote new Y coordinate of SoftSprite.
+*+
+*+ Notes:
+*+   Uses an absolute X,Y coordinate system within the Switcher interface
+*+   window only, no relative movement. Trashes D0,D1,A0,A1, and the
+*+   condition codes. Returns nothing. Requires a pointer to ToasterBase in
+*+   A5 and is tied closely to Switcher display system. This function cannot
+*+   be used within interrupt code and should not be used in Forbidden code
+*+   (tied to the input.device)
+*+
+*+   Another important note is that this function MUST NOT be called before
+*+   the Switcher interface code has installed its internal input handler
+*+   above the intuition handler, or else the potential for a big crash
+*+   will most definately exist.
+*+
+*+ Addendum 1/19/90:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_MoveSoftSpriteABS
+_MoveSoftSpriteABS:
+	movem.l	4(sp),d0/d1
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	MoveSoftSpriteABS
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	MoveSoftSpriteABS
+MoveSoftSpriteABS:	; entry XCoord, YCoord
+*				 D0      D1
+	SAVE	d0/d1/a6
+
+	GET.l	TB_DOSBase,a6
+	moveq	#4,d1
+	CALLROM	Delay
+	REST	d0/d1
+
+	GET.l	TB_Screen,a0		; cook pointer into correct position
+	add.w	sc_LeftEdge(a0),d0
+	add.w	sc_TopEdge(a0),d1
+
+	GET.l	TB_SYSBase,a6		; get execbase
+	DEA	DeviceRequest,a1	; address STDIO request
+	DEA	SSInputEvent,a0		; address dummy input event to force
+*					; the SoftSprite move
+
+	move.w	#IND_WRITEEVENT,IO_COMMAND(a1)	; fill out STDIO request
+	clr.b	IO_FLAGS(a1)
+	move.l	#ie_SIZEOF,IO_LENGTH(a1)
+	move.l	a0,IO_DATA(a1)
+
+	clr.l	ie_NextEvent(a0)		; fill out the input event
+	move.b	#IECLASS_POINTERPOS,ie_Class(a0)
+	clr.b	ie_SubClass(a0)
+	move.w	#IECODE_NOBUTTON,ie_Code(a0)
+	clr.w	ie_Qualifier(a0)
+	move.w	d0,ie_X(a0)
+	move.w	d1,ie_Y(a0)
+
+	CALLROM	DoIO			; send out the event
+
+	REST	a6
+	rts
+
+	ENDC
+
+*	Just in case TB_DEBUG is removed
+
+	IFND	TB_DEBUG
+
+	IFNE	_CCODE
+
+	XDEF	_MoveSoftSpriteREL
+_MoveSoftSpriteREL:
+
+	ENDC
+
+	XDEF	MoveSoftSpriteREL
+MoveSoftSpriteREL:	; entry: XPos, YPos
+*				  D0    D1
+	rts
+
+	IFNE	_CCODE
+
+	XDEF	_MoveSoftSpriteABS
+_MoveSoftSpriteABS:
+
+	ENDC
+
+	XDEF	MoveSoftSpriteABS
+MoveSoftSpriteABS:	; entry: XCoord, YCoord
+*				  D0      D1
+	rts
+
+	ENDC
+
+*+*******
+*+
+*+ ClearIDCMP
+*+
+*+ This function waits a bit for to give the input.device ample opportunity
+*+ to do its thing while it removes and replies to all unwanted
+*+ IntuiMessages found at the specified window's IDCMP port.
+*+
+*+ void ClearIDCMP( IDCMPMsgPort );
+*+                   A0
+*+
+*+ APTR IDCMPMsgPort:
+*+   Pointer to a window's IDCMP port that you wish to clear out.
+*+
+*+ Notes:
+*+   Trashes only the condition codes. No registers are altered. Nothing is
+*+   returned. This routine is primarily an internal use only routine for
+*+   the Switcher. It was specifically written to handle "key bouncing" we
+*+   were getting in the Switcher code because of keyboard input during
+*+   extended periods of having the interrupts off. This was showing up
+*+   after TBar or Auto transitions. Requires that A5 point to ToasterBase.
+*+   It is not tied closely to the Switcher display system. This function
+*+   relies on an input.device handler installed above intuition's
+*+   input.device handler in order to stem the tide of events from intuition.
+*+
+*+ Addendum 2/6/90:
+*+ Addendum 4/10/90:
+*+   Fixed dummy input handler so that it allows IECLASS_RAWKEY
+*+   (up keys only), IECLASS_RAWMOUSE (up buttons only),
+*+   IECLASS_DISKINSERTED, and IECLASS_DISKREMOVED events to continue down
+*+   the input stream. Fixed IDCMP message port cleanup so that all messages
+*+   are removed except for DISKINSERTED/DISKREMOVED messages.
+*+ Addendum 5/9/90:
+*+   Allowed this routine to have a IDCMP message port argument. Previously
+*+   only the Switcher message port was cleared.
+*+ Addendum 5/10/90:
+*+   Added code to lengthen the time spent clearing the input event stream
+*+   if any keyboard problems are sensed. This helps prevent bogus keyboard
+*+   input events from continuing down the input stream.
+*+ Addendum 8/13/90:
+*+   Removed the code that tries to lengthen clearing time spent cleaning up
+*+   the input stream when problems are encountered with the keyboard. Also
+*+   the delay has been shortened considerably. This is not because we solved
+*+   the problem we were having with the keyboard.device when interrupts were
+*+   off, rather it is because we no longer keep the interrupt servicing the
+*+   keyboard off whenever possible.
+*+ Addendum 10/29/90:
+*+   The temporary dummy input handler that was filtering the input stream
+*+   has been disabled. Additionally we now allow RAWKEYs and VANILLAKEYs
+*+   to remain in the specified IDCMP port.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_ClearIDCMP
+_ClearIDCMP:
+	move.l	4(sp),a0
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	ClearIDCMP
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	ClearIDCMP
+ClearIDCMP:	; entry: IDCMPMsgPort
+*			  A0
+
+	SAVE	d0-d2/a0-a2/a6		; save work registers
+;;	SAVE	d0-d2/a0-a3/a6		; save work registers
+
+;;	DEA	InputHandlerIS+IS_CODE,a3	; address interrupt structure
+;;*						; code vector of
+;;*						; input handler
+
+	lea	MP_MSGLIST(a0),a2	; address list of messages - if any
+
+;;	lea	.DummyHandler(pc),a0		; install our clean up
+;;	move.l	a0,(a3)				; input handler
+
+;;	GET.l	TB_DOSBase,a6
+
+;;	moveq	#1,d1			; insure input.device has been
+;;	CALLROM	Delay			; running its course
+
+	GET.l	TB_SYSBase,a6		; get exec base
+	move.l	(a2),a2
+_TEMP_	SET	RAWKEY+VANILLAKEY+DISKINSERTED+DISKREMOVED
+	move.l	#_TEMP_,d2			; mask of IDCMP classes
+*						; that we are to keep
+
+	CALLROM	Forbid
+
+.Loop:
+	move.l	LN_SUCC(a2),d0		; are we at the end of the list?
+	beq.s	.ExitLoop		; if so - skip out
+
+	move.l	im_Class(a2),d1		; else determine if we keep this
+	and.l	d2,d1			; IDCMP message or not
+	bne	.KeepIt			; if we keep it - jump on
+
+	move.l	a2,a1			; else unlink this IDCMP message
+	move.l	LN_PRED(a2),a0		; and "lose it"
+	move.l	d0,a2
+	move.l	a2,LN_SUCC(a0)
+	move.l	a0,LN_PRED(a2)
+	pea	.Loop(pc)
+	JUMPROM	ReplyMsg
+
+.KeepIt:
+	move.l	d0,a2			; address next possible IDCMP msg
+	bra.s	.Loop			; and reloop
+
+.ExitLoop:
+	CALLROM	Permit
+
+;;	lea	InputHandler(pc),a0	; re-install working input handler
+;;	move.l	a0,(a3)
+
+	REST	d0-d2/a0-a2/a6		; restore work registers
+;;	REST	d0-d2/a0-a3/a6		; restore work registers
+	rts
+
+	IFD	NEED_DUMMY_HANDLER
+
+*====	Dummy input handler for cleanup.
+
+.DummyHandler:
+	SAVE1	a0			; save event list anchor
+
+	move.l	a0,d0			; startup the loop....
+	bra.s	.SneakIn
+
+.ELoop:
+	move.b	ie_Class(a0),d0		; get the event Class
+
+	cmp.b	#IECLASS_RAWKEY,d0	; RAWKEY?
+	bne.s	.NotRAWKEY		; if not - skip on
+
+	move.b	ie_Code+1(a0),d0	; check key code for "up"
+	bpl.s	.VoidIt			; ignore event if key down
+
+	cmp.b	#$F0,d0			; are we dealing with one of the
+*					; special control keys? (F0-FF)
+	bcs.s	.KeepEvent		; nope - skip on
+	bra.s	.VoidIt			; else dump the code
+
+.NotRAWKEY:
+	cmp.b	#IECLASS_DISKINSERTED,d0	; DISKINSERTED?
+	beq.s	.KeepEvent			; if so - keep it
+
+	cmp.b	#IECLASS_DISKREMOVED,d0		; DISKREMOVED?
+	beq.s	.KeepEvent			; if so - keep it
+
+	cmp.b	#IECLASS_RAWMOUSE,d0	; RAWMOUSE?
+	bne.s	.VoidIt
+	move.b	ie_Code+1(a0),d0	; else check key code for "up"
+	bmi.s	.KeepEvent		; keep it if it's what we want
+
+.VoidIt:
+	clr.b	ie_Class(a0)		; make the event a NOP
+
+.KeepEvent:
+	move.l	(a0),d0			; get next event - if any
+
+.SneakIn:
+	bne.s	.ELoop			; reloop till end of event list
+
+	REST1	d0			; retrieve event list anchor
+	rts				; and exit handler
+
+	ENDC	; NEED_DUMMY_HANDLER
+
+*====	BOOT error message display.
+
+*+*******
+*+
+*+ BootErrMsg
+*+
+*+ This Switcher internal subroutine will attempt to post an alert/requester
+*+ with information on why the Switcher failed during bootup. If an alert is
+*+ posted, it will be a deadend alert and this function will not return.
+*+ Currently the valid range for error numbers is 1-255 (byte value in D0).
+*+
+*+ void BootErrMsg( ErrorNum );
+*+                   D0
+*+
+*+ Addendum 3/6/90:
+*+ Addendum 3/27/90: This routine will also handle requests that originate
+*+                   after bootup.
+*+
+*+*******
+
+BootErrMsg:
+	SAVE	d0/d1/a0-a3		; save all altered register
+
+	tst.b	d0			; was there an error code? (non-0)
+	beq.s	.Exit			; if not - skip out
+
+	cmp.b	#5,d0			; do we have a serious
+*					; non-recoverable error
+	bhi.s	.NotAnAlert		; if not - skip on
+
+	GET.l	TB_SYSBase,a6		; get execbase
+	DEA	TB_SwitcherTask,a5	; point to longword with our
+*					; task pointer in it - NOTE: we lose
+*					; A5 addressing after this
+
+	bne.s	.NotWBProblem		; skip on if not WB Toaster ROOT
+*					; lock problem
+
+	move.l	#AT_DeadEnd+AG_IOError+AO_Workbench,d7
+	JUMPROM	Alert
+
+.NotWBProblem:
+	cmp.b	#3,d0
+	bne.s	.NotDOSProblem
+
+	move.l	#AT_DeadEnd+AG_OpenLib+AO_DOSLib,d7
+	JUMPROM	Alert
+
+.NotDOSProblem:
+	cmp.b	#2,d0
+	bne.s	.NotITUProblem
+
+	move.l	#AT_DeadEnd+AG_OpenLib+AO_Intuition,d7
+	JUMPROM	Alert
+
+.NotITUProblem:
+	cmp.b	#2,d0
+	bne.s	.NotGFXProblem
+
+	move.l	#AT_DeadEnd+AG_OpenLib+AO_GraphicsLib,d7
+	JUMPROM	Alert
+
+.NotGFXProblem:
+	move.l	#AT_DeadEnd,d7
+	JUMPROM	Alert			; the last catch-all
+
+.NotAnAlert:
+	lea	.ErrorMessages(pc),a0	; now scan the error message table
+*					; for the error message specified
+*					; by the error number
+
+.Scan:
+	move.b	(a0)+,d1		; get error message's ID number
+	beq.s	.Exit			; if at end of the table - skip out
+	cmp.b	d1,d0			; else compare ID # with error #
+	beq.s	.FoundIt		; skip on if we found our message
+
+.SkipOver:
+	tst.b	(a0)+			; else skip to next error message
+	bne.s	.SkipOver		; entry
+	bra.s	.Scan
+
+.FoundIt:
+	CLEAR	d0			; use JR's Switcher Auto-Requester
+	CLEAR	d1			; to do the rest.....
+	move.l	d0,a1
+	move.l	d0,a2
+	lea	.CancelText(pc),a3
+	XCALL	DoSwitcherRequester
+
+.Exit:
+	REST	d0/d1/a0-a3
+	rts
+
+ERRMSG	MACRO
+	DC.b	\1
+	DC.b	'\2',0
+	ENDM
+
+.ErrorMessages:
+
+;;	IFD	CANNOT_SEE		; the error messages below are just
+*					; for reference - the error will be
+*					; presented in the form of a deadend
+*					; alert
+
+	ERRMSG	1,<Could not open graphics.library>
+	ERRMSG	2,<Could not open intuition.library>
+	ERRMSG	3,<Could not open dos.library>
+	ERRMSG	4,<Could not open diskfont.library>
+	ERRMSG	5,<No ROOT directory lock from WB startup>
+
+;;	ENDC	; CANNOT_SEE
+
+	IFND	AACHIPS
+	ERRMSG	6,<Error reading VTA>
+	ENDC
+	IFD	AACHIPS
+	ERRMSG	6,<Error reading VTA.AA>
+	ENDC
+
+	ERRMSG	7,<Switcher program already running>
+	ERRMSG	8,<Error Reading VTS>
+;;;;	ERRMSG	9,<Could not obtain CurrentProject file>
+
+	IFND	AACHIPS
+	ERRMSG	9,<Error reading VTI>
+	ENDC
+	IFD	AACHIPS
+	ERRMSG	9,<Error reading VTI.AA>
+	ENDC
+
+	ERRMSG	10,<Could not obtain CHIP memory>
+;;;;	ERRMSG	11,<INTERNAL ERROR - missing CG slice FG>
+	ERRMSG	11,<Could not obtain FAST memory>
+
+* ERRMSG not used?
+	ERRMSG	12,<FAST memory obtained - Low CHIP memory pool>
+
+	IFND	OLDTOASTER
+		IFND	AACHIPS
+		ERRMSG	13,<Error reading VTA2>
+		ENDC
+		IFD	AACHIPS
+		ERRMSG	13,<Error reading VTA2.AA>
+		ENDC
+
+		IFND	AACHIPS
+		ERRMSG	14,<Error reading VTI2>
+		ENDC
+		IFD	AACHIPS
+		ERRMSG	14,<Error reading VTI2.AA>
+		ENDC
+	ENDC
+
+	ERRMSG	20,<Could not obtain public Toaster port>
+	ERRMSG	21,<Could not obtain public Toaster message>
+	ERRMSG	22,<Could not obtain ARexx Toaster port> ; Addendum 6/14/90:
+	ERRMSG	23,<Could not obtain Toaster message port>
+;;;;	ERRMSG	30,<Could not open the Diskfont library>
+	ERRMSG	31,<Could not obtain the Switcher font>
+;;;;	ERRMSG	32,<Could not install ColorText>
+	ERRMSG	32,<Could not open Toaster Screen>
+	ERRMSG	33,<Could not open Toaster Window>
+
+;;;;	ERRMSG	40,<Could not open SoftSprite system>
+	ERRMSG	40,<Could not obtain audio interrupt server>
+
+	ERRMSG	50,<Could not obtain inputhandler signal>
+	ERRMSG	51,<Could not open input.device>
+	ERRMSG	52,<Could not install input.handler>
+	ERRMSG	60,<Could not obtain port for floppy system>
+	ERRMSG	61,<Could not open Switcher VB server>
+;;	ERRMSG	70,<Failed to load any effects grids>
+	ERRMSG	80,<Video Toaster not responding>
+	ERRMSG	81,<GPI system did not initialize>
+	ERRMSG	82,<Toaster unable to genlock>
+	
+	ERRMSG	90,<Could not open crouton.library>
+
+	DC.b	0
+
+.CancelText:
+	DC.b	'CANCEL',0
+
+	CNOP	0,2
+
+*+*******
+*+
+*+ AutoRequestDisable
+*+
+*+ void AutoRequestDisable();
+*+
+*+ This function patches the AutoRequest function of inituitionbase so that
+*+ the AutoRequest function does nothing more than return FALSE (for cancel).
+*+
+*+ Notes:
+*+   Trashes D0,D1,A0,A1, and the condition codes. Returns nothing. Requires
+*+   a pointer to ToasterBase in A5, but is not otherwise tied closely to the
+*+   Switcher system. The fields used and modified are private fields in
+*+   ToasterBase. This routine's original intention was to prevent DOS from
+*+   sticking us with a requester. Thanx to Carolyn Scheppner at CATS.
+*+   Note to ourselves: This function cannot be used before the intuition
+*+   library has been opened in Switcher initialization.
+*+
+*+ Addendum 3/21/90:
+*+ Addendum 4/27/91:
+*+   Now handles wedging the 2.0 function EasyRequest()
+*+   (_LVOEasyRequestArgs), if needed.
+*+
+*+*******
+	ifnd	_LVOEasyRequestArgs
+_LVOEasyRequestArgs	EQU	-588
+	endc
+
+	IFNE	_CCODE
+
+	XDEF	_AutoRequestDisable
+_AutoRequestDisable:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	AutoRequestDisable
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	AutoRequestDisable
+AutoRequestDisable:
+	SAVE1	a6
+	GET.l	TB_ITUBase,a1
+	move.w	#_LVOAutoRequest,a0
+	GET.l	NewAutoRequest,d0
+	GET.l	TB_SYSBase,a6
+	CALLROM	SetFunction
+	tst.l	OldAutoRequest(a5)
+	bne.s	1$
+	PUT.l	d0,OldAutoRequest
+1$:
+	GET.l	TB_ITUBase,a1			; 2.0 support
+	cmp.w	#TwoOVersion,LIB_VERSION(a1)
+	bcs.s	999$
+	move.w	#_LVOEasyRequestArgs,a0
+	GET.l	NewEasyRequest,d0
+;;	GET.l	TB_SYSBase,a6
+	CALLROM	SetFunction
+	tst.l	OldEasyRequest(a5)
+	bne.s	999$
+	PUT.l	d0,OldEasyRequest
+999$:
+	REST1	a6
+	rts
+
+*+*******
+*+
+*+ AutoRequestEnable
+*+
+*+ void AutoRequestEnable();
+*+
+*+ This function restores the AutoRequest function of inituitionbase with the
+*+ the original AutoRequest function vector found at the first call to
+*+ AutoRequestDisable().
+*+
+*+ Notes:
+*+   Trashes D0,D1,A0,A1, and the condition codes. Returns nothing. Requires
+*+   a pointer to ToasterBase in A5, but is not otherwise tied closely to the
+*+   Switcher system. The fields used and modified are private fields in
+*+   ToasterBase. This routine will not restore the AutoRequest function if
+*+   AutoRequestDisable() has never previously been called.
+*+   Note to ourselves: This function cannot be used before the intuition
+*+   library has been opened in Switcher initialization.
+*+
+*+ Addendum 3/21/90:
+*+ Addendum 4/27/91:
+*+   Now handles unwedging the 2.0 function EasyRequest()
+*+   (_LVOEasyRequestArgs), if needed.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_AutoRequestEnable
+_AutoRequestEnable:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	AutoRequestEnable
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	AutoRequestEnable
+AutoRequestEnable:
+	SAVE1	a6
+	GET.l	OldAutoRequest,d0
+	beq.s	1$
+	GET.l	TB_ITUBase,a1
+	move.w	#_LVOAutoRequest,a0
+	GET.l	TB_SYSBase,a6
+	CALLROM	SetFunction
+1$:
+	GET.l	TB_ITUBase,a1			; 2.0 support
+	cmp.w	#TwoOVersion,LIB_VERSION(a1)
+	bcs.s	999$
+	GET.l	OldEasyRequest,d0
+	beq.s	999$
+	move.w	#_LVOEasyRequestArgs,a0
+	GET.l	TB_SYSBase,a6
+	CALLROM	SetFunction
+999$:
+	REST1	a6
+	rts
+
+*+*******
+*+
+*+ StupidAutoRequest
+*+
+*+ This is the little piece of code used to patch over the AutoRequest
+*+ function when the Switcher is running. It does nothing more than always
+*+ return FALSE (assumed for CANCEL).
+*+
+*+ Addendum 3/14/90:
+*+
+*+*******
+
+StupidAutoRequest:
+	CLEAR	d0
+	rts
+
+*+*******
+*+
+*+ SpecialAutoRequest
+*+
+*+ This routine is a replacement function for AutoRequest() that is quite a
+*+ cut above the StupidAutoRequest() mentioned above this function. This
+*+ function will now allow AutoRequest()s to be granted if they originate
+*+ from the Switcher process by converting them into DoSwitcherRequester()s.
+*+ The primary motivation behind this function is allow DOS requesters to be
+*+ presented to the user.
+*+
+*+ Addendum 4/6/90:
+*+
+*+*******
+
+SpecialAutoRequest:
+	SAVE	d2-d6/a2-a6		; save work registers
+
+	lea	_ToasterBase,a5		; get addressing to ToasterBase
+	move.l	d0,d2			; save IDCMP info
+	move.l	d1,d3
+	move.l	a1,a4			; save body text
+
+	GET.l	TB_SYSBase,a6		; see if we should handle this
+	CLEARA	a1			; AutoRequest()
+	CALLROM	FindTask
+	cmp.l	TB_SwitcherTask(a5),d0
+	beq.s	.OurProcess		; if we should - skip on
+
+.CancelExit:
+	CLEAR	d0			; else return FALSE
+	bra	.ExitQ
+
+.OurProcess:
+	move.w	.InUseFlag(pc),d0	; a requester already been put up?
+	bne.s	.CancelExit		; yup - don't allow recursion
+
+	move.l	a4,a0			; get body text message(s) -
+	move.l	it_IText(a0),a4		; we assume first text line exists
+	move.l	it_NextText(a0),d6	; is there another line?
+	beq.s	.OnlyOne		; if not - skip on
+	move.l	d6,a0
+*					; else take only one more for 2
+	move.l	it_IText(a0),d6		; text lines max
+
+.OnlyOne:
+	move.l	a2,d0			; positive reply text?
+	beq.s	.NoPosText		; if not - skip on
+	move.l	it_IText(a2),a2		; else address positive text
+
+.NoPosText:
+	move.l	it_IText(a3),a3		; else address negative text -
+*					; we assume it exists
+
+	lea	.InUseFlag(pc),a0	; denote this requester is in use -
+	move.w	#-1,(a0)		; don't allow recursion
+
+	GET.w	TB_ToastActive,d0	; do we need to see disk changes?
+	beq.s	.Loop				; if not - skip on
+	move.l	#DISKINSERTED+DISKREMOVED,d4	; else set flags to insure
+*						; we see disk changes
+
+.Loop:
+	move.l	d2,d0			; put out DoSwitcherRequester()
+	move.l	d3,d1
+	or.l	d4,d0			; (assure we see all disk changes
+	move.l	a4,a0			;  - if needed)
+	move.l	d6,a1
+	XCALL	DoSwitcherRequester
+	move.l	d0,d5			; save return code
+
+	GET.w	TB_ToastActive,d0	; do we need to manually restore the
+	GET.w	TB_InterfaceOn,d1	; Toaster copper list?
+	eor.w	d0,d1
+	beq.s	.NoManual		; if not - skip over
+	XCALL	ReinstallCurrentCopList	; else manually restore copper lists
+
+.NoManual:
+	tst.l	d4			; do we re-validate the floppy sys?
+	beq.s	.NoChange		; nope - don't need to - skip on
+
+	XCALL	FloppyDiskQuery		; else do what is needed in the disk
+	beq.s	.NoChange		; system/string tables
+
+	XCALL	FloppyInOut
+
+	GET.w	TB_InterfaceOn,d0	; should we fix up pertinent FGs?
+	beq.s	.NoChange		; if not - skip on
+
+	XCALL	UpDateFC		; do possible Switcher file comment
+*					; update
+
+	GET.l	TB_Window,a0		; are we at config slice?
+	move.l	wd_FirstGadget(a0),a0
+	cmp.w	#'CF',gg_GadgetID(a0)
+	bne.s	.NoChange		; if not - skip on
+
+	CALLROM	Forbid
+	XCALL	SoftSpriteOff
+	moveq	#-1,d0			; assure project file comment updated
+	XCALL	UpDatePJFC		; if in config slice - this really
+	XCALL	SoftSpriteOn		; renders into display!
+	CALLROM	Permit
+
+.NoChange:
+	lea	.InUseFlag(pc),a0	; clear the use flag to allow the
+	clr.w	(a0)			; requester to be used again
+
+	move.l	d5,d0			; look at the DoSwitcherRequester()
+*					; result
+
+	bpl.s	.ExitQ			; if function failed - leave as
+*					; FALSE and exit OR if function
+*					; returned TRUE, leave as is and exit
+
+	CLEAR	d0			; else convert FALSE to proper
+*					; return code
+
+.ExitQ:
+	REST	d2-d6/a2-a6		; restore work registers
+	rts				; and return to caller
+
+.InUseFlag:
+	DC.w	0			; flag to keep this routine from
+*					; being recursively called
+
+*+*******
+*+
+*+ EnableKeyRepeat
+*+
+*+ This function restores the key repeat preferences that was in effect when
+*+ the Switcher was started up.
+*+
+*+ void EnableKeyRepeat():
+*+
+*+ Notes:
+*+   Trashes D0,D1,A0,A1, and the condition codes. Returns nothing. Uses
+*+   private portions of ToasterBase. Requires a pointer to ToasterBase
+*+   in A5.
+*+
+*+ Addendum 6/5/90:
+*+
+*+*******
+
+	XDEF	_EnableKeyRepeat
+_EnableKeyRepeat:
+     IFD	KILLKEYREPEATS
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	EnableKeyRepeat
+	REST1	a5
+     ENDC
+	rts
+
+	XDEF	EnableKeyRepeat
+EnableKeyRepeat:
+     IFD	KILLKEYREPEATS
+	SAVE1	a6
+
+	GET.l	TB_ITUBase,a6
+
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0	; restore key delay to
+	sub.l	d0,sp				; original preferences
+	move.l	sp,a0				; setting
+	CALLROM	GetPrefs
+	GET.l	KeyRptDelay,pf_KeyRptDelay+TV_SECS(sp)
+	move.l	sp,a0
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0
+	moveq	#-1,d1
+	CALLROM	SetPrefs
+	lea	pf_KeyRptDelay+TV_SIZE(sp),sp
+
+	REST1	a6
+     ENDC
+	rts
+
+*+*******
+*+
+*+ DisableKeyRepeat
+*+
+*+ This function disables the key repeat by setting prefernces to the
+*+ maximum key repeat delay time.
+*+
+*+ void DisableKeyRepeat():
+*+
+*+ Notes:
+*+   Trashes D0,D1,A0,A1, and the condition codes. Returns nothing. Uses
+*+   private portions of ToasterBase. Requires a pointer to ToasterBase
+*+   in A5.
+*+
+*+ Addendum 6/5/90:
+*+
+*+*******
+
+	XDEF	_DisableKeyRepeat
+_DisableKeyRepeat:
+     IFD	KILLKEYREPEATS
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	DisableKeyRepeat
+	REST1	a5
+     ENDC
+	rts
+
+	XDEF	DisableKeyRepeat
+DisableKeyRepeat:
+     IFD	KILLKEYREPEATS
+	SAVE1	a6
+
+	GET.l	TB_ITUBase,a6
+
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0	; set key delay to
+	sub.l	d0,sp				; maximum delay
+	move.l	sp,a0
+	CALLROM	GetPrefs
+	moveq	#-1,d0
+	move.l	d0,pf_KeyRptDelay+TV_SECS(sp)
+	move.l	sp,a0
+	move.l	#pf_KeyRptDelay+TV_SIZE,d0
+	moveq	#-1,d1
+	CALLROM	SetPrefs
+	lea	pf_KeyRptDelay+TV_SIZE(sp),sp
+
+	REST1	a6
+     ENDC
+	rts
+
+*+*******
+*+
+*+ EnableInput
+*+
+*+ This function enables untouched flow from the input.device to handlers
+*+ past the Toaster input handler.
+*+
+*+ void EnableInput();
+*+
+*+ Notes:
+*+   Trashes only the condition codes. No registers are altered. Uses private
+*+   portions of ToasterBase and requires a pointer to ToasterBase in A5.
+*+
+*+ Addendum 6/29/90:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_EnableInput
+_EnableInput:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	EnableInput
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	EnableInput
+EnableInput:
+	SAVE	a0/a1
+
+	DEA	InputHandlerIS+IS_CODE,a0	; address interrupt structure
+*						; code vector of
+*						; input handler
+
+	lea	.NormalHandler(pc),a1		; install our pass-thru
+	move.l	a1,(a0)				; input handler
+
+	REST	a0/a1
+	rts
+
+.NormalHandler:
+	move.l	a0,d0
+	rts
+
+*+*******
+*+
+*+ DisableInput
+*+
+*+ This function installs the normal Toaster input handler which monitors
+*+ and filters flow from the input.device to handlers past the Toaster
+*+ input handler.
+*+
+*+ void DisableInput();
+*+
+*+ Notes:
+*+   Trashes only the condition codes. No registers are altered. Uses private
+*+   portions of ToasterBase and requires a pointer to ToasterBase in A5.
+*+
+*+ Addendum 6/29/90:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_DisableInput
+_DisableInput:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	DisableInput
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	DisableInput
+DisableInput:
+	SAVE	a0/a1
+
+	DEA	InputHandlerIS+IS_CODE,a0	; address interrupt structure
+*						; code vector of
+*						; input handler
+
+	lea	InputHandler(pc),a1		; install normal Toaster
+	move.l	a1,(a0)				; input handler
+
+	REST	a0/a1
+	rts
+
+*****************************************************************************
+*
+* DummyICode
+*
+* Dummy crouton function handler code. The dummy crouton is for Toaster
+* booting only as of now.
+*
+* Addendum 10/18/90:
+*
+*****************************************************************************
+	XDEF	DummyCroutonHandler
+
+d0ptr set	((8+7)*4)
+
+DummyCroutonHandler
+DummyICode:
+	movem.l	d0-d7/a0-a6,-(sp)
+	movem.l	4+d0ptr(sp),d0/a3/a5
+
+	DEBUGHEXI.l	DBDIC,<DummyICode FG=>,a3,< >
+	DEBUGHEXI.l	DBDIC,<FGC_CMD=>,d0,<\>
+
+	GET.l	TB_EFXbase,a4
+
+* NOTE: This code will never get FGC_LOAD or FGC_UNLOAD commands!
+* Because it is internal (not loaded via Project loading)
+
+	lea	_LVOHandleSwitcher1TBar(a4),a1
+	lea	DefaultFadeData(pc),a2
+
+	cmpi.w	#FGC_AUTO,d0
+	beq.s	4$
+	cmpi.w	#FGC_UNAUTO,d0
+	bne.s	25$		;10$
+4$	lea	_LVOHandleSwitcher1Auto(a4),a1
+
+* What were these two lines in here???  Removed for 4.0
+;;10$	lea	TB_VTSetUp(a5),a0
+;;	ELHPUT_CDS_I	a0,VTI_CDS_CD
+
+*------------------
+* d0=command, a0->handler function, a1->data, a3->FG, a4->EFXlib, a5->TB
+25$	movea.l	EF_EffectsLogic(a4),a0
+	movea.l	TEL_TSEab(a0),a0
+	jsr	_LVOProcessEffect(a4)
+
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+* SwitcherEffects structure
+;;.EffectData:
+
+	XDEF	DefaultFadeData
+DefaultFadeData:
+	dc.l	.Variables-DefaultFadeData	;always points to Time Variables
+	dc.l	SEF_DOELH1			;modes
+
+.Variables:
+;------------------------------------------
+;00 = end of table
+;01 = ignore
+;02 = constant		WORDvalue  
+ 
+;all 03,04,05 parameters are binary reals (LONGS)
+;03 = linear		initDistance, speed, minDistance, maxDistance
+; mind <= sp*t+id <= maxd
+ 
+;04 = accelerated	initVelocity, accel, minSpeed, maxSpeed, initDistance
+; (minsp <= ac*t+iv <= maxsp)*t + id
+ 
+;05 = harmonic		initFreq, deltaFreq, minFreq, maxFreq, initPhase, 
+;                      iAmp, deltaAmp, minAmp, maxAmp
+; (minam <= da*t+ia <= maxam)*t * SIN[(minfr <= df*t+if <= maxfr)*t + ip]+os
+
+
+;----------------------------
+;ELHDATA
+	dc.w ET_TELH1
+
+;CD
+	dc.w TVT_HARMON
+* initFreq, deltaFreq, minFreq, maxFreq, initPhase
+	dc.l $8000,0,0,MAXLIMIT,$c000
+* initAmp,  deltaAmp,  minAmp,  maxAmp, initOffset
+	dc.l $7f8<<12,0,0,MAXLIMIT,$7f8<<12
+	
+;LKA
+	dc.w TVT_CONST
+	dc.w IGNORE	;flag use VTSetUps value
+
+;LKB
+	dc.w TVT_CONST
+	dc.w IGNORE	;flag use VTSetUps value
+
+	dc.w TVT_END
+	dc.w ET_RUN
+	
+	CNOP	0,4
+
+*****************************************************************************
+*
+* VBIntServCode
+*
+* Addendum 08/23/91:
+*
+* This routine will be linked into the Vertical Interrupt Server Chain.
+* If interrupts are turned off, you may call this routine directly.
+* All registers are preserved, except d0 will be cleared.
+*****************************************************************************
+	XDEF	VBServer1
+
+VBServer1:
+VBIntServCode:
+	move.l	a5,-(sp)
+	lea	_ToasterBase,a5		; if IntServer then a1 -> TB also
+	GET.l	TB_ColorCycle,d0	; LUT color cycling system installed?
+	beq.s	.ExitQ			; ...if not
+	btst.b	#0,TB_CycleFlags(a5)
+	beq.s	.ExitQ			; jmp if not enabled
+
+	movem.l	a0-a2,-(sp)
+	move.l	d0,a0			; Call the LUT color cycling
+	jsr	(a0)			; handler - handler should save all
+					; Handler modifies CURRENT DVESprite1
+
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A2
+     	GETCURRENTANDFLIP	A2
+     	PUT.L	A2,TB_CurrentSprite1
+
+	GET.l	TB_CurrentCopList,a0
+	GET.l	TB_CurrentSpriteTable,a1
+;;	GET.l	TB_CurrentSprite1,a2	; a new DVESprite1
+	CALLTL	AttachSprite1
+
+	movem.l	(sp)+,a0-a2		; registers because a call to here
+*					; from Skell's code may require it
+
+	CLEAR	d0			; permit VB server chain to continue
+*					; (A0 better have $DFF000!!!)
+
+.ExitQ:
+	movea.l	(sp)+,a5
+	rts
+
+*---------	SKELL 9/11/92
+*************************************************************************
+* ~MasterClock
+*
+* This routine will be linked into the Vertical Interrupt Server Chain.
+* When running with InterruptsOff() or AllInterruptsOff(), this code
+* will always execute, and is the 1st thing at the start of the field!
+* DisableInterrupts() will shut off the clock, so never be in that state
+* or for only brief periods (much less than 1 field).
+*****************************************************************************
+
+****!!!!!
+	XDEF	FieldBit
+FieldBit	dc.w	0
+	CNOP	0,4
+
+MasterClock:
+	move.l	a5,-(sp)
+
+	IFD	MASTERCLOCKTEST
+*---------------------
+****!!!!!! THIS CHECKS FOR ONLY ONE CLOCK PER FIELD, AND ALWAYS ONE.
+	cmpi.w	#36,TBClipASec(a5)
+	bne	6$
+
+	move.w	d1,-(sp)
+	moveq	#-1,d0
+	move.b	_custom+vposr,d0 ;current field
+
+	lea	FieldBit(pc),a5
+	move.w	(a5),d1		;value when this was last called
+	beq	5$		;jump if never called this before
+
+3$	eor.b	d0,d1
+	btst	#7,d1
+	bne	5$
+
+	DUMPMSG	<ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!>
+	DUMPMSG	< MasterClock called twice in one field!!!!>
+
+5$	move.w	d0,(a5)		;save current field
+	move.w	(sp)+,d1
+*---------------------
+	ENDC
+
+6$	lea	_ToasterBase,a5		; if IntServer then a1 -> TB also
+	addq.l	#1,TB_MasterTime(a5)	; Time at start of this field
+
+	tst.l	TB_SequencePosition(a5)
+	bmi.s	10$			;jmp if not sequencing
+	addq.l	#1,TB_FieldCounter(a5)	; = 0 on 1st field of sequence
+	ble.s	10$
+	addq.l	#1,TB_SequencePosition(a5)  ; = 0 on 1st field of sequence
+
+*---------
+* Look at mouse position every field, so it won't be missed ever.
+10$	move.l	d1,-(sp)
+	GET.w	TB_MouseYX,d1		;old mousexy UBYTE.UBYTE
+	CALLTL	GetMouseXY
+	PUT.w	d0,TB_MouseYX		;new mousexy UBYTE.UBYTE
+
+	sub.b	d1,d0			;new x - old x
+	ext.w	d0			;if abs(x) > 127 then it will be bogus
+	add.w	d0,TB_BigMouseX(a5)	;OK when -127 <= d0 WORD <= 127
+
+	GET.b	TB_MouseYX,d0
+	lsr.w	#8,d1
+
+	sub.b	d1,d0			;new y - old y
+	ext.w	d0			;if abs(y) > 127 then it will be bogus
+	add.w	d0,TB_BigMouseY(a5)	;OK when -127 <= d0 WORD <= 127
+	move.l	(sp)+,d1
+
+*---------
+* Look at mouse buttons every field, so they won't be missed ever.
+	CALLTL	IsLMBdown
+	tst.l	d0
+	bne.s	100$
+	bset.b	#LMBUP_BIT,TB_Flags3(a5)
+	bra.s	110$
+100$	bset.b	#LMBDOWN_BIT,TB_Flags3(a5)
+
+110$	CALLTL	IsRMBdown
+	tst.l	d0
+	bne.s	120$
+	bset.b	#RMBUP_BIT,TB_Flags3(a5)
+	bra.s	300$
+120$	bset.b	#RMBDOWN_BIT,TB_Flags3(a5)
+
+*---------
+
+300$	move.l	TB_MasterTimer(a5),d0
+	cmp.l	TB_MasterTime(a5),d0
+	bne.s	555$	
+
+* This allows execution of one "QUICK" event per vertical interrupt.
+	move.l	TB_MasterTimerEvent(a5),d0
+	beq.s	555$
+	move.l	a0,-(sp)
+	move.l	a1,-(sp)
+	movea.l	d0,a1
+	move.l	TB_MasterTimerData(a5),a0
+	jsr	(a1)		;must preserve registers!!!!
+	movea.l	(sp)+,a1
+	movea.l	(sp)+,a0
+	
+555$	btst.b	#ABORTVBCHAIN_BIT,TB_Flags(a5)
+	bne.s	666$
+	moveq	#0,d0		;continue chain
+	bra.s	777$
+
+666$	moveq	#1,d0		;abort chain
+
+777$	movea.l	(sp)+,a5
+	rts			;returns d0=abort chain flag
+
+*****************************************************************************
+*
+* Boolean <- CheckCIAA_TOD( void );
+*  (32)
+*   D0
+*   CC
+*
+* This function checks the CIAA TOD clock against vertical blank timing and
+* returns the driving frequency, 30HZ or 60HZ. Returns -1 in D0 if 30HZ is
+* detected, 0 if 60HZ. The condition codes are set to the result in D0.
+* No other registers are altered. NOTE: The LACE bit in BPLCON0 MUST be set
+* for this routine to work!!! It will hang otherwise!!!
+*
+* Addendum 1/25/90:
+*
+*****************************************************************************
+
+CheckCIAA_TOD:
+	SAVE	d1/a0/a1/a6		; save work registers
+
+	GET.l	TB_SYSBase,a6		; disable everything
+
+;;	CALLROM	Disable
+	CALLTL	AllInterruptsOff	; SKELL 9/11/92
+
+	lea	CHIPBASE,a0		; get base of custom chips
+
+	move.w	vposr(a0),d0		; synch to start of long frame
+	bmi.s	*-4
+	move.w	vposr(a0),d0
+	bpl.s	*-4
+
+	move.b	$BFE801,d1		; read low byte of CIAA TOD
+
+	move.w	vposr(a0),d0		; ...next long frame start
+	bmi.s	*-4
+	move.w	vposr(a0),d0
+	bpl.s	*-4
+
+	move.w	vposr(a0),d0		; ...next long frame start
+	bmi.s	*-4
+	move.w	vposr(a0),d0
+	bpl.s	*-4
+
+	sub.b	$BFE801,d1		; subtract current CIAA TOD clock
+*					; from previous
+	cmp.b	#-2,d1			; check frequency
+	blt.s	Clock_60		; jump if 60HZ clock
+
+;;	CALLROM	Enable			; enable everything again
+	CALLTL	AllInterruptsOn		; SKELL 9/11/92
+
+	moveq	#-1,d0			; denote 30HZ clock
+*					; (TOD driven by genlocked VSynch)
+	REST	d1/a0/a1/a6		; restore work registers
+	rts				; and return to caller
+
+Clock_60:
+;;	CALLROM	Enable			; enable everything again
+	CALLTL	AllInterruptsOn		; SKELL 9/11/92
+
+	CLEAR	d0			; denote 60HZ clock
+*					; (TOD driven by power supply
+*					;  or non-genlocked VSynch)
+	REST	d1/a0/a1/a6		; restore work registers
+	rts				; and return to caller
+
+
+****************************************************************
+* The following THREE ToastBase function can be SetFunctioned to
+* substitute code instead of checking the Amiga mouse directly.
+* If we did our job well, only these TWO functions would need to
+* be SetFuntioned to eliminate all Mouse hardware checks.
+* Always look at the results in D0, so PLEASE IGNORE STATUS FLAGS!!
+* Always call the ToastBase JMPs, and never call these directly!!!
+****************************************************************
+* BOOL d0=IsLMBdown()	;return d0=0 if up, =1 if down
+* Tests the state of the Left Mouse Button.  PLEASE IGNORE STATUS FLAGS!!
+IsLMBdown
+	 moveq	#1,d0	;assume button down
+	 ISLMBUP
+	 beq.s	.lmbdown
+	 moveq	#0,d0
+.lmbdown rts
+****************************************************************
+* BOOL d0=IsRMBdown()	;return d0=0 if up, =1 if down
+* Tests the state of the Right Mouse Button.  PLEASE IGNORE STATUS FLAGS!!
+IsRMBdown
+	 moveq	#1,d0	;assume button down
+	 ISRMBUP
+	 beq.s	.rmbdown
+	 moveq	#0,d0
+.rmbdown rts
+
+*********************************************************
+* UBYTE.UBYTE d0= GetMouseXY()
+*   Y     X
+* Get a mouse X-Y position.  This coords wrap in either direction forever.
+
+* In Version 3.0, this was called by DeltaXMouse() & DeltaYMouse()
+*
+* In Version 4.0, this is called by the MasterClock VERTB server, and used
+* to set TB_MouseXY.  Then DeltaX/YMouse() use that field instead.  This
+* way, if the mouse isn't looked at at 60 fps, I can still keep track of
+* large mouse moves and not get confused about direction (>128 clicks).
+
+	XDEF	GetMouseXY
+GetMouseXY:
+	moveq	#0,d0
+	move.w	CHIPBASE+joy0dat,d0	; get new Mouse X
+	rts
+
+
+
+
+
+
+
+********************************************************
+* Test the state of the left mouse button
+* RETURNS FLAGS NZ if up, Z if down, no registers affected.
+* This function is preferable to ISLMBUP Macro because it can be SetFunctioned via IsLMBdown()
+	XDEF	IsLMBup
+IsLMBup
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	IsLMBdown
+	eori.w	#1,d0
+	movem.l	(sp)+,d0/a5	;follow with bne if down, beq if up
+	rts
+
+********************************************************
+* Test the state of the right mouse button
+* RETURNS FLAGS NZ if up, Z if down, no registers affected.
+* This function is preferable to ISRMBUP Macro because it can be SetFunctioned via IsRMBdown()
+	XDEF	IsRMBup
+IsRMBup
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	IsRMBdown
+	eori.w	#1,d0
+	movem.l	(sp)+,d0/a5	;follow with bne if down, beq if up
+	rts
+
+
+********************************************************
+* BOOL	IsEitherButtonDown()
+
+	XDEF	IsEitherButtonDown
+IsEitherButtonDown
+	CALLTL	IsLMBdown
+	tst.l	d0
+	bne.s	666$
+	CALLTL	IsRMBdown
+	tst.l	d0
+666$	rts
+
+****************************************************************
+* VOID = Wait4LMBup()
+	XDEF	Wait4LMBup
+Wait4LMBup
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+10$	CALLTL	IsLMBdown
+	tst.w	d0
+	bne.s	10$	;jump if down
+	movem.l	(sp)+,d0/a5
+	rts
+
+****************************************************************
+* VOID = Wait4LMBdown()
+	XDEF	Wait4LMBdown
+Wait4LMBdown
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+10$	CALLTL	IsLMBdown
+	tst.w	d0
+	beq.s	10$	;jump if up
+	movem.l	(sp)+,d0/a5
+	rts
+
+****************************************************************
+* VOID = Wait4RMBup()
+	XDEF	Wait4RMBup
+Wait4RMBup
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+10$	CALLTL	IsRMBdown
+	tst.w	d0
+	bne.s	10$	;jump if down
+	movem.l	(sp)+,d0/a5
+	rts
+
+****************************************************************
+* VOID = Wait4RMBdown()
+	XDEF	Wait4RMBdown
+Wait4RMBdown
+	movem.l	d0/a5,-(sp)
+	lea	_ToasterBase,a5
+10$	CALLTL	IsRMBdown
+	tst.w	d0
+	beq.s	10$	;jump if up
+	movem.l	(sp)+,d0/a5
+	rts
+
+*********************************************************
+	ALLDUMPS
+*********************************************************
+
+*====	Data memory areas in here.
+
+	SECTION	SwitcherData,DATA
+
+*----	first put in the ToasterBase library function vectors.
+
+	IFNE	TB_NEGSIZ&3
+	DS.w	1			; pad here if needed to insure
+*					; ToasterBase longword aligned
+	ENDC
+
+* New Functions Go Here *********************************
+	LIBJMP	FGC_InterpTagsCommand
+
+	LIBJMP	KillAlphaKey
+	LIBJMP	ResetAVEI
+	LIBJMP	FGC_QueueCommand
+
+	LIBJMP	SetUpShallowAVEInterface
+	LIBJMP	InstallShallowIKeyDoELH
+	LIBJMP	InstallShallowIKey
+
+	LIBJMP	MakeTestClip
+	LIBJMP	IVectorWithPulses
+	LIBJMP	DoneGrabIQ
+	LIBJMP  GrabIQ	
+
+	LIBJMP	ApplyTags2Lists
+
+	LIBJMP	Clip2

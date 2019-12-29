@@ -1,0 +1,1399 @@
+********************************************************************
+* LUTB.a
+*
+* Copyright ©1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lutb.a,v 2.0 92/05/18 23:59:54 Hartford Exp $
+*
+* $Log:	lutb.a,v $
+*Revision 2.0  92/05/18  23:59:54  Hartford
+**** empty log message ***
+*
+*
+*********************************************************************
+
+	NOLIST
+	idnt	"LUTB"
+	section	LUT_text,code
+
+	Include	"Assembler.i"
+	Include	"Include.i"
+	Include	"NewTek.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"Rect.i"
+	Include	"Eflib.i"
+
+	Include	"SerialDebug.i"
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT0.i"
+	Include	"LUT5.i"
+	Include	"LUT6.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+;;SERDEBUG	EQU	1
+;;	LIST
+	PAGE
+LUT_MAXLINE	EQU	119		; Range of 0 to 118.
+*
+*	SMF Speed Table.
+*
+	XDEF	LUT_SMF_Speeds
+LUT_SMF_Speeds:
+	DC.L	$04000,$08000,$10000	; LUT Cycle Speed.
+	DC.L	$08000			; Error.
+	PAGE
+*************************************************************************
+*									*
+*	Cycle Mode On:							*
+*									*
+*	Turns On LUT Cycle Mode.					*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= LUT Cycle Speed.					*
+*	D1.B	= M_LUTBUS_MAIN or M_LUTBUS_PRVW or 0 == None.		*
+*	A0.L	= Address of Handler ( LUT_ForwardTranCycleRoutine ).	*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Cycle Mode is Enabled.					*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CycleModeOn
+LUT_CycleModeOn:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Save New Mode.
+*
+	BCLR.B #TBCF_Enable,TB_CycleFlags(A5) ; Disable until ready 
+	MOVE.L	D0,LUT_CycleSpeed	; Initilize The Speed.
+	PUT.L	A0,TB_ColorCycle	; Install handler.
+*
+*	Set the LUT BUS.
+*
+	TST.B	D1			; None?
+	BEQ.S	CYMDO1			; Skip If No Change in BUS.
+	PUT.B	D1,TB_LutBus		; PRVW or MAIN
+CYMDO1	PUT.B	#LUTMODE_BW,TB_LutMode	; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BNE.S	CYMDO2
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ; Set Color or B/W Mode.
+CYMDO2
+*
+*	Make The Initial LUT Cycling Sprite.
+*
+	MOVEQ.L	#0,D0			; Initilize The Position.
+	MOVE.L	D0,LUT_CycleLine
+	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BTST.B	#LUTF_TRANSITION,LTR_DisplayMode(A4) ; In Transition Mode?
+	BEQ.S	CYMDO3			; Jump If Filter Mode.
+	BSR.S	LUT_BuildTranSprite	; Make The First Sprite.
+	BRA.S	CYMDO4			; Skip Else Part.
+CYMDO3	BSR	LUT_BuildFilterSprite	; Make The First Sprite.
+CYMDO4
+*
+*	Turn LUT On.
+*
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VTSetUp.
+	ELHTEST_LUT	A0		; Is It Already On?
+	BNE.S	CYMDO5			; Exit If Mode Already On.
+	ELHSET_LUT	A0		; Else Enable the LUT Mode.
+	ELHCLEAR_LINP	A0
+	ELHSET_OBR	A0
+*
+*	Show This as Current View.
+*
+	CALLTL	CookPrvw
+	CALLTL	CookMain
+	CALLTL	InstallAVEIdoELH	; new sprite along with LUT mode
+CYMDO5	BSET.B #TBCF_Enable,TB_CycleFlags(A5) ; Enable Color Cycling.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	Cycle Mode Off Switcher:					*
+*									*
+*	Turns Off Switcher LUT Cycle Mode.				*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Cycle Mode is Disabled.					*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CycleModeOffSwitcher
+LUT_CycleModeOffSwitcher:
+*
+*	If The Mode Is Not On, Don't Turn It Off.
+*
+	TST.L	TB_ColorCycle(A5)	; Is a Handler Installed?
+	BEQ.S	CYMOFS1			; Jump If Mode Is Off
+	BSR	LUT_ModeOffSwitcher	; Turn Off LUT Mode.
+*
+*	Exit Subroutine.
+*
+CYMOFS1	RTS
+	PAGE
+*************************************************************************
+*									*
+*	Cycle Mode Off Editor:						*
+*									*
+*	Turns Off Editor LUT Cycle Mode.				*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Cycle Mode is Disabled.					*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CycleModeOffEditor
+LUT_CycleModeOffEditor:
+*
+*	If The Mode Is Not On, Don't Turn It Off.
+*
+	TST.L	TB_ColorCycle(A5)	; Is a Handler Installed?
+	BEQ.S	CYMOFE1			; Jump If Mode Is Off
+	BSR	LUT_ModeOffEditor	; Turn Off LUT Mode.
+*
+*	Exit Subroutine.
+*
+CYMOFE1	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BuildTranSprite:						*
+*									*
+*	Makes the Transition Sprite for the LUT Color Cycling Mode.	*
+*									*
+*	Input:								*
+*									*
+*	D0.W	= Current Line Number ( 0 to 119 ).			*
+*	A0.L	= Address of Buffer Area to Build Sprite.		*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Sprite Is Built In Toaster Base.				*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BuildTranSprite
+LUT_BuildTranSprite:
+	MOVEM.L	D0-D2/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make Line Number In The Range We Need It.
+*
+	ADD.W	D0,D0			; D0.W = Range of 0 to 238.
+	ADDQ.W	#2,D0			; D0.W = Range of 2 to 240.
+*
+*	MOVE.L #(D0<<24)!((D0+1)<<16)!(D0<<8)!(D0+1),D1
+*
+	MOVE.B	D0,D1			; Doing This So We Can Save Them
+	LSL.W	#8,D1			; 4 at a Time.
+	MOVE.B	D0,D1			; Even / Odd Lines.
+	ADDQ.B	#1,D1			;  +0  /  +1.
+	MOVE.W	D1,D2
+	SWAP.W	D1
+	MOVE.W	D2,D1
+*
+*	Save The Line Numbers 4 at a Time.
+*
+	MOVEA.L	A0,A1			; A1.L = Address of Buffer.
+	MOVEQ.L	#240/4-1,D2		; D2.L = Number of Long Words.
+BUSPR1 	MOVE.L	D1,(A1)+		; Save 4 at a Time.
+	DBF	D2,BUSPR1		; Loop Until Done.
+     	MOVE.B	D0,(A1)			; Save Ending Line Number, 241.
+	MOVE.B	#240,(A0)		; Where ever your linear ramp is used.
+*
+*	Now, Make Toaster Sprite Format.
+*
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A1
+     	GETCURRENT	A1		; A1.L =
+	MOVEQ.L	#0,D0			; D0.L =
+	MOVE.L	#SPRITEHEIGHT,D1	; D1.L = 241, Height Of Sprite.
+	MOVEQ.L	#B2SNORM,D2		; D2.L = Mode of Operation.
+	CALLTL	Bytes2Sprite1		; Make The Sprite.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BuildFilterSprite:						*
+*									*
+*	Makes the Filter Sprite for the LUT Color Cycling Mode.		*
+*									*
+*	Input:								*
+*									*
+*	D0.W	= Current Line Number ( 0 to 119 ).			*
+*	A0.L	= Address of Buffer Area to Build Sprite.		*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	New Sprite Is Built In Toaster Base.				*
+*									*
+*	08.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BuildFilterSprite
+LUT_BuildFilterSprite:
+	MOVEM.L	D0-D3/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make Line Number In The Range We Need It.
+*
+	ADD.W	D0,D0			; D0.W = Range of 0 to 238.
+	ADDQ.W	#2,D0			; D0.W = Range of 2 to 240.
+	MOVE.W	D0,D1			; D1.W = 2 to 240.
+	SUBQ.W	#1,D1			; D1.W = 1 to 239.
+	MOVE.W	#238,D3			; D3.W = Maximum Even Range ( 240 ).
+*
+*	D1.W = 1 - 239 Odd  Lines.
+*	D0.W = 2 - 240 Even Lines.
+*
+	MOVEA.L	A0,A1			; A1.L = Address of Buffer.
+	MOVE.B	#240,(A1)+		; Always Use Standard Video LUT Data
+	MOVEQ.L	#120-1,D2		; Loop Counter.
+BUFLS1	MOVE.B	D1,(A1)+		; Odd  Line.
+	MOVE.B	D0,(A1)+		; Even Line.
+	ADDQ.W	#2,D1
+	ADDQ.W	#2,D0
+	CMP.W	D3,D0			; Check Upper Even Range.
+	BLS.S	BUFLS2
+	MOVEQ.L	#1,D1			; D1.W = Minimum Odd  Range.
+	MOVEQ.L	#2,D0			; D0.W = Minimum Even Range.
+BUFLS2	DBF	D2,BUFLS1		; Loop Until Done.
+*
+*	Now, Make Toaster Sprite Format.
+*
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A1
+     	GETCURRENT	A1		; A1.L =
+	MOVEQ.L	#0,D0			; D0.L =
+	MOVE.L	#SPRITEHEIGHT,D1	; D1.L = 241, Height Of Sprite.
+	MOVEQ.L	#B2SNORM,D2		; D2.L = Mode of Operation.
+	CALLTL	Bytes2Sprite1		; Make The Sprite.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D3/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ForwardTranCycleRoutine:					*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ForwardTranCycleRoutine
+LUT_ForwardTranCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	ADD.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	CMPI.W	#LUT_MAXLINE,D0		; At Maximum Position?
+	BCS.S	FCYRO1			; Jump If Not Maximum Position.
+	CLR.W	D0			; Else Set Minimum Position.
+*
+*	Make The New Sprite.
+*
+FCYRO1	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildTranSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BackwardTranCycleRoutine:					*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BackwardTranCycleRoutine
+LUT_BackwardTranCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	SUB.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	TST.W	D0			; At Miminum Position?
+	BPL.S	BCYRO1			; Jump If Not Minimum Position.
+	MOVE.W	#LUT_MAXLINE-1,D0	; Else Set Maximum Position.
+*
+*	Make The New Sprite.
+*
+BCYRO1	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildTranSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BothTranCycleRoutine:						*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BothTranCycleRoutine
+LUT_BothTranCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	ADD.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	CMPI.W	#LUT_MAXLINE*2,D0	; At Maximum Position?
+	BCS.S	HCYRO1			; Jump If Not Maximum Position.
+	CLR.W	D0			; Else Set Minimum Position.
+	BRA.S	HCYRO2			; Show The First 1/2.
+HCYRO1	CMPI.W	#LUT_MAXLINE,D0		; At Maximum Position?
+	BCC.S	HCYRO3			; Jump If Maximum Position.
+*
+*	Make The New Sprite, First 1/2.
+*
+HCYRO2	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildTranSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+	BRA.S	HCYRO4			; Exit Subroutine.
+*
+*	Make The New Sprite, Second 1/2.
+*
+HCYRO3	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+	SWAP.W	D0			; Get The Actual Position Again.
+	NEG.W	D0			; - N.
+	ADDI.W	#2*LUT_MAXLINE-1,D0	; 2*MAXLINE - 1.
+	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildTranSprite	; Build The Sprite.
+*
+*	Exit Subroutine.
+*
+HCYRO4	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ForwardFilterCycleRoutine:					*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ForwardFilterCycleRoutine
+LUT_ForwardFilterCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	ADD.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	CMPI.W	#LUT_MAXLINE,D0		; At Maximum Position?
+	BCS.S	FCYRF1			; Jump If Not Maximum Position.
+	CLR.W	D0			; Else Set Minimum Position.
+*
+*	Make The New Sprite.
+*
+FCYRF1	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildFilterSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BackwardFilterCycleRoutine:					*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BackwardFilterCycleRoutine
+LUT_BackwardFilterCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	SUB.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	TST.W	D0			; At Miminum Position?
+	BPL.S	BCYRF1			; Jump If Not Minimum Position.
+	MOVE.W	#LUT_MAXLINE-1,D0	; Else Set Maximum Position.
+*
+*	Make The New Sprite.
+*
+BCYRF1	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildFilterSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BothFilterCycleRoutine:						*
+*									*
+*	Interrupt Routine That Cycles Colors On The Screen.		*
+*									*
+*	Input:								*
+*									*
+*	LUT_CycleLine	= ( 4 ) Current Cycle Line,  Fixed Point.	*
+*	LUT_CycleSpeed	= ( 4 ) Current Cycle Speed, Fixed Point.	*
+*	A5.L		= Address of Toaster Base.			*
+*									*
+*	Output:								*
+*									*
+*	A New Sprite Is Made for Color Cycling.				*
+*									*
+*	LUT_CycleLine	= ( 4 ) Updated Cycle Line.			*
+*									*
+*	28.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BothFilterCycleRoutine
+LUT_BothFilterCycleRoutine:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Move To Next Line.
+*
+	MOVE.L	LUT_CycleLine,D0	; Move Two Lines At a Time.
+	ADD.L	LUT_CycleSpeed,D0	; Move To Next Position.
+	SWAP.W	D0			; Get The Actual Position.
+	CMPI.W	#LUT_MAXLINE*2,D0	; At Maximum Position?
+	BCS.S	HCYRF1			; Jump If Not Maximum Position.
+	CLR.W	D0			; Else Set Minimum Position.
+	BRA.S	HCYRF2			; Show The First 1/2.
+HCYRF1	CMPI.W	#LUT_MAXLINE,D0		; At Maximum Position?
+	BCC.S	HCYRF3			; Jump If Maximum Position.
+*
+*	Make The New Sprite, First 1/2.
+*
+HCYRF2	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildFilterSprite	; Build The Sprite.
+	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+	BRA.S	HCYRF4			; Exit Subroutine.
+*
+*	Make The New Sprite, Second 1/2.
+*
+HCYRF3	SWAP.W	D0			; Restore Floating Point Position.
+	MOVE.L	D0,LUT_CycleLine	; Save Result.
+	SWAP.W	D0			; Get The Actual Position Again.
+	NEG.W	D0			; - N.
+	ADDI.W	#2*LUT_MAXLINE-1,D0	; 2*MAXLINE - 1.
+	MOVEA.L	TB_EffectsBase+EFB_BuffY(A5),A0	; A0.L = Address of Buffer.
+	BSR	LUT_BuildFilterSprite	; Build The Sprite.
+*
+*	Exit Subroutine.
+*
+HCYRF4	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_EditCycleForward:						*
+*									*
+*	Enables LUT in the Edit Forward Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Forward Cycle Mode Is Turned On.				*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_EditCycleForward
+LUT_EditCycleForward:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_ForwardTranCycleRoutine(PC),A0   ; A0.L = Address of Handler
+	BTST.B	#LUTF_TRANSITION,LUT_DisplayMode(A4) ; In Transition Mode?
+	BNE.S	CYEFO1				     ; Jump If Transition Mode.
+	LEA.L	LUT_ForwardFilterCycleRoutine(PC),A0 ; A0.L = Address of Handler
+CYEFO1	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYEFO2			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; Make Index to SMF.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	MOVEQ.L	#M_LUTBUS_MAIN,D1	; D1.L = LUT Bus.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYEFO2	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_EditCycleBackward:						*
+*									*
+*	Enables LUT in the Edit Backward Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Backward Cycle Mode Is Turned On.				*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_EditCycleBackward
+LUT_EditCycleBackward:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_BackwardTranCycleRoutine(PC),A0   ; A0.L =Address of Handler
+	BTST.B	#LUTF_TRANSITION,LUT_DisplayMode(A4)  ; In Transition Mode?
+	BNE.S	CYEBK1				      ; Jump If Transition Mode.
+	LEA.L	LUT_BackwardFilterCycleRoutine(PC),A0 ; A0.L =Address of Handler
+CYEBK1	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYEBK2			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; Make Index to SMF.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	MOVEQ.L	#M_LUTBUS_MAIN,D1	; D1.L = LUT Bus.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYEBK2	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_EditCycleBoth:						*
+*									*
+*	Enables LUT in the Edit Both Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Both Cycle Mode Is Turned On.					*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_EditCycleBoth
+LUT_EditCycleBoth:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_BothTranCycleRoutine(PC),A0	     ; A0.L = Address of Handler
+	BTST.B	#LUTF_TRANSITION,LUT_DisplayMode(A4) ; In Transition Mode?
+	BNE.S	CYEBH11				     ; Jump If Transition Mode.
+	LEA.L	LUT_BothFilterCycleRoutine(PC),A0    ; A0.L = Address of Handler
+CYEBH11	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYEBH12			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; Make Index to SMF.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	MOVEQ.L	#M_LUTBUS_MAIN,D1	; D1.L = LUT Bus.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYEBH12	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_GridCycleForward:						*
+*									*
+*	Enables LUT in the Grid Forward Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Value of LUTBUS ( Prvw or Main or 0 == None ).	*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Forward Cycle Mode Is Turned On.				*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GridCycleForward
+LUT_GridCycleForward:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_ForwardTranCycleRoutine(PC),A0   ; A0.L = Address of Handler
+	BTST.B	#LUTF_TRANSITION,LTR_DisplayMode(A4) ; In Transition Mode?
+	BNE.S	CYGFO1				     ; Jump If Transition Mode.
+	LEA.L	LUT_ForwardFilterCycleRoutine(PC),A0 ; A0.L = Address of Handler
+CYGFO1	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYGFO2			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.W	TB_FCountModeSec(A5),D0	; Make Index to SMF.
+	ADDQ.W	#1,D0			; D0.W = 0 to 2.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYGFO2	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_GridCycleBackward:						*
+*									*
+*	Enables LUT in the Grid Backward Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Value of LUTBUS ( Prvw or Main or 0 == None ).	*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Backward Cycle Mode Is Turned On.				*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GridCycleBackward
+LUT_GridCycleBackward:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_BackwardTranCycleRoutine(PC),A0   ; A0.L =Address of Handler
+	BTST.B	#LUTF_TRANSITION,LTR_DisplayMode(A4)  ; In Transition Mode?
+	BNE.S	CYGBK1				      ; Jump If Transition Mode.
+	LEA.L	LUT_BackwardFilterCycleRoutine(PC),A0 ; A0.L =Address of Handler
+CYGBK1	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYGBK2			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.W	TB_FCountModeSec(A5),D0	; Make Index to SMF.
+	ADDQ.W	#1,D0			; D0.W = 0 to 2.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYGBK2	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_GridCycleBoth:						*
+*									*
+*	Enables LUT in the Grid Both Cycling Mode.			*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= Value of LUTBUS ( Prvw or Main or 0 == None ).	*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Both Cycle Mode Is Turned On.					*
+*									*
+*	29.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GridCycleBoth
+LUT_GridCycleBoth:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If It's Not On, Turn It On.
+*
+	LEA.L	LUT_BothTranCycleRoutine(PC),A0      ; A0.L = Address of Handler
+	BTST.B	#LUTF_TRANSITION,LTR_DisplayMode(A4) ; In Transition Mode?
+	BNE.S	CYGBH1				     ; Jump If Transition Mode.
+	LEA.L	LUT_BothFilterCycleRoutine(PC),A0    ; A0.L = Address of Handler
+CYGBH1	CMPA.L	TB_ColorCycle(A5),A0	; Is It Already On?
+	BEQ.S	CYGBH2			; Jump If Already On.
+*
+*	Turn On Cycle Mode.
+*
+	MOVE.W	TB_FCountModeSec(A5),D0	; Make Index to SMF.
+	ADDQ.W	#1,D0			; D0.W = 0 to 2.
+	ANDI.W	#LUTM_SMF,D0		; D0.W = Only SMF.
+	LSL.W	#2,D0			; D0.W = Index to SMF.
+	LEA.L	LUT_SMF_Speeds(PC),A1	; A1.L = Address of Speed Table.
+	MOVE.L	0(A1,D0.W),D0		; D0.L = LUT Cycle Speed.
+	BSR	LUT_CycleModeOn		; Turn Cycle Mode On.
+*
+*	Exit Subroutine.
+*
+CYGBH2	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CheckUpDateMapCrouton:						*
+*									*
+*	Looks at the Assigned LUT Croutons and See If the Maps Need	*
+*	to be Sent Out to the Croutons.					*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Each Crouton Is Checked To See If It's Map Needs To Be Updated.	*
+*									*
+*	14.Oct 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CheckUpDateMapCrouton
+LUT_CheckUpDateMapCrouton:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Loop And Check Each One.
+*
+	MOVEQ.L	#1,D1			; D1.L = Loop Counter.
+	LEA.L	LTE_GridCrouton(A4),A1	; A1.L = Address of Array.
+	LEA.L	CUDMC7(PC),A2		; A2.L = Address of Message Table.
+CUDMC1	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A1)+,D0		; D0.L = Crouton To Check.
+	BSR	LUT_FindLUTData		; A0.L = Address of LUT Data.
+	BEQ.S	CUDMC3			; Jump If Failed.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A0) ; Did This One Change?
+	BNE.S	CUDMC2			; Jump If Change Made.
+	BTST.B	#LUTF_GridAssign,LUT_Flags(A0) ; Did It Become Assigned?
+	BEQ.S	CUDMC3			; Jump If Not Assigned.
+*
+*	Write The Data Out To a File.
+*
+CUDMC2	MOVE.L	A0,-(A7)		; Save Pointer to LUT.
+	MOVEA.L	(A2),A0			; A0.L = Address of Message.
+	BSR	LUT_DrawRenderMessage	; Put Up The Message.
+	MOVEA.L	(A7)+,A0		; Return Pointer to LUT.
+	MOVE.L	D1,D0			; D0.L = Which Crouton We Are On.
+	EXG.L	A0,A4			; A4.L = Address of Current LUT.
+	BCLR.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Don't Send Map to Toaster.
+	BSR	LUT_SendMap		; Set Out to File.
+	EXG.L	A0,A4			; A4.L = Address of Current LTE.
+*
+*	Check Condition Of Loop.
+*
+CUDMC3	ADDQ.L	#4,A2			; Increment Table Position.
+	ADDQ.W	#1,D1			; Increase By One.
+	CMPI.W	#4+1,D1			; At the Last One?
+	BCS.S	CUDMC1			; Loop Until Done.
+*
+*	Now Flag Them As Updated or Assigned.
+*
+	MOVEQ.L	#1,D1			; D1.L = Loop Counter.
+	LEA.L	LTE_GridCrouton(A4),A1	; A1.L = Address of Array.
+CUDMC4	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A1)+,D0		; D0.L = Crouton To Check.
+	BSR	LUT_FindLUTData		; A0.L = Address of LUT Data.
+	BEQ.S	CUDMC6			; Jump If Failed.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A0) ; Did This One Change?
+	BNE.S	CUDMC5			; Jump If Change Made.
+	BTST.B	#LUTF_GridAssign,LUT_Flags(A0) ; Did It Become Assigned?
+	BEQ.S	CUDMC6			; Jump If Not Assigned.
+CUDMC5	ANDI.B	#~((1<<LUTF_MapChange)+(1<<LUTF_GridAssign)),LUT_Flags(A0)
+CUDMC6	ADDQ.W	#1,D1			; Increase By One.
+	CMPI.W	#4+1,D1			; At the Last One?
+	BCS.S	CUDMC4			; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+*
+*	Pointer to 4 Messages, for Grid Croutons 1 to 4.
+*
+CUDMC7	DC.L	LUT_SwitcherPreset1,LUT_SwitcherPreset2
+	DC.L	LUT_SwitcherPreset3,LUT_SwitcherPreset4
+	PAGE
+*************************************************************************
+*									*
+*	SendSpriteToToaster:						*
+*									*
+*	Sends Out the Current Sprite To The Toaster.			*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Current Sprite Is Sent Out To The Toaster.			*
+*									*
+*	01.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SendSpriteToToaster
+LUT_SendSpriteToToaster:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Flip The Sprite Buffers.
+*
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A2
+	GETCURRENTANDFLIP	A2
+	PUT.L	A2,TB_CurrentSprite1	; A2.L = TB_CurrentSprite1.
+*
+*	Send Out the Current Sprite.
+*
+	MOVEA.L	TB_CurrentCopList(A5),A0
+	MOVEA.L	TB_CurrentSpriteTable(A5),A1
+;;	MOVEA.L	TB_CurrentSprite1(A5),A2 ; a new DVESprite1
+	CALLTL	AttachSprite1		; Send The Sprite To The Toaster.
+	CALLTL	Wait4Top		; Wait for VBlank.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DisableLUT:							*
+*									*
+*	Disables LUT Mode, Without Turning it Completely Off.		*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Mode is turned off.						*
+*									*
+*	15.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DisableLUT
+LUT_DisableLUT:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VTSetUp.
+	ELHCLEAR_LUT	A0
+	ELHSET_LINP	A0
+	ELHCLEAR_OBR	A0
+	PUT.B	#M_LUTBUS_NONE,TB_LutBus
+	CLR.L	TB_ColorCycle(A5)
+	CALLTL	CookPrvw		; Make Sure LUT Off Preview.
+	CALLTL	CookAndServeMain	; Make Sure LUT Off Main.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RemoveDVE0:							*
+*									*
+*	Makes Sure DVE0 is not showing on Main or Preview.		*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	If DVE0 is showing on Main or Preview it is removed.		*
+*									*
+*	21.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_RemoveDVE0
+LUT_RemoveDVE0:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do The Main.
+*
+	MOVE.W	TB_MainSec(A5),D0	; Current Main Source.
+	ANDI.W	#M_DV0,D0		; Is DVE0 On?
+	BEQ.S	REDVE1			; Jump If DVE0 Not Active.
+	MOVE.W	TB_MainSave(A5),D0	; Most Recent Analog Source.
+	TURNLIVEDVEOFF	D0		; Turn Off DVE0.
+	PUT.W	D0,TB_MainSec		; Save New Main Source.
+REDVE1	CALLTL	CookAndServeMain	; Fix Up the Buttons.
+*
+*	Do The Preview.
+*
+	MOVE.W	TB_PrvwSec(A5),D0	; Current Preview Source.
+	ANDI.W	#M_DV0,D0		; Is DVE0 On?
+	BEQ.S	REDVE2			; Jump If DVE0 Not Active.
+	MOVE.W	TB_PrvwSave(A5),D0	; Most Recent Analog Source.
+	TURNLIVEDVEOFF	D0		; Turn Off DVE0.
+	PUT.W	D0,TB_PrvwSec		; Save New Preview Source.
+REDVE2	CALLTL	CookAndServePrvw	; Fix Up the Buttons.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LinearRamp:							*
+*									*
+*	Creates a Ramp of Linear LUT Data.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Buffer Area to Write Into.			*
+*									*
+*	Output:								*
+*									*
+*	Linear Ramp Is Created.						*
+*									*
+*	18.Dec 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_LinearRamp
+LUT_LinearRamp:
+	MOVEM.L	D0-D2/A0,-(A7)	; Save Calling State.
+*
+*	Make the Linear Ramp.
+*
+	MOVEQ.L	#125-1,D0	; D0.L = Number of Quads.
+	MOVE.L	#$04040404,D1	; D1.L = Starts at Quad # 2.
+	MOVE.L	#$02020202,D2	; D2.L = Increment Amount to Next Quad.
+LINRP1	MOVE.L	D1,(A0)+	; Save Quad Value.
+	ADD.L	D2,D1		; Increment to Next Quad Value.
+	DBF	D0,LINRP1	; Do For Number of Quads.
+*
+*	Blast the rest of the line with highest level.
+*
+	MOVEQ.L	#(NUMQUADS-125)-1,D0 ; D0.L = Number of Quads.
+LINRP2	MOVE.L	D1,(A0)+	; Save Quad Value.
+	DBF	D0,LINRP2	; Do Till End of LIne.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CheckLinear:							*
+*									*
+*	Checks to See If the Linear Ramp Needs To Be Written Into Buffer*
+*									*
+*	Input:								*
+*									*
+*	D4.L	= Line Number.						*
+*	D5.L	= Index Into Planes.					*
+*	A2.L	= Address of Planes Table.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Linear Data Is Written Into Buffer.				*
+*									*
+*	CC	== Zero -> Last Line Was Picked.			*
+*	CC	!= Zero -> Last Line Was Not Picked.			*
+*									*
+*	18.Dec 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CheckLinear
+LUT_CheckLinear:
+	MOVEM.L	D0-D3/A0-A1,-(A7)	; Save Calling State.
+*
+*	Have We Reached the Line Yet?
+*
+	CMPI.W	#480-1,D4		; Are We There?
+	BNE.S	CHKLI1			; Exit If Not There.
+	SUBA.W	#4*NUMQUADS,A7		; A7.L = Internal Buffer.
+*
+*	Bast Data Into Buffer.
+*
+	MOVEA.L	A7,A0			; A0.L = Address of Buffer.
+	BSR.S	LUT_LinearRamp		; Make The Linear Data.
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	MOVEQ.L	#NUMQUADS>>2,D1		; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Convert to Toaster Format.
+*
+	MOVE.L	D5,D0			; D0.L = Destination Byte Offset.
+	ADDI.L	#NUMQUADS,D0		; Adjust To Complement / Normal.
+	MOVEQ.L	#NUMQUADS>>2,D1		; D1.L = Words Wide.
+	MOVEA.L	A7,A0			; A0.L = Address of Quad Buffer.
+	MOVEA.L	A2,A1			; A1.L = Address of Dest Planes Table.
+	CALLTL	Bytes2Planes
+*
+*	Exit Subroutine.
+*
+	ADDA.W	#4*NUMQUADS,A7		; A7.L = Restore Stack Position.
+	MOVEQ.L	#0,D0			; Set CC == Zero -> Last Line.
+CHKLI1	MOVEM.L	(A7)+,D0-D3/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DrawRenderMessage:						*
+*									*
+*	Draws the Rendering Message in a Box On the Screen.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Text Structure to Print.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Rendering Message is Written on the Screen.			*
+*									*
+*	20.Dec 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+LUT_BOXWIDTH	SET	326
+LUT_BOXHEIGHT	SET	52
+*
+	XDEF	LUT_DrawRenderMessage
+LUT_DrawRenderMessage:
+	MOVEM.L	D0-D3/A0-A4/A6,-(A7)	; Save Calling State.
+*
+*	Choose The Font to Draw With.
+*
+	MOVEA.L	A0,A2			; A2.L = Address of Text Structure.
+	MOVEA.L	TB_GFXBase(A5),A6	; A6.L = Address of Graphics Library.
+	LEA.L	DrawFont(PC),A0		; A0.L = Text Attributes.
+	JSR	_LVOOpenFont(A6)	; Try to Open The Font.
+	TST.L	D0			; Did We Get the Font?
+	BEQ.S	DRENM1			; Exit If Failed.
+	MOVEA.L	D0,A3			; A3.L = Address of New Font Pointer.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	MOVEA.L	rp_Font(A1),A4		; A4.L = Address of Old Font Pointer.
+*
+*	Put Up The Box.
+*
+	MOVE.L	#TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2,D0		; D0.L = x ULC.
+	MOVE.L	#TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+4,D1	; D1.L = y ULC.
+	MOVE.L	#LUT_BOXWIDTH,D2	; D2.L = Width.
+	MOVEQ.L	#LUT_BOXHEIGHT,D3	; D3.L = Height.
+	CALLTL	DrawBorderBox		; Draw Box On The Screen.
+*
+*	Make This the Current Font.
+*
+	MOVEA.L	A3,A0			; A0.L = Address of Font Pointer.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	JSR	_LVOSetFont(A6)		; It Is Now Current.
+*
+*	Set the Draw Mode.
+*
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	MOVEQ.L	#RP_JAM2,D0		; D0.L = Draw Mode.
+	JSR	_LVOSetDrMd(A6)		; Make The Current Drawing Mode.
+*
+*	Loop And Draw The Text.
+*
+	BSR.S	DRENM2			; Write The Message.
+	LEA.L	DrawText(PC),A2		; A2.L = Address of Title.
+	BSR.S	DRENM2			; Write The Message.
+*
+*	Make the Old Font the Current Font.
+*
+	MOVEA.L	A4,A0			; A0.L = Address of Font Pointer.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	JSR	_LVOSetFont(A6)		; It Is Now Current.
+*
+*	Get Rid Of the Font.
+*
+	MOVEA.L	A3,A1			; A1.L = Address of Font.
+	JSR	_LVOCloseFont(A6)	; Get Rid Of the Font.
+*
+*	Exit Subroutine.
+*
+DRENM1	MOVEM.L	(A7)+,D0-D3/A0-A4/A6	; Return Calling State.
+	RTS
+*
+*	Move To Position To Print Text.
+*
+DRENM2	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	(A2)+,D0		; D0.L = x Move Position.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	(A2)+,D1		; D1.L = y Move Position.
+	CALLROM	Move			; Move To That Screen Location.
+*
+*	Print Text On the Screen.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	(A2)+,D0		; D0.L = Length of Message.
+	MOVEA.L	(A2)+,A0		; A0.L = Address of Text.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	CALLROM	Text			; Write Text On Screen.
+	RTS
+*
+*	Text To Draw On Screen, xy Location, Length, and Text.
+*
+DrawText:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+20	; Top  Edge.
+	DC.W	LUT_TitleLn				; Length.
+	DC.L	LUT_Title				; Text.
+*
+*	Message for Presets.
+*
+	XDEF	LUT_PresetMessage
+LUT_PresetMessage:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+40	; Top  Edge.
+	DC.W	MessageLn				; Length.
+	DC.L	Message					; Text.
+*
+*	Message for Switcher Preset 1.
+*
+	XDEF	LUT_SwitcherPreset1
+LUT_SwitcherPreset1:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+40	; Top  Edge.
+	DC.W	ChromaFx1Ln				; Length.
+	DC.L	ChromaFx1				; Text.
+*
+*	Message for Switcher Preset 2.
+*
+	XDEF	LUT_SwitcherPreset2
+LUT_SwitcherPreset2:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+40	; Top  Edge.
+	DC.W	ChromaFx2Ln				; Length.
+	DC.L	ChromaFx2				; Text.
+*
+*	Message for Switcher Preset 3.
+*
+	XDEF	LUT_SwitcherPreset3
+LUT_SwitcherPreset3:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+40	; Top  Edge.
+	DC.W	ChromaFx3Ln				; Length.
+	DC.L	ChromaFx3				; Text.
+*
+*	Message for Switcher Preset 4.
+*
+	XDEF	LUT_SwitcherPreset4
+LUT_SwitcherPreset4:
+	DC.W	TBFG_LEFTEDGE+(640-LUT_BOXWIDTH)/2+20	; Left Edge.
+	DC.W	TBFG_TOPEDGE+(400-LUT_BOXHEIGHT)/2+40	; Top  Edge.
+	DC.W	ChromaFx4Ln				; Length.
+	DC.L	ChromaFx4				; Text.
+*
+*	Font to Draw Text Width.
+*
+DrawFont:
+	DC.L	FontName		; ta_Name
+	DC.W	12			; ta_YSize
+	DC.B	0,0			; ta_Style, ta_Flags.
+*
+*	Text of Messages.
+*
+Message:
+	DC.B	'Saving ChromaFX Presets'
+MessageLn	EQU	*-Message
+*
+ChromaFx1:
+	DC.B	'Saving Switcher Preset 1'
+ChromaFx1Ln	EQU	*-ChromaFx1
+*
+ChromaFx2:
+	DC.B	'Saving Switcher Preset 2'
+ChromaFx2Ln	EQU	*-ChromaFx2
+*
+ChromaFx3:
+	DC.B	'Saving Switcher Preset 3'
+ChromaFx3Ln	EQU	*-ChromaFx3
+*
+ChromaFx4:
+	DC.B	'Saving Switcher Preset 4'
+ChromaFx4Ln	EQU	*-ChromaFx4
+*
+*	Name of Font.
+*
+FontName:
+	DC.B	'Requester.font',0
+	END

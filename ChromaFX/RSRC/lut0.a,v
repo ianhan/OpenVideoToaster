@@ -1,0 +1,1508 @@
+head	2.12;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.12
+date	96.07.15.18.23.49;	author Holt;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	95.02.09.19.01.59;	author pfrench;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.10.03.12.05.38;	author pfrench;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.11.06.08.37.24;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.05.05.10.30.19;	author Finch2;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.05.04.16.48.33;	author Finch2;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	93.04.30.15.22.38;	author Finch2;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	93.04.29.17.31.00;	author Finch2;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	93.04.07.10.10.51;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	93.04.06.14.18.52;	author Finch2;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	93.02.23.18.14.51;	author Finch;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.05.20.16.42.19;	author Finch;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.23.58.00;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* LUT0.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: lut0.a,v 2.11 1995/02/09 19:01:59 pfrench Exp Holt $
+*
+* $Log: lut0.a,v $
+*Revision 2.11  1995/02/09  19:01:59  pfrench
+*Fixed bug where lut wasn't getting EffectsBase
+*
+*Revision 2.10  1994/10/03  12:05:38  pfrench
+*Removed crouton rendering code.
+*
+*Revision 2.9  1993/11/06  08:37:24  Kell
+*Fixed for EF_EffectsLogic being removed from within EFXBase.
+*
+*Revision 2.8  93/05/05  10:30:19  Finch2
+**** empty log message ***
+*
+*Revision 2.7  93/05/04  16:48:33  Finch2
+*Moved The Background Box Positions.
+*
+*Revision 2.4  93/04/07  10:10:51  Kell
+*Removed EffectData dc.l 0.  ProcessEffect doesn't need it if A2 is null.
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT0"
+	section	LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"Rect.i"
+	Include	"EfLib.i"
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT1.i"
+	Include	"LUT2.i"
+	Include	"LUT3.i"
+	Include	"LUT4.i"
+	Include	"LUT5.i"
+	Include	"LUT6.i"
+	Include	"LUT7.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTA.i"
+	Include	"LUTB.i"
+	Include	"LUTLib.i"
+	Include	"LUTBits.i"
+	Include	"serialdebug.i"
+
+;SERDEBUG EQU 1
+	ALLDUMPS	
+
+
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUTSlice:							*
+*									*
+*	Contains All The Code For the LUT Slice.			*
+*									*
+*	12.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	PAGE
+*************************************************************************
+*									*
+*	LUTSliceCode:							*
+*									*
+*	Performer the Main Tasks of the LUT Slice Code.			*
+*									*
+*	Input:								*
+*									*
+*	04(A7)	= Gadget Select Message.				*
+*	08(A7)	= Address of Fast Gadget That Was Selected.		*
+*	12(A7)	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Slice Code is Performed.					*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Could Not Read IFF File.			*
+*									*
+*	07.Feb 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUTSliceCode
+LUTSliceCode:
+	MOVEM.L	D0-D2/A0-A6,-(A7)	; Save Calling State.
+	LEA.L	LUT_Base,A4		; A4.L = Address of LUT Base.
+	MOVEM.L	11*4(A7),D0/A3/A5	; Get Select, Gadget, Toastbase.
+*
+*	Vector To Selected Data.
+*
+	CMPI.W	#LUTSCL,D0		; > Length Of Table?
+	BCC	LUTSCS			; Exit If > Length Of Table.
+	MOVE.W	D0,D1			; Make Word Wide Index.
+	ADD.W	D1,D1			; D1.W = Word Wide Index.
+	MOVE.W	LUTSCT(PC,D1.W),D1	; Get Word Offset.
+	JMP	LUTSCJ(PC,D1.W)		; Vector To Location.
+LUTSCJ					; Vector Address.
+*
+LUTSCT:	DC.W	LUTSCN-LUTSCJ		; FGC_LOAD
+	DC.W	LUTSCR-LUTSCJ		; FGC_UNLOAD
+	DC.W	LUTSC1-LUTSCJ		; FGC_SELECT
+LUTSCL	EQU	(*-LUTSCT)>>1		; Length of Table.
+*
+*	FGC_SELECT, The Crouton Was Selected.
+*
+LUTSC1	CLR.W	FG_HiLiteMask(A3)	; Un-Highlight the Calling Image.
+	TST.W	TB_TValSec(A5)		; Need to fource the TBar into
+	BEQ.S	LUTSC2			; the Zero position, so the LUT
+	CALLTL	DoTakeNoKey		; TBar Imaging Routine Will Work.
+	CLR.W	TB_TValSec(A5)		; LUT Obtains a Pointer to the TBAR
+	MOVEQ.L	#0,D0			; Image Out of the Switcher Fast
+	CALLTL	UpdateTBar		; Gadget Image.
+LUTSC2	CALLTL	CancelCG		; Turn Off The Character Generator.
+;;;	CALLTL	CancelNonStdEfx		; Deselect any non-standard effects.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off the SoftSprite.
+	CALLTL	NoTransFreeze		; Complete Any Transition & Freeze Video
+*
+*	Set Our Copy of Screen Redraw Routine.
+*
+	MOVE.L	#_LVOReDoDisplay,D0	; D0.L = Offset to Function.
+	MOVEA.L	A5,A0			; A0.L = Address of Library.
+	LEA.L	LUT_RequestorRedrawScreen(PC),A1 ; A1.L = Address New Function.
+	CALLTL	SetLibVector		; D0.L = Address Old Function.
+	MOVE.L	D0,-(A7)		; Save Address of Old Function.
+*
+*	Open Our Copy Of the Effects Library.
+*
+	LEA.L	LUT_ELHLIBNAME(PC),A0	; A0.L = Address of Effects Library Name
+	CALLTL	OpenAuxLib		; Try To Open The Library.
+	MOVE.L	D0,LTE_EfBase(A4)	; Save Pointer To Library.
+*
+*	Keep Other Tasks From Running.
+*
+	MOVE.L	TB_EfxFG(A5),-(A7)	; Save Calling Effect.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbit All Other Tasks from Running.
+	MOVEA.L	TB_ITUBase(A5),A6	; A6.L = Address of Intuition Base.
+*
+*	Modify the IDCMP Flags for Release.
+*
+	MOVEA.L	TB_Window(A5),A0	; Save Old IDCMP and Form Mew IDCMP
+	MOVE.L	wd_IDCMPFlags(A0),-(A7)	; Save Old IDCMP Flags.
+	MOVE.L	#LUT_IDCMP_FLAGS,D0	; D0.L = New IDCmp Flags.
+	JSR	_LVOModifyIDCMP(A6)	; Add in the New Flags.
+*
+*	Remove Other Screen Gadgets From the Screen.
+*
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	MOVE.L	wd_FirstGadget(A0),A1	; A1.L = Address of First Gadget.
+	MOVE.L	A1,-(A7)		; Save Original Gadget List.
+	MOVEQ.L	#-1,D0			; D0.L = Number of Gadgets to Remove.
+	JSR	_LVORemoveGList(A6)	; Remove All Gadgets.
+*
+*	Put Up Our Gadget List.
+*
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	LEA.L	LUT_FirstFG,A1		; A1.L = Address of First Gadget.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#0,D0			; D0.L = Position to Add In.
+	MOVEQ.L	#-1,D1			; D1.L = Number of Gadgets.
+	JSR	_LVOAddGList(A6)	; Put Our Gadget On the Screen.
+*
+*	Clear Preview Display to Background Color.
+*
+	MOVE.W	TB_PrvwSec(A5),D0	; Make Sure the DVE0 Buffer
+	ANDI.W	#M_DV0,D0		; Is Not Selected.
+	BEQ.S	LUTSC3			; Skip If Not Selected.
+	MOVE.W	TB_PrvwSave(A5),D0	; If a DVE0 Buffer Selected,
+	TURNLIVEDVEOFF	D0		; Then Use the Most Recent
+	PUT.W	D0,TB_PrvwSec		; Analog Source.
+LUTSC3	MOVE.W	TB_PrvwSec(A5),LTE_PrvwSec(A4) ; Save Original Prvw Row Position
+	CALLTL	ClearToastDisplay	; Clear Display To Background Color.
+*
+*	Select Our Dummy Crouton.
+*
+	LEA.L	LUT_DummyCrouton,A0	; A0.L = Address of Fast Gadget.
+	MOVE.L	A0,TB_EfxFG(A5)		; Install a Hidden Crouton.
+	CALLTL	DoHiLiteSelectQ		; Select hidden LUT Crouton.
+*
+*	Set The Matte Color to Black.
+*
+	MOVE.W	TB_ToastBGC(A5),D2	; D2.W = Old Matte Color.
+	SWAP.W	D2			; D2.H = Old Matte Color.
+	MOVEQ.L	#0,D0			; Set Matte Color To Black.
+	SET_MATT D0
+	CALLTL	RestoreMattColor
+*
+*	Free the DVE Buffers for the Editor.
+*
+	CLR.W	TB_OLaySec(A5)		; Don't Allow Overlay Keying.
+	MOVE.W	TB_MainSec(A5),D0	; Make Sure the DVE Buffers
+	ANDI.W	#M_DV0!M_DV1,D0		; Are Not Selected.
+	BEQ.S	LUTSC4			; Skip If Not Selected.
+	MOVE.W	TB_MainSave(A5),D0	; If a DVE Buffer Selected,
+	TURNLIVEDVEOFF	D0		; Then Use the Most Recent
+	PUT.W	D0,TB_MainSec		; Analog Source.
+*
+*	Enable the Preview Monitor to be Used for Editor.
+*
+LUTSC4	LEA.L	TB_VTSetUp(A5),A0	; We Want To Make DVE1
+	MOVE.W	TB_MainSec(A5),D0	; D0.W = Video Source for Program.
+	MOVE.W	D0,D1
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	A0,D0
+	MOVE.W	D1,D0
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	A0,D0
+	ELHPUT_PV_I	A0,VTI_PV_DAC1	; Visiable On The Screen.
+	ELHSET_USERON	A0		; Turn On Video On Preview Monitor.
+	ELHCLEAR_PVMUTE	A0		; Un-Mute The Preview Show Thru Video.
+	CALLTL	SendELH2Toaster		; Send It Out To Toaster.
+*
+*	Select The Three Monitor System.
+*
+	MOVE.W	TB_UserOn(A5),D2	; D2.H = Matte Color, D2.L = UserOn Flag
+	BNE.S	LUTSC5			; Jump If Already 2 Monitors.
+	MOVE.W	#-1,TB_UserOn(A5)	; Setup for 2 Monitor System.
+	CALLTL	InstallAVEI		; Install Color Interface.
+LUTSC5	MOVE.L	D2,-(A7)		; D2.H = Matte Color, D2.L = UserOn Flag
+*
+*	Select the First LUT Crouton.
+*
+	BSR	LUT_GetCroutonData	; Read The Crouton's Data.
+	BSR	LUT_Add_FGadgets	; Draw Out Gadets On The Screen.
+*
+*	Draw LUT Screen On Preview, MainSec, PreviewSec M_DV1.
+*	Exit, Put DV1 on Main.
+*
+	PUT.W	#M_DV1,TB_PrvwSec	; Make Sure DAC 1 Selected.
+	MOVE.L	#QUADBlack,D0		; D0.L = Quad Black Color, Clear Color.
+	BSR	LUT_ClearDVE1		; Clear The DVE1.
+	MOVE.L	LTE_EditRGB(A4),D0	; Get RGB Value.
+	BSR	LUT_MakeColorSquare	; Put Up the Color Square.
+	MOVEQ.L	#0,D0			; Make Top/Bottom Value.
+	MOVE.W	LUT_UpperRangeArrowFG+FG_HiLiteMask,D0
+	NOT.W	D0			; Go Other Way Around.
+	BSR	LUT_MakeEditColors	; Make The Edit Colors.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On the SoftSprite.
+*
+*	Allow Other Tasks to Run.
+*
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	JSR	_LVOPermit(A6)		; Permit Other Tasks to Run.
+*
+*	??? Ask Steve Kell.
+*
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VT SetUp.
+	ELHTEST_LUT	A0		; Is LUT Mode Enabled?
+	BNE.S	LUTSC6			; Jump If In LUT Mode.
+	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Clear The Pure Data Flags.
+	BCLR.B	#LTEF_EditChange,LTE_Flags(A4)	; No More Changes.
+	BCLR.B	#LUTF_MapChange,LUT_Flags(A4)	; No More Changes.
+*
+*	Loop and Set Edit Change Bit, Read The Messages.
+*
+LUTSC6	MOVE.B	LUT_Flags(A4),D0	; Get Current Flags.
+	ANDI.W	#1<<LUTF_MapChange,D0	; Edit & Map Change in Same Position.
+	OR.B	D0,LTE_Flags(A4)	; If Set Once, Always Set.
+*
+*	Read Next Message.
+*
+	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_ReadMessage		; Read the Message.
+*
+*	Check For Key Board.
+*
+	CMPI.L	#RAWKEY,D1		; Check For Raw Key Code.
+	BNE.S	LUTSC7			; Jump If Not Raw Key Code.
+	BSR	LUT_DoStep		; Step To Next Key?
+	BEQ.S	LUTSC6			; Jump If Key Selected.
+	BSR	LUT_DoKeySwitchVideo	; Switch Video Sources?
+	BEQ.S	LUTSC6			; Jump If Key Selected.
+	BSR	LUT_NumbericKeyPadEntry	; Entered Number on Keypad?
+	BEQ.S	LUTSC6			; Jump If Key Selected.
+	CMPI.W	#$45,D2			; Was it an Escape?
+	BEQ.S	LUTSC9			; Exit on Escape Key.
+	BRA.S	LUTSC6			; Check Next Message.
+*
+*	Check For Mouse Buttons.
+*
+LUTSC7	CMPI.L	#MOUSEBUTTONS,D1	; Check For Mouse Buttons.
+	BNE.S	LUTSC8			; Jump If Not Mouse Buttons.
+	CMPI.W	#MENUDOWN,D2		; Right Mouse Button Picked?
+	BNE.S	LUTSC6			; Jump If Not Right Mouse Button.
+	BSR	LUT_DoButtonTBar	; Do The Button TBar.
+	BRA.S	LUTSC6			; Check Next Message.
+*
+*	Check For Gadgets.
+*
+LUTSC8	CMPI.L	#GADGETDOWN,D1		; Only Respond To These Messages.
+	BNE.S	LUTSC6			; Jump If Not Gadget Down.
+	TST.L	FG_Function(A0)		; Any Function to Perform?
+	BEQ.S	LUTSC6			; Jump If Nothing.
+	MOVE.L	FG_Function(A0),A2	; Function To Perform.
+	JSR	(A2)			; Do the Function.
+	BEQ.S	LUTSC6			; Jump If No Special Inspection.
+	CMPA.L	#LUT_OkFG,A0		; Pick Ok Gadget?
+	BNE.S	LUTSC6			; Jump If Not Ok.
+*
+*	Pick The Old Two / Three Monitor System.
+*
+LUTSC9	TST.W	TB_TValSec(A5)		; Did The Last Effect Finish?
+	BEQ.S	LUTSCA			; Jump If It Did.
+	CLR.W	TB_TValSec(A5)		; Fource to First Position.
+LUTSCA	LEA.L	TB_VTSetUp(A5),A0	; A0.L = Address of VTSetUp.
+	MOVE.L	(A7)+,D2		; D2.H = Matte Color, D2.L = UserOn Flag
+	MOVE.L	D2,D0
+	SWAP.W	D0			; D2.W = Old Matte Color.
+	SET_MATT D0
+	CALLTL	RestoreMattColor	; 0 = 3 Monitors, -1 = 2 Monitors.
+	MOVE.W	D2,TB_UserOn(A5)	; Save UserOn Flag.
+	BNE.S	LUTSCB			; Jump If 2 Monitor System.
+	CALLTL	InstallAVEI		; Restore B/W Interface.
+	ELHCLEAR_USERON	A0		; Turn Off Video On Preview Monitor.
+	BRA.S	LUTSCC			; Skip Else Part.
+LUTSCB	ELHSET_PVMUTE	A0		; Mute The Preview Show Thru Video.
+*
+*	Clear LUT1.
+*
+LUTSCC	MOVE.W	LTE_PrvwSec(A4),D0
+	PUT.W	D0,TB_PrvwSec		; Return Original Prvw Row Position.
+	CALLTL	Mask2PV
+	ELHPUT_PV_R	A0,D0
+	BSR	LUT_PutCroutonData	; Write Data Back Into Crouton.
+	BSR	LUT_SendSpriteToToaster	; Send Out to Toaster.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	BSR	LUT_InitilizeDVE1	; Clear The DVE1.
+*
+*	Restore The Color Cycling.
+*
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Is The Buffer Pure?
+	BEQ.S	LUTSCZ				; Skip If Not Pure.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Was Their An Edit Change?
+	BNE.S	LUTSCZ				; Skip If Edit Change.
+	BSR	LUT_SetDisplayModeLongIndexEd	; D0.L = Index To Image.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Addr of Table.
+	MOVEA.L	0(A0,D0.L),A0		; A0.L = Addr of Color Cycl Func
+	JSR	(A0)			; Execute Color Cycling Routine.
+*
+*	Restore LUT Mode On.
+*
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VT SetUp.
+	ELHCLEAR_LINP	A0
+	ELHSET_OBR	A0
+	ELHSET_LUT	A0		; Enable LUT Mode.
+	BSR	LUT_SendSpriteToToaster	; Set Out To Toaster.
+	PUT.B	#M_LUTBUS_MAIN,TB_LutBus ;PRVW or MAIN
+	PUT.B	#LUTMODE_BW,TB_LutMode	; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(a4)
+	BNE.S	LUTSCD			; Jump If B&W Video.
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ; Set Color or B/W Mode.
+LUTSCD	CALLTL	CookMain		; Re-Enable LUT Mode.
+	CALLTL	CookAndServePrvw
+*
+*	Keep Other Tasks From Running.
+*
+LUTSCZ	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbit All Other Tasks from Running.
+	MOVEA.L	TB_ITUBase(A5),A6	; A6.L = Address of Intuition Base.
+*
+*	Remove Out Gadgets From the Screen.
+*
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	MOVE.L	wd_FirstGadget(A0),A1	; A1.L = Address of First Gadget.
+	MOVEQ.L	#-1,D0			; D0.L = Number of Gadgets.
+	JSR	_LVORemoveGList(A6)	; Remove Gadgets from Screen.
+*
+*	Restore Original Gadgets to Screen.
+*
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	MOVEA.L	(A7)+,A1		; A1.L = Address of Old Gadgets.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#0,D0			; D0.L = Position to Add In.
+	MOVEQ.L	#-1,D1			; D1.L = Number of Gadgets to Add.
+	JSR	_LVOAddGList(A6)	; Put Gadgets Back On Screen.
+*
+*	Restore Original IDCMP Flags.
+*
+	MOVE.L	(A7)+,D0		; D0.L = Original IDCmp Flags.
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Gadget Window.
+	MOVEA.L	TB_ITUBase(A5),A6	; A6.L = Address of Intuition Base.
+	JSR	_LVOModifyIDCMP(A6)	; Add in the Original Flags.
+*
+*	Put Up Old Screen Gadgets.
+*
+	PUT.W	#-1,TB_CleanUp		; Tell Switch Interface to Redraw Screen
+*
+*	Restore The Selected Crouton.
+*
+	MOVEA.L	(A7)+,A0		; A0.L = Address of Old Fast Gadget.
+	CALLTL	DoHiLiteSelectQ		; Re-Select the Gadget.
+*
+*	Leave Buffer Marked as Pure If We Are Only On Same GRID Crouton.
+*
+;;;	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Is The Buffer Pure?
+;;;	BEQ.S	LUTSCF				; Skip If Not Pure.
+;;;	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Was Their An Edit Change?
+;;;	BNE.S	LUTSCF				; Skip If Edit Change.
+;;;	BSR	LUT_SelectGridAddress	; A0.L = Address of LUT Data.
+;;;	BEQ.S	LUTSCE			; Exit If Not LUT Crouton.
+;;;	CMPA.L	LTE_PresentLUT(A4),A0	; Are We On The Same Grid Crouton?
+;;;	BEQ.S	LUTSCF
+;;;LUTSCE	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A4) ; Mark The Buffer as Not Pure.
+*
+*	Allow Other Tasks to Run.
+*
+;;;LUTSCF
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	JSR	_LVOPermit(A6)		; Permit Other Tasks to Run.
+*
+*	Save The File Information.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off the SoftSprite.
+	BSR	LUT_PutCroutonData	; Save Current Buffer Into List.
+	BSR	LUT_CheckUpDateMapCrouton ; Update Data in 4 Croutons.
+	BTST.B	#LTEF_EditChange,LTE_Flags(A4) ; Was Their a Change?
+	BEQ.S	LUTSCH			; Jump If No Change Nessary.
+LUTSCG	LEA.L	LUT_PresetMessage(PC),A0 ; A0.L = Address of Message.
+	BSR	LUT_DrawRenderMessage	; Put Up The Message.
+	BSR	LUT_WriteLUTList	; Write The Data On The Disk.
+	MOVE.L	D0,-(A7)		; Save Return Code.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On the SoftSprite.
+	MOVE.L	(A7)+,D0		; Return Return Code.
+	BEQ.S	LUTSCI			; Jump If No Error.
+	BSR	LUT_FileErrorMessageRetry ; D0.L = Retrun Code, Retry, Cancel.
+	SUBQ.L	#1,D0			; Was Retry Hit?
+	BNE.S	LUTSCI			; Jump If Not Retry.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off the SoftSprite.
+	BRA.S	LUTSCG			; Do The Retry.
+LUTSCH	CALLTL	SoftSpriteBPLCON0On	; Turn On the SoftSprite.
+*
+*	If we are on a Grid Crouton, Move The TBar There.
+*
+LUTSCI	BSR	LUT_SelectGridAddress	; A0.L = Address of LUT Data.
+	BEQ.S	LUTSCK			; Exit If Not LUT Crouton.
+	BSR	LUT_GetTBarPosition	; Get Current TBar Position.
+*
+*	Close Our Copy Of Effects Library.
+*
+LUTSCK	MOVE.L	LTE_EfBase(A4),D0	; Address of Effects Library.
+	BEQ.S	LUTSCM			; Jump If Already Closed.
+	MOVEA.L	D0,A0			; A0.L = Address of Effects Library.
+	CALLTL	CloseAuxLib		; Close The Library.
+	CLR.L	LTE_EfBase(A4)		; Set Pointer to NULL.
+*
+*	Restore Original Copy of Screen Redraw Routine.
+*
+LUTSCM	MOVE.L	#_LVOReDoDisplay,D0	; D0.L = Offset to Function.
+	MOVEA.L	A5,A0			; A0.L = Address of Library.
+	MOVEA.L	(A7)+,A1		; A1.L = Address New Function.
+	CALLTL	SetLibVector		; D0.L = Address Old Function.
+	BRA.S	LUTSCS			; Exit Subroutine.
+*
+*	FGC_LOAD, Initilize the SMF Settings.
+*
+LUTSCN	LEA.L	LUT_Comment(A4),A0	; Address of Comment.
+	MOVE.L	A0,LUT_COMMENTBOXSI+si_Buffer ; Save Pointer to Text String.
+	MOVE.W	#$2336,LTE_RandomNu(A4)	; Initilize Random Number Generator.
+	MOVE.B	#1,LUT_DisplayMode(A4)	; Set To Middle Position.
+	MOVE.B	#1,LTR_DisplayMode(A4)	; Set To Middle Position.
+	BSR	LUT_InitEBuf		; Initilize The Edit Buffer.
+*
+*	Prepare The Data Area For Load.
+*
+	BSR	LUT_AllocateLUTList	; Allocate The List of LUT Data.
+	MOVE.L	LTE_LULPtr(A4),D0	; D0.L = Address of First In List.
+	BEQ.S	LUTSCP			; Jump On NULL Pointer.
+	MOVEA.L	D0,A0			; A0.L = Address of Head of List.
+	MOVE.L	LUL_Next(A0),D0		; Second In List?
+	BEQ.S	LUTSCO			; Jump If No More List.
+	MOVEA.L	D0,A0			; A0.L = Address of Second of List.
+LUTSCO	ADDQ.L	#LUL_LUT,A0		; Offset TO LUT Data.
+	MOVE.L	A0,LTE_PresentLUT(A4)	; Save Pointer to Current LUT.
+LUTSCP	BSR	LUT_ReadLUTList		; Read The Data On The Disk.
+	BEQ.S	LUTSCQ			; Jump If No Error.
+	BSR	LUT_FileErrorMessageRetry ; D0.L = Error Code, Retry, Cancel.
+	SUBQ.L	#1,D0			; Did They Hit Retry?
+	BEQ.S	LUTSCP			; Jump If Retry Hit.
+*
+*	Make Pointer to TBar Handle.
+*
+LUTSCQ	MOVEA.L	TB_TBarFGL(A5),A0	; Addendum 3/25/91: by Speier
+	MOVE.L	FG_Data(A0),LUT_TBar_Img_PTRS ; Address read-only TBar imagery
+	MOVE.L	(A0),A0			; Do main TBar.
+	MOVE.L	(A0),A0
+	MOVE.L	FG_Data(A0),LUT_TopTBar_Img_PTRS ; Do Top TBar Cap.
+	MOVE.L	(A0),A0
+	MOVE.L	FG_Data(A0),LUT_BotTBar_Img_PTRS ; Do Bottom TBar Cap.
+	BRA.S	LUTSCS			; Exit Subroutine.
+*
+*	FGC_UNLOAD, Remove Allocations.
+*
+LUTSCR	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	BSR	LUT_FreeLUTList		; Frees The List of LUT Data.
+*
+*	Exit Subroutine.
+*
+LUTSCS	MOVEM.L	(A7)+,D0-D2/A0-A6	; Return Calling State.
+	RTS
+*
+	XDEF	LUT_ELHLIBNAME
+LUT_ELHLIBNAME:
+	DC.B	'effects.library',0
+	PAGE
+*************************************************************************
+*									*
+*	SelectGridAddress:						*
+*									*
+*	Return The Address of the Selected Grid Crouton's Data.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Data Address of the Selected Grid Crouton is Returned.	*
+*									*
+*	A0.L	= Address of this Crouton's LUT Base.			*
+*									*
+*	CC	== Zero -> Failed To Find Crouton.			*
+*	CC	!= Zero -> Found Grid Crouton.				*
+*									*
+*	13.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SelectGridAddress
+LUT_SelectGridAddress:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Try To Find The Address.
+*
+	MOVE.L	TB_EfxFG(A5),D0		; Is Their a Fast Gadget Their?
+	BEQ.S	SEGRA1			; Skip If No Fast Gadget.
+	MOVEA.L	D0,A0			; A0.L = Address of Fast Gadget.
+	BSR	LUT_IsGridCrouton	; Is It a Grid Crouton.
+	BNE.S	SEGRA1			; Jump If Not Grid Crouton.
+	MOVEA.L	FG_Function(A0),A0	; Get Pointer to Function.
+	MOVEA.L	LSU_RamPointer-LSU_Sizeof(A0),A0 ; Address of Source Buffer.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	LSG_GridNumber(A0),D0	; Get Current Grid Position.
+	LEA.L	LTE_GridCrouton(A4),A0	; A0.L = Address of Crouton Array.
+	MOVE.B	-1(A0,D0.W),D0		; D0.L = Real Value of Crouton.
+	BSR	LUT_FindLUTData		; A0.L = Address of This One.
+	BNE.S	SEGRA2			; Exit If All Is Well.
+*
+*	Error, Not Grid Crouton.
+*
+SEGRA1	MOVEQ.L	#0,D0			; Set CC == Zero.
+	MOVEA.L	D0,A0			; A0.L = NULL Address.
+*
+*	Exit Subroutine.
+*
+SEGRA2	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DummyCode:							*
+*									*
+*	Executes a Dummy Crouton Code Once.				*
+*									*
+*	Input:								*
+*									*
+*	04(A7)	= Gadget Select Message.				*
+*	08(A7)	= Address of Fast Gadget That Was Selected.		*
+*	12(A7)	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Dummy Code Crouton Is Performed Once.				*
+*									*
+*	13.Aug 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+;;EffectData DC.L	0			; Pointer to Effects Data.
+*
+	XDEF	LUT_DummyCode
+LUT_DummyCode:
+	MOVEM.L	D0-D1/A0-A5,-(A7)	; Save Calling State.
+*
+*	Get Pointer To Effects Library.
+*
+	MOVEM.L	2*4+8*4(A7),A3/A5	; A3 -> FG, A5 -> TB.
+
+	DUMPREG	<IN LUT_DummyCode>
+
+		
+	LEA.L	LUT_Base,A4		; A4.L = Address of LUT Base.
+	MOVE.L	LTE_EfBase(A4),D1	; D1.L = Address of Effects Base.
+	BNE.S	DUMCO1			; Jump If We Have The Library.
+	LEA.L	LUT_ELHLIBNAME(PC),A0	; A0.L = Address of Effects Library Name
+	CALLTL	OpenAuxLib		; Try To Open The Library.
+	MOVE.L	D0,LTE_EfBase(A4)	; Save Pointer To Library.
+	BEQ.S	DUMCO3			; Fail, Cannot Get Effects Library.
+*
+*	Get Index To Function.
+*
+DUMCO1
+*!	MOVE.W	#EF_LutColorTBar,D0	; D0.W = Color Index.
+	MOVE.W	#TEL_LutColorTBar,D0	; D0.W = Color Index.
+
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BEQ.S	DUMCO2			; Jump If In Color.
+*!	MOVE.W	#EF_LutMonoTBar,D0	; D0.W = Black & White Index.
+	MOVE.W	#TEL_LutMonoTBar,D0	; D0.W = Black & White Index.
+
+*
+*	Get Address Of Function.
+*
+DUMCO2	MOVEA.L	LTE_EfBase(a4),A4	; A4.L = Address of Effects Base.
+
+* OLD as of 11-5-93
+*!	MOVEA.L	0(A4,D0.W),A0		; A0.L = Address of Function.
+	movea.l	EF_EffectsLogic(a4),a0
+	movea.l	0(a0,d0.w),a0		; A0.L = Address of Function.
+
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	DUMCO3			; Exit On NULL Pointer.
+*
+*	Make Call To Process Effects.
+*
+	MOVE.L	1*4+8*4(A7),D0		; D0.L = Command.
+	SUBA.L	A1,A1			; A1.L = No TBar or Auto handler given
+
+;;	LEA.L	EffectData(PC),A2	; A2.L = Address of Effect Data.
+	SUBA.L	A2,A2			; A2.L = Address of Effect Data.
+
+	JSR	_LVOProcessEffect(A4)	; Do The Switcher Logic.
+*
+*	Exit Subroutine.
+*
+DUMCO3	MOVEM.L	(A7)+,D0-D1/A0-A5	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetRGBHSIBarPosition:						*
+*									*
+*	Takes RGB or HSI Value and Set the Proper Bar Image in Slider.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of 0RGB or HHSI Color.				*
+*	D1.L	== 0 -> Values Represent 0RGB.				*
+*		!= 0 -> Values Represent HHSI.				*
+*									*
+*	Output:								*
+*									*
+*	In the RGB or HSI Siders, The Current Bar Image Is Set.		*
+*									*
+*	09.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetRGBHSIBarPosition
+LUT_SetRGBHSIBarPosition:
+	MOVEM.L	D0/D2/A0,-(A7)		; Save Calling State.
+*
+*	Set the Values Of The 3 Bar Images.
+*
+	MOVE.L	D0,D2			; Save RGB or HSI Value.
+	ANDI.L	#$000000FF,D0		; Leave Only B or I.
+	BSR	LUT_BarImage		; A0.L = Address of Bar Image.
+	MOVE.L	A0,LUT_BISliderFG+FG_Data ;Save Pointer to Image.
+	LSR.L	#8,D2			; Get G or S.
+	MOVE.B	D2,D0			; D0.L = G or S Value.
+	BSR	LUT_BarImage		; A0.L = Address of Bar Image.
+	MOVE.L	A0,LUT_GSSliderFG+FG_Data ;Save Pointer to Image.
+	LSR.L	#8,D2			; Get R or H.
+	TST.L	D1			; Value From RGB?
+	BEQ.S	SRGBHS1			; Jump If From RGB.
+	LSR.L	#8,D2			; Move HH to H.
+SRGBHS1	MOVE.L	D2,D0			; D0.L = R or H.
+	BSR	LUT_BarImage		; A0.L = Address of Bar Image.
+	MOVE.L	A0,LUT_RHSliderFG+FG_Data ;Save Pointer to Image.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/D2/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_Add_FGadgets:						*
+*									*
+*	Adds All the Fast Gadets to the LUT Screen.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Fast Gadgets are Added to the Screen.				*
+*									*
+*	09.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_Add_FGadgets
+LUT_Add_FGadgets:
+	MOVEM.L	D0-D4/A0-A2,-(A7)	; Save Calling State.
+*
+*	Set the Video Source 1 to 4.
+*
+	BSR	LUT_HiLiteVideoN	; Set the Video Source.
+*
+*	Make The Interplation Index Gadgets.
+*
+	LEA.L	LUT_INT_SPREADFG,A0	; A0.L = Address of First Gadget.
+	MOVEA.L	A0,A1			; A1.L = Address of First Gadget.
+	MOVEQ.L	#7-1,D0			; Number of Gadgets.
+ADDFG1	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not HiLited.
+	MOVEA.L	gg_NextGadget(A1),A1	; Move To Next Gadget.
+	DBF	D0,ADDFG1		; Loop Until Done.
+	MOVEQ.L	#0,D0			; Now HiLite The Selected One.
+	MOVE.B	LUT_InterPos(A4),D0	; Position We Are On.
+	BRA.S	ADDFG3			; Start Looping.
+*
+*	Table of One or Two Arrows For Interplation Pick.
+*
+	XDEF	LUT_INTPIK
+LUT_INTPIK: DC.B -1,-1,0,0,0,0,0,0
+*
+ADDFG2	MOVEA.L	gg_NextGadget(A0),A0	; Move To Next Gadget.
+ADDFG3	DBF	D0,ADDFG2		; Loop Until Found.
+	BSR	LUT_SetHiLite		; HiLite This Image.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LUT_InterPos(A4),D0	; Index To Table Look Up.
+	MOVE.B	LUT_INTPIK(PC,D0.W),D0	; Get Current Setting.
+	BSR	LUT_LowerRangeArrowOnOff ;Add or Remove The Lower Range Arrows.
+*
+*	Make Sure Our TBar Matches TBar On Switcher Screen.
+*
+	BSR	LUT_GetTBarPosition	; Get Current TBar Position.
+	MOVE.W	TB_TValSec(A5),D0	; Get Current TBar Position.
+	MULU.W	#TBARSLIDESIZE*128,D0	; D0.L = Slide Size.
+	CLR.W	D0			; Get Rid Of Low Bits.
+	SWAP.W	D0			; D0.L = Slide Position 0 to SIZE - 1.
+	BSR	LUT_TBarImage		; A0.L = Image Address.
+	MOVE.L	A0,LUT_TBarFG+FG_Data	; Save The New Image.
+*
+*	Initilize the RGB Slider Gadgets.
+*
+	BSR	LUT_FromEditBuf		; D0.L = Current Edit Color.
+	MOVE.L	D0,LTE_EditRGB(A4)	; Make Sure RGB & HSI Are The Same.
+	BSR	RGBHSI			; Convert to HSI.
+	MOVE.L	D0,LTE_EditHSI(A4)	; Save Result.
+	MOVEQ.L	#-1,D1			; Set Flag to HHSI.
+	CMPI.L	#LUT_RGBTEXT_BT,LUT_RGBHSITextFG+FG_Data ; In RGB Mode?
+	BNE.S	ADDFG4			; Jump If HSI Mode.
+	MOVE.L	LTE_EditRGB(A4),D0	; Get RGB Value.
+	MOVEQ.L	#0,D1			; Set Flag to 0RGB.
+ADDFG4	BSR	LUT_SetRGBHSIBarPosition ;Set the 3 Bar Images.
+*
+*	Make The Slider Marker.
+*
+	MOVEQ.L	#-1,D0			; Flag Only One Marker.
+	CLR.W	D0			; Use This For Color.
+	MOVE.B	LTE_EditColor(A4),D0	; Current Edit Color.
+	BSR	LUT_MakeEditMark	; Make The Edit Mark.
+	LEA.L	LTE_EditMark(A4),A0	; Address of Image.
+	MOVE.L	A0,LUT_EditColorsFG+FG_Data ; Save Image Pointer.
+*
+*	Make The Posterization Positions.
+*
+	BSR	LUT_SetPosterImage	; Make The Current Settings.
+*
+*	Make The B&W or Color Positions.
+*
+	LEA.L	LUT_BAWFG,A0		; Assume B&W.
+	CLR.W	FG_HiLiteMask(A0)	; Make Sure Not HiLited.
+	MOVEA.L	gg_NextGadget(A0),A1	; Get Color.
+	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not HiLited.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4) ; Is It B&W?
+	BNE.S	ADDFG5			; Jump If B&W.
+	MOVEA.L	A1,A0			; Address of Color Image.
+ADDFG5	BSR	LUT_SetHiLite		; HiLite Image.
+*
+*	Set the Transition/Filter/Cycle/SMF Images.
+*
+	LEA.L	LUT_TransitionFG,A0	; Address of First Image.
+	MOVEA.L	A0,A2			; Save For Later.
+	MOVEQ.L	#6-1,D0			; Loop Counter.
+ADDFG6	CLR.W	FG_HiLiteMask(A0)	; Make Sure Not HiLighted.
+	MOVEA.L	gg_NextGadget(A0),A0	; Point To Next Gadget In List.
+	DBF	D0,ADDFG6		; Loop Until Done.
+	MOVE.L	#LUT_NOCYCLEARROW_BT,LUT_CycleArrowFG+FG_Data ;Make Sure NoArrow
+	BTST.B	#LUTF_TRANSITION,LUT_DisplayMode(A4) ; Transition or Filter.
+	BEQ.S	ADDFG7			; Jump If Filter.
+*
+*	Set Transition / Filter Mode.
+*
+	MOVEA.L	A2,A0			; Address of Transition Fast Gadget.
+	BRA.S	ADDFG8			; Skip Else Part.
+*
+*	Arrow Bit Map Table.
+*
+	XDEF	LUT_AROWTB
+LUT_AROWTB:
+	DC.L	LUT_NOCYCLEARROW_BT
+	DC.L	LUT_LEFTCYCLEARROW_BT
+	DC.L	LUT_RIGHTCYCLEARROW_BT
+	DC.L	LUT_BOTHCYCLEARROW_BT
+	XDEF	LUT_AROWLN
+LUT_AROWLN EQU	(*-LUT_AROWTB)/4
+*
+ADDFG7	MOVEA.L	gg_NextGadget(A2),A0	; Address of Filter Fast Gadget.
+ADDFG8	BSR	LUT_SetHiLite		; HiLite The Gadget.
+*
+*	Set Cycle / SMF Mode.
+*
+ADDFG9	MOVE.B	LUT_DisplayMode(A4),D0	; Get The Display Modes.
+	ANDI.W	#LUTM_CYCLE,D0		; Leave Only Color Cycling.
+	BEQ.S	ADDFGB			; Jump If In Off Position.
+	LEA.L	LUT_CycleArrowFG,A0	; Address of Fast Gadget.
+	BSR	LUT_SetHiLite		; HiLite The Gadget.
+	MOVE.L	LUT_AROWTB(PC,D0.W),FG_Data(A0) ; Set Image.
+	MOVE.B	LUT_DisplayMode(A4),D0	; Now Set The SMF Data.
+	ANDI.W	#LUTM_SMF,D0		; Remove Other Bits.
+ADDFGA	MOVEA.L	gg_NextGadget(A0),A0	; Go To Next Gadget.
+	DBF	D0,ADDFGA		; Loop Until Done.
+	BSR	LUT_SetHiLite		; HiLite The Gadget.
+*
+*	Draw The Boxes In The Window.
+*
+ADDFGB	MOVEQ.L	#BOXTLN-1,D4		; Loop Counter.
+	LEA.L	BOXTAB(PC),A2		; Address of Table.
+ADDFGC	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	(A2)+,D0		; x Coordinate.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	(A2)+,D1		; y Coordinate.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	(A2)+,D2		; Width.
+	MOVEQ.L	#0,D3			; Clear High Bits.
+	MOVE.W	(A2)+,D3		; Height.
+	CALLTL	DrawBorderBox		; Draw The Box On The Screen.
+	DBF	D4,ADDFGC		; Loop Until Done.
+*
+*	Draw All The Fast Gadgets In The Window.
+*
+	LEA.L	LUT_FirstFG,A0		; A0.L = Address of Quit Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#-1,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset Into Image.
+	CALLTL	DrawFastGList		; Draw Gadget On Screen.
+*
+*	Draw The String Gadget In The Window.
+*
+	LEA.L	LUT_REALSIG,A0		; A0.L = Address of Gadget.
+	CALLTL	RefreshFCString		; Write Text On Screen.
+*
+*	Draw The Numbers In The Window.
+*
+	BSR	LUT_PrintNumberText	; Write Text On Screen.
+ IFD TOASTER_3
+	BSR	LUT_MakeGridNumberText	; Make Ascii Text.
+	MOVEQ.L	#4-1,D0			; D0.L = Index to Print Number.
+ADDFGD	BSR	LUT_PrintGridNumber	; Write Number On Screen.
+	DBF	D0,ADDFGD		; Do All Of Them.
+ ENDC ;TOASTER_3
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D4/A0-A2	; Return Calling State.
+	RTS
+*
+*	Box Table.
+*
+BOXTAB:	DC.W	TBFG_LEFTEDGE+000,TBFG_TOPEDGE+031,508,066
+	DC.W	TBFG_LEFTEDGE+000,TBFG_TOPEDGE+101,508,180
+	DC.W	TBFG_LEFTEDGE+512,TBFG_TOPEDGE+031,128,066
+	DC.W	TBFG_LEFTEDGE+512,TBFG_TOPEDGE+101,128,088
+	DC.W	TBFG_LEFTEDGE+512,TBFG_TOPEDGE+193,128,088
+	DC.W	TBFG_LEFTEDGE+000,TBFG_TOPEDGE+283,336,124
+BOXTLN	EQU	(*-BOXTAB)/8
+*
+*	LUT Library Name.
+*
+	XDEF	LUT_NAME
+LUT_NAME: DC.B	'ChromaFX',0,0
+	PAGE
+*************************************************************************
+*									*
+*	IsGridCrouton:							*
+*									*
+*	Test To See If The Current Fast Gadget Is A Grid Crourton.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget To Be Checked.			*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Is A Grid Crouton.				*
+*	CC	!= Zero -> Is Not A Grid Crouton.			*
+*									*
+*	22.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_IsGridCrouton
+LUT_IsGridCrouton:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Check For Fast Gadget Carefully.
+*
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	ISGRD1			; Exit On NULL Pointer.
+	MOVE.L	FG_Function(A0),D0	; Get Pointer to Function.
+	BEQ.S	ISGRD1			; Exit If Nothing There.
+	MOVEA.L	D0,A0			; A0.L = Address of Function.
+	CMPI.L	#LSG_CheckConst,LSU_CheckVal-LSU_Sizeof(A0) ; Check Flag Value.
+	BNE.S	ISGRD2			; Exit If Flag Not There.
+	MOVE.L	LSU_RamPointer-LSU_Sizeof(A0),D0 ; Check For Byte Alignment.
+	BEQ.S	ISGRD1			; Exit On NULL Pointer.
+	ANDI.L	#LSG_RamANDMask,D0	; Low Bits Must Be 0.
+	BNE.S	ISGRD2			; Exit If Not.
+	MOVEA.L	LSU_RamPointer-LSU_Sizeof(A0),A0 ; Address of Source Buffer.
+	MOVE.W	LSG_GridNumber(A0),D0	; Get Current Grid Position.
+	BEQ.S	ISGRD1			; Fail On Zero.
+	CMPI.W	#4+1,D0			; Within Range.
+	BCC.S	ISGRD1			; Fail If > Upper Range.
+	MOVEQ.L	#0,D0			; Else It's Ok.
+	BRA.S	ISGRD2			; Exit Subroutine With Flags Set.
+ISGRD1	MOVEQ.L	#-1,D0			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+ISGRD2	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	IsLUTCrouton:							*
+*									*
+*	Test To See If The Current Fast Gadget Is A LUT Crouton.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget To Be Checked.			*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Is A LUT Crouton.				*
+*	CC	!= Zero -> Is Not A LUT Crouton.			*
+*									*
+*	22.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_IsLUTCrouton
+LUT_IsLUTCrouton:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	Check For Fast Gadget Carefully.
+*
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	ISLUT1			; Exit On NULL Pointer.
+	MOVE.L	FG_Function(A0),D0	; Get Pointer to Function.
+	BEQ.S	ISLUT1			; Exit If Nothing There.
+	MOVEA.L	D0,A0			; A0.L = Address of Function.
+	CMPI.L	#LSU_CheckConst,LSU_CheckVal-LSU_Sizeof(A0) ; Check Flag Value.
+	BNE.S	ISLUT2			; Exit If Flag Not There.
+	MOVE.L	LSU_RamPointer-LSU_Sizeof(A0),D0 ; Check For Byte Alignment.
+	BEQ.S	ISLUT1			; Exit On NULL Pointer.
+	ANDI.L	#LSU_RamANDMask,D0	; Low Bits Must Be 0.
+	BNE.S	ISLUT2			; Exit If Not.
+	MOVEA.L	LSU_RamPointer-LSU_Sizeof(A0),A0 ; Address of Source Buffer.
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A0) ; Is The Data Valid?
+	BRA.S	ISLUT2			; Exit Subroutine With Flags Set.
+ISLUT1	MOVEQ.L	#-1,D0			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+ISLUT2	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	GetCroutonData:							*
+*									*
+*	Reads The LUT Data Out Of the Current Crouton.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	If a LUT Crouton Was Selected, Data Is Read From The Crouton.	*
+*									*
+*	12.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GetCroutonData
+LUT_GetCroutonData:
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+*
+*	Get Pointer To Currently Selected Crouton.
+*
+	MOVEA.L	LTE_PresentLUT(A4),A0	; A0.L = Address of Source Buffer.
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	GETCR2			; Exit On NULL Pointer.
+*
+*	Copy Over The Data.
+*
+	MOVEA.L	A4,A1			; Address of Destination Buffer.
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A1) ; Is The Data Valid?
+	BNE.S	GETCR2			; Exit If Data Not Valid.
+	MOVE.W	#LUT_Sizeof/2-1,D0	; Loop Counter.
+GETCR1	MOVE.W	(A0)+,(A1)+		; Move The Data.
+	DBF	D0,GETCR1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+GETCR2	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PutCroutonData:							*
+*									*
+*	Writes The LUT Data Out To the Current Crouton.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	If a LUT Crouton Was Selected, Data Is Written To The Crouton.	*
+*									*
+*	12.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PutCroutonData
+LUT_PutCroutonData:
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+*
+*	Get Pointer To Currently Selected Crouton.
+*
+	MOVEA.L	LTE_PresentLUT(A4),A0	; A0.L = Address of Source Buffer.
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	PUTCR2			; Exit On NULL Pointer.
+*
+*	Copy Over The Data.
+*
+	MOVEA.L	A4,A1			; Address of Source Buffer.
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A1) ; Is The Data Valid?
+	BNE.S	PUTCR2			; Exit If Data Not Valid.
+	MOVE.W	#LUT_Sizeof/2-1,D0	; Loop Counter.
+PUTCR1	MOVE.W	(A1)+,(A0)+		; Move The Data.
+	DBF	D0,PUTCR1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+PUTCR2	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+*****************************************************************
+*								*
+*	PrintGridNumber:					*
+*								*
+*	Prints the Grid Number Text On The Screen.		*
+*								*
+*	Input:							*
+*								*
+*	D0.L	= Index to Number to Print.			*
+*								*
+*	Output:							*
+*								*
+*	The Indexed Number Text Is Written On The Screen.	*
+*								*
+*	15.May 1991 Jamie L. Finch.				*
+*								*
+*****************************************************************
+*
+ IFD TOASTER_3
+	XDEF	LUT_PrintGridNumber
+LUT_PrintGridNumber:
+	MOVEM.L	A0/D0-D1,-(A7)			; Save Calling State.
+	LSL.W	#2,D0				; Make Long Word Index.
+	MOVEA.L	LUT_GridNStrTb(PC,D0.W),A0	; A0.L = Address of Text.
+	MOVE.L	LUT_GridNXCoorTb(PC,D0.W),D0	; D0.L = x Position of Number.
+	MOVE.L	#TBFG_TOPEDGE+GRIDTEXT_Y,D1	; D1.L = y Position of Number.
+	BSR	LUT_PrintNumber			; Write Text On Screen.
+	MOVEM.L	(A7)+,A0/D0-D1			; Return Calling State.
+	RTS
+*
+*	Grid Number x Coordinate Table.
+*
+	XDEF	LUT_GridNXCoorTb
+LUT_GridNXCoorTb:
+	DC.L	TBFG_LEFTEDGE+GRIDTEXT_X1
+	DC.L	TBFG_LEFTEDGE+GRIDTEXT_X2
+	DC.L	TBFG_LEFTEDGE+GRIDTEXT_X3
+	DC.L	TBFG_LEFTEDGE+GRIDTEXT_X4
+*
+*	Grid Number String Table.
+*
+	XDEF	LUT_GridNStrTb
+LUT_GridNStrTb:
+	DC.L	LUT_GridNString1
+	DC.L	LUT_GridNString2
+	DC.L	LUT_GridNString3
+	DC.L	LUT_GridNString4
+ ENDC ;TOASTER_3
+
+	PAGE
+*************************************************************************
+*									*
+*	MakeGridNumberText:						*
+*									*
+*	Converts the Current Grid Crouton Number Assignment to Text.	*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Current Grid Number Croutons are Converted to Text Strings.	*
+*									*
+*	15.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+ IFD TOASTER_3
+	XDEF	LUT_MakeGridNumberText
+LUT_MakeGridNumberText:
+	MOVEM.L	D0-D3/A0-A2,-(A7)	; Save Calling State.
+*
+*	Get The Binary Value From Crouton.
+*
+	MOVEQ.L	#4-1,D3			; D3.L = Loop Counter.
+	LEA.L	LTE_GridCrouton(A4),A1	; A1.L = Address of Grid Crouton Array.
+	LEA.L	LUT_GridNStrTb(PC),A2	; A2.L = Address of Text Table.
+*
+*	Convert Binary Number to Ascii Text.
+*
+MKGNT1	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A1)+,D0		; D0.L = Value of Grid Assignment.
+	MOVEA.L	(A2)+,A0		; A0.L = Address of Text.
+	MOVEQ.L	#3,D1			; D1.L = Number of Bytes in Buffer.
+	MOVEQ.L	#'0',D2			; D2.L = High Pad Value.
+	BSR	RUBINTOASC		; Convert to Ascii Number.
+MKGNT2	DBF	D3,MKGNT1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D3/A0-A2	; Return Calling State.
+	RTS
+ ENDC ;TOASTER_3
+	PAGE
+*************************************************************************
+*									*
+*	RequestorRedrawScreen:						*
+*									*
+*	Redraws the LUT Edit Screen After a Requestor Is On the		*
+*	Screen.								*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	If Nessary the LUT Editor Screen is Redrawn.			*
+*									*
+*	28.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_RequestorRedrawScreen
+LUT_RequestorRedrawScreen:
+	MOVE.L	A4,-(A7)		; Save Calling State.
+*
+*	Get Address of LUT Base.
+*
+	LEA.L	LUT_Base,A4		; A4.L = Address of LUT Base.
+	BSR	LUT_Add_FGadgets	; Redraw The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEA.L	(A7)+,A4		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	GetTBarPosition:						*
+*									*
+*	Obtains the Current TBar Position, Based on Color Cycling.	*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Current TBar Position is Obtained and Moved to TB_TValSec.	*
+*									*
+*	29.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GetTBarPosition
+LUT_GetTBarPosition:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	If Color Cycling, Use First Position.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; Get Current Display Mode.
+	ANDI.W	#LUTM_CYCLE,D0		; Is It Color Cycling.
+	BEQ.S	GTBRP1			; Jump If Not Color Cycling.
+	MOVEQ.L	#0,D0			; Move To First Position.
+	BRA.S	GTBRP2			; Skip Else Part.
+GTBRP1	MOVE.W	LUT_LocalTBar(A4),D0	; Not Color Cycling, Get Current Pos.
+GTBRP2	MOVE.W	D0,TB_TValSec(A5)	; Save Current Position.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PutTBarPosition:						*
+*									*
+*	Saves the Current TBar Position, Based on Color Cycling.	*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Current TBar Position is Obtained and Moved to TB_TValSec.	*
+*									*
+*	29.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PutTBarPosition
+LUT_PutTBarPosition:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	If Color Cycling, Use First Position.
+*
+	MOVE.B	LUT_DisplayMode(A4),D0	; Put Current Display Mode.
+	ANDI.W	#LUTM_CYCLE,D0		; Is It Color Cycling.
+	BNE.S	PTBRP1			; Jump If Color Cycling.
+	MOVE.W	TB_TValSec(A5),LUT_LocalTBar(A4) ; Get the Position.
+*
+*	Exit Subroutine.
+*
+PTBRP1	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	END
+@
+
+
+2.11
+log
+@Fixed bug where lut wasn't getting EffectsBase
+@
+text
+@d7 1
+a7 1
+* $Id: lut0.a,v 2.10 1994/10/03 12:05:38 pfrench Exp pfrench $
+d10 3
+d55 6
+d605 4
+@
+
+
+2.10
+log
+@Removed crouton rendering code.
+@
+text
+@d5 1
+a5 1
+* Confidental and Proprietary. All rights reserved. 
+d7 1
+a7 1
+* $Id: lut0.a,v 2.9 1993/11/06 08:37:24 Kell Exp pfrench $
+d10 3
+d618 1
+a618 1
+DUMCO2	MOVEA.L	D1,A4			; A4.L = Address of Effects Base.
+d623 1
+a623 1
+	movea.l	0(a0,d0.w),a0		; A0.L = Address of Function.	
+@
+
+
+2.9
+log
+@Fixed for EF_EffectsLogic being removed from within EFXBase.
+@
+text
+@d7 1
+a7 1
+* $Id: lut0.a,v 2.8 93/05/05 10:30:19 Finch2 Exp Locker: Kell $
+d9 4
+a12 1
+* $Log:	lut0.a,v $
+d863 1
+d868 1
+d1090 1
+d1119 2
+d1140 1
+d1165 1
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@Binary files lut0.a and t:,RCSt1A78b8e78 differ
+@
+
+
+2.7
+log
+@Moved The Background Box Positions.
+@
+text
+@Binary files LUT0.a and t:,RCSt1A786ea98 differ
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT0.a and t:,RCSt1A786eaa8 differ
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT0.a and t:,RCSt1A786eae8 differ
+@
+
+
+2.4
+log
+@Removed EffectData dc.l 0.  ProcessEffect doesn't need it if A2 is null.
+@
+text
+@Binary files LUT0.a and t:,RCSt1A787cf70 differ
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@Binary files lut0.a and t:,RCSt1A78a44c0 differ
+@
+
+
+2.2
+log
+@Started Work On RGB Interface
+@
+text
+@Binary files LUT0.a and t:,RCSt1A786ea90 differ
+@
+
+
+2.1
+log
+@Demo For Steve
+
+@
+text
+@Binary files LUT0.a and t:,RCSt1A02997f0 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT0.a and t:,RCSt1A028ba48 differ
+@

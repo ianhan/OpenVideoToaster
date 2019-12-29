@@ -1,0 +1,4378 @@
+head	2.23;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.23
+date	94.07.27.19.25.01;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.07.15.22.02.29;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.03.19.01.16.05;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	93.11.12.16.02.40;	author Turcotte;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	93.05.05.00.17.39;	author Turcotte;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	93.04.16.04.04.49;	author Turcotte;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	93.03.31.23.43.05;	author Turcotte;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	93.03.19.21.55.14;	author Turcotte;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	93.03.11.21.36.49;	author Turcotte;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	93.03.10.05.35.29;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	93.03.10.00.04.07;	author Turcotte;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	93.03.06.02.59.49;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	93.03.06.01.01.15;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.03.06.00.56.13;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.02.28.20.35.03;	author Turcotte;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.02.28.02.31.52;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.02.27.21.05.09;	author Turcotte;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	93.02.24.01.05.25;	author Turcotte;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	93.02.13.05.46.27;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	92.12.17.17.50.23;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	92.09.24.16.01.44;	author Turcotte;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	92.09.18.03.40.07;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.09.12.02.07.10;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.21.06.26;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.23
+log
+@*** empty log message ***
+@
+text
+@*********************************************************************
+* softsprite.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: softsprite.a,v 2.22 1994/07/15 22:02:29 Kell Exp Kell $
+*
+* $Log: softsprite.a,v $
+*Revision 2.22  1994/07/15  22:02:29  Kell
+*Put in comments thats show setfunctioned function parameters.
+*
+*Revision 2.21  94/03/19  01:16:05  Kell
+**** empty log message ***
+*
+*Revision 2.20  93/11/12  16:02:40  Turcotte
+**** empty log message ***
+*
+*Revision 2.19  93/05/05  00:17:39  Turcotte
+**** empty log message ***
+*
+*Revision 2.18  93/04/16  04:04:49  Turcotte
+**** empty log message ***
+*
+*Revision 2.17  93/03/31  23:43:05  Turcotte
+*More patches for the softsprite
+*
+*Revision 2.15  93/03/11  21:36:49  Turcotte
+*Fixed problem with negative mouse position when screen was moved by hot key.
+*
+*Revision 2.14  93/03/10  05:35:29  Kell
+**** empty log message ***
+*
+*Revision 2.13  93/03/10  00:04:07  Turcotte
+*Change so sprite moves to bottom of screen.
+*
+*Revision 2.12  93/03/06  02:59:49  Kell
+*Now avoids infinit loop in SoftSpriteOff waiting for Audio Interrupt
+*when Interrupts have been turned off.
+*
+*Revision 2.11  93/03/06  01:01:15  Kell
+**** empty log message ***
+*
+*Revision 2.9  93/02/28  20:35:03  Turcotte
+*Fixed Bug with trashed D2 in BltBitMap patch
+*Fixed Bug with trashed A2 in BltBitMap patch
+*
+*Revision 2.8  93/02/28  02:31:52  Kell
+**** empty log message ***
+*
+*Revision 2.7  93/02/27  21:05:09  Turcotte
+*More softspriet mods
+*
+*Revision 2.6  93/02/24  01:05:25  Turcotte
+*Changed SoftSprite to work with any screnn.
+*screen
+*
+*Revision 2.5  93/02/13  05:46:27  Kell
+*Fixed enforcer hits when doing CloseSoftSprite at Switcher exit.
+*By changing AllInterruptsOff to DisableInterrupts, etc.
+*
+*Revision 2.4  92/12/17  17:50:23  Kell
+*BPLCON0 hacks for A2000/4000
+*
+*Revision 2.3  92/09/24  16:01:44  Turcotte
+*Added graphics.library patches.  Removed old wait pointer image.
+*
+*Revision 2.2  92/09/18  03:40:07  Kell
+*Now only renders on 2 planes, for the 2 field user interface.
+*
+*Revision 2.1  92/09/12  02:07:10  Kell
+*Replaced Disable & Enable Calls.
+*
+*Revision 2.0  92/05/18  21:06:26  Hartford
+**** empty log message ***
+*
+*********************************************************************
+*+*******
+*+
+*+ SoftSprite
+*+
+*+ This file contains the SoftSprite interrupt handler and ToasterBase
+*+ library routines for managing the SoftSprite system.
+*+
+*+*******
+
+*====	Needed include file and constants.
+ 
+	INCLUDE	'assembler.i'
+	INCLUDE	'intuition/intuition.i'
+	INCLUDE	'exec/execbase.i'
+	INCLUDE	'exec/memory.i'
+	INCLUDE	'hardware/custom.i'
+	INCLUDE	'devices/audio.i'
+	INCLUDE	'instinct.i'
+
+	INCLUDE	"lib/exec_lib.i"
+	INCLUDE	"lib/graphics_lib.i"
+	INCLUDE "serialdebug.i"
+	INCLUDE	"vtdebug.i"
+
+	XREF	_ToasterBase
+
+;;SERDEBUG	set	1
+
+
+;;$$
+;;	INCLUDE	'extras/serialdebug_lib.i'
+;;	XREF	SDBBase
+;;$$
+
+WAIT_POINTER	SET	1
+
+*====	Start of executably code.
+
+	SECTION	SoftSpriteCode,CODE
+
+*+*******
+*+
+*+ SoftSpriteVBServer
+*+
+*+ This code comprises the vertical blanking interrupt server for
+*+ implementing a Software Sprite. This is currently done using Audio
+*+ channels 0/1 in a direct processor Interrupt 4 vector handler.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteVBServer
+_SoftSpriteVBServer:
+
+	ENDC
+
+	XDEF	SoftSpriteVBServer
+SoftSpriteVBServer:	; entry: assume nothing setup
+
+*----	test to see where the interrupt originated - Addendum 12/17/90:
+
+	SAVE1	d0
+
+	move.w	CHIPBASE+intenar,d0
+	btst.l	#14,d0
+	bne.s	.IntsEnabled
+
+	REST1	d0
+	rte
+
+.IntsEnabled:
+	move.w	CHIPBASE+intreqr,d0
+	and.w	#$0780,d0
+	and.w	#$0180,d0		; our interrupt? (channels 0/1)
+	bne.s	.DoSoftSprite		; ...if so
+
+	move.l	(sp),d0				; else chain into EXEC
+	move.l	_ToasterBase+TB_Int4Vector,(sp)
+	rts
+
+.DoSoftSprite:
+	REST1	d0
+
+*----	reset Paula bits for Audio channels 0/1 interrupt
+
+	move.w	#$0180,CHIPBASE+intreq
+
+*----	get current video beam vertical position and assure proper synch
+
+	SAVE1	a6
+	move.w	CHIPBASE+vhposr,a6
+	cmp.w	#VBEAMSYNCH<<8,a6
+	bcc.s	1$
+
+	SAVE	d0/d1/a0/a1
+	move.w	#VBEAMSYNCH,d0
+	CALL	SoftSpriteVSynch
+;;	move.w	#$0180,CHIPBASE+intreq	; insure interrupt doesn't recurse
+;;*					; because of possible lost frame
+	REST	d0/d1/a0/a1/a6
+	rte				; exit interrupt early if re-synch
+*					; was needed
+
+1$:
+
+
+*----	save all registers.
+	SAVE	d0-d6/a0-a5
+
+*----	shutdown/fiddle with bplcon0 to get more DMA, if OK
+
+	lea	_ToasterBase,a6
+	tst.w	TB_BPLCON0(a6)
+	beq.s	3$
+
+	move.w	TB_BPLCON0(a6),d0
+	or.w	TB_BPLCON0orBits(a6),d0
+	move.w	d0,CHIPBASE+bplcon0
+
+*----	Addendum 8/6/90: for Switcher GPI
+
+3$	XCALL	ProcessSwitcherGPI
+
+*----	address VertBlankInfo structure from ToasterBase
+	lea	TB_SoftSprite(a6),a1
+
+*----	cache some important parameters
+	movem.l	VBI_Offset(a1),d0/a0		; D0 - offset in bitmap
+*						; A0 - screen pointer
+
+*----	determine mode - SoftSprite enabled or disabled
+	tst.w	VBI_OnOff(a1)		; SoftSprite requested to shut down?
+	beq.s	SpriteIsOn		; nope - skip to normal code
+
+*----	perform this code if we are to shut off the SoftSprite:
+*----	restore old background - if needed
+	move.l	d0,d0			; a background to restore?
+	bmi.s	9$			; nope - skip out from here
+;	moveq	#32-1,d1			; loop counter for height
+	move.w	VBI_PointerHeight(a1),d1	;now is variable
+	beq.s	999$
+	subq.w	#1,d1
+
+
+	movem.l	sc_BitMap+bm_Planes(a0),a2-a4	; get planes to restore into
+
+	lea	BackGroundSave(pc),a6		; old background to restore
+	add.l	d0,a2				; add correcting offset
+	add.l	d0,a3
+	add.l	d0,a4
+
+	cmp.b	#2,sc_BitMap+bm_Depth(a0)
+	bne.s	77$				;Go do 3 bitplane restore
+
+*****************************************************************************
+*	This is where we handle a Two bitplane interface.
+
+7$:	move.l	(a6)+,(a2)		; do line of plane 1,
+	move.l	(a6)+,(a3)		; plane 2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	dbf	d1,7$			; reloop till all lines done
+	bra.s	999$
+
+*****************************************************************************
+*	This is where we handle a three bitplane interface.
+
+77$:	move.l	(a6)+,(a2)		; do line of plane 1,
+	move.l	(a6)+,(a3)		; plane 2
+	move.l	(a6)+,(a4)		; plane 3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a4
+	dbf	d1,77$			; reloop till all lines done
+
+*****************************************************************************
+*	
+999$
+*----	insure that SoftSprite re-appears when turned back on
+	move.l	#$7FFF7FFF,VBI_MouseY(a1)	; invalidate the mouse coords
+
+*----	flag SoftSprite completely disabled
+	move.l	#-1,VBI_Offset(a1)	; denote background restored
+*					; and that the SoftSprite is off
+9$:
+	REST	d0-d6/a0-a6			; restore work registers
+	rte					; end server
+
+
+
+
+*----	normal code performed when SoftSprite enabled:
+*----	check and process mouse movement as needed
+SpriteIsOn
+	addq.w	#1,VBI_Count(a1)	; increment tick clock
+
+	move.l	sc_MouseY(a0),d2	; current mouse coords from screen
+	swap	d2		; mouse Y postion
+	move.w	sc_BitMap+bm_Rows(a0),d3
+	tst.w	d2
+	bmi.s	902$			;if neg put mouse at bottom of screen
+	cmp.w	d3,d2
+	blt.s	900$
+902$	move.w	d3,d2
+	subq.w	#1,d2			; Adjusted mouse Y Position
+900$	sub.w	d2,d3
+	cmp.w	#32,d3
+	blt.s	901$
+	moveq.l	#32,d3
+901$					;D3 is now height of pointer
+
+12$:
+	swap	d2
+;	cmp.w	#DISPLAYWIDTH-32,d2	; is rodent going off the right edge?
+	move.w	sc_BitMap+bm_BytesPerRow(a0),d1
+	lsl.w	#3,d1
+	sub.w	#32,d1
+	cmp.w	d1,d2
+	bls.s	15$			; if not - skip on
+;	move.w	#DISPLAYWIDTH-32,d2	; else limit the X movement
+	move.w	d1,d2
+15$:
+	cmp.l	VBI_MouseY(a1),d2	; has the mouse moved?
+	beq	99$			; if not - skip out - nothing to do
+	move.l	d2,VBI_MouseY(a1)	; else save new mouse coords
+
+*----	restore old background - if needed
+	move.l	d0,d0			; a background to restore?
+	bmi.s	19$			; nope - skip out from here
+;	moveq	#32-1,d1			; loop counter for height
+	move.w	VBI_PointerHeight(a1),d1	;now is variable
+	subq.w	#1,d1
+	bmi.s	19$
+
+*****************************************************************************
+*	Restore Old image 
+
+* HACKED TO PREVENT RENDERING TO THE UPPER OF 4 PLANES.  SKELL 9/18/92
+;;	movem.l	sc_BitMap+bm_Planes(a0),a2-a5	; get planes to restore into
+	movem.l	sc_BitMap+bm_Planes(a0),a2-a4	; get planes to restore into
+
+	lea	BackGroundSave(pc),a6		; old background to restore
+	add.l	d0,a2				; add correcting offset
+	add.l	d0,a3
+	add.l	d0,a4
+
+	cmp.b	#2,sc_BitMap+bm_Depth(a0)
+	bne.s	177$				;Go do 3 bitplane restore
+
+*****************************************************************************
+*	If screen is 2 bitplanes
+
+17$:
+	move.l	(a6)+,(a2)		; do line of plane 1,
+	move.l	(a6)+,(a3)		; plane 2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	dbf	d1,17$			; reloop till all lines done
+	bra.s	444$
+
+*****************************************************************************
+*	If screen is 3 bitplanes
+177$:
+	move.l	(a6)+,(a2)		; do line of plane 1,
+	move.l	(a6)+,(a3)		; plane 2
+	move.l	(a6)+,(a4)		; plane 3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a4
+	dbf	d1,177$			; reloop till all lines done
+
+444$
+
+*----	determine mask/image to use based on modulus 16 of X pixel position
+19$:
+	moveq	#15,d1			; determine from X what pointer
+	and.w	d2,d1			; masks/images we'll need - point to
+	lsl.w	#8,d1			; them with A2
+	move.l	PointerMasks(pc),a2
+	lea	0(a2,d1.w),a2
+
+*----	get new offset into screen bitmap where new pointer is to go
+	move.w	d2,d1			; get offset into screen bitmap
+	swap	d2			; needed for new mouse pointer in D2
+;;;	mulu	#DISPLAYWIDTH/8,d2
+	mulu.w	sc_BitMap+bm_BytesPerRow(a0),d2
+	lsr.w	#4,d1			; form X into bytes - assure word
+	add.w	d1,d1			; alignment!!
+	add.l	d1,d2
+	move.l	d2,VBI_Offset(a1)	; save new screen bitmap offset
+
+*----	do it all here - save background while placing new SoftSprite
+
+
+	move.w	d3,d0
+	move.w	d0,VBI_PointerHeight(a1)
+	subq.w	#1,d0
+;	moveq	#32-1,d0			; loop counter for 32 lines
+
+	lea	128(a2),a1			; pointers to mask data
+
+* HACKED TO PREVENT RENDERING TO THE UPPER OF 4 PLANES.  SKELL 9/18/92
+;;	movem.l	sc_BitMap+bm_Planes(a0),a3-a6	; bitmap plane pointers
+	movem.l	sc_BitMap+bm_Planes(a0),a3-a4/a6 ; bitmap plane pointers
+
+	lea	BackGroundSave(pc),a5		; background image save area
+	add.l	d2,a3			; offset plane pointer 1
+	add.l	d2,a4			; offset plane pointer 2
+	add.l	d2,a6			; offset plane pointer 3
+
+
+	cmp.b	#2,sc_BitMap+bm_Depth(a0)
+	bne.s	21$				;Go do 3 bitplane restore
+
+*****************************************************************************
+*	If screen is 2 bitplanes
+
+20$:
+	move.l	(a3),d1			; line of data from plane 1,
+	move.l	(a4),d2			; plane 2
+	move.l	d1,(a5)+		; save them as new background image
+	move.l	d2,(a5)+
+	move.l	(a1)+,d5		; get AND mask data
+	move.l	(a2)+,d6		; get OR mask data
+	and.l	d5,d1			; AND line of data from plane 1,
+	and.l	d5,d2			; plane 2,
+	or.l	d6,d1			; OR line of data from plane 1,
+	or.l	d6,d2			; plane 2,
+	move.l	d1,(a3)			; save new line of data into plane 1,
+	move.l	d2,(a4)			; plane 2
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a4
+	dbf	d0,20$			; reloop till all lines done
+	bra.s	99$
+
+*****************************************************************************
+*	If screen is 3 bitplanes
+
+21$:
+	move.l	(a3),d1			; line of data from plane 1,
+	move.l	(a4),d2			; plane 2
+	move.l	(a6),d3			; plane 3
+	move.l	d1,(a5)+		; save them as new background image
+	move.l	d2,(a5)+
+	move.l	d3,(a5)+
+	move.l	(a1)+,d5		; get AND mask data
+	move.l	(a2)+,d6		; get OR mask data
+	and.l	d5,d1			; AND line of data from plane 1,
+	and.l	d5,d2			; plane 2,
+	and.l	d5,d3			; plane 2,
+	or.l	d6,d1			; OR line of data from plane 1,
+	or.l	d6,d2			; plane 2,
+	move.l	d1,(a3)			; save new line of data into plane 1,
+	move.l	d2,(a4)			; plane 2
+	move.l	d3,(a6)			; plane 3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a3
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a4
+	add.w	sc_BitMap+bm_BytesPerRow(a0),a6
+	dbf	d0,21$			; reloop till all lines done
+
+
+*****************************************************************************
+*	SoftSprite render is complete
+99$:
+	REST	d0-d6/a0-a6			; restore work registers
+	rte					; end server
+
+*+*******
+*+
+*+ SoftSpriteOff
+*+
+*+ This function turns the SoftSprite off so that you can render into the
+*+ bitmap without fear of the SoftSprite causing little messes in your
+*+ display.
+*+
+*+ void SoftSpriteOff();
+*+
+*+ Notes:
+*+   To use this function properly in a multitasking environment and/or while
+*+   rendering into the screen bitmap, you should adhere to the following
+*+   outline:
+*+
+*+   Forbid();
+*+   SoftSpriteOff();
+*+   <Do and finish ALL rendering here>
+*+   SoftSpriteOn();
+*+   Permit();
+*+
+*+   The following outline is acceptable also:
+*+
+*+   Forbid();
+*+   SoftSpriteOff();
+*+   Permit();
+*+   <Do and finish ALL rendering here>
+*+   Forbid();
+*+   SoftSpriteOn();
+*+   Permit();
+*+
+*+   This function basically sets the VBI_OnOff field of the VertBlankInfo
+*+   structure to -1, and then busy waits until the VBI_Offset field becomes
+*+   -1. At this point the SoftSprite is indeed disabled and the function
+*+   will return to your code. I can already hear some snears from hard-core
+*+   multitasking know-it-alls, but the SoftSprite vertical blank server will
+*+   pick up on this with a worst case of 1/60th of a second. Besides it's
+*+   simple and isn't invoked that often. Trashes only the condition codes.
+*+   Also this function can work even if the SoftSprite VB server is not
+*+   running or not yet installed if the VBI_Offset field is -1. When
+*+   initializing the VertBlankInfo structure for use, the VBI_Offset field
+*+   should always be set to -1.
+*+
+*+   A5 needs to be pointing to ToasterBase when this function is entered
+*+   in order to gain access to the VertBlankInfo structure within the
+*+   ToasterBase (TB_SoftSprite). When using this function, note that it
+*+   effects only the interface/switcher screen display memory (VBI_Screen).
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteOff
+_SoftSpriteOff:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	SoftSpriteOff
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	SoftSpriteOff
+SoftSpriteOff:
+	addq.w	#1,TB_SoftSprite+VBI_Nest(a5)	; increment SoftSprite
+*						; disabled count
+	bne	20$				; if already off - skip on
+
+;;	DUMPMSG	<SOFTSPRITE OFF>
+
+	move.w	#-1,TB_SoftSprite+VBI_OnOff(a5)	; else request that the
+
+	move.w	d0,-(sp)
+	move.w	CHIPBASE+intenar,d0
+	andi.w	#$180,d0		;AUD0/1 interrupts on?
+	beq.s	15$	;DON'T WAIT FOR INTERRUPT IF INTERRUPT TURNED OFF!!!!
+* If it is turned off, the pointer won't be erased, so it might be a problem,
+* but there would be a problem anyway.  The real problem should be fixed.
+
+*						; SoftSprite be disabled
+10$:
+	tst.l	TB_SoftSprite+VBI_Offset(a5)	; wait till background is
+*						; restored before continuing
+	bpl.s	10$
+	
+15$:	move.w	(sp)+,d0
+20$	rts				; 'tis now safe to return to caller
+
+
+******* SoftSpriteOnScreen **************************************************
+*
+*   NAME   
+*	SoftSpriteOnScreen -- Turns on soft sprite
+*
+*   SYNOPSIS
+*	SoftSpriteOnScreen(screen)
+*	                     a0
+*   FUNCTION
+*	Same as SoftSpriteOn but does allows softsprite to appear on any
+*	screen
+*
+*   INPUTS
+*	Screen     - Screen that you want sprite on.
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+
+*+*******
+*+
+*+ SoftSpriteOn
+*+
+*+ This function enables the SoftSprite to shown.
+*+
+*+ void SoftSpriteOn();
+*+
+*+ Notes:
+*+   To use this function properly in a multitasking environment and/or while
+*+   rendering into the screen bitmap, you should adhere to the following
+*+   outline:
+*+
+*+   Forbid();
+*+   SoftSpriteOff();
+*+   <Do and finish ALL rendering here>
+*+   SoftSpriteOn();
+*+   Permit();
+*+
+*+   The following outline is acceptable also:
+*+
+*+   Forbid();
+*+   SoftSpriteOff();
+*+   Permit();
+*+   <Do and finish ALL rendering here>
+*+   Forbid();
+*+   SoftSpriteOn();
+*+   Permit();
+*+
+*+   This function basically clears the VBI_OnOff field of the VertBlankInfo
+*+   structure to 0. Trashes only the condition codes.
+*+   Also this function can work even if the SoftSprite VB server is not
+*+   running or not yet installed if the VBI_Offset field is -1. When
+*+   initializing the VertBlankInfo structure for use, the VBI_Offset field
+*+   should always be set to -1.
+*+
+*+   A5 needs to be pointing to ToasterBase when this function is entered
+*+   in order to gain access to the VertBlankInfo structure within the
+*+   ToasterBase (TB_SoftSprite). When using this function, note that it
+*+   effects only the interface/switcher screen display memory (VBI_Screen).
+*+
+*+ Addendum 8/21/90:
+*+   Added code to clear the Switcher IDCMP port of all messages except types
+*+   of DISKINSERTED/DISKREMOVED whenever the SoftSprite was to be enabled
+*+   again. The motivation behind this cleanup was to not allow the user to
+*+   continue gathering input, inadvertently or not, during a time when the
+*+   system was to appear busy. There was also a danger that certain FG
+*+   functions that must have a strict sequence of code entrance/exit before
+*+   another code entrance might actaully be entered 2 or more times in a row
+*+   without a matching exit. This aforementioned problem did occur on the
+*+   Switcher interface with some of the slice FGs.
+*+ Addendum 10/29/90:
+*+   Reduced IDCMP filtering to allow RAWKEYs and VANILLAKEYs to pass thru.
+*+
+*+*******
+
+	XDEF	SoftSpriteOn
+SoftSpriteOn:
+	movem.l	a0,-(sp)
+	move.l	TB_Screen(a5),a0
+	bsr	SoftSpriteOnScreen
+	movem.l	(sp)+,a0
+	rts
+
+	xdef	SoftSpriteOnScreen
+SoftSpriteOnScreen:
+	move.l	a0,TB_SoftSprite+VBI_Screen(a5)
+
+	subq.w	#1,TB_SoftSprite+VBI_Nest(a5)	; decrement SoftSprite
+*						; disabled count
+	bpl.s	10$				; if still disabled - skip on
+
+;;	DUMPMSG	<SOFTSPRITE ON>
+
+	clr.w	TB_SoftSprite+VBI_OnOff(a5)	; else denote SoftSprite
+*						; is enabled
+
+
+10$:
+	rts				; return to caller
+
+	XDEF	ClearWindowIDCMP
+ClearWindowIDCMP:
+	SAVE	d0-d2/a0-a2/a6		; save work registers
+	GET.l	TB_MsgPort,a2		; get Switcher IDCMP port
+
+	GET.l	TB_SYSBase,a6			; get exec base
+	move.l	MP_MSGLIST(a2),a2		; address messages - if any
+_TEMP_	SET	RAWKEY+VANILLAKEY+DISKINSERTED+DISKREMOVED
+	move.l	#_TEMP_,d2			; mask of IDCMP classes
+*						; that we are to keep
+
+	CALLROM	Forbid
+
+.Loop:
+	move.l	LN_SUCC(a2),d0		; are we at the end of the list?
+	beq.s	.ExitLoop		; if so - skip out
+
+	move.l	im_Class(a2),d1		; else determine if we keep this
+	and.l	d2,d1			; IDCMP message or not
+	bne.s	.KeepIt			; if we keep it - jump on
+
+	move.l	a2,a1			; else unlink this IDCMP message
+	move.l	LN_PRED(a2),a0		; and "lose it"
+	move.l	d0,a2
+	move.l	a2,LN_SUCC(a0)
+	move.l	a0,LN_PRED(a2)
+	pea	.Loop(pc)
+	JUMPROM	ReplyMsg
+
+.KeepIt:
+	move.l	d0,a2			; address next possible IDCMP msg
+	bra.s	.Loop			; and reloop
+
+.ExitLoop:
+	CALLROM	Permit
+
+	REST	d0-d2/a0-a2/a6		; restore work registers
+	rts
+
+*+*******
+*+
+*+ ForceSoftSpriteOn
+*+
+*+ This function bypasses the SoftSprite nest counter and forces the
+*+ SoftSprite to be turned on.
+*+
+*+ void ForceSoftSpriteOn();
+*+
+*+ This function is DANGEROUS and should not be used if the conventional
+*+ system can be made usable. This function may not even work if part of the
+*+ of the SoftSpriteOff nesting was due to
+*+ SoftSpriteBPLCON0Off()/SoftSpriteAudioOff() not to mention messing up
+*+ the nesting count of those respective systems. Those caveats aside, if
+*+ you are on sure ground that only SoftSpriteOff()s have been nested when
+*+ making this call, this call will force the SoftSprite on. This function
+*+ trashes only the condition codes and requires a pointer to ToasterBase
+*+ in A5.
+*+
+*+ Addendum 10/29/90:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_ForceSoftSpriteOn
+_ForceSoftSpriteOn:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	ForceSoftSpriteOn
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	ForceSoftSpriteOn
+ForceSoftSpriteOn:
+	clr.w	TB_SoftSprite+VBI_Nest(a5)	; remove the nest count
+	bra	SoftSpriteOn			; and turn the SoftSprite on
+
+*+*******
+*+
+*+ SoftSpriteBPLCON0Off
+*+
+*+ This function turns off the SoftSprite then redirects the SoftSprite
+*+ interrupt vector to a very efficient minimul handler that only refreshes
+*+ the audio synch.
+*+
+*+ void SoftSpriteBPLCON0Off();
+*+
+*+ Notes:
+*+   A5 needs to be pointing to ToasterBase when this function is entered.
+*+   Also see the documentation for SoftSpriteOff().
+*+
+*+ Addendum 10/30/89:
+*+
+*+ Addendum 12/17/90:
+*+   Added the capability to chain back into EXEC for interrupts caused by
+*+   audio channels other than 0/1.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteBPLCON0Off
+_SoftSpriteBPLCON0Off:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	SoftSpriteBPLCON0Off
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	SoftSpriteBPLCON0Off
+SoftSpriteBPLCON0Off:
+	tst.l	TB_Int4Vector(a5)		; SoftSprite sys installed?
+	beq.s	.ExitQ				; if not - skip all this
+
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+	GET.l	TB_SYSBase,a6			; assure data integrity
+	CALLROM	Forbid
+
+	addq.w	#1,TB_BPLCON0Nest(a5)		; increment nest counter
+	bne.s	.Exit				; if already off - skip on
+
+	CALL	SoftSpriteOff			; else first assure
+*						; SoftSprite is off
+
+	GET.l	TB_Int4Address,a0		; get autovector where
+*						; SoftSprite interrupt
+*						; handler is installed
+	lea	.MinimulHandler(pc),a1		; address minimul interrupt
+*						; handler
+	move.l	a1,(a0)				; and install it
+
+.Exit:
+	CALLROM	Permit
+	movem.l	(sp)+,d0-d1/a0-a1/a6
+
+.ExitQ:
+	rts
+
+.MinimulHandler:
+
+*----	reset Paula bits for Audio channels 0/1 interrupt - should run
+*----	quickly enough to avoid fatal supervisor stack nesting
+
+	SAVE1	d0
+	move.w	CHIPBASE+intreqr,d0
+	and.w	#$0780,d0
+	and.w	#$0180,d0		; our interrupt? (channels 0/1)
+	bne.s	.DoSoftSprite		; ...if so
+
+	move.l	(sp),d0				; else chain into EXEC
+	move.l	_ToasterBase+TB_Int4Vector,(sp)
+	rts
+
+.DoSoftSprite:
+	REST1	d0
+	move.w	#$0180,CHIPBASE+intreq
+	rte
+
+*+*******
+*+
+*+ SoftSpriteBPLCON0On
+*+
+*+ This function redirects the SoftSprite interrupt vector back to the
+*+ SoftSprite interrupt handler and then turns the SoftSprite on.
+*+
+*+ void SoftSpriteBPLCON0On();
+*+
+*+ Notes:
+*+   A5 needs to be pointing to ToasterBase when this function is entered.
+*+   Also see the documentation for SoftSpriteOn().
+*+
+*+ Addendum 10/30/89:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteBPLCON0On
+_SoftSpriteBPLCON0On:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	SoftSpriteBPLCON0On
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	SoftSpriteBPLCON0On
+SoftSpriteBPLCON0On:
+	tst.l	TB_Int4Vector(a5)		; SoftSprite sys installed?
+	beq.s	.ExitQ				; if not - skip all this
+
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+	GET.l	TB_SYSBase,a6			; assure data integrity
+	CALLROM	Forbid
+
+	subq.w	#1,TB_BPLCON0Nest(a5)		; decrement nest counter
+	bpl.s	.Exit				; if still off - skip on
+
+	GET.l	TB_Int4Address,a0		; get autovector where
+*						; minimul interrupt
+*						; handler is installed
+	lea	SoftSpriteVBServer(pc),a1	; address SoftSprite
+*						; interrupt handler
+	move.l	a1,(a0)				; and install it
+
+	CALL	SoftSpriteOn			; then turn on SoftSprite
+
+.Exit:
+	CALLROM	Permit
+	movem.l	(sp)+,d0-d1/a0-a1/a6
+
+.ExitQ:
+	rts
+
+*+*******
+*+
+*+ SoftSpriteAudioOff
+*+
+*+ This function first turns off the SoftSprite then disables all audio
+*+ channel interrupts and DMA, which drive the SoftSprite interrupt handler.
+*+
+*+ void SoftSpriteAudioOff();
+*+
+*+ Notes:
+*+   A5 needs to be pointing to ToasterBase when this function is entered.
+*+   Also see the documentation for SoftSpriteOff() and SoftSpriteVSynch().
+*+
+*+ Addendum 10/31/89:
+*+
+*+ Addendum 12/17/90:
+*+   Allows audio channels 2/3 to travel through the code untouched.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteAudioOff
+_SoftSpriteAudioOff:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	SoftSpriteAudioOff
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	SoftSpriteAudioOff
+SoftSpriteAudioOff:
+	GET.l	TB_Int4Vector,d0		; SoftSprite sys installed?
+	beq.s	.ExitQ				; if not - skip all this
+
+	SAVE1	a6
+	GET.l	TB_SYSBase,a6
+	CALLROM	Forbid			; assure data integrity
+
+	addq.w	#1,TB_AudioNest(a5)	; increment nest count
+	bne.s	.Exit			; if already off - skip out
+
+	CALL	SoftSpriteOff		; assure SoftSprite off
+
+	move.w	#$0180,CHIPBASE+intena	; disable audio channel interrupts
+	move.w	#$0003,CHIPBASE+dmacon	l disable audio channel DMA
+
+.Exit:
+	CALLROM	Permit
+	REST1	a6
+
+.ExitQ:
+	rts
+
+******* SoftSpriteAudioOnScreen *********************************************
+*
+*   NAME   
+*	SoftSpriteAudioOnScreen -- Turns on soft sprite Audio and soft sprite
+*
+*   SYNOPSIS
+*	SoftSpriteAudioOnScreen(screen)
+*	                           a0
+*   FUNCTION
+*	Same as SoftSpriteAudioOn but does allows softsprite to appear on any
+*	screen
+*
+*   INPUTS
+*	Screen     - Screen that you want sprite on.
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+
+*+*******
+*+
+*+ SoftSpriteAudioOn
+*+
+*+ This function first enables all audio channel interrupts and DMA which
+*+ drives the SoftSprite interrupt handler, re-synchronizes the interrupt to
+*+ the desired display scan line, and then turns the SoftSprite back on.
+*+
+*+ void SoftSpriteAudioOn();
+*+
+*+ Notes:
+*+   A5 needs to be pointing to ToasterBase when this function is entered.
+*+   Also see the documentation for SoftSpriteOn() and SoftSpriteVSynch().
+*+
+*+ Addendum 10/31/89:
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteAudioOn
+_SoftSpriteAudioOn:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	SoftSpriteAudioOn
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	SoftSpriteAudioOn
+SoftSpriteAudioOn
+	movem.l	a0,-(sp)
+	move.l	TB_Screen(a5),a0
+	bsr	SoftSpriteAudioOnScreen
+	movem.l	(sp)+,a0
+	rts
+
+	XDEF	SoftSpriteAudioOnScreen
+
+SoftSpriteAudioOnScreen:
+	GET.l	TB_Int4Vector,d0		; SoftSprite sys installed?
+	beq.s	.ExitQ				; if not - skip all this
+
+	SAVE	a0/a6
+	GET.l	TB_SYSBase,a6
+	CALLROM	Forbid			; assure data integrity
+
+	subq.w	#1,TB_AudioNest(a5)	; decrement nest count
+	bpl.s	.Exit			; if still off - skip out
+
+	move.w	#VBEAMSYNCH,d0		; re-adjust the SoftSprite
+	CALL.s	SoftSpriteVSynch	; interrupt trigger and turn audio
+*					; DMA back on
+
+	move.l	(sp),a0			; screen
+	CALL	SoftSpriteOn		; assure SoftSprite on
+
+.Exit:
+	CALLROM	Permit
+	REST	a0/a6
+
+.ExitQ:
+	rts
+
+*+*******
+*+
+*+ CloseSoftSprite
+*+
+*+ This function shuts down the audio 0/1 channel SoftSprite. In addition to
+*+ this all resources allocated toward the SoftSprite are released back into
+*+ the system pool. This cleanup is not reflected in ToasterBase, however, so
+*+ this routine should only be called precluding a total shutdown of Toaster
+*+ program/system, and don't call it twice.
+*+
+*+ void CloseSoftSprite();
+*+
+*+ Note:
+*+   Returns nothing. Trashes D0,D1,A0,A1 and the condition codes. If the
+*+   ToasterBase structure shows that nothing has been allocated toward the
+*+   SoftSprite system (TB_Int4Vector = NULL), then this routine becomes a
+*+   NOP. At entry, this function assumes A5 points to ToasterBase. Because
+*+   of the fiddling of sensitive internals of the Video Toaster system,
+*+   this function should never be called by application. Leave it to the
+*+   controlling interface/switcher code. NEVER call this function twice!
+*+
+*+ Addendum 12/17/90:
+*+   Allows audio channels 2/3 to travel through the code untouched.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_CloseSoftSprite
+_CloseSoftSprite:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	CloseSoftSprite
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	CloseSoftSprite
+CloseSoftSprite:
+	GET.l	TB_Int4Vector,d0	; was the OpenSoftSprite() ever
+*					; called succesfully?
+	beq.s	99$			; if not - nothing to close down
+
+	SAVE1	a6			; save the work register
+
+	bsr	UnPatchGFX		;unpatch rendering functions to work
+					;with softsprite
+	GET.l	TB_SYSBase,a6		; disable interrupts
+
+;;	CALLROM	Disable
+	CALLTL	DisableInterrupts	;SKELL 2-12-93	
+
+	lea	CHIPBASE,a0
+	move.w	#$0003,dmacon(a0)	; turn off DMA for audio channels
+	move.w	#$0180,intena(a0)	; disable audio channel interrupts
+	move.w	#$0180,intreq(a0)	; insure no audio interrupts pending
+;;$$
+	move.l	AudioDev0(pc),IVAUD0+IV_CODE(a6)	; Addendum 12/18/90:
+	move.l	AudioDev1(pc),IVAUD1+IV_CODE(a6)	; restore execbase
+*							; audio 0/1 handlers
+;;$$
+	GET.l	TB_Int4Address,a0	; restore Exec's Int4 handler
+	GET.l	TB_Int4Vector,(a0)
+
+;;	CALLROM	Enable			; restore interrupts
+	CALLTL	EnableInterrupts	;SKELL 2-12-93	
+
+	lea	TheIOAudio(pc),a1	; close up the audio device - free
+	CALLROM	CloseDevice		; up all 4 of the audio channels
+
+	lea	TheIOAudio(pc),a0	; get rid of the message port in the
+	move.l	MN_REPLYPORT(a0),a0	; IOAudio structure
+	CALL	DeletePort
+
+	REST1	a6			; restore the work register
+99$:
+	rts				; and return to caller
+
+*+*******
+*+
+*+ SoftSpriteVSynch
+*+
+*+ This function sets audio channels 0/1 in synchronization with video beam
+*+ at the specified scan line.
+*+
+*+ void SoftSpriteVSynch( VBeamPosition, ToastBase );
+*+                         D0		   a5
+*+
+*+ LONG VBeamPosition:
+*+   Low unsigned 16 bits are used as the beam position audio channels 0/1
+*+   are to be synchronized to.
+*+
+*+ Notes:
+*+   The specified VBeamPosition must be in the range of 10-250. Values
+*+   specified outside of this range will be truncated to the min/max value
+*+   respectively. This function disables interrupts and all audio channels
+*+   while polling the video beam for synchup. All other audio channels
+*+   other than channels 0/1 are disabled both by DMA and by interrupt. Audio
+*+   channels 0/1 are fully re-initialized prior to synchup. Anything
+*+   previously written in the registers will be gone. Also all audio
+*+   channels are disabled from being used to modulate other audio channels.
+*+   Trashes D0,D1,A0,A1, and the condition codes.
+*+
+*+   Note that it can not
+*+   operate outside of the display setup by the interface/switcher code as
+*+   it assumes an interlaced display. It can be called by interrupt code.
+*+
+*+ Addendum 10/31/89:
+*+   This function should not be directly called by application code. Use
+*+   the SoftSpriteAudioOn/Off call to handle the complete enabling/disabling
+*+   of the SoftSprite.
+*+
+*+ Addendum 12/17/90:
+*+   Allows audio channels 2/3 to travel through the code untouched.
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_SoftSpriteVSynch
+_SoftSpriteVSynch:
+	move.l	4(sp),d0
+
+	ENDC
+
+	XDEF	SoftSpriteVSynch
+SoftSpriteVSynch:	; entry: VBeamPosition
+*                                 D0
+	SAVE	d2/a5-a6			; save work registers
+
+	XREF	_ToasterBase
+	lea	_ToasterBase,a5
+
+	move.w	d0,d2			; copy VBeamPosition
+	move.l	ABSSYSBASE,a6		; disable interrupts
+
+;;	CALLROM	Disable
+	CALLTL	AllInterruptsOff	;SKELL 9/11/92	
+
+	lsl.w	#8,d2			; form mask out of VBeamPosition
+	cmp.w	#VBEAMSYNCHMIN,d2	; insure the VBeamPosition is within
+	bcc.s	10$			; limits
+	move.w	#VBEAMSYNCHMIN,d2
+	bra.s	20$
+
+10$:
+	cmp.w	#VBEAMSYNCHMAX,d2
+	bls.s	20$
+	move.w	#VBEAMSYNCHMAX,d2
+
+20$:
+	lea	CHIPBASE,a0
+	move.w	#$0003,dmacon(a0)	; disable DMA to audio channels
+;;	move.w	#$0600,intena(a0)	; insure interrupts disabled for all
+	move.w	#$8180,intena(a0)	; audio channels except channels 0/1
+;;	move.w	#$00FF,adkcon(a0)		; no audio channels will be
+;;*						; used for modulating
+
+	lea	$1000,a1
+	move.l	a1,aud0+ac_ptr(a0)		; audio 0/1 pointer to data
+	move.l	a1,aud1+ac_ptr(a0)		; (anywhere in CHIP memory)
+
+	move.w	#SAMPLEPERIOD,d0
+	move.w	d0,aud0+ac_per(a0)		; audio 0 period
+	move.w	d0,aud1+ac_per(a0)		; audio 1 period
+
+	CLEAR	d0
+	move.w	d0,aud0+ac_vol(a0)		; audio 0 volume
+	move.w	d0,aud1+ac_vol(a0)		; audio 1 volume
+
+	cmp.w	vhposr(a0),d2			; synch up with video beam
+	beq.s	36$				; if on the spot - jump on
+	bcc.s	30$				; if beam low - wait on it
+
+27$:
+	btst.b	#0,vposr+1(a0)			; else beam past synch spot
+	beq.s	27$				; - wait till next frame
+
+30$:
+	cmp.w	vhposr(a0),d2			; wait on video beam position
+	bhi.s	30$
+
+36$:
+	move.w	#FRAMECOUNT,aud0+ac_len(a0)	; setup audio channel 0
+	move.w	#$8001,dmacon(a0)		; start audio channel 0 DMA
+
+45$:
+	btst.b	#0,vposr+1(a0)
+	beq.s	45$				; - wait till next frame
+
+54$:
+	cmp.w	vhposr(a0),d2			; wait on video beam position
+	bhi.s	54$
+
+	move.w	#FRAMECOUNT,aud1+ac_len(a0)	; setup audio channel 1
+	move.w	#$8002,dmacon(a0)		; start audio channel 1 DMA
+
+60$:
+	btst.b	#2,vhposr(a0)		; wait 4-8 scan lines for
+	bne.s	60$			; audio channels 0/1 to set the
+
+70$:					; interrupt bits in Paula
+	btst.b	#2,vhposr(a0)
+	beq.s	70$
+	move.w	#$0180,intreq(a0)	; clear any pending audio interrupts
+*					; (including first audio 0/1 channel
+*					; bogus interrupts)
+
+;;	CALLROM	Enable			; re-enable interrupts
+	CALLTL	AllInterruptsOn	;SKELL 9/11/92	
+
+	REST	d2/a5-a6		; restore work registers
+	rts				; return to caller
+
+*+*******
+*+
+*+ OpenSoftSprite
+*+
+*+ This function initializes and sets into motion the SoftSprite. Also other
+*+ allocations and initializations are preformed and noted in ToasterBase.
+*+
+*+ LONG OpenSoftSprite( VBeamPosition );
+*+  D0                   D0
+*+
+*+ LONG VBeamPosition:
+*+ LONG VBeamPosition:
+*+   Low unsigned 16 bits are used as the beam position audio channels 0/1
+*+   are to have its interrupts synchronized to. This value becomes a
+*+   parameter to a SoftSpriteVSynch() issued within this function.
+*+
+*+ Notes:
+*+   Returns D0 cleared and the Z flag set if all went well. Otherwise D0
+*+   contains a positive error code and the Z flag is reset. This routine
+*+   trashes D1,A0,A1, and the condition codes. All 4 audio channels will be
+*+   permanently allocated via the audio device and the processor interrupt 4
+*+   vector taken over to drive the SoftSprite. All of this is reflected in
+*+   the ToasterBase.  At entry, this function assumes A5 points to the
+*+   ToasterBase structure. Because this function deals with several
+*+   sensitive internal issues within the Video Toaster system, it should
+*+   never be called by application code. Leave this function to the
+*+   controlling interface/switcher code. NEVER call this function twice!
+*+
+*+*******
+
+	IFNE	_CCODE
+
+	XDEF	_OpenSoftSprite
+_OpenSoftSprite:
+	move.l	4(sp),d0
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	OpenSoftSprite
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	OpenSoftSprite
+OpenSoftSprite:	; entry: VBeamPosition
+*                         D0
+	SAVE	d2/a2/a6		; save work registers
+
+	move.l	d0,d2			; VBeamPosition to safe data reg
+
+	moveq	#-99,d0
+	lea	AudioPortName(pc),a0	; get a message port for IOAudio
+	CALL	CreatePort		; structure
+	bne.s	10$			; if we got the port - skip on
+	moveq	#1,d0			; else place an error code
+	bra	99$			; and exit
+
+10$:
+	lea	TheIOAudio(pc),a1	; finish setting up the IOAudio
+	move.l	d0,MN_REPLYPORT(a1)	; structure for OpenDevice call and
+	lea	AudioName(pc),a0	; the permanent allocation of all 4
+	CLEAR	d0			; audio channels
+	CLEAR	d1
+	GET.l	TB_SYSBase,a6
+	CALLROM	OpenDevice
+	move.l	d0,d0			; did we get what we asked for?
+	beq.s	20$			; jump on if we did
+	lea	TheIOAudio(pc),a0	; else free up the message port
+	move.l	MN_REPLYPORT(a0),a0	; allocated earlier
+	CALL	DeletePort
+	moveq	#2,d0			; place an error code
+	bra.s	99$			; and exit
+
+20$:
+*						; assumed a vector table
+*						; address starting at 0
+*						; in ToasterBase
+	btst.b	#AFB_68010,AttnFlags+1(a6)	; have a 68010 or better?
+	beq.s	30$				; if no VBR - skip on and
+*						; leave TB_VBR zero
+	move.l	a5,a2			; else save ToasterBase pointer
+	lea	189$(pc),a5		; then find out where the exception
+	CALLROM	Supervisor		; table really is
+	move.l	a2,a5			; restore ToasterBase pointer
+	PUT.l	d0,TB_VBR		; reflect the VBR in ToasterBase
+
+30$:
+	move.l	d0,a2			; get address of interrupt 4
+	lea	$70(a2),a2		; processor autovector
+	PUT.l	a2,TB_Int4Address	; reflect this in ToasterBase
+
+;;	CALLROM	Disable			; disable interrupts
+	CALLTL	DisableInterrupts	;SKELL 2-12-93
+
+;;$$
+	move.l	IVAUD0+IV_CODE(a6),AudioDev0	; Addendum 12/18/90:
+	move.l	IVAUD1+IV_CODE(a6),AudioDev1	; hamstring execbase audio
+	lea	AudioDevHandler0(pc),a0		; interrupt handlers for
+	move.l	a0,IVAUD0+IV_CODE(a6)		; channels 0/1
+	lea	AudioDevHandler1(pc),a0
+	move.l	a0,IVAUD1+IV_CODE(a6)
+;;$$
+	PUT.l	(a2),TB_Int4Vector		; save Exec's Int4 handler
+*						; (should be cleared prior to
+*						;  our fill in here - used by
+*						;  CloseSoftSprite())
+	lea	SoftSpriteVBServer(pc),a0	; install our Int4 handler
+	move.l	a0,(a2)				; for SoftSprite
+	move.l	d2,d0			; synchronize audio channels 0/1 with
+	CALL	SoftSpriteVSynch	; desired scan line - also takes care
+*					; of all of the audio channels
+;;	CALLROM	Enable			; enable interrupts again
+	CALLTL	EnableInterrupts	;SKELL 2-12-83
+
+
+	bsr.s	PatchGFX		;Patch graphics functions to work with
+					;soft sprites.
+
+	CLEAR	d0			; give a clean bill of health
+
+99$:
+	REST	d2/a2/a6		; restore work registers
+	rts				; return to caller with D0 clear if
+*					; all went well (Z flag set),
+*					; non0 if unsuccessful (Z flag reset)
+
+189$:					; a "MOVEC.L VBR,d0" instro to be
+*					; trapped at supervisor state with
+*					; the Exec Supervisor function
+	DC.w	$4E7A,$0801
+	rte
+
+DoPatch		macro
+	move.l	TB_GFXBase(a5),a1		;library to patch
+	lea	New\1,a0
+	move.l	a0,d0
+	move.l	#_LVO\1,a0
+	CALLROM	SetFunction
+	move.l	d0,Old\1
+	endm
+
+UnDoPatch	macro
+
+	move.l	TB_GFXBase(a5),a1		;library to patch
+	move.l	Old\1,d0
+	move.l	#_LVO\1,a0
+	CALLROM	SetFunction
+
+	endm
+
+****** PatchGFX *************************************************************
+*
+*	NAME
+*	PatchGFX -- patch gfx functions to work with softsprite
+*
+*	SYNOPSIS
+*	To make the softsprite work with normal intuition functions it is
+*	necessary to patch all graphics functions called by intuition.
+*	A call to softspriteoff/on has been added to those functions.
+*
+*	INPUTS
+*	none
+*	RESULT
+*	Functions are patched
+*
+*	EXAMPLE
+*
+*	NOTES
+*
+*	BUGS
+*
+*	SEE ALSO
+*
+*****************************************************************************
+*
+
+PatchGFX:
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+	move.l	(4).w,a6		;exec base
+
+	DoPatch	BltBitMap
+	DoPatch	RectFill
+	DoPatch	Draw
+	DoPatch	Text
+	DoPatch	BltMaskBitMapRastPort
+	DoPatch	BltPattern
+	DoPatch	BltTemplate
+	DoPatch	BltClear
+	DoPatch SetRast
+
+	movem.l	(sp)+,d0-d1/a0-a1/a6
+	rts
+
+****** UnPatchGFX ***********************************************************
+*
+*	NAME
+*	UnPatchGFX -- reverse the function of PatchGFX
+*
+*	SYNOPSIS
+*
+*	INPUTS
+*	none
+*
+*	RESULT
+*	The functions are returned to normal
+*
+*	EXAMPLE
+*
+*	NOTES
+*	This function does not nest.  One call each to UnPatchGFX and
+*	PatchGFX.
+*
+*	BUGS
+*
+*	SEE ALSO
+*
+*****************************************************************************
+*
+
+UnPatchGFX:
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+	move.l	(4).w,a6		;exec base
+
+	UnDoPatch	BltBitMap
+	UnDoPatch	RectFill
+	UnDoPatch	Draw
+	UnDoPatch	Text
+	UnDoPatch	BltMaskBitMapRastPort
+	UnDoPatch	BltPattern
+	UnDoPatch	BltTemplate
+	UnDoPatch	BltClear
+	UnDoPatch 	SetRast
+
+	movem.l	(sp)+,d0-d1/a0-a1/a6
+	rts
+
+*	planecnt = BltBitMap(SrcBitMap, SrcX, SrcY, DstBitMap,
+*	D0                   A0         D0:16 D1:16 A1
+*	    DstX, DstY, SizeX, SizeY, Minterm, Mask [, TempA])
+*	    D2:16 D3:16 D4:16  D5:16  D6:8     D7:8   [A2]
+NewBltBitMap
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldBltBitMap,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+*     void BltMaskBitMapRastPort
+*          (srcbm, srcx, srcy, destrp, destX, destY, sizeX, sizeY,
+*	     A0     D0    D1    A1      D2     D3     D4     D5
+*	     minterm, bltmask)
+*	     D6       A2
+NewBltMaskBitMapRastPort
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldBltMaskBitMapRastPort,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+*  void BltPattern(rp, mask, xl, yl, maxx, maxy, bytecnt)
+*                  a1,  a0   d0  d1   d2   d3     d4
+NewBltPattern
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldBltPattern,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+* void	BltTemplate(SrcTemplate, SrcX, SrcMod, rp,
+*	            A0           D0:16  D1:16  A1
+*	    DstX,  DstY, SizeX, SizeY)
+*	    D2:16  D3:16 D4:16  D5:16
+NewBltTemplate
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldBltTemplate,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+* void	BltClear( memBlock, bytecount, flags )
+*		    a1         d0       d1
+NewBltClear
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldBltClear,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+* void  SetRast( rp, pen )
+*                a1  d0
+NewSetRast
+	movem.l	a0/a3/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldSetRast,a3
+	jsr	(a3)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a0/a3/a5
+	rts
+
+
+* void	RectFill( rp, xmin, ymin, xmax, ymax)
+*                 a1  d0:16 d1:16 d2:16 d3:16
+NewRectFill
+	movem.l	a2/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldRectFill,a2
+	jsr	(a2)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a2/a5
+	rts
+
+* void	Text(rp, string, length)
+*	     A1  A0      D0-0:16
+NewText
+	movem.l	a2/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldText,a2
+	jsr	(a2)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a2/a5
+	rts
+
+* void  Draw( rp,   x,     y)
+*             a1  d0:16  d1:16
+NewDraw
+	movem.l	a2/a5,-(sp)
+	lea	_ToasterBase,a5
+	CALLTL	SoftSpriteOff
+	move.l	OldDraw,a2
+	jsr	(a2)
+	CALLTL	Wait4Blit
+	move.l	TB_SoftSprite+VBI_Screen(a5),a0
+	CALLTL	SoftSpriteOnScreen
+	movem.l	(sp)+,a2/a5
+	rts
+
+*****************************************************************************
+*
+* DisplayNormalSprite
+*
+* void DisplayNormalSprite( void );
+*
+* This function sets the internal data pointer to the "normal" SoftSprite
+* image data. Alters the condition codes, but no registers. Requires a
+* pointer to ToasterBase.
+*
+* Addendum 2/7/91:
+*
+*****************************************************************************
+
+	IFNE	_CCODE
+
+	XDEF	_DisplayNormalSprite
+_DisplayNormalSprite:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	DisplayNormalSprite
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	DisplayNormalSprite
+DisplayNormalSprite:
+	move.l	#NormalPointerMasks,PointerMasks
+	move.l	#$7FFF7FFF,TB_SoftSprite+VBI_MouseY(a5)	; force update
+	rts
+
+*****************************************************************************
+*
+* DisplayWaitSprite
+*
+* void DisplayWaitSprite( void );
+*
+* This function sets the internal data pointer to the "wait" SoftSprite
+* image data. Alters the condition codes, but no registers. Requires a
+* pointer to ToasterBase.
+*
+* Addendum 2/7/91:
+*
+*****************************************************************************
+
+	IFNE	_CCODE
+
+	XDEF	_DisplayWaitSprite
+_DisplayWaitSprite:
+	SAVE1	a5
+	lea	_ToasterBase,a5
+	CALL.s	DisplayWaitSprite
+	REST1	a5
+	rts
+
+	ENDC
+
+	XDEF	DisplayWaitSprite
+DisplayWaitSprite:
+	move.l	#WaitPointerMasks,PointerMasks
+	move.l	#$7FFF7FFF,TB_SoftSprite+VBI_MouseY(a5)	; force update
+	rts
+
+*****************************************************************************
+*
+* GetDisplaySprite
+*
+* Type GetDisplaySprite( void );
+* (32)
+*  D0
+*  CC
+*
+* This function returns the type of SoftSprite image data currently active.
+* Returns 0 in D0 if the "normal" image data is being used, -1 for the "wait"
+* image data. The condition codes are set to the result in D0. No other
+* registers are altered. Doesn't require a pointer to ToasterBase.
+*
+* Addendum 2/7/91:
+*
+*****************************************************************************
+
+	IFNE	_CCODE
+
+	XDEF	_GetDisplaySprite
+_GetDisplaySprite:
+
+	ENDC
+
+	XDEF	GetDisplaySprite
+GetDisplaySprite:
+	move.l	#NormalPointerMasks,d0
+	sub.l	PointerMasks(pc),d0
+	beq.s	10$
+
+	moveq	#-1,d0
+10$:
+	rts
+
+*********
+*
+* CreatePort
+*
+* Creates a named system public port. A0 addresses the name string for the
+* port to be created and D0 will hold the priority, D0 will return a pointer
+* to the port or NULL. The Z flag will be set according to the result in D0.
+* No registers other than D0 are altered.
+*
+* Shhhh! - This function is completely internal/private - you didn't see it.
+*
+*********
+
+	XDEF	CreatePort		; assembly language private
+CreatePort:
+	SAVE	d1-d5/a0/a1/a6
+	move.l	a0,d2
+	move.b	d0,d5
+	CLEARA	a1
+	CALLROM	FindTask,ABSSYSBASE
+	move.l	d0,d4
+	moveq	#-1,d0
+	CALLROM	AllocSignal
+	move.l	d0,d3
+	bpl.s	10$
+	CLEAR	d0
+	bra.s	99$
+10$:
+	move.l	#MP_SIZE,d0
+	move.l	#MEMF_PUBLIC!MEMF_CLEAR,d1
+	CALLROM	AllocMem
+	move.l	d0,d0
+	bne.s	20$
+	move.l	d3,d0
+	CALLROM	FreeSignal
+	CLEAR	d0
+	bra.s	99$
+20$:
+	move.l	d0,a1
+	move.b	#NT_MSGPORT,LN_TYPE(a1)
+	move.b	d5,LN_PRI(a1)
+	move.l	d2,LN_NAME(a1)
+	move.b	#PA_SIGNAL,MP_FLAGS(a1)
+	move.b	d3,MP_SIGBIT(a1)
+	move.l	d4,MP_SIGTASK(a1)
+	move.l	a1,d2
+	CALLROM	AddPort
+	move.l	d2,d0
+99$:
+	REST	d1-d5/a0/a1/a6
+	rts
+
+*********
+*
+* DeletePort
+*
+* Removes a system public port pointed to by A0 that was allocated with
+* CreatePort. Nothing is returned and no registers are altered, although the
+* port pointer in A0 will no longer be valid.
+*
+* Shhhh! - This function is completely internal/private - you didn't see it.
+*
+*********
+
+	XDEF	DeletePort		; assembly language private
+DeletePort:
+	SAVE	d0/d1/a0-a2/a6
+	move.l	a0,a1
+	move.l	a0,a2
+	CALLROM	RemPort,ABSSYSBASE
+	CLEAR	d0
+	move.b	MP_SIGBIT(a2),d0
+	CALLROM	FreeSignal
+	move.l	a2,a1
+	move.l	#MP_SIZE,d0
+	CALLROM	FreeMem
+	REST	d0/d1/a0-a2/a6
+	rts
+
+
+	ALLDUMPS
+
+*----	private data area for SoftSprite vertical blanking server
+*----	and support code
+
+BackGroundSave:
+	DS.l	32*MAXDISPLAYDEPTH
+
+PointerMasks:
+	DC.l	NormalPointerMasks
+
+NormalPointerMasks:
+ DC.l %10000000000000000000000000000000	; offset 0 pixels
+ DC.l %11000000000000000000000000000000
+ DC.l %11100000000000000000000000000000
+ DC.l %11110000000000000000000000000000
+ DC.l %11011000000000000000000000000000
+ DC.l %11001100000000000000000000000000
+ DC.l %11000110000000000000000000000000
+ DC.l %11000011000000000000000000000000
+ DC.l %11000001100000000000000000000000
+ DC.l %11000000110000000000000000000000
+ DC.l %11000000011000000000000000000000
+ DC.l %11000000001100000000000000000000
+ DC.l %11000000000110000000000000000000
+ DC.l %11000000000011000000000000000000
+ DC.l %11000000000001100000000000000000
+ DC.l %11000000000001110000000000000000
+ DC.l %11000000000111000000000000000000
+ DC.l %11000000001100000000000000000000
+ DC.l %11000000001000000000000000000000
+ DC.l %11000000001000000000000000000000
+ DC.l %11001111001100000000000000000000
+ DC.l %11111001000100000000000000000000
+ DC.l %11100001100110000000000000000000
+ DC.l %10000000100010000000000000000000
+ DC.l %00000000110011000000000000000000
+ DC.l %00000000010001000000000000000000
+ DC.l %00000000011001100000000000000000
+ DC.l %00000000001000100000000000000000
+ DC.l %00000000001100110000000000000000
+ DC.l %00000000000100010000000000000000
+ DC.l %00000000000110110000000000000000
+ DC.l %00000000000011100000000000000000
+
+ DC.l %01111111111111111111111111111111
+ DC.l %00111111111111111111111111111111
+ DC.l %00011111111111111111111111111111
+ DC.l %00001111111111111111111111111111
+ DC.l %00000111111111111111111111111111
+ DC.l %00000011111111111111111111111111
+ DC.l %00000001111111111111111111111111
+ DC.l %00000000111111111111111111111111
+ DC.l %00000000011111111111111111111111
+ DC.l %00000000001111111111111111111111
+ DC.l %00000000000111111111111111111111
+ DC.l %00000000000011111111111111111111
+ DC.l %00000000000001111111111111111111
+ DC.l %00000000000000111111111111111111
+ DC.l %00000000000000011111111111111111
+ DC.l %00000000000000001111111111111111
+ DC.l %00000000000000111111111111111111
+ DC.l %00000000000011111111111111111111
+ DC.l %00000000000111111111111111111111
+ DC.l %00000000000111111111111111111111
+ DC.l %00000000000011111111111111111111
+ DC.l %00000110000011111111111111111111
+ DC.l %00011110000001111111111111111111
+ DC.l %01111111000001111111111111111111
+ DC.l %11111111000000111111111111111111
+ DC.l %11111111100000111111111111111111
+ DC.l %11111111100000011111111111111111
+ DC.l %11111111110000011111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111111000001111111111111111
+ DC.l %11111111111000001111111111111111
+ DC.l %11111111111100011111111111111111
+
+ DC.l %01000000000000000000000000000000	; offset 1 pixels
+ DC.l %01100000000000000000000000000000
+ DC.l %01110000000000000000000000000000
+ DC.l %01111000000000000000000000000000
+ DC.l %01101100000000000000000000000000
+ DC.l %01100110000000000000000000000000
+ DC.l %01100011000000000000000000000000
+ DC.l %01100001100000000000000000000000
+ DC.l %01100000110000000000000000000000
+ DC.l %01100000011000000000000000000000
+ DC.l %01100000001100000000000000000000
+ DC.l %01100000000110000000000000000000
+ DC.l %01100000000011000000000000000000
+ DC.l %01100000000001100000000000000000
+ DC.l %01100000000000110000000000000000
+ DC.l %01100000000000111000000000000000
+ DC.l %01100000000011100000000000000000
+ DC.l %01100000000110000000000000000000
+ DC.l %01100000000100000000000000000000
+ DC.l %01100000000100000000000000000000
+ DC.l %01100111100110000000000000000000
+ DC.l %01111100100010000000000000000000
+ DC.l %01110000110011000000000000000000
+ DC.l %01000000010001000000000000000000
+ DC.l %00000000011001100000000000000000
+ DC.l %00000000001000100000000000000000
+ DC.l %00000000001100110000000000000000
+ DC.l %00000000000100010000000000000000
+ DC.l %00000000000110011000000000000000
+ DC.l %00000000000010001000000000000000
+ DC.l %00000000000011011000000000000000
+ DC.l %00000000000001110000000000000000
+
+ DC.l %10111111111111111111111111111111
+ DC.l %10011111111111111111111111111111
+ DC.l %10001111111111111111111111111111
+ DC.l %10000111111111111111111111111111
+ DC.l %10000011111111111111111111111111
+ DC.l %10000001111111111111111111111111
+ DC.l %10000000111111111111111111111111
+ DC.l %10000000011111111111111111111111
+ DC.l %10000000001111111111111111111111
+ DC.l %10000000000111111111111111111111
+ DC.l %10000000000011111111111111111111
+ DC.l %10000000000001111111111111111111
+ DC.l %10000000000000111111111111111111
+ DC.l %10000000000000011111111111111111
+ DC.l %10000000000000001111111111111111
+ DC.l %10000000000000000111111111111111
+ DC.l %10000000000000011111111111111111
+ DC.l %10000000000001111111111111111111
+ DC.l %10000000000011111111111111111111
+ DC.l %10000000000011111111111111111111
+ DC.l %10000000000001111111111111111111
+ DC.l %10000011000001111111111111111111
+ DC.l %10001111000000111111111111111111
+ DC.l %10111111100000111111111111111111
+ DC.l %11111111100000011111111111111111
+ DC.l %11111111110000011111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111111000001111111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111100000111111111111111
+ DC.l %11111111111100000111111111111111
+ DC.l %11111111111110001111111111111111
+
+ DC.l %00100000000000000000000000000000	; offset 2 pixels
+ DC.l %00110000000000000000000000000000
+ DC.l %00111000000000000000000000000000
+ DC.l %00111100000000000000000000000000
+ DC.l %00110110000000000000000000000000
+ DC.l %00110011000000000000000000000000
+ DC.l %00110001100000000000000000000000
+ DC.l %00110000110000000000000000000000
+ DC.l %00110000011000000000000000000000
+ DC.l %00110000001100000000000000000000
+ DC.l %00110000000110000000000000000000
+ DC.l %00110000000011000000000000000000
+ DC.l %00110000000001100000000000000000
+ DC.l %00110000000000110000000000000000
+ DC.l %00110000000000011000000000000000
+ DC.l %00110000000000011100000000000000
+ DC.l %00110000000001110000000000000000
+ DC.l %00110000000011000000000000000000
+ DC.l %00110000000010000000000000000000
+ DC.l %00110000000010000000000000000000
+ DC.l %00110011110011000000000000000000
+ DC.l %00111110010001000000000000000000
+ DC.l %00111000011001100000000000000000
+ DC.l %00100000001000100000000000000000
+ DC.l %00000000001100110000000000000000
+ DC.l %00000000000100010000000000000000
+ DC.l %00000000000110011000000000000000
+ DC.l %00000000000010001000000000000000
+ DC.l %00000000000011001100000000000000
+ DC.l %00000000000001000100000000000000
+ DC.l %00000000000001101100000000000000
+ DC.l %00000000000000111000000000000000
+
+ DC.l %11011111111111111111111111111111
+ DC.l %11001111111111111111111111111111
+ DC.l %11000111111111111111111111111111
+ DC.l %11000011111111111111111111111111
+ DC.l %11000001111111111111111111111111
+ DC.l %11000000111111111111111111111111
+ DC.l %11000000011111111111111111111111
+ DC.l %11000000001111111111111111111111
+ DC.l %11000000000111111111111111111111
+ DC.l %11000000000011111111111111111111
+ DC.l %11000000000001111111111111111111
+ DC.l %11000000000000111111111111111111
+ DC.l %11000000000000011111111111111111
+ DC.l %11000000000000001111111111111111
+ DC.l %11000000000000000111111111111111
+ DC.l %11000000000000000011111111111111
+ DC.l %11000000000000001111111111111111
+ DC.l %11000000000000111111111111111111
+ DC.l %11000000000001111111111111111111
+ DC.l %11000000000001111111111111111111
+ DC.l %11000000000000111111111111111111
+ DC.l %11000001100000111111111111111111
+ DC.l %11000111100000011111111111111111
+ DC.l %11011111110000011111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111111000001111111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111100000111111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111110000011111111111111
+ DC.l %11111111111110000011111111111111
+ DC.l %11111111111111000111111111111111
+
+ DC.l %00010000000000000000000000000000	; offset 3 pixels
+ DC.l %00011000000000000000000000000000
+ DC.l %00011100000000000000000000000000
+ DC.l %00011110000000000000000000000000
+ DC.l %00011011000000000000000000000000
+ DC.l %00011001100000000000000000000000
+ DC.l %00011000110000000000000000000000
+ DC.l %00011000011000000000000000000000
+ DC.l %00011000001100000000000000000000
+ DC.l %00011000000110000000000000000000
+ DC.l %00011000000011000000000000000000
+ DC.l %00011000000001100000000000000000
+ DC.l %00011000000000110000000000000000
+ DC.l %00011000000000011000000000000000
+ DC.l %00011000000000001100000000000000
+ DC.l %00011000000000001110000000000000
+ DC.l %00011000000000111000000000000000
+ DC.l %00011000000001100000000000000000
+ DC.l %00011000000001000000000000000000
+ DC.l %00011000000001000000000000000000
+ DC.l %00011001111001100000000000000000
+ DC.l %00011111001000100000000000000000
+ DC.l %00011100001100110000000000000000
+ DC.l %00010000000100010000000000000000
+ DC.l %00000000000110011000000000000000
+ DC.l %00000000000010001000000000000000
+ DC.l %00000000000011001100000000000000
+ DC.l %00000000000001000100000000000000
+ DC.l %00000000000001100110000000000000
+ DC.l %00000000000000100010000000000000
+ DC.l %00000000000000110110000000000000
+ DC.l %00000000000000011100000000000000
+
+ DC.l %11101111111111111111111111111111
+ DC.l %11100111111111111111111111111111
+ DC.l %11100011111111111111111111111111
+ DC.l %11100001111111111111111111111111
+ DC.l %11100000111111111111111111111111
+ DC.l %11100000011111111111111111111111
+ DC.l %11100000001111111111111111111111
+ DC.l %11100000000111111111111111111111
+ DC.l %11100000000011111111111111111111
+ DC.l %11100000000001111111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11100000000000011111111111111111
+ DC.l %11100000000000001111111111111111
+ DC.l %11100000000000000111111111111111
+ DC.l %11100000000000000011111111111111
+ DC.l %11100000000000000001111111111111
+ DC.l %11100000000000000111111111111111
+ DC.l %11100000000000011111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11100000000000011111111111111111
+ DC.l %11100000110000011111111111111111
+ DC.l %11100011110000001111111111111111
+ DC.l %11101111111000001111111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111100000111111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111110000011111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111111000001111111111111
+ DC.l %11111111111111000001111111111111
+ DC.l %11111111111111100011111111111111
+
+ DC.l %00001000000000000000000000000000	; offset 4 pixels
+ DC.l %00001100000000000000000000000000
+ DC.l %00001110000000000000000000000000
+ DC.l %00001111000000000000000000000000
+ DC.l %00001101100000000000000000000000
+ DC.l %00001100110000000000000000000000
+ DC.l %00001100011000000000000000000000
+ DC.l %00001100001100000000000000000000
+ DC.l %00001100000110000000000000000000
+ DC.l %00001100000011000000000000000000
+ DC.l %00001100000001100000000000000000
+ DC.l %00001100000000110000000000000000
+ DC.l %00001100000000011000000000000000
+ DC.l %00001100000000001100000000000000
+ DC.l %00001100000000000110000000000000
+ DC.l %00001100000000000111000000000000
+ DC.l %00001100000000011100000000000000
+ DC.l %00001100000000110000000000000000
+ DC.l %00001100000000100000000000000000
+ DC.l %00001100000000100000000000000000
+ DC.l %00001100111100110000000000000000
+ DC.l %00001111100100010000000000000000
+ DC.l %00001110000110011000000000000000
+ DC.l %00001000000010001000000000000000
+ DC.l %00000000000011001100000000000000
+ DC.l %00000000000001000100000000000000
+ DC.l %00000000000001100110000000000000
+ DC.l %00000000000000100010000000000000
+ DC.l %00000000000000110011000000000000
+ DC.l %00000000000000010001000000000000
+ DC.l %00000000000000011011000000000000
+ DC.l %00000000000000001110000000000000
+
+ DC.l %11110111111111111111111111111111
+ DC.l %11110011111111111111111111111111
+ DC.l %11110001111111111111111111111111
+ DC.l %11110000111111111111111111111111
+ DC.l %11110000011111111111111111111111
+ DC.l %11110000001111111111111111111111
+ DC.l %11110000000111111111111111111111
+ DC.l %11110000000011111111111111111111
+ DC.l %11110000000001111111111111111111
+ DC.l %11110000000000111111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11110000000000001111111111111111
+ DC.l %11110000000000000111111111111111
+ DC.l %11110000000000000011111111111111
+ DC.l %11110000000000000001111111111111
+ DC.l %11110000000000000000111111111111
+ DC.l %11110000000000000011111111111111
+ DC.l %11110000000000001111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11110000000000001111111111111111
+ DC.l %11110000011000001111111111111111
+ DC.l %11110001111000000111111111111111
+ DC.l %11110111111100000111111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111110000011111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111111000001111111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111100000111111111111
+ DC.l %11111111111111100000111111111111
+ DC.l %11111111111111110001111111111111
+
+ DC.l %00000100000000000000000000000000	; offset 5 pixels
+ DC.l %00000110000000000000000000000000
+ DC.l %00000111000000000000000000000000
+ DC.l %00000111100000000000000000000000
+ DC.l %00000110110000000000000000000000
+ DC.l %00000110011000000000000000000000
+ DC.l %00000110001100000000000000000000
+ DC.l %00000110000110000000000000000000
+ DC.l %00000110000011000000000000000000
+ DC.l %00000110000001100000000000000000
+ DC.l %00000110000000110000000000000000
+ DC.l %00000110000000011000000000000000
+ DC.l %00000110000000001100000000000000
+ DC.l %00000110000000000110000000000000
+ DC.l %00000110000000000011000000000000
+ DC.l %00000110000000000011100000000000
+ DC.l %00000110000000001110000000000000
+ DC.l %00000110000000011000000000000000
+ DC.l %00000110000000010000000000000000
+ DC.l %00000110000000010000000000000000
+ DC.l %00000110011110011000000000000000
+ DC.l %00000111110010001000000000000000
+ DC.l %00000111000011001100000000000000
+ DC.l %00000100000001000100000000000000
+ DC.l %00000000000001100110000000000000
+ DC.l %00000000000000100010000000000000
+ DC.l %00000000000000110011000000000000
+ DC.l %00000000000000010001000000000000
+ DC.l %00000000000000011001100000000000
+ DC.l %00000000000000001000100000000000
+ DC.l %00000000000000001101100000000000
+ DC.l %00000000000000000111000000000000
+
+ DC.l %11111011111111111111111111111111
+ DC.l %11111001111111111111111111111111
+ DC.l %11111000111111111111111111111111
+ DC.l %11111000011111111111111111111111
+ DC.l %11111000001111111111111111111111
+ DC.l %11111000000111111111111111111111
+ DC.l %11111000000011111111111111111111
+ DC.l %11111000000001111111111111111111
+ DC.l %11111000000000111111111111111111
+ DC.l %11111000000000011111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11111000000000000111111111111111
+ DC.l %11111000000000000011111111111111
+ DC.l %11111000000000000001111111111111
+ DC.l %11111000000000000000111111111111
+ DC.l %11111000000000000000011111111111
+ DC.l %11111000000000000001111111111111
+ DC.l %11111000000000000111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11111000000000000111111111111111
+ DC.l %11111000001100000111111111111111
+ DC.l %11111000111100000011111111111111
+ DC.l %11111011111110000011111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111111000001111111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111100000111111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111110000011111111111
+ DC.l %11111111111111110000011111111111
+ DC.l %11111111111111111000111111111111
+
+ DC.l %00000010000000000000000000000000	; offset 6 pixels
+ DC.l %00000011000000000000000000000000
+ DC.l %00000011100000000000000000000000
+ DC.l %00000011110000000000000000000000
+ DC.l %00000011011000000000000000000000
+ DC.l %00000011001100000000000000000000
+ DC.l %00000011000110000000000000000000
+ DC.l %00000011000011000000000000000000
+ DC.l %00000011000001100000000000000000
+ DC.l %00000011000000110000000000000000
+ DC.l %00000011000000011000000000000000
+ DC.l %00000011000000001100000000000000
+ DC.l %00000011000000000110000000000000
+ DC.l %00000011000000000011000000000000
+ DC.l %00000011000000000001100000000000
+ DC.l %00000011000000000001110000000000
+ DC.l %00000011000000000111000000000000
+ DC.l %00000011000000001100000000000000
+ DC.l %00000011000000001000000000000000
+ DC.l %00000011000000001000000000000000
+ DC.l %00000011001111001100000000000000
+ DC.l %00000011111001000100000000000000
+ DC.l %00000011100001100110000000000000
+ DC.l %00000010000000100010000000000000
+ DC.l %00000000000000110011000000000000
+ DC.l %00000000000000010001000000000000
+ DC.l %00000000000000011001100000000000
+ DC.l %00000000000000001000100000000000
+ DC.l %00000000000000001100110000000000
+ DC.l %00000000000000000100010000000000
+ DC.l %00000000000000000110110000000000
+ DC.l %00000000000000000011100000000000
+
+ DC.l %11111101111111111111111111111111
+ DC.l %11111100111111111111111111111111
+ DC.l %11111100011111111111111111111111
+ DC.l %11111100001111111111111111111111
+ DC.l %11111100000111111111111111111111
+ DC.l %11111100000011111111111111111111
+ DC.l %11111100000001111111111111111111
+ DC.l %11111100000000111111111111111111
+ DC.l %11111100000000011111111111111111
+ DC.l %11111100000000001111111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111100000000000011111111111111
+ DC.l %11111100000000000001111111111111
+ DC.l %11111100000000000000111111111111
+ DC.l %11111100000000000000011111111111
+ DC.l %11111100000000000000001111111111
+ DC.l %11111100000000000000111111111111
+ DC.l %11111100000000000011111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111100000000000011111111111111
+ DC.l %11111100000110000011111111111111
+ DC.l %11111100011110000001111111111111
+ DC.l %11111101111111000001111111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111100000111111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111110000011111111111
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111111000001111111111
+ DC.l %11111111111111111000001111111111
+ DC.l %11111111111111111100011111111111
+
+ DC.l %00000001000000000000000000000000	; offset 7 pixels
+ DC.l %00000001100000000000000000000000
+ DC.l %00000001110000000000000000000000
+ DC.l %00000001111000000000000000000000
+ DC.l %00000001101100000000000000000000
+ DC.l %00000001100110000000000000000000
+ DC.l %00000001100011000000000000000000
+ DC.l %00000001100001100000000000000000
+ DC.l %00000001100000110000000000000000
+ DC.l %00000001100000011000000000000000
+ DC.l %00000001100000001100000000000000
+ DC.l %00000001100000000110000000000000
+ DC.l %00000001100000000011000000000000
+ DC.l %00000001100000000001100000000000
+ DC.l %00000001100000000000110000000000
+ DC.l %00000001100000000000111000000000
+ DC.l %00000001100000000011100000000000
+ DC.l %00000001100000000110000000000000
+ DC.l %00000001100000000100000000000000
+ DC.l %00000001100000000100000000000000
+ DC.l %00000001100111100110000000000000
+ DC.l %00000001111100100010000000000000
+ DC.l %00000001110000110011000000000000
+ DC.l %00000001000000010001000000000000
+ DC.l %00000000000000011001100000000000
+ DC.l %00000000000000001000100000000000
+ DC.l %00000000000000001100110000000000
+ DC.l %00000000000000000100010000000000
+ DC.l %00000000000000000110011000000000
+ DC.l %00000000000000000010001000000000
+ DC.l %00000000000000000011011000000000
+ DC.l %00000000000000000001110000000000
+
+ DC.l %11111110111111111111111111111111
+ DC.l %11111110011111111111111111111111
+ DC.l %11111110001111111111111111111111
+ DC.l %11111110000111111111111111111111
+ DC.l %11111110000011111111111111111111
+ DC.l %11111110000001111111111111111111
+ DC.l %11111110000000111111111111111111
+ DC.l %11111110000000011111111111111111
+ DC.l %11111110000000001111111111111111
+ DC.l %11111110000000000111111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111110000000000001111111111111
+ DC.l %11111110000000000000111111111111
+ DC.l %11111110000000000000011111111111
+ DC.l %11111110000000000000001111111111
+ DC.l %11111110000000000000000111111111
+ DC.l %11111110000000000000011111111111
+ DC.l %11111110000000000001111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111110000000000001111111111111
+ DC.l %11111110000011000001111111111111
+ DC.l %11111110001111000000111111111111
+ DC.l %11111110111111100000111111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111110000011111111111
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111111000001111111111
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111111100000111111111
+ DC.l %11111111111111111100000111111111
+ DC.l %11111111111111111110001111111111
+
+ DC.l %00000000100000000000000000000000	; offset 8 pixels
+ DC.l %00000000110000000000000000000000
+ DC.l %00000000111000000000000000000000
+ DC.l %00000000111100000000000000000000
+ DC.l %00000000110110000000000000000000
+ DC.l %00000000110011000000000000000000
+ DC.l %00000000110001100000000000000000
+ DC.l %00000000110000110000000000000000
+ DC.l %00000000110000011000000000000000
+ DC.l %00000000110000001100000000000000
+ DC.l %00000000110000000110000000000000
+ DC.l %00000000110000000011000000000000
+ DC.l %00000000110000000001100000000000
+ DC.l %00000000110000000000110000000000
+ DC.l %00000000110000000000011000000000
+ DC.l %00000000110000000000011100000000
+ DC.l %00000000110000000001110000000000
+ DC.l %00000000110000000011000000000000
+ DC.l %00000000110000000010000000000000
+ DC.l %00000000110000000010000000000000
+ DC.l %00000000110011110011000000000000
+ DC.l %00000000111110010001000000000000
+ DC.l %00000000111000011001100000000000
+ DC.l %00000000100000001000100000000000
+ DC.l %00000000000000001100110000000000
+ DC.l %00000000000000000100010000000000
+ DC.l %00000000000000000110011000000000
+ DC.l %00000000000000000010001000000000
+ DC.l %00000000000000000011001100000000
+ DC.l %00000000000000000001000100000000
+ DC.l %00000000000000000001101100000000
+ DC.l %00000000000000000000111000000000
+
+ DC.l %11111111011111111111111111111111
+ DC.l %11111111001111111111111111111111
+ DC.l %11111111000111111111111111111111
+ DC.l %11111111000011111111111111111111
+ DC.l %11111111000001111111111111111111
+ DC.l %11111111000000111111111111111111
+ DC.l %11111111000000011111111111111111
+ DC.l %11111111000000001111111111111111
+ DC.l %11111111000000000111111111111111
+ DC.l %11111111000000000011111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111111000000000000111111111111
+ DC.l %11111111000000000000011111111111
+ DC.l %11111111000000000000001111111111
+ DC.l %11111111000000000000000111111111
+ DC.l %11111111000000000000000011111111
+ DC.l %11111111000000000000001111111111
+ DC.l %11111111000000000000111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111111000000000000111111111111
+ DC.l %11111111000001100000111111111111
+ DC.l %11111111000111100000011111111111
+ DC.l %11111111011111110000011111111111
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111111000001111111111
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111111100000111111111
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111111110000011111111
+ DC.l %11111111111111111110000011111111
+ DC.l %11111111111111111111000111111111
+
+ DC.l %00000000010000000000000000000000	; offset 9 pixels
+ DC.l %00000000011000000000000000000000
+ DC.l %00000000011100000000000000000000
+ DC.l %00000000011110000000000000000000
+ DC.l %00000000011011000000000000000000
+ DC.l %00000000011001100000000000000000
+ DC.l %00000000011000110000000000000000
+ DC.l %00000000011000011000000000000000
+ DC.l %00000000011000001100000000000000
+ DC.l %00000000011000000110000000000000
+ DC.l %00000000011000000011000000000000
+ DC.l %00000000011000000001100000000000
+ DC.l %00000000011000000000110000000000
+ DC.l %00000000011000000000011000000000
+ DC.l %00000000011000000000001100000000
+ DC.l %00000000011000000000001110000000
+ DC.l %00000000011000000000111000000000
+ DC.l %00000000011000000001100000000000
+ DC.l %00000000011000000001000000000000
+ DC.l %00000000011000000001000000000000
+ DC.l %00000000011001111001100000000000
+ DC.l %00000000011111001000100000000000
+ DC.l %00000000011100001100110000000000
+ DC.l %00000000010000000100010000000000
+ DC.l %00000000000000000110011000000000
+ DC.l %00000000000000000010001000000000
+ DC.l %00000000000000000011001100000000
+ DC.l %00000000000000000001000100000000
+ DC.l %00000000000000000001100110000000
+ DC.l %00000000000000000000100010000000
+ DC.l %00000000000000000000110110000000
+ DC.l %00000000000000000000011100000000
+
+ DC.l %11111111101111111111111111111111
+ DC.l %11111111100111111111111111111111
+ DC.l %11111111100011111111111111111111
+ DC.l %11111111100001111111111111111111
+ DC.l %11111111100000111111111111111111
+ DC.l %11111111100000011111111111111111
+ DC.l %11111111100000001111111111111111
+ DC.l %11111111100000000111111111111111
+ DC.l %11111111100000000011111111111111
+ DC.l %11111111100000000001111111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111100000000000011111111111
+ DC.l %11111111100000000000001111111111
+ DC.l %11111111100000000000000111111111
+ DC.l %11111111100000000000000011111111
+ DC.l %11111111100000000000000001111111
+ DC.l %11111111100000000000000111111111
+ DC.l %11111111100000000000011111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111100000000000011111111111
+ DC.l %11111111100000110000011111111111
+ DC.l %11111111100011110000001111111111
+ DC.l %11111111101111111000001111111111
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111111100000111111111
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111111110000011111111
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111111000001111111
+ DC.l %11111111111111111111000001111111
+ DC.l %11111111111111111111100011111111
+
+ DC.l %00000000001000000000000000000000	; offset 10 pixels
+ DC.l %00000000001100000000000000000000
+ DC.l %00000000001110000000000000000000
+ DC.l %00000000001111000000000000000000
+ DC.l %00000000001101100000000000000000
+ DC.l %00000000001100110000000000000000
+ DC.l %00000000001100011000000000000000
+ DC.l %00000000001100001100000000000000
+ DC.l %00000000001100000110000000000000
+ DC.l %00000000001100000011000000000000
+ DC.l %00000000001100000001100000000000
+ DC.l %00000000001100000000110000000000
+ DC.l %00000000001100000000011000000000
+ DC.l %00000000001100000000001100000000
+ DC.l %00000000001100000000000110000000
+ DC.l %00000000001100000000000111000000
+ DC.l %00000000001100000000011100000000
+ DC.l %00000000001100000000110000000000
+ DC.l %00000000001100000000100000000000
+ DC.l %00000000001100000000100000000000
+ DC.l %00000000001100111100110000000000
+ DC.l %00000000001111100100010000000000
+ DC.l %00000000001110000110011000000000
+ DC.l %00000000001000000010001000000000
+ DC.l %00000000000000000011001100000000
+ DC.l %00000000000000000001000100000000
+ DC.l %00000000000000000001100110000000
+ DC.l %00000000000000000000100010000000
+ DC.l %00000000000000000000110011000000
+ DC.l %00000000000000000000010001000000
+ DC.l %00000000000000000000011011000000
+ DC.l %00000000000000000000001110000000
+
+ DC.l %11111111110111111111111111111111
+ DC.l %11111111110011111111111111111111
+ DC.l %11111111110001111111111111111111
+ DC.l %11111111110000111111111111111111
+ DC.l %11111111110000011111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111110000000111111111111111
+ DC.l %11111111110000000011111111111111
+ DC.l %11111111110000000001111111111111
+ DC.l %11111111110000000000111111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111110000000000001111111111
+ DC.l %11111111110000000000000111111111
+ DC.l %11111111110000000000000011111111
+ DC.l %11111111110000000000000001111111
+ DC.l %11111111110000000000000000111111
+ DC.l %11111111110000000000000011111111
+ DC.l %11111111110000000000001111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111110000000000001111111111
+ DC.l %11111111110000011000001111111111
+ DC.l %11111111110001111000000111111111
+ DC.l %11111111110111111100000111111111
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111111110000011111111
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111111000001111111
+ DC.l %11111111111111111111000000111111
+ DC.l %11111111111111111111100000111111
+ DC.l %11111111111111111111100000111111
+ DC.l %11111111111111111111110001111111
+
+ DC.l %00000000000100000000000000000000	; offset 11 pixels
+ DC.l %00000000000110000000000000000000
+ DC.l %00000000000111000000000000000000
+ DC.l %00000000000111100000000000000000
+ DC.l %00000000000110110000000000000000
+ DC.l %00000000000110011000000000000000
+ DC.l %00000000000110001100000000000000
+ DC.l %00000000000110000110000000000000
+ DC.l %00000000000110000011000000000000
+ DC.l %00000000000110000001100000000000
+ DC.l %00000000000110000000110000000000
+ DC.l %00000000000110000000011000000000
+ DC.l %00000000000110000000001100000000
+ DC.l %00000000000110000000000110000000
+ DC.l %00000000000110000000000011000000
+ DC.l %00000000000110000000000011100000
+ DC.l %00000000000110000000001110000000
+ DC.l %00000000000110000000011000000000
+ DC.l %00000000000110000000010000000000
+ DC.l %00000000000110000000010000000000
+ DC.l %00000000000110011110011000000000
+ DC.l %00000000000111110010001000000000
+ DC.l %00000000000111000011001100000000
+ DC.l %00000000000100000001000100000000
+ DC.l %00000000000000000001100110000000
+ DC.l %00000000000000000000100010000000
+ DC.l %00000000000000000000110011000000
+ DC.l %00000000000000000000010001000000
+ DC.l %00000000000000000000011001100000
+ DC.l %00000000000000000000001000100000
+ DC.l %00000000000000000000001101100000
+ DC.l %00000000000000000000000111000000
+
+ DC.l %11111111111011111111111111111111
+ DC.l %11111111111001111111111111111111
+ DC.l %11111111111000111111111111111111
+ DC.l %11111111111000011111111111111111
+ DC.l %11111111111000001111111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111000000011111111111111
+ DC.l %11111111111000000001111111111111
+ DC.l %11111111111000000000111111111111
+ DC.l %11111111111000000000011111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111111000000000000111111111
+ DC.l %11111111111000000000000011111111
+ DC.l %11111111111000000000000001111111
+ DC.l %11111111111000000000000000111111
+ DC.l %11111111111000000000000000011111
+ DC.l %11111111111000000000000001111111
+ DC.l %11111111111000000000000111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111111000000000000111111111
+ DC.l %11111111111000001100000111111111
+ DC.l %11111111111000111100000011111111
+ DC.l %11111111111011111110000011111111
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111111000001111111
+ DC.l %11111111111111111111000000111111
+ DC.l %11111111111111111111100000111111
+ DC.l %11111111111111111111100000011111
+ DC.l %11111111111111111111110000011111
+ DC.l %11111111111111111111110000011111
+ DC.l %11111111111111111111111000111111
+
+ DC.l %00000000000010000000000000000000	; offset 12 pixels
+ DC.l %00000000000011000000000000000000
+ DC.l %00000000000011100000000000000000
+ DC.l %00000000000011110000000000000000
+ DC.l %00000000000011011000000000000000
+ DC.l %00000000000011001100000000000000
+ DC.l %00000000000011000110000000000000
+ DC.l %00000000000011000011000000000000
+ DC.l %00000000000011000001100000000000
+ DC.l %00000000000011000000110000000000
+ DC.l %00000000000011000000011000000000
+ DC.l %00000000000011000000001100000000
+ DC.l %00000000000011000000000110000000
+ DC.l %00000000000011000000000011000000
+ DC.l %00000000000011000000000001100000
+ DC.l %00000000000011000000000001110000
+ DC.l %00000000000011000000000111000000
+ DC.l %00000000000011000000001100000000
+ DC.l %00000000000011000000001000000000
+ DC.l %00000000000011000000001000000000
+ DC.l %00000000000011001111001100000000
+ DC.l %00000000000011111001000100000000
+ DC.l %00000000000011100001100110000000
+ DC.l %00000000000010000000100010000000
+ DC.l %00000000000000000000110011000000
+ DC.l %00000000000000000000010001000000
+ DC.l %00000000000000000000011001100000
+ DC.l %00000000000000000000001000100000
+ DC.l %00000000000000000000001100110000
+ DC.l %00000000000000000000000100010000
+ DC.l %00000000000000000000000110110000
+ DC.l %00000000000000000000000011100000
+
+ DC.l %11111111111101111111111111111111
+ DC.l %11111111111100111111111111111111
+ DC.l %11111111111100011111111111111111
+ DC.l %11111111111100001111111111111111
+ DC.l %11111111111100000111111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111100000001111111111111
+ DC.l %11111111111100000000111111111111
+ DC.l %11111111111100000000011111111111
+ DC.l %11111111111100000000001111111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111100000000000011111111
+ DC.l %11111111111100000000000001111111
+ DC.l %11111111111100000000000000111111
+ DC.l %11111111111100000000000000011111
+ DC.l %11111111111100000000000000001111
+ DC.l %11111111111100000000000000111111
+ DC.l %11111111111100000000000011111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111100000000000011111111
+ DC.l %11111111111100000110000011111111
+ DC.l %11111111111100011110000001111111
+ DC.l %11111111111101111111000001111111
+ DC.l %11111111111111111111000000111111
+ DC.l %11111111111111111111100000111111
+ DC.l %11111111111111111111100000011111
+ DC.l %11111111111111111111110000011111
+ DC.l %11111111111111111111110000001111
+ DC.l %11111111111111111111111000001111
+ DC.l %11111111111111111111111000001111
+ DC.l %11111111111111111111111100011111
+
+ DC.l %00000000000001000000000000000000	; offset 13 pixels
+ DC.l %00000000000001100000000000000000
+ DC.l %00000000000001110000000000000000
+ DC.l %00000000000001111000000000000000
+ DC.l %00000000000001101100000000000000
+ DC.l %00000000000001100110000000000000
+ DC.l %00000000000001100011000000000000
+ DC.l %00000000000001100001100000000000
+ DC.l %00000000000001100000110000000000
+ DC.l %00000000000001100000011000000000
+ DC.l %00000000000001100000001100000000
+ DC.l %00000000000001100000000110000000
+ DC.l %00000000000001100000000011000000
+ DC.l %00000000000001100000000001100000
+ DC.l %00000000000001100000000000110000
+ DC.l %00000000000001100000000000111000
+ DC.l %00000000000001100000000011100000
+ DC.l %00000000000001100000000110000000
+ DC.l %00000000000001100000000100000000
+ DC.l %00000000000001100000000100000000
+ DC.l %00000000000001100111100110000000
+ DC.l %00000000000001111100100010000000
+ DC.l %00000000000001110000110011000000
+ DC.l %00000000000001000000010001000000
+ DC.l %00000000000000000000011001100000
+ DC.l %00000000000000000000001000100000
+ DC.l %00000000000000000000001100110000
+ DC.l %00000000000000000000000100010000
+ DC.l %00000000000000000000000110011000
+ DC.l %00000000000000000000000010001000
+ DC.l %00000000000000000000000011011000
+ DC.l %00000000000000000000000001110000
+
+ DC.l %11111111111110111111111111111111
+ DC.l %11111111111110011111111111111111
+ DC.l %11111111111110001111111111111111
+ DC.l %11111111111110000111111111111111
+ DC.l %11111111111110000011111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111110000000111111111111
+ DC.l %11111111111110000000011111111111
+ DC.l %11111111111110000000001111111111
+ DC.l %11111111111110000000000111111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111110000000000001111111
+ DC.l %11111111111110000000000000111111
+ DC.l %11111111111110000000000000011111
+ DC.l %11111111111110000000000000001111
+ DC.l %11111111111110000000000000000111
+ DC.l %11111111111110000000000000011111
+ DC.l %11111111111110000000000001111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111110000000000001111111
+ DC.l %11111111111110000011000001111111
+ DC.l %11111111111110001111000000111111
+ DC.l %11111111111110111111100000111111
+ DC.l %11111111111111111111100000011111
+ DC.l %11111111111111111111110000011111
+ DC.l %11111111111111111111110000001111
+ DC.l %11111111111111111111111000001111
+ DC.l %11111111111111111111111000000111
+ DC.l %11111111111111111111111100000111
+ DC.l %11111111111111111111111100000111
+ DC.l %11111111111111111111111110001111
+
+ DC.l %00000000000000100000000000000000	; offset 14 ixels
+ DC.l %00000000000000110000000000000000
+ DC.l %00000000000000111000000000000000
+ DC.l %00000000000000111100000000000000
+ DC.l %00000000000000110110000000000000
+ DC.l %00000000000000110011000000000000
+ DC.l %00000000000000110001100000000000
+ DC.l %00000000000000110000110000000000
+ DC.l %00000000000000110000011000000000
+ DC.l %00000000000000110000001100000000
+ DC.l %00000000000000110000000110000000
+ DC.l %00000000000000110000000011000000
+ DC.l %00000000000000110000000001100000
+ DC.l %00000000000000110000000000110000
+ DC.l %00000000000000110000000000011000
+ DC.l %00000000000000110000000000011100
+ DC.l %00000000000000110000000001110000
+ DC.l %00000000000000110000000011000000
+ DC.l %00000000000000110000000010000000
+ DC.l %00000000000000110000000010000000
+ DC.l %00000000000000110011110011000000
+ DC.l %00000000000000111110010001000000
+ DC.l %00000000000000111000011001100000
+ DC.l %00000000000000100000001000100000
+ DC.l %00000000000000000000001100110000
+ DC.l %00000000000000000000000100010000
+ DC.l %00000000000000000000000110011000
+ DC.l %00000000000000000000000010001000
+ DC.l %00000000000000000000000011001100
+ DC.l %00000000000000000000000001000100
+ DC.l %00000000000000000000000001101100
+ DC.l %00000000000000000000000000111000
+
+ DC.l %11111111111111011111111111111111
+ DC.l %11111111111111001111111111111111
+ DC.l %11111111111111000111111111111111
+ DC.l %11111111111111000011111111111111
+ DC.l %11111111111111000001111111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111000000011111111111
+ DC.l %11111111111111000000001111111111
+ DC.l %11111111111111000000000111111111
+ DC.l %11111111111111000000000011111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111111000000000000111111
+ DC.l %11111111111111000000000000011111
+ DC.l %11111111111111000000000000001111
+ DC.l %11111111111111000000000000000111
+ DC.l %11111111111111000000000000000011
+ DC.l %11111111111111000000000000001111
+ DC.l %11111111111111000000000000111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111111000000000000111111
+ DC.l %11111111111111000001100000111111
+ DC.l %11111111111111000111100000011111
+ DC.l %11111111111111011111110000011111
+ DC.l %11111111111111111111110000001111
+ DC.l %11111111111111111111111000001111
+ DC.l %11111111111111111111111000000111
+ DC.l %11111111111111111111111100000111
+ DC.l %11111111111111111111111100000011
+ DC.l %11111111111111111111111110000011
+ DC.l %11111111111111111111111110000011
+ DC.l %11111111111111111111111111000111
+
+ DC.l %00000000000000010000000000000000	; offset 15 ixels
+ DC.l %00000000000000011000000000000000
+ DC.l %00000000000000011100000000000000
+ DC.l %00000000000000011110000000000000
+ DC.l %00000000000000011011000000000000
+ DC.l %00000000000000011001100000000000
+ DC.l %00000000000000011000110000000000
+ DC.l %00000000000000011000011000000000
+ DC.l %00000000000000011000001100000000
+ DC.l %00000000000000011000000110000000
+ DC.l %00000000000000011000000011000000
+ DC.l %00000000000000011000000001100000
+ DC.l %00000000000000011000000000110000
+ DC.l %00000000000000011000000000011000
+ DC.l %00000000000000011000000000001100
+ DC.l %00000000000000011000000000001110
+ DC.l %00000000000000011000000000111000
+ DC.l %00000000000000011000000001100000
+ DC.l %00000000000000011000000001000000
+ DC.l %00000000000000011000000001000000
+ DC.l %00000000000000011001111001100000
+ DC.l %00000000000000011111001000100000
+ DC.l %00000000000000011100001100110000
+ DC.l %00000000000000010000000100010000
+ DC.l %00000000000000000000000110011000
+ DC.l %00000000000000000000000010001000
+ DC.l %00000000000000000000000011001100
+ DC.l %00000000000000000000000001000100
+ DC.l %00000000000000000000000001100110
+ DC.l %00000000000000000000000000100010
+ DC.l %00000000000000000000000000110110
+ DC.l %00000000000000000000000000011100
+
+ DC.l %11111111111111101111111111111111
+ DC.l %11111111111111100111111111111111
+ DC.l %11111111111111100011111111111111
+ DC.l %11111111111111100001111111111111
+ DC.l %11111111111111100000111111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111100000001111111111
+ DC.l %11111111111111100000000111111111
+ DC.l %11111111111111100000000011111111
+ DC.l %11111111111111100000000001111111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111100000000000011111
+ DC.l %11111111111111100000000000001111
+ DC.l %11111111111111100000000000000111
+ DC.l %11111111111111100000000000000011
+ DC.l %11111111111111100000000000000001
+ DC.l %11111111111111100000000000000111
+ DC.l %11111111111111100000000000011111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111100000000000011111
+ DC.l %11111111111111100000110000011111
+ DC.l %11111111111111100011110000001111
+ DC.l %11111111111111101111111000001111
+ DC.l %11111111111111111111111000000111
+ DC.l %11111111111111111111111100000111
+ DC.l %11111111111111111111111100000011
+ DC.l %11111111111111111111111110000011
+ DC.l %11111111111111111111111110000001
+ DC.l %11111111111111111111111111000001
+ DC.l %11111111111111111111111111000001
+ DC.l %11111111111111111111111111100011
+
+*----	Wait pointer. Addendum 2/7/91:
+
+WaitPointerMasks:
+ IFND	WAIT_POINTER	;wait_pointer Mask
+	REPT	16
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+	DC.l	%00000000000000000000000000000000
+
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	DC.l	%11111111111111111111111111111111
+	ENDR
+ ENDC	; WAIT_POINTER Mask
+
+
+
+;	This is the real wait pointer.
+
+ DC.l %00000000000000000000000000000000	; offset 0 pixels
+ DC.l %00000111100000000000000000000000
+ DC.l %00011111111100000000000000000000
+ DC.l %00010000000100000000000000000000
+ DC.l %00110000000110000000000000000000
+ DC.l %00111111000110000000000000000000
+ DC.l %00111110001111000000000000000000
+ DC.l %01111100011111000000000000000000
+ DC.l %01111000111111000000000000000000
+ DC.l %01110001111110000000000000000000
+ DC.l %00110000000110000000000000000000
+ DC.l %00110000000110000000000000000000
+ DC.l %00011111111100000000000000000000
+ DC.l %00000111110000000000000000000000
+ DC.l %00000001111100000000000000000000
+ DC.l %00000011111100000000000000000000
+ DC.l %00000011111100000000000000000000
+ DC.l %00000001111000000000000000000000
+ DC.l %00000011110000000000000000000000
+ DC.l %00000111000000000000000000000000
+ DC.l %00000111100000000000000000000000
+ DC.l %00000011000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11110000001111111111111111111111
+ DC.l %11000000000001111111111111111111
+ DC.l %11000000000001111111111111111111
+ DC.l %10000000000000111111111111111111
+ DC.l %10000000000000111111111111111111
+ DC.l %10000000000000011111111111111111
+ DC.l %00000000000000011111111111111111
+ DC.l %00000000000000001111111111111111
+ DC.l %00000000000000001111111111111111
+ DC.l %00000000000000001111111111111111
+ DC.l %00000000000000001111111111111111
+ DC.l %10000000000000001111111111111111
+ DC.l %10000000000000011111111111111111
+ DC.l %11000000000000011111111111111111
+ DC.l %11000000000000011111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11110000000000111111111111111111
+ DC.l %11111000000000111111111111111111
+ DC.l %11110000000000111111111111111111
+ DC.l %11110000000000111111111111111111
+ DC.l %11110000000001111111111111111111
+ DC.l %11110000000011111111111111111111
+ DC.l %11111000000111111111111111111111
+ DC.l %11111000000111111111111111111111
+ DC.l %11111100001111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 1 pixels
+ DC.l %00000011110000000000000000000000
+ DC.l %00001111111110000000000000000000
+ DC.l %00001000000010000000000000000000
+ DC.l %00011000000011000000000000000000
+ DC.l %00011111100011000000000000000000
+ DC.l %00011111000111100000000000000000
+ DC.l %00111110001111100000000000000000
+ DC.l %00111100011111100000000000000000
+ DC.l %00111000111111000000000000000000
+ DC.l %00011000000011000000000000000000
+ DC.l %00011000000011000000000000000000
+ DC.l %00001111111110000000000000000000
+ DC.l %00000011111000000000000000000000
+ DC.l %00000000111110000000000000000000
+ DC.l %00000001111110000000000000000000
+ DC.l %00000001111110000000000000000000
+ DC.l %00000000111100000000000000000000
+ DC.l %00000001111000000000000000000000
+ DC.l %00000011100000000000000000000000
+ DC.l %00000011110000000000000000000000
+ DC.l %00000001100000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111000000111111111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11100000000000111111111111111111
+ DC.l %11000000000000011111111111111111
+ DC.l %11000000000000011111111111111111
+ DC.l %11000000000000001111111111111111
+ DC.l %10000000000000001111111111111111
+ DC.l %10000000000000000111111111111111
+ DC.l %10000000000000000111111111111111
+ DC.l %10000000000000000111111111111111
+ DC.l %10000000000000000111111111111111
+ DC.l %11000000000000000111111111111111
+ DC.l %11000000000000001111111111111111
+ DC.l %11100000000000001111111111111111
+ DC.l %11100000000000001111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11111000000000011111111111111111
+ DC.l %11111100000000011111111111111111
+ DC.l %11111000000000011111111111111111
+ DC.l %11111000000000011111111111111111
+ DC.l %11111000000000111111111111111111
+ DC.l %11111000000001111111111111111111
+ DC.l %11111100000011111111111111111111
+ DC.l %11111100000011111111111111111111
+ DC.l %11111110000111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000; offset 2 pixels
+ DC.l %00000001111000000000000000000000
+ DC.l %00000111111111000000000000000000
+ DC.l %00000100000001000000000000000000
+ DC.l %00001100000001100000000000000000
+ DC.l %00001111110001100000000000000000
+ DC.l %00001111100011110000000000000000
+ DC.l %00011111000111110000000000000000
+ DC.l %00011110001111110000000000000000
+ DC.l %00011100011111100000000000000000
+ DC.l %00001100000001100000000000000000
+ DC.l %00001100000001100000000000000000
+ DC.l %00000111111111000000000000000000
+ DC.l %00000001111100000000000000000000
+ DC.l %00000000011111000000000000000000
+ DC.l %00000000111111000000000000000000
+ DC.l %00000000111111000000000000000000
+ DC.l %00000000011110000000000000000000
+ DC.l %00000000111100000000000000000000
+ DC.l %00000001110000000000000000000000
+ DC.l %00000001111000000000000000000000
+ DC.l %00000000110000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111100000011111111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11110000000000011111111111111111
+ DC.l %11100000000000001111111111111111
+ DC.l %11100000000000001111111111111111
+ DC.l %11100000000000000111111111111111
+ DC.l %11000000000000000111111111111111
+ DC.l %11000000000000000011111111111111
+ DC.l %11000000000000000011111111111111
+ DC.l %11000000000000000011111111111111
+ DC.l %11000000000000000011111111111111
+ DC.l %11100000000000000011111111111111
+ DC.l %11100000000000000111111111111111
+ DC.l %11110000000000000111111111111111
+ DC.l %11110000000000000111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11111100000000001111111111111111
+ DC.l %11111110000000001111111111111111
+ DC.l %11111100000000001111111111111111
+ DC.l %11111100000000001111111111111111
+ DC.l %11111100000000011111111111111111
+ DC.l %11111100000000111111111111111111
+ DC.l %11111110000001111111111111111111
+ DC.l %11111110000001111111111111111111
+ DC.l %11111111000011111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 3 pixels
+ DC.l %00000000111100000000000000000000
+ DC.l %00000011111111100000000000000000
+ DC.l %00000010000000100000000000000000
+ DC.l %00000110000000110000000000000000
+ DC.l %00000111111000110000000000000000
+ DC.l %00000111110001111000000000000000
+ DC.l %00001111100011111000000000000000
+ DC.l %00001111000111111000000000000000
+ DC.l %00001110001111110000000000000000
+ DC.l %00000110000000110000000000000000
+ DC.l %00000110000000110000000000000000
+ DC.l %00000011111111100000000000000000
+ DC.l %00000000111110000000000000000000
+ DC.l %00000000001111100000000000000000
+ DC.l %00000000011111100000000000000000
+ DC.l %00000000011111100000000000000000
+ DC.l %00000000001111000000000000000000
+ DC.l %00000000011110000000000000000000
+ DC.l %00000000111000000000000000000000
+ DC.l %00000000111100000000000000000000
+ DC.l %00000000011000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111110000001111111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11111000000000001111111111111111
+ DC.l %11110000000000000111111111111111
+ DC.l %11110000000000000111111111111111
+ DC.l %11110000000000000011111111111111
+ DC.l %11100000000000000011111111111111
+ DC.l %11100000000000000001111111111111
+ DC.l %11100000000000000001111111111111
+ DC.l %11100000000000000001111111111111
+ DC.l %11100000000000000001111111111111
+ DC.l %11110000000000000001111111111111
+ DC.l %11110000000000000011111111111111
+ DC.l %11111000000000000011111111111111
+ DC.l %11111000000000000011111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111110000000000111111111111111
+ DC.l %11111111000000000111111111111111
+ DC.l %11111110000000000111111111111111
+ DC.l %11111110000000000111111111111111
+ DC.l %11111110000000001111111111111111
+ DC.l %11111110000000011111111111111111
+ DC.l %11111111000000111111111111111111
+ DC.l %11111111000000111111111111111111
+ DC.l %11111111100001111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 4 pixels
+ DC.l %00000000011110000000000000000000
+ DC.l %00000001111111110000000000000000
+ DC.l %00000001000000010000000000000000
+ DC.l %00000011000000011000000000000000
+ DC.l %00000011111100011000000000000000
+ DC.l %00000011111000111100000000000000
+ DC.l %00000111110001111100000000000000
+ DC.l %00000111100011111100000000000000
+ DC.l %00000111000111111000000000000000
+ DC.l %00000011000000011000000000000000
+ DC.l %00000011000000011000000000000000
+ DC.l %00000001111111110000000000000000
+ DC.l %00000000011111000000000000000000
+ DC.l %00000000000111110000000000000000
+ DC.l %00000000001111110000000000000000
+ DC.l %00000000001111110000000000000000
+ DC.l %00000000000111100000000000000000
+ DC.l %00000000001111000000000000000000
+ DC.l %00000000011100000000000000000000
+ DC.l %00000000011110000000000000000000
+ DC.l %00000000001100000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111000000111111111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111100000000000111111111111111
+ DC.l %11111000000000000011111111111111
+ DC.l %11111000000000000011111111111111
+ DC.l %11111000000000000001111111111111
+ DC.l %11110000000000000001111111111111
+ DC.l %11110000000000000000111111111111
+ DC.l %11110000000000000000111111111111
+ DC.l %11110000000000000000111111111111
+ DC.l %11110000000000000000111111111111
+ DC.l %11111000000000000000111111111111
+ DC.l %11111000000000000001111111111111
+ DC.l %11111100000000000001111111111111
+ DC.l %11111100000000000001111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111111000000000011111111111111
+ DC.l %11111111100000000011111111111111
+ DC.l %11111111000000000011111111111111
+ DC.l %11111111000000000011111111111111
+ DC.l %11111111000000000111111111111111
+ DC.l %11111111000000001111111111111111
+ DC.l %11111111100000011111111111111111
+ DC.l %11111111100000011111111111111111
+ DC.l %11111111110000111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 5 pixels
+ DC.l %00000000001111000000000000000000
+ DC.l %00000000111111111000000000000000
+ DC.l %00000000100000001000000000000000
+ DC.l %00000001100000001100000000000000
+ DC.l %00000001111110001100000000000000
+ DC.l %00000001111100011110000000000000
+ DC.l %00000011111000111110000000000000
+ DC.l %00000011110001111110000000000000
+ DC.l %00000011100011111100000000000000
+ DC.l %00000001100000001100000000000000
+ DC.l %00000001100000001100000000000000
+ DC.l %00000000111111111000000000000000
+ DC.l %00000000001111100000000000000000
+ DC.l %00000000000011111000000000000000
+ DC.l %00000000000111111000000000000000
+ DC.l %00000000000111111000000000000000
+ DC.l %00000000000011110000000000000000
+ DC.l %00000000000111100000000000000000
+ DC.l %00000000001110000000000000000000
+ DC.l %00000000001111000000000000000000
+ DC.l %00000000000110000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111100000011111111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111110000000000011111111111111
+ DC.l %11111100000000000001111111111111
+ DC.l %11111100000000000001111111111111
+ DC.l %11111100000000000000111111111111
+ DC.l %11111000000000000000111111111111
+ DC.l %11111000000000000000011111111111
+ DC.l %11111000000000000000011111111111
+ DC.l %11111000000000000000011111111111
+ DC.l %11111000000000000000011111111111
+ DC.l %11111100000000000000011111111111
+ DC.l %11111100000000000000111111111111
+ DC.l %11111110000000000000111111111111
+ DC.l %11111110000000000000111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111111100000000001111111111111
+ DC.l %11111111110000000001111111111111
+ DC.l %11111111100000000001111111111111
+ DC.l %11111111100000000001111111111111
+ DC.l %11111111100000000011111111111111
+ DC.l %11111111100000000111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111111000011111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 6 pixels
+ DC.l %00000000000111100000000000000000
+ DC.l %00000000011111111100000000000000
+ DC.l %00000000010000000100000000000000
+ DC.l %00000000110000000110000000000000
+ DC.l %00000000111111000110000000000000
+ DC.l %00000000111110001111000000000000
+ DC.l %00000001111100011111000000000000
+ DC.l %00000001111000111111000000000000
+ DC.l %00000001110001111110000000000000
+ DC.l %00000000110000000110000000000000
+ DC.l %00000000110000000110000000000000
+ DC.l %00000000011111111100000000000000
+ DC.l %00000000000111110000000000000000
+ DC.l %00000000000001111100000000000000
+ DC.l %00000000000011111100000000000000
+ DC.l %00000000000011111100000000000000
+ DC.l %00000000000001111000000000000000
+ DC.l %00000000000011110000000000000000
+ DC.l %00000000000111000000000000000000
+ DC.l %00000000000111100000000000000000
+ DC.l %00000000000011000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111110000001111111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111111000000000001111111111111
+ DC.l %11111110000000000000111111111111
+ DC.l %11111110000000000000111111111111
+ DC.l %11111110000000000000011111111111
+ DC.l %11111100000000000000011111111111
+ DC.l %11111100000000000000001111111111
+ DC.l %11111100000000000000001111111111
+ DC.l %11111100000000000000001111111111
+ DC.l %11111100000000000000001111111111
+ DC.l %11111110000000000000001111111111
+ DC.l %11111110000000000000011111111111
+ DC.l %11111111000000000000011111111111
+ DC.l %11111111000000000000011111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111110000000000111111111111
+ DC.l %11111111111000000000111111111111
+ DC.l %11111111110000000000111111111111
+ DC.l %11111111110000000000111111111111
+ DC.l %11111111110000000001111111111111
+ DC.l %11111111110000000011111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111111100001111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 7 pixels
+ DC.l %00000000000011110000000000000000
+ DC.l %00000000001111111110000000000000
+ DC.l %00000000001000000010000000000000
+ DC.l %00000000011000000011000000000000
+ DC.l %00000000011111100011000000000000
+ DC.l %00000000011111000111100000000000
+ DC.l %00000000111110001111100000000000
+ DC.l %00000000111100011111100000000000
+ DC.l %00000000111000111111000000000000
+ DC.l %00000000011000000011000000000000
+ DC.l %00000000011000000011000000000000
+ DC.l %00000000001111111110000000000000
+ DC.l %00000000000011111000000000000000
+ DC.l %00000000000000111110000000000000
+ DC.l %00000000000001111110000000000000
+ DC.l %00000000000001111110000000000000
+ DC.l %00000000000000111100000000000000
+ DC.l %00000000000001111000000000000000
+ DC.l %00000000000011100000000000000000
+ DC.l %00000000000011110000000000000000
+ DC.l %00000000000001100000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111000000111111111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111100000000000111111111111
+ DC.l %11111111000000000000011111111111
+ DC.l %11111111000000000000011111111111
+ DC.l %11111111000000000000001111111111
+ DC.l %11111110000000000000001111111111
+ DC.l %11111110000000000000000111111111
+ DC.l %11111110000000000000000111111111
+ DC.l %11111110000000000000000111111111
+ DC.l %11111110000000000000000111111111
+ DC.l %11111111000000000000000111111111
+ DC.l %11111111000000000000001111111111
+ DC.l %11111111100000000000001111111111
+ DC.l %11111111100000000000001111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111111000000000011111111111
+ DC.l %11111111111100000000011111111111
+ DC.l %11111111111000000000011111111111
+ DC.l %11111111111000000000011111111111
+ DC.l %11111111111000000000111111111111
+ DC.l %11111111111000000001111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111111110000111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 8 pixels
+ DC.l %00000000000001111000000000000000
+ DC.l %00000000000111111111000000000000
+ DC.l %00000000000100000001000000000000
+ DC.l %00000000001100000001100000000000
+ DC.l %00000000001111110001100000000000
+ DC.l %00000000001111100011110000000000
+ DC.l %00000000011111000111110000000000
+ DC.l %00000000011110001111110000000000
+ DC.l %00000000011100011111100000000000
+ DC.l %00000000001100000001100000000000
+ DC.l %00000000001100000001100000000000
+ DC.l %00000000000111111111000000000000
+ DC.l %00000000000001111100000000000000
+ DC.l %00000000000000011111000000000000
+ DC.l %00000000000000111111000000000000
+ DC.l %00000000000000111111000000000000
+ DC.l %00000000000000011110000000000000
+ DC.l %00000000000000111100000000000000
+ DC.l %00000000000001110000000000000000
+ DC.l %00000000000001111000000000000000
+ DC.l %00000000000000110000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111100000011111111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111110000000000011111111111
+ DC.l %11111111100000000000001111111111
+ DC.l %11111111100000000000001111111111
+ DC.l %11111111100000000000000111111111
+ DC.l %11111111000000000000000111111111
+ DC.l %11111111000000000000000011111111
+ DC.l %11111111000000000000000011111111
+ DC.l %11111111000000000000000011111111
+ DC.l %11111111000000000000000011111111
+ DC.l %11111111100000000000000011111111
+ DC.l %11111111100000000000000111111111
+ DC.l %11111111110000000000000111111111
+ DC.l %11111111110000000000000111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111111100000000001111111111
+ DC.l %11111111111110000000001111111111
+ DC.l %11111111111100000000001111111111
+ DC.l %11111111111100000000001111111111
+ DC.l %11111111111100000000011111111111
+ DC.l %11111111111100000000111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111111000011111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 9 pixels
+ DC.l %00000000000000111100000000000000
+ DC.l %00000000000011111111100000000000
+ DC.l %00000000000010000000100000000000
+ DC.l %00000000000110000000110000000000
+ DC.l %00000000000111111000110000000000
+ DC.l %00000000000111110001111000000000
+ DC.l %00000000001111100011111000000000
+ DC.l %00000000001111000111111000000000
+ DC.l %00000000001110001111110000000000
+ DC.l %00000000000110000000110000000000
+ DC.l %00000000000110000000110000000000
+ DC.l %00000000000011111111100000000000
+ DC.l %00000000000000111110000000000000
+ DC.l %00000000000000001111100000000000
+ DC.l %00000000000000011111100000000000
+ DC.l %00000000000000011111100000000000
+ DC.l %00000000000000001111000000000000
+ DC.l %00000000000000011110000000000000
+ DC.l %00000000000000111000000000000000
+ DC.l %00000000000000111100000000000000
+ DC.l %00000000000000011000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111110000001111111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111111000000000001111111111
+ DC.l %11111111110000000000000111111111
+ DC.l %11111111110000000000000111111111
+ DC.l %11111111110000000000000011111111
+ DC.l %11111111100000000000000011111111
+ DC.l %11111111100000000000000001111111
+ DC.l %11111111100000000000000001111111
+ DC.l %11111111100000000000000001111111
+ DC.l %11111111100000000000000001111111
+ DC.l %11111111110000000000000001111111
+ DC.l %11111111110000000000000011111111
+ DC.l %11111111111000000000000011111111
+ DC.l %11111111111000000000000011111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111110000000000111111111
+ DC.l %11111111111111000000000111111111
+ DC.l %11111111111110000000000111111111
+ DC.l %11111111111110000000000111111111
+ DC.l %11111111111110000000001111111111
+ DC.l %11111111111110000000011111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111111100001111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 10 pixels
+ DC.l %00000000000000011110000000000000
+ DC.l %00000000000001111111110000000000
+ DC.l %00000000000001000000010000000000
+ DC.l %00000000000011000000011000000000
+ DC.l %00000000000011111100011000000000
+ DC.l %00000000000011111000111100000000
+ DC.l %00000000000111110001111100000000
+ DC.l %00000000000111100011111100000000
+ DC.l %00000000000111000111111000000000
+ DC.l %00000000000011000000011000000000
+ DC.l %00000000000011000000011000000000
+ DC.l %00000000000001111111110000000000
+ DC.l %00000000000000011111000000000000
+ DC.l %00000000000000000111110000000000
+ DC.l %00000000000000001111110000000000
+ DC.l %00000000000000001111110000000000
+ DC.l %00000000000000000111100000000000
+ DC.l %00000000000000001111000000000000
+ DC.l %00000000000000011100000000000000
+ DC.l %00000000000000011110000000000000
+ DC.l %00000000000000001100000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111000000111111111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111100000000000111111111
+ DC.l %11111111111000000000000011111111
+ DC.l %11111111111000000000000011111111
+ DC.l %11111111111000000000000001111111
+ DC.l %11111111110000000000000001111111
+ DC.l %11111111110000000000000000111111
+ DC.l %11111111110000000000000000111111
+ DC.l %11111111110000000000000000111111
+ DC.l %11111111110000000000000000111111
+ DC.l %11111111111000000000000000111111
+ DC.l %11111111111000000000000001111111
+ DC.l %11111111111100000000000001111111
+ DC.l %11111111111100000000000001111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111111000000000011111111
+ DC.l %11111111111111100000000011111111
+ DC.l %11111111111111000000000011111111
+ DC.l %11111111111111000000000011111111
+ DC.l %11111111111111000000000111111111
+ DC.l %11111111111111000000001111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111111110000111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 11 pixels
+ DC.l %00000000000000001111000000000000
+ DC.l %00000000000000111111111000000000
+ DC.l %00000000000000100000001000000000
+ DC.l %00000000000001100000001100000000
+ DC.l %00000000000001111110001100000000
+ DC.l %00000000000001111100011110000000
+ DC.l %00000000000011111000111110000000
+ DC.l %00000000000011110001111110000000
+ DC.l %00000000000011100011111100000000
+ DC.l %00000000000001100000001100000000
+ DC.l %00000000000001100000001100000000
+ DC.l %00000000000000111111111000000000
+ DC.l %00000000000000001111100000000000
+ DC.l %00000000000000000011111000000000
+ DC.l %00000000000000000111111000000000
+ DC.l %00000000000000000111111000000000
+ DC.l %00000000000000000011110000000000
+ DC.l %00000000000000000111100000000000
+ DC.l %00000000000000001110000000000000
+ DC.l %00000000000000001111000000000000
+ DC.l %00000000000000000110000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111100000011111111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111110000000000011111111
+ DC.l %11111111111100000000000001111111
+ DC.l %11111111111100000000000001111111
+ DC.l %11111111111100000000000000111111
+ DC.l %11111111111000000000000000111111
+ DC.l %11111111111000000000000000011111
+ DC.l %11111111111000000000000000011111
+ DC.l %11111111111000000000000000011111
+ DC.l %11111111111000000000000000011111
+ DC.l %11111111111100000000000000011111
+ DC.l %11111111111100000000000000111111
+ DC.l %11111111111110000000000000111111
+ DC.l %11111111111110000000000000111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111111100000000001111111
+ DC.l %11111111111111110000000001111111
+ DC.l %11111111111111100000000001111111
+ DC.l %11111111111111100000000001111111
+ DC.l %11111111111111100000000011111111
+ DC.l %11111111111111100000000111111111
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111111000011111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 12 pixels
+ DC.l %00000000000000000111100000000000
+ DC.l %00000000000000011111111100000000
+ DC.l %00000000000000010000000100000000
+ DC.l %00000000000000110000000110000000
+ DC.l %00000000000000111111000110000000
+ DC.l %00000000000000111110001111000000
+ DC.l %00000000000001111100011111000000
+ DC.l %00000000000001111000111111000000
+ DC.l %00000000000001110001111110000000
+ DC.l %00000000000000110000000110000000
+ DC.l %00000000000000110000000110000000
+ DC.l %00000000000000011111111100000000
+ DC.l %00000000000000000111110000000000
+ DC.l %00000000000000000001111100000000
+ DC.l %00000000000000000011111100000000
+ DC.l %00000000000000000011111100000000
+ DC.l %00000000000000000001111000000000
+ DC.l %00000000000000000011110000000000
+ DC.l %00000000000000000111000000000000
+ DC.l %00000000000000000111100000000000
+ DC.l %00000000000000000011000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111110000001111111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111111000000000001111111
+ DC.l %11111111111110000000000000111111
+ DC.l %11111111111110000000000000111111
+ DC.l %11111111111110000000000000011111
+ DC.l %11111111111100000000000000011111
+ DC.l %11111111111100000000000000001111
+ DC.l %11111111111100000000000000001111
+ DC.l %11111111111100000000000000001111
+ DC.l %11111111111100000000000000001111
+ DC.l %11111111111110000000000000001111
+ DC.l %11111111111110000000000000011111
+ DC.l %11111111111111000000000000011111
+ DC.l %11111111111111000000000000011111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111110000000000111111
+ DC.l %11111111111111111000000000111111
+ DC.l %11111111111111110000000000111111
+ DC.l %11111111111111110000000000111111
+ DC.l %11111111111111110000000001111111
+ DC.l %11111111111111110000000011111111
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111111100001111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 13 pixels
+ DC.l %00000000000000000011110000000000
+ DC.l %00000000000000001111111110000000
+ DC.l %00000000000000001000000010000000
+ DC.l %00000000000000011000000011000000
+ DC.l %00000000000000011111100011000000
+ DC.l %00000000000000011111000111100000
+ DC.l %00000000000000111110001111100000
+ DC.l %00000000000000111100011111100000
+ DC.l %00000000000000111000111111000000
+ DC.l %00000000000000011000000011000000
+ DC.l %00000000000000011000000011000000
+ DC.l %00000000000000001111111110000000
+ DC.l %00000000000000000011111000000000
+ DC.l %00000000000000000000111110000000
+ DC.l %00000000000000000001111110000000
+ DC.l %00000000000000000001111110000000
+ DC.l %00000000000000000000111100000000
+ DC.l %00000000000000000001111000000000
+ DC.l %00000000000000000011100000000000
+ DC.l %00000000000000000011110000000000
+ DC.l %00000000000000000001100000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111111000000111111111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111100000000000111111
+ DC.l %11111111111111000000000000011111
+ DC.l %11111111111111000000000000011111
+ DC.l %11111111111111000000000000001111
+ DC.l %11111111111110000000000000001111
+ DC.l %11111111111110000000000000000111
+ DC.l %11111111111110000000000000000111
+ DC.l %11111111111110000000000000000111
+ DC.l %11111111111110000000000000000111
+ DC.l %11111111111111000000000000000111
+ DC.l %11111111111111000000000000001111
+ DC.l %11111111111111100000000000001111
+ DC.l %11111111111111100000000000001111
+ DC.l %11111111111111110000000000011111
+ DC.l %11111111111111111000000000011111
+ DC.l %11111111111111111100000000011111
+ DC.l %11111111111111111000000000011111
+ DC.l %11111111111111111000000000011111
+ DC.l %11111111111111111000000000111111
+ DC.l %11111111111111111000000001111111
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111111110000111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 14 ixels
+ DC.l %00000000000000000001111000000000
+ DC.l %00000000000000000111111111000000
+ DC.l %00000000000000000100000001000000
+ DC.l %00000000000000001100000001100000
+ DC.l %00000000000000001111110001100000
+ DC.l %00000000000000001111100011110000
+ DC.l %00000000000000011111000111110000
+ DC.l %00000000000000011110001111110000
+ DC.l %00000000000000011100011111100000
+ DC.l %00000000000000001100000001100000
+ DC.l %00000000000000001100000001100000
+ DC.l %00000000000000000111111111000000
+ DC.l %00000000000000000001111100000000
+ DC.l %00000000000000000000011111000000
+ DC.l %00000000000000000000111111000000
+ DC.l %00000000000000000000111111000000
+ DC.l %00000000000000000000011110000000
+ DC.l %00000000000000000000111100000000
+ DC.l %00000000000000000001110000000000
+ DC.l %00000000000000000001111000000000
+ DC.l %00000000000000000000110000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111111100000011111111
+ DC.l %11111111111111110000000000011111
+ DC.l %11111111111111110000000000011111
+ DC.l %11111111111111100000000000001111
+ DC.l %11111111111111100000000000001111
+ DC.l %11111111111111100000000000000111
+ DC.l %11111111111111000000000000000111
+ DC.l %11111111111111000000000000000011
+ DC.l %11111111111111000000000000000011
+ DC.l %11111111111111000000000000000011
+ DC.l %11111111111111000000000000000011
+ DC.l %11111111111111100000000000000011
+ DC.l %11111111111111100000000000000111
+ DC.l %11111111111111110000000000000111
+ DC.l %11111111111111110000000000000111
+ DC.l %11111111111111111000000000001111
+ DC.l %11111111111111111100000000001111
+ DC.l %11111111111111111110000000001111
+ DC.l %11111111111111111100000000001111
+ DC.l %11111111111111111100000000001111
+ DC.l %11111111111111111100000000011111
+ DC.l %11111111111111111100000000111111
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111111000011111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+ DC.l %00000000000000000000000000000000	; offset 15 ixels
+ DC.l %00000000000000000000111100000000
+ DC.l %00000000000000000011111111100000
+ DC.l %00000000000000000010000000100000
+ DC.l %00000000000000000110000000110000
+ DC.l %00000000000000000111111000110000
+ DC.l %00000000000000000111110001111000
+ DC.l %00000000000000001111100011111000
+ DC.l %00000000000000001111000111111000
+ DC.l %00000000000000001110001111110000
+ DC.l %00000000000000000110000000110000
+ DC.l %00000000000000000110000000110000
+ DC.l %00000000000000000011111111100000
+ DC.l %00000000000000000000111110000000
+ DC.l %00000000000000000000001111100000
+ DC.l %00000000000000000000011111100000
+ DC.l %00000000000000000000011111100000
+ DC.l %00000000000000000000001111000000
+ DC.l %00000000000000000000011110000000
+ DC.l %00000000000000000000111000000000
+ DC.l %00000000000000000000111100000000
+ DC.l %00000000000000000000011000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+ DC.l %00000000000000000000000000000000
+
+ DC.l %11111111111111111110000001111111
+ DC.l %11111111111111111000000000001111
+ DC.l %11111111111111111000000000001111
+ DC.l %11111111111111110000000000000111
+ DC.l %11111111111111110000000000000111
+ DC.l %11111111111111110000000000000011
+ DC.l %11111111111111100000000000000011
+ DC.l %11111111111111100000000000000001
+ DC.l %11111111111111100000000000000001
+ DC.l %11111111111111100000000000000001
+ DC.l %11111111111111100000000000000001
+ DC.l %11111111111111110000000000000001
+ DC.l %11111111111111110000000000000011
+ DC.l %11111111111111111000000000000011
+ DC.l %11111111111111111000000000000011
+ DC.l %11111111111111111100000000000111
+ DC.l %11111111111111111110000000000111
+ DC.l %11111111111111111111000000000111
+ DC.l %11111111111111111110000000000111
+ DC.l %11111111111111111110000000000111
+ DC.l %11111111111111111110000000001111
+ DC.l %11111111111111111110000000011111
+ DC.l %11111111111111111111000000111111
+ DC.l %11111111111111111111000000111111
+ DC.l %11111111111111111111100001111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+ DC.l %11111111111111111111111111111111
+
+
+
+*----	some totally private data structures needed by OpenSoftSprite() and
+*----	CloseSoftSprite() functions
+
+	CNOP	0,4
+*					; Addendum 12/18/90:
+AudioDev0:				; holds original execbase audio 0/1
+	DS.l	1			; interrupt handlers (usually point
+AudioDev1:				; to handlers for the audio device)
+	DS.l	1
+
+TheIOAudio:				; needed for talking to Audio device
+	DCB.b	LN_PRI,0
+	DC.b	127			; set priority of audio channels
+*					; allocated to 127 so that no one
+*					; else can ever steal them
+	DCB.b	ioa_Data-LN_NAME,0
+	DC.l	AllocMap		; pointer to audio channel
+*					; allocation map
+	DC.l	1			; byte length of the allocation map
+	DCB.b	ioa_SIZEOF-ioa_Period,0
+
+*					; Addendum 12/18/90:
+AudioDevHandler0:			; dummy interrupt handlers we forge
+	move.w	#$0080,CHIPBASE+intreq	; into execbase audio 0/1 interrupt
+	rts				; handlers
+AudioDevHandler1:
+	move.w	#$0100,CHIPBASE+intreq
+	rts
+
+AllocMap:
+	DC.b	$03			; allocate audio channels 0/1
+
+AudioName:
+	DC.b	'audio.device',0
+
+AudioPortName:
+	DC.b	'Toaster Audio Port',0
+
+	DS.w	0
+OldRectFill	dc.l	0		;vectors for graphics functions patched
+OldBltBitMap	dc.l	0
+OldDraw		dc.l	0
+OldText		dc.l	0
+OldBltMaskBitMapRastPort	dc.l	0
+OldBltPattern	dc.l	0
+OldBltTemplate	dc.l	0
+OldBltClear	dc.l	0
+OldSetRast	dc.l	0
+
+	END
+@
+
+
+2.22
+log
+@Put in comments thats show setfunctioned function parameters.
+@
+text
+@d7 1
+a7 1
+* $Id: softsprite.a,v 2.21 94/03/19 01:16:05 Kell Exp Locker: Kell $
+d9 4
+a12 1
+* $Log:	softsprite.a,v $
+@
+
+
+2.21
+log
+@*** empty log message ***
+@
+text
+@Binary files softsprite.a and t:,RCSt1A70ad4b0 differ
+@
+
+
+2.20
+log
+@*** empty log message ***
+@
+text
+@Binary files softsprite.a and t:,RCSt1A70c32a0 differ
+@
+
+
+2.19
+log
+@*** empty log message ***
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A70a2e50 differ
+@
+
+
+2.18
+log
+@*** empty log message ***
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74bb900 differ
+@
+
+
+2.17
+log
+@More patches for the softsprite
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74c8260 differ
+@
+
+
+2.16
+log
+@*** empty log message ***
+@
+text
+@Binary files softsprite.a and t:,RCSt1A74ba288 differ
+@
+
+
+2.15
+log
+@Fixed problem with negative mouse position when screen was moved by hot key.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74b41e0 differ
+@
+
+
+2.14
+log
+@*** empty log message ***
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74b41e0 differ
+@
+
+
+2.13
+log
+@Change so sprite moves to bottom of screen.
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a3a50 differ
+@
+
+
+2.12
+log
+@Now avoids infinit loop in SoftSpriteOff waiting for Audio Interrupt
+when Interrupts have been turned off.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74ba1f8 differ
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a3c00 differ
+@
+
+
+2.10
+log
+@Now prevents SoftSpriteOff waiting forever if Interrupts were off.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A78a3c58 differ
+@
+
+
+2.9
+log
+@Fixed Bug with trashed D2 in BltBitMap patch
+Fixed Bug with trashed A2 in BltBitMap patch
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a3c58 differ
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A74ba5f8 differ
+@
+
+
+2.7
+log
+@More softspriet mods
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a4560 differ
+@
+
+
+2.6
+log
+@Changed SoftSprite to work with any screnn.
+screen
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A70743e0 differ
+@
+
+
+2.5
+log
+@Fixed enforcer hits when doing CloseSoftSprite at Switcher exit.
+By changing AllInterruptsOff to DisableInterrupts, etc.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A70bbbf8 differ
+@
+
+
+2.4
+log
+@BPLCON0 hacks for A2000/4000
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a3610 differ
+@
+
+
+2.3
+log
+@Added graphics.library patches.  Removed old wait pointer image.
+@
+text
+@Binary files softsprite.a and t:,RCSt1A78a3588 differ
+@
+
+
+2.2
+log
+@Now only renders on 2 planes, for the 2 field user interface.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A02a0330 differ
+@
+
+
+2.1
+log
+@Replaced Disable & Enable Calls.
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A0315ae8 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files SoftSprite.a and t:,RCSt1A031c9b8 differ
+@

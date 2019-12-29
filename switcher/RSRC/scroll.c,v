@@ -1,0 +1,3617 @@
+head	2.30;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.30
+date	95.11.15.18.17.31;	author Holt;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	95.06.15.12.35.43;	author Holt;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	95.06.09.08.50.14;	author Holt;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	95.06.08.11.16.10;	author Holt;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	95.06.07.16.25.17;	author Holt;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	95.06.05.11.02.32;	author Holt;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	95.06.05.09.25.11;	author Holt;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	95.06.02.09.47.17;	author Holt;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	95.06.01.15.07.41;	author Holt;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	95.05.19.17.59.40;	author Holt;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	95.05.19.10.00.52;	author Holt;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	95.03.18.00.50.26;	author pfrench;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	95.03.05.14.38.26;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	95.02.28.16.19.00;	author CACHELIN4000;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	95.02.18.14.58.50;	author CACHELIN4000;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	95.02.17.09.24.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	95.02.15.15.59.22;	author CACHELIN4000;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	95.02.13.17.17.51;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	95.02.13.14.08.22;	author CACHELIN4000;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	95.02.12.16.11.27;	author CACHELIN4000;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	95.02.10.18.59.57;	author CACHELIN4000;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	95.02.06.17.15.05;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	95.02.06.15.15.59;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	95.02.03.16.23.45;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	95.02.01.18.56.00;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	95.02.01.17.40.00;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	95.02.01.17.31.35;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	95.02.01.17.00.18;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	95.02.01.12.30.50;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	95.01.31.23.19.36;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	95.01.31.17.01.14;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.30
+log
+@fixed line spacing problems
+@
+text
+@/********************************************************************
+* $Scroll.c$
+*
+* Copyright c1995 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: scroll.c,v 2.29 1995/06/15 12:35:43 Holt Exp Holt $
+* $Log: scroll.c,v $
+*Revision 2.29  1995/06/15  12:35:43  Holt
+**** empty log message ***
+*
+*Revision 2.28  1995/06/09  08:50:14  Holt
+*changed letter positioning so it uses outlines only unless -shadow
+*
+*Revision 2.27  1995/06/08  11:16:10  Holt
+*FIXED COUNTDOWN RENDER PROBLEM
+*
+*Revision 2.26  1995/06/07  16:25:17  Holt
+*made a lot more twiks on Scrolls and crawls
+*
+*Revision 2.25  1995/06/05  11:02:32  Holt
+*worked on reduceing the cuttoff parts of shadows
+*in scrolls
+*
+*Revision 2.24  1995/06/05  09:25:11  Holt
+*extended the MaxY on crawl boarders by Y not to exceed 300.
+*
+*Revision 2.23  1995/06/02  09:47:17  Holt
+*may have fixed shadows and boarders on crawls.
+*
+*Revision 2.22  1995/06/01  15:07:41  Holt
+*more fixes
+*
+*Revision 2.21  1995/05/19  17:59:40  Holt
+*more fixes.
+*
+*Revision 2.20  1995/05/19  10:00:52  Holt
+*some fixes.
+*
+*Revision 2.19  1995/03/18  00:50:26  pfrench
+*Had to write replacement bitmap allocation functions
+*for A2000's since they're not running V39
+*
+*Revision 2.18  1995/03/05  14:38:26  CACHELIN4000
+*define out buggy shadows/outlines on scrolls/crawls ... we gotta ship NOW
+*
+*Revision 2.17  1995/02/28  16:19:00  CACHELIN4000
+*Repair rendering glitch in  scroll
+*
+*Revision 2.16  1995/02/18  14:58:50  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.15  1995/02/17  09:24:55  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.13  1995/02/13  17:17:51  Kell
+*Added some CopyFast routines for Keyed pages.
+*
+*Revision 2.12  1995/02/13  14:08:22  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.11  1995/02/12  16:11:27  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.10  1995/02/10  18:59:57  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.9  1995/02/06  17:15:05  Kell
+**** empty log message ***
+*
+*Revision 2.8  1995/02/06  15:15:59  Kell
+*New Open/Close, Init/Free stuff for easier coding.
+*
+*Revision 2.7  1995/02/03  16:23:45  Kell
+**** empty log message ***
+*
+*Revision 2.6  1995/02/01  18:56:00  Kell
+**** empty log message ***
+*
+*Revision 2.5  1995/02/01  17:40:00  Kell
+**** empty log message ***
+*
+*Revision 2.4  1995/02/01  17:31:35  Kell
+**** empty log message ***
+*
+*Revision 2.1  1995/01/31  23:19:36  CACHELIN4000
+*Added ClearBitMap...
+*
+*Revision 2.0  1995/01/31  17:01:14  Kell
+*FirstCheckIn
+*
+*
+* Scroll page rules:
+*	- Lines can not overlap Y coords
+*	- one text face color per Line
+*	- shadow and outline are opaque and black
+*	- max 640 wide
+*
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <dos.h>
+#include <stdio.h>
+#include <math.h>
+#include <libraries/iff.h>
+
+//#define SERDEBUG	1
+#include <serialdebug.h>
+
+#include <proto/exec.h>
+#include <proto/graphics.h>
+#include <proto/layers.h>
+#include <proto/intuition.h>
+#include "crlib:libinc/crouton_all.h"
+
+#include "movepage.h"
+
+#ifndef PROTO_PASS
+#include "sw:proto/Scroll.p"
+#include "sw:proto/NewCrawl.p"
+
+//*************************************************************
+struct BitMap *wiener_AllocBitMap(
+	ULONG w, ULONG h, ULONG d, ULONG flags, struct BitMap *friend );
+
+UWORD DAVID;
+
+VOID wiener_FreeBitMap(struct BitMap *bm);
+
+UBYTE *__asm WordAfterPlanes(
+	register __a0 struct BitMap *BM);
+
+ULONG __asm CopyLongBlock2(
+	register __a0 struct BitMap *SourceBitMap,
+	register	__a1 struct BitMap *DestinationBitMap,
+	register	__d0 UWORD X1,
+	register	__d1 UWORD Y1,
+	register	__d2 UWORD Width,
+	register	__d3 UWORD Height);
+
+BOOL __asm ORIntoMS(
+	register __a0 struct BitMap *BitMap,
+	register __a1 struct Rectangle *Rect);
+
+VOID __asm DoBMOutline(
+	register __a0 struct BitMap *SourceBM,
+	register __a1 struct Rectangle *SourceRect,
+	register __a2 struct BitMap *DestBM,
+	register __d0 WORD DestMinX,
+	register __d1 WORD DestMinY,
+	register __d2 UWORD OutlineType);
+
+
+VOID *__asm RoundLW2(
+	register __d0 VOID *address );
+
+VOID __asm ByteFillMemory(
+	register __a0 UBYTE *MemBlock,
+	register __d0 BYTE FillValue,
+	register __d1 ULONG MemSize);
+
+BOOL __asm ScrollPage(VOID);
+BOOL __asm CrawlPage(VOID);
+
+#endif
+//*************************************************************
+
+//#ifdef PROTO_PASS
+//#include "crlib:libinc/crouton_all.h"
+//#endif
+
+VOID WaitButton(VOID);
+
+extern struct Gadget *CurrentBottomList, *AllGadgets[];
+
+extern UBYTE *ToastChipMem, *ToastFastMem;
+
+struct RenderData OurRenderData;
+struct MovePage	*CurrentMovePage=NULL;
+
+//**********************
+// 2.0 Shadow/Outline info
+//WORD ShadowDX[] = { 0,1,1,1,0,-1,-1,-1 };
+//WORD ShadowDY[] = {-1,-1,0,1,1,1,0,-1 };
+
+// 3.0 Shadow/Outline info
+WORD ShadowDX[] = { 0,-1,-1,-1,0,1,1,1 };
+WORD ShadowDY[] = { 1,1,0,-1,-1,-1,0,1 };
+
+// Outline matrices are in a 1.17 ratio so they appear of
+// uniform width on all sides of text
+struct OutlineStuff Outlines[] = {
+	{ 0,0,0,0 },
+	{ 4,2,8,4 },
+	{ 4,2,8,4 },
+	{ 8,4,16,8 }
+};		// { 8,4,15,8 }
+
+
+// Letter->Flags : bottom 2 BITS = OL type, next 2 Shad type, next shad pri,
+// next 3 dir, next 3 len
+
+#define	BUGGY_OS	1
+#define	OL		0x00000003
+#define	STYP		0x0000000C
+#define	SPRI		0x00000010
+#define	SDIR		0x000000E0
+#define	SLEN		0x00000F00	// changed from x00000700
+#define	OLMASK		~OL
+#define	STYPMASK	~STYP
+#define	SPRIMASK	~SPRI
+#define	SDIRMASK	~SDIR
+#define	SLENMASK	~SLEN
+#define SET_OLTYPE(flags,type)		(flags=((flags&OLMASK	) | type))
+#define SET_SHADTYPE(flags,type)	(flags=((flags&STYPMASK) | (type<<2) ))
+#define SET_SHADPRI(flags,type)		(flags=((flags&SPRIMASK) | (type<<4) ))
+#define SET_SHADDIR(flags,type)		(flags=((flags&SDIRMASK) | (type<<5) ))
+#define SET_SHADLEN(flags,type)		(flags=((flags&SLENMASK) | (type<<8) ))
+#define OLTYPE(flags)		(flags&OL	)
+#define SHADTYPE(flags)	((flags&STYP)>>2)
+#define SHADPRI(flags)	((flags&SPRI)>>4)
+#define SHADDIR(flags)	((flags&SDIR)>>5)
+#define SHADLEN(flags)	((flags&SLEN)>>8) //8
+#define REL_XPOS	0x80000000 // use letter XPosition as relative to last one
+
+
+
+struct ScrollInfo *SI = NULL;
+struct BitMap *ScrollTextA, *ScrollTextB,*ScrollBM;
+UBYTE *AfterScroll,num=0;
+
+#ifdef SERDEBUG
+UBYTE	namebuff[100];
+#endif
+
+struct Library *IFFBase;
+struct Library *LayersBase;
+extern struct GfxBase *GfxBase;
+
+LONG	OpenCount=0;
+
+/****** NewScroll/ClearYBlock ***************************************
+*
+*   NAME
+*	ClearYBlock
+*
+*   SYNOPSIS
+*	VOID __asm ClearYBlock(
+*		register __a0 struct BitMap *BM,
+*		register __d0 UWORD MinY,
+*		register __d1 UWORD MaxY)
+*
+*   FUNCTION
+*		Calls BltClear() to clear MinY to MaxY of bitmap
+*
+********************************************************************/
+VOID __asm ClearYBlock(
+	register __a0 struct BitMap *BM,
+	register __d0 UWORD MinY,
+	register __d1 UWORD MaxY)
+{
+	UWORD A;
+	ULONG StartOffset,ClearSize;
+
+	StartOffset = BM->BytesPerRow * MinY;
+	ClearSize = (ULONG)(BM->BytesPerRow * (MaxY - MinY + 1));
+	for (A = 0; A < BM->Depth; A++)
+		BltClear(BM->Planes[A] + StartOffset,ClearSize,0);
+	WaitBlit();
+}
+
+
+
+/****** NewSupport/ClearBitMap ***************************************
+*
+*   NAME
+*	ClearBitMap
+*
+*   SYNOPSIS
+*	VOID __asm ClearBitMap(
+*		register __a0 struct BitMap *BitMap)
+*
+*   FUNCTION
+*		clear bitmap with CPU
+*
+*********************************************************************/
+VOID __asm ClearBitMap(
+	register __a0 struct BitMap *BitMap)
+{
+	UWORD A;
+	ULONG PlaneSize;
+
+	PlaneSize = BitMap->BytesPerRow * BitMap->Rows;
+	for (A = 0; A < BitMap->Depth; A++)
+		ByteFillMemory(BitMap->Planes[A],0,PlaneSize);
+}
+
+
+/****** NewScroll/RenderScrollLine **********************************
+*
+*   NAME
+*	RenderScrollLine
+*
+*   SYNOPSIS
+*	BOOL __asm RenderScrollLine(
+*		register __a0 struct MovePage *Page,
+*		register __a2 struct BitMap *DestBM,
+*
+*   FUNCTION
+*		Renders face in planes 0,1, Out&Shad in plane 2
+*		if InterfaceOnly, just does face
+*
+********************************************************************/
+BOOL __asm RenderScrollLine(
+	register __a0 struct MovePage *Page,
+	register __a2 struct BitMap *DestBM)
+{
+	register struct ScrollInfo *S;
+	struct Rectangle FaceRect;
+
+	S = SI;
+
+	if (!DestBM)
+		DestBM = S->ScrollTextA;
+
+	FaceRect.MinX = 0; // flag that first DO_FACE
+
+	if(Page)
+	   DoMPLine(DestBM,&FaceRect,S->SrcFakeBM,Page);
+
+	WaitBlit();
+
+	return(TRUE);
+}
+
+/****** NewScroll/InitScrollRenderer ********************************
+*
+*   NAME
+*	InitScrollRenderer
+*
+*   SYNOPSIS
+*	BOOL __asm InitScrollRenderer(
+*		register __a0 UBYTE *ChipMem,
+*		register __a1 struct BitMap *TempChar,
+*		register __a2 struct BitMap *CharAlpha)
+*
+*   FUNCTION
+*		Readies scroll rendering engine
+*
+* THIS MAY BE CALLED MORE THAN ONCE
+********************************************************************/
+BOOL __asm InitScrollRenderer(
+	register __a0 UBYTE *ChipMem,
+	register __a1 struct BitMap *TempChar,
+	register __a2 struct BitMap *CharAlpha)
+{
+	register struct ScrollInfo *S;
+
+	if(!SI)
+	{
+	 if(SI = SafeAllocMem(sizeof(struct ScrollInfo),MEMF_CLEAR))
+    {
+		S = SI;
+
+		S->TempChar = TempChar;
+		S->CharAlpha = CharAlpha;
+
+		if (S->ScrollTextA = HelpAllocBitMap(SCROLL_WIDTH,SCROLL_RENDER_HEIGHT,
+			SCROLL_DEPTH,ChipMem,FALSE)) {
+		ChipMem = WordAfterPlanes(S->ScrollTextA);
+		if (S->ScrollTextB = HelpAllocBitMap(SCROLL_WIDTH,SCROLL_RENDER_HEIGHT,
+			SCROLL_DEPTH,ChipMem,FALSE)) {
+		ChipMem = WordAfterPlanes(S->ScrollTextB);
+		if (S->ScrollBM = HelpAllocBitMap(SCROLL_WIDTH,SCROLL_HEIGHT,
+			SCROLL_DEPTH,ChipMem,TRUE)) {
+
+		// Fake bitmaps/layers used during shadow/outline rendering
+		if (S->SrcFakeBM = HelpAllocBitMap(SCROLL_WIDTH,SCROLL_RENDER_HEIGHT,
+			1,TempChar->Planes[0],FALSE)) {
+		if (S->DstFakeBM = HelpAllocBitMap(SCROLL_WIDTH,SCROLL_RENDER_HEIGHT,
+			1,TempChar->Planes[0],FALSE)) {
+
+		ScrollTextA = S->ScrollTextA;
+		ScrollTextB = S->ScrollTextB;
+		ScrollBM = S->ScrollBM;
+
+		AfterScroll = WordAfterPlanes(S->ScrollBM);
+
+		return(TRUE);
+		} } } } }
+
+		FreeScrollRenderer();
+	}
+
+	return(FALSE);
+
+  }
+  else return(TRUE);
+}
+
+//*******************************************************************
+// Layers opened/closed seperately because cleared with blitter
+//
+BOOL __asm OpenScrollLayers(VOID)
+{
+	BOOL Success = FALSE;
+	register struct ScrollInfo *S;
+
+	S = SI;
+	if ((S->FakeLayerInfo = NewLayerInfo()) &&
+		(S->FakeLayer = CreateUpfrontLayer(S->FakeLayerInfo,S->DstFakeBM,
+		0,0,SCROLL_WIDTH-1,SCROLL_HEIGHT-1,LAYERSIMPLE,
+		(struct BitMap *)NULL))) {
+
+		Success = TRUE;
+	}
+	return(Success);
+}
+
+//*******************************************************************
+VOID __asm CloseScrollLayers(VOID)
+{
+	register struct ScrollInfo *S;
+
+	S = SI;
+	S->FakeLayer->rp->BitMap->Planes[0] = S->TempChar->Planes[0];
+	if (S->FakeLayer) {
+		DeleteLayer(NULL,S->FakeLayer);
+		S->FakeLayer = NULL;
+	}
+	if (S->FakeLayerInfo) {
+		DisposeLayerInfo(S->FakeLayerInfo);
+		S->FakeLayerInfo = NULL;
+	}
+	WaitBlit(); // DeleteLayer clears bitmap
+}
+
+/****** NewScroll/FreeScrollRenderer ********************************
+*
+*   NAME
+*	FreeScrollRenderer
+*
+*   SYNOPSIS
+*	VOID __asm FreeScrollRenderer(VOID)
+*
+*   FUNCTION
+*		Frees scroll rendering engine
+*
+* THIS MAY BE CALLED MORE THAN ONCE
+********************************************************************/
+VOID __asm FreeScrollRenderer(VOID)
+{
+	register struct ScrollInfo *S;
+
+	if (S = SI) {
+		HelpFreeBitMap(S->DstFakeBM);
+		HelpFreeBitMap(S->SrcFakeBM);
+		HelpFreeBitMap(S->ScrollBM);
+		HelpFreeBitMap(S->ScrollTextB);
+		HelpFreeBitMap(S->ScrollTextA);
+
+		FreeMem(S,sizeof(struct ScrollInfo));
+
+		SI = NULL;
+	}
+}
+
+// All open or none will be open.
+BOOL	__asm OpenScrawlLibs()
+{
+	if(!IFFBase)
+		if(!(IFFBase = OpenLibrary(IFFNAME,IFFVERSION)))
+			return(FALSE);
+
+	if(!LayersBase)
+		if(!(LayersBase = OpenLibrary("layers.library",36L)))
+	{
+			CloseScrawlLibs();		//close the ones that did open
+			return(FALSE);
+	}
+
+	return(TRUE);
+}
+
+void	__asm CloseScrawlLibs()
+{
+	if(IFFBase) CloseLibrary(IFFBase);
+	IFFBase=NULL;
+
+	if(LayersBase) CloseLibrary(LayersBase);
+	LayersBase=NULL;
+}
+
+//#define	CHIP_BM
+struct BitMap	*LoadBitMap(char *file)
+{
+	struct IFFL_BMHD *bmhd;
+	ULONG *iff_file;
+	UWORD w,h,d;
+	struct BitMap	*bm;
+	if(!(iff_file=IFFL_OpenIFF(file,IFFL_MODE_READ))) return(NULL);
+	if(iff_file[2]==ID_ILBM || iff_file[2]==ID_ANIM )
+	{
+		if((bmhd=IFFL_GetBMHD(iff_file)))
+		{
+			w=bmhd->w; h=bmhd->h; d=bmhd->nPlanes;
+#ifdef	CHIP_BM
+			if(bm=wiener_AllocBitMap(w,h,d,BMF_CLEAR,NULL))
+#else
+			if(bm=AllocFastBitMap(w,h,d))
+#endif
+			{
+				if(IFFL_DecodePic(iff_file,bm))
+				{
+					IFFL_CloseIFF(iff_file);
+					return(bm);
+				}
+				FreeFastBitMap(bm);
+			}
+		}
+	}
+	IFFL_CloseIFF(iff_file);
+	return(NULL);
+}
+
+void FreeMovePage(struct MovePage *MP)
+{
+	if(MP)
+	{
+		//DUMPUDECL("Free MP->Glyphs: ",MP->GlyphNum*sizeof(struct Glyph)," bytes\\");
+		//DUMPHEXIL("    @@         : ",(LONG)MP->Glyphs,"\\");
+		if(MP->Glyphs)	FreeMem(MP->Glyphs,	MP->GlyphNum*sizeof(struct Glyph));
+
+		//DUMPUDECL("Free MP->Letters: ",MP->CharNum*sizeof(struct Letter)," bytes\\");
+		//DUMPHEXIL("    @@         : ",(LONG)MP->Letters,"\\");
+		if(MP->Letters) FreeMem(MP->Letters,	MP->CharNum*sizeof(struct Letter));
+
+		//DUMPUDECL("Free MP->Lines: ",MP->LineNum*sizeof(struct MPLine)," bytes");
+		//DUMPUDECL("	 	",MP->LineNum," Lines\\");
+		//DUMPHEXIL("    @@         : ",(LONG)MP->Lines,"\\");
+		if(MP->Lines)	 FreeMem(MP->Lines,MP->LineNum*sizeof(struct MPLine));
+
+		//DUMPUDECL("Free MP->GBM: ",sizeof(struct BitMap)," bytes\\");
+		//DUMPHEXIL("    @@       : ",(LONG)MP->GBM,"\\");
+#ifdef	CHIP_BM
+		if(MP->GBM) wiener_FreeBitMap(MP->GBM);
+#else
+		if(MP->GBM) FreeFastBitMap(MP->GBM);
+#endif
+		if(MP->tmpBM) wiener_FreeBitMap(MP->tmpBM);
+
+		//DUMPUDECL("Free MP: ",sizeof(struct MovePage)," bytes\\");
+		FreeMem(MP,sizeof(struct MovePage));
+		MP=NULL;
+	}
+}
+
+// ********************************************************************
+// Allocates and fills  MovePage from file (already opened and positioned)
+struct MovePage *ReadMP(struct BufferLock *LB)
+{
+	struct MovePage *MP;
+	if (!LB->File) return(NULL);
+	if(!(MP=SafeAllocMem(sizeof(struct MovePage), MEMF_CLEAR))) return(NULL);
+
+	if (CR_ERR_NONE != BufferRead(LB,(UBYTE *)MP,sizeof(struct MovePage))) goto Failure;
+	if(!(MP->Glyphs = (struct Glyph *)	SafeAllocMem(MP->GlyphNum*sizeof(struct Glyph),MEMF_CLEAR))) goto Failure;
+	if(!(MP->Letters = (struct Letter *)SafeAllocMem(MP->CharNum*sizeof(struct Letter),MEMF_CLEAR))) goto Failure;
+	if(!(MP->Lines = (struct MPLine *)	SafeAllocMem(MP->LineNum*sizeof(struct MPLine), MEMF_CLEAR))) goto Failure;
+
+	if(CR_ERR_NONE != BufferRead(LB,(UBYTE *)MP->Glyphs ,MP->GlyphNum*sizeof(struct Glyph) )) goto Failure;
+	if(CR_ERR_NONE != BufferRead(LB,(UBYTE *)MP->Letters,MP->CharNum*sizeof(struct Letter) )) goto Failure;
+	if(CR_ERR_NONE != BufferRead(LB,(UBYTE *)MP->Lines	,MP->LineNum*sizeof(struct MPLine) )) goto Failure;
+	MP->GBM = NULL;
+	MP->tmpBM = NULL;
+
+	DUMPHEXIL("MP @@ ",(LONG)MP," = { ");
+	DUMPUDECW("GlyphNum=",MP->GlyphNum,", ");
+	DUMPUDECW("CharNum=",MP->CharNum,", ");
+	DUMPUDECW("LineNum=",MP->LineNum,"}\\ ");
+
+	return(MP);
+
+Failure:	// OK so i created a goto...  i feel dirty, but look at InitMovePage()..
+	DUMPMSG("LOAD MOVEPAGE FAILED FREEING MP STRUCT");
+	FreeMovePage(MP);
+	return(NULL);
+}
+
+#define PUSS	  0x20505553  //  PUS  = Parse Upwards Search Structure
+#define FORM	  0x464F524D  // FORM
+#define ILBM	  0x494C424D  // ILBM
+#define MVPG	  0x4D565047  // MVPG
+
+struct MovePage *LoadMovePage(char *file)
+{
+	struct MovePage *MP=NULL;
+	struct BufferLock *LB;
+	ULONG		Buff[8]={0,0,0,0,0,0,0,0};
+
+	if ((LB = BufferOpen(file,MODE_OLDFILE,60024,NULL)))
+	{
+		if( (CR_ERR_NONE==BufferRead(LB,(UBYTE *)Buff,12)) && (Buff[0]==FORM) )
+		{
+			while(Buff[2]!=MVPG)
+			{
+				DUMPHEXIL("MPChunk: ",Buff[0],"  { ");
+				DUMPSTR((UBYTE *)Buff);
+				DUMPUDECL(" }  Size: ",Buff[1],"  ");
+				DUMPHEXIL("Type: ",Buff[2],"   ");
+				DUMPMSG((UBYTE *)&(Buff[2]));
+				BufferSeek( LB, Buff[1]-4, OFFSET_CURRENT );		// Skip chunk
+				if (CR_ERR_NONE != BufferRead(LB,(UBYTE *)Buff,12)) break;
+			}
+			MP=ReadMP(LB);
+
+//#ifdef SERDEBUG
+			if( MP ) ShowGlyphList(MP);
+//#endif
+		}
+		BufferClose(LB);
+		if( MP )
+		{
+			if(MP->GBM=LoadBitMap(file))
+			{
+				DUMPHEXIL(" MP->GBM ",(LONG)MP->GBM," \\");
+				if(MP->tmpBM = wiener_AllocBitMap(MP->W+63,MP->H,MP->GBM->Depth,BMF_CLEAR,NULL))
+				{
+					DUMPMSG("Return MP...");
+					return(MP);
+				}
+			}
+		}
+		DUMPMSG("FAILED TO LOAD MP");
+		FreeMovePage(MP);	//this on failure
+	}
+	return(NULL);
+}
+
+struct BitMap *wiener_AllocBitMap(
+	ULONG w, ULONG h, ULONG d, ULONG flags, struct BitMap *friend )
+{
+	struct	BitMap *bm;
+	BOOL	ok = FALSE;
+
+	if ( bm = SafeAllocMem( sizeof(*bm),MEMF_CLEAR) )
+	{
+		ULONG			planesize;
+
+		// planesize = RASSIZE(w,h);
+
+		w = ((w + 15)>>4)<< 1;
+		planesize = w * h;
+
+#ifdef SERDEBUGger
+		sprintf(namebuff,"W,H: %d %d",w,h);
+		DUMPSTR(namebuff);
+#endif
+
+		if ( bm->Planes[0] = SafeAllocMem(planesize * d,MEMF_CHIP|MEMF_CLEAR) )
+		{
+			PLANEPTR			*pp = &bm->Planes[1];
+			LONG				 p_offset = planesize;
+
+			bm->BytesPerRow = w;
+			bm->Rows = h;
+			bm->Depth = d;
+
+			/* Fill out all the plane ptrs */
+			while ( --d )
+			{
+				*pp = (PLANEPTR) ((char *)bm->Planes[0] + p_offset);
+				pp++;
+				p_offset += planesize;
+			}
+
+			ok = TRUE;
+		}
+
+		if ( !ok )
+		{
+			FreeMem(bm,sizeof(*bm));
+			bm = NULL;
+		}
+	}
+
+	return(bm);
+}
+
+VOID wiener_FreeBitMap(struct BitMap *bm)
+{
+	if ( bm )
+	{
+		if ( bm->Planes[0] )
+		{
+			ULONG			planesize;
+
+			planesize = bm->BytesPerRow * bm->Rows;
+
+
+			FreeMem( bm->Planes[0], planesize * bm->Depth );
+		}
+
+		FreeMem(bm,sizeof(*bm));
+	}
+}
+
+#ifdef asdfg
+void	ShowMovePage(struct MovePage *MP, struct BitMap *dbm)
+{
+	struct Rectangle rectum;
+	struct BitMap	*tmp;
+	DUMPMSG("ShowMovePage");
+
+	if(tmp=wiener_AllocBitMap( (dbm->BytesPerRow)<<3,dbm->Rows,1,BMF_CLEAR,NULL ))
+	{
+		for( MP->CurLine=0, MP->CurChar=0; MP->CurLine<MP->LineNum; MP->CurLine++)
+			DoMPLine(dbm,&rectum,tmp,MP);
+		MP->CurLine=0;
+		MP->CurChar=0;
+		wiener_FreeBitMap(tmp);
+	}
+}
+#endif
+
+
+// render current char into destBM, return dx for new X <<< USED BY 
+UWORD RenderMPChar(struct BitMap *DestBM, struct MovePage *MP, WORD X, WORD Y)
+{
+	struct BitMap *tbm = MP->tmpBM;
+ 	struct BitMap FBM1,FBM2;
+	struct Letter *let;
+	struct Glyph	*gly;
+	int    dx;
+	struct Rectangle Face,Out,Shad;
+	UWORD	W=0;
+	char letter[3]="  ";
+
+// create the forground plane.
+//	FBM1 = *tbm;
+
+//	FBM2.BytesPerRow = tbm->BytesPerRow;
+//	FBM2.Rows = tbm->Rows;
+//	FBM2.Flags = tbm->Flags;
+//	FBM2.Depth = 1;
+//	FBM2.Planes[0] = tbm->Planes[0];
+//	FBM2.Planes[1] = tbm->Planes[1];
+
+	FBM2.BytesPerRow = DestBM->BytesPerRow;
+	FBM2.Rows = DestBM->Rows;
+	FBM2.Flags = DestBM->Flags;
+	FBM2.Depth = 1;
+	FBM2.Planes[0] = DestBM->Planes[1] ;
+
+
+// create the background plane.
+//	FBM2 = *DestBM;
+        
+	FBM1.BytesPerRow = DestBM->BytesPerRow;
+	FBM1.Rows = DestBM->Rows;
+	FBM1.Flags = DestBM->Flags;
+	FBM1.Depth = 1;
+	FBM1.Planes[0] = DestBM->Planes[2] ;
+
+/*
+	DUMPHEXIL("MP @@ ",(LONG)MP," = { ");
+	DUMPSDECL("GlyphNum=",MP->GlyphNum,", ");
+	DUMPSDECL("CharNum=",MP->CharNum,", ");
+	DUMPUDECW("CurChar=",MP->CurChar,",\\ ");
+	DUMPHEXIL("Glyphs @@",(LONG)MP->Glyphs,", ");
+	DUMPHEXIL("Letters @@",(LONG)MP->Letters,"\\, ");
+	DUMPSDECL("LineNum=",MP->LineNum,", ");
+	DUMPUDECW("CurLine=",MP->CurLine,"}\\ ");
+*/
+
+	let=&(MP->Letters[MP->CurChar]);
+	if( (MP->CurChar<MP->CharNum) && (let->Index<=MP->GlyphNum) )
+	{
+		
+//		if(let->Flags & REL_XPOS) X += let->XPos; // This is for kerning...
+		gly = &(MP->Glyphs[let->Index]);
+		dx = gly->X&0x001F;	  // last 5 bits offset due to long alignment in Copy LongBlock
+
+/*
+#ifdef SERDEBUGger
+		sprintf(namebuff,"MP: %08x Let[%d]=%c ",MP,MP->CurChar,gly->Code&0x00ff);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"Glyph Index: %d\tFastBlit: %d %d %d %d ",let->Index,gly->X,gly->Y,gly->W,gly->H);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\tLet->XPos= %d\t Actual X= %d ",let->XPos,X);
+		DUMPMSG(namebuff);
+		DUMPHEXIL("CPU CopyLongBlock2( ",(LONG)MP->GBM," )...\\");
+#endif
+*/
+
+// Copy the letter to chip ram from fast ram.
+//		DUMPMEM("TBM",tbm,64);		//test deh
+		CopyLongBlock2(MP->GBM,tbm,gly->X,gly->Y,gly->W,gly->H);
+// This is where the actual letter in blited down on the screen.	
+// BltBitMap(src,srcx,srcy,dest,destx,desty,w,h,minterm,mask,tempa)
+//
+//		sprintf(namebuff,"\tx,y w,h, dx %d %d %d %d %d ",X,Y,gly->W,gly->H,dx);
+//		DUMPMSG(namebuff);
+
+		BltBitMap(tbm,dx,0,DestBM,X,Y,gly->W,gly->H,0xe0,0x7,NULL); // MinTerm 60 = B&~C + ~B&C, e0=OR
+
+
+// This does not seem to do anything really.?
+//		BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+//
+// 		MP->CurChar++;		// dont inc curchar here or last char WW!
+		W = gly->W;
+		Face.MinX = X;
+		Face.MinY = Y;
+		Face.MaxX = X+gly->W-1;
+		Face.MaxY = gly->H-1;
+
+
+#ifdef SERDEBUGger
+			sprintf(namebuff,"max,min: %d %d %d %d",Face.MinX,Face.MinY,Face.MaxX,Face.MaxY);
+			DUMPSTR(namebuff);
+#endif
+		if(let->Flags & REL_XPOS)
+		{
+			W += let->XPos;
+			letter[0]=(UBYTE)gly->Code&0x00ff;
+/*
+#ifdef SERDEBUGger
+			DUMPSTR(letter);
+			DUMPSDECW("W = ",W,"     ");
+			DUMPSDECW("gly->W = ",gly->W,"     ");
+			DUMPSDECW("let->XPos = ",let->XPos,"\\");
+#endif
+*/
+			if(W==0) W=1;
+		}
+		WaitBlit();
+
+
+// test out making shadows and boarders.
+
+	Out.MinX = X;
+	Out.MinY = 0;
+	Out.MaxX = (X+gly->W-1);
+	Out.MaxY - gly->H-1+Y+8;
+	if (Out.MaxY > 300) Out.MaxY=300;
+
+	Face.MinX = X;
+	Face.MinY = Y;
+	Face.MaxX = (X+gly->W-1);
+	Face.MaxY = gly->H-1+Y;
+	if (Face.MaxY > 300) Face.MaxY=300;
+
+
+// end of test out making shadows and boarders.
+// #ifdef BUGGY_OS
+		if( SHADTYPE((MP->Letters[MP->CurChar]).Flags) || OLTYPE((MP->Letters[MP->CurChar]).Flags))
+		{
+			CalcOSRect((MP->Letters[MP->CurChar]).Flags,&Face,&Shad,&Out); // SO not clipped
+//			DUMPMSG("ORIntoMS...");
+//			ORIntoMS(DestBM,&Face); // OR into BP 2
+			if (OLTYPE((MP->Letters[MP->CurChar]).Flags))
+			{
+//				DUMPMSG("BlitClear...");
+//				BltClear(FBM1.Planes[0],FBM1.BytesPerRow*FBM1.Rows,1);
+//				DUMPMSG("DoBMOutline...");
+//***!!! NEED THIS.  Commented out because it's messed up!
+				DoBMOutline(&FBM2,&Face,&FBM1,Out.MinX,Out.MinY,OLTYPE((MP->Letters[MP->CurChar]).Flags) );
+
+			}
+			else
+			   BltBitMap(&FBM2,Face.MinX,Face.MinY,&FBM1,Face.MinX,Face.MinY,
+			   		(Face.MaxX-Face.MinX+1),(Face.MaxY-Face.MinY+1),
+					0xc0,0x1,NULL); //0xc0
+			if (SHADTYPE((MP->Letters[MP->CurChar]).Flags))		// make shadow into BP 2
+				MakeBMShadow(&FBM2,&Out,&FBM1,&Shad,TRUE,Out.MinX,Out.MinY,(MP->Letters[MP->CurChar]).Flags);
+				//MakeBMShadow(&FBM2,&Out,&FBM1,&Shad,TRUE,Out.MinX,Out.MinY,(MP->Letters[MP->CurChar]).Flags);
+			   	//BltBitMap(&FBM2,Face.MinX,Face.MinY,&FBM1,Face.MinX,Face.MinY,
+				//	(Face.MaxX-Face.MinX+1),(Face.MaxY-Face.MinY+1),
+				//	0xe0,0x1,NULL); //0xc0
+				
+			else
+				BltBitMap(&FBM2,Out.MinX,Out.MinY,&FBM1,Out.MinX,Out.MinY,
+				(Out.MaxX-Out.MinX+1),(Out.MaxY-Out.MinY+1),0x60,0x1,NULL);
+
+//				BltBitMap(&FBM2,Out.MinX,Out.MinY,&FBM1,Out.MinX,Out.MinY,
+//				(Out.MaxX-Out.MinX+1),(Out.MaxY-Out.MinY+1),0xc0,0x1,NULL);
+// 		MP->CurChar++;
+		}
+ 		MP->CurChar++;
+			
+
+	}
+#ifdef SERDEBUGger
+				sprintf(namebuff,"W: %d",W);
+				DUMPMSG(namebuff);
+#endif
+
+	return(W);		// return the width of char.
+}
+
+
+// render current line into destBM
+void RenderMPLine(
+	struct BitMap *DestBM, // dest chip BM
+	struct MovePage *MP,
+	struct Rectangle *rect)
+{
+	struct BitMap *tbm = MP->tmpBM;
+	struct Letter *let=&(MP->Letters[MP->CurChar]);
+	struct Glyph	*gly;
+	int	i;
+	UWORD	X=0,dx,LY;
+	WORD	Y=0,TY;
+	ULONG	flags;
+	struct OutlineStuff *OS;
+
+
+	flags = ((MP->Letters[MP->CurChar]).Flags);
+
+	LY=GetTallest(MP);
+
+	if ((MP->CurLine<MP->LineNum) && (MP->CurChar<MP->CharNum))
+	{
+		Y = ((ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] 
+				* SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+
+		if (Y<0)
+			Y = -Y;
+		else 	
+			Y = 0;			
+
+		OS = &Outlines[OLTYPE(flags)];
+
+		Y = Y + (OS->LeftHeight)+1;
+
+		if (Y < 0) Y = 0; 
+		if (Y > 8) Y = 8;
+		
+		rect->MaxY=12+Y+MP->H+((ShadowDY[(SHADDIR((MP->Letters[MP->CurChar]).Flags))]
+						   * SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+		rect->MinY = Y;
+		rect->MinX = let->XPos;
+		Y%=400;
+		TY=Y;
+		for( i=0; (i<MP->Lines[MP->CurLine].Length) && (MP->CurChar<MP->CharNum); i++ )
+		{
+			if(let->Flags & REL_XPOS)
+				X += let->XPos;
+			else
+				X = let->XPos;
+			gly = &(MP->Glyphs[let->Index]);
+
+			dx = gly->X&0x001F;
+	                
+			CopyLongBlock2(MP->GBM,tbm,gly->X,gly->Y,gly->W,gly->H);
+
+
+			//sprintf(namebuff,"\tx,y,w,h %d %d %d %d ",X,Y,gly->W,gly->H);
+			//DUMPMSG(namebuff);
+
+			
+			if(LY>gly->H)
+				Y=TY+(LY-gly->H)-8;	//testing 111595deh
+			else 
+				Y=TY;			
+
+
+
+			BltBitMap(tbm,dx,0,DestBM,X,Y,gly->W,gly->H,0xe0,0x7,NULL);
+
+			MP->CurChar++;
+
+			let++;
+		}
+		rect->MaxX = X + gly->W;
+		WaitBlit();
+	}
+}
+
+
+/*
+		DUMPUDECW(" YPos = ",MP->Lines[MP->CurLine].YPos,"\\");
+		DUMPUDECW(" Y = ",Y,"\\");
+#ifdef SERDEBUGger
+		sprintf(namebuff,"FaceRect: %d %d %d %d ",rect->MinX,rect->MinY,rect->MaxX,rect->MaxY);
+		DUMPMSG(namebuff);
+#endif
+*/
+
+
+
+//***********************************************************
+//* C impamentation of get largest char in line
+UWORD GetTallest(struct MovePage *MP)
+{
+	struct 	Letter *let;
+	struct 	Glyph  *gly;
+	struct 	MPLine *line;
+	int    	i;
+	UWORD	bbr,th,H=0;
+
+	th=MP->CurChar;
+	for( i=0; (i<MP->Lines[MP->CurLine].Length); i++ )
+	{
+		bbr = MP->Glyphs[MP->Letters[th].Index].H;	
+	if(bbr>H) H=bbr;
+	th++;	
+	}	
+	return(H);		// return the width of char
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//*************************************************************
+// This is called via a FGC_LOAD
+// This may be safely called multiple times.
+// If this fails, you need not ever call UnLoadScrawl.
+BOOL __asm FGC_LoadScrawl(VOID)
+{
+	if(!OpenCount)
+	{
+		if(OpenScrawlLibs())
+		{
+		   if(!InitRenderer(&OurRenderData))	//sets up stuff for both Scrolls & Crawls
+			{
+				CloseScrawlLibs();	//if any were open
+				return(FALSE);
+			}
+		}
+		else return(FALSE);
+	}
+
+	OpenCount++;
+	return(TRUE);
+}
+
+// This is called via a FGC_UNLOAD
+// THIS IS ONLY SENT TO CROUTONS THAT HAVE SUCCESSFULLY FGC_LOADed
+// This may be safely called multiple times.
+VOID __asm FGC_UnloadScrawl(VOID)
+{
+	OpenCount--;
+	if(!OpenCount)
+	{
+		FreeRenderer(&OurRenderData);
+		CloseScrawlLibs();
+	}
+	else if(OpenCount<0) OpenCount=0;  //protection againest too many UnLoads
+}
+
+// This is called via a FGC_SELECT
+// This may be safely called multiple times.
+BOOL __asm FGC_SelectScrawl(register __a0 char *buf)
+{
+	if(!CurrentMovePage)
+		if(!(CurrentMovePage=LoadMovePage(buf))) return(FALSE);
+
+	return(TRUE);
+}
+
+// This is called via a FGC_REMOVE
+// This may be safely called multiple times.
+VOID __asm FGC_RemoveScrawl(VOID)
+{
+		if(CurrentMovePage) FreeMovePage(CurrentMovePage);
+		CurrentMovePage=NULL;
+}
+
+// This is called via a FGC_AUTO (or FGC_TOMAIN)
+// This may be safely called multiple times.
+VOID __asm FGC_ToMainScroll(VOID)
+{
+			ScrollPage();
+}
+
+// This is called via a FGC_AUTO (or FGC_TOMAIN)
+// This may be safely called multiple times.
+VOID __asm FGC_ToMainCrawl(VOID)
+{
+			CrawlPage();
+}
+
+//*************************************************************
+
+BOOL __asm TestMPscroll(register __a0 char *buf)
+{
+	BOOL success=FALSE;
+
+	if(FGC_LoadScrawl())
+	{
+		if(FGC_SelectScrawl(buf))
+		{
+			FGC_ToMainScroll();
+			FGC_RemoveScrawl();
+			success=TRUE;
+		}
+
+		FGC_UnloadScrawl();
+	}
+
+	return(success);
+}
+
+
+BOOL __asm TestMPcrawl(register __a0 char *buf)
+{
+	BOOL success=FALSE;
+
+	if(FGC_LoadScrawl())
+	{
+		if(FGC_SelectScrawl(buf))
+		{
+			FGC_ToMainCrawl();
+			FGC_RemoveScrawl();
+			success=TRUE;
+		}
+
+		FGC_UnloadScrawl();
+	}
+
+	return(success);
+}
+
+//************************************************************
+BOOL DoMPLine(
+	struct BitMap *DestBM,
+	struct Rectangle *FaceRect,
+	struct BitMap *TempBM,   
+	struct MovePage *MP)
+{
+	struct BitMap FBM=*TempBM,*FakeBM=&FBM;
+	PLANEPTR TempBP;
+	struct Rectangle ShadRect,OutRect;
+	ULONG AtrFlags = (MP->Letters[MP->CurChar]).Flags;
+
+	TempBP = TempBM->Planes[0];
+
+	// always render the line at the top of the DestBM
+	ClearYBlock(DestBM,0,MP->H+10);
+
+	if((MP->CurLine>=MP->LineNum) || (MP->CurChar>=MP->CharNum) || (MP->Lines[MP->CurLine].Length<=0) )
+		return(FALSE);
+
+	// make face in BP 0,1
+	RenderMPLine(DestBM,MP,FaceRect); 						// FaceRect clipped
+	//sprintf(namebuff,"\tFaceRect: %d %d %d %d ",FaceRect->MinX,FaceRect->MinY,FaceRect->MaxX,FaceRect->MaxY);
+	//DUMPMSG(namebuff);
+	
+	CalcOSRect(AtrFlags,FaceRect,&ShadRect,&OutRect);	// SO not clipped
+
+	// if no out/shad, done
+	if( SHADTYPE(AtrFlags) || OLTYPE(AtrFlags) )
+	{
+		BltClear(DestBM->Planes[2],DestBM->BytesPerRow*DestBM->Rows,1);
+		BltClear(TempBM->Planes[0],TempBM->BytesPerRow*TempBM->Rows,1);
+	   	ORIntoMS(DestBM,FaceRect); // OR into BP 2
+		// make outline into Temp BP
+		TempBM->Planes[0] = DestBM->Planes[2];
+		FakeBM->Planes[0] = TempBP;
+		BltClear(TempBP,TempBM->BytesPerRow*TempBM->Rows,1);
+		if (OLTYPE(AtrFlags))
+		{
+			DUMPUDECL("Outline, MP->H = ",MP->H,"   ");
+			BltClear(TempBP,FakeBM->BytesPerRow*FakeBM->Rows,1);
+			DUMPUDECL("BM->Rows = ",FakeBM->Rows,"\\");
+			DoBMOutline(TempBM,FaceRect,FakeBM,OutRect.MinX,OutRect.MinY,OLTYPE(AtrFlags));
+		}
+		else 
+			BltBitMap(TempBM,FaceRect->MinX,FaceRect->MinY,
+			FakeBM,FaceRect->MinX,FaceRect->MinY,
+			(FaceRect->MaxX-FaceRect->MinX),((FaceRect->MaxY-FaceRect->MinY)+20),
+			0xc0,0x1,NULL);
+
+		// make shadow into BP 2
+		TempBM->Planes[0] = TempBP;
+		FakeBM->Planes[0] = DestBM->Planes[2];
+		if(SHADTYPE(AtrFlags))
+			MakeBMShadow(TempBM,&OutRect,FakeBM,&ShadRect,
+							 TRUE,OutRect.MinX,OutRect.MinY,AtrFlags);
+		else
+			BltBitMap(TempBM,OutRect.MinX,OutRect.MinY,
+			FakeBM,OutRect.MinX,OutRect.MinY,
+			(OutRect.MaxX-OutRect.MinX),(OutRect.MaxY-OutRect.MinY)+20,  
+			 0xc0,0x1,NULL);
+	}
+	WaitBlit();
+	return(TRUE);
+}
+
+
+//*******************************************************************
+VOID __asm MakeBMShadow(
+	register __a0 struct BitMap *SourceBM,
+	register __a1 struct Rectangle *SourceRect,
+	register __a2 struct BitMap *DestBM,
+	register __a3 struct Rectangle *DestRect,
+	register __d0 BOOL IncludeFaceInCast, // TRUE when using shadow for outline
+					 // and ShadowPriority==TRUE
+	register __d1 WORD DestFirstX,
+	register __d2 WORD DestFirstY,
+	register __d3 ULONG AtrFlags)
+{
+	WORD W,H,X,Y,DX,DY,A;
+
+	X = DestFirstX;
+	Y = DestFirstY;
+
+	W = SourceRect->MaxX-SourceRect->MinX+12;		//1;
+	H = SourceRect->MaxY-SourceRect->MinY+12;		//1;
+	DX = ShadowDX[SHADDIR(AtrFlags)];
+	DY = ShadowDY[SHADDIR(AtrFlags)];
+
+	if (SourceRect->MinY < 0) SourceRect->MinY=0;   // fix for garbage on top
+
+	if (SHADTYPE(AtrFlags) == SHADOW_DROP) {
+		for (A = 0; A < SHADLEN(AtrFlags); A++) {
+			BltBitMap(SourceBM,SourceRect->MinX,SourceRect->MinY,
+				DestBM,X,Y,W,H+20,0xe0,1,NULL);						//0xe0
+			X += DX;
+			Y += DY;
+		}
+	} 
+		else { // SHADOW_CAST
+//CLIPPING SEEMS TO BE HERE!!!! ALLTHOUGH NON OF THE VARABLES HERE HAVE ANY EFFEC
+		BltBitMap(SourceBM,SourceRect->MinX,SourceRect->MinY,   //testdeh060795
+			DestBM,X+(DX * SHADLEN(AtrFlags)),
+				Y+(DY * SHADLEN(AtrFlags)),W,H+20,0xe0,1,NULL);  //0xc0 0x60
+		if (IncludeFaceInCast)
+			BltBitMap(SourceBM,SourceRect->MinX,SourceRect->MinY,
+				DestBM,X,Y,W,H+20,0xe0,1,NULL);						//0xe0
+	}
+}
+
+//***********************************************
+VOID __regargs CalcShad(
+	ULONG flags,
+	struct Rectangle *Source,
+	struct Rectangle *Shadow)
+{
+	WORD A;
+
+#ifdef SERDEBUGger
+		sprintf(namebuff,"FLAGS: %d %d %d %d %d",flags,SHADTYPE(flags),SHADPRI(flags),SHADDIR(flags),SHADLEN(flags));
+		DUMPMSG(namebuff);
+#endif
+	CopyMem(Source,Shadow,sizeof(struct Rectangle));
+	if (SHADTYPE(flags)) {
+		A = ShadowDY[SHADDIR(flags)] * SHADLEN(flags);
+		if (A > 0) Shadow->MaxY += A;
+		else if (A < 0) Shadow->MinY += A;
+		A = ShadowDX[SHADDIR(flags)] * SHADLEN(flags);
+		if (A > 0) Shadow->MaxX += A;
+		else if (A < 0) Shadow->MinX += A;
+	}
+}
+
+//***********************************************
+/* VOID __asm CalcOSYMinMax( */
+VOID __asm CalcLineOSMinMax(
+	register __d0 ULONG flags,
+	register __a1 struct Rectangle *Rect)
+{
+	WORD A;
+	struct OutlineStuff *OS;
+	WORD TestDX1,TestDX2,TestDY1,TestDY2;
+
+#ifdef SERDEBUGGER
+		sprintf(namebuff,"FLAGS: %d %d %d %d %d",flags,SHADTYPE(flags),SHADPRI(flags),SHADDIR(flags),SHADLEN(flags));
+		DUMPMSG(namebuff);
+#endif
+
+	TestDY1 = TestDY2 = 0;
+	TestDX1 = TestDX2 = 0;
+	if (SHADTYPE(flags))
+	{
+		A = ShadowDX[SHADDIR(flags)]; // * SHADLEN(flags); //TEST!!!051095DEH
+		//if (A > 0) 
+		//	TestDX2 = A;
+		//else if (A < 0) 
+		//	TestDX1 = A;
+		
+		A = ShadowDY[SHADDIR(flags)]; // * SHADLEN(flags); //TEST!!!051095DEH
+		if (A > 0) 
+			TestDY2 = A;
+		else if (A < 0) 
+			TestDY1 = A;
+
+	}
+	if (OLTYPE(flags))
+	{
+		OS = &Outlines[OLTYPE(flags)];   
+		//TestDX1 -= OS->LeftWidth;	
+		//TestDX2 += (OS->TotalWidth-OS->LeftWidth); 
+		TestDY1 -= OS->LeftHeight;	
+		TestDY2 += (OS->TotalHeight-OS->LeftHeight); 
+	}
+
+	Rect->MinX = TestDX1;   //test DEH
+	Rect->MaxX = TestDX2;   //test DEH
+	Rect->MinY = TestDY1;   //test DEH
+	Rect->MaxY = TestDY2+10;   //test DEH
+
+#ifdef SERDEBUGger
+		sprintf(namebuff,"stuff: %d %d %d %d",TestDX1, TestDX2, OS->TotalWidth, OS->LeftWidth);
+		DUMPMSG(namebuff);
+#endif
+
+
+}
+
+VOID __regargs CalcOL(
+	ULONG flags,
+	struct Rectangle *Source,
+	struct Rectangle *Outline)
+{
+	struct OutlineStuff *OS;
+
+	CopyMem(Source,Outline,sizeof(struct Rectangle));
+	if (OLTYPE(flags)) {
+		OS = &Outlines[OLTYPE(flags)];
+		Outline->MinX -= OS->LeftWidth;
+		Outline->MinY -= OS->LeftHeight;
+		Outline->MaxX += (OS->TotalWidth-OS->LeftWidth);
+		Outline->MaxY += (OS->TotalHeight-OS->LeftHeight)+4;
+	}
+}
+
+BOOL __asm CalcOSRect(
+	register __d0 ULONG flags,
+	register __a0 struct Rectangle *FaceRect,
+	register __a1 struct Rectangle *ShadowRect,
+	register __a2 struct Rectangle *OutlineRect)
+{
+	if (SHADPRI(flags)) { // shadow comes first
+		CalcShad(flags,FaceRect,ShadowRect);
+		CalcOL(flags,ShadowRect,OutlineRect);
+	} else {
+		CalcOL(flags,FaceRect,OutlineRect);
+		CalcShad(flags,OutlineRect,ShadowRect);
+	}
+	return(TRUE);
+}
+
+
+
+/****** GraphicHelp/HelpAllocBitMap *********************************
+*
+*   NAME
+*	HelpAllocBitMap
+*
+*   SYNOPSIS
+*	struct BitMap *__asm HelpAllocBitMap(
+*		register __d0 UWORD Width,
+*		register __d1 UWORD Height,
+*		register __d2 UWORD Depth,
+*		register __a0 UBYTE *Planes,
+*		register __d3 BOOL Round)
+*
+*   FUNCTION
+*	Allocates bitmap structure and planes
+*	if Planes non-NULL, used for bitplane memory (assumed continguous)
+*	Round if TRUE aligns planes on double-longword boundaries
+*
+*********************************************************************
+*/
+struct BitMap *__asm HelpAllocBitMap(
+	register __d0 UWORD Width,
+	register __d1 UWORD Height,
+	register __d2 UWORD Depth,
+	register __a0 UBYTE *Planes,
+	register __d3 BOOL Round)
+{
+	struct BitMap *BM;
+	ULONG PlaneSize;
+	UWORD A;
+
+	if (Planes) {
+	if (BM = (struct BitMap *)SafeAllocMem(sizeof(struct BitMap),
+		MEMF_CLEAR)) {
+		BM->BytesPerRow = (Width+7)>>3;
+		BM->Rows = Height;
+		BM->Depth = Depth;
+		PlaneSize = BM->BytesPerRow * Height;
+		for (A = 0; A < Depth; A++) {
+			if (Round)
+				Planes = RoundLW2(Planes);
+			BM->Planes[A] = Planes;
+			Planes += PlaneSize;
+		}
+	}
+	}
+	return(BM);
+}
+
+/****** GraphicHelp/HelpFreeBitMap **************************************
+*
+*   NAME
+*	HelpFreeBitMap
+*
+*   SYNOPSIS
+*	VOID __asm HelpFreeBitMap(
+*		register __a0 struct BitMap *BM)
+*
+*   FUNCTION
+*	Frees the BitMap structure
+*
+*********************************************************************
+*/
+VOID __asm HelpFreeBitMap(
+	register __a0 struct BitMap *BM)
+{
+	if (BM) FreeMem(BM,sizeof(struct BitMap));
+}
+
+//*******************************************************************
+
+
+/****** GraphicHelp/AllocFastBitMap *********************************
+*
+*   NAME
+*	AllocFastBitMap
+*
+*   SYNOPSIS
+*	struct BitMap *__asm AllocFastBitMap(
+*		register __d0 UWORD Width,
+*		register __d1 UWORD Height,
+*		register __d2 UWORD Depth)
+*
+*   FUNCTION
+*	Allocates bitmap structure and planes from fast RAM
+*
+*********************************************************************
+*/
+struct BitMap *__asm AllocFastBitMap(
+	register __d0 UWORD Width,
+	register __d1 UWORD Height,
+	register __d2 UWORD Depth)
+{
+	struct BitMap *BM;
+	ULONG PlaneSize, flag=TRUE;
+	UWORD A;
+
+	if(!(Width && Height && Depth)) return(NULL);
+	if (BM = (struct BitMap *)SafeAllocMem(sizeof(struct BitMap),MEMF_CLEAR))
+	{
+		BM->BytesPerRow = (Width+7)>>3;
+		BM->Rows = Height;
+		BM->Depth = Depth;
+		PlaneSize = BM->BytesPerRow * Height;
+		for (A = 0; (A < Depth) && flag; A++)
+		{
+			BM->Planes[A] = SafeAllocMem(PlaneSize,MEMF_CLEAR);
+			flag = (ULONG)(BM->Planes[A]);
+		}
+		if(A!=Depth) // failure in allocation
+		{
+			while(A>=0)
+				if(BM->Planes[A]) FreeMem(BM->Planes[A--],PlaneSize);
+			FreeMem(BM,sizeof(struct BitMap));
+			return(NULL);
+		}
+	}
+	//DUMPMEM("FAST_BM",BM,100);
+	return(BM);
+}
+
+/****** GraphicHelp/FreeFastBitMap **************************************
+*
+*   NAME
+*	FreeFastBitMap
+*
+*   SYNOPSIS
+*	VOID __asm FreeFastBitMap(
+*		register __a0 struct BitMap *BM)
+*
+*   FUNCTION
+*	Frees the BitMap structure
+*
+*********************************************************************
+*/
+VOID __asm FreeFastBitMap(
+	register __a0 struct BitMap *BM)
+{
+	UWORD A;
+	ULONG PlaneSize;
+	if (BM)
+	{
+		PlaneSize = BM->BytesPerRow * BM->Rows;
+		for( A=0; (A<BM->Depth) && BM->Planes[A]; A++ )
+			FreeMem(BM->Planes[A],PlaneSize);
+		FreeMem(BM,sizeof(struct BitMap));
+	}
+}
+
+
+/****** NewSupport/InitRenderer *************************************
+*
+*   NAME
+*	InitRender
+*
+*   SYNOPSIS
+*	BOOL __asm InitRenderer(
+*		register __a0 struct RenderData *D)
+*
+*   FUNCTION
+*		Initializes rendering engine,
+*		Allocates buffers needed to render pages
+*		(Does not allocate any CHIP memory)
+*
+* THIS MAY BE CALLED MORE THAN ONCE
+********************************************************************/
+BOOL __asm InitRenderer(
+	register __a0 struct RenderData *D)
+{
+	UBYTE *A,*B;
+
+// asm allocates structure (which is actually gb_ structure)
+
+	if (ToastFastMem && ToastChipMem) {
+
+	// fast shared
+		A = ToastFastMem;
+
+		if (D->FastKey || (D->FastKey = HelpAllocBitMap(KEY_WIDTH,KEY_HEIGHT,
+			KEY_DEPTH,A,FALSE))) {
+
+	// every page type uses these chip buffers
+		A = ToastChipMem;
+
+		if (D->TempKey || (D->TempKey = HelpAllocBitMap(KEY_WIDTH,KEY_HEIGHT,
+			KEY_DEPTH,A,TRUE))) { // TempKey shared with TempChar
+
+		if (D->TempChar || (D->TempChar = HelpAllocBitMap(TEMP_CHAR_WIDTH,PAGE_HEIGHT,
+			ALPHA_DEPTH,A,FALSE))) {
+		A = WordAfterPlanes(D->TempChar);
+
+		if (D->CharAlpha || (D->CharAlpha = HelpAllocBitMap(PAGE_WIDTH,PAGE_HEIGHT,
+			ALPHA_DEPTH,A,FALSE))) {
+		B = A = WordAfterPlanes(D->CharAlpha);
+
+	// PAGE_SCROLL
+		if (InitScrollRenderer(B,D->TempChar,D->CharAlpha)) {
+
+	// PAGE_CRAWL
+		if (InitCrawlRenderer(B,D->TempChar,D->CharAlpha)) {
+			return(TRUE);
+	 } } } } }
+
+	FreeRenderer(D);
+	}}
+	return(FALSE);
+}
+
+//*******************************************************************
+// Layers opened/closed seperately because cleared with blitter
+//
+BOOL __asm OpenCGLayers(VOID)
+{
+	struct RenderData *D;
+	BOOL Success = FALSE;
+
+	D = &OurRenderData;
+
+//	DUMPMSG("Before NewLayerInfo 1");
+//	DUMPHEXIL("GfxBase=",(LONG)GfxBase,"\\");
+//	DUMPHEXIL("LayersBase=",(LONG)LayersBase,"\\");
+
+//	if ((D->AlphaLayerInfo = NewLayerInfo()) &&
+//	(D->AlphaLayer = CreateUpfrontLayer(D->AlphaLayerInfo,D->CharAlpha,0,0,
+//		(D->CharAlpha->BytesPerRow*8)-1,D->CharAlpha->Rows-1,LAYERSIMPLE,
+//		(struct BitMap *)NULL))) {
+
+
+	if (D->AlphaLayerInfo = NewLayerInfo())
+	{
+//		DUMPMSG("Before CreateUpfrontLayer 1");
+
+		if (D->AlphaLayer = CreateUpfrontLayer(D->AlphaLayerInfo,D->CharAlpha,0,0,
+		(D->CharAlpha->BytesPerRow*8)-1,D->CharAlpha->Rows-1,LAYERSIMPLE,
+		(struct BitMap *)NULL)) {
+
+//		DUMPMSG("Before CreateUpfrontLayer 2");
+
+	if ((D->TempLayerInfo = NewLayerInfo()) &&
+	(D->TempLayer = CreateUpfrontLayer(D->TempLayerInfo,D->TempChar,0,0,
+		(D->TempChar->BytesPerRow*8)-1,D->TempChar->Rows-1,LAYERSIMPLE,
+		(struct BitMap *)NULL))) {
+
+//	DUMPMSG("Before OpenScrollLayers() && OpenCrawlLayers()");
+
+	if (OpenScrollLayers() && OpenCrawlLayers()) {
+
+		Success = TRUE;
+	} } } }
+	return(Success);
+}
+
+//*******************************************************************
+VOID __asm CloseCGLayers(VOID)
+{
+	struct RenderData *D;
+
+	D = &OurRenderData;
+
+	CloseCrawlLayers();
+	CloseScrollLayers();
+	if (D->TempLayer) {
+		DeleteLayer(NULL,D->TempLayer);
+		D->TempLayer = NULL;
+	}
+	if (D->TempLayerInfo) {
+		DisposeLayerInfo(D->TempLayerInfo);
+		D->TempLayerInfo = NULL;
+	}
+	if (D->AlphaLayer) {
+		DeleteLayer(NULL,D->AlphaLayer);
+		D->AlphaLayer = NULL;
+	}
+	if (D->AlphaLayerInfo) {
+		DisposeLayerInfo(D->AlphaLayerInfo);
+		D->AlphaLayerInfo = NULL;
+	}
+	WaitBlit(); // DeleteLayer clears bitmap
+}
+
+/****** NewSupport/FreeRenderer *************************************
+*
+*   NAME
+*	FreeRender
+*
+*   SYNOPSIS
+*	VOID __asm FreeRenderer(
+*		register __a0 struct RenderData *D)
+*
+*   FUNCTION
+*		Free buffers needed to render pages
+*
+* THIS MAY BE CALLED MORE THAN ONCE
+********************************************************************/
+VOID __asm FreeRenderer(
+	register __a0 struct RenderData *D)
+{
+	if (D)
+  {
+
+// PAGE_CRAWL
+		FreeCrawlRenderer();	   //deletes CI structure & associated BMs
+
+// PAGE_SCROLL
+		FreeScrollRenderer();	//deletes SI structure & associated BMs
+
+// every page type uses these chip buffers
+	HelpFreeBitMap(D->CharAlpha);
+	HelpFreeBitMap(D->TempChar);
+	HelpFreeBitMap(D->TempKey);
+
+// fast shared
+	HelpFreeBitMap(D->FastKey);
+
+	D->CharAlpha=NULL;
+	D->TempChar=NULL;
+	D->TempKey=NULL;
+	D->FastKey=NULL;
+  }
+}
+
+// THE FOLLOWING COPYFAST ROUTONS ARE USED BY KEYED PAGES & CALLED BY THE SWITCHER!!!
+/****** NewInterface/CopyFastBMOH ***********************************
+*
+*   NAME
+*	CopyFastBMOH
+*
+*   SYNOPSIS
+*	VOID __asm CopyFastBMOH(
+*		register __a0 struct BitMap *Source,
+*		register __a1 struct BitMap *Dest,
+*		register __d0 ULONG SourceRowOffset,
+*		register __d1 ULONG Height,
+*		register __d2 ULONG DestRowOffset)
+*
+*   FUNCTION
+*		SourceRowOffset = #rows into SourceBM to start on
+*
+********************************************************************/
+VOID __asm CopyFastBMOH(
+	register __a0 struct BitMap *Source,
+	register __a1 struct BitMap *Dest,
+	register __d0 ULONG SourceRowOffset,
+	register __d1 ULONG Height,
+	register __d2 ULONG DestRowOffset)
+{
+	UWORD MaxP,P,R;
+	ULONG CopySize,Rows;
+	UBYTE *S,*D;
+
+	MaxP = min(Source->Depth,Dest->Depth);
+	Rows = min((Source->Rows-SourceRowOffset),(Dest->Rows-DestRowOffset));
+	Rows = min(Rows,Height);
+	if (Source->BytesPerRow > Dest->BytesPerRow)
+		CopySize = Dest->BytesPerRow;
+	else
+		CopySize = Source->BytesPerRow;
+
+	SourceRowOffset *= Source->BytesPerRow;
+	DestRowOffset *= Dest->BytesPerRow;
+
+	for (P=0; P < MaxP; P++) {
+		S = Source->Planes[P] + SourceRowOffset;
+		D = Dest->Planes[P] + DestRowOffset;
+		for (R = 0; R < Rows; R++) {
+			CopyMem(S,D,CopySize);
+			S += Source->BytesPerRow;
+			D += Dest->BytesPerRow;
+		}
+	}
+}
+
+/****** NewInterface/CopyFastBM ************************************
+*
+*   NAME
+*	CopyFastBM
+*
+*   SYNOPSIS
+*	VOID __asm CopyFastBM(
+*		register __a0 struct BitMap *Source,
+*		register __a1 struct BitMap *Dest)
+*
+*   FUNCTION
+*		Copies one bitmap to another, can handle
+*		one smaller than the other (clips it)
+*
+********************************************************************/
+VOID __asm CopyFastBM(
+	register __a0 struct BitMap *Source,
+	register __a1 struct BitMap *Dest)
+{
+	CopyFastBMOH(Source,Dest,0,65000,0);
+}
+
+//**********************************************************
+#ifdef SERDEBUG
+void ShowGlyphList(struct MovePage *MP)
+{
+	struct Glyph *Gly=MP->Glyphs;
+	ULONG	g;
+	for(g=0;g<MP->GlyphNum;g++)
+	{
+		sprintf(namebuff,"Glyphs[%d/%d]: %c At:	 (%d,0)	 Size:	 (%d,%d)",g,MP->GlyphNum,(Gly[g].Code&0x00FF),Gly[g].X,Gly[g].W,Gly[g].H);
+		DUMPMSG(namebuff);
+	}
+	for(g=0; g<MP->LineNum; g++)
+	{
+		sprintf(namebuff," Line %d of %d %d: Length= %d",g,MP->LineNum,MP->Lines[g].Length,MP->Lines[g].YPos );
+		DUMPMSG(namebuff);
+	}
+
+}
+#endif
+
+#ifndef SERDEBUG
+void ShowGlyphList(struct MovePage *MP) { }
+#endif
+
+// end of newscroll.c
+@
+
+
+2.29
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.28 1995/06/09 08:50:14 Holt Exp Holt $
+d9 3
+a513 4
+#ifdef SERDEBUGger
+				sprintf(namebuff,"Got BitMap: %d x %d x %d ",w,h,d);
+				DUMPMSG(namebuff);
+#endif
+d531 2
+a532 2
+		DUMPUDECL("Free MP->Glyphs: ",MP->GlyphNum*sizeof(struct Glyph)," bytes\\");
+		DUMPHEXIL("    @@         : ",(LONG)MP->Glyphs,"\\");
+d535 2
+a536 2
+		DUMPUDECL("Free MP->Letters: ",MP->CharNum*sizeof(struct Letter)," bytes\\");
+		DUMPHEXIL("    @@         : ",(LONG)MP->Letters,"\\");
+d539 3
+a541 3
+		DUMPUDECL("Free MP->Lines: ",MP->LineNum*sizeof(struct MPLine)," bytes");
+		DUMPUDECL("	 	",MP->LineNum," Lines\\");
+		DUMPHEXIL("    @@         : ",(LONG)MP->Lines,"\\");
+d544 2
+a545 2
+		DUMPUDECL("Free MP->GBM: ",sizeof(struct BitMap)," bytes\\");
+		DUMPHEXIL("    @@       : ",(LONG)MP->GBM,"\\");
+d553 1
+a553 1
+		DUMPUDECL("Free MP: ",sizeof(struct MovePage)," bytes\\");
+d618 1
+a618 1
+#ifdef SERDEBUG
+d620 1
+a620 1
+#endif
+d914 2
+a915 2
+	UWORD	X=0,dx;
+	WORD	Y=0;
+d922 2
+d926 2
+a927 4
+//		Y = 0; //MP->Lines[MP->CurLine].YPos; // 8 needed for the anti-shadows
+//		Y = 2; //MP->Lines[MP->CurLine].YPos;
+//		Y = 8; //MP->Lines[MP->CurLine].YPos;
+//		Y = 7; //MP->Lines[MP->CurLine].YPos;
+a928 4
+//		    10	
+
+//		Y = (8 - (2*(ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] * SHADLEN((MP->Letters[MP->CurChar]).Flags))));
+		Y = ((ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] * SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+d933 1
+a933 2
+		
+		
+d936 1
+a936 4
+		//if (SHADTYPE(flags) == SHADOW_DROP)
+		//{
+			Y = Y + (OS->LeftHeight)+1;
+
+a937 7
+#ifdef SERDEBUG
+			sprintf(namebuff,"Shad,OL: %d %d\t \\",
+			(ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] * SHADLEN((MP->Letters[MP->CurChar]).Flags)),(OS->LeftHeight));
+			DUMPSTR(namebuff);
+#endif
+
+		//}
+a939 28
+
+		
+		rect->MaxY = 12 + Y + MP->H+((ShadowDY[(SHADDIR((MP->Letters[MP->CurChar]).Flags))] * SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+		
+		
+#ifdef SERDEBUG
+			sprintf(namebuff,"Deaming of Y: %d\t \\",Y);
+			DUMPSTR(namebuff);
+#endif
+
+
+
+//
+//		if (1 == (ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)]))
+//		    	{Y = 5; //1
+//			rect->MaxY = Y + MP->H+10;//
+//			}
+//		else
+//			if (-1 == (ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)]))	
+//		    		{Y = 9;	//9
+//				rect->MaxY = Y + MP->H+10;
+//				}
+//		   	else
+//				{Y = 4; //0
+//				rect->MaxY = Y + MP->H+8;
+//				}
+
+//		(MP->Letters[MP->CurChar]).Flags
+d941 2
+a943 1
+//		rect->MaxY = Y + MP->H +  // + 10;
+d946 1
+a946 6
+/*
+		DUMPUDECW(" Line # = ",MP->CurLine," ");
+		DUMPUDECW(" of ",MP->LineNum," ");
+		DUMPUDECW("just ",MP->Lines[MP->CurLine].Length," bytes long at ");
+		DUMPUDECW(" Y = ",MP->Lines[MP->CurLine].YPos,"\\");
+*/
+a948 4
+#ifdef SERDEBUGger
+			sprintf(namebuff,"Line: %d\t Xpos: %d \\",MP->CurLine,gly->Code&0x00ff, let->XPos);
+			DUMPSTR(namebuff);
+#endif
+d954 3
+a956 9
+			dx = gly->X&0x001F;	  // last 5 bits offset due to long alignment in Copy LongBlock
+/*
+#ifdef SERDEBUGger
+			sprintf(namebuff,"Line: %d Let[%d]=%c\tIndex: %d\tFastBlit: %d %d %d %d \\",MP->CurLine,MP->CurChar,gly->Code&0x00ff, let->Index,gly->X,gly->Y,gly->W,gly->H);
+			DUMPSTR(namebuff);
+			sprintf(namebuff,"  ChipBlit: %d 0 TO %d %d ",dx,X,Y);
+			DUMPMSG(namebuff);
+#endif
+*/
+d958 15
+a972 2
+			BltBitMap(tbm,dx,0,DestBM,X,Y,gly->W,gly->H,0xe0,0x7,NULL); // MinTerm 60 = B&~C + ~B&C
+//			BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+d974 1
+d979 4
+d984 2
+d991 21
+a1011 1
+	}
+d1014 21
+d1159 1
+a1159 2
+
+// always render the line at the top of the DestBM
+a1163 3
+// make face in BP 0,1
+		
+		RenderMPLine(DestBM,MP,FaceRect); // FaceRect clipped
+d1165 6
+a1170 14
+//For Debugging
+//		WaitButton();
+
+	CalcOSRect(AtrFlags,FaceRect,&ShadRect,&OutRect); // SO not clipped
+#ifdef SERDEBUGger
+		sprintf(namebuff,"\tFaceRect: %d %d %d %d ",FaceRect->MinX,FaceRect->MinY,FaceRect->MaxX,FaceRect->MaxY);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\t OutRect: %d %d %d %d ",OutRect.MinX,OutRect.MinY,OutRect.MaxX,OutRect.MaxY);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\tShadRect: %d %d %d %d ",ShadRect.MinX,ShadRect.MinY,ShadRect.MaxX,ShadRect.MaxY);
+		DUMPMSG(namebuff);
+#endif
+
+
+d1172 1
+a1172 2
+#ifdef BUGGY_OS
+// if no out/shad, done
+d1177 2
+a1178 3
+	   ORIntoMS(DestBM,FaceRect); // OR into BP 2
+
+// make outline into Temp BP
+a1181 2
+//	DUMPMEM("TempBM",DestBM,50);
+//	DUMPMEM("FakeBM",FakeBM,50);
+a1186 15
+			//FaceRect->MaxY = 100;
+			//OutRect.MaxY = 100;
+			//ShadRect.MaxY = 100;
+
+#ifdef SERDEBUGger
+		sprintf(namebuff,"\tFaceRect: %d %d %d %d ",FaceRect->MinX,FaceRect->MinY,FaceRect->MaxX,FaceRect->MaxY);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\t OutRect: %d %d %d %d ",OutRect.MinX,OutRect.MinY,OutRect.MaxX,OutRect.MaxY);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\tShadRect: %d %d %d %d ",ShadRect.MinX,ShadRect.MinY,ShadRect.MaxX,ShadRect.MaxY);
+		DUMPMSG(namebuff);
+		sprintf(namebuff,"\tfakebm: %d %d ",TempBM->Rows,TempBM->BytesPerRow);
+		DUMPMSG(namebuff);
+	
+#endif
+d1195 1
+a1195 1
+// make shadow into BP 2
+a1198 2
+		{
+			DUMPUDECL("Doing Shadow at y= ",OutRect.MinY,"\\");
+d1200 2
+a1201 3
+				          TRUE,OutRect.MinX,OutRect.MinY,AtrFlags);
+		} else
+			//DUMPUDECL("Doing Shadow at y= ",OutRect.MinY,"\\");
+d1204 2
+a1205 2
+			(OutRect.MaxX-OutRect.MinX),(OutRect.MaxY-OutRect.MinY)+20,  //+10 +10
+			0xc0,0x1,NULL);
+a1206 6
+
+//For Debugging
+//	WaitButton();
+
+#endif
+
+d1211 1
+d1484 1
+a1484 1
+	DUMPMEM("FAST_BM",BM,100);
+d1774 1
+a1774 1
+		sprintf(namebuff," Line %d of %d: Length= %d",g,MP->LineNum,MP->Lines[g].Length);
+@
+
+
+2.28
+log
+@changed letter positioning so it uses outlines only unless -shadow
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.27 1995/06/08 11:16:10 Holt Exp Holt $
+d9 3
+@
+
+
+2.27
+log
+@FIXED COUNTDOWN RENDER PROBLEM
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.26 1995/06/07 16:25:17 Holt Exp Holt $
+d9 3
+d189 3
+a191 3
+	{ 4,2,8,6 },
+	{ 4,2,8,6 },
+	{ 8,4,16,10 }
+d844 1
+a844 1
+	Out.MaxY - gly->H-1+Y;
+d914 3
+d918 1
+d927 16
+d944 8
+a951 2
+		Y = 5 - ((ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] * SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+		if (Y < 0) Y = 1;
+d955 2
+a956 3
+		rect->MaxY = 10 + Y + MP->H+((ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)] * SHADLEN((MP->Letters[MP->CurChar]).Flags)));
+
+
+@
+
+
+2.26
+log
+@made a lot more twiks on Scrolls and crawls
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.25 1995/06/05 11:02:32 Holt Exp Holt $
+d9 3
+@
+
+
+2.25
+log
+@worked on reduceing the cuttoff parts of shadows
+in scrolls
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.24 1995/06/05 09:25:11 Holt Exp Holt $
+d9 4
+d183 3
+a185 3
+	{ 4,2,7,4 },
+	{ 4,2,7,4 },
+	{ 8,4,16,8 }
+d906 3
+a908 1
+	UWORD	X=0,Y,dx;
+d912 1
+a912 1
+//		Y = 0; //MP->Lines[MP->CurLine].YPos;
+d914 1
+a914 1
+		Y = 5; //MP->Lines[MP->CurLine].YPos;
+d917 31
+a947 13
+		if (1 == (ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)]))
+		    	{Y = 5; //1
+			rect->MaxY = Y + MP->H+10;//
+			}
+		else
+			if (-1 == (ShadowDY[SHADDIR((MP->Letters[MP->CurChar]).Flags)]))	
+		    		{Y = 9;	//9
+				rect->MaxY = Y + MP->H+10;
+				}
+		   	else
+				{Y = 4; //0
+				rect->MaxY = Y + MP->H+8;
+				}
+d983 1
+a983 1
+			BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+d1112 1
+a1112 1
+	struct BitMap *TempBM,
+d1122 1
+d1129 1
+d1136 1
+a1136 1
+#ifdef SERDEBUG
+d1145 2
+d1153 2
+a1154 1
+		ORIntoMS(DestBM,FaceRect); // OR into BP 2
+d1166 15
+d1183 2
+a1184 1
+		else BltBitMap(TempBM,FaceRect->MinX,FaceRect->MinY,
+d1186 1
+a1186 1
+			(FaceRect->MaxX-FaceRect->MinX+1),(FaceRect->MaxY-FaceRect->MinY+1),
+d1188 1
+a1194 1
+		//!!! this is where the lines are comming from BUG00100!!!
+d1196 1
+a1196 1
+				TRUE,OutRect.MinX,OutRect.MinY,AtrFlags);
+d1201 1
+a1201 1
+			(OutRect.MaxX-OutRect.MinX+1),(OutRect.MaxY-OutRect.MinY+1),
+d1235 3
+d1241 1
+a1241 1
+				DestBM,X,Y,W,H,0xe0,1,NULL);						//0xe0
+d1245 4
+a1248 2
+	} else { // SHADOW_CAST
+		BltBitMap(SourceBM,SourceRect->MinX,SourceRect->MinY,
+d1250 1
+a1250 1
+				Y+(DY * SHADLEN(AtrFlags)),W,H,0xe0,1,NULL);  //0xc0 0x60
+d1253 1
+a1253 1
+				DestBM,X,Y,W,H,0xe0,1,NULL);						//0xe0
+d1324 1
+a1324 1
+	Rect->MaxY = TestDY2;   //test DEH
+@
+
+
+2.24
+log
+@extended the MaxY on crawl boarders by Y not to exceed 300.
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.23 1995/06/02 09:47:17 Holt Exp Holt $
+d9 3
+d906 3
+a908 2
+		Y = 0; //MP->Lines[MP->CurLine].YPos;
+		Y = 2; //MP->Lines[MP->CurLine].YPos;
+d912 2
+a913 2
+		    	{Y = 2;
+			rect->MaxY = Y + MP->H+5;
+d917 1
+a917 1
+		    		{Y = 9;
+d921 1
+a921 1
+				{Y = 6;
+d924 1
+d1149 1
+a1149 1
+		//!!! this is where the lines are comming from
+d1185 1
+@
+
+
+2.23
+log
+@may have fixed shadows and boarders on crawls.
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.22 1995/06/01 15:07:41 Holt Exp Holt $
+d9 3
+d831 2
+a832 1
+	Out.MaxY - gly->H-1+20;
+d837 2
+a838 1
+	Face.MaxY = gly->H-1;
+d1180 2
+a1181 2
+	W = SourceRect->MaxX-SourceRect->MinX+1;
+	H = SourceRect->MaxY-SourceRect->MinY+1;
+d1291 1
+a1291 1
+		Outline->MaxY += (OS->TotalHeight-OS->LeftHeight);
+@
+
+
+2.22
+log
+@more fixes
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.21 1995/05/19 17:59:40 Holt Exp Holt $
+d9 3
+d763 1
+a763 1
+		if(let->Flags & REL_XPOS) X += let->XPos; // This is for kerning...
+d792 1
+a792 1
+		BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+d1238 5
+a1242 3
+		//A = ShadowDX[SHADDIR(flags)] * 1;  //*SHADLEN(flags); //TEST!!!051095DEH
+		//if (A > 0) TestDX2 = A;
+		 //else if (A < 0) TestDX1 = A;
+d1244 5
+a1248 3
+		A = ShadowDY[SHADDIR(flags)];	//*SHADLEN(flags); //TEST!!!051095DEH
+		if (A > 0) TestDY2 = A;
+		 else if (A < 0) TestDY1 = A;
+@
+
+
+2.21
+log
+@more fixes.
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.20 1995/05/19 10:00:52 Holt Exp Holt $
+d9 3
+d172 1
+a172 1
+	{ 7,3,13,5 }
+d707 1
+a707 1
+// render current char into destBM, return dx for new X
+d714 1
+a714 1
+	int    dx,bx,by;
+d759 2
+a760 3
+
+//		if(let->Flags & REL_XPOS) X += let->XPos;
+
+d763 1
+d784 1
+a784 1
+		
+d789 1
+a789 1
+//		BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+d794 1
+a794 1
+		Face.MinY = 0;
+d825 1
+a825 1
+	Out.MaxY - gly->H-1;
+d828 1
+a828 1
+	Face.MinY = 0;
+d866 2
+d869 1
+a869 1
+		}
+a870 1
+
+d1224 1
+a1224 1
+	WORD TestDX1,TestDX2;
+d1231 1
+d1235 8
+a1242 3
+		A = ShadowDX[SHADDIR(flags)] * 1;   //SHADLEN(flags); //TEST!!!051095DEH
+		if (A > 0) TestDX2 = A;
+		 else if (A < 0) TestDX1 = A;
+d1247 4
+a1250 2
+		TestDX1 -= OS->LeftWidth;	
+		TestDX2 += (OS->TotalWidth-OS->LeftWidth); 
+d1252 1
+d1255 3
+@
+
+
+2.20
+log
+@some fixes.
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.19 1995/03/18 00:50:26 pfrench Exp Holt $
+d9 3
+d169 1
+a169 1
+	{ 6,2,12,4 }
+d562 1
+d578 1
+a578 1
+	if ((LB = BufferOpen(file,MODE_OLDFILE,1024,NULL)))
+d611 1
+a611 1
+
+@
+
+
+2.19
+log
+@Had to write replacement bitmap allocation functions
+for A2000's since they're not running V39
+@
+text
+@d4 1
+a4 1
+* Copyright ©1995 NewTek, Inc.
+d7 1
+a7 1
+* $Id: scroll.c,v 2.18 1995/03/05 14:38:26 CACHELIN4000 Exp pfrench $
+d9 4
+d17 1
+a17 1
+*Repair rendering glitch in scroll
+d96 2
+d123 1
+d158 1
+a158 1
+WORD ShadowDY[] = {	1,1,0,-1,-1,-1,0,1 };
+d166 2
+a167 2
+	{ 8,4,15,8 }
+};
+d172 2
+d175 4
+a178 4
+#define	STYP	0x0000000C
+#define	SPRI	0x00000010
+#define	SDIR	0x000000E0
+#define	SLEN	0x00000700
+d193 1
+a193 1
+#define SHADLEN(flags)	((flags&SLEN)>>8)
+d483 1
+a483 1
+#ifdef SERDEBUG
+d616 2
+a617 2
+	struct BitMap		*bm;
+	BOOL					ok = FALSE;
+d628 5
+d701 1
+a701 4
+UWORD RenderMPChar(
+	struct BitMap *DestBM, // dest chip BM
+	struct MovePage *MP,
+	WORD X, WORD Y)
+d703 2
+a704 1
+	struct BitMap *tbm = MP->tmpBM, FBM1,FBM2;
+d707 1
+a707 1
+	int	dx;
+d712 23
+a734 1
+	FBM1 = *tbm;
+d736 1
+a736 3
+	FBM2 = *DestBM;
+	FBM2.Depth = 1;
+	FBM2.Planes[0] = DestBM->Planes[2] ;
+d750 1
+a750 1
+	if( (MP->CurChar<MP->CharNum) && (let->Index<MP->GlyphNum) )
+d758 1
+a758 1
+#ifdef SERDEBUG
+d768 3
+d772 6
+a778 1
+		BltBitMap(DestBM,X,Y,tbm,dx,0,gly->W,gly->H,0x00,0x3,NULL); // MinTerm 00 =Clear?
+d780 5
+a784 1
+		MP->CurChar++;
+d790 6
+d801 1
+a801 1
+#ifdef SERDEBUG
+d813 16
+a828 2
+#ifdef BUGGY_OS
+		if( SHADTYPE((MP->Letters[MP->CurChar]).Flags) || OLTYPE((MP->Letters[MP->CurChar]).Flags) )
+d831 3
+a833 3
+			DUMPMSG("ORIntoMS...");
+			ORIntoMS(DestBM,&Face); // OR into BP 2
+			if (OLTYPE((MP->Letters[MP->CurChar]).Flags) )
+d835 3
+a837 3
+				DUMPMSG("BlitClear...");
+				BltClear(FBM1.Planes[0],FBM1.BytesPerRow*FBM1.Rows,1);
+				DUMPMSG("DoBMOutline...");
+d839 2
+a840 1
+//	DoBMOutline(&FBM2,&Face,&FBM1,Out.MinX,Out.MinY,OLTYPE((MP->Letters[MP->CurChar]).Flags) );
+d843 17
+a859 7
+				BltBitMap(&FBM2,Face.MinX,Face.MinY,&FBM1,Face.MinX,Face.MinY,
+					(Face.MaxX-Face.MinX+1),(Face.MaxY-Face.MinY+1),
+					0xc0,0x1,NULL);
+			if (SHADTYPE((MP->Letters[MP->CurChar]).Flags) )		// make shadow into BP 2
+				MakeBMShadow(&FBM1,&Out,&FBM2,&Shad,TRUE,Out.MinX,Out.MinY,(MP->Letters[MP->CurChar]).Flags);
+			else BltBitMap(&FBM1,Out.MinX,Out.MinY,&FBM2,Out.MinX,Out.MinY,
+				(Out.MaxX-Out.MinX+1),(Out.MaxY-Out.MinY+1),0xc0,0x1,NULL);
+a860 1
+#endif
+d864 6
+a869 1
+	return(W);
+d885 1
+a885 1
+	if((MP->CurLine<MP->LineNum) && (MP->CurChar<MP->CharNum))
+d889 17
+d907 1
+a907 1
+		rect->MaxY = Y + MP->H + 10;
+d918 1
+a918 1
+#ifdef SERDEBUG
+d929 1
+a929 1
+#ifdef SERDEBUG
+d945 1
+a945 1
+#ifdef SERDEBUG
+d1108 3
+d1128 1
+d1132 1
+d1155 1
+a1155 1
+										  // and ShadowPriority==TRUE
+d1171 1
+a1171 1
+				DestBM,X,Y,W,H,0xe0,1,NULL);
+d1178 1
+a1178 1
+				Y+(DY * SHADLEN(AtrFlags)),W,H,0xc0,1,NULL);
+d1181 1
+a1181 1
+				DestBM,X,Y,W,H,0xe0,1,NULL);
+d1193 4
+d1218 5
+d1226 1
+a1226 1
+		A = ShadowDX[SHADDIR(flags)] * SHADLEN(flags);
+d1228 1
+a1228 1
+		else if (A < 0) TestDX1 = A;
+d1232 12
+a1243 6
+		OS = &Outlines[OLTYPE(flags)];
+		TestDX1 -= OS->LeftWidth;
+		TestDX2 += (OS->TotalWidth-OS->LeftWidth);
+	}
+	Rect->MinX = TestDX1;
+	Rect->MaxX = TestDX2;
+d1398 1
+@
+
+
+2.18
+log
+@define out buggy shadows/outlines on scrolls/crawls ... we gotta ship NOW
+@
+text
+@d7 5
+a11 2
+* $Id: Scroll.c,v 2.17 1995/02/28 16:19:00 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: Scroll.c,v $
+d89 5
+d139 1
+a139 1
+extern UBYTE *ToastChipMem, *ToastFastMem; 
+d237 1
+a237 1
+*   NAME   
+d352 1
+a352 1
+		
+d377 1
+a377 1
+	} 
+d401 1
+a401 1
+*   NAME   
+d469 1
+a469 1
+			if(bm=AllocBitMap(w,h,d,BMF_CLEAR,NULL))
+d511 1
+a511 1
+		if(MP->GBM) FreeBitMap(MP->GBM);
+d515 1
+a515 1
+		if(MP->tmpBM) FreeBitMap(MP->tmpBM);
+d591 1
+a591 1
+				if(MP->tmpBM = AllocBitMap(MP->W+63,MP->H,MP->GBM->Depth,BMF_CLEAR,NULL))
+d604 62
+d674 1
+a674 1
+	if(tmp=AllocBitMap( (dbm->BytesPerRow)<<3,dbm->Rows,1,BMF_CLEAR,NULL ))
+d680 1
+a680 1
+		FreeBitMap(tmp);
+d880 1
+a880 1
+// This is called via a FGC_UNLOAD 
+d1216 1
+a1216 1
+*   NAME   
+d1446 1
+a1446 1
+*   NAME   
+d1481 1
+a1481 1
+	D->FastKey=NULL;   
+@
+
+
+2.17
+log
+@Repair rendering glitch in scroll
+@
+text
+@d7 1
+a7 1
+* $Id: Scroll.c,v 2.16 1995/02/18 14:58:50 CACHELIN4000 Exp CACHELIN4000 $
+d9 3
+d70 1
+a70 1
+#define SERDEBUG	1
+d691 3
+a696 1
+/*
+a703 1
+
+a705 1
+
+a714 1
+*/
+d716 3
+d752 4
+d931 2
+d970 2
+@
+
+
+2.16
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: Scroll.c,v 2.15 1995/02/17 09:24:55 CACHELIN4000 Exp CACHELIN4000 $
+d9 3
+d67 1
+a67 1
+//#define SERDEBUG	1
+d734 1
+d736 1
+a736 1
+		rect->MaxY = Y + MP->H;
+d739 1
+d744 1
+a744 1
+
+d753 1
+a753 1
+
+d760 1
+a760 1
+
+d903 1
+a903 1
+	ClearYBlock(DestBM,0,MP->H-1);
+d917 1
+a917 1
+		sprintf(namebuff,"\tOutRect: %d %d %d %d ",OutRect.MinX,OutRect.MinY,OutRect.MaxX,OutRect.MaxY);
+d933 1
+a933 1
+			DUMPMSG("I feel like ");
+d935 1
+a935 1
+			DUMPMSG("Doing Outline");
+d945 1
+a945 1
+		if (SHADTYPE(AtrFlags))
+d947 1
+a947 1
+			DUMPMSG("Doing Shadow");
+@
+
+
+2.15
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: Scroll.c,v 2.13 1995/02/13 17:17:51 Kell Exp CACHELIN4000 $
+d9 3
+d267 1
+a267 1
+	
+d728 1
+a728 1
+	if(MP->CurLine<MP->LineNum)
+d735 4
+a738 1
+		DUMPUDECW(" Line Y = ",MP->Lines[MP->CurLine].YPos,"\\");
+d740 1
+a740 1
+		for( i=0; i<MP->Lines[MP->CurLine].Length; i++ )
+d748 1
+a748 1
+/*
+d755 1
+a755 1
+*/
+d764 1
+d769 1
+a769 5
+	}
+	else
+	{
+		MP->CurLine = 0;
+		MP->CurChar = 0;
+d900 2
+d910 1
+a910 1
+		sprintf(namebuff,"\tShadRect: %d %d %d %d ",ShadRect.MinX,ShadRect.MinY,ShadRect.MaxX,ShadRect.MaxY);
+d914 2
+a916 1
+/*
+d921 1
+d928 1
+d930 1
+a936 1
+
+d942 1
+d945 2
+a946 1
+		} else BltBitMap(TempBM,OutRect.MinX,OutRect.MinY,
+a950 1
+*/
+d1481 6
+@
+
+
+2.14
+log
+@Comment out shadow/ol from scroll
+@
+text
+@d732 1
+d742 1
+a744 1
+#endif
+a745 2
+			CopyLongBlock2(MP->GBM,tbm,gly->X,gly->Y,gly->W,gly->H);
+#ifdef SERDEBUG
+d747 1
+d749 2
+a750 1
+			DUMPMSG(namebuff);
+d760 1
+a761 1
+		DUMPMSG(namebuff);
+@
+
+
+2.13
+log
+@Added some CopyFast routines for Keyed pages.
+@
+text
+@d7 5
+a11 2
+* $Id: scroll.c,v 2.12 1995/02/13 14:08:22 CACHELIN4000 Exp Kell $
+* $Log: scroll.c,v $
+d61 1
+a61 1
+#define SERDEBUG	1
+a274 4
+// Test it all out
+//		for( Page->CurLine=0, Page->CurChar=0; Page->CurLine<Page->LineNum; Page->CurLine++)
+//			DoMPLine(DestBM,&FaceRect,S->SrcFakeBM,Page);
+
+d407 1
+a407 1
+	
+a567 1
+		DUMPMSG("Close Buffer...");
+a570 1
+			DUMPSTR("Load Bmap... ");
+a573 1
+				DUMPMSG("Alloc Chip Bmap...");
+d671 2
+d677 2
+a889 2
+/*
+	struct Attributes Attr;
+a890 6
+	Attr.ShadowLength 		= SHADLEN(AtrFlags);
+	Attr.ShadowType 			= SHADTYPE(AtrFlags);
+	Attr.OutlineType 			= OLTYPE(AtrFlags);
+	Attr.ShadowDirection 	= SHADDIR(AtrFlags);
+	Attr.ShadowPriority 	= SHADPRI(AtrFlags);
+*/
+a904 1
+#endif
+a905 1
+#ifdef SERDEBUG
+d907 1
+d909 1
+a909 2
+		DUMPMSG(namebuff);
+
+d940 1
+@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@d7 5
+a11 2
+* $Id: Scroll.c,v 2.11 1995/02/12 16:11:27 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: Scroll.c,v $
+d1394 73
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: Scroll.c,v 2.10 1995/02/10 18:59:57 CACHELIN4000 Exp CACHELIN4000 $
+d9 3
+d55 1
+a55 1
+//#define SERDEBUG	1
+d620 1
+d637 1
+a637 1
+ */
+d671 2
+@
+
+
+2.10
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: Scroll.c,v 2.9 1995/02/06 17:15:05 Kell Exp CACHELIN4000 $
+d9 3
+a637 3
+//		DUMPHEXIL("Letters[CurChar] @@",(LONG)let,", ");
+
+		if(let->Flags & REL_XPOS) X += let->XPos;
+d639 1
+a639 2
+		Face.MinX = X;
+		Face.MinY = 0;
+a641 2
+//		DUMPSDECW("let->Index=",let->Index,", ");
+//		DUMPHEXIL("Glyphs[let->Index] @@",(LONG)gly,"\\, ");
+d660 3
+a662 1
+		Face.MaxX = gly->W-1;
+d670 1
+a672 1
+/*
+d676 1
+d697 1
+a698 1
+*/
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@d7 5
+a11 2
+* $Id: scroll.c,v 2.8 1995/02/06 15:15:59 Kell Exp Kell $
+* $Log: scroll.c,v $
+d449 4
+d470 2
+d473 3
+d477 4
+d482 3
+d491 2
+d494 1
+a515 1
+   return(MP);
+d517 7
+d555 1
+a555 1
+	
+d564 1
+a564 1
+			DUMPMSG("Load Bmap...");
+d567 1
+d620 14
+a633 1
+	if(MP->CurChar<MP->CharNum)
+d635 2
+a636 1
+		let=&(MP->Letters[MP->CurChar]);
+a641 1
+
+d643 2
+d646 1
+a646 1
+
+d648 7
+a654 1
+		sprintf(namebuff,"Line: %d Let[%d]=%c\tIndex: %d\tFastBlit: %d %d %d %d ",MP->CurLine,MP->CurChar,gly->Code&0x00ff, let->Index,gly->X,gly->Y,gly->W,gly->H);
+d656 1
+a656 3
+		DUMPSTR(namebuff);
+
+		DUMPMSG("CPU CopyLongBlock()...");
+d658 1
+a658 3
+		DUMPMSG("Blit1()...");
+		BltBitMap(tbm,dx,0,DestBM,X,Y,gly->W,gly->H,0xe0,0x7,NULL); // MinTerm 60 = B&~C + ~B&C
+		DUMPMSG("Blit2()...");
+d660 1
+d665 7
+a671 1
+		if(let->Flags & REL_XPOS) W += let->XPos;
+d673 1
+a687 1
+
+d689 4
+a692 3
+			else BltBitMap(&FBM2,Face.MinX,Face.MinY,&FBM1,Face.MinX,Face.MinY,
+				(Face.MaxX-Face.MinX+1),(Face.MaxY-Face.MinY+1),
+				0xc0,0x1,NULL);
+d698 1
+a699 1
+	else MP->CurChar = 0;
+d733 1
+a733 1
+			sprintf(namebuff,"Line: %d Let[%d]=%c\tIndex: %d\tFastBlit: %d %d %d %d ",MP->CurLine,MP->CurChar,gly->Code&0x00ff, let->Index,gly->X,gly->Y,gly->W,gly->H);
+d1284 1
+a1284 1
+	DUMPMSG("Before NewLayerInfo 1");
+d1296 2
+a1297 2
+		DUMPMSG("Before CreateUpfrontLayer 1");
+			
+d1302 1
+a1302 1
+		DUMPMSG("Before CreateUpfrontLayer 2");
+d1309 1
+a1309 1
+	DUMPMSG("Before OpenScrollLayers() && OpenCrawlLayers()");
+@
+
+
+2.8
+log
+@New Open/Close, Init/Free stuff for easier coding.
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.7 1995/02/03 16:23:45 Kell Exp Kell $
+d9 3
+d763 1
+a763 1
+VOID __asm FGC_AutoScroll(VOID)
+d770 1
+a770 1
+VOID __asm FGC_AutoCrawl(VOID)
+d785 1
+a785 1
+			FGC_AutoScroll();
+d805 1
+a805 1
+			FGC_AutoCrawl();
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.6 1995/02/01 18:56:00 Kell Exp Kell $
+d9 3
+d107 1
+a126 1
+struct MovePage	*CurrentMovePage=NULL;
+d166 2
+d280 1
+a286 1
+	BOOL Success = FALSE;
+d289 4
+a292 1
+	if (SI = SafeAllocMem(sizeof(struct ScrollInfo),MEMF_CLEAR)) {
+d319 1
+a319 1
+		Success = TRUE;
+d321 2
+d324 5
+a328 1
+	return(Success);
+d379 1
+d386 5
+a390 2
+		if (S->DstFakeBM) HelpFreeBitMap(S->DstFakeBM);
+		if (S->SrcFakeBM) HelpFreeBitMap(S->SrcFakeBM);
+a391 3
+		if (S->ScrollBM) HelpFreeBitMap(S->ScrollBM);
+		if (S->ScrollTextB) HelpFreeBitMap(S->ScrollTextB);
+		if (S->ScrollTextA) HelpFreeBitMap(S->ScrollTextA);
+d393 2
+d398 2
+a399 1
+BOOL	__asm InitIff()
+d401 3
+a403 2
+	if(!(IFFBase = OpenLibrary(IFFNAME,IFFVERSION)))
+		return(FALSE);
+d405 6
+a410 2
+	if(!(LayersBase = OpenLibrary("layers.library",36L)))
+		return(FALSE);
+d415 1
+a415 1
+void	__asm CloseIff()
+d417 1
+a417 1
+	if(IFFBase) CloseLibrary(IFFBase);		/* MUST ALWAYS BE CLOSED !! */
+d420 1
+a420 1
+	if(LayersBase) CloseLibrary(LayersBase);	/* MUST ALWAYS BE CLOSED !! */
+d433 1
+d451 1
+d453 1
+d461 2
+a462 2
+		if(MP->Letters)	FreeMem(MP->Letters,	MP->CharNum*sizeof(struct Letter));
+		if(MP->Lines)		FreeMem(MP->Lines,MP->LineNum*sizeof(struct MPLine));
+d479 2
+a480 1
+	if(!(MP=SafeAllocMem(sizeof(struct MovePage), MEMF_CLEAR))) return(MP);
+d491 1
+a492 1
+  return(MP);
+d494 1
+a494 7
+	if(MP)
+	{
+		if(MP->Glyphs) FreeMem(MP->Glyphs,	MP->GlyphNum*sizeof(struct Glyph));
+		if(MP->Letters) FreeMem(MP->Letters,	MP->CharNum*sizeof(struct Letter));
+		if(MP->Lines) FreeMem(MP->Lines,MP->LineNum*sizeof(struct MPLine));
+		FreeMem(MP,sizeof(struct MovePage));
+	}
+d544 2
+a545 1
+		FreeMovePage(MP);
+d703 5
+a707 1
+BOOL __asm TestMPscroll(register __a0 char *buf)
+d709 16
+a724 1
+	BOOL	success=FALSE;
+d726 7
+a732 1
+	if(InitIff())
+d734 15
+a748 2
+	  if(InitRenderer(&OurRenderData))
+	  {
+d750 7
+a756 2
+		if(CurrentMovePage=LoadMovePage(buf))
+		{
+d758 4
+d763 21
+a783 2
+			FreeMovePage(CurrentMovePage);
+			CurrentMovePage=NULL;
+d786 2
+a787 3
+		FreeRenderer(&OurRenderData);
+	  }
+	  CloseIff();
+d789 1
+d793 1
+d796 1
+a796 1
+	BOOL	success=FALSE;
+d798 1
+a798 1
+	if(InitIff())
+d800 1
+a800 4
+	  if(InitRenderer(&OurRenderData))
+	  {
+
+		if(CurrentMovePage=LoadMovePage(buf))
+d802 2
+a803 4
+
+			CrawlPage();
+			FreeMovePage(CurrentMovePage);
+			CurrentMovePage=NULL;
+d806 2
+a807 3
+		FreeRenderer(&OurRenderData);
+	  }
+	  CloseIff();
+d809 1
+d813 1
+a813 1
+
+d1076 1
+a1076 2
+	if (BM)
+		FreeMem(BM,sizeof(struct BitMap));
+d1173 1
+a1177 1
+	BOOL Success = FALSE;
+d1187 2
+a1188 2
+		if (D->FastKey = HelpAllocBitMap(KEY_WIDTH,KEY_HEIGHT,
+			KEY_DEPTH,A,FALSE)) {
+d1192 3
+a1194 2
+		if (D->TempKey = HelpAllocBitMap(KEY_WIDTH,KEY_HEIGHT,
+			KEY_DEPTH,A,TRUE)) { // TempKey shared with TempChar
+d1196 2
+a1197 2
+		if (D->TempChar = HelpAllocBitMap(TEMP_CHAR_WIDTH,PAGE_HEIGHT,
+			ALPHA_DEPTH,A,FALSE)) {
+d1199 3
+a1201 2
+		if (D->CharAlpha = HelpAllocBitMap(PAGE_WIDTH,PAGE_HEIGHT,
+			ALPHA_DEPTH,A,FALSE)) {
+d1209 2
+a1210 2
+			Success = TRUE;
+	} } } } } } }
+d1212 3
+a1214 1
+	return(Success);
+d1301 1
+d1306 2
+a1307 1
+	if (D) {
+d1310 1
+a1310 1
+		FreeCrawlRenderer();
+d1313 1
+a1313 1
+		FreeScrollRenderer();
+d1316 3
+a1318 6
+	if (D->CharAlpha)
+		HelpFreeBitMap(D->CharAlpha);
+	if (D->TempChar)
+		HelpFreeBitMap(D->TempChar);
+	if (D->TempKey)
+		HelpFreeBitMap(D->TempKey);
+d1321 7
+a1327 3
+	if (D->FastKey)
+		HelpFreeBitMap(D->FastKey);
+	}
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.5 1995/02/01 17:40:00 Kell Exp Kell $
+d9 3
+d40 1
+a40 1
+#define SERDEBUG	1
+d87 3
+d154 2
+d157 2
+d160 2
+d241 1
+a241 1
+
+d249 7
+a255 2
+	if(Page) DoMPLine(DestBM,&FaceRect,S->SrcFakeBM,Page);
+	
+d257 1
+d385 4
+d394 1
+a394 1
+	if(IFFBase) CloseLibrary(IFFBase);	/* MUST ALWAYS BE CLOSED !! */
+d396 3
+d494 5
+a498 5
+				DumpHexiL("MPChunk: ",Buff[0],"  { ");
+				DumpStr((UBYTE *)Buff);
+				DumpUDecL(" }  Size: ",Buff[1],"  ");
+				DumpHexiL("Type: ",Buff[2],"   ");
+				DumpMsg((UBYTE *)&(Buff[2]));
+d503 2
+d506 1
+d508 1
+d511 2
+d514 2
+d517 2
+d520 3
+d528 2
+d534 1
+a534 1
+	DumpMsg("ShowMovePage");
+d545 1
+a547 1
+
+d574 1
+d577 7
+d585 1
+d587 1
+d598 1
+d602 1
+d604 6
+a609 1
+				DoBMOutline(&FBM2,&Face,&FBM1,Out.MinX,Out.MinY,OLTYPE((MP->Letters[MP->CurChar]).Flags) );
+d653 1
+d655 2
+a656 1
+			DumpStr(namebuff);
+d658 1
+d660 2
+a661 1
+			DumpMsg(namebuff);
+d669 1
+d671 2
+a672 1
+		DumpMsg(namebuff);
+d681 25
+a705 1
+BOOL __asm TestMP(register __a0 char *buf)
+d707 1
+a707 1
+	if(CurrentMovePage=LoadMovePage(buf))
+d709 7
+a715 2
+//***!!! WRONG NUMBER OF PARAMETERS
+//		ShowMovePage(CurrentMovePage);
+d717 10
+a726 3
+	FreeMovePage(CurrentMovePage);
+	CurrentMovePage=NULL;
+	return(FALSE);
+d729 1
+d757 2
+a758 1
+		WaitButton();
+d761 1
+d763 3
+a765 1
+		DumpMsg(namebuff);
+d767 2
+a768 1
+		DumpMsg(namebuff);
+d801 2
+a802 1
+	WaitButton();
+a1118 3
+	// PAGE_STATIC and PAGE_BUFFER
+		if (D->FullAlpha = HelpAllocBitMap(PAGE_WIDTH,PAGE_HEIGHT,
+			KEY_DEPTH,A,FALSE)) {
+d1125 1
+a1125 1
+	} } } } } } } }
+d1140 15
+a1154 2
+	if ((D->AlphaLayerInfo = NewLayerInfo()) &&
+	(D->AlphaLayer = CreateUpfrontLayer(D->AlphaLayerInfo,D->CharAlpha,0,0,
+d1156 3
+a1158 1
+		(struct BitMap *)NULL))) {
+d1165 2
+d1170 1
+a1170 1
+	} } }
+a1225 3
+	if (D->FullAlpha)
+		HelpFreeBitMap(D->FullAlpha);
+
+d1241 1
+d1248 2
+a1249 2
+		sprintf(namebuff,"Glyphs[%d]: %c 	At:	 (%d,0)	 Size:	 (%d,%d)",g,(Gly[g].Code&0x00FF),Gly[g].X,Gly[g].W,Gly[g].H);
+		DumpMsg(namebuff);
+d1252 5
+d1258 1
+a1258 1
+// end of newscroll.c@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.4 1995/02/01 17:31:35 Kell Exp Kell $
+d9 3
+d37 3
+d95 2
+a236 4
+//**!! THIS IS WHAT WE HAD
+//	if(Page) DoMPLine(DestBM,&S->TotalRect,&FaceRect,S->FakeLayer,S->SrcFakeBM,Page);
+
+//*!! THIS IS WHAT I CHANGED IT TO. (SKell)
+d469 5
+a473 5
+//				DumpHexiL("MPChunk: ",Buff[0],"  { ");
+//				DumpStr((UBYTE *)Buff);
+//				DumpUDecL(" }  Size: ",Buff[1],"  ");
+//				DumpHexiL("Type: ",Buff[2],"   ");
+//				DumpMsg((UBYTE *)&(Buff[2]));
+d494 1
+a494 1
+//	DumpMsg("ShowMovePage");
+d596 2
+a597 2
+//			sprintf(namebuff,"Line: %d Let[%d]=%c\tIndex: %d\tFastBlit: %d %d %d %d ",MP->CurLine,MP->CurChar,gly->Code&0x00ff, let->Index,gly->X,gly->Y,gly->W,gly->H);
+//			DumpStr(namebuff);
+d599 2
+a600 2
+//			sprintf(namebuff,"  ChipBlit: %d 0 TO %d %d ",dx,X,Y);
+//			DumpMsg(namebuff);
+d609 1
+a609 1
+//		DumpMsg(namebuff);
+d661 1
+a661 1
+//		DumpMsg(namebuff);
+d663 1
+a663 1
+//		DumpMsg(namebuff);
+d759 26
+d993 1
+a993 1
+	if (D->SharedFast && D->SharedChip) {
+d996 1
+a996 1
+		A = D->SharedFast;
+d1002 1
+a1002 1
+		A = D->SharedChip;
+d1131 1
+a1131 1
+//		DumpMsg(namebuff);
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.1 1995/01/31 23:19:36 CACHELIN4000 Exp Kell $
+d9 3
+d614 1
+a614 1
+BOOL TestMP(char *buf)
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@a967 3
+//**!! This was not commented out, but looking at the next line, we can see it's weak.
+//		A = WordAfterPlanes(D->FastKey);
+
+a982 4
+
+//**!! Commented this out because it isn't used anywhere below
+//		A = WordAfterPlanes(D->FullAlpha);
+
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@a83 2
+extern struct RenderData *RD;
+
+d86 1
+d1009 1
+a1009 1
+	D = RD;
+d1033 1
+a1033 1
+	D = RD;
+@
+
+
+2.1
+log
+@Added ClearBitMap...
+@
+text
+@d7 1
+a7 1
+* $Id: scroll.c,v 2.0 1995/01/31 17:01:14 Kell Exp CACHELIN4000 $
+d9 3
+d70 5
+d82 1
+a82 2
+//**!!! THIS ISN'T DEFINED
+//VOID WaitButton(VOID);
+d84 1
+a84 2
+//**!!!!!! NOT DEFINED!!!
+//extern struct RenderData *RD;
+a614 1
+	{
+d616 2
+a617 3
+//***!!!! This shouldn't be commented out
+//			ShowMovePage(CurrentMovePage);
+	}
+d651 1
+a651 2
+//**!!!!!! NOT DEFINED!!!
+//		WaitButton();
+d690 1
+a690 2
+//**!!! THIS ISN'T DEFINED
+//	WaitButton();
+a960 7
+#ifndef FINAL_CODE
+	if (!D->ToasterBase) {
+		D->SharedFast = SafeAllocMem(SHARED_FAST_SIZE,NULL);
+		D->SharedChip = SafeAllocMem(SHARED_CHIP_SIZE,MEMF_CHIP);
+	}
+#endif
+
+d1007 1
+a1007 1
+	struct RenderData *D=NULL;
+d1010 1
+a1010 2
+//**!!!!!! NOT DEFINED!!!
+//	D = RD;
+d1032 1
+a1032 1
+	struct RenderData *D=NULL;
+d1034 1
+a1034 2
+//**!!!!!! NOT DEFINED!!!
+//	D = RD;
+a1094 9
+
+#ifndef FINAL_CODE
+	if (!D->ToasterBase) {
+		if (D->SharedChip)
+			FreeMem(D->SharedChip,SHARED_CHIP_SIZE);
+		if (D->SharedFast)
+			FreeMem(D->SharedFast,SHARED_FAST_SIZE);
+	}
+#endif
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@d7 4
+a10 2
+* $Id$
+* $Log$
+d12 1
+d164 27
+@

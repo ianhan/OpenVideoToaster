@@ -1,0 +1,2263 @@
+23d22
+< 	xref StdPot6
+24a24
+> 
+151,153c151
+< MenuUp		equ $69!$80
+< 
+< ;SERDEBUG	equ	1
+---
+> MenuUp	equ $69!$80
+155d152
+< 	include "ram:mod.i"
+167d163
+< 	include	"exec/nodes.i"
+169c165
+< 	include "exec/ports.i"	;for mp_size message port struct
+---
+> 	;include "exec/ports.i"	;for mp_size message port struct
+175,176d170
+< 	include	"ps:serialdebug.i"
+< 
+179,505d172
+< CHECKMASK:	MACRO	;(destroys d2/d3/d4)  (args d0=x d1=y a0=maskplane)
+< 	move.w	d1,d4			;d4 gonna be address in bitplane
+< 	mulu	PasteBitMap_(BP),d4	;y*#bytes per row in brush
+< 
+< 	move.w	d0,d3	;d3=copy of x for BYTE
+< 	asr.w	#3,d3	;x/8
+< 	add.L	d3,d4	;upper bits of D3 guaranteed cleared by caller
+< 	moveq	#7,d2	;prep for...
+< 	sub.w	d0,d2	;d2=bit # in byte (+junk >7, ignored in  bXXX.b opcode)
+< 	btst	d2,0(a0,d4.L)
+<  ENDM
+< 
+< 
+< STARTaLOOP:	MACRO	; dreg
+< 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+< 	move.w	ppix_row_less1_(BP),\2	;Paint PIXels per row, minus one
+<  ENDM
+< 
+< STARTaWordLOOP:	MACRO	; dreg	;sets up reg for long word counted loop
+< 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+< 	move.w	pwords_row_less1_(BP),\2	;Paint (short) Words per row
+<  ENDM
+< 
+< STARTaLongLOOP:	MACRO	; dreg	;sets up reg for long word counted loop
+< 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+< 	move.w	plwords_row_less1_(BP),\2	;Paint Long Words per row
+<  ENDM
+< 
+< ivp:	MACRO	;requires d2=#s_SIZEOF (digipaint pi)
+< 	move.l	d1,(a6)	;clears 2 words, verpixel & maxverpixel fields
+< 	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+<  endm
+< 
+< ivp8:	MACRO	;codesize6*8=48bytes
+< 	ivp
+< 	ivp
+< 	ivp
+< 	ivp
+< 
+< 	ivp
+< 	ivp
+< 	ivp
+< 	ivp
+<  endm	ivp8
+< 
+< 
+< REMOVEMSG:	MACRO	;cloned from exec/lists
+< 	MOVE.L	(A1),A0
+< 	MOVE.L	LN_PRED(A1),A1
+< 	MOVE.L	A0,(A1)
+< 	MOVE.L	A1,LN_PRED(A0)
+<  ENDM
+< 
+< rset_addrbit:	MACRO	;codesize 20bytes
+< 	;not for static...;nxtrandom d6		;MACRO, compute another random #
+< 		;compute static dither
+< 	;AUG211990;move.B	(a0)+,d6
+< 	;;eor.B	d0,d6	;row constant, static dither	
+< 
+< 	;;and.W	#$003f,d6;6 bits, only, for dither
+< 
+< 	move.b	d7,(a6)+ ;s_PlotFlag
+< 	;AUG211990;move.b d6,(a6)	;june22;d6,s_DitherThresh-s_PlotFlag(a6)
+< 	move.B	(a0)+,(a6)
+< 	;june22;lea	s_SIZEOF(a6),a6
+< 	lea	(s_SIZEOF-1)(a6),a6	;june22;s_SIZEOF(a6),a6
+<  ENDM
+< 
+< rsnybble:	  MACRO
+< 	rset_addrbit
+< 	rset_addrbit
+< 	rset_addrbit
+< 	rset_addrbit
+<  ENDM
+< 
+< set_dithbit:	MACRO
+< 	;move.B  (a1)+,(a6)		;dither value.b FROM table INTO savearray
+< 	move.b	d7,(a6)+		;s_PlotFlag(a6)
+< 	move.B	(a1)+,(a6)		;june22;(a1)+,s_DitherThresh-s_PlotFlag(a6)
+< 
+< 	clr.b	(a6)			;test only dither fix
+< 
+< 	add.l	d0,a6			;june;lea s_SIZEOF(a6),a6
+<  ENDM
+< 
+< setdbyte:	MACRO
+< 	move.l	A0,a1			;re-setup threshold ptr
+< 	set_dithbit
+< 	set_dithbit
+< 	set_dithbit
+< 	set_dithbit
+< 
+< 	set_dithbit
+< 	set_dithbit
+< 	set_dithbit
+< 	set_dithbit
+<  ENDM
+< 
+< setonebrushbit:	MACRO	;code size 10bytes
+< 	;JUNE061990;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also) 6+2=8 cy
+< 	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also) ;4 cy
+< 	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+< 	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+<  endm
+< 
+< set4bits:	MACRO	;code size 40 bytes
+< 	setonebrushbit
+< 	setonebrushbit
+< 	setonebrushbit
+< 	setonebrushbit
+<  endm
+< 
+< 
+< ;setone2brushbit:	MACRO	;code size 10bytes
+< ;	;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also)
+< ;	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also)
+< ;	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+< ;	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+< ;	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+< ;	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+< ;  endm
+< ;JUNE061990
+< 
+< setone2brushbit:	MACRO	;code size 10bytes
+< 	;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also)
+< 	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also)
+< 	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+< 	;add.l	d2,a6	;lea	s_SIZEOF(a6),a6 8 CYCLES
+< 	;scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev) 12 cy
+< 			;total WAS 8+12=20 cycles
+< 	scs	0(a6,d3.w)	;total is now 18 cyles
+< 	add.l	d2,a6	;(now =2*s_SIZEOF) ...;lea	s_SIZEOF(a6),a6
+<  endm
+< 
+< set4doublebits:	MACRO	;code size 40 bytes
+< 	setone2brushbit
+< 	setone2brushbit
+< 	setone2brushbit
+< 	setone2brushbit
+<  endm
+< 
+< dither_dx_l2s:	MACRO	;dreg {long register d0 or d2, WordINT.FRACword}
+< 	;ADD.L	#(3<<(16-6))!(%111111),\1	;add 'constant' to # b4 subtr dither (=dither-4)
+< 
+< 	;SUB.L	d4,\1	;(how novel!);ADD.L	d4,\1
+< ; DitherRemove test only	ADD.L	d4,\1	;digipaint pi...add +/- 1/2 dither value
+< ; DitherRemove test only	bpl.s	nddx\@	;not 0 (or negative)
+< ; DitherRemove test only	moveq	#0,\1
+< 
+< nddx\@:	swap	\1
+< 
+< 	cmp.w	#$0040,\1
+< 	bcs.s	ndok\@
+< 	moveq	#$3f,\1	;.w	#$000f,\1
+< ndok\@
+< 
+< 	ENDM		;dither_dx_l2s
+< 
+< 
+< 
+< do_add:	MACRO	;color	(d2=#15)
+< 	IFC '\1','red'
+< 	move.b	(a6),d1
+< 	add.b	(a1),d1 ;s_Paint\1(a6),d1	;add paint color
+< 	ENDC
+< 	IFNC '\1','red'
+< 	move.b	s_\1(a6),d1
+< 	add.b	s_\1(a1),d1 ;s_Paint\1(a6),d1	;add paint color
+< 	ENDC
+< 	bcc.s	do_add_end\@	;new color <= 255 is ok
+< 	move.B	d2,d1	;q #15,d1
+< do_add_end\@:
+< 	;17NOV91;move.b	d1,s_Paint\1(a6)
+< 	move.b	d1,s_\1(a1)
+<  ENDM
+< 
+< 
+< do_sub:	MACRO	;color
+< 	IFC '\1','red'
+< 	move.b	(a6),d1
+< 	sub.b	(a1),d1 ;s_Paint\1(a6),d1	;subtract paint color
+< 	ENDC
+< 	IFNC '\1','red'
+< 	move.b	s_\1(a6),d1
+< 	sub.b	s_\1(a1),d1 ;s_Paint\1(a6),d1	;subtract paint color
+< 	ENDC
+< 	bcc.s do_sub_end\@	;new color >= 0 is ok
+< 	moveq	#0,d1
+< do_sub_end\@:
+< 	;move.b	d1,s_Paint\1(a6)
+< 	move.b	d1,s_\1(a1)
+< 	ENDM
+< 
+< ditherend:	MACRO	;\1=color
+< 	move.b	s_Paint\1(a6),d2
+< 	swap	d2		;8.16  w.w
+< 	asr.w	#4,d2
+< 	dither_dx_l2s d2
+< 	;2.0;move.b	d2,s_\1(a6)	;is what weir gonna (try to) plot
+< 	move.b	d2,s_\1(a1)	;is what weir gonna (try to) plot
+<  ENDM
+< 
+< COPY1LOTOHI:	MACRO		;20 code bytes?
+< 		;copy all-at-once-with-no-loops Messes up A5=BP, From A0, To A1*2
+< 	movem.l	(a0),d2-d5/a2-a5	;8 .long = 32 bytes
+< 	movem.l	d2-d5/a2-a5,s_SIZEOF(a1)
+< 	movem.l	d2-d5/a2-a5,(a1)	;8+8n=72cy
+<  ENDM	;rts	;copy1lotohi
+< 
+< 
+< LOHIINNER:	MACRO		;32 bytes per (?)
+< 	COPY1LOTOHI			;from a0 record to 2 records...a1,a1*2
+< 	lea	-2*s_SIZEOF(a1),a1	;doubling...backup destination
+< 	ADD.L	d0,a0 ;lea	-s_SIZEOF(A0),A0	;source...backup
+<  ENDM
+< 
+< HITOLOINNER:	MACRO	;record size is 8.5*4(byte->lwords)=32+2=34 bytes
+< ;	moveq.l	#((s_SIZEOF)/2)-1,d0	;db' loop count, rest of record
+< ;to_lores_loop\@:
+< ;	move.w	(a0)+,(a1)+
+< ;	dbf	d0,to_lores_loop\@
+< ;	lea	s_SIZEOF(a0),a0
+< 
+< ;following code REQUIRES S_SIZEOF = 32
+< ;copy all-at-once-with-no-loops messes up A5=BP
+< ;...average colors between pixels...
+< 
+<   IFC 't','f' ;...it didn't handle the overflow....AUG091990
+< 	move.B	(a0),d2		;red
+< 	add.b	s_SIZEOF(a0),d2
+< 	asr.b	#1,d2
+< 	move.b	d2,(a0)
+< 	move.B	1(a0),d2	;green
+< 	add.b	1+s_SIZEOF(a0),d2
+< 	asr.b	#1,d2
+< 	move.b	d2,1(a0)
+< 	move.B	2(a0),d2	;blue
+< 	add.b	2+s_SIZEOF(a0),d2
+< 	asr.b	#1,d2
+< 	move.b	d2,2(a0)
+<   ENDC
+< 
+<   IFC 't','f' ;AUG271990....no 'averaging...'
+< 	moveq	#0,d2
+< 	moveq	#0,d3
+< 	move.B	(a0),d2		;red
+< 	move.B	s_SIZEOF(a0),d3
+< 	add.W	d3,d2
+< 	asr.W	#1,d2
+< 	move.b	d2,(a0)
+< 
+< 	moveq	#0,d2
+< 	;moveq	#0,d3
+< 	move.B	1(a0),d2		;green
+< 	move.B	1+s_SIZEOF(a0),d3
+< 	add.W	d3,d2
+< 	asr.W	#1,d2
+< 	move.b	d2,1(a0)
+< 
+< 	moveq	#0,d2
+< 	moveq	#0,d3
+< 	move.B	2(a0),d2		;blue
+< 	move.B	2+s_SIZEOF(a0),d3
+< 	add.W	d3,d2
+< 	asr.W	#1,d2
+< 	move.b	d2,2(a0)
+<   ENDC ;AUG271990....no 'averaging...'
+< 
+< 	movem.l	(a0)+,d2-d5/a2-a5	;8 .long = 32 bytes  adjusts a0=next
+< 	movem.l	d2-d5/a2-a5,(a1)	;8+8n=72cy
+< 	ADD.L	d0,a1 			;lea	32(a1),a1		;8 cy    point to very next record
+< 	ADD.L	d0,a0 			;lea	s_SIZEOF(a0),a0		; skip a record
+< 	ENDM
+< 
+< 
+< fixbrite:	macro
+< 	add.l	d2,d2			;kludge for 2*briteness allowance
+< ;BUGFIX june24 for "colors getting darker"
+< ;only do this if "solid blend"....
+< 	cmp.w	#$ff00,Pot0Temp_(BP)
+< 	bcs.s	noincr\@
+< 	;;cmp.w	#$ffff,Pot1Temp_(BP)
+< 	;;bne.s	noincr\@
+< 
+< 	cmp.l	#$10000,d2		;<1 already?
+< 	bcs.s	noincr\@		;...yep
+< 
+< 	;addq.w	#1,d2			;add '1' to final 8 bit value of each r,g,b
+< 	;add.L	#$8000,d2		;just add .5 (8 bit integer, + this, corrects?)
+< 	;add.L	#$c000,d2		;just add .75 (8 bit integer, + this, corrects?)
+< 	;add.L	#$ffff,d2		;just add .99 (8 bit integer, + this, corrects?)
+< 	ADD.L	#$10000,d2		;add 1  (NOTICE! color #1 might be gone...)
+< noincr\@:
+< 	cmp.l	d5,d2			;#$ffFFff,d2	;1.99999
+< 	bcs.s	fb\@
+< 	move.l	d5,d2			;#$ffFFff,d2
+< fb\@:
+<    endm
+< 
+< 
+< ;FINAL MOVE s_Paint(color) to s_(color)(a6)
+< ; D2="RatioA" with 15 bit fraction, d5=RatioB with 15 bit frac
+< shade24_color:	MACRO	;macro used by 'range' and 'clr' paint types
+<  ifc '\1','red'
+< 	moveq	#0,d0
+< 	moveq	#0,d1
+< 	move.b	(a1),d0			;s_Paintred(a6),d0
+< 	move.b	(a6),d1			;s_red(a6),d1
+< 	mulu	d2,d0			;ratioa, 15 bit fraction
+< 	mulu	d5,d1			;ratiob, 15 bit fraction
+< 	add.L	d1,d0
+< 	ADD.L	d0,d0			;<<1, since 15 bit fractions in d2,d5
+< 	swap	d0
+< 	move.b	d0,(a6) ;s_\1(a6)	;s_red	;is what weir gonna (try to) plot
+< 			MEXIT		;ENDM
+<   endc ;'red'
+< 	moveq	#0,d0
+< 	moveq	#0,d1
+< 	move.b	s_\1(a1),d0		;s_Paint\1(a6),d0
+< 	move.b	s_\1(a6),d1		;s_red(a6),d1
+< 	mulu	d2,d0			;ratioa, 15 bit fraction
+< 	mulu	d5,d1			;ratiob, 15 bit fraction
+< 	add.L	d1,d0
+< 	ADD.L	d0,d0			;<<1, since 15 bit fractions in d2,d5
+< 	swap	d0
+< 	move.b	d0,s_\1(a6)		;s_red	;is what weir gonna (try to) plot
+<  ENDM
+539c206
+< 	xjsr	FixInterLace 		;main.key.i ;help out intuition, as needed... (DESTROYS d0/d1/a0/a1/a6)
+---
+> 	xjsr	FixInterLace ;main.key.i ;help out intuition, as needed... (DESTROYS d0/d1/a0/a1/a6)
+543c210
+< 	xjmp	FixInterLace 		;main.key.i ;help out intuition, as needed... (DESTROYS d0/d1/a0/a1/a6)
+---
+> 	xjmp	FixInterLace ;main.key.i ;help out intuition, as needed... (DESTROYS d0/d1/a0/a1/a6)
+546a214
+> 
+548c216
+< 	bsr	SkipScroll		;scroll hires screen down if needed
+---
+> 	bsr	SkipScroll	;scroll hires screen down if needed
+550,551c218,219
+< 	bsr.s	_CheckCancel		;dumpmoves, return cancel status
+< 	bne.s	ea_saywait		;outta here w/no activate...cancel msg waiting
+---
+> 	bsr.s	_CheckCancel	;dumpmoves, return cancel status
+> 	bne.s	ea_saywait	;outta here w/no activate...cancel msg waiting
+553,555c221
+< 	xjsr	ReallyActivate		;main (stops mousemoves apro')
+< 
+< 	xjsr	SetPointerWait		;'other' waitptr, flood, then reg
+---
+> 	xjsr	ReallyActivate	;main (stops mousemoves apro')
+557,560c223
+< ;checkcancel to dump current moves before first line
+< ;ok to 'not do anything' with returned code...
+< ;...(it'll come back again)
+< ;fix bug: hang when startpick while drawing/repainting
+---
+> 	xjsr	SetPointerWait	;'other' waitptr, flood, then reg
+562,563c225,230
+< 	bsr.s	_CheckCancel		;dumpmoves, return cancel status
+< 	bne.s	ea_saywait		;outta here w/no activate...cancel msg waiting
+---
+> 		;checkcancel to dump current moves before first line
+> 		;ok to 'not do anything' with returned code...
+> 		;...(it'll come back again)
+> 		;fix bug: hang when startpick while drawing/repainting
+> 	bsr.s	_CheckCancel	;dumpmoves, return cancel status
+> 	bne.s	ea_saywait	;outta here w/no activate...cancel msg waiting
+565,566c232,233
+< 	xjsr	ResetIDCMP		;removes mousemoves from hires
+< ;SEP091990;ELIMINATE PROP FLASHING IN RANGE MODE?;
+---
+> 	xjsr	ResetIDCMP	;removes mousemoves from hires
+> 	;SEP091990;ELIMINATE PROP FLASHING IN RANGE MODE?;
+570c237
+< 	xjsr	ReDoHires		;tool.code.i, also does 'unshowpaste' may01
+---
+> 	xjsr	ReDoHires	;tool.code.i, also does 'unshowpaste' may01
+572c239
+< 	xjmp	CheckCancel		;dumpmoves, return cancel status
+---
+> 	xjmp	CheckCancel	;dumpmoves, return cancel status
+578,579c245,246
+< 	bsr.s	SayWait			;force pointer="wait"
+< 	bra	nostartcancel		;june271990...cont_start	*go do real work
+---
+> 	bsr.s	SayWait		;force pointer="wait"
+> 	bra	nostartcancel	;june271990...cont_start
+582,583d248
+< 	xjsr	sayRepaint
+< 	xjsr	MakeStroke8Bits
+596c261
+< 	xjsr	KillLineList		;drawb.mode.i ;removes 'current shape'
+---
+> 	xjsr	KillLineList	;drawb.mode.i ;removes 'current shape'
+599c264
+< 	tst.b	FlagXSpe_(BP)		;dont skip shading h/v savearray record fill?
+---
+> 	tst.b	FlagXSpe_(BP)	;dont skip shading h/v savearray record fill?
+601c266
+< 	xjsr	CopySuperScreen		;quick "undo"
+---
+> 	xjsr	CopySuperScreen	;quick "undo"
+606,607c271,272
+< Again:	moveq	#-1,d0			;value for flagagain, AGAIN gadget rtn
+< 	bra.s	agst			;'again start'
+---
+> Again:	moveq	#-1,d0		;value for flagagain, AGAIN gadget rtn
+> 	bra.s	agst		;'again start'
+609,611c274,275
+< 
+< RePaint_Picture:			;screen='dirty' and UnDoBitMap='clean'
+< 	moveq	#0,d0			;valu for 'flagagain'
+---
+> RePaint_Picture:		;screen='dirty' and UnDoBitMap='clean'
+> 	moveq	#0,d0		;valu for 'flagagain'
+614,615c278,279
+< 	bsr	SayWait			;force pointer="wait"
+< 	beq.s	nostartcancel		*go do the real work
+---
+> 	bsr	SayWait		;force pointer="wait"
+> 	beq.s	nostartcancel
+644,645d307
+< 
+< 
+646a309
+> 
+650,651c313,314
+< 	xjsr	SaveUnDo 		;memories.o;screenbitmap => UnDoBitMap ONLY IF NEEDED
+< 	xjsr	SaveUnDoRGB		;rgbrtns.asm, copy 24 bit buffers....
+---
+> 	xjsr	SaveUnDo ;memories.o;screenbitmap => UnDoBitMap ONLY IF NEEDED
+> 	xjsr	SaveUnDoRGB	;rgbrtns.asm, copy 24 bit buffers....
+658,660c321,323
+< 	tst.b	FlagAgain_(BP)		;redo//again (not penup) (for fill mode?)
+< 	bne	1$			;yep...don't re-flood
+< 	xjsr	DoColorFlood		;newflood.asm, digipaint pi
+---
+> 	tst.b	FlagAgain_(BP)	;redo//again (not penup) (for fill mode?)
+> 	bne.s	1$		;yep...don't re-flood
+> 	xjsr	DoColorFlood	;newflood.asm, digipaint pi
+663,665c326,328
+< 1$	xjsr	StrokeBounds		;determine bounds of brush stroke
+< ;;;d0=xmin d1=ymin d2=xmax d3=ymax d4=width d5=height d6=-1 if empty
+< 	;bmi	cancel_repaint		;-->ABORT, nothing in brush bitmap
+---
+> 1$	xjsr	StrokeBounds	;determine bounds of brush stroke
+> 	;;;d0=xmin d1=ymin d2=xmax d3=ymax d4=width d5=height d6=-1 if empty
+> 	;bmi	cancel_repaint	;-->ABORT, nothing in brush bitmap
+669,670d331
+< 
+< 
+671a333
+> 
+678,680c340,342
+< 	cmp.w	#32,d0			;already "at/near" leftedge?  june2490
+< 	xref FlagBump32_		;june2690
+< 	scc	FlagBump32_(BP)		;*only* used here, and just before LinePlot
+---
+> 	cmp.w	#32,d0	;already "at/near" leftedge?  june2490
+> 	xref FlagBump32_	;june2690
+> 	scc	FlagBump32_(BP)	;*only* used here, and just before LinePlot
+682,683c344,345
+< 	sub.w	#32,d0			;extra 32 pixels on leftedge
+< 	add.w	#32,d4			;bump width, too
+---
+> 	sub.w	#32,d0	;extra 32 pixels on leftedge
+> 	add.w	#32,d4	;bump width, too
+685a348
+> 
+688c351
+< ;no "last repaint ht" if this is a BRUSH effect...AUG191990
+---
+> 		;no "last repaint ht" if this is a BRUSH effect...AUG191990
+701a365
+> 
+703c367
+< 	;xref paint_width_		;greatest paint width (strokebounds result)
+---
+> 	;xref paint_width_	;greatest paint width (strokebounds result)
+705a370,378
+> 	;SEP201990;move.w	d4,halfpaint_width_(BP)	;used by VStrecth (only)
+> 	;SEP201990;addq.w	#1,halfpaint_width_(BP)
+> 	;SEP201990;asr.w	halfpaint_width_(BP)	;memory mode...only shiftzit (1)
+> 	
+> 	;AUG291990, no need;	;for VStretch (vertical stretching)
+> 	;AUG291990, no need;move.w	d0,-(sp)
+> 	;AUG291990, no need;and.w	#(32-1),d0	;left offset to 1st painted pixel
+> 	;AUG291990, no need;move.w	d0,v_extraleft_(BP)
+> 	;AUG291990, no need;move.w	(sp)+,d0
+707c380,381
+< ;for VStretch (vertical stretching)
+---
+> 	;AUG291990...yes, need...;
+> 		;for VStretch (vertical stretching)
+709c383
+< 	and.w	#(32-1),d0		;left offset to 1st painted pixel
+---
+> 	and.w	#(32-1),d0	;left offset to 1st painted pixel
+718c392
+< 	addq.w	#4,d2			;adjust d2=ending x, accounts for (4) potential cleanups
+---
+> 	addq.w	#4,d2	;adjust d2=ending x, accounts for (4) potential cleanups
+723d396
+< 
+725,727c398,400
+< 	asr.w	#5,d0			;startx/32= D0=paint start long word #
+< 	asr.w	#5,d2			;ditto for endx
+< 	sub.w	d0,d2	
+---
+> 	asr.w	#5,d0	;startx/32= D0=paint start long word #
+> 	asr.w	#5,d2	;ditto for endx
+> 	sub.w	d0,d2
+740c413
+< 	asl.w	#2,d0			;<<2= D0=offset to 1st byte on line 
+---
+> 	asl.w	#2,d0	;<<2= D0=offset to 1st byte on line 
+748d420
+< 
+751c423
+< 	asl.w	#3,d0			;<<3=*8=#pixels
+---
+> 	asl.w	#3,d0	;<<3=*8=#pixels
+756c428
+< 	add.l	d0,a6			;JUNE;lea	0(a6,d0.l),a6
+---
+> 	add.l	d0,a6		;JUNE;lea	0(a6,d0.l),a6
+759c431
+< ;hide the tool window, so we can see bottom of 'repaint area'
+---
+> 		;hide the tool window, so we can see bottom of 'repaint area'
+765,769c437,439
+< 
+< ;; removed to work with lace ham screen;	tst.b	FlagLace_(BP)
+< ;; removed to work with lace ham screen;	beq.s	notint
+< 
+< 	add.W	D0,D0			;yep, double screen topedge since always in non-int
+---
+> 	tst.b	FlagLace_(BP)
+> 	beq.s	notint
+> 	add.W	D0,D0	;yep, double screen topedge since always in non-int
+770a441
+> 
+772,773d442
+< 	
+< 	
+781d449
+< 
+782a451
+> 
+788c457
+< 	xjsr	DoFlood			;NewFlood.o
+---
+> 	xjsr	DoFlood		;NewFlood.o
+790c459
+< 	bne	cancel_repaint		;-->ABORT,...couldn't flood fill
+---
+> 	bne	cancel_repaint	;-->ABORT,...couldn't flood fill
+798a468,481
+> STARTaLOOP:	MACRO	; dreg
+> 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+> 	move.w	ppix_row_less1_(BP),\2	;Paint PIXels per row, minus one
+> 	ENDM
+> 
+> STARTaWordLOOP:	MACRO	; dreg	;sets up reg for long word counted loop
+> 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+> 	move.w	pwords_row_less1_(BP),\2	;Paint (short) Words per row
+> 	ENDM
+> 
+> STARTaLongLOOP:	MACRO	; dreg	;sets up reg for long word counted loop
+> 	move.l	SAStartRecord_(BP),\1	;1st pixel's "record" inside savearray
+> 	move.w	plwords_row_less1_(BP),\2	;Paint Long Words per row
+> 	ENDM
+806d488
+< 
+807a490,506
+> 
+> ivp:	MACRO	;requires d2=#s_SIZEOF (digipaint pi)
+> 	move.l	d1,(a6)	;clears 2 words, verpixel & maxverpixel fields
+> 	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+> 	endm
+> ivp8:	MACRO	;codesize6*8=48bytes
+> 	ivp
+> 	ivp
+> 	ivp
+> 	ivp
+> 
+> 	ivp
+> 	ivp
+> 	ivp
+> 	ivp
+> 	endm	ivp8
+> 
+809,811c508,510
+< 	;addq.w	#1,d0			;dbf type looper, #longwords
+< 	;add.w	d0,d0			;*2=#words (=16bits) (shorter code within loop)
+< 	;subq.w	#1,d0			;still, a db' type loop index
+---
+> 	;addq.w	#1,d0	;dbf type looper, #longwords
+> 	;add.w	d0,d0	;*2=#words (=16bits) (shorter code within loop)
+> 	;subq.w	#1,d0	;still, a db' type loop index
+815c514
+< 	moveq.l	#s_SIZEOF,d2		;'ivp' macro needs this
+---
+> 	moveq.l	#s_SIZEOF,d2	;'ivp' macro needs this
+823c522
+< 	moveq	#0,d2			;clear upper bits, we use it as a byte...
+---
+> 	moveq	#0,d2	;clear upper bits, we use it as a byte...
+833,836c532,535
+< 	;addq	#1,d4 ;=#lines to scan
+< 	;subq	#1,d4 ;for db' type loop
+< 	;paint pi...be accurate!	;asr.w	#3,d4	;/8, count up 8 lines per loop (could overrun bitmap!)
+< 	move.w	d4,-(sp)		;loop ctr for inner loop (cvloop)
+---
+> 		;addq	#1,d4 ;=#lines to scan
+> 		;subq	#1,d4 ;for db' type loop
+> 	;paint pi...be accurate!;asr.w	#3,d4	;/8, count up 8 lines per loop (could overrun bitmap!)
+> 	move.w	d4,-(sp)	;loop ctr for inner loop (cvloop)
+845c544
+< ;no need MAY90;	addq.w  #1,d1		;incr. starting plane address
+---
+> ;no need MAY90;	addq.w  #1,d1	;incr. starting plane address
+849c548
+< 	addq.w  #1,d1			;incr. starting plane address
+---
+> 	addq.w  #1,d1	;incr. starting plane address
+851,852c550,553
+< 	move.w	(sp),d4			;db' type loop ctr, ht=#lines to paint//scan
+< 	CLR.W	D5			;only saved word!
+---
+> 
+> 	move.w	(sp),d4	;db' type loop ctr, ht=#lines to paint//scan
+> 	CLR.W	D5	;only saved word!
+> 
+857,859c558,560
+< 	addq.w  #1,d5			;s_MaxVerPixel(a6)
+< cvnope	add.L	d6,d3			;.w bytes_per_row_W_(BP),d3	;#40,d3
+< 	dbf	d4,cvloop		;1 longword, 32 pixels per iteration
+---
+> 	addq.w  #1,d5	;s_MaxVerPixel(a6)
+> cvnope	add.L	d6,d3	;.w bytes_per_row_W_(BP),d3	;#40,d3
+> 	dbf	d4,cvloop	;1 longword, 32 pixels per iteration
+861c562
+< 	ADDQ.W	#1,d5			;maxverpixel var really is 1 wider...
+---
+> 	ADDQ.W	#1,d5		;maxverpixel var really is 1 wider...
+867c568,570
+< 	lea	2(sp),sp		;(d4) ht loop ctr, cvloop
+---
+> 	lea	2(sp),sp	;(d4) ht loop ctr, cvloop
+> 
+> 
+871,872c574,575
+< ;LATEOCTOBER'90
+< ;extra loop to smooth vertical shading....eliminate "jitters"
+---
+> 		;LATEOCTOBER'90
+> 		;extra loop to smooth vertical shading....eliminate "jitters"
+875c578
+< 	subq.w	#2,d7			;loop 2 less times...
+---
+> 	subq.w	#2,d7				;loop 2 less times...
+878,879c581,582
+< 	;ALWAYS SMOOTH IT...		;move.w	(a6),d0			;this vertical size...s_MaxVerPixel(a6)
+< 	;move.w	d0,d1			;build d1="filtered" vertical
+---
+> 	;ALWAYS SMOOTH IT...;move.w	(a6),d0			;this vertical size...s_MaxVerPixel(a6)
+> 	;move.w	d0,d1		;build d1="filtered" vertical
+881a585
+> 
+883a588
+> 
+885a591
+> 
+887a594
+> 
+897,898c604
+<  ENDC
+< 
+---
+>   ENDC
+900,902c606,608
+< ;determine vertical shading (Array) parameters: (s_fx_{lrtb) fields)
+< ;  WORD s_MaxVerPixel,WORD s_MidPointY top,midpoint pixel # on shading curve
+< ;  WORD s_fx_top,s_f_bottom
+---
+> 	;determine vertical shading (Array) parameters: (s_fx_{lrtb) fields)
+> 	;  WORD s_MaxVerPixel,WORD s_MidPointY top,midpoint pixel # on shading curve
+> 	;  WORD s_fx_top,s_f_bottom
+909d614
+< 
+912a618
+> 
+980,981c686,687
+< 	bsr	InitPaintPtr		;inside paintcode.i, handle 'realtime' sliders
+< 	bsr	Repaint_Line		;TA DA! we call the MAIN (b)LOOPER here
+---
+> 	bsr	InitPaintPtr	;inside paintcode.i, handle 'realtime' sliders
+> 	bsr	Repaint_Line	;TA DA! we call the MAIN (b)LOOPER here
+1015a722,729
+> 
+> REMOVEMSG:	MACRO	;cloned from exec/lists
+> 	MOVE.L	(A1),A0
+> 	MOVE.L	LN_PRED(A1),A1
+> 	MOVE.L	A0,(A1)
+> 	MOVE.L	A1,LN_PRED(A0)
+> 	ENDM
+> 
+1054c768
+< ;fixes guru when 'pick color hamtools' while repaint
+---
+> 		;fixes guru when 'pick color hamtools' while repaint
+1061d774
+< 
+1062a776
+> 
+1067c781
+< ;some other button (left button), outta here with no ptr reset
+---
+> 		;some other button (left button), outta here with no ptr reset
+1069,1070c783,784
+< ;AUG201990;bra.s	contend_rp
+< ;AUG201990......rgb mode, start painting again while redrawing
+---
+> 	;AUG201990;bra.s	contend_rp
+> 		;AUG201990......rgb mode, start painting again while redrawing
+1074a789,790
+> 
+> 
+1078c794
+< ;if "low memory" - no cutpaste undo, then remove ENTIRE image
+---
+> 		;if "low memory" - no cutpaste undo, then remove ENTIRE image
+1085c801
+< 	xjsr	ReallyActivate			;main (stops mousemoves apro')
+---
+> 	xjsr	ReallyActivate		;main (stops mousemoves apro')
+1089,1092c805,807
+< 	move.L	line_offset_(BP),D0		;arg for partialunddo
+< 	xjsr	PartialUnDo			;memories.o ;D0=lineoffset a5=Base
+< 	;no...;xjsr	UnDoRGB			;ensure rgb buffers "undone"....SEP121990 (??)
+< 
+---
+> 	move.L	line_offset_(BP),D0	;arg for partialunddo
+> 	xjsr	PartialUnDo		;memories.o ;D0=lineoffset a5=Base
+> 	;no...;xjsr	UnDoRGB		;ensure rgb buffers "undone"....SEP121990 (??)
+1094,1095c809,812
+< 	sf	FlagNeedRepaint_(BP)		;we coulda cancel'd
+< 	sf	FlagBitMapSaved_(BP)		;=-1 if 'undo' saved but not restored (?)
+---
+> 
+> 	sf	FlagNeedRepaint_(BP)	;we coulda cancel'd
+> 	sf	FlagBitMapSaved_(BP)	;=-1 if 'undo' saved but not restored (?)
+> contend_rp:
+1097d813
+< contend_rp:	
+1108,1109c824,825
+< ;scans the 'input message list' and ReplyMsg's all
+< ;the msgs for window a0 (for use just before CloseWindow)
+---
+> 		;scans the 'input message list' and ReplyMsg's all
+> 		;the msgs for window a0 (for use just before CloseWindow)
+1114d829
+< 
+1115a831
+> 
+1133,1134c849
+< 
+< ;;	;AUG061990....kludge for fixing "flip horizontal"
+---
+> ;;		;AUG061990....kludge for fixing "flip horizontal"
+1139c854
+< ;handle "always render" mode....AUG011990
+---
+> 
+1140a856,857
+> 
+> 		;handle "always render" mode....AUG011990
+1149a867
+> 
+1151a870
+> 
+1179a899,900
+> 
+> 
+1193c914
+< 	;"latest"
+---
+> 		;"latest"
+1206d926
+<  ifeq 1
+1210a931
+> 
+1214a936
+> 
+1224a947
+> 
+1230a954
+> 
+1234a959
+> 
+1252a978,998
+> rset_addrbit:	MACRO	;codesize 20bytes
+> 	;not for static...;nxtrandom d6		;MACRO, compute another random #
+> 		;compute static dither
+> 	;AUG211990;move.B	(a0)+,d6
+> 	;;eor.B	d0,d6	;row constant, static dither	
+> 
+> 	;;and.W	#$003f,d6	;6 bits, only, for dither
+> 
+> 	move.b	d7,(a6)+	;s_PlotFlag
+> 	;AUG211990;move.b	d6,(a6)	;june22;d6,s_DitherThresh-s_PlotFlag(a6)
+> 	move.B	(a0)+,(a6)
+> 	;june22;lea	s_SIZEOF(a6),a6
+> 	lea	(s_SIZEOF-1)(a6),a6	;june22;s_SIZEOF(a6),a6
+> 	ENDM
+> rsnybble:	  MACRO
+> 	rset_addrbit
+> 	rset_addrbit
+> 	rset_addrbit
+> 	rset_addrbit
+> 	ENDM
+> 
+1256c1002
+< *
+---
+> 
+1260a1007
+> 
+1268a1016,1017
+> 
+> 
+1275a1025,1043
+> 
+> set_dithbit:	MACRO
+> 	;move.B  (a1)+,(a6)	;dither value.b FROM table INTO savearray
+> 	move.b	d7,(a6)+		;s_PlotFlag(a6)
+> 	move.B	(a1)+,(a6)	;june22;(a1)+,s_DitherThresh-s_PlotFlag(a6)
+> 	add.l	d0,a6		;june;lea	s_SIZEOF(a6),a6
+> 	ENDM
+> setdbyte:	MACRO
+> 	move.l	A0,a1	;re-setup threshold ptr
+> 	set_dithbit
+> 	set_dithbit
+> 	set_dithbit
+> 	set_dithbit
+> 
+> 	set_dithbit
+> 	set_dithbit
+> 	set_dithbit
+> 	set_dithbit
+> 	ENDM
+1282,1283d1049
+< enda_dithsup:
+<  endc	;remove all dithering
+1285c1051
+< 
+---
+> enda_dithsup:
+1287a1054
+> 
+1298c1065
+< ;	xjsr	UnPlot_SaveArray	;get image bits into savearray
+---
+> 	xjsr	UnPlot_SaveArray	;get image bits into savearray
+1301c1068
+< ;	xjsr	SimplyScroll		;"auto" scroll the screen   ;SEP91
+---
+> 	xjsr	SimplyScroll		;"auto" scroll the screen   ;SEP91
+1322c1089
+< ;left edge sup
+---
+> 		;left edge sup
+1331c1098
+< ;WO!SATURDAYMAY13'1990;;move.l	-8(a3),a3		;bitmap ptr
+---
+> 	;WO!SATURDAYMAY13'1990;;move.l	-8(a3),a3		;bitmap ptr
+1354a1122
+> 
+1374a1143
+> 
+1381d1149
+< 
+1382a1151
+> 
+1388,1391c1157,1161
+< 	move.W	D0,d1					;4
+< 	add.w	d1,d1					;4
+< 	add.w	d1,d1					;4
+< 	move.l	0(a2,d1.w),d1	;copy rg from LCT	;18
+---
+> 		move.W	D0,d1					;4
+> 		add.w	d1,d1					;4
+> 		add.w	d1,d1					;4
+> 
+> 		move.l	0(a2,d1.w),d1	;copy rg from LCT	;18
+1396,1400c1166,1171
+< 	move.B	D0,d1		;lastplot		;4
+< 	move.l	d1,(a6)		;...into SaveArray(r,g,b,LastP) ;14=48cy
+< 	;move.l	0(a2,d1.w),(a6)	;LCT(r,g,b,brite) -> savearray
+< 	lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+< 	dbf	d3,get_savearray_loop
+---
+> 		move.B	D0,d1		;lastplot		;4
+> 		move.l	d1,(a6)		;...into SaveArray(r,g,b,LastP) ;14=48cy
+> 		;move.l	0(a2,d1.w),(a6)	;LCT(r,g,b,brite) -> savearray
+> 
+> 		lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+> 		dbf	d3,get_savearray_loop
+1409,1411c1180,1182
+< 	move.W	s_red-s_SIZEOF(a6),(a6) ;s_red;we KNOW we're aligned ok
+< 	lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+< 	dbf	d3,get_savearray_loop
+---
+> 		move.W	s_red-s_SIZEOF(a6),(a6) ;s_red;we KNOW we're aligned ok
+> 		lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+> 		dbf	d3,get_savearray_loop
+1416c1187
+< ;no need;andi.b  #$0f,D0
+---
+> 	;no need;andi.b  #$0f,D0
+1419,1421c1190,1192
+< 	move.b  s_green-s_SIZEOF(a6),s_green(a6)	;21cy
+< 	move.b  s_blue-s_SIZEOF(a6),s_blue(a6)		;21cy
+< 	;move.L	-s_SIZEOF(a6),(a6)	;lastrgb->thisrgb	;30cy
+---
+> 		move.b  s_green-s_SIZEOF(a6),s_green(a6)	;21cy
+> 		move.b  s_blue-s_SIZEOF(a6),s_blue(a6)		;21cy
+> 		;move.L	-s_SIZEOF(a6),(a6)	;lastrgb->thisrgb	;30cy
+1423,1424c1194,1195
+< 	lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+< 	dbf	d3,get_savearray_loop
+---
+> 		lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+> 		dbf	d3,get_savearray_loop
+1430,1432c1201,1203
+< 	move.b  s_red-s_SIZEOF(a6),(a6)	;s_red;
+< 	move.b  s_blue-s_SIZEOF(a6),s_blue(a6)
+< 	;move.L	-s_SIZEOF(a6),(a6)	;lastrgb->thisrgb	;30cy
+---
+> 		move.b  s_red-s_SIZEOF(a6),(a6)	;s_red;
+> 		move.b  s_blue-s_SIZEOF(a6),s_blue(a6)
+> 		;move.L	-s_SIZEOF(a6),(a6)	;lastrgb->thisrgb	;30cy
+1434,1435c1205,1206
+< 	lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+< 	dbf	d3,get_savearray_loop
+---
+> 		lea	s_SIZEOF(a6),a6 ;next record in SaveArray, make it current
+> 		dbf	d3,get_savearray_loop
+1438c1209,1210
+< ;==== get colors (Rgb) into savearray for Rub-thru or brush image
+---
+> 
+> 	;==== get colors (Rgb) into savearray for Rub-thru or brush image
+1496d1267
+< 
+1523c1294
+< ;MAY141990;	;bummer...fix args
+---
+> ;MAY141990;		;bummer...fix args
+1533a1305
+> 	xjsr GenGetRGB	;get pixel data from RGB arrays (ZERO flag if none)
+1535d1306
+< 	xjsr GenGetRGB			;get pixel data from RGB arrays (ZERO flag if none)
+1542,1543c1313,1315
+< 	movem.l	(sp)+,d0-d7/a0-a6	;GROSS KLUDGE...KLEAN UP
+< 	bne	donegettingcolors	;GotRubRGBs
+---
+> 	movem.l	(sp)+,d0-d7/a0-a6		;GROSS KLUDGE...KLEAN UP
+> 	bne	donegettingcolors	;	GotRubRGBs
+> 
+1550,1551c1322,1324
+< 	mulu	d0,d1			;bm_BytesPerRow(a6),d1	;offset to start of line in brush
+< 	asl.w	#3,d0			;bm_BytesPerRow(a6)*8=#pixels in brush bitmap
+---
+> 	mulu	d0,d1	;bm_BytesPerRow(a6),d1	;offset to start of line in brush
+> 	asl.w	#3,d0	;bm_BytesPerRow(a6)*8=#pixels in brush bitmap
+> 
+1585d1357
+< 
+1594a1367,1368
+> 
+> 
+1614c1388
+< ;DECEMBER 1990...force antialias (text) brushes
+---
+> 		;DECEMBER 1990...force antialias (text) brushes
+1624,1626c1398,1402
+< ;=====set s_PaintFlag(SaveArray) = 0 (no paint) or 1 (paint here)
+< ;...by pulling bits from the 'brush stroke' bitmap
+< ;grab new mask//remask anyway for anti-alias text
+---
+> 
+>  ;=====set s_PaintFlag(SaveArray) = 0 (no paint) or 1 (paint here)
+> 	;...by pulling bits from the 'brush stroke' bitmap
+> 
+> 	;grab new mask//remask anyway for anti-alias text
+1634a1411,1423
+> setonebrushbit:	MACRO	;code size 10bytes
+> 	;JUNE061990;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also) 6+2=8 cy
+> 	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also) ;4 cy
+> 	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+> 	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+>   endm
+> set4bits:	MACRO	;code size 40 bytes
+> 	setonebrushbit
+> 	setonebrushbit
+> 	setonebrushbit
+> 	setonebrushbit
+> 	endm
+> 
+1646a1436,1464
+> ;setone2brushbit:	MACRO	;code size 10bytes
+> ;	;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also)
+> ;	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also)
+> ;	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+> ;	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+> ;	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+> ;	add.l	d2,a6	;lea	s_SIZEOF(a6),a6
+> ;  endm
+> ;JUNE061990
+> 
+> setone2brushbit:	MACRO	;code size 10bytes
+> 	;roxl.W	#1,d1	;our databit -> eXtend bit (and carry bit, also)
+> 	addx.W	d1,d1	;our databit -> eXtend bit (and carry bit, also)
+> 	scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev)
+> 
+> 	;add.l	d2,a6	;lea	s_SIZEOF(a6),a6 8 CYCLES
+> 	;scs	(a6)	;true if brush bit, else zero (17cy vs. 21prev) 12 cy
+> 				;total WAS 8+12=20 cycles
+> 	scs	0(a6,d3.w)	;total is now 18 cyles
+> 
+> 	add.l	d2,a6	;(now =2*s_SIZEOF) ...;lea	s_SIZEOF(a6),a6
+>   endm
+> set4doublebits:	MACRO	;code size 40 bytes
+> 	setone2brushbit
+> 	setone2brushbit
+> 	setone2brushbit
+> 	setone2brushbit
+> 	endm
+> 
+1679a1498
+> 
+1690c1509,1511
+< ;check only painting odd/even but AFTER stretching verticals
+---
+> 
+> 
+> 		;check only painting odd/even but AFTER stretching verticals
+1705c1526
+< ;compute horizontal shading stuff, XMidPoint,fx_left,fx_right
+---
+> 	;compute horizontal shading stuff, XMidPoint,fx_left,fx_right
+1721d1541
+< 
+1743c1563
+< ;"BRUSH COLOR MODE" FORCE;or.b	FlagCutPaste_(BP),D0	;or cutpaste
+---
+> 	;"BRUSH COLOR MODE" FORCE;or.b	FlagCutPaste_(BP),D0	;or cutpaste
+1745a1566
+> 
+1763c1584,1585
+< ;may1990
+---
+> 
+> 	;may1990
+1779,1782c1601,1603
+< ;gross kludge but needed to fix bug...
+< ;colorize with black messes up so...
+< ;if {colorize (paint#11) AND paint=black}, THEN paint=white
+< 
+---
+> 		;gross kludge but needed to fix bug...
+> 		;colorize with black messes up so...
+> 		;if {colorize (paint#11) AND paint=black}, THEN paint=white
+1817,1818c1638,1639
+< ;SEP91..."auto" scroll the screen more often
+< ;SEP91...repaint calls "PutRGB" before a other time consuming things...
+---
+> 		;SEP91..."auto" scroll the screen more often
+> 		;SEP91...repaint calls "PutRGB" before a other time consuming things...
+1827c1648
+< ;normal 'rubthru' transparency
+---
+> 		;normal 'rubthru' transparency
+1851a1673
+> 
+1853c1675
+< ;DigiPaint Pi...do "fill mode colors"...test array values...
+---
+> 	;DigiPaint Pi...do "fill mode colors"...test array values...
+1858a1681
+> 
+1863a1687
+> 
+1867a1692
+> 
+1870a1696
+> 
+1882a1709
+> 
+1890,1894d1716
+< 	;24bit mode...using Flag24
+< 	;GetRGB only called if Flag24
+< 	;...Flag24 is set at RePaintLine, then set/reset after GetRGB
+< 	;paintcode.24.i only if Flag24
+< 	;PutRGB only called if Flag24
+1895a1718,1723
+> 		;24bit mode...using Flag24
+> 		;GetRGB only called if Flag24
+> 		;...Flag24 is set at RePaintLine, then set/reset after GetRGB
+> 		;paintcode.24.i only if Flag24
+> 		;PutRGB only called if Flag24
+> 
+1918,2215c1746
+< 
+< *****************************************************************************
+< ;;  include "PS:paintcode.i" ;new code for 24bit, 8bit color in s_Paint(rgb)*
+< *****************************************************************************
+< * PaintCode.i.asm ...included by DoBrushLine and Scratch//RePaint
+< ; determines color to paint given "what was there" and Paint color
+< ; a6 -> s_{rgb},s_Paint{rgb} valid, sets s_{rgb} to result (SaveArray record)
+< ;	feel free to modify what a6 points at (rgb) because it's only used here
+< ; ...must not change a6 itself, but data a6 pts2 needs 2b molested
+< ;REGISTERS....lotsa, a1=substitue for current s_Paintred
+< ;using a3,a2 for shortmuls
+< ;using a3 for temp, britetable
+< 
+< ; NOTICE: 'LongColorTable_' is the FIRST variable, so am using a5 as ref'
+< 
+< 	xref HVShadingPotV
+< 	xref HVShadingPotH
+< 	xref HVStretchingPotV
+< 	xref HVStretchingPotH
+< 
+< 	;load d4.long with dither (table/random/none) value
+<  IFND RePaint	;"if not the SCRATCH.o module"
+< 	xref EffectNumber_	;3=horflip//mirror,4=rot90,5=-90
+< 	;xref LongColorTablePtr_
+< 	xref Pot0Temp_	;1st slider to right of shading gadgets
+< 	xref Pot1Temp_	;2nd slider to right of shading gadgets (edge)
+< 	;xref Pot2Temp_
+< 	;xref Pot3Temp_
+< 	xref ShortMulTablePtr_
+< 	xref BriteTablePtr_
+< 	xref FlagHStretching_
+< 	xref FlagVStretching_
+< 	xref StretchHPot_
+< 	xref StretchVPot_
+< 	xref StretchGain_
+< 	xref StretchGainAlt_
+< 	xref FlagText_
+< 
+< 	move.l	(a6),d4			;s_(r,g,b)
+< 	asl.l	#2,d4			;4 color now 8 bit			
+< 	move.B	3(a6),d4
+< 	move.l	d4,(a6)
+< 	move.l	s_Paintred(a6),d4
+< 	asl.l	#2,d4	;4 color now 8 bit					
+< 	move.B	3+s_Paintred(a6),d4
+< 	move.l	d4,(a6)
+< 
+< 
+< 	moveq	#0,d4		;default dither (none)
+< 	tst.b	FlagDither_(BP)
+< 	beq.s	skip_myditherset
+< 	move.w	MyDrawY_(BP),d4
+< 	andi.w	#7,d4		;use line # mod 8
+< 	asl.w	#3,d4		;*8
+< 	add.b	s_BitNumber(a6),d4	;byte#, word is valid (valu fitzinbyte)
+< 	move.B	ThresholdTable(pc,d4.w),d4
+< skip_myditherset:
+<  ENDC
+<  IFD RePaint	;"if this IS scratch.o"
+< 	moveq	#0,d4			;clear upper,lower word
+< 	move.b	s_DitherThresh(a6),d4	;only using .B size
+<  ENDC
+< 
+< 	ADDQ.W	#4,d4	;kludge...but it really fixes dither...
+< 	ext.w	d4
+< 	swap	d4	;6.16, preserve sign
+< 	clr.W	d4
+< 	asr.l	#6,d4	;top 6 bits... (max=+/- .5)
+< 
+< 	;move.l	BriteTablePtr_(BP),a3	;fix s_(rgb)(),sup 4th byte BRITEVALU
+< 	;move.W	(a6),d0			;2bytes,   0000rrrr0000gggg	;12c
+< 	;asl.b	#4,d0			;green<<4  0000rrrrgggg0000	;14c
+< 	;or.b	2(A6),d0		;          0000rrrrggggbbbb	;12cy
+< 	;move.b	0(a3,d0.w),s_LastPlot(A6)	;8bit bright from table
+< 
+< 	move.b	(a6),d0		;red
+< 	move.W	(a6),d2	;only using 2nd byte;move.b	1(a6),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	1$
+< 	move.b	d2,d0	;1(a6),d0
+< 1$	;cmp.b		2(a6),d0
+< 	move.b	2(a6),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	2$
+< 	move.b	d2,d0	;2(a6),d0
+< 2$
+< ;	SUBQ.B	#4,d0		;DITHER FIX...march'90, lastplot brite-4 ditherbits
+< ;	bpl.s	3$
+< ;	moveq	#0,d0
+< ;3$
+< 	move.b	d0,s_LastPlot(a6)	;"highest"/brightest
+< 
+< 	LEA	s_Paintred(a6),A1	;POINT TO PAINT.b(r,g,b,brite//lastplot)
+< 
+< 	move.b	(a1),d1		;red
+< 	move.W	(a1),d2	;only using 2nd byte;move.b	1(a1),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	11$
+< 	move.b	d2,d1	;1(a1),d1
+< 11$	move.b	2(a1),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	12$
+< 	move.b	d2,d1	;2(a1),d1
+< 12$
+< ;	tst.b	FlagRub_(BP)	;RUB THRU KLUDGE...4bits ...to 8 bits
+< ;	beq.s	13$
+< ;	asl.l	#4,d1
+< ;13$
+< 	move.b	d1,s_LastPlot(a1)
+< 
+< 
+< 	cmp.b	#7,EffectNumber_(BP)	;range paint?
+< 	bne.s	notrangepaint
+< 	movem.l	d0-d7/a0-a6,-(sp)
+< 	bsr	Brush_Paint_Sol	;ding:	;*****, clear (black) background
+< 	movem.l	(sp)+,d0-d7/a0-a6
+< notrangepaint:
+< 
+< 	move.l	PaintRoutinePtr_(BP),a0
+< 	jmp	(a0)		;d0=bg brite, d1=paint brite
+< 
+< 
+< ;;;  ifc 't','f' ;JUNE08
+< ThresholdTable:
+< 	dc.b	00,08,53,61,02,10,55,63
+< 	dc.b	16,24,37,45,18,26,39,47
+< 	dc.b	49,57,04,12,51,59,06,14
+< 	dc.b	33,41,20,28,35,43,22,30
+< 	dc.b	03,11,54,62,01,09,52,60
+< 	dc.b	19,27,38,46,17,25,36,44
+< 	dc.b	50,58,07,15,48,56,05,13
+< 	dc.b	34,42,23,31,32,40,21,29
+< ;;;  endc
+<   ifc 't','f' ;Feb'90
+< ThresholdTable:
+< 	dc.b	00-0,08-3,53-3,61-3,02-2,10-3,55-3,63-3
+< 	dc.b	16-3,24-3,37-3,45-3,18-3,26-3,39-3,47-3
+< 	dc.b	49-3,57-3,04-3,12-3,51-3,59-3,06-3,14-3
+< 	dc.b	33-3,41-3,20-3,28-3,35-3,43-3,22-3,30-3
+< 	dc.b	03-3,11-3,54-3,62-3,01-1,09-3,52-3,60-3
+< 	dc.b	19-3,27-3,38-3,46-3,17-3,25-3,36-3,44-3
+< 	dc.b	50-3,58-3,07-3,15-3,48-3,56-3,05-3,13-3
+< 	dc.b	34-3,42-3,23-3,31-3,32-3,40-3,21-3,29-3
+<   endc
+< 	ifnd StdPot0
+<  xref StdPot0	;1st slider to right of shading gadgets RELOC'uck...
+<  xref StdPot1	;2nd slider to right of shading gadgets (edge)
+< * xref StdPot6	;main control transparency
+< 	endc
+< 	ifnd RePaint	;scratch module? no?
+<  xref StdPot5 ;warp amt	LOCATABLE, yuck
+< 	endc
+< 
+< InitPaintPtr:	;sup pot values, call once per LINE
+< 		;this grabs 'real time' intuition pot values->basepage temps
+< 
+< 		;IF doing a (flip or rotate) OR (text brush paint)
+< 		;...set pots for "maximum blend"
+< 
+< 	move.l	d1,-(sp)
+< 
+< 	tst.b	FlagText_(BP)
+< 	bne.s	1$
+< 	cmp.b	#3,EffectNumber_(BP)	;3=horflip//mirror,4=rot90,5=-90
+< 	bcs.s	2$
+< 	cmp.b	#7,EffectNumber_(BP)	;range paint (digipaint pi)
+< 	bcc.s	2$
+< 
+< 1$	moveq	#-1,d0
+< 	move.w	d0,Pot0Temp_(BP)
+< 	move.w	d0,Pot1Temp_(BP)
+< 	bra.s	3$
+< 2$
+< 	moveq	#0,d0		;clear upper words (in case realtime...april30)
+< 	move.w	StdPot0,d0	;relocatable ref, REALTIME potvalu
+< 
+<   ifd DoBrushLine	;april30.....avg sliders for realtime paint
+< 	add.w	StdPot1,d0
+< 	bcc.s	22$
+< 	swap	d0
+< 	addq.W	#1,d0
+< 	swap	d0
+< 22$	asr.L	#1,d0	;d0=average of 2 sliders...
+<   endc
+< 
+< 	not.w	d0		;flip inTWIT's valu
+< 
+< 
+<  ifeq 0
+< 
+< 	moveq.l	#0,d1
+< *	move.w	StdPot6,d1
+< 	move.w	#$0,d1
+< 	not.w	d1
+< 	mulu.w	d1,d0
+< 	tst.w	d0
+< 	bne.s	556$
+< 	add.l	#$10000,d0
+< 556$	swap.w	d0
+<  endc
+< 
+< 
+< 	move.w	d0,Pot0Temp_(BP)
+< 
+<     ifd DoBrushLine	;SEP101990...trying to fix 'real time paint...
+< 	move.w	d0,Pot1Temp_(BP)
+< 	bra.s	3$
+<     endc
+< 
+< 	move.w	StdPot1,d0	;relocatable ref, REALTIME potvalu
+< 
+< 	not.w	d0		;flip inTWIT's valu
+< 
+< 
+<  ifeq 0
+< 	mulu.w	d1,d0
+< 	tst.w	d0
+< 	bne.s	555$
+< 	add.l	#$10000,d0
+< 555$	swap.w	d0
+<  endc
+< 
+< 
+< 
+< 	move.w	d0,Pot1Temp_(BP)
+< 3$
+< 	moveq	#0,d0		;no warp amt if not stretch hor or vert
+< 	tst.W	FlagHStretching_(BP)	;test TWO flags (.w) vert too
+< 	beq.s	dfltga
+< 	move.w	StdPot5,d0
+< ;	not.w	d0		;flip to bot=0, top=-1 (now) NOT!070594
+< 	;asr.w	#1,d0		;USES 1/2 (flipped) pot valu
+< 	;and.W	#$7fff,d0	;max, tops allowable
+< dfltga	move.w	d0,StretchGain_(BP)
+< 	not.w	d0
+< 	move.w	d0,StretchGainAlt_(BP)
+< 	
+< 
+< 		;set stretch{h,v}pot_ vars to reflect "adjusted" values
+< 	move.w	#$7fff,d0	;default 'y' stretch pot value center'd
+< 	tst.b	FlagHStretching_(BP)
+< 	beq.s	dfltsh
+< 	move.w	HVStretchingPotH,d0	;RELOCATABLES
+< dfltsh	move.w	d0,StretchHPot_(BP)
+< 	move.w	#$7fff,d0	;default 'y', too
+< 	tst.b	FlagVStretching_(BP)
+< 	beq.s	dfltsv
+< 	move.w	HVStretchingPotV,d0
+< dfltsv	move.w	d0,StretchVPot_(BP)
+< 
+< 	move.l	(sp)+,d1
+< 	rts	;initpaintPTR
+< 
+< InitPaintRtn:	;sets up paint TYPE, only checks once per 'screen'
+< 	moveq	#0,d0
+< 	move.b	PaintNumber_(BP),d0
+< 	add.w	d0,d0			;word size table entries
+< 	lea	PcOffsetTable(pc),a0	;table of offsets to paintcode adrs's
+< 	move.w	0(a0,d0.W),d0		;d0=.w offset to start of table
+< 	lea	0(a0,d0.W),a0		;a0=addr of paintcode=(table+offs)
+< 	move.l	a0,PaintRoutinePtr_(BP)
+< 	rts
+< 
+< PcOffsetTable:	;table of WORDS
+< 	dc.w	Brush_Paint_Add-PcOffsetTable
+< 	dc.w	Brush_Paint_Sub-PcOffsetTable
+< 	dc.w	Brush_Paint_Dkn-PcOffsetTable
+< 	dc.w	Brush_Paint_Ltn-PcOffsetTable
+< 
+< 	dc.w	Brush_Paint_Lig-PcOffsetTable
+< 	dc.w	Brush_Paint_Dar-PcOffsetTable
+< 	dc.w	Brush_Paint_Sol-PcOffsetTable
+< 	dc.w	Brush_Paint_Clr-PcOffsetTable
+< 
+< 	dc.w	Brush_Paint_And-PcOffsetTable
+< 	dc.w	Brush_Paint_Or-PcOffsetTable
+< 	dc.w	Brush_Paint_Xor-PcOffsetTable
+< 	dc.w	Brush_Paint_Hue-PcOffsetTable	;Colorize	;(hue)
+< 
+< 
+< 
+< 	;generate dithered \1 based on D4(=ThresholdTable)
+< 	;given \1.LONG= integerhiword.fractionloword
+< 	;returns \1.BYTE
+< 			;KLUDGE ADD.L IN MACRO, CLUP PLEASE
+< 
+<   ifnd RePaint ;...if not scratch.o, the module where this bp var is declare
+< 	xref BPaintred_
+<   endc
+< 
+< Ctab4to8:	dc.b	$00,$10,$20,$30		;18NOV91...cloned from MouseRtns
+< 		dc.b	$40,$50,$60,$70
+< 		dc.b	$80,$90,$a0,$b0
+< 		dc.b	$c0,$d0,$e0,$ff	;note: '$f'->'$ff' skewed, desired.
+< 
+< 
+< Brush_Paint_Sol:	;ding:	;*****, clear (black) background
+< 	MOVE.L	(a6),-(sp)	;STACK original background color
+---
+>   include "PS:paintcode.i" ;new code for 24bit, 8bit color in s_Paint(rgb)
+2217,2734d1747
+< 
+< ;18NOV91;move.l	(17*4)(BP),d0
+< ;18NOV91;asl.L	#4,d0			;back color of 'range' paint
+< ;18NOV91;move.l	d0,(a6)
+< 
+< 		;convert $0f to $ff     18NOV91
+< 	moveq	#0,d0
+< 	move.b	0+(17*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),(a6)+
+< 	move.b	1+(17*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),(a6)+
+< 	move.b	2+(17*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),(a6)+
+< ;;	move.b	3+(17*4)(BP),d0			;handle brightness, too			
+< ;;	move.b	Ctab4to8(pc,d0.W),(a6)+
+< 	lea -3(a6),a6
+< 
+< 	move.b	(a6),d0		;red
+< 	move.W	(a6),d2	;only using 2nd byte;move.b	1(a6),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	1$
+< 	move.b	d2,d0	;1(a6),d0
+< 1$	
+< ;	cmp.b	2(a6),d0
+< 	move.b	2(a6),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	2$
+< 	move.b	d2,d0	;2(a6),d0
+< 2$	move.b	d0,s_LastPlot(A6)	;8bit bright from table
+< 
+< 	;move.L	(16*4)(a0),d0		;rgbb.long front color of 'range'
+< 	move.L	(16*4)(BP),d0		;rgbb.long front color of 'range'
+< ;MAY23....both colors of range the same?
+< 	cmp.l	(17*4)(BP),d0
+< 	beq	keepblack		;both colors the same...end of range
+< 
+< ;18NOV91;asl.L	#4,d0			;front color of 'range' paint
+< ;18NOV91;move.L	d0,(a1)			;front color of 'range'=paint
+< 		;convert $0f to $ff     18NOV91
+< 	moveq	#0,d0
+< 	move.b	(16*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),(a1)
+< 	move.b	1+(16*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),1(a1)
+< 	move.b	2+(16*4)(BP),d0
+< 	move.b	Ctab4to8(pc,d0.W),2(a1)						
+< ;;	move.b	3+(16*4)(BP),d0		;handle brightness, too
+< ;;	move.b	Ctab4to8(pc,d0.W),3(a1)
+< 
+< 	move.b	(a1),d0		;red
+< 	move.W	(a1),d2	;only using 2nd byte;move.b	1(a6),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	11$
+< 	move.b	d2,d0	;1(a6),d0
+< 11$	;cmp.b		2(a6),d0
+< 	move.b	2(a1),d2
+< 	cmp.b	d2,d0
+< 	bcc.s	12$
+< 	move.b	d2,d0	;2(a6),d0
+< 12$	move.b	d0,s_LastPlot(A1)	;8bit bright from table
+< 
+<   ifnd DoBrushLine
+< 	;move.w	#-1,d2 			;'highest' 'max' 16bit frac
+< 	;moveq	#-1,d0	;default if no shading
+< 	;move.l	#$8000,d2
+< 
+< 	moveq.l	#1,d2
+< 	swap	d2
+< 	moveq	#-1,d0	;default if no shading
+< 
+< 	;move.l	d2,d0
+< 	;moveq.l	#1,d2
+< 	;swap	d2
+< 	;asr.l	#1,d2	;=$0.8000= 1>>1
+< 	;move.l	d2,d0
+< 
+< 	tst.W	FlagHShading_(BP)	;tests.b	flagVshading too
+< 	beq.s	RNG_dobov	;do both if no shading selected ;RNG_dend
+< 	tst.b	FlagVShading_(BP)
+< 	beq.s	RNG_gbrat
+< RNG_dobov:	
+< 	move.w	s_MidPointY(a6),d2	;midpt in pixels, adj per slider
+< 	move.w	s_VerPixel(a6),d0	;ThisBit
+< 	cmp.w	d2,d0			;< Slider?
+< 	bge.s	RNG_dobss
+< 	mulu	s_fx_top(a6),d0
+< 	bra.s	RNG_gbrat
+< RNG_dobss:	sub.w	d2,d0		;-sliderpos leaves pos on bot half
+< 	mulu	s_fx_bottom(a6),d0
+< 	not.L	d0
+< RNG_gbrat:
+< 	moveq	#-1,d1	;default if no shading
+< 	tst.W	FlagHShading_(BP)	;tests.b	flagVshading too
+< 	beq.s	RNG_doboh	;do both if no shading selected ;RNG_dend
+< 	tst.b	FlagHShading_(BP)
+< 	beq.s	RNG_grrat			;skip, no horiz shade, use #-1
+< RNG_doboh:
+< 	move.w	 s_HorPixel(a6),d1
+< 	cmp.w	XMidPoint_(BP),d1	;< Slider?
+< 	bge.s	RNG_dorss			; do right sideshade
+< 	mulu	fx_left_(BP),d1
+< 	bra.s	RNG_grrat
+< RNG_dorss:	sub.w	XMidPoint_(BP),d1
+< 	mulu	fx_right_(BP),d1
+< 	not.L	d1	;~((pixelnbr-midpoint)*fx_right_(BP))
+< RNG_grrat:
+< 	asr.w	#8,d0		;ratioa, using just 8 bits now
+< 	andi.w	#$FF,d0
+< 	move.l	BlendCurvePtr_(BP),a0	;256 byte size entries, 1 table 2ways
+< 	move.b	0(a0,d0.w),d0	;straightline - > curve
+< 	;digipaint pi
+< 	beq.s	1$
+< 	addq.w	#1,d0
+< 1$
+< 	asr.w	#8,d1		;ratioB, 8bits now
+< 	andi.w	#$FF,d1
+< 	move.b	0(a0,d1.w),d1	;straightline - > curve
+< 	;digipaint pi
+< 	beq.s	2$
+< 	addq.w	#1,d1
+< 2$
+< 
+< 	move.w	d0,d2
+< 	mulu	d1,d2		;d0 = vert * hor ;byte*byte=16bitfraction
+< RNG_dend:
+<   endc	;ifnd dobrushline
+<   ifd DoBrushLine
+< 	;SUNDAYjune2490;moveq	#-1,d2
+< 	moveq.l	#1,d2
+< 	swap	d2		;d2=$1.0000
+<   endc
+< 	asr.l	#1,d2		;16bits frac >>1 leaves 15 bits frac
+< 	;?;swap	d2		;d2=15bit fraction, "1"=$8000
+< 	move.l	#$8000,d5
+< 	sub.l	d2,d5		;d5=back ratio
+< 
+< 	;apply shading to COLOR
+< 
+< 	shade24_color red	;move s_Paint(rgb) to s_(rgb) in shaded fashion
+< 	shade24_color green
+< 	shade24_color blue	;s_(rgb) now are 8 BIT VALUES from shade_color
+< 
+< 	;apply shading to BRITENESS
+< 
+< 	moveq	#0,d0
+< 	moveq	#0,d1
+< 	move.b	s_LastPlot(a1),d0	;s_Paint\1(a6),d0
+< 	move.b	s_LastPlot(a6),d1	;s_red(a6),d1
+< 	mulu	d2,d0		;ratioa, 15 bit fraction
+< 	mulu	d5,d1		;ratiob, 15 bit fraction
+< 	add.L	d1,d0
+< 	ADD.L	d0,d0		;<<1, since 15 bit fractions in d2,d5
+< 	swap	d0
+< 	move.b	d0,s_LastPlot(a6) ;8bit brite of new (ranged) color
+< 
+< 		;s_(rgb)(a6)=UNnormalized correct new color, get d1=highestcolor
+< 		;s_(brite=lastplot)=valid 8 bits
+<   IFC 't','f' ;...no need (?)
+< 		;extract s_rgb's 8 bit britest value, each rgb is 8bits, now
+< 	move.b	(a6),d1		;8bit s_red
+< 	cmp.b	s_green(a6),d1
+< 	bcc.s	23$
+< 	move.b	s_green(a6),d1
+< 23$	cmp.b	s_blue(a6),d1
+< 	bcc.s	24$
+< 	move.b	s_blue(a6),d1
+< 24$				;d0 (still) = 'correct' new brite
+< 	tst.B	d1		;d1=8bit brite of new result color (b-out brite)
+< 	beq.s	keepblack	;black is black is black (stays black)
+< 	
+< 	;WANNADO: each color *(d0=newbrite) /(d1=currentbrite)
+< 
+< 	swap	d0	;8bits<<16=24bits
+< 	asr.L	#4,d0	;24bits>>4=20bits
+< 
+< 	divu	d1,d0	;20bits/8bits=12bits
+< 	bvc.s	235$
+< 	move.w	#$0fff,d0	;'real high' 12 bit number
+< 235$	;d0='12bit brite factor'
+< 
+< 	moveq	#0,d2
+< 	move.b	(a6),d2		;s_red 8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	asl.L	#4,d2		;now 8 bit int
+< 	swap	d2
+< 	move.b	d2,(a6) ;s_red(a6) ;is what weir gonna (try to) plot
+< 
+< 	moveq	#0,d2
+< 	move.b	s_green(a6),d2	;8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	asl.L	#4,d2		;now 8 bit int
+< 	swap	d2
+< 	move.b	d2,s_green(a6)	;is what weir gonna (try to) plot
+< 
+< 	moveq	#0,d2
+< 	move.b	s_blue(a6),d2	;8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	asl.L	#4,d2		;now 8 bit int
+< 	swap	d2
+< 	move.b	d2,s_blue(a6)	;is what weir gonna (try to) plot
+<   ENDC
+< 
+< keepblack:	;black is black is black (stays black)
+< 	move.l	(a6),(a1)	;new (ranged) paint (WAS in bg/prev fields)
+< 	MOVE.L	(sp)+,(a6)	;destack original background color (rgb+okBRITE)
+< 		;...end of range paint, continue & blend it in now
+< 
+< 	;;;bra resetB_Clr	;"reset Brite (of paint rgb) and do Brush_Paint_Clr"
+< 
+< 	;digipaint pi;bra	Brush_Paint_Clr	;end of solidpaint, finish up at 'clr' rtn
+< 	RTS	;BrushPaintSol, digipaint pi
+< 
+< 
+< 
+< 
+< 
+< Brush_Paint_Add:
+< 	;MAR91;moveq	#15,d2	;d0_add MACRO 'parm'
+< 	moveq	#-1,d2	;d0_add MACRO 'parm', maximum value
+< 	do_add red
+< 	do_add green
+< 	do_add blue
+< 	;bra.s	Brush_Paint_Clr		;"normal" - background/paintcolor set
+< 	;MAY91;bra	Brush_Paint_Clr		;"normal" - background/paintcolor set
+< 	bra	BP_addsub_end
+< 
+< 
+< Brush_Paint_Sub:
+< 	do_sub red
+< 	do_sub green
+< 	do_sub blue
+< 	;bra.s	Brush_Paint_Clr	 ;"normal" - background/paintcolor set
+< 	;bra	Brush_Paint_Clr	 ;"normal" - background/paintcolor set
+< 	;bra	BP_addsub_end
+< 	;both pm-add and pm-sub end up here...so brightness is not disturbed...
+< BP_addsub_end:
+< 
+< 	;ditherend	red
+< 	;ditherend	green
+< 	;ditherend	blue
+< 	;
+< 	;bra	b_is_b_is_b	;black is black is black (stays black)
+< 	bra	Brush_Paint_Clr	 ;"normal" - background/paintcolor set
+< 				;...actually...end of all paint-mode-code
+< 
+< Brush_Paint_Lig:	;lighter ;OK24
+< 	move.l	(a6),d0
+< 	cmp.l	(a1),d0
+< 	;bcs	didpaint	;branch when paint is lighter
+< 	bge	didpaint	;branch when paint is lighter or same
+< 	move.l	(a6),(a1) ;s_Paintred(a6)	;shuffle existing->paint
+< 	bra	didpaint
+< 
+< Brush_Paint_Dar:	;darker ;OK24
+< 	move.l	(a6),d0
+< 	cmp.l	(a1),d0
+< 	bcc	didpaint	;branch when paint is already <=
+< 	move.l	(a6),(a1) ;s_Paintred(a6)	;shuffle existing->paint
+< 	bra.s	didpaint
+< 
+< Brush_Paint_Dkn:	;darken this one (just like lighten, with a twist) OK24
+< 	;DARKEN the paint color	;NOTE: LOWERS CONTRAST
+< 	move.L	(a6),d0	;old r/g/b/brite
+< 	moveq	#0,d1	;clear upper bits (ALREADY CLEARED?)
+< 	move.B	d0,d1	;8bit brite
+< 		;digipaint pi/24....2* darker
+< 	;;;;asr.W	#1,d1	;1/2 as bright
+< ;	sub.b	d1,d0	;original-.5brite=.5 times original bright
+< ;	bcc.s	9$	;underflo?
+< ;	CLR.B	d0	;only clear the brightness
+< ;9$
+< 
+< 	asr.w	#1,d1	;brite/2
+< 	move.B	d1,d0	;oldcolor, newbrite
+< 	move.L	d0,(a1)	;new color, brite	
+< 
+< 
+< 	BRA.s	didpaint	;okoknow...(compute_newhue-no!)
+< 	;BRA	didpaint	;okoknow...(compute_newhue-no!)
+< 
+< Brush_Paint_Ltn:	;LIGHTEN the paint color	;NOTE: RAISES CONTRAST OK24
+< 	move.L	(a6),d0	;old r/g/b/brite
+< 	moveq	#0,d1	;clear upper bits (ALREADY CLEARED?)
+< 	move.B	d0,d1	;8bit brite
+< 		;digipaint pi/24....2* brighter
+< ;	;;;;asr.W	#1,d1	;1/2 as bright
+< ;
+< 	add.b	d1,d0	;original+.5brite=1.5 times original bright
+< 
+< 	;;add.b	d0,d0	;double brite
+< 	;ASL.b	d0,d0	;double brite
+< 	bcc.s	9$	;overflo?
+< 	move.B	#-1,d0	;else set brightest
+< 9$
+< 	move.L	d0,(a1)	;new color, brite	
+< 	BRA.s	didpaint	;okoknow...(compute_newhue-no!)
+< 
+< 
+< Brush_Paint_Hue:	; (Colorize)	;oh wow real quick?
+< 	;;move.b	s_LastPlot(a6),s_effectbyte(a6)	;use ORIGINAL brite, NEW color
+< 	move.b	s_LastPlot(a6),s_LastPlot(a1) ;use ORIGINAL brite, NEW color
+< 	;;BRA.s	didpaint
+< 	bra.s	Brush_Paint_Clr	;("normal") ;OK24
+< 
+< Brush_Paint_And:	;DO A RECALC *HERE* FOR BRITE... OK24 *no* LOWER BITS?
+< 	move.l	(a1),d1 ;s_Paintred(a6),d1
+< 	and.l	(a6),d1
+< 	;move.b	3(a1),d1	;preserve existing brite valu
+< 	move.l	d1,(a1) ;s_Paintred(a6) ;s_red(a6); 
+< 	bra.s	resetB_Clr	;Brush_Paint_Clr	;	didpaint
+< 
+< Brush_Paint_Or:	;OK24
+< 	move.l	(a1),d1 ;s_Paintred(a6),d1
+< 	or.l	(a6),d1
+< 	;move.b	3(a1),d1	;preserve existing brite valu
+< 	move.l	d1,(a1) ;s_Paintred(a6) ;s_red(a6); 
+< 	bra.s	resetB_Clr	;Brush_Paint_Clr	;	didpaint
+< 
+< Brush_Paint_Xor:	;OK24 no lower bits for regular paint?
+< 	move.l	(a1),d1 ;s_Paintred(a6),d1
+< 	;eor.l	(a6),d1	;illegal opcode blah blah blah
+< 	move.l	(a6),d0
+< 	eor.l	d0,d1
+< 	;move.b	3(a1),d1	;preserve existing brite valu
+< 	move.l	d1,(a1) ;s_Paintred(a6)
+< 	;bra.s	resetB_Clr	;Brush_Paint_Clr	;didpaint
+< 
+< resetB_Clr:	;"reset Brite (of paint rgb) and do Brush_Paint_Clr"
+< 	move.b	(a1),d1
+< 	move.W	(a1),d2	;only using 2nd byte;move.b	1(a1),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	11$
+< 	move.b	d2,d1	;1(a1),d1
+< 11$	move.b	2(a1),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	12$
+< 	move.b	d2,d1
+< 12$	move.b	d1,s_LastPlot(a1)
+< 	;bra.s	Brush_Paint_Clr
+< 
+< Brush_Paint_Clr:	;("normal") ;OK24
+< 	;NOTE: GOT TO RE-COLORIZE...BRIGHTNESS...HUE BLENDING
+< 
+< didpaint:	;have a1=s_paint(r,g,b,BRITE)
+< 	;*all* paint types end up here, in order to 'shade' results
+< 	;s_(rgb)(a6) is old color, s_Paint(rgb)(a6) is calc'd paint
+< 
+<   ifnd DoBrushLine
+< 	moveq.l	#1,d2
+< 	swap	d2			;d2=$1.0000
+< 
+< 	tst.W	FlagHShading_(BP)	;tests.b	flagVshading too
+< 	beq.s	dend
+< 
+< 	moveq	#-1,d0	;default if no shading
+< 	tst.b	FlagVShading_(BP)
+< 	beq.s	gbrat
+< 	move.w	s_MidPointY(a6),d2	;midpt in pixels, adj per slider
+< 	move.w	s_VerPixel(a6),d0	;ThisBit
+< 	cmp.w	d2,d0			;< Slider?
+< 	bge.s	dobss
+< 	mulu	s_fx_top(a6),d0
+< 	bra.s	gbrat
+< dobss:	sub.w	d2,d0		;-sliderpos leaves pos on bot half
+< 	mulu	s_fx_bottom(a6),d0
+< 	not.L	d0
+< gbrat:
+< 	moveq	#-1,d1	;default if no shading
+< 	tst.b	FlagHShading_(BP)
+< 	beq.s	grrat			;skip, no horiz shade, use #-1
+< 	move.w	 s_HorPixel(a6),d1
+< 	cmp.w	XMidPoint_(BP),d1	;< Slider?
+< 	bge.s	dorss			; do right sideshade
+< 	mulu	fx_left_(BP),d1
+< 	bra.s	grrat
+< dorss:	sub.w	XMidPoint_(BP),d1
+< 	mulu	fx_right_(BP),d1
+< 	not.L	d1	;~((pixelnbr-midpoint)*fx_right_(BP))
+< grrat:
+< 	asr.w	#8,d0		;ratioa, using just 8 bits now
+< 	andi.w	#$FF,d0
+< 	move.l	BlendCurvePtr_(BP),a0	;256 byte size entries, 1 table 2ways
+< 	move.b	0(a0,d0.w),d0	;straightline - > curve
+< 	beq.s	azero
+< 	ADDQ.W	#1,d0		;front ratio max now $0100, not $00ff
+< azero:
+< 	asr.w	#8,d1		;ratioB, 8bits now
+< 	andi.w	#$FF,d1
+< 	move.b	0(a0,d1.w),d1	;straightline - > curve
+< 	beq.s	bzero
+< 	ADDQ.W	#1,d1		;BACK ratio max now $0100, not $00ff
+< bzero:
+< 
+< 	move.w	d0,d2
+< 	mulu	d1,d2		;d0 = vert * hor ;byte*byte=16bitfraction
+< 				;d0 maximum 1.0 = $0001.0000
+< dend:
+<   endc	;ifnd dobrushline
+< 
+<   ifd DoBrushLine
+< 	moveq.l	#1,d2
+< 	swap	d2
+<   endc
+< 	asr.l	#1,d2		;16bits frac >> 1 leaves 15 bits frac
+< 
+< 	move.w	d2,d1		;save in reg, ratiob build
+< 	mulu	Pot0Temp_(BP),d2 ;=shading ratio * pot0(inverted ok)
+< 	;not.w	d1		;buildt ratiob
+< 	move.l	#$8000,d5	;constant for next instruction, used soon
+< 	sub.w	d5,d1		;#$8000,d1
+< 	neg.w	d1
+< 
+< 	mulu	Pot1Temp_(BP),d1 ;=~shading ratio * pot1
+< 	add.L	d1,d2
+< 	swap	d2		;d2=15bit fraction, "1"=$8000
+< 	sub.l	d2,d5		;d5=$0.8000-d2=back ratio
+< 
+< ;D2,D5 = FRONT/BACK SHADING/BLENDING RATIOS
+< ;COMPUTE NEW COLOR (SHADE BETWEEN RGBS)
+< ;COMPUTE NEW BRITE (SHADE BETWEEN BRITES)
+< ;COMPUTE NEW RESULT (NEW BRITE, NEW RGB COLOR)
+< 
+< 
+< 	;COMPUTE NEW COLOR (SHADE BETWEEN RGBS)
+< 	shade24_color red		;move s_Paint(rgb) to s_(rgb) in shaded fashion
+< 	shade24_color green
+< 	shade24_color blue	;s_(rgb) now are 8 BIT VALUES from shade_color
+< 	; s_(red,gr,bl)(A6) = correct color s_LastPlot(A6)=original brite, backg
+< 	; s_(red,gr,bl)(A1) = junked  color s_LastPlot(A1)=original brite, paint
+< 
+< 	;COMPUTE NEW BRITE (SHADE BETWEEN BRITES)
+< 	moveq	#0,d0
+< 	moveq	#0,d1
+< 	move.b	s_LastPlot(a1),d0	;8bit brite paint result, no shading
+< 	move.b	s_LastPlot(a6),d1	;8bit brite original/backgrnd
+< 	mulu	d2,d0 	;=ratioa * paint brite
+< 	mulu	d5,d1	;=ratiob * background brite
+< 	add.L	d1,d0	;="new brite"
+< 	ADD.L	d0,d0	;<<1, since 15 bit fractions in d2,d5
+< 		;s_(rgb)(a6)=UNnormalized correct new color, get d1=highestcolor
+< 
+< ;COMPUTE NEW RESULT (NEW BRITE, NEW RGB COLOR)
+< ;compute d1=new paint result briteness
+< ;note: really want to recompute 2nd color? (or, colorize s/b diff')
+< ;move.B	s_LastPlot(a6),d1	;8bit brite of background//existing
+< ;compute newbrite from new rgb
+< 	moveq	#0,d1
+< 	move.b	(a6),d1		;red
+< 	move.W	(a6),d2	;only using 2nd byte;move.b	1(a6),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	1$
+< 	move.b	d2,d1	;1(a6),d1
+< 1$	move.b	2(a6),d2
+< 	cmp.b	d2,d1
+< 	bcc.s	2$
+< 	move.b	d2,d1	;2(a6),d1
+< 2$	tst.b	d1
+< 	;beq	b_is_b_is_b	;black is black is black (stays black)
+< 	bne.s	200$
+< 	moveq	#0,d0	;"black" blend ration, color set...
+< 	bra.s	235$
+< 200$
+< 
+< 	swap	d0	;8 bits in lower word for compare
+< 	cmp.b	d0,d1	;same as old?
+< 	bne.s	222$	
+< 	move.l	#$08000,d0 ;="1.0">>1 ;#0,d0	;"black" blend/brite adjust ratio
+< 	bra.s	235$
+< 222$
+< 	swap	d0	;8 bits in upper word, int.frac form
+< 	
+< ;WANNADO: each color *(d0=newbrite) /(d1=currentbrite)
+< 	ASR.L	#1,d0	;kludge....lets briteness get "doubled"
+< 	divu	d1,d0	;24bits/8bits=d0.w=16bits fraction
+< 	bvc.s	235$
+< 	move.w	#$ffff,d0	;'real high' 16 bit number
+< 235$	;d0='12bit brite factor'
+< 
+< 	move.l	#$ffFFff,d5	;d5=constant for macro, 1.99999
+< 
+< 	moveq	#0,d2
+< 	move.b	(a6),d2		;s_red 8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	fixbrite
+< 	move.l	d2,d1
+< 	swap	d1
+< 	move.b	d1,(a1) ;s_Paintred(a6)	;save 8 bits
+< 	asr.l	#2,d2	;20bits....  4.16
+< 	dither_dx_l2s d2
+< 	move.b	d2,(a6)	;s_red	;is what weir gonna (try to) plot
+< 
+< 	moveq	#0,d2
+< 	move.b	s_green(a6),d2	;8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	fixbrite
+< 	move.l	d2,d1
+< 	swap	d1
+< 	move.b	d1,s_Paintgreen(a6)	;save 8 bits
+< 	asr.l	#2,d2	;20bits....  4.16
+< 	dither_dx_l2s d2
+< 	move.b	d2,s_green(a6)	;is what weir gonna (try to) plot
+< 
+< 	moveq	#0,d2
+< 	move.b	s_blue(a6),d2	;8 bit
+< 	mulu	d0,d2		;*newbrite    8bit*12bit=4bitint.16bitfrac
+< 	fixbrite
+< 	move.l	d2,d1
+< 	swap	d1
+< 	move.b	d1,s_Paintblue(a6)	;save 8 bits
+< 	asr.l	#2,d2	;20bits....  4.16
+< 	dither_dx_l2s d2
+< 	move.b	d2,s_blue(a6)	;is what weir gonna (try to) plot
+< 
+< b_is_b_is_b:	;black is black is black (stays black)
+< *************
+< *
+< *************
+< 
+2745a1759
+> 
+2773,2777c1787,1791
+< 	;put"ALL"rgb rtn ignores "paintflag", stuffs ALL values...
+< 	;d0=row#
+< 	;d1=pixel# (even multiple of 32)
+< 	;d2=#pixels
+< 	;a0=savearray
+---
+> 		;put"ALL"rgb rtn ignores "paintflag", stuffs ALL values...
+> 		;d0=row#
+> 		;d1=pixel# (even multiple of 32)
+> 		;d2=#pixels
+> 		;a0=savearray
+2782,2783c1796,1797
+< 	;SEP91..."auto" scroll the screen more often
+< 	;SEP91...repaint calls "PutRGB" before a other time consuming things...
+---
+> 		;SEP91..."auto" scroll the screen more often
+> 		;SEP91...repaint calls "PutRGB" before a other time consuming things...
+2789c1803
+< 	;range front/back fixer...
+---
+> 		;range front/back fixer...
+2793,2797c1807,1811
+< 	;genlock 'fixer upper'...
+< 	;IF   not paintflag (painted pixel)
+< 	;AND  s_PlotFlag (cleanup pixel) 
+< 	;AND  color zero is color (genlock clear)
+< 	;THEN clear plotflag (cause no re-determine)
+---
+> 		;genlock 'fixer upper'...
+> 		;IF   not paintflag (painted pixel)
+> 		;AND  s_PlotFlag (cleanup pixel) 
+> 		;AND  color zero is color (genlock clear)
+> 		;THEN clear plotflag (cause no re-determine)
+2814c1828,1830
+< 	STARTaLOOP A6,d2 	;d0
+---
+> 
+> 
+> 	STARTaLOOP A6,d2 ;d0
+2821c1837
+< 	tst.L	Datared_(BP)		;rgb mode?
+---
+> 	tst.L	Datared_(BP)	;rgb mode?
+2835,2837c1851,1852
+< 	asR.l	#2,d0		;8bits down to 4
+< ;;	and.l	#$0f0f0f00,d0	;top bit strip (asr crawl down)
+< 	and.l	#$3f3f3f00,d0	;top bit strip (asr crawl down)
+---
+> 	asR.l	#4,d0		;8bits down to 4
+> 	and.l	#$0f0f0f00,d0	;top bit strip (asr crawl down)
+2854,2855c1869,1870
+< 	asR.l	#2,d0		;8bits down to 4
+< 	and.l	#$3f3f3f00,d0	;top bit strip (asr crawl down)
+---
+> 	asR.l	#4,d0		;8bits down to 4
+> 	and.l	#$0f0f0f00,d0	;top bit strip (asr crawl down)
+2874,2878c1889,1890
+< ;;	moveq	#6,Dsix
+< ;;	moveq	#$f,Dfifteen
+< ;;	move.w	#$0100,Dhundred		;256 really ("hundred in hex")
+< 
+< 	moveq	#$3f,Dfifteen
+---
+> 	moveq	#6,Dsix
+> 	moveq	#$f,Dfifteen
+2880d1891
+< 	moveq	#4,Dsix
+2883,2884c1894,1895
+< ;gross...AUG091990
+< ;if effect# 4 or 5 (rot-, rot+) then do the dithering...
+---
+> 		;gross...AUG091990
+> 		;if effect# 4 or 5 (rot-, rot+) then do the dithering...
+2889a1901
+> 
+2893a1906
+> 
+2895c1908
+< ;;;	move.l	s_Paintred(a6),(a6)	;"putrgb","putallrgb" save "paint" field(s)
+---
+> 	;;;;;;move.l	s_Paintred(a6),(a6)	;"putrgb","putallrgb" save "paint" field(s)
+2897c1910
+< ;QUICK'NDIRTY DITHER...CLEANUP...
+---
+> 	;QUICK'NDIRTY DITHER...CLEANUP...
+2902,2904c1915,1917
+< ; DitherRemove test only	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+< ; DitherRemove test only	bcc.s	1$
+< ; DitherRemove test only	add.w	Dhundred,d0
+---
+> 	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+> 	bcc.s	1$
+> 	add.w	Dhundred,d0
+2915,2917c1928,1930
+< ; DitherRemove test only	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+< ; DitherRemove test only	bcc.s	1$
+< ; DitherRemove test only	add.w	Dhundred,d0
+---
+> 	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+> 	bcc.s	1$
+> 	add.w	Dhundred,d0
+2928,2930c1941,1943
+< ; DitherRemove test only	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+< ; DitherRemove test only	bcc.s	1$
+< ; DitherRemove test only	add.w	Dhundred,d0
+---
+> 	add.B	s_DitherThresh(a6),d0	;+6bit dither (10 bit result, still)
+> 	bcc.s	1$
+> 	add.w	Dhundred,d0
+2945d1957
+< 
+2950c1962
+< ;	lea	2(sp),sp	;dispose of counter from last loop
+---
+> 	;;;lea	2(sp),sp	;dispose of counter from last loop
+2957c1969
+< ;	tst.w	LastRepaintX_(BP)	;at leftedge?   june2490
+---
+> 	;tst.w	LastRepaintX_(BP)	;at leftedge?   june2490
+2966c1978
+< 	xjmp	LinePlot_SaveArray	;go and plot lines on HAM Screen
+---
+> 	xjmp	LinePlot_SaveArray
+2967a1980
+> 
+2971d1983
+< **************************************************
+2979a1992
+> 
+2982a1996
+> 
+2994a2009
+> 
+3014a2030
+> 
+3042a2059,2065
+> COPY1LOTOHI:	MACRO		;20 code bytes?
+> 		;copy all-at-once-with-no-loops messes up A5=BP, From A0, To A1*2
+> 	movem.l	(a0),d2-d5/a2-a5	;8 .long = 32 bytes
+> 	movem.l	d2-d5/a2-a5,s_SIZEOF(a1)
+> 	movem.l	d2-d5/a2-a5,(a1)	;8+8n=72cy
+> 	ENDM	;rts	;copy1lotohi
+> 
+3064a2088,2092
+> LOHIINNER:	MACRO		;32 bytes per (?)
+> 	COPY1LOTOHI			;from a0 record to 2 records...a1,a1*2
+> 	lea	-2*s_SIZEOF(a1),a1	;doubling...backup destination
+> 	ADD.L	d0,a0 ;lea	-s_SIZEOF(A0),A0	;source...backup
+> 	ENDM
+3088,3089c2116,2117
+< ;NO NEED?;tst.b	FlagToast_(BP)
+< ;NO NEED?;beq	nohitolo
+---
+> 	;NO NEED?;tst.b	FlagToast_(BP)
+> 	;NO NEED?;beq	nohitolo
+3091a2120
+> 
+3113a2143
+> 
+3128a2159,2216
+> HITOLOINNER:	MACRO	;record size is 8.5*4(byte->lwords)=32+2=34 bytes
+> 
+> ;	moveq.l	#((s_SIZEOF)/2)-1,d0	;db' loop count, rest of record
+> ;to_lores_loop\@:
+> ;	move.w	(a0)+,(a1)+
+> ;	dbf	d0,to_lores_loop\@
+> ;	lea	s_SIZEOF(a0),a0
+> 
+> 		;following code REQUIRES S_SIZEOF = 32
+> 		;copy all-at-once-with-no-loops messes up A5=BP
+> 		;...average colors between pixels...
+>   IFC 't','f' ;...it didn't handle the overflow....AUG091990
+> 	move.B	(a0),d2		;red
+> 	add.b	s_SIZEOF(a0),d2
+> 	asr.b	#1,d2
+> 	move.b	d2,(a0)
+> 	move.B	1(a0),d2	;green
+> 	add.b	1+s_SIZEOF(a0),d2
+> 	asr.b	#1,d2
+> 	move.b	d2,1(a0)
+> 	move.B	2(a0),d2	;blue
+> 	add.b	2+s_SIZEOF(a0),d2
+> 	asr.b	#1,d2
+> 	move.b	d2,2(a0)
+>   ENDC
+> 
+>   IFC 't','f' ;AUG271990....no 'averaging...'
+> 	moveq	#0,d2
+> 	moveq	#0,d3
+> 	move.B	(a0),d2		;red
+> 	move.B	s_SIZEOF(a0),d3
+> 	add.W	d3,d2
+> 	asr.W	#1,d2
+> 	move.b	d2,(a0)
+> 
+> 	moveq	#0,d2
+> 	;moveq	#0,d3
+> 	move.B	1(a0),d2		;green
+> 	move.B	1+s_SIZEOF(a0),d3
+> 	add.W	d3,d2
+> 	asr.W	#1,d2
+> 	move.b	d2,1(a0)
+> 
+> 	moveq	#0,d2
+> 	moveq	#0,d3
+> 	move.B	2(a0),d2		;blue
+> 	move.B	2+s_SIZEOF(a0),d3
+> 	add.W	d3,d2
+> 	asr.W	#1,d2
+> 	move.b	d2,2(a0)
+>   ENDC ;AUG271990....no 'averaging...'
+> 
+> 
+> 	movem.l	(a0)+,d2-d5/a2-a5	;8 .long = 32 bytes  adjusts a0=next
+> 	movem.l	d2-d5/a2-a5,(a1)	;8+8n=72cy
+> 	ADD.L	d0,a1 ;lea	32(a1),a1		;8 cy    point to very next record
+> 	ADD.L	d0,a0 ;lea	s_SIZEOF(a0),a0		; skip a record
+> 	ENDM
+3143a2232,2245
+> 
+> 
+> CHECKMASK:	MACRO	;(destroys d2/d3/d4)  (args d0=x d1=y a0=maskplane)
+> 	move.w	d1,d4			;d4 gonna be address in bitplane
+> 	mulu	PasteBitMap_(BP),d4	;y*#bytes per row in brush
+> 
+> 	move.w	d0,d3	;d3=copy of x for BYTE
+> 	asr.w	#3,d3	;x/8
+> 	add.L	d3,d4	;upper bits of D3 guaranteed cleared by caller
+> 	moveq	#7,d2	;prep for...
+> 	sub.w	d0,d2	;d2=bit # in byte (+junk >7, ignored in  bXXX.b opcode)
+> 	btst	d2,0(a0,d4.L)
+>   ENDM
+> 
+3144a2247
+> 
+3152c2255
+< 	asl.L	#5,d0			;s_SIZEOF=#32
+---
+> 	asl.L	#5,d0		;s_SIZEOF=#32
+3156,3157c2259,2260
+< 	;a6 lined up for screen (as if anti-ali//smaller brush)
+< 	;a4 lined up further left, as if NOT-anti-alias'd
+---
+> 		;a6 lined up for screen (as if anti-ali//smaller brush)
+> 		;a4 lined up further left, as if NOT-anti-alias'd
+3164c2267
+< taaloop:				;"text anti-alias" loop
+---
+> taaloop:			;"text anti-alias" loop
+3176c2279
+< 	CHECKMASK 			;(args d0=x d1=y a0=maskplane),(destroys d2/d3/d4)
+---
+> 	CHECKMASK 	;(args d0=x d1=y a0=maskplane),(destroys d2/d3/d4)
+3182c2285
+< 	asr.l	#2,d5			;strip 2 bits...use 6 bits (yuck)
+---
+> 	asr.l	#2,d5		;	strip 2 bits...use 6 bits (yuck)
+3195c2298
+< 	CHECKMASK 			;(args d0=x d1=y a0=maskplane),(destroys d2/d3/d4)
+---
+> 	CHECKMASK 	;(args d0=x d1=y a0=maskplane),(destroys d2/d3/d4)
+3212c2315
+< 	;nope;asr.l	#2,d5	;=(first//bg + 3xsecond//paint)/4
+---
+> 	;nope;asr.l	#2,d5		;=(first//bg + 3xsecond//paint)/4
+3215c2318
+< 18$	;add.l	s_Paintred(a4),d5 ;=2x colors from brush
+---
+> 18$	;add.l	s_Paintred(a4),d5	;=2x colors from brush
+3217c2320
+< 	asr.l	#2,d7		;strip 2 bits...use 6 bits (yuck)
+---
+> 	asr.l	#2,d7		;	strip 2 bits...use 6 bits (yuck)
+3226c2329
+< 	beq.s	28$		;bra when 1st NOT mask, also
+---
+> 	beq.s	28$			;bra when 1st NOT mask, also
+3233c2336
+< 	asr.l	#2,d7		;strip 2 bits...use 6 bits (yuck)
+---
+> 	asr.l	#2,d7		;	strip 2 bits...use 6 bits (yuck)
+3238c2341
+< 	bra.s	4$			;go mask bits and resave this rgb
+---
+> 	bra.s	4$		;go mask bits and resave this rgb
+3241c2344
+< 	asr.l	#2,d7			;strip 2 bits...use 6 bits (yuck)
+---
+> 	asr.l	#2,d7		;	strip 2 bits...use 6 bits (yuck)
+3259c2362
+< 	lea	2(sp),sp		;relieve stack (ahhh....) (loop counter...burp!)
+---
+> 	lea	2(sp),sp	;relieve stack (ahhh....) (loop counter...burp!)
+3261c2364
+< 	move.l	(sp)+,d7		;digipaint pi...pro'lly not needed?
+---
+> 	move.l	(sp)+,d7	;digipaint pi...pro'lly not needed?
+3264d2366
+< 	RDUMP
+3266d2367
+< 	end

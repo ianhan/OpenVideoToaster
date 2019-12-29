@@ -1,0 +1,782 @@
+6,8c6,8
+< 	XDEF	GetOld			;DESTROYS D0/D1/A0/A1 d0=x d1=y a3=rastport
+< 	XDEF	GetOldfromBitMap	;DESTROYS D0/D1/A0/A1 d0=x d1=y a3=bitmap
+< ;;	XDEF	QuickGetOldBM		;DESTROYS d0-d4,a0-a2, d0,1=x,y A3=bm_Planes ptr
+---
+>    XDEF GetOld ; DESTROYS D0/D1/A0/A1 d0=x d1=y a3=rastport
+>    XDEF GetOldfromBitMap ; DESTROYS D0/D1/A0/A1 d0=x d1=y a3=bitmap
+>  ;;  XDEF QuickGetOldBM	;destroys d0-d4,a0-a2, d0,1=x,y A3=bm_Planes ptr
+13,24c13,22
+< ;;	xref	LongColorTable_ ; table of words repr. 16 color register shade values
+< 	xref	Predold_
+< 	xref	Pgreenold_
+< 	xref	Pblueold_
+< 	xref	LastPlot_
+< 
+< 	include "ram:mod.i"
+< 	INCLUDE	"exec/types.i"
+< 	INCLUDE	"graphics/gfx.i"
+< 	INCLUDE "windows.i"
+< ;;	INCLUDE "BETAxrefs_macros.i"
+< 	include	"ps:serialdebug.i"
+---
+>  ;;  xref LongColorTable_ ; table of words repr. 16 color register shade values
+>    xref Predold_
+>    xref Pgreenold_
+>    xref Pblueold_
+>    xref LastPlot_
+> 
+>    INCLUDE "exec/types.i"
+>    include "graphics/gfx.i"
+>    INCLUDE "windows.i"
+> ;   INCLUDE "BETAxrefs_macros.i"
+26,29d23
+< 
+< ;;SERDEBUG	equ	1
+< 
+< 
+31a26
+> 	;APRIL06'89;btst	d2,0(a0,d1.w)
+43,45c38,39
+< 
+< my_readpixel:	MACRO		;(d0=x, d1=y, a1=bm_Planes table,  leaves d0=6bits)
+< 	;move.w	d0,d2		;save original x	; 4
+---
+> my_readpixel:	MACRO	;(d0=x, d1=y, a1=bm_Planes table,  leaves d0=6bits)
+> 	;move.w	d0,d2	;save original x	; 4
+47c41
+< 	;addq.w	#7,d2		;d2 = bit number [ 7..0 ]
+---
+> 	;addq.w	#7,d2	;d2 = bit number [ 7..0 ]
+49c43
+< 	sub.w	d0,d2		;d2=bitnumber "+ dontcarebits" for btst opcode
+---
+> 	sub.w	d0,d2	;d2=bitnumber "+ dontcarebits" for btst opcode
+51,52c45,46
+< ;THIS IS 'mul by var' because could be from hamtools or bigpic
+< ;COULD BE SPED UP?->timestableptr reference for bigpic,or times_table_40
+---
+> 	;THIS IS 'mul by var' because could be from hamtools or bigpic
+> 	;COULD BE SPED UP?->timestableptr reference for bigpic,or times_table_40
+53a48
+> 
+55c50,52
+< ;may02'89...prevent "run off left edge" when cant find a color
+---
+> 	;APRIL06'89;add.w	d0,d1
+> 
+> 		;may02'89...prevent "run off left edge" when cant find a color
+59a57
+> 
+62c60
+< 	swap	d0		;12cy vs 16cy for andi.l #$0000ffff
+---
+> 	swap	d0	;12cy vs 16cy for andi.l #$0000ffff
+64,65c62,65
+< ;?NOT NEEDED, BTST INSTR ONLY LOOKS AT BOTTOM BITS?;andi.w	#7,d2	;original "x"
+< 	moveq	#0,d0		;assume zeros to start (we setup ones)
+---
+> 
+> 	;?NOT NEEDED, BTST INSTR ONLY LOOKS AT BOTTOM BITS?;andi.w	#7,d2	;original "x"
+> 
+> 	moveq	#0,d0	;assume zeros to start (we setup ones)
+72,73d71
+< 	get_screen_bit 6	;,32000
+< 	get_screen_bit 7	;,32000
+75,76c73
+<  endm 				;my_readpixel
+< 
+---
+>  endm ;my_readpixel
+78,82c75,78
+< 
+< readpix_setup:	MACRO		;AUG261990
+< ;	move.w	d0,d2		;save original x	; 4
+< ;	neg.w	d2
+< ;	addq.w	#7,d2		;d2 = bit number [ 7..0 ]
+---
+> readpix_setup:	MACRO	;AUG261990
+> 	;move.w	d0,d2	;save original x	; 4
+> 	;neg.w	d2
+> 	;addq.w	#7,d2	;d2 = bit number [ 7..0 ]
+84,86c80,83
+< 	sub.w	d0,d2		;d2=bitnumber "+ dontcarebits" for btst opcode
+< ;THIS IS 'mul by var' because could be from hamtools or bigpic
+< ;COULD BE SPED UP?->timestableptr reference for bigpic,or times_table_40
+---
+> 	sub.w	d0,d2	;d2=bitnumber "+ dontcarebits" for btst opcode
+> 
+> 	;THIS IS 'mul by var' because could be from hamtools or bigpic
+> 	;COULD BE SPED UP?->timestableptr reference for bigpic,or times_table_40
+88,91c85,91
+< 	asr.w	#3,d0		;x/8
+< ;may02'89...prevent "run off left edge" when cant find a color
+< 	bpl.s	1$		;x ok?(horrors! another cycle-hoggin branch)
+< 	moveq	#0,d0		;negative x? wha?...short out and use palette zero
+---
+> 
+> 	asr.w	#3,d0	;x/8
+> 	;APRIL06'89;add.w	d0,d1
+> 
+> 		;may02'89...prevent "run off left edge" when cant find a color
+> 	bpl.s	1$	;x ok?(horrors! another cycle-hoggin branch)
+> 	moveq	#0,d0	;negative x? wha?...short out and use palette zero
+97c97
+< 	swap	d0		;12cy vs 16cy for andi.l #$0000ffff
+---
+> 	swap	d0	;12cy vs 16cy for andi.l #$0000ffff
+100c100
+< ;?NOT NEEDED, BTST INSTR ONLY LOOKS AT BOTTOM BITS?;andi.w	#7,d2	;original "x"
+---
+> 	;?NOT NEEDED, BTST INSTR ONLY LOOKS AT BOTTOM BITS?;andi.w	#7,d2	;original "x"
+102c102
+< 	moveq	#0,d0		;assume zeros to start (we setup ones)
+---
+> 	moveq	#0,d0	;assume zeros to start (we setup ones)
+106c106
+< ;	movem.l	(sp)+,d3/d4 ;/a2
+---
+>    ;movem.l	(sp)+,d3/d4 ;/a2
+108c108
+< ;return 8 bit values in d0/d1/d2
+---
+> 		;return 8 bit values in d0/d1/d2
+121c121
+< 	asl.l	#2,d0		;make leftside colors be 8 bits...
+---
+> 	asl.l	#4,d0		;make leftside colors be 8 bits...
+124c124
+< 	cmp.b	#$f3,(sp)
+---
+> 	cmp.b	#$f0,(sp)
+128c128
+< 	cmp.b	#$f3,1(sp)
+---
+> 	cmp.b	#$f0,1(sp)
+132c132
+< 	cmp.b	#$f3,2(sp)
+---
+> 	cmp.b	#$f0,2(sp)
+139c139
+< 	;;convert 4 bit to an 8 bit value....
+---
+> 	;	;convert 4 bit to an 8 bit value....
+149a150
+> 
+150a152
+> 
+155d156
+< 
+169c170
+<    andi.W	#15,OldPixel   	; max of 16 registers
+---
+>    andi.W	#15,OldPixel   ; max of 16 registers
+189,190c190
+< 
+< ****** Get P(red,green,blue)old and LastPlot at curt XY ****   
+---
+> ******* Get P(red,green,blue)old and LastPlot at curt XY ****   
+192a193
+> 
+195c196
+< GetOld:				; ( d0=X, d1=Y, A3=RASTPORT ); DESTROYS D0/D1/D2/A0/A1/A3
+---
+> GetOld: ; ( d0=X, d1=Y, A3=RASTPORT )   ; DESTROYS D0/D1/D2/A0/A1/A3
+198,199c199
+< 
+< GetOldfromBitMap: 		; ( d0=X, d1=Y A3=BITMAP )
+---
+> GetOldfromBitMap: ; ( d0=X, d1=Y A3=BITMAP )
+202c202
+< 	bsr.s	QuickGetOldplanes	;bra.s	QuickGetOldBM;alternate entrance
+---
+> 	bsr.s	QuickGetOldplanes	;bra.s	QuickGetOldBM	;alternate entrance
+205,206c205
+< 	cnop 0,4 		;longalign next rtn for '020s
+< 
+---
+> 	cnop 0,4 ;longalign next rtn for '020s
+208,209c207,208
+< 	xdef GetOldRGBBitMap 	; ( d0=X, d1=Y A3=BITMAP ) ;DECEMBER 1990...RGB ONLY
+< GetOldRGBBitMap: 		; ( d0=X, d1=Y A3=BITMAP )
+---
+>  xdef GetOldRGBBitMap ; ( d0=X, d1=Y A3=BITMAP ) ;DECEMBER 1990...RGB ONLY
+> GetOldRGBBitMap: ; ( d0=X, d1=Y A3=BITMAP )
+212,213c211,212
+< 	bsr	QuickGetRGB	;bra.s	QuickGetOldBM	;alternate entrance
+< 	movem.l	(sp)+,d3/d4 	;/a2
+---
+> 	bsr.s	QuickGetRGB	;bra.s	QuickGetOldBM	;alternate entrance
+> 	movem.l	(sp)+,d3/d4 ;/a2
+217,218c216
+< 
+< QuickGetOldplanes: 		;d0,1 = x,y WATCH a3=BITPLANE PTRs (bm_Planes in a bm_ struct)
+---
+> QuickGetOldplanes: ;d0,1 = x,y WATCH a3=BITPLANE PTRs (bm_Planes in a bm_ struct)
+224,225c222,223
+< 	movea.l	a3,a1		; 6 bitplane addr's
+< 	subq	#2,sp		;leave room on stack for "lastplot"
+---
+> 	movea.l	a3,a1	; 6 bitplane addr's
+> 	subq	#2,sp	;leave room on stack for "lastplot"
+227,228c225,226
+< ;;AUG261990....ignore '6 bit' ham lookup, if repainting...
+< ;;....should work ok...
+---
+> ;		;AUG261990....ignore '6 bit' ham lookup, if repainting...
+> ;		;....should work ok...
+237c235
+< ;;AUG271990....help out 'narrow' brushes, right edge, anti-aliasing...
+---
+> ;		;AUG271990....help out 'narrow' brushes, right edge, anti-aliasing...
+239c237
+< ;	asr.w	#3,d0 
+---
+> ;	asr.w	#3,d0
+244c242
+< ;	;moveq	#0,d2		;'last bit//pixel' on a line
+---
+> ;	;moveq	#0,d2	;'last bit//pixel' on a line
+256,259c254,257
+< QuickGetRGB:			;d0,1 = x,y WATCH a3=BITPLANE PTRs (bm_Planes in a bm_ struct)
+< 				;LATEMAY1990
+< 	movea.l	a3,a1		; 6 bitplane addr's
+< 	;subq	#2,sp		;leave room on stack for "lastplot"
+---
+> QuickGetRGB:	;d0,1 = x,y WATCH a3=BITPLANE PTRs (bm_Planes in a bm_ struct)
+> 		;LATEMAY1990
+> 	movea.l	a3,a1	; 6 bitplane addr's
+> 	;subq	#2,sp	;leave room on stack for "lastplot"
+261c259
+< 	;;movem.l d0/d1/d2,-(sp)
+---
+> 	;;movem.l	d0/d1/d2,-(sp)
+263,264c261,262
+< 	;;move.W d0,12(sp)	;LEAVE 8 bit "lastplot" on stack (as a .word)
+< 	;;movem.l (sp)+,d0/d1/d2
+---
+> 	;;move.W	d0,12(sp)	;LEAVE 8 bit "lastplot" on stack (as a .word)
+> 	;;movem.l	(sp)+,d0/d1/d2
+268,271c266,269
+< ;MAR91...rearranged for quicker txmapping...
+< ;priority order is ...
+< ;swap brush(txmap), screen, brush, swap screen, undo...
+< ;note: this should speed up txmapping, txmap+antialiasing
+---
+> 		;MAR91...rearranged for quicker txmapping...
+> 		;priority order is ...
+> 		;swap brush(txmap), screen, brush, swap screen, undo...
+> 		;note: this should speed up txmapping, txmap+antialiasing
+323,324c321,322
+< 	xref	GrabB_RGB 	;BrushRGBRtns.asm
+< 	jsr	GrabB_RGB 	;BrushRGBRtns.asm, get 8 bit colors from RGB bitmap
+---
+> 	xref	GrabB_RGB ;BrushRGBRtns.asm
+> 	jsr	GrabB_RGB ;BrushRGBRtns.asm, get 8 bit colors from RGB bitmap
+344,345c342,343
+< 	lsr.l	#2,d1		;8bits>>4 = 4 bit values
+< 	and.l	#$3f3f3f00,d1
+---
+> 	asr.l	#4,d1		;8bits>>4 = 4 bit values
+> 	and.l	#$0f0f0f00,d1
+366,367c364,365
+< ;if old pixel is a register number, go use it
+< ;;; 	beq.s	Get_Ham_All 	;pixel value=color register 0
+---
+>    ; if old pixel is a register number, go use it
+> 	;;; beq.s	Get_Ham_All ; pixel value=color register 0
+369c367
+< 	bcc.s	IsColor 	;>= 16? then it's a color
+---
+> 	bcc.s	IsColor ; >= 16? then it's a color
+372c370
+< ;;;;lea LongColorTable_(BP),a2	;table of 16 words representing RGB bits
+---
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+387,389c385,387
+< 	move.b	d0,LastPlot_(BP) ;1st time around, save LastPlot pixel value
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> 	move.b	d0,LastPlot_(BP) ; 1st time around, save LastPlot pixel value
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+391,393c389,391
+< 	;;; beq Isred   	;color # 2
+< 	bcs Isblue  		;color # 1
+< 	bne Isgreen 		;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	;;; beq Isred   ; color # 2
+> 	bcs Isblue  ; color # 1
+> 	bne Isgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+397a396
+> 
+399,400c398,399
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Predold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Predold_(BP) ; save the actually seen value
+402,409c401,408
+< redIsred: 			;Get last Pixel's 6 bit plotted current value
+< 	;subq.l	#1,d3 		;X=X-1
+< 	subq.W	#1,d3 		;X=X-1
+< 	;move.l	d3,d0 		;X
+< 	;move.l	d4,d1 		;Y
+< 	move.W	d3,d0 		;X
+< 	move.W	d4,d1 		;Y
+< 	movea.l	a3,a1   	;RastPort for current window
+---
+> redIsred: ; Get last Pixel's 6 bit plotted current value
+> 	;subq.l	#1,d3 ; X=X-1
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ; Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+412c411
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+414,415c413,414
+< 	bcc.s	redIsColor 	;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	redIsColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+420,421c419,420
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+423,425c422,424
+< 	beq redIsred   		;color # 2 (again)
+< 	;;; bcs redIsblue  	;color # 1
+< 	bcc redIsgreen 		;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	beq redIsred   ; color # 2 (again)
+> 	;;; bcs redIsblue  ; color # 1
+> 	bcc redIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+429,430c428,429
+< 	andi.b	#$3F,d0		;Strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pblueold_(BP) ; save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pblueold_(BP) ; save the actually seen value
+432,438c431,437
+< redIsblueloop: 			;Get last Pixel's 6 bit plotted current value
+< 	subq.W	#1,d3 		;X=X-1
+< 	;move.l	d3,d0 		;X
+< 	;move.l	d4,d1 		;Y
+< 	move.W	d3,d0 		;X
+< 	move.W	d4,d1 		;Y
+< 	movea.l	a3,a1   	;RastPort for current window
+---
+> redIsblueloop: ; Get last Pixel's 6 bit plotted current value
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+440,441c439,440
+< 	
+< ;if old pixel is a register number, go use it
+---
+> 
+>    ; if old pixel is a register number, go use it
+444c443
+< ;;;;	lea	LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+---
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+447,450c446,448
+< 
+< redIsblueColor: 		;find which color
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> redIsblueColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+452,457c450,455
+< ;;	beq.s	redIsblueloop   ;color # 2 (again)
+< ;;	bcs.s	redIsblueloop   ;color # 1
+< 	BLS	redIsblueloop   ;color #2 (again) or color #1
+< ;;	bra	redIsgreen 	;color # 3 ; (BRANCH COULD BE REDUNDANT)
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pgreenold_(BP) ;save the actually seen value
+---
+> 	;;   beq.s	redIsblueloop   ; color # 2 (again)
+> 	;;   bcs.s	redIsblueloop   ; color # 1
+> 	BLS	redIsblueloop   ; color #2 (again) or color #1
+> 	;;   bra	redIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+> 	move.b	d0,Pgreenold_(BP) ; save the actually seen value
+462,463c460,461
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pgreenold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pgreenold_(BP) ; save the actually seen value
+465,471c463,469
+< redIsgreenloop:			;Get last Pixel's 6 bit plotted current value
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> redIsgreenloop: ; Get last Pixel's 6 bit plotted current value
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+474c472
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+476,477c474,475
+< 	bcc.s	redIsgreenColor ;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	redIsgreenColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+480,483c478,480
+< 
+< redIsgreenColor: 		;find which color
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> redIsgreenColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+485,487c482,484
+< 	BEQ	redIsgreenloop	;color # 2 (again)
+< 	bcs.s	redIsgreenGotblue ;color # 1
+< 	BRA	redIsgreenloop 	;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	BEQ	redIsgreenloop	; color # 2 (again)
+> 	bcs.s	redIsgreenGotblue ; color # 1
+> 	BRA	redIsgreenloop ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+489,490c486,487
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pblueold_(BP) ;save the actually seen value
+---
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+> 	move.b	d0,Pblueold_(BP) ; save the actually seen value
+499,500c496,497
+<    andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+<    move.b	d0,Pgreenold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pgreenold_(BP) ; save the actually seen value
+502,508c499,505
+< greenIsgreen: 			;Get last Pixel's 6 bit plotted current value
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> greenIsgreen: ; Get last Pixel's 6 bit plotted current value
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+511c508
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+513,514c510,511
+< 	bcc.s	greenIsColor 	;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	greenIsColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+518,521c515,517
+< 
+< greenIsColor: 			;find which color
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> greenIsColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+523,525c519,521
+< 	;;; beq greenIsred	;color # 2 (red)
+< 	bcs greenIsblue 	;color # 1
+< 	bne greenIsgreen	;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	;;; beq greenIsred   ; color # 2 (red)
+> 	bcs greenIsblue  ; color # 1
+> 	bne greenIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+529,530c525,526
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Predold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Predold_(BP) ; save the actually seen value
+533,538c529,534
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+541c537
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+543,544c539,540
+< 	bcc.s	greenIsredColor ;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	greenIsredColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+547,550c543,545
+< 
+< greenIsredColor: 		;find which color
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> greenIsredColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+552,556c547,551
+< ;	beq greenIsredloop	;color # 2 (red again)
+< 	BCC	greenIsredloop	;color # 3 (green again)
+< 	andi.b	#$3F,d0	; strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pblueold_(BP) ;save the actually seen value
+< GetOld_EN
+---
+> 	; beq greenIsredloop   ; color # 2 (red again)
+> 	BCC	greenIsredloop   ; color # 3 (green again)
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+> 	move.b	d0,Pblueold_(BP) ; save the actually seen value
+> 	GetOld_END
+560,561c555,556
+<    andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+<    move.b	d0,Pblueold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pblueold_(BP) ; save the actually seen value
+563,569c558,564
+< greenIsblueloop:		;Get last Pixel's 6 bit plotted current value
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y	
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> greenIsblueloop: ; Get last Pixel's 6 bit plotted current value
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+572c567
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+574,575c569,570
+< 	bcc.s	greenIsblueColor ;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	greenIsblueColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+578,581c573,575
+< 
+< greenIsblueColor:		;find which color
+< 	move.b	d0,d1		;get pixel
+< 	lsr.b	#6,d1		;strip of shade#, leave 2 bit color#
+---
+> greenIsblueColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+583,585c577,579
+< ;;	beq	greenIsblueGotred ;color # 2 (red)
+< ;;	bcs	greenIsblueloop ;color # 1 (blue)
+< ;;	bne.s	greenIsblueloop ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	;;  beq greenIsblueGotred  ; color # 2 (red)
+> 	;;  bcs greenIsblueloop ; color # 1 (blue)
+> 	;;  bne.s	greenIsblueloop ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+588c582
+< 	andi.b	#$3F,d0		; strip of HAM color select, leave 4 bit shade
+---
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+591a586,588
+> 
+> 
+> 
+597,598c594,595
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Pblueold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pblueold_(BP) ; save the actually seen value
+601,606c598,603
+< 	subq.W	#1,d3		;X=X-1
+< ;	move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+609c606
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+611c608
+< 	bcc.s	blueIsColor 	;>= 16? then it's a color
+---
+> 	bcc.s	blueIsColor ; >= 16? then it's a color
+616,619c613,615
+< 
+< blueIsColor: 			;find which color
+< 	move.b	d0,d1  		;get pixel
+< 	lsr.b	#6,d1   	;strip of shade#, leave 2 bit color#
+---
+> blueIsColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+621,623c617,619
+< ;;;	beq blueIsred   	;color # 2 (red)
+< 	bcs blueIsblue  	;color # 1
+< 	bne blueIsgreen 	;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	;;; beq blueIsred   ; color # 2 (red)
+> 	bcs blueIsblue  ; color # 1
+> 	bne blueIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+627,628c623,624
+<    andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+<    move.b	d0,Predold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Predold_(BP) ; save the actually seen value
+631,636c627,632
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+639c635
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+641c637
+< 	bcc.s	blueIsredColor 	;>= 16? then it's a color
+---
+> 	bcc.s	blueIsredColor ; >= 16? then it's a color
+645d640
+< 
+647,648c642,643
+< 	move.b	d0,d1	;get pixel
+< 	lsr.b	#6,d1   ;strip of shade#, leave 2 bit color#
+---
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+650,652c645,647
+< ;;	beq.s	blueIsredloop   ; color # 2 (again)
+< ;;	bcs.s	blueIsredloop   ; color # 1
+< ;;	bls.s	blueIsredloop   ; color #2(again) or color #1
+---
+> 	;;	beq.s	blueIsredloop   ; color # 2 (again)
+> 	;;	bcs.s	blueIsredloop   ; color # 1
+> 	;;	bls.s	blueIsredloop   ; color #2(again) or color #1
+654,655c649,650
+< ;	bra	blueIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+< 	andi.b	#$3F,d0	; strip of HAM color select, leave 4 bit shade
+---
+> 	;	bra	blueIsgreen ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+661,662c656,657
+<    andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+<    move.b	d0,Pgreenold_(BP) ;save the actually seen value
+---
+>    andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+>    move.b	d0,Pgreenold_(BP) ; save the actually seen value
+664,670c659,665
+< blueIsgreenloop: 		;Get last Pixel's 6 bit plotted current value
+< 	subq.W	#1,d3		;X=X-1
+< 	;move.l	d3,d0		;X
+< 	;move.l	d4,d1		;Y
+< 	move.W	d3,d0		;X
+< 	move.W	d4,d1		;Y
+< 	movea.l	a3,a1		;RastPort for current window
+---
+> blueIsgreenloop: ; Get last Pixel's 6 bit plotted current value
+> 	subq.W	#1,d3 ; X=X-1
+> 	;move.l	d3,d0 ; X
+> 	;move.l	d4,d1 ;Y
+> 	move.W	d3,d0 ; X
+> 	move.W	d4,d1 ; Y
+> 	movea.l	a3,a1   ; RastPort for current window
+673c668
+< ;if old pixel is a register number, go use it
+---
+>    ; if old pixel is a register number, go use it
+675,676c670,671
+< 	bcc.s	blueIsgreenColor ;>= 16? then it's a color
+< 	;;;;lea LongColorTable_(BP),a2 ;table of 16 words representing RGB bits
+---
+> 	bcc.s	blueIsgreenColor ; >= 16? then it's a color
+> 	;;;;lea LongColorTable_(BP),a2 ; table of 16 words representing RGB bits
+679,682c674,676
+< 
+< blueIsgreenColor: 		;find which color
+< 	move.b	d0,d1		;get pixel
+< 	lsr.b	#6,d1		;strip of shade#, leave 2 bit color#
+---
+> blueIsgreenColor: ; find which color
+> 	move.b	d0,d1  ; get pixel
+> 	asr.b	#4,d1   ; strip of shade#, leave 2 bit color#
+684,686c678,680
+< ;;	beq	blueIsgreenGotred ;color # 2 (red)
+< ;;;;	bcs	blueIsgreenloop ;color # 1 (blue)
+< ;;	bra.s	blueIsgreenloop ;color # 3 ; (BRANCH COULD BE REDUNDANT)
+---
+> 	;;  beq blueIsgreenGotred  ; color # 2 (red)
+> 	;;;;  bcs blueIsgreenloop ; color # 1 (blue)
+> 	;;  bra.s	blueIsgreenloop ; color # 3 ; (BRANCH COULD BE REDUNDANT)
+689,690c683,684
+< 	andi.b	#$3F,d0		;strip of HAM color select, leave 4 bit shade
+< 	move.b	d0,Predold_(BP) ;save the actually seen value
+---
+> 	andi.b	#$F,d0	; strip of HAM color select, leave 4 bit shade
+> 	move.b	d0,Predold_(BP) ; save the actually seen value
+692,694d685
+< 
+< 
+< 	ALLDUMPS

@@ -1,0 +1,3067 @@
+head	2.24;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.24
+date	94.12.24.09.55.42;	author Kell;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.12.23.03.29.15;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.10.12.00.14.28;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.09.27.04.32.15;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.07.27.19.28.13;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.05.24.21.02.06;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.02.07.16.53.55;	author Kell;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.02.07.15.46.27;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.02.07.15.39.52;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.01.14.13.06.17;	author Kell;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	93.11.16.19.31.58;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	93.11.16.02.18.52;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	93.11.06.08.39.26;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	93.10.23.05.23.45;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.09.05.05.07.53;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.09.05.04.46.12;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.09.05.01.17.41;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.08.25.00.32.19;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	93.06.19.10.29.01;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	93.06.08.14.37.47;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	93.06.05.07.35.46;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	93.06.04.17.04.10;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	93.06.04.13.38.02;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.06.01.21.58.28;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	93.05.30.13.07.57;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.24
+log
+@Changed VID4 loopback to VID2 so it can work with the Flyer.
+@
+text
+@*********************************************************************
+* Adjust.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: adjust.a,v 2.23 1994/12/23 03:29:15 Kell Exp Kell $
+*
+* $Log: adjust.a,v $
+*Revision 2.23  1994/12/23  03:29:15  Kell
+*New default TAGs for the hardcoded crouton.
+*
+*Revision 2.22  1994/10/12  00:14:28  Kell
+*VTI and VIA files now work from a Switcher_Support drawer.
+*
+*Revision 2.21  1994/09/27  04:32:15  Kell
+*Changed macros & functions that used Matt to Matte
+*
+*Revision 2.20  1994/07/27  19:28:13  Kell
+**** empty log message ***
+*
+*Revision 2.19  1994/05/24  21:02:06  Kell
+*Changed SelectQCrouton to FGC_SelectQCommand call
+*
+*Revision 2.18  94/02/07  16:53:55  Kell
+**** empty log message ***
+*
+*Revision 2.17  94/02/07  15:46:27  Kell
+*Various changes to support the new 4.0 croutons & projects.
+*
+*Revision 2.16  94/02/07  15:39:52  Kell
+**** empty log message ***
+*
+*Revision 2.15  94/01/14  13:06:17  Kell
+**** empty log message ***
+*
+*Revision 2.14  93/11/16  19:31:58  Kell
+*Sends out new matte colors when selecting R/G/B buttons.  This broke when
+*DoSafeWrite no longer would necessarily send out EH3.
+*
+*Revision 2.13  93/11/16  02:18:52  Kell
+*Now dumps CG on entry.
+*
+*Revision 2.12  93/11/06  08:39:26  Kell
+*Fixed to work with EF_EffectsLogic, EF_EffectsTable, EF_TimeVariables and EF_VariableResults no longer being embedded within EFXBase.
+*
+* Revision 2.11  93/10/23  05:23:45  SKell
+*Now correctly saves HS after the AutoAdjust button is selected.
+*
+*Revision 2.10  93/09/05  05:07:53  Kell
+**** empty log message ***
+*
+*Revision 2.9  93/09/05  04:46:12  Kell
+*Fixed bug that cause Hardware Setup to always save an HS file
+*
+*Revision 2.8  93/09/05  01:17:41  Kell
+*New buttons for selecting patch file.  "No" answers on returning to
+*switcher now restore all values.  AutoAdjust now uses both old and new
+*patches.
+*
+*Revision 2.7  93/08/25  00:32:19  Kell
+*Some MOVEMs around AutoMatte call
+*
+*Revision 2.6  93/06/19  10:29:01  Kell
+*Now updates slider after AutoAdjust
+*
+*Revision 2.5  93/06/08  14:37:47  Kell
+*New messages
+*
+*Revision 2.4  93/06/05  07:35:46  Kell
+*Now has final (?) text messages
+*
+*Revision 2.3  93/06/04  17:04:10  Kell
+*Bug fixes.
+*
+*Revision 2.2  93/06/04  13:38:02  Kell
+*Now it a "Shippable" version.
+*
+*Revision 2.0  93/05/30  13:07:57  Kell
+*FirstCheckIn
+*
+*
+*********************************************************************
+* NOTE: This interface is not included in the 3.0 upgrade.
+* It only exists for the new VT4000 board.
+
+	INCLUDE	'assembler.i'
+	INCLUDE	'libraries/dos.i'
+
+	INCLUDE	"lib/exec_lib.i"
+	INCLUDE	"lib/intuition_lib.i"
+	INCLUDE	"lib/graphics_lib.i"
+	INCLUDE	"lib/dos_lib.i"
+	INCLUDE	"lib/intuition_lib.i"
+
+	include	"intuition/sghooks.i"
+
+	INCLUDE	'instinct.i'
+	INCLUDE 'vtdebug.i'
+	include 'eflib.i'
+	include 'croutons.i'
+	include	'hardsets.i'
+	INCLUDE	'vthand.i'
+	INCLUDE	'macros.i'
+	INCLUDE 'serialdebug.i'
+
+;;SERDEBUG	set	1
+
+	ALLDUMPS
+
+*****************************************************************
+* Here are the equations for converting the slider value to the
+* actual value stored in the HS file.
+*
+* WORD values starting at offset $00A0
+*
+* PedConfig  = x
+* GainConfig = 255-x	(usually ORed with $8000)
+* HueDP      = 63-(x/4)
+* HueEP      = x/4
+*
+* Interface  = 0 for RGB display
+* GPI        = 0 for off
+* Termination= 15 for terminate all inputs
+*
+* RedCynMP   = x/16
+* MagGrnMP   = 15-(x/16)
+* BluYelMP   = x/16
+*
+*****************************************************************
+
+* This won't currently ever be assembled with the OLDTOASTER flag, because
+* we won't ever link it with the old Toaster switcher.main.  We want this
+* to only be a feature of the new 4000 toaster.
+
+	SECTION ,CODE
+
+* Everything is relative to POSX_LEFTEDGE, POSY_TITLE1
+
+POSX_LEFT	set	POSX_LEFTEDGE-32
+POSY_TOP	set	POSY_TITLE1-8
+
+	STRUCTURE	AdjustMode,0
+		APTR	AJMD_FG			;->Fastgadget
+		APTR	AJMD_SelectCode		;->routine to execute on select
+		APTR	AJMD_SliderToByte	;->Slider UWORD to UBYTE routine
+		APTR	AJMD_ByteToELH		;->Byte to ELH routine
+		APTR	AJMD_Text		;Text
+		UWORD	AJMD_CurrentTVal	;0-511
+		UWORD	AJMD_CurrentSlider	;0-255
+		UWORD	AJMD_HorizPotRes		
+		UWORD	AJMD_pad
+
+	     LABEL	AJMD_SIZEOF
+
+***********************************************************************
+* This code is called when first entering (via Slice select) the Slice.
+	XDEF	AdjustSliceCode
+AdjustSliceCode:
+	movem.l	4(sp),d0/a3/a5
+
+* This will only get LOAD, SELECT, SELECTK, and UNLOAD FGC commands.
+
+	cmp.w	#FGC_SELECT,d0		; we only respond to FGC_SELECTs
+	beq	OK1
+
+	cmp.w	#FGC_SELECTK,d0		; but now also to FGC_SELECTKs
+	beq	OK2			; Addendum 10/16/90:
+
+QuickExit:
+	rts				; early exit route
+
+* Startup/initial code.
+
+OK1:
+
+*====	Make our Slice screen the current Toaster screen - save previous.
+
+	move.l	a3,a0			; implement a release verify
+	GET.l	TB_Window,a1
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	beq.s	QuickExit
+
+OK2:
+	CALLTL	CancelCG
+	CALLTL	CancelNonStdEfx		; Get out of any non-standard effects
+
+	lea	DataPool(pc),a4		; establish addressing to data area
+
+	GET.l	TB_EfxFG,a0
+	clr.w	FG_HiLiteMask(a0)	; Make sure original EfxFG is not
+					; hilited on exit
+
+	movem.l	a4/a5,-(sp)
+	lea	InternalWipeFG,a0
+	PUT.l	a0,TB_EfxFG
+	XJSR	FGC_SelectQCommand
+	movem.l	(sp)+,a4/a5
+
+	lea	RenderTBar,a0
+	PUT.l	a0,TB_CustomTBarRendering
+	lea	RenderMidTrans,a0
+	PUT.l	a0,TB_CustomMidTransRendering
+
+	move.l	sp,OrgSP(a4)		; and save initial stack pointer
+
+	GET.l	TB_SYSBase,a6		; keep to ourselves for a while
+	XSYS	Forbid
+
+	GET.l	TB_Window,a0		; save old IDCMP and form new IDCMP
+	move.l	wd_IDCMPFlags(a0),OrgIDCMP(a4)
+	move.l	#GADGETDOWN+GADGETUP+RAWKEY+MOUSEMOVE,d0	;;+MOUSEMOVE???
+	GET.l	TB_ITUBase,a6
+	XSYS	ModifyIDCMP
+
+	GET.l	TB_Window,a0		; save old Gadget list and replace
+	move.l	wd_FirstGadget(a0),a1	; it with our own
+	move.l	a1,OrgGList(a4)
+	moveq	#-1,d0
+	XSYS	RemoveGList
+	GET.l	TB_Window,a0
+	lea	OurGList(pc),a1
+	CLEAR	d0
+	moveq	#-1,d1
+	move.l	d0,a2
+	XSYS	AddGList
+
+	GET.l	TB_SYSBase,a6
+	XSYS	Permit			; allow others to play
+
+* Setup Hilite flags
+
+*	Make Pointer to TBar Handle.
+
+	XREF	TBar_Img_PTRS,TopTBar_Img_PTRS,BotTBar_Img_PTRS
+
+	MOVEA.L	TB_TBarFGL(A5),A0	; Addendum 3/25/91: by Speier
+	MOVE.L	FG_Data(A0),TBar_Img_PTRS ; Address read-only TBar imagery
+	MOVE.L	(A0),A0			; Do main TBar.
+	MOVE.L	(A0),A0
+	MOVE.L	FG_Data(A0),TopTBar_Img_PTRS ; Do Top TBar Cap.
+	MOVE.L	(A0),A0
+	MOVE.L	FG_Data(A0),BotTBar_Img_PTRS ; Do Bottom TBar Cap.
+
+*====	Finally display Slice interface. Also make Slice re-display routine
+*====	the default ReDoDisplay() routine.
+
+	move.w	#_LVOReDoDisplay,d0
+	move.l	a5,a0
+	lea	AdjustReDoDisplay(pc),a1
+	CALLTL	SetLibVector
+	move.l	d0,OrgReDoDisplay(a4)
+
+	CALLTL	SoftSpriteOff		; Addendum 8/21/90: extra pair with
+	CALLTL	SoftSpriteOn		; no Forbid/Permit to burn off IDCMP
+
+	CALLTL	InstallAVE
+
+	bsr	ConfigToSliderELH
+	bsr	AdjustReDoDisplay
+
+	move.w	CurrentMode,d0
+	bsr	SelectAdjustMode	;plots TBar
+	bsr	AdjustUpdateDisplay
+	bsr	UpdateTextMessages
+
+	clr.b	SaveFlag
+
+*----------------------------------------------------------------------
+*====	IDCMP loop. We live in here till exited by external means.
+
+WaitForIDCMP:
+	GET.l	TB_MsgPort,a0
+	XSYS	WaitPort
+
+NextIDCMP:
+	GET.l	TB_MsgPort,a0
+	XSYS	GetMsg
+	move.l	d0,d0
+	beq.s	WaitForIDCMP		; if no ready IDCMP messages - wait
+	move.l	d0,a1			; save pointer to IDCMP message
+
+	PUT.l	im_Seconds(a1),TB_LastSeconds	; Addendun 10/23/90: save
+	PUT.l	im_Micros(a1),TB_LastMicros		; IDCMP timestamp
+
+* Clicked on one of the big gadgets, or keyboard.
+	cmp.l	#GADGETUP,im_Class(a1)
+	beq.s	.dofgstuff
+	cmp.l	#GADGETDOWN,im_Class(a1)	; valid IDCMP?
+	beq.s	.dofgstuff
+	cmp.l	#MOUSEMOVE,im_Class(a1)
+	bne.s	CheckRawKey			; if not - skip on
+	lea	SliderHandler,a2
+	bra.s	.amousemove
+
+.dofgstuff
+	move.l	im_IAddress(a1),a2	; get routine to run
+	move.l	gg_UserData(a2),a2	; Buttons/tbar
+
+.amousemove
+	move.w	im_MouseX(a1),d3	; also get mouse coordinates within
+	move.w	im_MouseY(a1),d2	; the window
+
+	XSYS	ReplyMsg		; return the message
+
+	pea	NextIDCMP(pc)		; call the handler
+	jmp	(a2)			; (handler must preserve registers)
+
+CheckRawKey:
+	cmp.l	#RAWKEY,im_Class(a1)	; rawkey IDCMP?
+	bne	.IgnoreIDCMP		; if not - skip on
+
+	CLEAR	d2
+	move.b	im_Code+1(a1),d2	; else get the raw key code
+	move.w	im_Qualifier(a1),d3	; get qualifier in case we need it
+
+	XSYS	ReplyMsg		; return the message
+
+	move.b	d2,d2			; do we have a key up?
+	bmi	NextIDCMP		; if so - ignore it
+
+	cmp.b	#$45,d2
+	beq	SwitcherCodeK		; ESC
+
+	cmp.b	#$5e,d2			; numeric keypad '+'?
+	bne.s	.NotPlus		; if not - skip
+
+	pea	NextIDCMP(pc)		; else call the handler -
+	bra	PlusKey			; must preserve registers
+
+.NotPlus:
+	cmp.b	#$4a,d2			; numeric keypad '-'?
+	bne.s	.NotMinus		; if not - skip
+
+	pea	NextIDCMP(pc)		; else call the handler -
+	bra	MinusKey		; must preserve registers
+
+.NotMinus:
+	cmp.b	#$43,d2			; NumPad enter?
+	bne.s	.NotEnter
+
+.NormalEnter:
+	pea	NextIDCMP(pc)		; do operation?
+	bra	EnterKey		; Addendum 10/3/90:
+
+.NotEnter:
+	cmp.b	#$44,d2			; return key?
+	beq.s	.NormalEnter		; Addendum 10/3/90:
+
+	bra	NextIDCMP		; if neither - go wait for more
+
+.IgnoreIDCMP:
+	XSYS	ReplyMsg		; return the message
+	bra	NextIDCMP		; continue....
+
+********************************************************************
+* d0=CurrentMode, a5->TB
+SelectAdjustMode:
+	movem.l	d0-d3/a0-a2,-(sp)
+
+	move.w	d0,CurrentMode
+	move.w	d0,d3		;stash
+
+	lea	AdjustModes+6*AJMD_SIZEOF,a0
+	moveq	#7-1,d2
+	
+10$	move.l	AJMD_FG(a0),a1
+	cmp.w	d3,d2
+	bne.s	100$
+
+* Selected
+	move.b	FG_HiLiteVal(a1),d0	; assure the FG is highlighted
+	move.b	d0,FG_HiLiteMask(a1)
+	move.b	d0,FG_HiLiteMask+1(a1)
+
+	move.w	AJMD_CurrentTVal(a0),d0
+
+	CALLTL	ImageryOff
+	CALLTL	DoTake
+	
+	move.l	AJMD_SelectCode(a0),a2
+	jsr	(a2)
+
+	CALLTL	ImageryOn
+	PUT.w	d0,TB_TValSec
+	bsr	MoveWipe		;do a FGC_TBAR
+
+	moveq	#0,d0
+	move.w	AJMD_CurrentSlider(a0),d0	; NEED TO MODIFY PROP
+	bsr	UpdateSlider
+
+	bra	666$
+
+* Not selected
+100$	clr.w	FG_HiLiteMask(a1)
+
+666$	suba.w	#AJMD_SIZEOF,a0
+	dbra	d2,10$
+
+* assume old patches
+	lea	Range1FG,a0
+	move.b	FG_HiLiteVal(a0),d0	; assure the FG is highlighted
+	move.b	d0,FG_HiLiteMask(a0)
+	move.b	d0,FG_HiLiteMask+1(a0)
+
+	lea	Range2FG,a0
+	clr.w	FG_HiLiteMask(a0)	; Unhilite
+
+	tst.b	CurrentRange
+	beq.s	777$
+
+	lea	Range2FG,a0
+	move.b	FG_HiLiteVal(a0),d0	; assure the FG is highlighted
+	move.b	d0,FG_HiLiteMask(a0)
+	move.b	d0,FG_HiLiteMask+1(a0)
+
+	lea	Range1FG,a0
+	clr.w	FG_HiLiteMask(a0)	; Unhilite
+
+777$	movem.l	(sp)+,d0-d3/a0-a2
+	rts
+
+***********************************************************************
+* a5->TB, d0=New horizontal value
+UpdateSlider:
+	movem.l	d0-d4/a0-a2/a6,-(sp)
+
+	move.w	CurrentMode,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a2
+	lea	0(a2,d1.w),a2
+
+	movea.l	AJMD_SliderToByte(a2),a0
+	jsr	(a0)
+
+	bsr	SliderToASCII
+
+	GET.l	TB_SYSBase,a6
+	XSYS	Forbid			; keep to ourselves
+	CALLTL	SoftSpriteOff		; turn SoftSprite off
+
+	movem.w	SliderPropInfo,d0-d4
+	move.l	(sp),d1			:OFF OF STACK
+
+	move.w	AJMD_HorizPotRes(a2),d3
+
+	lea	OurGList,a0
+	GET.l	TB_Window,a1
+	suba.l	a2,a2
+	GET.l	TB_ITUBase,a6
+
+	XSYS	ModifyProp
+
+	GET.l	TB_SYSBase,a6
+	CALLTL	SoftSpriteOn		; turn SoftSprite back on
+	XSYS	Permit			; allow everyone else to play
+
+	movem.l	(sp)+,d0-d4/a0-a2/a6
+	rts
+
+***********************************************************************
+*====	Area control gadget handler routine.
+* a5->TB, a4->DataPool
+
+GadgetHandler:
+	move.l	AdjustFGL(a4),a0	; see if any FG has been selected
+	CLEAR	d0
+	move.w	d3,d1
+	CALLTL	MouseFastGList
+	beq.s	.Exit
+
+.Select:
+	move.l	d0,a0			; attempt to run the chosen FG's
+	move.l	FG_Function(a0),a0	; function code
+	SAVE	d2-d7/a2-a6
+	jsr	(a0)
+	REST	d2-d7/a2-a6
+
+	XJSR	ClearWindowIDCMP
+
+	tst.w	TB_CleanUp(a5)
+	beq.s	.Exit
+	CALLTL	ReDoDisplay
+	clr.w	TB_CleanUp(a5)
+
+.Exit:
+	rts
+
+***********************************************************************
+* d0=slider value
+SliderToASCII
+	movem.l	d0/a0,-(sp)
+	lea	SliderNumber+3,a0
+	move.b	#' ',-2(a0)
+	move.b	#' ',-3(a0)
+	ext.l	d0
+	divu.w	#10,d0
+	swap.w	d0
+	add.b	#'0',d0
+	move.b	d0,-(a0)	
+	swap.w	d0
+	ext.l	d0
+	beq.s	10$	 ;0-9
+	divu.w	#10,d0
+	swap.w	d0
+	add.b	#'0',d0
+	move.b	d0,-(a0)
+	swap.w	d0
+	ext.l	d0
+	beq.s	10$	 ;0-99
+	divu.w	#10,d0
+	swap.w	d0
+	add.b	#'0',d0
+	move.b	d0,-(a0)
+10$	movem.l	(sp)+,d0/a0
+	rts
+
+***********************************************************************
+* a5->TB
+SliderHandler:
+	movem.l	a2/a6,-(sp)
+
+	move.b	#1,SaveFlag
+
+	moveq	#0,d0
+	move.w	SliderCurrentValue,d0
+
+	move.w	CurrentMode,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a0
+	lea	0(a0,d1.w),a1		;->AJMD structure
+	move.w	d0,AJMD_CurrentSlider(a1)	
+	
+	movea.l	AJMD_SliderToByte(a1),a0
+	jsr	(a0)
+
+	bsr	SliderToASCII
+
+	movea.l	AJMD_ByteToELH(a1),a1
+	jsr	(a1)
+	lea	ELHlist(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	GET.l	TB_SYSBase,a6
+	XSYS	Forbid			; keep to ourselves
+	CALLTL	SoftSpriteOff		; turn SoftSprite off
+	
+	lea	OurGList,a0
+	GET.l	TB_Window,a1
+	suba.l	a2,a2
+	GET.l	TB_ITUBase,a6
+	XSYS	RefreshGadgets
+
+	GET.l	TB_SYSBase,a6
+	CALLTL	SoftSpriteOn		; turn SoftSprite back on
+	XSYS	Permit			; allow everyone else to play
+
+	movem.l	(sp)+,a2/a6
+	rts
+
+ELHlist	dc.b	EH6A,EH6B,EH5,EH3,EHEND
+	CNOP	0,4
+	
+***********************************************************************
+textleft	set	15	;relative to box
+texttop		set	23	;relative to box
+textspace	set	18
+
+UpdateTextMessages
+	movem.l	d0-d2/a0,-(sp)
+	move.l	#POSX_LEFT+32,d0	; island for message box
+	move.l	#POSY_TOP+54,d1
+	move.l	#640,d2
+	move.l	#171,d3
+	CALLTL	DrawBorderBox
+
+	move.w	CurrentMode,d2
+	mulu.w	#AJMD_SIZEOF,d2
+	lea	AdjustModes,a0
+	move.l  AJMD_Text(a0,d2.w),a0
+	
+	add.l	#textleft,d0
+	add.l	#texttop,d1
+	move.l	#textspace,d2
+	bsr	PrintMessage
+
+	movem.l	(sp)+,d0-d2/a0
+	rts
+
+***********************************************************************
+* d0=x, d1=y, d2=linespace, a0->message, a5->TB
+PrintMessage
+	movem.l	d0-d4/a0-a2/a6,-(sp)
+	move.l	d2,d4		;stash space
+	move.l	d0,d2		;stash x
+	move.l	d1,d3		;stash y
+	movea.l	a0,a2
+	GET.l	TB_ITUBase,a6
+	
+10$	tst.b	(a2)
+	beq.s	666$
+	
+	GET.l	TB_RastPort,a0
+	lea	DummyIText(pc),a1
+	move.l	a2,it_IText(a1)
+	move.l	d2,d0
+	move.l	d3,d1
+	XSYS	PrintIText
+	
+20$	tst.b	(a2)+		;move to end of string
+	bne.s	20$
+
+	add.l	d4,d3
+	bra.s	10$	
+
+666$	movem.l	(sp)+,d0-d4/a0-a2/a6
+	rts
+
+DummyIText	dc.b	0,0,RP_JAM2,0
+		dc.w	0,0
+		dc.l	SwitcherFont		;font
+DummyITextStr	dc.l	0			;FILL IN LATER
+		dc.l	0
+
+***********************************************************************
+*====	UpdateDisplay() subroutine for this slice.
+* Doesn't update the Text Messages
+
+AdjustUpdateDisplay:
+	SAVE	d0-d3/a0-a4/a6		; save work registers
+
+	GET.l	TB_SYSBase,a6
+	XSYS	Forbid			; keep to ourselves
+	CALLTL	SoftSpriteOff		; turn off the SoftSprite
+	bra.s	addrd
+
+***********************************************************************
+*====	ReDoDisplay() subroutine for this slice.
+
+AdjustReDoDisplay:
+	SAVE	d0-d3/a0-a4/a6		; save work registers SEE ABOVE!!!
+
+	GET.l	TB_SYSBase,a6
+	XSYS	Forbid			; keep to ourselves
+	CALLTL	SoftSpriteOff		; turn off the SoftSprite
+	CALLTL	ClearToastDisplay	; clear display to background color
+	
+;;	bsr	UpdateTextMessages
+
+addrd:
+	lea	DataPool(pc),a4
+
+; Render this list last.  (This puts the images over the islands, if any)
+	move.l	AdjustFGL(a4),a0
+	GET.l	TB_Window,a1
+;;	CLEARA	a2
+	CLEAR	d0
+	CLEAR	d1
+	CALLTL	DrawFastGList		; Always draws TBar
+
+	lea	OurGList,a0
+;;	GET.l	TB_Window,a1
+	suba.l	a2,a2
+	GET.l	TB_ITUBase,a6
+	XSYS	RefreshGadgets
+
+	GET.l	TB_SYSBase,a6
+	CALLTL	SoftSpriteOn		; turn SoftSprite back on
+	XSYS	Permit			; allow everyone else to play
+
+	REST	d0-d3/a0-a4/a6
+	rts
+
+*************************************************************************
+RenderMidTrans: rts
+
+*************************************************************************
+*************************************************************************
+*************************************************************************
+*									*
+*	RenderTBar:							*
+*									*
+*	Moves The TBar To Current Position.  Assumes SoftSprite is off				*
+*	Looks at TB_TValSec(a5)
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	TBar is Moved To Current Position.				*
+*									*
+*	29.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	RenderTBar
+RenderTBar:
+	MOVEM.L	D0-d1/A0,-(A7)		; Save Calling State.
+*
+*	Get The Current Image.
+*
+
+* Get a PTRIndex for current TBar position
+	moveq	#0,d0
+	GET.w	TB_TValSec,d0		; Get Current TBar Position.
+		
+	move.w	CurrentMode,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a0
+	move.w	d0,AJMD_CurrentTVal(a0,d1.w)
+
+	divu	#3*2,d0			; scale it into imagery index
+	add.w	d0,d0			; form into image pointer table index
+	add.w	d0,d0
+
+	MOVEA.L	TB_TBarFGL(A5),A0	; A0.L = Address of Fast Gadget.
+	move.l	FG_PTRTable(a0),a0	; and get offset pointer to imagery
+	move.l	0(a0,d0.w),d0
+
+	lea	DataPool(pc),a0		; establish addressing to data area
+	move.l	TBarFGL(a0),a0		; A1.L = Address of Fast Gadget.
+	CMP.L	FG_Data(A0),d0		; Has The Image Changed?
+	BEQ.S	UPDAT1			; Exit If Image The Same.
+	MOVE.L	d0,FG_Data(A0)		; Save New Image.
+
+	BSR.S	DrawTBar		; Draw TBar On The Screen.
+*
+*	Exit Subroutine.
+*
+UPDAT1	MOVEM.L	(A7)+,D0-d1/A0		; Return Calling State.
+	RTS
+	PAGE
+
+*************************************************************************
+*									*
+*	DrawTBar:							*
+*									*
+*	Draws the TBar on the Screen.  Assumes SoftSprite is off					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of TBar Fast Gadget.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The TBar is Drawn On The Screen.				*
+*									*
+*	12.Sept 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	DrawTBar
+DrawTBar:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Redraw The Screen.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number  of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset  to Image.
+	CALLTL	DrawFastGList		; Redraw The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+
+*************************************************************************
+* a0->FG, a5->TB
+SendFGC_TBAR
+	movem.l	d0-d7/a0-a6,-(sp)
+	move.l	FG_Function(a0),d0
+	beq.s	666$
+
+	movem.l	a0/a5,-(sp)
+	move.l	#FGC_TBAR,-(sp)
+	move.l	d0,a0
+	jsr	(a0)
+	lea	12(sp),sp
+666$	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+*************************************************************************
+	XDEF	AdjustTBarCode
+	XREF	AdjustTBarFG
+
+* a5->TB
+AdjustTBarCode:
+	GET.l	TB_EfxFG,a0	
+	move.l	FG_Function(a0),d0
+	beq	666$
+
+	CALLTL	SoftSpriteOff		; Turn The Sprite Off.
+
+	bsr	SendFGC_TBAR
+	bsr	RenderTBar
+*
+*	Move The Soft Sprite Over The TBar Handler.
+*
+
+	lea	AdjustTBarFG,a0
+	MOVE.W	gg_LeftEdge(a0),D0	; D0.W = Make x Position.
+	ADDI.W	#40,d0			; D0.W = x Position.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D1	; D1.L = Make y Position.
+	DIVU.W	#3*2,D1			; Scale The Input.
+	ADD.W	gg_TopEdge(a0),D1	; Adjust to Current Position.
+	ADDQ.W	#8,D1			; D1.L = y Position.
+
+	CALLTL	MoveSoftSpriteABS	; Move To That Position.
+	CALLTL	SoftSpriteOn		; Turn The Sprite Back On.
+
+666$	rts
+
+*************************************************************************
+* a5->TB, looks at TB_TValSec
+MoveWipe
+	movem.l	d0/a0,-(sp)
+	GET.l	TB_EfxFG,a0	
+	move.l	FG_Function(a0),d0
+	beq	666$
+
+	CALLTL	SoftSpriteOff		; Turn The Sprite Off.
+	bsr	SendFGC_TBAR
+;;	bsr	RenderTBar		; Will be rendered by ReDoDisplay?
+	CALLTL	SoftSpriteOn		; Turn The Sprite Back On.
+
+666$	movem.l	(sp)+,d0/a0
+	rts
+
+*************************************************************************
+*************************************************************************
+***********************************************************************
+*====	Exit Slice FG handler.
+
+	XDEF	SwitcherCode
+	XREF	SwitcherFG
+
+* a5->TB
+SwitcherCode:
+	lea	SwitcherFG,a3
+
+	move.l	a3,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	bne.s	10$			; if selected
+	rts
+
+10$	clr.w	FG_HiLiteMask(a3)	; denote un-selected image
+
+*----------------------------------------------------------------------
+* a5->TB
+SwitcherCodeK:	* Don't need to save Regs because we're restoring sp
+	lea	DataPool(pc),a4		; establish addressing to data area
+
+	tst.b	SaveFlag
+	beq.s	110$
+
+	moveq	#0,d0
+	moveq	#0,d1
+	lea	savemsg(pc),a0
+	move.l	d0,a1
+	lea	YesStr(pc),a2	
+	lea	NoStr(pc),a3
+	CALLTL	DoSwitcherRequester
+	tst.w	d0
+	bpl	100$			;jump if not cancel
+	
+* restore everything
+	bsr	RestoreCodeK
+	bra.s	110$
+
+100$	bsr	SaveCodeK
+
+110$	move.w	#_LVOReDoDisplay,d0	; replace original ReDoDisplay()
+	move.l	a5,a0
+	move.l	OrgReDoDisplay(a4),a1
+	CALLTL	SetLibVector
+
+	PUT.w	#-1,TB_CleanUp		; denote Switcher interface destroyed
+	
+*------
+	GET.w	TB_TValSec,d0
+	
+	CALLTL	DoTake
+
+	CALLTL	RestoreMatteColor
+
+	CALLTL	SelectStdEfx
+		
+	move.w	CurrentMode,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a0
+	move.w	d0,AJMD_CurrentTVal(a0,d1.w)
+*------
+
+	clr.l	TB_CustomTBarRendering(a5)
+	clr.l	TB_CustomMidTransRendering(a5)
+
+	move.l	OrgSP(a4),sp		; assure stack is restored
+
+	GET.l	TB_SYSBase,a6		; keep everything to ourselves
+	XSYS	Forbid
+
+	GET.l	TB_Window,a0		; restore original window GList
+	move.l	wd_FirstGadget(a0),a1
+	moveq	#-1,d0
+	GET.l	TB_ITUBase,a6
+	XSYS	RemoveGList
+	GET.l	TB_Window,a0
+	move.l	OrgGList(a4),a1
+	CLEAR	d0
+	moveq	#-1,d1
+	move.l	d0,a2
+	XSYS	AddGList
+
+	GET.l	TB_Window,a0		; restore original IDCMP
+	move.l	OrgIDCMP(a4),d0
+	XSYS	ModifyIDCMP
+
+	GET.l	TB_SYSBase,a6
+	JUMPROM	Permit			;returns to Switcher!
+
+***********************************************************************
+* Handler for user punching generic enter or return.
+* Selects next button in the Mode row, cycling thru the choices.
+EnterKey:
+	rts
+
+***********************************************************************
+* This routine handles the numeric '+' key for incrementing slider
+PlusKey:
+	rts
+
+***********************************************************************
+* This routine handles the numeric '-' key for decrementing slider
+
+MinusKey:
+	rts
+
+***********************************************************************
+* Select Code
+***********************************************************************
+
+	XDEF	PedestalCode
+	XDEF	GainCode
+	XDEF	LockPhaseCode
+	XDEF	ADPhaseCode
+	XDEF	RedCode
+	XDEF	GreenCode
+	XDEF	BlueCode
+
+PedestalCode:
+	lea	PedestalFG,a3
+	bra.s	ProcessSelect
+
+GainCode:
+	lea	GainFG,a3
+	bra.s	ProcessSelect
+
+LockPhaseCode:
+	lea	LockPhaseFG,a3
+	bra.s	ProcessSelect
+
+ADPhaseCode:
+	lea	ADPhaseFG,a3
+	bra.s	ProcessSelect
+
+RedCode:
+	lea	RedFG,a3
+	bra.s	ProcessSelect
+
+GreenCode:
+	lea	GreenFG,a3
+	bra.s	ProcessSelect
+
+BlueCode:
+	lea	BlueFG,a3
+;;	bra.s	ProcessSelect
+
+* a0->FG
+
+ProcessSelect:
+	move.w	FG_IndexID(a3),d0
+	subq.w	#1,d0
+	cmp.w	CurrentMode,d0
+	beq.s	10$			; jump if already selected
+
+	move.l	a3,a0
+
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	beq.s	10$			; if not selected
+
+	move.w	FG_IndexID(a3),d0
+	subq.w	#1,d0
+
+	bsr	SelectAdjustMode
+	bsr	AdjustUpdateDisplay
+	bsr	UpdateTextMessages
+
+10$	rts
+
+***********************************************************************
+* NOTE!! This will save hard sets.  This HS file will do AutoCalibate
+* each time the switcher is started.  Only if they do a "SAVE" or SAVE
+* on EXIT will the flag be set to avoid AutoCalibrate on switcher startup.
+
+	XDEF	AutoAdjustCode
+	XREF	AutoAdjustFG
+
+AutoAdjustCode:
+	lea	AutoAdjustFG,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	bne	10$
+	rts				; if not selected
+
+*-----------------------
+* Do Ped/Gain with VTI patches for the sake of AutoHue and grabbing
+* input VID1s burst.
+10$	movem.lIa2-a3/a6,-(sp)
+
+	lea	AutoAdjustFG,a0
+	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustUpdateDisplay
+
+	moveq	#0,d0
+	moveq	#0,d1
+	lea	aamsg1(pc),a0
+	lea	aamsg2(pc),a1
+	lea	ContinueStr(pc),a2	
+	lea	CancelStr(pc),a3
+	CALLTL	DoSwitcherRequester
+	tst.w	d0
+	bmi	999$			;jump if cancel
+
+	CALLTL	SoftSpriteBPLCON0Off
+
+	GET.w	TB_TValSec,stashedtbar
+
+	CALLTL	DoTake
+	
+	CALLTL	InstallAVE
+
+	moveq	#0,d0		;don't necessarily force whole calibration
+	CALLTL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+
+	lea	ToasterConfig,a0	; setting up
+	move.w	#-1,Pedestal(a0)	;force total AutoCal
+	CALLTL	AutoCalibrate		;what about error message ????
+
+*----------------
+* Load the AutoHue patches
+	GET.l	TB_DOSBase,a6
+	GET.l	TB_BootLock,d1	;lock of root of switcher
+	XSYS	CurrentDir
+
+	CALLTL	RestoreCopperList	;so LoadView0 will work
+	CALLTL	Wait4Top
+
+	lea	VTAutoHue(pc),a0
+	CALLTL	LoadPatches		; Addendum 11/29/90:
+					; load patch file directly
+	move.l	d0,d0
+	beq	.BadLoadAHPatches	; if the Patch failed to load - jump
+
+	moveq	#0,d0			; now do the standard patching
+	moveq	#1,d1		;patch new AA Toaster on AA or non AA machine
+	CALLTL	ProgramChips
+
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+*----------------
+* Initialize the Toaster after patching with the AutoHue patches
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	moveq	#0,d0		;don't necessarily force whole calibration
+	CALLTL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster3
+
+*----------------
+* Make sure cables are setup for AutoHue
+.preAHSetUpLoop
+	CALLTL	TestVid1Camera		; test for video 1
+	tst.l	d0
+	bne.s	.UserContinue		;jump if cables hooked up OK
+
+* Need to hook up cable, or no camera is hooked up
+.AHSetUpLoop:
+	CLEAR	d0			; put up done requester to allow user
+	CLEAR	d1			; to properly configure his Toaster
+	lea	AHDoIt1new(pc),a0		; Assume A4000 AutoHue
+	lea	AHDoIt2new(pc),a1
+	lea	AHOK(pc),a2
+	lea	CancelStr(pc),a3
+	bsr	.DoRequester
+
+	tst.w	d0
+	bpl.s	.preAHSetUpLoop	 ;NOTE!!!! if can't open request = OK
+				 ;!!!!!!!! THIS COULD BE AN INFINITE LOOP ???
+* Cancel Clicked
+	bra	.SkipOnWard
+
+*-------------------
+* Main->is_EXT or Main->Vid2 Cable is OK
+.UserContinue:
+
+	XCALL	AutoHue			; perform the AutoHue
+
+	movem.l	d1-d7,-(sp)
+
+	tst.l	d1
+	bpl.s	8861$
+	neg.l	d1
+8861$	tst.l	d2
+	bpl.s	8862$
+	neg.l	d2
+
+8862$	DEA.l	TB_VTSetUp,a0
+	ELHGET_EP	a0,d3
+	ELHGET_DP	a0,d4
+	swap	d3
+	move.w	d4,d3
+
+	movem.l	d0-d3,-(sp)	;save old patches results
+
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	lea	VTAutoHue2(pc),a0
+	CALLTL	LoadPatches		; Addendum 11/29/90:
+*					; load patch file directly
+	move.l	d0,d0
+	beq	.BadLoadAHPatches	; if the Patch failed to load - jump
+
+	CLEAR	d0			; now do the standard patching
+	moveq	#1,d1			;patch new AA Toaster on AA or non AA machine
+	CALLTL	ProgramChips
+
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	moveq	#0,d0		;don't necessarily force whole calibration
+	CALLTL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster3
+
+	XCALL	AutoHue			; perform the AutoHue
+
+	tst.l	d1
+	bpl.s	8851$
+	neg.l	d1
+8851$	tst.l	d2
+	bpl.s	8852$
+	neg.l	d2
+
+8852$	DEA.l	TB_VTSetUp,a0
+	ELHGET_EP	a0,d3
+	ELHGET_DP	a0,d4
+	swap	d3
+	move.w	d4,d3	
+
+	movem.l	(sp)+,d4-d7	;restore old results
+	add.w	d4,d4
+	add.w	d4,d4
+	or.w	d0,d4		;error flags
+	add.w	d4,d4
+	add.w	d4,d4
+	
+	lea	.BestPatchTBL,a0
+	move.l	0(a0,d4.w),a0		
+	jsr	(a0)
+
+	lea	ToasterConfig,a0	; setting up
+	move.w	d1,HueDP(a0)
+	move.l	d1,d2
+	swap	d1
+	move.w	d1,HueEP(a0)
+
+	tst.w	d0
+	beq.s	8856$
+	bset.b	#7,HueEP(a0)		;bit 15 set if new patches
+
+8856$	DEA.l	TB_VTSetUp,a0
+	ELHPUT_DP_R	a0,d2
+	ELHPUT_EP_R	a0,d1
+
+	movem.l	(sp)+,d1-d7
+	bra	.GotBestPhase
+
+*----------------
+* d1=NewEPerror d2=NewDPerror d3=NewEPDP
+* d5=OldEPerror d6=OldDPerror d7=OldEPDP
+
+.PickOld
+	moveq	#0,d0
+	move.l	d7,d1
+	rts
+
+.PickNew
+	moveq	#1,d0
+	move.l	d3,d1
+	rts
+
+.PickBestDP
+	moveq	#0,d0	;assume use old
+	move.l	d7,d1
+	cmp.l	d2,d6
+	bcs.s	8883$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d1
+8883$	rts
+
+.PickBestEP
+	moveq	#0,d0	;assume use old
+	cmp.l	d1,d5
+	bcs.s	8884$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8884$	move.l	d7,d1
+	rts
+
+.PickBestEPDP	;EP old or DP new
+	moveq	#0,d0	;assume use old
+	cmp.l	d2,d5
+	bcs.s	8885$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8885$	move.l	d7,d1
+	rts
+
+.PickBestDPEP	;DP old or EP new
+	moveq	#0,d0	;assume use old
+	cmp.l	d1,d6
+	bcs.s	8886$	;jump if new is worse than old
+	moveq	#1,d0
+	move.l	d3,d7
+8886$	move.l	d7,d1
+	rts
+
+*----------------
+* This table helps us pick the best choice of patches, when both fail
+* or both are good, depending on AutoHues returned error codes.
+.BestPatchTBL	dc.l	.PickBestDP
+		dc.l	.PickOld
+		dc.l	.PickOld
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickBestEP
+		dc.l	.PickBestEPDP
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickBestDPEP
+		dc.l	.PickBestDP
+		dc.l	.PickOld
+
+		dc.l	.PickNew
+		dc.l	.PickNew
+		dc.l	.PickNew
+		dc.l	.PickBestDP
+
+.GotBestPhase
+
+* AutoHue is done
+.SkipOnWard
+	CALLTL	InitReadScanLineBMs	;since messed up by Vid1Camera etc.  
+
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	lea	VTInitialize(pc),a0
+	lea	ToasterConfig,a1	; setting up
+	tst.w	HueEP(a1)
+	bpl.s	8888$
+	lea	VTInitialize2(pc),a0	;assume old patches
+8888$
+	CALLTL	LoadPatches		; load patch file directly
+	move.l	d0,d0
+	beq	.BadLoadPatches
+
+	moveq	#0,d0			; now do the standard patching
+	moveq	#1,d1		;patch new AA Toaster on AA or non AA machine
+	CALLTL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	moveq	#3,d0			;both banks
+	XJSR	InstallToaster		; open and initialize the VToaster
+
+	moveq	#0,d0		;don't necessarily force whole calibration
+
+	CALLTL	CaliReadScanLine
+	tst.l	d0
+	beq	.BadToaster
+
+	CALLTL	AutoCalibrate		;what about error message ????
+	
+	movem.l	d2-d5,-(sp)
+	CALLTL	AutoMatte
+	movem.l	(sp)+,d2-d5
+
+	CALLTL	RestoreMatteColor
+
+	CALLTL	SaveHardSets	;assume success
+	clr.b	SaveFlag	;assume success
+
+666$	move.w	CurrentMode,d0
+	move.w	d0,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a0
+	move.w	stashedtbar,AJMD_CurrentTVal(a0,d1.w)
+
+;;	lea	AutoAdjustFG,a0
+;;	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustReDoDisplay
+	CALLTL	InstallAVEI
+
+	bsr	ConfigToSliderELH
+;;	move.w	CurrentMode,d0
+	bsr	SelectAdjustMode	;plots TBar
+	bsr	AdjustUpdateDisplay
+	bsr	UpdateTextMessages
+
+	CALLTL	SoftSpriteBPLCON0On
+
+999$	movem.l	(sp)+,a2-a3/a6
+	rts
+
+555$	lea	ContinueStr(pc),a3
+444$	moveq	#0,d0
+	moveq	#0,d1
+	move.l	d0,a2
+	bsr	.DoRequester
+	bra.s	666$			;might crash if failed to GenLock!!!!!!
+	
+.DoRequester
+	bsr	AdjustReDoDisplay
+	bsr	UpdateTextMessages
+	CALLTL	InstallAVEI
+	CALLTL	SoftSpriteBPLCON0On
+	CALLTL	DoSwitcherRequester
+	CALLTL	SoftSpriteBPLCON0Off
+	JUMPTL	InstallAVE
+	
+.BadLoadAHPatches
+	lea	vtaerr(pc),a0
+	lea	unable(pc),a1
+	bra.s	555$
+
+.BadToaster:
+	lea	respond(pc),a0
+	lea	unable(pc),a1
+	bra.s	555$
+
+.BadToaster3:
+	lea	respond(pc),a0
+	lea	restart(pc),a1
+	bra.s	555$
+
+.BadToaster2:
+	lea	genlock(pc),a0
+	lea	reboot(pc),a1
+	lea	crash(pc),a3
+	bra.s	444$
+
+.BadLoadPatches:
+	lea	vtierr(pc),a0
+	lea	restart(pc),a1
+	bra.s	555$
+
+*--------------------------------
+stashedtbar	dc.w	0
+
+savemsg dc.b	'Do you want to save the current settings?',0
+YesStr	dc.b	'Yes',0
+NoStr	dc.b	'No',0
+
+*-------------
+AHDone1:
+	DC.b	'Auto Adjust completed. Please re-configure',0
+
+AHDone2:
+	DC.b	'Toaster Inputs/Outputs before continuing.',0
+
+AHDoIt1:
+	DC.b	'Auto Adjust - Connect Input 1 to a video source and',0
+
+AHDoIt2:
+	DC.b	'connect Program output to Input 2 before continuing.',0
+
+AHDoIt1new:
+	DC.b	'Auto Adjust:',0
+
+AHDoIt2new:
+	DC.b	'Connect Input 1 to a video source before continuing.',0
+
+OKStr:
+AHOK:
+	DC.b	'OK',0
+
+CancelStr:
+	DC.b	'Cancel',0
+
+*--------------
+aamsg1	dc.b	'Auto Adjust will adjust ALL settings.',0
+aamsg2	dc.b	'The results will then be saved.',0
+
+scmsg	dc.b	'Save the current settings?',0
+
+resmsg	dc.b	'Bring back the last saved settings?',0
+
+vtaerr:
+	dc.b	'Error reading VTA',0
+unable:
+	dc.b	'Unable to completely Auto Adjust',0
+
+ContinueStr:
+	dc.b	'Continue',0
+
+vtierr:
+	IFND	AACHIPS
+	dc.b	'Error reading VTI',0
+	ENDC
+	IFD	AACHIPS
+	dc.b	'Error reading VTI.AA',0
+	ENDC
+restart:
+	dc.b	'Please Quit and Restart the Video Toaster',0
+
+respond:
+	dc.b	'Video Toaster not responding',0
+
+genlock:
+	dc.b	'Toaster unable to genlock',0
+
+reboot:
+	dc.b	'You must Reboot!',0
+
+crash	dc.b	'REBOOT',0
+
+*-------------
+VTAutoHue:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTA.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTA',0
+	 ENDC
+
+VTInitialize:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTI.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTI',0
+	 ENDC
+
+VTAutoHue2:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTA2.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTA2',0
+	 ENDC
+
+VTInitialize2:
+	 IFD	AACHIPS
+	  DC.b	'Switcher_Support/VTI2.AA',0
+	 ENDC
+
+	 IFND	AACHIPS
+	  DC.b	'Switcher_Support/VTI2',0
+	 ENDC
+
+elhlistconf
+	dc.b	EH1,EH2,EH3,EH4,EH5,EH68,EH69,EH6A,EH6B,EHEND
+
+	CNOP	0,4
+
+***********************************************************************
+* This will cause the switcher to avoid AutoCalibate each time the
+* switcher is started!!!  See AutoAdjust().
+
+	XDEF	SaveCode
+	XREF	SaveFG
+
+SaveCode:
+	lea	SaveFG,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	bne.s	SaveCodeReq		; if selected
+	rts
+
+SaveCodeReq
+	lea	SaveFG,a0
+	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustUpdateDisplay
+
+	movem.l	a2-a3,-(sp)
+	moveq	#0,d0
+	moveq	#0,d1
+	lea	scmsg(pc),a0
+	suba.l	a1,a1
+	lea	OKStr(pc),a2	
+	lea	CancelStr(pc),a3
+	CALLTL	DoSwitcherRequester
+	movem.l	(sp)+,a2-a3
+	tst.w	d0
+	bpl	SaveCodeK			;jump if OK
+	rts
+
+SaveCodeK:
+	DEA	TB_VTSetUp,a0
+	lea	ToasterConfig,a1	
+
+	ELHGET_PED	a0,d0
+	andi.w	#$ff,d0
+	move.w	d0,Pedestal(a1)
+	
+	ELHGET_GAIN	a0,d0
+	andi.w	#$ff,d0
+	bset	#15,d0			;don't do AutoCal on each startup
+	move.w	d0,Gain(a1)
+	
+	ELHGET_EP	a0,d0
+	andi.w	#$ff,d0
+	move.w	d0,HueEP(a1)
+	
+	tst.b	CurrentRange
+	beq.s	5$
+	bset.b	#7,HueEP(a1)		;set flag for New patches
+
+5$	ELHGET_DP	a0,d0
+	andi.w	#$ff,d0
+	move.w	d0,HueDP(a1)
+	
+	move.w	CurrentRed,d1
+	lsr.w	#8,d1
+	lsr.w	#4,d1
+	move.w	d1,RedCynMP(a1)
+
+	moveq	#2,d0		;red
+	bsr.s	mpupdate
+	moveq	#7,d0		;cyan
+	bsr.s	mpupdate
+
+	move.w	CurrentGreen,d1
+	lsr.w	#8,d1
+	not.b	d1
+	lsr.w	#4,d1
+	move.w	d1,MagGrnMP(a1)
+
+	moveq	#3,d0		;green
+	bsr.s	mpupdate
+	moveq	#6,d0		;magenta
+	bsr.s	mpupdate
+
+	move.w	CurrentBlue,d1
+	lsr.w	#8,d1
+	lsr.w	#4,d1
+	move.w	d1,BluYelMP(a1)
+
+	moveq	#4,d0		;blue
+	bsr.s	mpupdate
+	moveq	#5,d0		;yellow
+	bsr.s	mpupdate
+
+	CALLTL	SaveHardSets	;assume success
+
+	clr.b	SaveFlag
+	
+;;	lea	SaveFG,a0
+;;	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustUpdateDisplay
+
+10$	rts
+
+* d0=index, d1=phase
+mpupdate
+	movem.l	d0-d3/a0-a1,-(sp)
+	move.w	d1,d2	
+
+	XLEA	BGColorFGL_,a0
+	CALLTL	IndexFastG
+	move.l	d0,a0
+	move.w	FG_IndexID(a0),d0
+
+	GET.w	TB_ToastBGC,d1
+	andi.w	#MATTE_BITS,d1
+	cmp.w	d1,d0
+	bne.s	10$
+
+* modifying the currently selected matte
+	andi.w	#$fff0,d0		;zero out MP
+	or.w	d2,d0			;new phase
+	PUT.w	d0,TB_ToastBGC
+	bra.s	20$
+
+10$	andi.w	#$fff0,d0		;zero out MP
+	or.w	d2,d0			;new phase
+
+20$	move.w	d0,FG_IndexID(a0)
+	movem.l	(sp)+,d0-d3/a0-a1
+	rts
+
+***********************************************************************
+	XDEF	RestoreCode
+	XREF	RestoreFG
+
+RestoreCode:
+	lea	RestoreFG,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	beq	10$			; if not selected
+
+	lea	RestoreFG,a0
+	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustUpdateDisplay
+
+	movem.l	a2-a3,-(sp)
+	moveq	#0,d0
+	moveq	#0,d1
+	lea	resmsg(pc),a0
+	suba.l	a1,a1
+	lea	OKStr(pc),a2	
+	lea	CancelStr(pc),a3
+	CALLTL	DoSwitcherRequester
+	movem.l	(sp)+,a2-a3
+	tst.w	d0
+	bpl	RestoreCodeK		;jump if not cancel
+10$	rts
+
+* See jump from above
+RestoreCodeK:
+	move.b	CurrentRange,d0		;stash current value
+	bsr	ConfigToSliderELH
+
+	cmp.b	CurrentRange,d0
+	beq.s	5$
+
+	move.b	CurrentRange,d0
+	bsr	RePatch
+
+5$	lea	ELHlist(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	move.w	CurrentMode,d0
+	bsr	SelectAdjustMode	; Easy way to update slider
+
+;;	lea	RestoreFG,a0
+;;	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustUpdateDisplay
+
+	bsr	UpdateTextMessages
+
+	clr.b	SaveFlag
+	rts
+
+***********************************************************************
+	XDEF	Range1Code
+	XREF	Range1FG
+
+Range1Code:
+	cmpi.b	#0,CurrentRange
+	beq.s	10$			; jump if already selected
+
+	lea	Range1FG,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	beq	10$			; if not selected
+	
+	move.b	#1,SaveFlag
+
+	moveq	#0,d0
+	move.b	d0,CurrentRange
+	bsr	RePatch
+
+10$	rts
+
+***********************************************************************
+	XDEF	Range2Code
+	XREF	Range2FG
+
+Range2Code:
+	cmpi.b	#1,CurrentRange
+	beq.s	10$			; jump if already selected
+
+	lea	Range2FG,a0
+	GET.l	TB_Window,a1		; implement a release verify
+;;	CLEARA	a2
+	CALLTL	HiLiteBoolSelect
+	beq	10$			; if not selected
+
+	move.b	#1,SaveFlag
+
+	moveq	#1,d0
+	move.b	d0,CurrentRange
+	bsr	RePatch
+
+10$	rts
+
+***********************************************************************
+RePatch
+	movem.l	d0-d2/a2-a3/a6,-(sp)
+	move.w	d0,d2
+
+	CALLTL	SoftSpriteBPLCON0Off
+
+	GET.w	TB_TValSec,stashedtbar
+
+	CALLTL	DoTake
+	
+	CALLTL	InstallAVE
+
+	GET.l	TB_DOSBase,a6
+	GET.l	TB_BootLock,d1	;lock of root of switcher
+	XSYS	CurrentDir
+
+	CALLTL	RestoreCopperList
+	CALLTL	Wait4Top
+
+	lea	VTInitialize(pc),a0
+	tst.w	d2
+	beq.s	10$
+	lea	VTInitialize2(pc),a0
+
+10$	CALLTL	LoadPatches		; load patch file directly
+	move.l	d0,d0
+	beq	.BadLoadPatchesII
+
+	moveq	#0,d0			; now do the standard patching
+
+	moveq	#1,d1			;patch new AA Toaster on AA or non AA machine
+	CALLTL	ProgramChips
+	tst.l	d0			; Addendum 12/7/90: check to see if
+	beq	.BadToaster2II		; Patching failed
+
+	moveq	#0,d0
+	CALLTL	LockToasterELH	;in an attempt to fix syncwrite, added 3-6-93
+
+	lea	elhlistconf(pc),a0
+	CALLTL	SendELHList2Toaster	
+
+	moveq	#3,d0			;both banks
+	XJSR	InstallToaster		; open and initialize the VToaster
+	
+666$	move.w	CurrentMode,d0
+	move.w	d0,d1
+	mulu.w	#AJMD_SIZEOF,d1
+	lea	AdjustModes,a0
+	move.w	stashedtbar,AJMD_CurrentTVal(a0,d1.w)
+
+;;	lea	AutoAdjustFG,a0
+;;	clr.w	FG_HiLiteMask(a0)	; Unhilite
+	bsr	AdjustReDoDisplay
+	CALLTL	InstallAVEI
+
+;;	move.w	CurrentMode,d0
+	bsr	SelectAdjustMode	;plots TBar
+	bsr	AdjustUpdateDisplay
+	bsr	UpdateTextMessages
+
+	CALLTL	SoftSpriteBPLCON0On
+
+	movem.l	(sp)+,d0-d2/a2-a3/a6
+	rts
+
+.BadToaster2II:
+	lea	genlock(pc),a0
+	lea	reboot(pc),a1
+	lea	crash(pc),a3
+	bra.s	444$
+
+.BadLoadPatchesII:
+	lea	vtierr(pc),a0
+	lea	restart(pc),a1
+;;	bra.s	555$
+
+555$	lea	ContinueStr(pc),a3
+444$	moveq	#0,d0
+	moveq	#0,d1
+	move.l	d0,a2
+	bsr	.DoRequester
+	bra.s	666$			;might crash if failed to GenLock!!!!!!
+
+.DoRequester
+	bsr	AdjustReDoDisplay
+	bsr	UpdateTextMessages
+	CALLTL	InstallAVEI
+	CALLTL	SoftSpriteBPLCON0On
+	CALLTL	DoSwitcherRequester
+	CALLTL	SoftSpriteBPLCON0Off
+	JUMPTL	InstallAVE
+
+***********************************************************************
+***********************************************************************
+	XREF	ToasterConfig
+
+ConfigToSliderELH:
+	movem.l	d0-d1/a0-a1,-(sp)
+
+	DEA	TB_VTSetUp,a0
+	lea	ToasterConfig,a1	
+	
+	move.w	Pedestal(a1),d0
+	bpl.s	100$
+* Never did pedgain
+	ELHGET_PED	a0,d0
+	bra.s	110$
+
+100$	move.w	d0,d1
+	ELHPUT_PED_R	a0,d1
+
+110$	lsl.w	#8,d0
+	move.w	d0,CurrentPedestal
+
+*--------
+	tst.w	Pedestal(a1)
+	bpl.s	200$
+* Never did pedgain
+	ELHGET_GAIN	a0,d0
+	bra.s	210$
+
+200$	move.w	Gain(a1),d0
+	andi.w	#$ff,d0
+	move.w	d0,d1
+	ELHPUT_GAIN_R	a0,d1
+
+210$	not.b	d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentGain
+
+*--------
+	move.b	#0,CurrentRange
+	move.w	HueEP(a1),d0
+	bpl.s	215$
+	move.b	#1,CurrentRange
+
+*--------
+215$	tst.w	HueDP(a1)
+	bpl.s	300$
+* Never did autohue
+290$	ELHGET_EP	a0,d0
+	bra.s	310$
+
+300$	move.w	HueEP(a1),d0
+	andi.w	#%111111,d0	;kill patch # flag
+	move.w	d0,d1
+	ELHPUT_EP_R	a0,d1
+
+310$	lsl.w	#2,d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentLockPhase
+
+*--------
+	move.w	HueDP(a1),d0
+	bpl	400$
+* Never did autohue
+	ELHGET_DP	a0,d0
+	bra	410$
+
+400$	move.w	d0,d1
+	ELHPUT_DP_R	a0,d1
+
+410$	lsl.w	#2,d0
+	not.b	d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentADPhase
+
+*--------
+	move.w	RedCynMP(a1),d0
+	lsl.w	#4,d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentRed
+
+*--------
+	move.w	MagGrnMP(a1),d0
+	lsl.w	#4,d0
+	not.b	d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentGreen
+
+*--------
+	move.w	BluYelMP(a1),d0
+	lsl.w	#4,d0
+	lsl.w	#8,d0
+	move.w	d0,CurrentBlue
+
+	movem.l	(sp)+,d0-d1/a0-a1
+	rts
+
+***********************************************************************
+***********************************************************************
+
+ADPhaseSelect
+GainSelect
+PedestalSelect
+	PUT.w	#VIDEOTYPE_LIVE,TB_VideoFlagSec
+	CALLTL	CookAndServeFreeze
+	PUT.w	#M_DVE_VIDEO1,TB_MainSec
+	PUT.w	#M_VIDEO1,TB_PrvwSec
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain
+	rts
+
+GainSlider
+PedestalSlider
+	lsr.w	#8,d0
+	rts
+
+PedestalValue
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_PED_R	a0,d0
+	rts
+
+*--------
+GainValue
+	not.b	d0
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_GAIN_R	a0,d0
+	rts
+
+*--------
+LockPhaseSelect
+	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	CALLTL	CookAndServeFreeze
+	PUT.w	#M_VIDEO1,TB_MainSec
+	PUT.w	#M_DV0,TB_PrvwSec
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain
+	CALLTL	SMPTEbars
+	rts
+
+ADPhaseSlider
+LockPhaseSlider
+	lsr.w	#8,d0
+	andi.w	#~%11,d0
+	rts
+
+LockPhaseValue
+	lsr.w	#2,d0
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_EP_R	a0,d0
+	rts
+
+*--------
+ADPhaseValue
+	not.b	d0
+	lsr.w	#2,d0
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_DP_R	a0,d0
+	rts
+
+*--------
+BlueSelect
+	movem.l	d0-d5,-(sp)
+	move.w	CurrentBlue,d0
+	bsr	BlueSlider
+	bsr	BlueValue
+
+	move.l	#110,d0	;Y
+	move.l	#-28,d1	;I
+	move.l	#26,d2	;Q
+	bra.s	matsel
+
+GreenSelect
+	movem.l	d0-d5,-(sp)
+	move.w	CurrentGreen,d0
+	bsr	GreenSlider
+	bsr	GreenValue
+
+	move.l	#123,d0	;Y
+	move.l	#-28,d1	;I
+	move.l	#-57,d2	;Q
+	bra.s	matsel
+
+RedSelect
+	movem.l	d0-d5,-(sp)
+	move.w	CurrentRed,d0
+	bsr	RedSlider
+	bsr	RedValue
+
+	move.l	#116,d0	;Y
+	move.l	#48,d1	;I
+	move.l	#17,d2	;Q
+;;	bra.s	matsel
+
+matsel	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	CALLTL	CookAndServeFreeze
+	PUT.w	#M_ENCODER,TB_MainSec
+	PUT.w	#M_DV0,TB_PrvwSec
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain
+	moveq	#0,d3		;bank
+	moveq	#2,d4		;start line
+	move.l	#478,d5		;num lines
+
+;;	CALLTL	WriteYIQBlockAVEI
+
+	CALLTL	InstallAVE
+	CALLTL	WriteYIQBlock
+	bsr	AdjustReDoDisplay
+	CALLTL	InstallAVEI
+
+	movem.l	(sp)+,d0-d5
+	rts
+
+BlueSlider
+GreenSlider
+RedSlider
+	lsr.w	#8,d0
+	andi.w	#~%1111,d0
+	rts
+
+*------
+BlueValue
+	movem.l	d0-d2/a0,-(sp)
+	moveq	#$0,d1	;MA
+	moveq	#$7,d2	;MB
+	bra.s	matelh
+
+GreenValue
+	movem.l	d0-d2/a0,-(sp)
+	moveq	#$0,d1	;MA
+	moveq	#$b,d2	;MB
+	not.b	d0
+	bra.s	matelh
+
+RedValue
+	movem.l	d0-d2/a0,-(sp)
+	moveq	#$9,d1	;MA
+	moveq	#$0,d2	;MB
+;;	bra.s	matelh
+
+matelh:
+	lsr.w	#4,d0
+	DEA.l	TB_VTSetUp,a0
+	ELHSET_NOSNOW	a0
+	ELHPUT_MA_R	a0,d1
+	ELHPUT_MB_R	a0,d2
+	ELHPUT_MP_R	a0,d0	
+
+	lea	ELHlist(pc),a0
+	CALLTL	SendELHList2Toaster
+
+	movem.l	(sp)+,d0-d2/a0
+	rts
+
+***********************************************************************
+*****************************************************************************
+*
+* InternalWipe
+*
+* Interal Wipe crouton function handler code.
+*
+*****************************************************************************
+
+InternalWipe:
+	movem.l	4(sp),d0/a3/a5
+	GET.l	TB_EFXbase,a4
+
+* NOTE: This code will never get FGC_LOAD or FGC_UNLOAD commands!
+* Nor will I be allowing AUTOS, UNAUTOS.
+* It might only get FGC_TBAR, FGC_SELECT, FGC_REMOVE, FGC_TAKE commands.
+
+	lea	_LVOHandleWipe1TBar(a4),a1
+	lea	.EffectData,a2
+
+*! OLD as of 11-5-93
+*	movea.l	EF_TSEwipeTemp(a4),a0
+	movea.l	EF_EffectsLogic(a4),a0
+	movea.l	TEL_TSEwipeTemp(a0),a0
+
+	jmp	_LVOProcessEffect(a4)
+
+
+* SwitcherEffects structure
+.EffectData:
+	dc.l	.Variables-.EffectData  ;always points to Time Variables
+	dc.l	0			;modes
+	dc.w	1			;num rectangles horizontally	
+
+.Variables:
+;XDATA	  
+	dc.w ET_Wipe1X1
+
+;position
+	dc.w TVT_CONST
+	dc.w $0000
+
+;srcAxis
+	dc.w TVT_CONST
+	dc.w WCENT
+
+;destMin
+	dc.w TVT_CONST
+	dc.w WXMIN
+
+;destMax
+	dc.w TVT_CONST
+	dc.w WXMAX
+
+;destAxis
+	dc.w TVT_CONST
+	dc.w WXAXIS
+
+;effectSize
+	dc.w TVT_CONST
+	dc.w WXSIZE
+
+;effectColor	  
+	dc.w TVT_CONST
+	dc.w KEYHI
+
+;overscanColor  
+	dc.w TVT_CONST
+	dc.w IGNORE
+
+	dc.w TVT_END
+
+;---------------
+;YDATA
+	dc.w ET_Wipe1Y
+
+;position
+	dc.w TVT_CONST
+	dc.w $0000
+
+;srcAxis
+	dc.w TVT_CONST
+	dc.w WSTART
+
+;destMin
+	dc.w TVT_CONST
+	dc.w WYMIN
+
+;destMax
+	dc.w TVT_CONST
+	dc.w WYMAX
+
+;destAxis
+	dc.w TVT_CONST
+	dc.w WYMIN
+
+;effectSize
+	dc.w TVT_LINEAR
+	dc.l 0,WYSIZE<<16,$00000000,MAXLIMIT
+
+;effectColor	  
+	dc.w TVT_CONST
+	dc.w KEYHI
+
+;overscanColor  
+	dc.w TVT_CONST
+	dc.w IGNORE
+
+	dc.w TVT_END
+	dc.w ET_RUN
+	
+*------------------------------
+InternalWipeFG:
+
+	DC.l	0			; gg_NextGadget
+	DC.w	0			; gg_LeftEdge
+	DC.w	0			; gg_TopEdge
+	DC.w	0			; gg_Width
+	DC.w	0			; gg_Height
+	DCB.b	gg_SIZEOF-gg_Flags,0	; clear rest of Gadget structure
+	DC.w	0			; FG_ModeType
+	DC.w	0			; FG_WWidth
+	DC.w	0			; FG_Height
+	DC.w	0			; FG_Modulus
+	DC.l	0			; FG_Offset
+	DC.l	0			; FG_Data
+	DC.w	0			; FG_EntrySize
+	DC.w	0			; FG_PTRIndex
+	DC.l	0			; FG_PTRTable
+	DC.l	InternalWipe		; FG_Function
+	DC.b	0			; FG_LoadFlag
+	DC.b	-1			; FG_DispFlag
+	DC.b	-1			; FG_MouseFlag
+	DC.b	0			; FG_HiLiteVal
+	DC.w	0			; FG_IndexID
+	DC.w	0			; FG_HiLiteMask
+	DC.w	0			; FG_BorderCon
+	DC.w	0			; FG_TopSize
+	DC.w	0			; FG_BotSize
+	DC.w	0			; FG_LeftWSize
+	DC.w	0			; FG_RightWSize
+	DC.w	0			; FG_LeftMask
+	DC.w	0			; FG_RightMask
+	DC.w	0			; FG_Extra1
+	dcb.b	InternalWipeFG+FG_SIZ-*,0
+
+	dc.l	0		;FGS_FileName
+	dc.l	0		;FGS_ObjectType
+	dc.l	0		;FGS_ObjectVersion
+	DC.l	0		;FGS_EntryLibrary
+	DC.l	0		;FGS_EntryRoutine
+	dc.l	InternalWipeFGTagLists-InternalWipeFG 	 ;FGS_TagLists
+	DC.l	0		;FGS_LocalData
+
+	dcb.b	InternalWipeFG+FGS_SIZ-*,0
+
+InternalWipeFGTagLists:	
+	TAG_START
+
+;;	TAG_CroutonType	0
+;;	TAG_TimeLine	0
+;;	TAG_IndexID	0	   	
+
+	TAG_FCountMode	0	   
+
+	TAG_VariableFCount	0   	
+	TAG_SlowFCount	   	75
+	TAG_MedFCount	   	45
+	TAG_FastFCount		20
+
+	TAG_VariableFCount68000	0
+	TAG_SlowFCount68000    	75
+	TAG_MedFCount68000     	45
+	TAG_FastFCount68000    	20
+
+	TAG_NumFields		0
+
+;;	TAG_StartTime		0
+	TAG_MatteColor		0	   
+;;	TAG_CustomMatteColor	0   
+
+* Generated fields after FGC_LOAD or FGC_FCOUNT
+	TAG_NumFields		0	;read only
+	TAG_NumFramesSlow	0	;read only
+	TAG_NumFramesMedium	0	;read only
+	TAG_NumFramesFast	0	;read only
+	TAG_NumFramesVariable	0	;read only
+
+	TAG_END		;end of tag list
+
+*------------------------
+
+	CNOP	0,4
+
+**************************************************************************
+
+
+*====	Private slice data areas.
+
+	XDEF	AdjustPool		; for Switcher's benefit only
+AdjustPool:				
+*					
+*					
+*					
+
+DataPool:
+	DATASYM	OrgIDCMP,DataPool
+	DS.l	1
+
+	DATASYM	OrgGList,DataPool
+	DS.l	1
+
+	DATASYM	OrgSP,DataPool
+	DS.l	1
+
+	DATASYM	OrgReDoDisplay,DataPool
+	DS.l	1
+
+	DATASYM	AdjustFGL,DataPool
+	XREF	AdjustFGs
+	DC.l	AdjustFGs
+
+	DATASYM	TBarFGL,DataPool
+	XREF	AdjustTBarFGs
+	DC.l	AdjustTBarFGs
+
+*-------------
+
+OurGList:
+	DC.l	WholeScreen		; gg_NextGadget
+	DC.w	POSX_LEFT+58		; gg_LeftEdge
+	DC.w	POSY_TOP+300+14		; gg_TopEdge
+	DC.w	270			; gg_Width
+	DC.w	6			; gg_Height
+	DC.w	GADGHNONE		  ; gg_Flags
+	DC.w	GADGIMMEDIATE+FOLLOWMOUSE+RELVERIFY ; gg_Activation
+	DC.w	PROPGADGET		  ; gg_GadgetType
+	DC.l	KnobImage		; gg_GadgetRender
+	DC.l	0			; gg_SelectRender
+	DC.l	SliderIText		; gg_GadgetText
+	DC.l	0			; gg_MutualExclude
+	DC.l	SliderPropInfo		; gg_SpecialInfo
+	DC.w	'SL'			; gg_GadgetID - Addendum 4/5/90: ID
+	DC.l	SliderHandler		; gg_UserData
+
+* Used by the AUTOKNOB feature of the prop gadget
+KnobImage
+	dc.w	0,0,15,6		;left,top,width,height
+	dc.w	0			;depth=do rectange
+	dc.l	0			;ImageData
+	dc.b	0,0			;PlanePick, PlaneOnOff=color
+	dc.l	0			;next image
+
+SliderIText:
+	dc.b	0,0,RP_JAM2,0
+	dc.w	283,-3			;relative to slider
+	dc.l	SwitcherFont		;font
+	dc.l	SliderNumber
+	dc.l	0			;next
+
+SwitcherFont	dc.l	fontname
+		dc.w	14
+		dc.b	FS_NORMAL!FSF_COLORFONT,FPF_DISKFONT!FPF_DESIGNED ;style,flags
+fontname
+	dc.b	'CGInterface.font',0
+
+SliderNumber	dc.b	'236',0
+
+	CNOP	0,4
+*-----
+SliderPropInfo:
+	dc.w	FREEHORIZ!PROPBORDERLESS
+
+SliderCurrentValue
+	dc.w	0				;HorizPot
+	dc.w	0				;VertPot
+	dc.w	$100,$ffff			;HorizBody,VertBody
+	dc.w	0,0,0,0,0,0			;Used by intuition
+
+	CNOP	0,4
+
+*-------------------------------------
+WholeScreen
+	DC.l	0			; gg_NextGadget
+	DC.w	0			; gg_LeftEdge
+	DC.w	0			; gg_TopEdge
+	DC.w	DISPLAYWIDTH		; gg_Width
+	DC.w	DISPLAYHEIGHT		; gg_Height
+	DC.w	GADGHNONE		; gg_Flags
+	DC.w	GADGIMMEDIATE		; gg_Activation
+	DC.w	BOOLGADGET		; gg_GadgetType
+	DC.l	0			; gg_GadgetRender
+	DC.l	0			; gg_SelectRender
+	DC.l	0			; gg_GadgetText
+	DC.l	0			; gg_MutualExclude
+	DC.l	0			; gg_SpecialInfo
+	DC.w	'AJ'			; gg_GadgetID - Addendum 4/5/90: ID
+	DC.l	GadgetHandler		; gg_UserData
+
+*-------------------------------------
+CurrentMode	dc.w	0	;default to Pedestal
+SaveFlag	dc.b	0	;=1 if need to save
+CurrentRange	dc.b	0	;0=old patches, 1=new patches
+
+*-------------------------------------
+AdjustModes:
+	XREF	PedestalFG
+	dc.l	PedestalFG	;->FG
+	dc.l	PedestalSelect
+	dc.l	PedestalSlider
+	dc.l	PedestalValue
+	dc.l	PedestalText
+	dc.w	430		;TBarVal
+CurrentPedestal:
+	dc.w	0		;CurrentSlider
+	dc.w	$100
+	dc.w	0
+
+*-----------------
+	XREF	GainFG
+	dc.l	GainFG		;->FG	
+	dc.l	GainSelect
+	dc.l	GainSlider
+	dc.l	GainValue
+	dc.l	GainText
+	dc.w	430		;TBarVal
+CurrentGain:
+	dc.w	0		;CurrentSlider
+	dc.w	$100
+	dc.w	0
+
+*-----------------
+	XREF	LockPhaseFG
+	dc.l	LockPhaseFG	;->FG	
+	dc.l	LockPhaseSelect
+	dc.l	LockPhaseSlider
+	dc.l	LockPhaseValue
+	dc.l	LockPhaseText
+	dc.w	256		;TBarVal
+CurrentLockPhase:
+	dc.w	0		;CurrentSlider
+	dc.w	$400
+	dc.w	0
+
+*-----------------
+	XREF	ADPhaseFG
+	dc.l	ADPhaseFG	;->FG	
+	dc.l	ADPhaseSelect
+	dc.l	ADPhaseSlider
+	dc.l	ADPhaseValue
+	dc.l	ADPhaseText
+	dc.w	256		;TBarVal
+CurrentADPhase:
+	dc.w	0		;CurrentSlider
+	dc.w	$400
+	dc.w	0
+
+*-----------------
+	XREF	RedFG
+	dc.l	RedFG		;->FG	
+	dc.l	RedSelect
+	dc.l	RedSlider
+	dc.l	RedValue
+	dc.l	RedText
+	dc.w	256		;TBarVal
+CurrentRed:
+	dc.w	0		;CurrentSlider
+	dc.w	$1000
+	dc.w	0
+
+*-----------------
+	XREF	GreenFG
+	dc.l	GreenFG		;->FG	
+	dc.l	GreenSelect
+	dc.l	GreenSlider
+	dc.l	GreenValue
+	dc.l	GreenText
+	dc.w	256		;TBarVal
+CurrentGreen:
+	dc.w	0		;CurrentSlider
+	dc.w	$1000
+	dc.w	0
+
+*-----------------
+	XREF	BlueFG
+	dc.l	BlueFG		;->FG	
+	dc.l	BlueSelect
+	dc.l	BlueSlider
+	dc.l	BlueValue
+	dc.l	BlueText
+	dc.w	256		;TBarVal
+CurrentBlue:
+	dc.w	0		;CurrentSlider
+	dc.w	$1000
+	dc.w	0
+
+**************************************************************
+	IFD	CRAP
+PedestalText
+ dc.b 'Pedestal (brightness) adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1.',0
+ dc.b ' ',0
+ dc.b ' Move the slider to adjust the black areas of the lower external bars',0
+ dc.b ' until they match the reference black areas above as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' waveform monitor.',0
+	dc.b	0
+
+GainText
+ dc.b 'Gain (contrast) adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1.',0
+ dc.b ' ',0
+ dc.b ' Move the slider to adjust the white areas of the lower external bars.',0
+ dc.b ' Alternately select and re-adjust the Pedestal and Gain controls',0
+ dc.b ' until each matches the reference areas above as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' waveform monitor.',0
+	dc.b	0
+
+LockPhaseText
+ dc.b 'Analog (external) video phase adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1.',0
+ dc.b ' ',0
+ dc.b ' Move the slider until the lower external SMPTE color bars match the',0
+ dc.b ' reference bars above them as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' vectorscope.',0
+	dc.b	0
+
+ADPhaseText
+ dc.b 'Digital (internal) video phase adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1.',0
+ dc.b ' ',0
+ dc.b ' Move the slider until the lower internal SMPTE color bars match the',0
+ dc.b ' external reference bars above them as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' vectorscope.',0
+	dc.b	0
+
+RedText
+ dc.b 'Red DV3 Background color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides red color reference.',0
+ dc.b ' ',0
+ dc.b ' Move the slider until the lower color matches the upper red color',0
+ dc.b ' as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' vectorscope.',0
+	dc.b	0
+
+GreenText
+ dc.b 'Green DV3 Background color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides green color reference.',0
+ dc.b ' ',0
+ dc.b ' Move the slider until the lower color matches the upper green color',0
+ dc.b ' as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' vectorscope.',0
+	dc.b	0
+
+BlueText
+ dc.b 'Blue DV3 Background color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides blue color reference.',0
+ dc.b ' ',0
+ dc.b ' Move the slider until the lower color matches the upper blue color',0
+ dc.b ' as closely as possible.',0
+ dc.b ' ',0
+ dc.b ' Adjustments can be made visually, or for more precision, with a',0
+ dc.b ' vectorscope.',0
+	dc.b	0
+
+	ENDC
+
+**********************************************************************
+PedestalText
+ dc.b 'Pedestal (A/D converter D.C. offset) adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1 and waveform monitor to',0
+ dc.b ' main output.',0
+ dc.b ' ',0
+ dc.b ' ',0
+ dc.b ' Adjust A/D Pedestal and Gain until SMPTE black and white match reference.',0
+ dc.b 0
+
+GainText
+ dc.b 'Contrast (A/D converter gain) adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1 and waveform monitor to',0
+ dc.b ' main output.',0
+ dc.b ' ',0
+ dc.b ' ',0
+ dc.b ' Adjust A/D Pedestal and Gain until SMPTE black and white match reference.',0
+ dc.b 0
+
+LockPhaseText
+ dc.b 'Lock Phase (master genlock phase) adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1 and vectorscope to main output.',0
+ dc.b ' ',0
+ dc.b ' Select a Delay Range appropriate for both Lock Phase and A/D Phase.',0
+ dc.b 0
+
+ADPhaseText
+ dc.b 'A/D Phase adjustment:',0
+ dc.b ' ',0
+ dc.b ' Connect external SMPTE color bars to input 1 and vectorscope to main output.',0
+ dc.b ' ',0
+ dc.b ' Select a Delay Range appropriate for both Lock Phase and A/D Phase.',0
+ dc.b ' ',0
+ dc.b ' Adjust Lock Phase before performing this adjustment.',0
+ dc.b 0
+
+RedText
+ dc.b 'Red DV3 Background Color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides red color reference.',0
+ dc.b ' ',0
+ dc.b ' ',0
+ dc.b ' Match hue as closely as possible between top and bottom.',0
+ dc.b 0
+
+GreenText
+ dc.b 'Green DV3 Background Color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides green color reference.',0
+ dc.b ' ',0
+ dc.b ' ',0
+ dc.b ' Match hue as closely as possible between top and bottom.',0
+ dc.b 0
+
+BlueText
+ dc.b 'Blue DV3 Background Color adjustment:',0
+ dc.b ' ',0
+ dc.b ' Top half of screen provides blue color reference.',0
+ dc.b ' ',0
+ dc.b ' ',0
+ dc.b ' Match hue as closely as possible between top and bottom.',0
+ dc.b 0
+
+	END
+@
+
+
+2.23
+log
+@New default TAGs for the hardcoded crouton.
+@
+text
+@d7 1
+a7 1
+* $Id: adjust.a,v 2.22 1994/10/12 00:14:28 Kell Exp Kell $
+d10 3
+d1122 1
+a1122 1
+* Main->is_EXT or Main->Vid4 Cable is OK
+d1420 1
+a1420 1
+	DC.b	'connect Program output to Input 4 before continuing.',0
+@
+
+
+2.22
+log
+@VTI and VIA files now work from a Switcher_Support drawer.
+@
+text
+@d7 1
+a7 1
+* $Id: adjust.a,v 2.21 1994/09/27 04:32:15 Kell Exp Kell $
+d10 3
+d2242 3
+a2244 3
+	TAG_CroutonType	0
+	TAG_TimeLine	0
+	TAG_IndexID	0	   	
+d2260 1
+a2260 1
+	TAG_StartTime		0
+d2262 8
+a2269 1
+	TAG_CustomMatteColor	0   
+@
+
+
+2.21
+log
+@Changed macros & functions that used Matt to Matte
+@
+text
+@d7 1
+a7 1
+* $Id: adjust.a,v 2.20 1994/07/27 19:28:13 Kell Exp Kell $
+d10 3
+d1469 1
+a1469 1
+	  DC.b	'VTA.AA',0
+d1473 1
+a1473 1
+	  DC.b	'VTA',0
+d1478 1
+a1478 1
+	  DC.b	'VTI.AA',0
+d1482 1
+a1482 1
+	  DC.b	'VTI',0
+d1487 1
+a1487 1
+	  DC.b	'VTA2.AA',0
+d1491 1
+a1491 1
+	  DC.b	'VTA2',0
+d1496 1
+a1496 1
+	  DC.b	'VTI2.AA',0
+d1500 1
+a1500 1
+	  DC.b	'VTI2',0
+@
+
+
+2.20
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: adjust.a,v 2.19 1994/05/24 21:02:06 Kell Exp Kell $
+d10 3
+d884 1
+a884 1
+	CALLTL	RestoreMattColor
+d1324 1
+a1324 1
+	CALLTL	RestoreMattColor
+d1615 1
+a1615 1
+	andi.w	#~((1<<MATT_LOCK_FLAG)!(1<<MATT_CHANGE_FLAG)),d1
+@
+
+
+2.19
+log
+@Changed SelectQCrouton to FGC_SelectQCommand call
+@
+text
+@d7 1
+a7 1
+* $Id: adjust.a,v 2.18 94/02/07 16:53:55 Kell Exp Locker: Kell $
+d9 4
+a12 1
+* $Log:	adjust.a,v $
+@
+
+
+2.18
+log
+@*** empty log message ***
+@
+text
+@Binary files adjust.a and t:,RCSt1A70c3c00 differ
+@
+
+
+2.17
+log
+@Various changes to support the new 4.0 croutons & projects.
+@
+text
+@Binary files adjust.a and t:,RCSt1A70c35c0 differ
+@
+
+
+2.16
+log
+@*** empty log message ***
+@
+text
+@Binary files adjust.a and t:,RCSt1A70c35c0 differ
+@
+
+
+2.15
+log
+@*** empty log message ***
+@
+text
+@Binary files adjust.a and t:,RCSt1A70c33b8 differ
+@
+
+
+2.14
+log
+@Sends out new matte colors when selecting R/G/B buttons.  This broke when
+DoSafeWrite no longer would necessarily send out EH3.
+@
+text
+@Binary files adjust.a and t:,RCSt1A70a6648 differ
+@
+
+
+2.13
+log
+@Now dumps CG on entry.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b4030 differ
+@
+
+
+2.12
+log
+@Fixed to work with EF_EffectsLogic, EF_EffectsTable, EF_TimeVariables and EF_VariableResults no longer being embedded within EFXBase.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b3df8 differ
+@
+
+
+2.11
+log
+@Now correctly saves HS after the AutoAdjust button is selected.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b8e78 differ
+@
+
+
+2.10
+log
+@*** empty log message ***
+@
+text
+@Binary files adjust.a and t:,RCSt1A78af528 differ
+@
+
+
+2.9
+log
+@Fixed bug that cause Hardware Setup to always save an HS file
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0508 differ
+@
+
+
+2.8
+log
+@New buttons for selecting patch file.  "No" answers on returning to
+switcher now restore all values.  AutoAdjust now uses both old and new
+patches.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0508 differ
+@
+
+
+2.7
+log
+@Some MOVEMs around AutoMatte call
+@
+text
+@Binary files adjust.a and t:,RCSt1A78afc50 differ
+@
+
+
+2.6
+log
+@Now updates slider after AutoAdjust
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0308 differ
+@
+
+
+2.5
+log
+@New messages
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0b18 differ
+@
+
+
+2.4
+log
+@Now has final (?) text messages
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0150 differ
+@
+
+
+2.3
+log
+@Bug fixes.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b0150 differ
+@
+
+
+2.2
+log
+@Now it a "Shippable" version.
+@
+text
+@Binary files adjust.a and t:,RCSt1A78aef60 differ
+@
+
+
+2.1
+log
+@Fixed slider bugs
+@
+text
+@Binary files adjust.a and t:,RCSt1A78aef60 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files adjust.a and t:,RCSt1A78b00f0 differ
+@

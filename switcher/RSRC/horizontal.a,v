@@ -1,0 +1,220 @@
+head	2.1;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.1
+date	94.07.27.19.28.11;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.21.15.27;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* horizontal.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: horizontal.a,v 2.0 1992/05/18 21:15:27 Hartford Exp Kell $
+*
+* $Log: horizontal.a,v $
+*Revision 2.0  1992/05/18  21:15:27  Hartford
+**** empty log message ***
+*
+*********************************************************************
+********************************************************************
+* horizontal.a - HorizontalLine
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* 11-29-89	Junior		Created this file
+* 12-03-89	SKell		All Effects code will follow consistant rules!		
+* 12-03-89	SKell		Uses +/- Width instead of endpixel, allows
+*				lines of 0 length, also fixed lines of
+*				length 1.  Fixed right mask bug.
+*				Fixed short branches. General optimization.
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include	"exec/memory.i"
+	include "graphics/gfx.i"
+	include "graphics/text.i"
+;;	include "smallmacros.i"		;(no comment)
+	include "macros.i"
+
+	XCODE	HorizontalLine
+
+;;	xref	_GfxBase		;not used
+
+	section	,code
+*******************************************************************
+* VOID HorizontalLine(Buffer, StartPixel, +/-Width, SetClear)
+*                       a0       d0         d1         d2
+* Summary:
+*	uses CPU to put bit zero of SetClear from StartPixel to EndPixel
+*	SetClear = 0 or 1.
+*
+* Upon Exit:
+*	NO registers disroyed!  At NewTek we (I) write modular code.
+********************************************************************~
+HorizontalLine:
+	movem.l	d0-d5/a0-a1,-(sp)
+
+	move.w	d0,d3
+	add.w	d1,d3
+	tst.w	d1
+	beq	Return	;zero width, abort
+	bpl.s	10$
+	exg	d0,d3
+	neg.w	d1
+	addq.w	#1,d0	;actual start
+	bra.s	20$
+10$	subq.w	#1,d3	;actual end	
+		
+*************************************************
+* special case: length < 17
+* d0=start pixel, d1=width > 0, d3=end pixel
+
+20$	cmp.w	#16,d1
+	bhi.s		Normal	;jump if width > 16
+
+* if line not contained in one word, Normal can handle it
+	move.w	d0,d4
+	lsr.w	#4,d4	;start word
+	move.w	d3,d5
+	lsr.w	#4,d5	;end word
+	cmp.w	d4,d5
+	bne.s		Normal	;jump if start word != end word
+
+* otherwise, special case
+	add.w	d4,d4
+	add.w	d4,a0	; -> dest word
+
+	lea.l	EdgeMask,a1
+	add.w	d1,d1	; width in pixels *2 (word table), >0, <=16*2
+	move.w	0(a1,d1.w),d1	;contains # of 0s = to width
+	not.w	d1		;contains # of 1s = to width
+
+	and.w	#$000f,d0	; starting pixel offset from left
+	lsr.w	d0,d1		; got final data now
+
+	tst.w	d2
+	beq.s		ClearSpecial	;jump if clear
+	or.w	d1,(a0)
+	bra.s		Return
+ClearSpecial
+	not.w	d1
+	and.w	d1,(a0)
+	bra.s		Return
+
+*************************************************
+* normal case: length > 16 (so at least left & right masks)
+Normal
+	move.w	d3,d4	; end pixel
+	lsr.w	#4,d4	; end word (not inc mask)
+
+	move.w	d0,d5	; start pixel
+	add.w	#16,d5	; round right to nearest word
+	lsr.w	#4,d5	; start word (not inc mask)
+
+	sub.w	d5,d4	; # words (not inc 2 masks), can be zero
+
+	move.w	d0,d5
+	lsr.w	#4,d5	; word offset
+	add.w	d5,d5
+	add.w	d5,a0	; first dest word
+
+	and.w	#$000f,d0	; start pixel
+	add.w	d0,d0
+	lea.l	EdgeMask,a1
+*	not.w	-16000(a0)
+	move.w	0(a1,d0.w),d0	;# of 1s = to left mask
+
+	tst.w	d2
+	beq.s		ClearLeft	;jump if clear
+	or.w	d0,(a0)+
+	moveq	#-1,d5
+	bra.s		CL
+ClearLeft
+	not.w	d0
+	and.w	d0,(a0)+
+	moveq.l	#0,d5
+
+	beq.s	CL	;could be zero width
+NextFullWord
+	move.w	d5,(a0)+
+CL	dbra	d4,NextFullWord
+
+	and.w	#$000f,d3
+	add.w	d3,d3
+	lea.l	SpecialMask,a1
+*	not.w	-16000(a0)
+	move.w	0(a1,d3.w),d0
+
+	tst.w	d2
+	beq.s		ClearRight	;jump if clear
+	not.w	d0
+	or.w	d0,(a0)
+	bra.s		CR
+ClearRight
+	and.w	d0,(a0)
+CR
+
+Return
+	movem.l	(sp)+,d0-d5/a0-a1
+	rts
+
+********************************************************************~
+	section	,data
+EdgeMask
+	dc.b	%11111111,%11111111
+SpecialMask
+	dc.b	%01111111,%11111111
+	dc.b	%00111111,%11111111
+	dc.b	%00011111,%11111111
+	dc.b	%00001111,%11111111
+	dc.b	%00000111,%11111111
+	dc.b	%00000011,%11111111
+	dc.b	%00000001,%11111111
+	dc.b	%00000000,%11111111
+	dc.b	%00000000,%01111111
+	dc.b	%00000000,%00111111
+	dc.b	%00000000,%00011111
+	dc.b	%00000000,%00001111
+	dc.b	%00000000,%00000111
+	dc.b	%00000000,%00000011
+	dc.b	%00000000,%00000001
+	dc.b	%00000000,%00000000	;used by special case, and right mask
+	end
+* end of book.a
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id$
+d9 4
+a12 1
+* $Log$
+@

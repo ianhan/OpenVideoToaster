@@ -1,0 +1,3787 @@
+head	2.85;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.85
+date	97.04.18.17.08.42;	author Holt;	state Exp;
+branches;
+next	2.84;
+
+2.84
+date	96.07.29.10.27.28;	author Holt;	state Exp;
+branches;
+next	2.83;
+
+2.83
+date	96.02.09.15.46.45;	author Holt;	state Exp;
+branches;
+next	2.82;
+
+2.82
+date	95.10.14.10.17.27;	author Flick;	state Exp;
+branches;
+next	2.81;
+
+2.81
+date	95.10.12.16.35.41;	author Flick;	state Exp;
+branches;
+next	2.80;
+
+2.80
+date	95.10.09.16.42.52;	author Flick;	state Exp;
+branches;
+next	2.79;
+
+2.79
+date	95.10.06.16.11.19;	author Flick;	state Exp;
+branches;
+next	2.78;
+
+2.78
+date	95.10.05.18.37.32;	author Flick;	state Exp;
+branches;
+next	2.77;
+
+2.77
+date	95.10.05.03.43.19;	author Flick;	state Exp;
+branches;
+next	2.76;
+
+2.76
+date	95.10.03.17.30.32;	author Flick;	state Exp;
+branches;
+next	2.75;
+
+2.75
+date	95.10.02.15.19.43;	author Flick;	state Exp;
+branches;
+next	2.74;
+
+2.74
+date	95.09.28.10.09.52;	author Flick;	state Exp;
+branches;
+next	2.73;
+
+2.73
+date	95.09.25.12.20.01;	author Flick;	state Exp;
+branches;
+next	2.72;
+
+2.72
+date	95.09.13.12.17.25;	author Flick;	state Exp;
+branches;
+next	2.71;
+
+2.71
+date	95.08.31.16.15.09;	author Flick;	state Exp;
+branches;
+next	2.70;
+
+2.70
+date	95.08.28.16.41.09;	author Flick;	state Exp;
+branches;
+next	2.69;
+
+2.69
+date	95.08.28.15.24.31;	author Flick;	state Exp;
+branches;
+next	2.68;
+
+2.68
+date	95.08.28.10.39.38;	author Flick;	state Exp;
+branches;
+next	2.67;
+
+2.67
+date	95.08.18.16.46.21;	author Flick;	state Exp;
+branches;
+next	2.66;
+
+2.66
+date	95.08.09.17.54.33;	author Flick;	state Exp;
+branches;
+next	2.65;
+
+2.65
+date	95.07.13.13.09.18;	author Flick;	state Exp;
+branches;
+next	2.64;
+
+2.64
+date	95.07.07.19.24.19;	author Flick;	state Exp;
+branches;
+next	2.63;
+
+2.63
+date	95.07.07.17.04.42;	author Flick;	state Exp;
+branches;
+next	2.62;
+
+2.62
+date	95.07.05.14.57.47;	author Flick;	state Exp;
+branches;
+next	2.61;
+
+2.61
+date	95.06.28.18.08.03;	author Flick;	state Exp;
+branches;
+next	2.60;
+
+2.60
+date	95.06.20.23.47.14;	author Flick;	state Exp;
+branches;
+next	2.59;
+
+2.59
+date	95.04.27.11.05.41;	author Flick;	state Exp;
+branches;
+next	2.58;
+
+2.58
+date	95.04.26.14.35.42;	author Flick;	state Exp;
+branches;
+next	2.57;
+
+2.57
+date	95.03.07.16.09.06;	author CACHELIN4000;	state Exp;
+branches;
+next	2.56;
+
+2.56
+date	95.03.02.12.34.48;	author pfrench;	state Exp;
+branches;
+next	2.55;
+
+2.55
+date	95.02.28.10.10.47;	author pfrench;	state Exp;
+branches;
+next	2.54;
+
+2.54
+date	95.02.22.10.17.14;	author CACHELIN4000;	state Exp;
+branches;
+next	2.53;
+
+2.53
+date	95.01.12.12.05.43;	author CACHELIN4000;	state Exp;
+branches;
+next	2.52;
+
+2.52
+date	94.12.30.19.35.31;	author CACHELIN4000;	state Exp;
+branches;
+next	2.51;
+
+2.51
+date	94.12.29.16.15.47;	author CACHELIN4000;	state Exp;
+branches;
+next	2.50;
+
+2.50
+date	94.12.28.16.29.56;	author CACHELIN4000;	state Exp;
+branches;
+next	2.49;
+
+2.49
+date	94.12.21.17.31.10;	author CACHELIN4000;	state Exp;
+branches;
+next	2.48;
+
+2.48
+date	94.12.19.22.38.35;	author pfrench;	state Exp;
+branches;
+next	2.47;
+
+2.47
+date	94.12.07.15.54.23;	author pfrench;	state Exp;
+branches;
+next	2.46;
+
+2.46
+date	94.12.05.14.02.17;	author pfrench;	state Exp;
+branches;
+next	2.45;
+
+2.45
+date	94.11.29.13.10.50;	author pfrench;	state Exp;
+branches;
+next	2.44;
+
+2.44
+date	94.11.15.17.54.14;	author pfrench;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	94.11.15.13.46.43;	author pfrench;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	94.11.09.20.11.00;	author Kell;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	94.11.09.17.39.06;	author Kell;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	94.11.09.16.49.58;	author Kell;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	94.11.09.12.49.54;	author pfrench;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	94.10.20.11.50.03;	author CACHELIN4000;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	94.10.12.18.58.06;	author CACHELIN4000;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	94.10.11.21.41.02;	author CACHELIN4000;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	94.10.10.21.19.37;	author CACHELIN4000;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	94.10.10.17.17.29;	author CACHELIN4000;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	94.09.20.22.49.02;	author pfrench;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	94.09.12.18.40.16;	author pfrench;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	94.09.09.16.42.06;	author pfrench;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.09.08.16.18.43;	author pfrench;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.09.08.15.53.03;	author pfrench;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.09.06.23.57.01;	author pfrench;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.09.02.08.24.41;	author Kell;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.08.30.10.42.11;	author Kell;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.08.27.17.45.28;	author CACHELIN4000;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.08.27.00.29.58;	author CACHELIN4000;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.08.26.15.00.46;	author pfrench;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.08.16.19.05.31;	author pfrench;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.08.16.17.12.55;	author pfrench;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.08.02.21.48.31;	author pfrench;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.07.21.12.28.42;	author pfrench;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.07.14.15.25.27;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.07.14.11.59.49;	author pfrench;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.07.08.10.09.08;	author CACHELIN4000;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.07.07.11.26.43;	author pfrench;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.07.04.19.14.56;	author pfrench;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.07.01.15.08.06;	author CACHELIN4000;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.06.07.15.18.23;	author CACHELIN4000;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.04.23.17.45.27;	author CACHELIN4000;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.04.22.17.46.07;	author CACHELIN4000;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.04.20.17.33.48;	author CACHELIN4000;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.03.15.16.40.09;	author CACHELIN4000;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.03.14.21.57.21;	author CACHELIN4000;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.03.14.00.37.00;	author CACHELIN4000;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.03.13.07.50.33;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.03.12.20.01.16;	author CACHELIN4000;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.03.10.18.16.47;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.03.09.01.56.43;	author CACHELIN4000;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.03.02.21.05.01;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.17.16.24.37;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.85
+log
+@changed ver number and ESC to RMB.
+@
+text
+@/********************************************************************
+* $HandleCommon.c - routines common to projects & grazers$
+* $Id: handlecommon.c,v 2.84 1996/07/29 10:27:28 Holt Exp Holt $
+* $Log: handlecommon.c,v $
+*Revision 2.84  1996/07/29  10:27:28  Holt
+*added keyboard eq for changing effect speeds without opening its panel
+*
+*Revision 2.83  1996/02/09  15:46:45  Holt
+**** empty log message ***
+*
+*Revision 2.82  1995/10/14  10:17:27  Flick
+*Added DTM_RefreshTabs to SetupWindow()  (for Grazers only)
+*
+*Revision 2.81  1995/10/12  16:35:41  Flick
+*Replaced hard-coded ViewMode values with VIEW_XXX defines (popup rearranged)
+*
+*Revision 2.80  1995/10/09  16:42:52  Flick
+*Added project TagList dumper (debugging ver only), now gets Tags.h
+*
+*Revision 2.79  1995/10/06  16:11:19  Flick
+*Bumped rev to read 4.1 -- corrected Auto Insert doc, added Alt-C Alt-P
+*
+*Revision 2.78  1995/10/05  18:37:32  Flick
+*Auto insert bound to Alt-I
+*
+*Revision 2.77  1995/10/05  03:43:19  Flick
+*Using copyright symbol in InterfaceLG font instead of "(c)"
+*
+*Revision 2.76  1995/10/03  17:30:32  Flick
+*Added Alt-P and Alt-C hotkeys for processing and cutting clips
+*
+*Revision 2.75  1995/10/02  15:19:43  Flick
+*Moved quick-tune hotkey to CTRL, removed date-compiled from HELP panel (still in "About")
+*Added Options panel to F10 key as well as Setup panel
+*
+*Revision 2.74  1995/09/28  10:09:52  Flick
+*Now uses RawKeyCodes.h, made "prev view" key toggle correctly between last 2 views
+*
+*Revision 2.73  1995/09/25  12:20:01  Flick
+*Added right-ALT quick tune
+*
+*Revision 2.72  1995/09/13  12:17:25  Flick
+*Bumped rev to 4.08
+*
+*Revision 2.71  1995/08/31  16:15:09  Flick
+*Bumped version to 4.06, changed content of about box
+*
+*Revision 2.70  1995/08/28  16:41:09  Flick
+*One more rename/adjustment on help panel, moved Alt U to Alt S
+*
+*Revision 2.69  1995/08/28  15:24:31  Flick
+*Cleaned up keyboard shortcuts panel, added new ALT stuff
+*
+*Revision 2.68  1995/08/28  10:39:38  Flick
+*Added audio-under hotkey
+*
+*Revision 2.67  1995/08/18  16:46:21  Flick
+*Slight change for maintaining project current time
+*
+*Revision 2.66  1995/08/09  17:54:33  Flick
+*Changed hotkeys to make .allicons. to RALT,CTRL,HELP
+*Removed ALT-ALT-TILDE hotkey sequence -- not needed, we have a button for this
+*
+*Revision 2.65  1995/07/13  13:09:18  Flick
+*Fixed bugs w/ HandleLockDown() and HandleAudioOnOff() -- they get EditTop now
+*
+*Revision 2.64  1995/07/07  19:24:19  Flick
+*Moved DEL-verify out of RAW_DELETE handler (ugh!)
+*
+*Revision 2.63  1995/07/07  17:04:42  Flick
+*Added "About" window, fixed wrongly doc'd keyboard shortcuts
+*Added verify to DEL key in project
+*
+*Revision 2.62  1995/07/05  14:57:47  Flick
+*Added easy audio on/off switch via hot-key
+*Minor changes to lock/unlock handling code (new keys)
+*
+*Revision 2.61  1995/06/28  18:08:03  Flick
+*Moved ESC,DEL,BKSP keys around a bit (per James)
+*Added lock/unlock and Cut to Music function keys
+*
+*Revision 2.60  1995/06/20  23:47:14  Flick
+*Bumped rev #'s to 4.05, attempts to de-uglify key shortcuts help panel
+*
+*Revision 2.59  1995/04/27  11:05:41  Flick
+*Bumped rev to 4.04, we've shipped 4.03
+*
+*Revision 2.58  1995/04/26  14:35:42  Flick
+*Bumped version number and string
+*
+*Revision 2.57  1995/03/07  16:09:06  CACHELIN4000
+*Add FAstDrive recording mode qualifier on  record panel hotkey (Tilde)
+*
+*Revision 2.56  1995/03/02  12:34:48  pfrench
+*Added switcher un-used rawkey handling code
+*
+*Revision 2.55  1995/02/28  10:10:47  pfrench
+*Fixed ViewMode problems, now brute force checking going on
+*inside the MakeLayout function
+*
+*Revision 2.54  1995/02/22  10:17:14  CACHELIN4000
+*Make Help key toggle preview overlay like switcher
+*
+*Revision 2.53  1995/01/12  12:05:43  CACHELIN4000
+*Remove viewmode set from makelayout(), add redrawpopup after view hotkey
+*
+*Revision 2.52  1994/12/30  19:35:31  CACHELIN4000
+*Change help panel, version #
+*
+*Revision 2.51  1994/12/29  16:15:47  CACHELIN4000
+*Add f8 to cycle views, esc to return to last view, ctrl-alt-f8 for editor exit
+*
+*Revision 2.50  1994/12/28  16:29:56  CACHELIN4000
+*Change NewGrazer to VALID_VOLUMES, so files display defaults to volumes not devices
+*
+*Revision 2.49  1994/12/21  17:31:10  CACHELIN4000
+*Add keys for record, play, stop
+*
+*Revision 2.48  1994/12/19  22:38:35  pfrench
+*Modified for now shared-code proof.library.
+*
+*Revision 2.47  1994/12/07  15:54:23  pfrench
+*Removed InitialPath hack in makelayout, now properly
+*handled in GraphicHelp
+*
+*Revision 2.46  1994/12/05  14:02:17  pfrench
+*Added support for moving to project save directory
+*
+*Revision 2.45  1994/11/29  13:10:50  pfrench
+*Added CDROM directory optimizations
+*
+*Revision 2.44  1994/11/15  17:54:14  pfrench
+*Added support to highlight delayed error croutons when
+*the error is posted, and not before.
+*
+*Revision 2.43  1994/11/15  13:46:43  pfrench
+*Made sure enter key worked correctly in switcher mode.
+*
+*Revision 2.42  1994/11/09  20:11:00  Kell
+*Now LALT+RAMIGA+HELP hack uses LALT+RSHIFT+HELP
+*
+*Revision 2.41  1994/11/09  17:39:06  Kell
+**** empty log message ***
+*
+*Revision 2.40  1994/11/09  16:49:58  Kell
+*Hack code for testing out all the sequencing error messages.
+*
+*Revision 2.39  1994/11/09  12:49:54  pfrench
+*Added initial support for croutongrid object
+*
+*Revision 2.38  1994/10/20  11:50:03  CACHELIN4000
+*Add Setup-screen (alt for old mode), alt-help for 2-3 monitor mode toggle
+*
+*Revision 2.37  94/10/12  18:58:06  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.36  94/10/11  21:41:02  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.35  94/10/10  21:19:37  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.34  94/10/10  17:17:29  CACHELIN4000
+*Fix Controls (f9) hotkey, ignore key-up events
+*
+*Revision 2.33  94/09/20  22:49:02  pfrench
+*Modified to work with dircache (Editwindow has ptr to list now)
+*
+*Revision 2.32  1994/09/12  18:40:16  pfrench
+*Navigation now works according to spec
+*
+*Revision 2.31  1994/09/09  16:42:06  pfrench
+*Tied in a accesswindow rowcount hack
+*
+*Revision 2.30  1994/09/08  16:18:43  pfrench
+*Removed call to redraw accesswindow
+*
+*Revision 2.29  1994/09/08  15:53:03  pfrench
+*Added redraw code for accesswindow in MakeLayout()
+*
+*Revision 2.28  1994/09/06  23:57:01  pfrench
+*Added basic accesswindow calls
+*
+*Revision 2.27  1994/09/02  08:24:41  Kell
+*Disabled SERDEBUG flag
+*
+*Revision 2.26  1994/08/30  10:42:11  Kell
+*Changed SendSwitcherReply calls to work with new ESParams structures.
+*
+*Revision 2.25  1994/08/27  17:45:28  CACHELIN4000
+*Refresh on Enter
+*
+*Revision 2.24  94/08/27  00:29:58  CACHELIN4000
+*Handle RAW_ENTER
+*
+*Revision 2.23  94/08/26  15:00:46  pfrench
+*Fixed bug with spacebar handling, also added
+*bad crouton support.
+*
+*Revision 2.22  1994/08/16  19:05:31  pfrench
+*Now de-selects all current croutons when switching to
+*project/switcher mode
+*
+*Revision 2.21  1994/08/16  17:12:55  pfrench
+*Now disables "select all" button in switcher mode
+*
+*Revision 2.20  1994/08/02  21:48:31  pfrench
+*Now re-scans dir in file-requester mode.
+*
+*Revision 2.19  1994/07/21  12:28:42  pfrench
+*Added async requester window type.
+*
+*Revision 2.18  1994/07/14  15:25:27  CACHELIN4000
+*Fixed new bug/typo in 'sweet spot' in OpenEditScreen
+*
+*Revision 2.17  94/07/14  11:59:49  pfrench
+*Added sweet spot for adding async requesters.
+*
+*Revision 2.16  94/07/08  10:09:08  CACHELIN4000
+*replace SendSwitcher() calls with SendSwitcherReply()
+*
+*Revision 2.15  94/07/07  11:26:43  pfrench
+*Added initial support for project/project editing
+*
+*Revision 2.14  94/07/04  19:14:56  pfrench
+*Modified indenting a little, no code changes.
+*
+*Revision 2.13  94/07/01  15:08:06  CACHELIN4000
+*Begin to reinstate Proj2Proj
+*
+*Revision 2.12  94/06/07  15:18:23  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.11  94/04/23  17:45:27  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.10  94/04/22  17:46:07  CACHELIN4000
+*Intercept RAW_SPACE, translate to ES_AUTO call
+*
+*Revision 2.9  94/04/20  17:33:48  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.8  94/03/15  16:40:09  CACHELIN4000
+*comment out F10 switching
+*
+*Revision 2.7  94/03/14  21:57:21  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.6  94/03/14  00:37:00  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.5  94/03/13  07:50:33  Kell
+*Reworded the HELP requester
+*
+*Revision 2.4  94/03/12  20:01:16  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.3  94/03/10  18:16:47  CACHELIN4000
+*added __AMIGADATE__ to info, version strings
+*
+*Revision 2.2  94/03/09  01:56:43  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.1  94/03/02  21:05:01  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  16:24:37  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  15:57:47  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  14:44:54  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+*	12-17-92	Steve H		Convert to use SmartStrings
+*	11-30-93	Steve H		Last Update
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <crouton_all.h>
+#include <stdio.h>
+
+#include <editwindow.h>
+#include <editswit.h>
+#include <gadgets.h>
+#include <project.h>
+#include <grazer.h>
+#include <filelist.h>
+#include <request.h>
+#include <panel.h>
+#include <RawKeyCodes.h>
+#include <Tags.h>
+#include <DirTabs.h>
+
+#ifndef PROOF_LIB_H
+#include <proof_lib.h>
+#endif
+
+#include <croutongrid.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+
+//#define SERDEBUG	1
+#include <serialdebug.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#endif
+
+LONG UpdateAccessWindowRows( LONG newrows );
+
+extern struct Library *ProofBase, *FlyerBase;
+extern struct SmartString *TopPath,*BottomPath;
+extern struct EditWindow *EditTop,*EditBottom;
+extern struct Screen *EditScreen;
+extern struct List WindowList;
+extern WORD GrazerLayout;
+extern struct NewWindow NewWindowStructure3;
+extern struct MsgPort *EditPort,*SwitPort;
+extern struct Window *SwitWind;
+extern struct FastGadget *CurFG,*SKellFG;
+extern int	CurGrid,CurRow,CurCol;
+//extern BOOL GlobalFastDrives;
+extern BOOL	EditingLive;
+extern CFAR struct TagHelp TagNames[];
+
+extern char	**ErrMsgs[];
+
+extern struct ESParams1 ESparams1;
+
+
+struct NewProject NewProject = {
+	EW_PROJECT,
+	0,0,WINDOW_WIDTH,TOP_SMALL,
+	SCREEN_EXISTING,
+	OPTION_ALLOW_DRAG,
+	EW_TOP,
+	NULL
+};
+
+struct NewGrazer NewGrazer = {
+	EW_GRAZER,
+	0,0,WINDOW_WIDTH,TOP_SMALL,
+	SCREEN_EXISTING,
+	OPTION_ALLOW_DRAG,
+	EW_TOP,
+	NULL,
+
+	VALID_FILES|VALID_DIRECTORIES|VALID_VOLUMES,
+};
+
+#define MAX_UWORD 65535
+
+#define SWITCHER_MODE	( (!EditBottom) && (EditTop->Height != TOP_LARGE) )
+#define EDITOR_MODE		(!SWITCHER_MODE)
+
+extern WORD ViewMode,PrevViewMode;
+
+struct EditWindow *AllocInitAsyncReq(struct NewEditWindow *NewEdit );
+
+VOID KPutStr(char *);
+#ifdef SERDEBUG
+static void DumpProject(struct EditWindow *Edit);
+#endif
+
+/****** HandleCommon/HandleDummy ************************************
+*
+*   NAME
+*	HandleDummy
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleDummy(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+struct EditWindow *HandleDummy(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	return(Edit);
+}
+
+//*********************************************************************
+struct EditWindow *HandleLogo(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct EditWindow *Next,*Draw;
+
+	GrazerLayout ^= 1;
+	Draw = (struct EditWindow *)WindowList.lh_Head;
+	while (Next = (struct EditWindow *)Draw->Node.MinNode.mln_Succ) {
+	if (Draw->Node.Type == EW_GRAZER) {
+		GrazGrid(Draw); // err check !!!
+		Draw->RowOffset = Draw->ScrollOffset = 0;
+		RowOffsetToPot(Draw);
+		NewGridLength(Draw);
+		RenderEditWindow(Draw,FALSE);
+		Draw->RedrawList = TRUE;
+	}
+	Draw = Next;
+	}
+	return(Edit);
+}
+
+/****** HandleCommon/HandleDelete ************************************
+*
+*   NAME
+*	HandleDelete
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleDelete(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*	Finds which window (top/bottom) has selected items, calls
+*	window's handler for delete
+*
+*********************************************************************
+*/
+struct EditWindow *HandleDelete(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct EditWindow *W = NULL;
+
+	if (CheckNodeStatus(EditTop,EN_SELECTED)) W = EditTop;
+	else if (EditBottom)
+		if (CheckNodeStatus(EditBottom,EN_SELECTED)) W = EditBottom;
+	if (W && (W->NodeDeleted)) W->NodeDeleted(W);
+	return(Edit);
+}
+
+BOOL CheckNodeStatus(
+	struct EditWindow *Edit,
+	UWORD Status)
+{
+	struct EditNode *Node,*Next;
+	struct FastGadget *FG;
+
+	switch(Edit->Node.Type)
+	{
+	case EW_GRAZER:
+		Node = (struct EditNode *)Edit->Special->pEditList->lh_Head;
+		while (Next=(struct EditNode *)Node->Node.MinNode.mln_Succ)
+		{
+			if (Node->Status == Status)
+				return(TRUE);
+			Node = Next;
+		}
+	break;
+
+	case EW_PROJECT:
+		FG = *(((struct Project *)Edit->Special)->PtrPtr);
+		while (FG)
+		{
+			if (FG->FGDiff.FGNode.Status == Status)
+				return(TRUE);
+			FG = FG->NextGadget;
+		}
+	}
+	return(FALSE);
+}
+
+/****** HandleCommon/HandleDuplicate ********************************
+*
+*   NAME
+*	HandleDuplicate
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleDuplicate(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*	Finds which window (top/bottom) has selected items, calls
+*	window's handler for delete
+*
+*********************************************************************
+*/
+struct EditWindow *HandleDuplicate(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct EditWindow *W = NULL;
+
+	if (CheckNodeStatus(EditTop,EN_SELECTED)) W = EditTop;
+	else if (EditBottom)
+		if (CheckNodeStatus(EditBottom,EN_SELECTED)) W = EditBottom;
+	if (W && (W->NodeDuplicate)) W->NodeDuplicate(W);
+	return(Edit);
+}
+
+//*********************************************************************
+VOID EraseGadget(struct Window *Window,UWORD ID)
+{
+	struct Gadget *Gadget;
+	struct RastPort *RP;
+
+	if (Gadget = FindGadget(Window->FirstGadget,ID)) {
+		RP = Window->RPort;
+		SetAPen(RP,SCREEN_PEN);
+		SetDrMd(RP,JAM2);
+		RectFill(RP,Gadget->LeftEdge,Gadget->TopEdge,
+			Gadget->LeftEdge+Gadget->Width-1,
+			Gadget->TopEdge+Gadget->Height-1);
+	}
+}
+
+//*********************************************************************
+// turn Project into Grazer without Close/OpenWindow() so looks nice
+// assumes Window stays same size in same place
+BOOL MorphWindow(WORD Location,WORD NewType)
+{
+	struct EditWindow *Edit,*Old;
+	struct NewEditWindow *NewEdit;
+	struct IntuiMessage *IntuiMsg;
+	struct Gadget *G;
+	struct RastPort *RP;
+
+	if (NewType == EW_GRAZER) NewEdit = &NewGrazer.NewEdit;
+	else NewEdit = &NewProject.NewEdit;
+
+	if (Location == EW_TOP) {
+		Old = EditTop;
+		NewEdit->Height = TOP_SMALL;
+	} else if (Location == EW_BOTTOM) {
+		Old = EditBottom;
+		NewEdit->Height = BOTTOM_SMALL;
+	}
+	else return(FALSE);
+
+// first do things without window updates
+	RemoveGList(Old->Window,Old->Gadgets,MAX_UWORD);
+	NewEdit->Screen = EditScreen;
+	NewEdit->Location = Location;
+
+	if (Location == EW_TOP)
+		NewEdit->TopEdge = 0;
+	else
+		NewEdit->TopEdge = TOP_SMALL; //EditScreen->Height - NewEdit->Height;
+
+	if (NewType == EW_PROJECT)
+	{
+		if (!(Edit = AllocInitProject(&NewProject)))
+			return(FALSE);
+	}
+	else
+	{
+		if (!(Edit = AllocInitGrazer(&NewGrazer)))
+			return(FALSE);
+	}
+
+// flush IDCMP port for the window so anymore messages are forgotten
+	while (IntuiMsg = (struct IntuiMessage *)GetMsg(Old->Window->UserPort))
+		ReplyMsg((struct Message *)IntuiMsg);
+
+// now do actual window updates
+	RP = Old->Window->RPort;
+	SetAPen(RP,SCREEN_PEN);
+	SetDrMd(RP,JAM2);
+
+	Edit->Window = Old->Window;
+	Old->Window = NULL; // so not closed
+
+	if (Location == EW_TOP)
+	{
+		if (NewType == EW_GRAZER)
+		{
+			/* erase section going away */
+
+			G = FindGadget(Old->Gadgets,ID_GRID);
+
+			RectFill(RP,G->LeftEdge-BORD_W,
+				G->TopEdge+175,
+				G->LeftEdge+G->Width+BORD_W-1,
+				G->TopEdge+G->Height+BORD_H-1);
+		}
+
+		if ( Edit->ew_cg )
+		{
+			/* Need _NEW_ grid */
+
+			G = FindGadget(Edit->Gadgets,ID_GRID);
+
+			ob_SetAttrs( Edit->ew_cg,
+					CRGRIDA_DestLeft,		Edit->Window->LeftEdge + G->LeftEdge,
+					CRGRIDA_DestTop,		Edit->Window->TopEdge + G->TopEdge,
+					CRGRIDA_DestWidth,	G->Width,
+					CRGRIDA_DestHeight,	G->Height,
+					TAG_DONE );
+		}
+	}
+
+	AddGList(Edit->Window,Edit->Gadgets,0,MAX_UWORD,NULL);
+	Old->Free(Old);
+	if (Location == EW_TOP)	EditTop = Edit;
+	else EditBottom = Edit;
+	SetupWindow(Edit);
+
+	RenderEditWindow(Edit,FALSE);
+	BuildWaitMask();
+	return(TRUE);
+}
+
+/****** HandleCommon/MakeLayout *************************************
+*
+*   NAME
+*	MakeLayout
+*
+*   SYNOPSIS
+*	BOOL MakeLayout(WORD NewTopType, WORD NewTopHeight, WORD NewBottomType)
+*
+*   FUNCTION
+*	Changes whatever is currently on EditScreen to match parameters
+*
+*********************************************************************
+*/
+BOOL MakeLayout(WORD NewTopType, WORD NewTopHeight, WORD NewBottomType)
+{
+	UBYTE TopType = EW_EMPTY, BottomType = EW_EMPTY;
+	BOOL Success = TRUE;
+
+	if (EditTop) TopType = EditTop->Node.Type;
+	if (EditBottom) BottomType = EditBottom->Node.Type;
+
+	if ( NewTopType == EW_PROJECT )
+	{
+		if ( NewBottomType == EW_EMPTY )
+		{
+			if ( NewTopHeight == TOP_SMALL )
+				ViewMode = VIEW_PROJ_SWIT;		/* Proj/switcher */
+			else
+				ViewMode = VIEW_PROJ;			/* Big proj */
+		}
+		else if ( NewBottomType == EW_GRAZER )
+			ViewMode = VIEW_PROJ_FILES;		/* Proj/Files */
+		else
+			ViewMode = VIEW_PROJ_PROJ;			/* Proj/Proj */
+	}
+	else if ( NewTopType == EW_GRAZER )
+	{
+		ViewMode = VIEW_FILES_FILES;			/* Files/Files */
+	}
+	else	/* Async requester on top or empty */
+	{
+		/* ViewMode = ??; */
+	}
+
+// special cases to make redisplay nicer
+	if (EditTop && (NewTopHeight == TOP_SMALL) &&
+		(EditTop->Height == TOP_SMALL))
+	{
+		if ((TopType == EW_GRAZER) && (NewTopType == EW_PROJECT))
+		{
+			if (!MorphWindow(EW_TOP,EW_PROJECT)) return(FALSE);
+				TopType = EditTop->Node.Type;
+		} else if ((TopType == EW_PROJECT) && (NewTopType == EW_GRAZER))
+		{
+			if (!MorphWindow(EW_TOP,EW_GRAZER)) return(FALSE);
+				TopType = EditTop->Node.Type;
+		} else if ((TopType == EW_PROJECT) && (NewTopType == EW_PROJECT))
+		{
+			if (!MorphWindow(EW_TOP,EW_PROJECT)) return(FALSE);
+				TopType = EditTop->Node.Type;
+		}
+	}
+
+// if top wrong type, close
+	if ( EditTop && (TopType != NewTopType) )
+   {
+		DUMPMSG("Closing top window");
+
+		EditTop->Close(EditTop);
+		EditTop->Free(EditTop);
+		EditTop = NULL;
+	}
+
+// if bottom wrong type, close
+	if (EditBottom && (BottomType != NewBottomType))
+	{
+		DUMPMSG("Closing bottom window");
+
+		EditBottom->Close(EditBottom);
+		EditBottom->Free(EditBottom);
+		EditBottom = NULL;
+	}
+
+// if top not open, and one requested, open at correct size
+	if (!EditTop && (NewTopType != EW_EMPTY))
+	{
+		DUMPMSG("Opening top window");
+
+		if (!OpenEditScreenWindow(NewTopHeight,NewTopType,EW_TOP))
+			Success = FALSE;
+	}
+	else	// if top open but wrong size, resize
+	{
+		if (EditTop && (EditTop->Height != NewTopHeight))
+		{
+			DUMPMSG("Resizing top window");
+
+			if (!ResizeEditWindow(EditTop,NewTopHeight)) Success = FALSE;
+		}
+	}
+
+	if ( EditTop && (ViewMode == VIEW_PROJ_SWIT) )
+		ChangeStatusList(EditTop,EN_SELECTED,EN_NORMAL);
+
+// if bottom not open, and one requested, open at correct size
+	if (!EditBottom &&
+		((NewBottomType == EW_GRAZER) || (NewBottomType == EW_PROJECT)))
+	{
+		DUMPMSG("Opening bottom window");
+
+		if (!OpenEditScreenWindow(BOTTOM_SMALL,NewBottomType,EW_BOTTOM))
+			Success = FALSE;
+	}
+
+	DUMPHEXIL("MakeLayout returning ",(LONG)Success,"\\");
+
+	return(Success);
+}
+
+
+/****** HandleCommon/OpenEditScreenWindow ***************************
+*
+*   NAME
+*	OpenEditScreenWindow
+*
+*   SYNOPSIS
+*	BOOL OpenEditScreenWindow(WORD Height,WORD Type,WORD Location)
+*
+*   FUNCTION
+*	Takes care of allocating and opening EditWindow on the EditScreen
+*
+*********************************************************************
+*/
+BOOL OpenEditScreenWindow(WORD Height,WORD Type,WORD Location)
+{
+	struct EditWindow *Edit;
+	struct NewEditWindow *NewEdit;
+	BOOL Success = FALSE;
+
+	if (Type == EW_GRAZER) NewEdit = &NewGrazer.NewEdit;
+	else NewEdit = &NewProject.NewEdit;
+
+	NewEdit->Screen = EditScreen;
+	NewEdit->Height = Height;
+	NewEdit->Location = Location;
+	if (Location == EW_TOP) NewEdit->TopEdge = 0;
+	else NewEdit->TopEdge = TOP_SMALL; // EditScreen->Height - Height;
+
+	if (Type == EW_PROJECT) {
+		if (!(Edit = AllocInitProject(&NewProject))) goto Exit;
+	} else if (Type == EW_GRAZER) {
+		if (!(Edit = AllocInitGrazer(&NewGrazer))) goto Exit;
+	} else if (Type == EW_ASYNCREQ) {
+		/*	**************************************
+					Insert Async Requester code here!!
+				************************************** */
+		if (!(Edit = AllocInitAsyncReq(NewEdit))) goto Exit;
+	} else goto Exit;
+
+	if (Location == EW_TOP) NewWindowStructure3.IDCMPFlags |= DISKINSERTED+DISKREMOVED;
+	else NewWindowStructure3.IDCMPFlags &= (~(DISKINSERTED+DISKREMOVED));
+
+// something is allocated now
+	if (Edit->Open(Edit))
+	{
+		if (Location == EW_TOP) EditTop = Edit;
+		else if (Location == EW_BOTTOM) EditBottom = Edit;
+
+		SetupWindow(Edit);
+		UpdateDisplay(Edit);
+
+		Success = TRUE;
+
+	} else
+		Edit->Free(Edit);
+
+Exit:
+	return(Success);
+}
+
+//*******************************************************************
+VOID SetupWindow(struct EditWindow *E)
+{
+	if (E->Node.Type == EW_GRAZER)
+	{
+		APTR				 dirtab_gad;
+
+		/* NOW it is safe to refresh this window's DirTab's */
+		dirtab_gad = FindGadget(E->Gadgets,ID_DIRTAB_CYCLE);
+		ob_DoMethod(dirtab_gad,DTM_RefreshTabs);
+		RefreshGList(E->Gadgets,E->Window,NULL,MAX_UWORD);
+
+		DoAllNewDir(E);
+	}
+	else if (E->Node.Type == EW_PROJECT)
+	{
+#ifndef SWIT_ONLY
+	if (!SwitPort) {
+		AddNodes(E,2);
+	} else
+#endif
+		GetLoadedProject(E);
+		SafeFixRowCount(E);
+		NewGridLength(E);
+		UpdateAccessWindowRows( E->CurrentRows );
+		E->RedrawList = TRUE;
+	}
+}
+
+//*******************************************************************
+VOID AddNodes(struct EditWindow *Edit,UWORD T)
+{
+	int a;
+	struct FastGadget *Node;
+
+	for (a=0; a<T; a++) {
+		Node = AllocProj(NULL);
+		AddProjTail((struct Project *)Edit->Special,Node);
+	}
+}
+
+/****** ARexxPort/OpenAuxWindow *************************************
+*
+*   NAME
+*	OpenAuxWindow
+*
+*   SYNOPSIS
+*	struct EditWindow *OpenAuxWindow(struct NewEditWindow *NewEdit)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+#ifdef ASDFG
+struct EditWindow *OpenAuxWindow(struct NewEditWindow *NewEdit)
+{
+	struct EditWindow *Edit = NULL;
+
+	NewEdit->Location = EW_REQUEST;
+
+	if (NewEdit->Type == EW_PROJECT) {
+		if (!(Edit = AllocInitProject((struct NewProject *)NewEdit))) goto Exit;
+	}
+	else if (!(Edit = AllocInitGrazer((struct NewGrazer *)NewEdit))) goto Exit;
+
+// something is allocated now
+	if (Edit->Open(Edit)) {
+
+		SetupWindow(Edit);
+
+	} else {
+		Edit->Free(Edit);
+		Edit = NULL;
+	}
+
+Exit:
+	return(Edit);
+}
+#endif
+
+/****** HandleCommon/HandleAll ************************************
+*
+*   NAME
+*	HandleAll
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleAll(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+struct EditWindow *HandleAll(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct EditWindow *W = NULL;
+
+	if (EditBottom && (CheckNodeStatus(EditBottom,EN_SELECTED)))
+		W = EditBottom;
+	else
+		W = EditTop;
+
+	if (W && (W->SelectAll)) W->SelectAll(W);
+
+	SetCurrentTime(-1);				// Remove
+
+	return(Edit);
+}
+
+
+#define LITTLEVERSION "Video Toaster Editor 4.2"
+#define VERSIONSTR "$VER: " LITTLEVERSION __DATE__
+
+UBYTE		ver_str[]=VERSIONSTR ;
+
+char HelpMsg1[] = "   " LITTLEVERSION " Keyboard Shortcuts",
+	HelpMsg2[] = " Prog Prev Key  ",
+	HelpMsg3[] = " F1   1    Q : Input 1      Alt A : Audio on/off",
+	HelpMsg4[] = " F2   2    W : Input 2      Alt L : Lock/Unlock",
+	HelpMsg5[] = " F3   3    E : Input 3      Alt I : Auto Insert",
+	HelpMsg6[] = " F4   4    R : Input 4      Alt C : Cut clip",
+	HelpMsg7[] = " F5   5    T : DV1          Alt P : Process clip",
+	HelpMsg8[] = " F6   6    Y : DV2          Help : 2/3-Monitors",
+	HelpMsg9f[]= " F7   7    U : DV3          (tilde) : Flyer Record",
+	HelpMsg9[] = " F7   7    U : DV3                            ",
+	HelpMsg10[]= " F8 : Cycle Views          Bksp : Previous View",
+	HelpMsg11[]= " F9 : Info/Controls        Tab : Play",
+	HelpMsg12[] =" F10: Setup Panel          RMB : Stop",
+	HelpMsg13[] =" ",
+	*HelpMsg[] = { HelpMsg1,HelpMsg13,HelpMsg2,HelpMsg3,HelpMsg4,HelpMsg5,
+		HelpMsg6,HelpMsg7,HelpMsg8,HelpMsg9,HelpMsg10,HelpMsg11,HelpMsg12 };
+
+char
+	AboutMsg1[] = "   " LITTLEVERSION " " __DATE__,
+	AboutMsg2[] = " ",
+	AboutMsg3[] = "   Copyright \xA9 1994, 1997 NewTek, Inc.",
+	AboutMsg4[] = " ",
+	AboutMsg5[] = "   Written by...",
+	AboutMsg6[] = "       Pat Brouillette",
+	AboutMsg7[] = "       Arnie Cachelin",
+	AboutMsg8[] = "       Marty Flickinger",
+	AboutMsg9[] = "       David Holt",
+	AboutMsg10[] ="   Based on demo code by Jr Hartford",
+
+	*AboutMsg[] = { AboutMsg1,AboutMsg2,AboutMsg3,AboutMsg4,AboutMsg5,AboutMsg6,AboutMsg7,
+		AboutMsg8,AboutMsg9,AboutMsg10 };
+
+//*******************************************************************
+BOOL __regargs SendIntuiSwitcher(struct IntuiMessage *IntuiMsg)
+{
+	struct IntuiMessage *MyIntuiMsg;
+
+	if (SwitWind) {
+		if (MyIntuiMsg = SafeAllocMem(sizeof(struct IntuiMessage),0)) {
+			CopyMem(IntuiMsg,MyIntuiMsg,sizeof(struct IntuiMessage));
+			MyIntuiMsg->IDCMPWindow = SwitWind; // is this ok?
+			MyIntuiMsg->SpecialLink = NULL;
+			MyIntuiMsg->ExecMessage.mn_ReplyPort = EditPort;
+			MyIntuiMsg->ExecMessage.mn_Length = sizeof(struct IntuiMessage);
+			MyIntuiMsg->ExecMessage.mn_Node.ln_Name = NULL;
+			MyIntuiMsg->ExecMessage.mn_Node.ln_Succ = NULL;
+			MyIntuiMsg->ExecMessage.mn_Node.ln_Pred = NULL;
+			PutMsg(SwitWind->UserPort,&MyIntuiMsg->ExecMessage);
+			return(TRUE);
+			}
+		}
+	return(FALSE);
+}
+
+//*******************************************************************
+struct EditWindow *HandleKey(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{  // Should probably return EditWindow if changes like MakeLayout are done
+	BOOL Processed = FALSE;
+	UWORD TV;
+	char	***ErrorMessages;
+
+	if ( AccessPanelGetsMessage(IntuiMsg) )
+	{
+		// Report this key to the numeric pad handler so it
+		// can update the text in the box, etc.
+		// HandleNumericPad(IntuiMsg->Code);
+		Processed = TRUE;
+	}
+	else if ( IntuiMsg->Code >0x80 ) // absorb key-ups
+	{
+		Processed = TRUE;
+	}
+	else
+	{
+	DUMPHEXIL("Key=",(LONG)IntuiMsg->Code,"\\");
+	switch ( IntuiMsg->Code )
+	{
+	case RAWKEY_PAD_PERIOD:
+		DUMPHEXIL("  STATUS: CurFG = ",(LONG)CurFG,"  ");
+		DUMPUDECB("Row: ",CurRow," ");
+		DUMPUDECB("Column: ",CurCol," ");
+		DUMPUDECB("Number: ",CurGrid,"\\ ");
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_UP:
+		NavigateUp(Edit,IntuiMsg->Qualifier);
+		Processed = TRUE;
+		break;
+	case RAWKEY_DOWN:
+		NavigateDown(Edit,IntuiMsg->Qualifier);
+		Processed = TRUE;
+		break;
+	case RAWKEY_LEFT:
+	case RAWKEY_PAD_MINUS:
+		NavigateLeft(Edit,IntuiMsg->Qualifier);
+		Processed = TRUE;
+		break;
+	case RAWKEY_RIGHT:
+	case RAWKEY_PAD_PLUS:
+		NavigateRight(Edit,IntuiMsg->Qualifier);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_HELP:
+		//*** LALT+RSHIFT+HELP ---> Preview all error requesters
+		if((IntuiMsg->Qualifier & IEQUALIFIER_LALT) && (IntuiMsg->Qualifier & IEQUALIFIER_RSHIFT))
+		{
+			ErrorMessages=ErrMsgs;
+
+			while(*ErrorMessages && ErrorMessageBoolRequest(Edit->Window,*ErrorMessages++));;
+
+			Processed = TRUE;
+			break;
+		}
+		//*** RALT+CTRL+HELP ---> Build .allicons.i file
+		if ((IntuiMsg->Qualifier & IEQUALIFIER_RALT) && (IntuiMsg->Qualifier & IEQUALIFIER_CONTROL))
+		{
+			if ( Edit->Node.Type == EW_GRAZER )
+			{
+				BuildIconFile(GetCString(((struct Grazer *)Edit->Special)->Path));
+			}
+			Processed = TRUE;
+			break;
+		}
+		//*** CTRL+HELP ---> Put up "About" requester
+		if( IntuiMsg->Qualifier & IEQUALIFIER_CONTROL )
+		{
+			SimpleRequest(Edit->Window,AboutMsg,10,REQ_H_CENTER,NULL);
+			Processed = TRUE;
+			break;
+		}
+		//*** ELSE ---> Put up general Editor Help requester
+		if(FlyerBase) HelpMsg[9] = HelpMsg9f;
+		else HelpMsg[9] = HelpMsg9;
+		SimpleRequest(Edit->Window,HelpMsg,13,REQ_H_CENTER,NULL);
+		break;
+	case RAWKEY_SPACE:
+		DUMPMSG("SPACE");
+
+		if (EditingLive)
+		{
+			HandleLockDown(EditTop);
+			NavigateRight(Edit,IntuiMsg->Qualifier);
+			Processed = TRUE;
+		}
+		break;
+
+	case RAWKEY_COMMA:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			HandleMultiCroutonsSp(EditTop,3);
+		}
+		break;
+
+	case RAWKEY_PERIOD:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			HandleMultiCroutonsSp(EditTop,0);
+		}
+		break;
+
+
+	case RAWKEY_SLASH:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+//			HandleLockDown(EditTop);    //this is a test this is going to be Speedset.
+			HandleMultiCroutonsSp(EditTop,1);
+		}
+		else
+		{
+			DUMPMSG("Slash");
+
+			if(EDITOR_MODE && CurFG)
+			{
+				ESparams1.Data1=(LONG)CurFG;
+	
+				if(CurFG==SKellFG)
+					SendSwitcherReply(ES_Auto,&ESparams1);
+				else if(!SendSwitcherReply(ES_Select,&ESparams1))
+				{
+					SendSwitcherReply(ES_Auto,&ESparams1);
+					SKellFG=CurFG;
+				}
+				else
+				{
+					CurFG->FGDiff.FGNode.Behavior |= EN_BADCROUTON;
+					CurFG->FGDiff.FGNode.Redraw = TRUE;
+					SKellFG=NULL;
+				}
+				Processed = TRUE;
+			}
+		}
+		break;
+	case RAWKEY_L:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			HandleLockDown(EditTop);
+			Processed = TRUE;
+		}
+		break;
+	case RAWKEY_A:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			HandleAudioOnOff(EditTop);
+			Processed = TRUE;
+		}
+		break;
+	case RAWKEY_I:		// Auto insert
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			HandleAudioUnder(EditTop);
+			Processed = TRUE;
+		}
+		break;
+	case RAWKEY_P:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			ProcessCrouton(EditTop,FALSE);		// Process clip
+			Processed = TRUE;
+		}
+		break;
+	case RAWKEY_C:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			ProcessCrouton(EditTop,TRUE);		// Destructively cut clip
+			Processed = TRUE;
+		}
+		break;
+#ifdef SERDEBUG
+	case RAWKEY_D:
+		if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+		{
+			DumpProject(EditTop);		// Dump project to serial terminal
+			Processed = TRUE;
+		}
+		break;
+#endif
+	case RAWKEY_PAD_ENTER:
+		if (EditingLive)
+			HandleLockDown(EditTop);
+		else if (IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT))
+			HandleLockDown(EditTop);
+		else if( CurFG && (CurFG!=SKellFG) )
+		{
+			/* THIS MUST BE BEFORE THE SENDSWITCHERREPLY
+			 *
+			 *	The switcher may send a REDRAW before the
+			 * SELECT comes back.  Redraw will automatically
+			 * clear the OptRender flag.
+			 *
+			 */
+			Edit->ew_OptRender = TRUE;
+
+			ESparams1.Data1=(LONG)CurFG;
+
+			if(	SendSwitcherReply(ES_Select,&ESparams1) ||
+					((SWITCHER_MODE) ? SendSwitcherReply(ES_Select,&ESparams1):0) )
+			{
+				// CurFG->FGDiff.FGNode.Behavior |= EN_BADCROUTON;
+				// CurFG->FGDiff.FGNode.Redraw = TRUE;
+				SKellFG=NULL;
+			}
+			else
+			{
+				SKellFG=CurFG;
+				CurFG->FGDiff.FGNode.Redraw = TRUE;
+			}
+
+			if ( Edit->ew_cg )
+			{
+				LONG			nodenum;
+
+				nodenum = GetProjNodeOrder(Edit,CurFG);
+
+				ob_DoMethod( Edit->ew_cg,CRGRIDM_SelectCrouton,
+					nodenum,GRIDSELECT_NORMAL,CROUTONSELECT_SELECTED);
+			}
+
+			Edit->RedrawSelect = TRUE;
+			Edit->DisplayGrid = TRUE;
+		}
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_RAMIGA:
+    HandleLogo(Edit,IntuiMsg);
+		Processed = TRUE;
+    break;
+
+	case RAWKEY_TAB:  // Play
+		HandlePlay(Edit,IntuiMsg);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_ESC:  // Stop
+		DUMPMSG("Try to STOP!");
+		HandleStop(Edit,IntuiMsg);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_DELETE:	// Equivalent for delete button
+		HandleDelete(Edit,IntuiMsg);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_TILDE:  // record
+//		if(GlobalFastDrives || ((IntuiMsg->Qualifier&IEQUALIFIER_LALT) && (IntuiMsg->Qualifier&IEQUALIFIER_RALT)))
+//			GlobalFastDrives=TRUE;
+//		else
+//			GlobalFastDrives=FALSE;
+
+		HandleNewClip(Edit,IntuiMsg);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_F10:
+		if(IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT) )
+		{
+			if(IntuiMsg->Qualifier & IEQUALIFIER_CONTROL)		// Trying to quit?
+				break;
+			else
+				DoOptionsPanel(Edit,NULL);
+		}
+		else
+			DoSetupPanel(Edit,NULL);
+		Processed = TRUE; // absorb F10s if not in PJ/Switcher mode
+		break;
+
+	case RAWKEY_F9:
+		GrazerHandleInfo(Edit,IntuiMsg);
+		Processed = TRUE;
+		break;
+
+	case RAWKEY_F8:
+		if( (IntuiMsg->Qualifier&IEQUALIFIER_LALT) && (IntuiMsg->Qualifier&IEQUALIFIER_CONTROL) )
+			return(NULL); // This will cause Edit to quit!!!
+		Processed = TRUE;
+		PrevViewMode=ViewMode;
+		ViewMode++;
+		if(ViewMode==VIEW_PROJ_PROJ) ViewMode++;		// Avoid this one here
+		if(ViewMode>=USABLE_VIEWS) ViewMode=0;			// Wrap around
+		SetView(ViewMode);
+		Edit = EditTop;
+		RedrawPopupText(Edit);
+		break;
+
+	case RAWKEY_BKSPACE:		// Toggle between most recently used views
+		Processed = TRUE;
+//		SetView(PrevViewMode);
+//		TV=PrevViewMode;
+//		PrevViewMode=ViewMode;
+//		ViewMode=TV;
+
+		TV=ViewMode;
+		SetView(PrevViewMode);	// Sets ViewMode for us
+		PrevViewMode=TV;
+
+		Edit = EditTop;
+		RedrawPopupText(Edit);
+		break;
+	case RAWKEY_CTRL:		// Ctrl key
+		QuickVIDEOPanel(Edit,CurFG);
+		Processed = TRUE;
+	}
+	}
+
+	if ( !Processed )
+	{
+		/* "Class" will be cleared in main event loop if it is the
+		 * result of getting an ES_SwitcherRAWKEY from the switcher.
+		 * (see Edit.c)
+		 */
+		if ( IntuiMsg->Class )
+		{
+			SendIntuiSwitcher(IntuiMsg);
+			DUMPMSG("Key passed to Switcher");
+		}
+	}
+	else DUMPMSG("Key Handled by Edit");
+	return(Edit);
+}
+
+
+#ifdef SERDEBUG
+static BOOL DumpProjFunc(APTR tagptr,APTR data)
+{
+	ULONG	tagid,tagflags,*tptr;
+
+	tptr = (ULONG *)tagptr;
+	tagflags = *tptr++;
+
+	if (TAGCTRL_UNSAVED & tagflags)
+		DUMPSTR("(unsaved)");
+
+	tagid = tagflags & 0x00FFFFFF;
+	DUMPSTR(TagNames[tagid].th_Name);
+	if (TAGCTRL_LONG & tagflags)
+	{
+		if (*tptr <= 999999)		// Show in hex on really big numbers, else decimal
+			DUMPUDECL(" = ",*tptr,"\\");
+		else
+			DUMPHEXIL(" = ",*tptr,"\\");
+	}
+	else
+	{
+		switch (tagid)
+		{
+			case TAG_OriginalLocation:
+			case TAG_CommentList:
+				DUMPSTR(" = \"");
+				DUMPSTR((UBYTE *)(tptr+1));
+				DUMPMSG("\"");
+				break;
+			default:
+//				DUMPUDECL(" (",*tptr," bytes of data)\\");
+				DUMPMEM(" = ",(APTR)(tptr+1),*tptr);
+		}
+	}
+
+	return(TRUE);
+}
+
+static void DumpProject(struct EditWindow *Edit)
+{
+	struct ExtFastGadget *FG;
+	char	TypeStr[5];
+
+	if (Edit->Node.Type == EW_PROJECT)			// Only works from project window
+	{
+		FG = (struct ExtFastGadget *) *((struct Project *)Edit->Special)->PtrPtr;
+		for (; FG; FG=(struct ExtFastGadget *)FG->FG.NextGadget)
+		{
+			DUMPSTR("------");
+			DUMPSTR(FG->FileName);
+			DUMPSTR("------");
+			*((ULONG *)TypeStr) = FG->ObjectType;
+			TypeStr[4] = 0;
+			DUMPSTR(TypeStr);
+			DUMPHEXIL("------ (FG:",(LONG)FG,")\\");
+
+			WalkTagList(FG,DumpProjFunc,NULL);		// Print each tag for this crouton
+		}
+	}
+}
+#endif
+
+
+// end of handlecommon.c
+@
+
+
+2.84
+log
+@added keyboard eq for changing effect speeds without opening its panel
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.83 1996/02/09 15:46:45 Holt Exp Holt $
+* $Log: HandleCommon.c,v $
+d902 1
+a902 1
+#define LITTLEVERSION "Video Toaster Editor 4.1"
+d910 1
+a910 1
+	HelpMsg4[] = " F2   2   W : Input 2      Alt L : Lock/Unlock",
+d919 1
+a919 1
+	HelpMsg12[] =" F10: Setup Panel          Esc : Stop",
+d927 1
+a927 1
+	AboutMsg3[] = "   Copyright \xA9 1994, 1995 NewTek, Inc.",
+@
+
+
+2.83
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.82 1995/10/14 10:17:27 Flick Exp Holt $
+d5 3
+d1052 15
+d1068 6
+a1073 3
+		DUMPMSG("Slash");
+
+		if(EDITOR_MODE && CurFG)
+d1075 1
+a1075 1
+			ESparams1.Data1=(LONG)CurFG;
+d1077 1
+a1077 8
+			if(CurFG==SKellFG)
+				SendSwitcherReply(ES_Auto,&ESparams1);
+			else if(!SendSwitcherReply(ES_Select,&ESparams1))
+			{
+				SendSwitcherReply(ES_Auto,&ESparams1);
+				SKellFG=CurFG;
+			}
+			else
+d1079 16
+a1094 3
+				CurFG->FGDiff.FGNode.Behavior |= EN_BADCROUTON;
+				CurFG->FGDiff.FGNode.Redraw = TRUE;
+				SKellFG=NULL;
+a1095 1
+			Processed = TRUE;
+d1350 1
+@
+
+
+2.82
+log
+@Added DTM_RefreshTabs to SetupWindow()  (for Grazers only)
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.81 1995/10/12 16:35:41 Flick Exp Flick $
+d5 3
+d927 1
+a927 1
+	AboutMsg9[] = " ",
+@
+
+
+2.81
+log
+@Replaced hard-coded ViewMode values with VIEW_XXX defines (popup rearranged)
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.80 1995/10/09 16:42:52 Flick Exp Flick $
+d5 3
+d290 1
+d667 2
+d677 2
+d687 2
+d696 2
+d709 2
+d715 2
+d786 7
+@
+
+
+2.80
+log
+@Added project TagList dumper (debugging ver only), now gets Tags.h
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.79 1995/10/06 16:11:19 Flick Exp Flick $
+d5 3
+d358 1
+d360 1
+d623 1
+a623 1
+				ViewMode = 2;	/* Proj/switcher */
+d625 1
+a625 1
+				ViewMode = 3;	/* Big proj */
+d628 1
+a628 1
+			ViewMode = 0;		/* Proj/Files */
+d630 1
+a630 1
+			ViewMode = 4;		/* Proj/Proj */
+d634 1
+a634 1
+		ViewMode = 1;			/* Files/Files */
+d690 1
+a690 1
+	if ( EditTop && (ViewMode == 2) )
+d1192 2
+a1193 1
+		if(ViewMode>3) ViewMode=0;
+@
+
+
+2.79
+log
+@Bumped rev to read 4.1 -- corrected Auto Insert doc, added Alt-C Alt-P
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.78 1995/10/05 18:37:32 Flick Exp Flick $
+d5 3
+d283 1
+d318 1
+d355 1
+d1076 9
+d1228 64
+@
+
+
+2.78
+log
+@Auto insert bound to Alt-I
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.77 1995/10/05 03:43:19 Flick Exp Flick $
+d5 3
+d859 1
+a859 1
+#define LITTLEVERSION "Video Toaster Editor 4.08"
+d868 3
+a870 3
+	HelpMsg5[] = " F3   3    E : Input 3      Alt S : Auto Split",
+	HelpMsg6[] = " F4   4    R : Input 4      Alt PlayFrom : Edit to Music/Video",
+	HelpMsg7[] = " F5   5    T : DV1",
+@
+
+
+2.77
+log
+@Using copyright symbol in InterfaceLG font instead of "(c)"
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.76 1995/10/03 17:30:32 Flick Exp Flick $
+d5 3
+d1046 1
+a1046 1
+	case RAWKEY_S:
+@
+
+
+2.76
+log
+@Added Alt-P and Alt-C hotkeys for processing and cutting clips
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.75 1995/10/02 15:19:43 Flick Exp Flick $
+d5 3
+d878 1
+a878 1
+	AboutMsg3[] = "   Copyright (c) 1994, 1995 NewTek, Inc.",
+@
+
+
+2.75
+log
+@Moved quick-tune hotkey to CTRL, removed date-compiled from HELP panel (still in "About")
+Added Options panel to F10 key as well as Setup panel
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.74 1995/09/28 10:09:52 Flick Exp Flick $
+d5 4
+d1044 14
+@
+
+
+2.74
+log
+@Now uses RawKeyCodes.h, made "prev view" key toggle correctly between last 2 views
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.73 1995/09/25 12:20:01 Flick Exp Flick $
+d5 3
+d864 1
+a864 1
+	HelpMsg13[] ="              " __DATE__" ", // SAS C 6.51 feature!
+d878 1
+a878 1
+	AboutMsg10[] ="   Based on demo code by Junior Hartford",
+d1123 8
+a1130 2
+			break;
+		DoSetupPanel(Edit,NULL);
+d1165 1
+a1165 2
+	case RAWKEY_RALT:		// Right ALT key
+//	case RAWKEY_LAMIGA:	// Left Amiga key
+@
+
+
+2.73
+log
+@Added right-ALT quick tune
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.72 1995/09/13 12:17:25 Flick Exp Flick $
+d5 3
+d263 1
+a841 33
+#define RAW_F1			0x50
+#define RAW_F8			0x57
+#define RAW_F9			0x58
+#define RAW_F10 		0x59
+#define RAW_AMIGA_R 0x67
+#define RAW_AMIGA_L 0x66
+#define RAW_TAB     0x42
+#define RAW_TILDE   0x00
+#define RAW_DELETE  0x46
+#define RAW_CTRL    0x63
+//#define RAW_SPACE		0x41		//UGH!
+#define RAW_BKSP    0x41
+#define RAW_ENTER		0x43
+#define RAW_RETURN	0x44
+#define RAW_ESCAPE	0x45
+#define RAW_HELP 		0x5f
+#define RAW_IN 			0x5A // num-pad '('
+#define RAW_OUT 		0x5B // num-pad ')'
+#define RAW_DEL 		0x5D // num-pad '*'
+#define RAW_LEN 		0x5C // num-pad '/'
+#define RAW_PLUS 		0x5E // num-pad '+'
+#define RAW_MINUS		0x4A // num-pad '-'
+#define RAW_PERIOD	0x3C // num-pad '.'
+#define RAW_UP 			0x4C
+#define RAW_DOWN 		0x4D
+#define RAW_RIGHT		0x4E
+#define RAW_LEFT		0x4F
+#define RAW_NUMPAD0	0x0F
+#define RAW_SLASH		0x3A
+#define RAW_A			0x20
+#define RAW_L			0x28
+#define RAW_S			0x21
+#define RAW_ALT_R		0x65
+d925 1
+a925 1
+	case RAW_PERIOD:
+d933 1
+a933 1
+	case RAW_UP:
+d937 1
+a937 1
+	case RAW_DOWN:
+d941 2
+a942 2
+	case RAW_LEFT:
+	case RAW_MINUS:
+d946 2
+a947 2
+	case RAW_RIGHT:
+	case RAW_PLUS:
+d952 1
+a952 1
+	case RAW_HELP:
+d985 1
+a985 1
+	case RAW_SPACE:
+d996 1
+a996 1
+	case RAW_SLASH:
+d1019 1
+a1019 1
+	case RAW_L:
+d1026 1
+a1026 1
+	case RAW_A:
+d1033 1
+a1033 1
+	case RAW_S:
+d1040 1
+a1040 1
+	case RAW_ENTER:
+d1087 1
+a1087 1
+	case RAW_AMIGA_R:
+d1092 1
+a1092 1
+	case RAW_TAB:  // Play
+d1097 1
+a1097 1
+	case RAW_ESCAPE:  // Stop
+d1103 1
+a1103 1
+	case RAW_DELETE:	// Equivalent for delete button
+d1108 1
+a1108 1
+	case RAW_TILDE:  // record
+d1118 1
+a1118 1
+	case RAW_F10:
+d1125 1
+a1125 1
+	case RAW_F9:
+d1130 1
+a1130 1
+	case RAW_F8:
+d1142 1
+a1142 1
+	case RAW_BKSP:		// Toggle between most recently used views
+d1144 9
+a1152 4
+		SetView(PrevViewMode);
+		TV=PrevViewMode;
+		PrevViewMode=ViewMode;
+		ViewMode=TV;
+d1156 2
+a1157 1
+	case RAW_ALT_R:		// Right ALT key
+@
+
+
+2.72
+log
+@Bumped rev to 4.08
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.71 1995/08/31 16:15:09 Flick Exp Flick $
+d5 3
+d299 1
+d870 1
+d946 1
+d948 1
+d1180 3
+a1182 1
+
+@
+
+
+2.71
+log
+@Bumped version to 4.06, changed content of about box
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.70 1995/08/28 16:41:09 Flick Exp Flick $
+d5 3
+d867 1
+a867 1
+#define LITTLEVERSION "Video Toaster Editor 4.06"
+@
+
+
+2.70
+log
+@One more rename/adjustment on help panel, moved Alt U to Alt S
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.69 1995/08/28 15:24:31 Flick Exp Flick $
+d5 3
+d864 1
+a864 1
+#define LITTLEVERSION "Video Toaster Editor 4.05"
+d895 2
+a896 2
+	AboutMsg9[] = "       Steve Hartford",
+	AboutMsg10[]= "       Steve Kell",
+@
+
+
+2.69
+log
+@Cleaned up keyboard shortcuts panel, added new ALT stuff
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.68 1995/08/28 10:39:38 Flick Exp Flick $
+d5 3
+d859 1
+a859 1
+#define RAW_U			0x16
+d870 1
+a870 1
+	HelpMsg5[] = " F3   3    E : Input 3      Alt U : Audio Under/Match Frame",
+d1049 1
+a1049 1
+	case RAW_U:
+@
+
+
+2.68
+log
+@Added audio-under hotkey
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.67 1995/08/18 16:46:21 Flick Exp Flick $
+d5 3
+d865 7
+a871 7
+	HelpMsg3[] = " F1   1    Q : Input 1                      ",
+	HelpMsg4[] = " F2   2    W : Input 2                      ",
+	HelpMsg5[] = " F3   3    E : Input 3                      ",
+	HelpMsg6[] = " F4   4    R : Input 4                      ",
+	HelpMsg7[] = " F5   5    T : DV1                          ",
+	HelpMsg8[] = " F6   6    Y : DV2         Help : 2/3-Monitors",
+	HelpMsg9f[]= " F7   7    U : DV3            ~  : Flyer Record",
+d874 2
+a875 2
+	HelpMsg11[]= " F9 : Info/Controls        Tab : Play         ",
+	HelpMsg12[] =" F10: Setup Panel           Esc : Stop         ",
+@
+
+
+2.67
+log
+@Slight change for maintaining project current time
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.66 1995/08/09 17:54:33 Flick Exp Flick $
+d5 3
+d853 1
+d1040 7
+@
+
+
+2.66
+log
+@Changed hotkeys to make .allicons. to RALT,CTRL,HELP
+Removed ALT-ALT-TILDE hotkey sequence -- not needed, we have a button for this
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.65 1995/07/13 13:09:18 Flick Exp Flick $
+d5 4
+d809 3
+a811 1
+	else W = EditTop;
+d813 3
+@
+
+
+2.65
+log
+@Fixed bugs w/ HandleLockDown() and HandleAudioOnOff() -- they get EditTop now
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.64 1995/07/07 19:24:19 Flick Exp Flick $
+* $Log: handlecommon.c,v $
+d270 1
+a270 1
+extern BOOL GlobalFastDrives;
+d950 1
+a950 1
+//***!! This is the "LALT+RSHIFT+HELP" error requester test hack
+d960 2
+a961 1
+		if( IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT) )
+d970 1
+d977 1
+d1099 5
+a1103 4
+		if(GlobalFastDrives || ((IntuiMsg->Qualifier&IEQUALIFIER_LALT) && (IntuiMsg->Qualifier&IEQUALIFIER_RALT)))
+			GlobalFastDrives=TRUE;
+		else
+			GlobalFastDrives=FALSE;
+@
+
+
+2.64
+log
+@Moved DEL-verify out of RAW_DELETE handler (ugh!)
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.63 1995/07/07 17:04:42 Flick Exp Flick $
+d5 3
+d981 1
+a981 1
+			HandleLockDown(Edit);
+d1013 1
+a1013 1
+			HandleLockDown(Edit);
+d1020 1
+a1020 1
+			HandleAudioOnOff(Edit);
+d1026 1
+a1026 1
+			HandleLockDown(Edit);
+d1028 1
+a1028 1
+			HandleLockDown(Edit);
+@
+
+
+2.63
+log
+@Added "About" window, fixed wrongly doc'd keyboard shortcuts
+Added verify to DEL key in project
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.62 1995/07/05 14:57:47 Flick Exp Flick $
+d5 4
+d1085 1
+a1085 2
+		if (BoolRequest(Edit->Window,"Are you sure you want to delete croutons?"))
+			HandleDelete(Edit,IntuiMsg);
+@
+
+
+2.62
+log
+@Added easy audio on/off switch via hot-key
+Minor changes to lock/unlock handling code (new keys)
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.61 1995/06/28 18:08:03 Flick Exp Flick $
+d5 4
+a803 1
+#define RAW_HELP 		0x5f
+d832 2
+a833 1
+#define VERSIONSTR "$VER: Video Toaster Editor 4.05 " __DATE__
+d836 2
+a837 1
+char HelpMsg1[] = "   Video Toaster 4.05 Keyboard Shortcuts",
+d847 1
+a847 1
+	HelpMsg10[]= " F8 : Cycle Views           Esc : Previous View",
+d849 1
+a849 1
+	HelpMsg12[] =" F10: Setup Panel           Del : Stop         ",
+d854 15
+d959 6
+d1081 3
+a1083 1
+		HandleDelete(Edit,IntuiMsg);
+@
+
+
+2.61
+log
+@Moved ESC,DEL,BKSP keys around a bit (per James)
+Added lock/unlock and Cut to Music function keys
+@
+text
+@d3 6
+a8 2
+* $Id: HandleCommon.c,v 2.60 1995/06/20 23:47:14 Flick Exp Flick $
+* $Log: HandleCommon.c,v $
+d257 1
+a257 1
+extern BOOL	Cutting2Music;
+d826 2
+d946 1
+a946 1
+		if (Cutting2Music)
+d948 1
+a948 1
+			HandleLockDown();
+d977 14
+d992 2
+a993 2
+		if (Cutting2Music)
+			HandleLockDown();
+d995 1
+a995 1
+			HandleLockDown();
+@
+
+
+2.60
+log
+@Bumped rev #'s to 4.05, attempts to de-uglify key shortcuts help panel
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.59 1995/04/27 11:05:41 Flick Exp Flick $
+d5 3
+d253 1
+d803 1
+a803 1
+#define RAW_SPACE		0x41
+d820 2
+d882 2
+d938 13
+d972 5
+a976 1
+		if( CurFG && (CurFG!=SKellFG) )
+d1028 1
+a1028 1
+	case RAW_DELETE:  // Stop
+d1034 4
+d1071 1
+a1071 1
+	case RAW_ESCAPE:  // Toggle between most recently used views
+d1081 1
+@
+
+
+2.59
+log
+@Bumped rev to 4.04, we've shipped 4.03
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.58 1995/04/26 14:35:42 Flick Exp Flick $
+* $Log: handlecommon.c,v $
+d817 1
+a817 1
+#define VERSIONSTR "$VER: Video Toaster Editor 4.04 " __DATE__
+d820 1
+a820 1
+char HelpMsg1[] = "   Video Toaster 4.0 Keyboard Shortcuts",
+d828 1
+a828 1
+	HelpMsg9f[]= " F7   7    U : DV3           ~  : Flyer Record",
+d831 1
+a831 1
+	HelpMsg11[]= " F9 : Info/Controls         Tab : Play         ",
+@
+
+
+2.58
+log
+@Bumped version number and string
+@
+text
+@@
+
+
+2.57
+log
+@Add FAstDrive recording mode qualifier on  record panel hotkey (Tilde)
+@
+text
+@@
+
+
+2.56
+log
+@Added switcher un-used rawkey handling code
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.55 1995/02/28 10:10:47 pfrench Exp pfrench $
+d5 3
+d240 1
+d1001 4
+@
+
+
+2.55
+log
+@Fixed ViewMode problems, now brute force checking going on
+inside the MakeLayout function
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.54 1995/02/22 10:17:14 CACHELIN4000 Exp pfrench $
+d5 4
+d1036 2
+a1037 1
+	if (!Processed)
+d1039 9
+a1047 2
+		SendIntuiSwitcher(IntuiMsg);
+		DUMPMSG("Key passed to Switcher");
+@
+
+
+2.54
+log
+@Make Help key toggle preview overlay like switcher
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.53 1995/01/12 12:05:43 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d524 23
+@
+
+
+2.53
+log
+@Remove viewmode set from makelayout(), add redrawpopup after view hotkey
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.52 1994/12/30 19:35:31 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d197 1
+d219 1
+a219 1
+extern struct Library *ProofBase;
+d777 1
+a777 1
+char HelpMsg1[] = "   Video Toaster 3.9 Keyboard Shortcuts",
+d784 3
+a786 2
+	HelpMsg8[] = " F6   6    Y : DV2                          ",
+	HelpMsg9[] = " F7   7    U : DV3                          ",
+d870 1
+a872 1
+
+d879 1
+d882 2
+a884 1
+		Processed = TRUE;
+a903 1
+
+@
+
+
+2.52
+log
+@Change help panel, version #
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.51 1994/12/29 16:15:47 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+a517 12
+	if (NewTopType == EW_PROJECT)
+	{
+		if (NewTopHeight != TOP_SMALL)			ViewMode = 3;
+		else if (NewBottomType == EW_EMPTY)		ViewMode = 2;
+		else if (NewBottomType == EW_PROJECT)	ViewMode = 4;
+		else ViewMode = 0;
+	}
+	else if (NewTopType == EW_GRAZER)
+		ViewMode = 1;
+	else
+		ViewMode = 0;
+
+d986 1
+d996 1
+@
+
+
+2.51
+log
+@Add f8 to cycle views, esc to return to last view, ctrl-alt-f8 for editor exit
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.50 1994/12/28 16:29:56 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d779 1
+a779 1
+#define VERSIONSTR "$VER: Video Toaster 4.0 " __DATE__
+d782 2
+a783 2
+char HelpMsg1[] = "Video Toaster 4.0 Help Screen",
+	HelpMsg2[] = "Prog Prev Key  ",
+d791 6
+a796 6
+	HelpMsg10[]= " F8 : Quit Editor                  ",
+	HelpMsg11[]= " F9 : Info                         ",
+	HelpMsg12[] = "F10: Setup Panel                  ",
+	HelpMsg13[] = __DATE__" ", // SAS C 6.51 feature!
+	*HelpMsg[] = { HelpMsg1,HelpMsg2,HelpMsg3,HelpMsg4,HelpMsg5,
+		HelpMsg6,HelpMsg7,HelpMsg8,HelpMsg9,HelpMsg10,HelpMsg11,HelpMsg12,HelpMsg13 };
+@
+
+
+2.50
+log
+@Change NewGrazer to VALID_VOLUMES, so files display defaults to volumes not devices
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.49 1994/12/21 17:31:10 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d250 1
+a250 1
+extern WORD ViewMode;
+d821 1
+a821 1
+
+d870 1
+a870 1
+	
+d949 1
+a970 1
+
+d977 1
+d984 2
+a985 2
+		if((IntuiMsg->Qualifier&(IEQUALIFIER_LALT | IEQUALIFIER_RALT)) )
+			break;
+d987 1
+d990 11
+a1000 28
+		switch(ViewMode)
+		{
+			case 0:   // Project/Files
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_GRAZ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_GRAZER);
+			break;
+			case 1:	 // Files/Files
+				ESparams1.Data1=GUI_T_GRAZ|GUI_B_GRAZ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_GRAZER,TOP_SMALL,EW_GRAZER);
+			break;
+			case 2:	 // Project/Switcher
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY);
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_SWIT;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(TRUE);
+//				aw_Redraw(global_aw);
+			break;
+			case 3:	 // Big Project
+				ESparams1.Data1=GUI_T_NONE|GUI_B_PROJ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+			break;
+		}
+d1004 6
+a1009 2
+
+	if (!Processed) SendIntuiSwitcher(IntuiMsg);
+@
+
+
+2.49
+log
+@Add keys for record, play, stop
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.48 1994/12/19 22:38:35 pfrench Exp CACHELIN4000 $
+d5 3
+d239 1
+a239 1
+	VALID_FILES|VALID_DIRECTORIES|VALID_DEVICES,
+@
+
+
+2.48
+log
+@Modified for now shared-code proof.library.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.47 1994/12/07 15:54:23 pfrench Exp pfrench $
+d5 3
+d749 2
+d861 1
+a861 1
+			ErrorMessages=ErrMsgs;			
+d947 18
+@
+
+
+2.47
+log
+@Removed InitialPath hack in makelayout, now properly
+handled in GraphicHelp
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.46 1994/12/05 14:02:17 pfrench Exp pfrench $
+d5 4
+d180 4
+a183 1
+#include <object.h>
+d200 1
+@
+
+
+2.46
+log
+@Added support for moving to project save directory
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.45 1994/11/29 13:10:50 pfrench Exp pfrench $
+d5 3
+a539 15
+	}
+
+// Only an EditBottom of type grazer will make it here intact
+	if ( (NewTopType == EW_ASYNCREQ) && EditBottom )
+	{
+		/* Swap the paths so the grazer comes up in the inital directory */
+		if ( global_gr->gr_InitialPath )
+		{
+			struct SmartString	*s;
+
+			s = ((struct Grazer *)EditBottom->Special)->Path;
+			((struct Grazer *)EditBottom->Special)->Path = global_gr->gr_InitialPath;
+			global_gr->gr_InitialPath = s;
+		}
+		DoAllNewDir(EditBottom);
+@
+
+
+2.45
+log
+@Added CDROM directory optimizations
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.44 1994/11/15 17:54:14 pfrench Exp $
+d5 3
+d190 1
+d542 9
+@
+
+
+2.44
+log
+@Added support to highlight delayed error croutons when
+the error is posted, and not before.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.43 1994/11/15 13:46:43 pfrench Exp pfrench $
+d5 4
+d854 6
+a859 1
+		if(IntuiMsg->Qualifier & (IEQUALIFIER_LALT | IEQUALIFIER_RALT) )
+d861 1
+@
+
+
+2.43
+log
+@Made sure enter key worked correctly in switcher mode.
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.42 1994/11/09 20:11:00 Kell Exp pfrench $
+* $Log: handlecommon.c,v $
+a879 2
+			ULONG			selectmode = CROUTONSELECT_SELECTED;
+
+d894 2
+a895 2
+				CurFG->FGDiff.FGNode.Behavior |= EN_BADCROUTON;
+				CurFG->FGDiff.FGNode.Redraw = TRUE;
+a896 1
+				selectmode |= CROUTONSELECT_ERROR;
+d911 1
+a911 1
+					nodenum,GRIDSELECT_NORMAL,selectmode);
+@
+
+
+2.42
+log
+@Now LALT+RAMIGA+HELP hack uses LALT+RSHIFT+HELP
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.41 1994/11/09 17:39:06 Kell Exp Kell $
+d5 3
+d890 2
+a891 1
+			if(!SendSwitcherReply(ES_Select,&ESparams1))
+d893 1
+a893 1
+				SKellFG=CurFG;
+d895 2
+d900 1
+a900 1
+				CurFG->FGDiff.FGNode.Behavior |= EN_BADCROUTON;
+a901 2
+				SKellFG=NULL;
+				selectmode |= CROUTONSELECT_ERROR;
+@
+
+
+2.41
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.40 1994/11/09 16:49:58 Kell Exp Kell $
+d5 3
+d832 1
+d834 2
+a835 3
+
+//**!! This is the "LALT+RAMIGA+HELP" error requester test hack
+		if((IntuiMsg->Qualifier & IEQUALIFIER_LALT) & (IntuiMsg->Qualifier & IEQUALIFIER_RCOMMAND))
+d839 1
+a839 2
+			while(*ErrorMessages)
+				ErrorMessageRequest(Edit->Window,*ErrorMessages++);
+@
+
+
+2.40
+log
+@Hack code for testing out all the sequencing error messages.
+@
+text
+@d3 1
+a3 1
+* $Id: handlecommon.c,v 2.39 1994/11/09 12:49:54 pfrench Exp Kell $
+d5 3
+d832 1
+a832 1
+		if((IntuiMsg->Qualifier & IEQUALIFIER_LALT) & (IntuiMsg->Qualifier | IEQUALIFIER_RCOMMAND))
+@
+
+
+2.39
+log
+@Added initial support for croutongrid object
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.38 1994/10/20 11:50:03 CACHELIN4000 Exp pfrench $
+* $Log: HandleCommon.c,v $
+d181 2
+d786 2
+d827 12
+@
+
+
+2.38
+log
+@Add Setup-screen (alt for old mode), alt-help for 2-3 monitor mode toggle
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.37 94/10/12 18:58:06 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	HandleCommon.c,v $
+d151 3
+d402 10
+a411 2
+	if (Location == EW_TOP) {
+		if (NewType == EW_GRAZER) {
+d413 1
+d417 8
+a424 1
+				G->TopEdge+G->Height+BORD_H-1); // erase section going away
+d426 6
+a434 2
+	Edit->Window = Old->Window;
+	Old->Window = NULL; // so not closed
+d850 11
+d866 1
+d873 1
+d875 11
+@
+
+
+2.37
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.36 94/10/11 21:41:02 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d794 2
+d824 1
+a824 1
+			ESparams1.Data1=(LONG)CurFG;	
+a841 2
+//	case RAW_CTRL:
+//		DisplayMessage("Your Message Here! Outdoor Advertising Pays",EditScreen);
+d846 4
+a849 9
+		if( EditBottom || (EditTop->Height>TOP_SMALL) )
+		{
+//			if(MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+//			{
+//				SwitcherSwitch(TRUE);
+//				Edit=EditTop;
+//			}
+			Processed = TRUE; // absorb F10s if not in PJ/Switcher mode
+		}
+d853 6
+a858 2
+//	case RAW_F9 + 0x80:
+//	case RAW_HELP + 0x80:
+d860 32
+@
+
+
+2.36
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.35 94/10/10 21:19:37 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+@
+
+
+2.35
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.34 94/10/10 17:17:29 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d703 1
+a703 1
+#define VERSIONSTR "$VER: Video Toaster 4.0 " __AMIGADATE__
+d718 1
+a718 1
+	HelpMsg13[] = __AMIGADATE__, // SAS C 6.51 feature!
+@
+
+
+2.34
+log
+@Fix Controls (f9) hotkey, ignore key-up events
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.33 94/09/20 22:49:02 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d700 1
+a700 1
+#define VERSIONSTR "$VER: Video Toaster 4.0 " __AMIGADATE__;
+d702 1
+a702 1
+UBYTE		ver_str[]=VERSIONSTR
+@
+
+
+2.33
+log
+@Modified to work with dircache (Editwindow has ptr to list now)
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.32 1994/09/12 18:40:16 pfrench Exp pfrench $
+* $Log: handlecommon.c,v $
+d691 1
+d697 3
+a699 1
+UBYTE		ver_str[]="$VER: Video Toaster 4.0 "__AMIGADATE__;
+d750 4
+a753 1
+	else switch ( IntuiMsg->Code )
+d755 1
+a755 1
+	case 0x3C:
+d788 1
+a788 1
+			ESparams1.Data1=(LONG)CurFG;	
+d845 3
+a847 3
+		GrazerHandleInfo(NULL,NULL);
+	case RAW_F9 + 0x80:
+	case RAW_HELP + 0x80:
+@
+
+
+2.32
+log
+@Navigation now works according to spec
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.31 1994/09/09 16:42:06 pfrench Exp pfrench $
+* $Log: HandleCommon.c,v $
+d266 1
+a266 1
+		Node = (struct EditNode *)Edit->Special->EditList.lh_Head;
+@
+
+
+2.31
+log
+@Tied in a accesswindow rowcount hack
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.30 1994/09/08 16:18:43 pfrench Exp pfrench $
+d5 3
+d752 1
+a752 4
+		if( IntuiMsg->Qualifier & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+			DoUpArrow(Edit);
+		else
+			NavigateUp(Edit);
+d756 1
+a756 4
+		if( IntuiMsg->Qualifier & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+			DoDownArrow(Edit);
+		else
+			NavigateDown(Edit);
+d761 1
+a761 4
+		if( IntuiMsg->Qualifier & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+			NavigateFirst(Edit);
+		else
+			NavigateLeft(Edit);
+d766 1
+a766 4
+		if( IntuiMsg->Qualifier & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+			NavigateLast(Edit);
+		else
+			NavigateRight(Edit);
+@
+
+
+2.30
+log
+@Removed call to redraw accesswindow
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.29 1994/09/08 15:53:03 pfrench Exp pfrench $
+d5 3
+d139 2
+a576 1
+
+d579 1
+@
+
+
+2.29
+log
+@Added redraw code for accesswindow in MakeLayout()
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.28 1994/09/06 23:57:01 pfrench Exp pfrench $
+d5 3
+a144 1
+extern struct AccessWindow *global_aw;
+a491 4
+
+	// Redraw the access window at the bottom
+	if ( (NewTopHeight != TOP_LARGE) && (NewBottomType == EW_EMPTY) )
+		aw_Redraw(global_aw);
+@
+
+
+2.28
+log
+@Added basic accesswindow calls
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.27 1994/09/02 08:24:41 Kell Exp pfrench $
+d5 3
+d142 1
+d490 4
+@
+
+
+2.27
+log
+@Disabled SERDEBUG flag
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.26 1994/08/30 10:42:11 Kell Exp Kell $
+* $Log: handlecommon.c,v $
+d720 9
+a728 1
+	switch (IntuiMsg->Code) {
+@
+
+
+2.26
+log
+@Changed SendSwitcherReply calls to work with new ESParams structures.
+@
+text
+@d3 5
+a7 2
+* $Id: handleCommon.c,v 2.25 1994/08/27 17:45:28 CACHELIN4000 Exp Kell $
+* $Log: handleCommon.c,v $
+d120 1
+a120 1
+#define SERDEBUG	1
+@
+
+
+2.25
+log
+@Refresh on Enter
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.24 94/08/27 00:29:58 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	HandleCommon.c,v $
+d134 2
+d760 5
+a764 2
+			if(CurFG==SKellFG) SendSwitcherReply(ES_Auto,(LONG)CurFG,0,0);
+			else if(!SendSwitcherReply(ES_Select,(LONG)CurFG,NULL,NULL))
+d766 1
+a766 1
+				SendSwitcherReply(ES_Auto,(LONG)CurFG,0,0);
+d782 3
+a784 1
+			if(!SendSwitcherReply(ES_Select,(LONG)CurFG,NULL,NULL))
+@
+
+
+2.24
+log
+@Handle RAW_ENTER
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.23 94/08/26 15:00:46 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+a719 1
+		{
+a720 9
+/* 			if(Edit->RowOffset)
+			{
+				Edit->RowOffset--;
+				Edit->RedrawSelect = TRUE;
+				Edit->DisplayGrid = TRUE;
+				RowOffsetToPot(Edit);
+			}
+*/
+		}
+d784 2
+@
+
+
+2.23
+log
+@Fixed bug with spacebar handling, also added
+bad crouton support.
+@
+text
+@d3 6
+a8 2
+* $Id: HandleCommon.c,v 2.22 1994/08/16 19:05:31 pfrench Exp pfrench $
+* $Log: HandleCommon.c,v $
+d774 1
+a774 1
+			
+d778 16
+d796 1
+@
+
+
+2.22
+log
+@Now de-selects all current croutons when switching to
+project/switcher mode
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.21 1994/08/16 17:12:55 pfrench Exp pfrench $
+d5 4
+d759 1
+a759 1
+			else if(SendSwitcherReply(ES_Select,(LONG)CurFG,NULL,NULL))
+d763 8
+a770 1
+			} else SKellFG=NULL;
+@
+
+
+2.21
+log
+@Now disables "select all" button in switcher mode
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.20 1994/08/02 21:48:31 pfrench Exp pfrench $
+d5 3
+d389 3
+a391 3
+		if (NewTopHeight != TOP_SMALL) ViewMode = 3;
+		else if (NewBottomType == EW_EMPTY) ViewMode = 2;
+		else if (NewBottomType == EW_PROJECT) ViewMode = 4;
+d419 6
+a424 6
+  if (EditTop && (TopType != NewTopType))
+  {
+    EditTop->Close(EditTop);
+    EditTop->Free(EditTop);
+    EditTop = NULL;
+  }
+d453 3
+@
+
+
+2.20
+log
+@Now re-scans dir in file-requester mode.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.19 1994/07/21 12:28:42 pfrench Exp pfrench $
+d5 3
+d139 1
+a139 1
+#define SWITCHER_MODE	((!EditBottom)||(EditBottom->Node.Type==EW_EMPTY))
+d314 16
+a329 6
+	if (Location == EW_TOP) NewEdit->TopEdge = 0;
+	else NewEdit->TopEdge = TOP_SMALL; //EditScreen->Height - NewEdit->Height;
+	if (NewType == EW_PROJECT) {
+		if (!(Edit = AllocInitProject(&NewProject))) return(FALSE);
+	} else
+		if (!(Edit = AllocInitGrazer(&NewGrazer))) return(FALSE);
+d407 4
+@
+
+
+2.19
+log
+@Added async requester window type.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.18 1994/07/14 15:25:27 CACHELIN4000 Exp pfrench $
+d5 3
+d399 2
+a400 1
+  if (EditTop && (TopType != NewTopType)) {
+d407 2
+a408 1
+	if (EditBottom && (BottomType != NewBottomType)) {
+d414 6
+d421 2
+a422 1
+	if (!EditTop && (NewTopType != EW_EMPTY)) {
+d426 4
+a429 4
+
+// if top open but wrong size, resize
+	else {
+		if (EditTop && (EditTop->Height != NewTopHeight)) {
+d436 2
+a437 1
+		((NewBottomType == EW_GRAZER) || (NewBottomType == EW_PROJECT))) {
+@
+
+
+2.18
+log
+@Fixed new bug/typo in 'sweet spot' in OpenEditScreen
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.17 94/07/14 11:59:49 pfrench Exp Locker: CACHELIN4000 $
+* $Log:	HandleCommon.c,v $
+d138 2
+d469 1
+d476 2
+a477 2
+	if (Edit->Open(Edit)) {
+
+d496 2
+a497 1
+	if (E->Node.Type == EW_GRAZER) {
+d499 3
+a501 2
+	} else {
+
+@
+
+
+2.17
+log
+@Added sweet spot for adding async requesters.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.16 94/07/08 10:09:08 CACHELIN4000 Exp Locker: pfrench $
+d5 3
+d458 1
+a458 1
+	} else if (Type == EW_PROJECT) {
+@
+
+
+2.16
+log
+@replace SendSwitcher() calls with SendSwitcherReply()
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.15 94/07/07 11:26:43 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d64 1
+a64 1
+* Confidental and Proprietary. All rights reserved. 
+d189 11
+d207 2
+a208 1
+	switch(Edit->Node.Type) {
+d211 4
+a214 2
+		while (Next=(struct EditNode *)Node->Node.MinNode.mln_Succ) {
+			if (Node->Status == Status) return(TRUE);
+d221 4
+a224 2
+		while (FG) {
+			if (FG->FGDiff.FGNode.Status == Status) return(TRUE);
+d226 1
+a226 1
+		}		
+a230 11
+struct EditWindow *HandleDelete(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct EditWindow *W = NULL;
+
+	if (CheckNodeStatus(EditTop,EN_SELECTED)) W = EditTop;
+	else if (EditBottom) 
+		if (CheckNodeStatus(EditBottom,EN_SELECTED)) W = EditBottom;
+	if (W && (W->NodeDeleted)) W->NodeDeleted(W);
+	return(Edit);
+}
+
+d304 1
+a304 1
+	} else 
+d367 4
+a370 2
+	else if (NewTopType == EW_GRAZER) ViewMode = 1;
+		else ViewMode = 0;
+d373 2
+a374 2
+	if (EditTop && (NewTopHeight == TOP_SMALL) && 
+		(EditTop->Height == TOP_SMALL)) 
+d376 1
+a376 1
+		if ((TopType == EW_GRAZER) && (NewTopType == EW_PROJECT)) 
+d380 1
+a380 1
+		} else if ((TopType == EW_PROJECT) && (NewTopType == EW_GRAZER)) 
+d415 1
+a415 1
+	if (!EditBottom && 
+d427 1
+a427 1
+*   NAME   
+d455 1
+a455 1
+	} else 
+d457 5
+d518 1
+a518 1
+*   NAME   
+d525 1
+a525 1
+*	
+d558 1
+a558 1
+*   NAME   
+d566 1
+a566 1
+*	
+d574 1
+a574 1
+	if (EditBottom && (CheckNodeStatus(EditBottom,EN_SELECTED))) 
+@
+
+
+2.15
+log
+@Added initial support for project/project editing
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.14 94/07/04 19:14:56 pfrench Exp Locker: pfrench $
+d5 3
+d692 1
+a692 1
+			if(CurFG==SKellFG) SendSwitcher(ES_Auto,(LONG)CurFG,0,0);
+d695 1
+a695 1
+				SendSwitcher(ES_Auto,(LONG)CurFG,0,0);
+@
+
+
+2.14
+log
+@Modified indenting a little, no code changes.
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.13 94/07/01 15:08:06 CACHELIN4000 Exp Locker: pfrench $
+d5 3
+d349 2
+a350 1
+	if (NewTopType == EW_PROJECT) {
+d353 4
+a357 2
+	} else if (NewTopType == EW_GRAZER) ViewMode = 1;
+	else ViewMode = 0;
+a700 6
+		Processed = TRUE;
+    break;
+//	case RAW_AMIGA_R:
+	case RAW_AMIGA_L:
+		if( IntuiMsg->Qualifier & IEQUALIFIER_RSHIFT )
+	    MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+@
+
+
+2.13
+log
+@Begin to reinstate Proj2Proj
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.12 94/06/07 15:18:23 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d355 11
+a365 7
+		(EditTop->Height == TOP_SMALL)) {
+	if ((TopType == EW_GRAZER) && (NewTopType == EW_PROJECT)) {
+		if (!MorphWindow(EW_TOP,EW_PROJECT)) return(FALSE);
+		TopType = EditTop->Node.Type;
+	} else if ((TopType == EW_PROJECT) && (NewTopType == EW_GRAZER)) {
+		if (!MorphWindow(EW_TOP,EW_GRAZER)) return(FALSE);
+		TopType = EditTop->Node.Type;
+a366 1
+	}
+d369 5
+a373 5
+	if (EditTop && (TopType != NewTopType)) {
+		EditTop->Close(EditTop);
+		EditTop->Free(EditTop);
+		EditTop = NULL;
+	}
+@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.11 94/04/23 17:45:27 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d692 5
+a696 4
+//	case RAW_AMIGA_L:
+//    MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+//		Processed = TRUE;
+//    break;
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.10 94/04/22 17:46:07 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d87 1
+a87 1
+extern struct FastGadget *CurFG;
+d111 4
+d672 1
+a672 1
+		if(CurFG)
+d674 6
+a679 1
+			SendSwitcher(ES_Auto,(LONG)CurFG,0,0);
+@
+
+
+2.10
+log
+@Intercept RAW_SPACE, translate to ES_AUTO call
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.9 94/04/20 17:33:48 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d623 2
+a624 1
+			if(Edit->RowOffset)
+d631 1
+d665 5
+a669 2
+		if(CurFG) SendSwitcher(ES_Auto,(LONG)CurFG,0,0);
+		Processed = TRUE;
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.8 94/03/15 16:40:09 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d55 1
+d547 1
+d657 4
+@
+
+
+2.8
+log
+@comment out F10 switching
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.7 94/03/14 21:57:21 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d63 3
+d67 1
+a67 9
+#include <handlecommon.p>
+#include <editwindow.p>
+#include <grazer.p>
+#include <project.p>
+#include <scrollgrid.p>
+#include <edit.p>
+#include <grid.p>
+#include <gadgethelp.p>
+#include <graphichelp.p>
+d77 2
+d199 1
+a199 1
+*   NAME   
+d534 5
+a538 5
+#define RAW_F1 0x50
+#define RAW_F8 0x57
+#define RAW_F9 0x58
+#define RAW_F10 0x59
+#define RAW_HELP 0x5f
+d544 14
+d604 46
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.6 94/03/14 00:37:00 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d607 5
+a611 5
+			if(MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY))
+			{
+				SwitcherSwitch(TRUE);
+				Edit=EditTop;
+			}
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.5 94/03/13 07:50:33 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d304 1
+a304 1
+*   NAME   
+d582 2
+a583 2
+VOID HandleKey(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+d603 8
+a610 1
+		Processed = TRUE; // absorb F10s if not in PJ/Switcher mode
+d620 1
+@
+
+
+2.5
+log
+@Reworded the HELP requester
+@
+text
+@d3 1
+a3 1
+* $Id: HandleCommon.c,v 2.4 94/03/12 20:01:16 CACHELIN4000 Exp Locker: Kell $
+d5 3
+d530 1
+d550 1
+a550 1
+	HelpMsg11[]= " F9 : CG                           ",
+d599 2
+a600 1
+		if(EditBottom) Processed = TRUE; // absorb F10s if not in PJ/Switcher mode
+d602 3
+a604 5
+	case RAW_F8:
+;;		GrazerHandleInfo(NULL,NULL);
+
+
+	case RAW_F8 + 0x80:
+a606 1
+
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: handlecommon.c,v 2.3 94/03/10 18:16:47 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	handlecommon.c,v $
+d545 1
+a545 1
+	HelpMsg10[]= " F8 : File information             ",
+d547 1
+a547 1
+	HelpMsg12[] = "F10: Config panel                 ",
+d598 3
+a600 1
+		GrazerHandleInfo(NULL,NULL);
+@
+
+
+2.3
+log
+@added __AMIGADATE__ to info, version strings
+@
+text
+@d3 5
+a7 2
+* $Id: HandleCommon.c,v 2.2 94/03/09 01:56:43 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	HandleCommon.c,v $
+d591 3
+d599 1
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@Binary files HandleCommon.c and t:,RCSt1A70d4540 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files HandleCommon.c and t:,RCSt1A70d3798 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files HandleCommon.c and t:,RCSt1A7195c18 differ
+@

@@ -1,0 +1,20 @@
+;***************************************************
+; setup
+;	sets up RCS server/client developer environment
+;	last change 5-18-92 Steve Hartford
+;***************************************************
+if NOT exists $LocalChromaFX
+	echo "You must setenv $LocalChromaFX, makedir $LocalChromaFX,"
+	echo "and SaveNetPrefs first!"
+	quit 30
+endif
+set CodeName CFX
+set CodeLong ChromaFX
+set CodeDir $LocalChromaFX
+assign VT: $LocalToaster
+
+execute network:bat/setup.generic
+execute network:bat/setup.hisoft
+execute network:bat/setup.UseSwitcher
+
+; end of setup

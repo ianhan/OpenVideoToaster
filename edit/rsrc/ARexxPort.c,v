@@ -1,0 +1,5290 @@
+head	2.41;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.41
+date	96.03.11.18.16.36;	author Holt;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	95.11.21.13.27.11;	author Flick;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	95.11.17.15.13.13;	author Flick;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	95.11.15.18.36.13;	author Flick;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	95.11.08.15.30.10;	author Flick;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	95.10.28.03.48.47;	author Flick;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	95.10.14.10.25.21;	author Flick;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	95.10.12.16.09.16;	author Flick;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	95.10.10.00.34.24;	author Flick;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	95.10.06.15.42.43;	author Flick;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	95.10.05.18.28.45;	author Flick;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	95.10.03.18.05.13;	author Flick;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	95.10.03.13.59.01;	author Flick;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	95.09.28.11.29.30;	author pfrench;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	95.09.13.12.03.32;	author Flick;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	95.09.07.17.32.01;	author pfrench;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	95.08.07.09.33.44;	author Flick;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	95.06.05.13.59.55;	author pfrench;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	95.05.31.18.33.08;	author pfrench;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	95.05.08.15.14.07;	author pfrench;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	95.04.24.15.13.55;	author pfrench;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	95.03.16.16.20.02;	author CACHELIN4000;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	95.03.10.18.38.37;	author CACHELIN4000;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	95.03.07.15.58.22;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	95.03.06.13.21.27;	author CACHELIN4000;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	95.03.05.17.05.02;	author CACHELIN4000;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	95.02.25.16.02.10;	author CACHELIN4000;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	95.02.22.10.15.59;	author CACHELIN4000;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	95.02.19.01.51.33;	author CACHELIN4000;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	95.02.11.16.46.26;	author CACHELIN4000;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	95.02.01.17.56.58;	author CACHELIN4000;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	95.01.12.12.06.25;	author CACHELIN4000;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.12.24.15.43.46;	author CACHELIN4000;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.12.22.20.26.38;	author CACHELIN4000;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.12.21.17.44.38;	author CACHELIN4000;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.12.16.21.03.15;	author CACHELIN4000;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.12.03.18.34.31;	author CACHELIN4000;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.11.29.14.45.16;	author CACHELIN4000;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.11.18.16.52.34;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.11.16.01.18.27;	author CACHELIN4000;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.08.29.21.09.15;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.17.16.23.36;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.41
+log
+@changed the croutonchecktag function so it dosnt call checktag.
+@
+text
+@/********************************************************************
+* $ARexxPort.c$
+* $Id: ARexxPort.c,v 2.40 1995/11/21 13:27:11 Flick Exp Holt $
+* $Log: ARexxPort.c,v $
+*Revision 2.40  1995/11/21  13:27:11  Flick
+*Added CRNUMTYPE.
+*
+*Revision 2.39  1995/11/17  15:13:13  Flick
+*Fixed lack of reply from PROJUPDATE
+*
+*Revision 2.38  1995/11/15  18:36:13  Flick
+*Grafted in new versions of SetTag, GetTag, CheckTag, and TagSavable that work
+*with a specified crouton, rather than the currently selected one (CurFG)
+*
+*Revision 2.37  1995/11/08  15:30:10  Flick
+*Defines for Tools/Programs popups removed, are now found in Edit.h -- Much safer!
+*AddTool/AddProgram functions now return an error when limit is reached (was not
+*before, would crash editor!)
+*
+*Revision 2.36  1995/10/28  03:48:47  Flick
+*Added CROUTONSAVETAG to mark tags as savable
+*
+*Revision 2.35  1995/10/14  10:25:21  Flick
+*SET_VIEW command now returns number of the previous view
+*SET_VIEW, CROUTONLOAD, CROUTONDELETE now refresh the appropriate windows
+*when done.
+*
+*Revision 2.34  1995/10/12  16:09:16  Flick
+*Added "INSERT" option to CROUTONLOAD, reinstated EW_PROJECT test (Enf hits!)
+*Added CROUTONDELETE, CROUTONTIME
+*Fixed CROUTONSETTAG, was returning last value fetched with GETTAG!?!
+*
+*Revision 2.33  1995/10/10  00:34:24  Flick
+*Changed RxReqTime, RxReqStr, RxReqNum to return "CANCEL" if cancel button pressed (not dflt val)
+*Also did some cleanup of some REAL UGLY handling of variable number of args to these
+*
+*Revision 2.32  1995/10/06  15:42:43  Flick
+*Added ReqFlyerJog command, RecordStop now returns to normal sprite
+*
+*Revision 2.31  1995/10/05  18:28:45  Flick
+*Record functions now use improved Flyer_ functions, not DHD_Abort(0)!!!
+*
+*Revision 2.30  1995/10/03  18:05:13  Flick
+*Updated for Tools/Programs popup w/ more items
+*
+*Revision 2.29  1995/10/03  13:59:01  Flick
+*Added cmds for custom tool popup items: AddTool,RemTool,ToolName,ToolCmd,ToolNum
+*Fixed bug in AddProgram that would have crashed bad when trying to make 26th item (limit is 25!)
+*
+*Revision 2.28  1995/09/28  11:29:30  pfrench
+*Added RxCroutonsInProject
+*
+*Revision 2.27  1995/09/13  12:03:32  Flick
+*Added REQ_BUTTONS and PROJUPDATE commands
+*
+*Revision 2.26  1995/09/07  17:32:01  pfrench
+*Fixed Load/Save Project and added CroutonSelected
+*command.
+*
+*Revision 2.25  1995/08/07  09:33:44  Flick
+*Added (cast) to appease warning
+*
+*Revision 2.24  1995/06/05  13:59:55  pfrench
+*Fixed copy-paste code typo in checktag
+*
+*Revision 2.23  1995/05/31  18:33:08  pfrench
+*Added Dan's fixes to SetCroutonTag
+*
+*Revision 2.22  1995/05/08  15:14:07  pfrench
+*Fixed CroutonPick(0)
+*
+*Revision 2.21  1995/04/24  15:13:55  pfrench
+*Fixed couple of arexx bugs
+*
+*Revision 2.20  1995/03/16  16:20:02  CACHELIN4000
+*Add RECORDADD, FLYEROUT commands.
+*
+*Revision 2.19  1995/03/10  18:38:37  CACHELIN4000
+*Support flyerstill in MAKECLIPICON
+*
+*Revision 2.18  1995/03/07  15:58:22  CACHELIN4000
+*Add FLYERDRIVE, FLYERSTATUS commands
+*
+*Revision 2.17  1995/03/06  13:21:27  CACHELIN4000
+*Add REQ_OPEN,REQ_CLOSE,CURRENTPATH commands, groundwork for single-framing SW
+*
+*Revision 2.16  1995/03/05  17:05:02  CACHELIN4000
+*Add STARTFILEREQ, QUERYFILEREQ commands
+*
+*Revision 2.15  1995/02/25  16:02:10  CACHELIN4000
+*Add Programs popup commands: AddProgram, RemProgram, ProgramName, ProgramCmd, ProgramNum.
+*
+*Revision 2.14  1995/02/22  10:15:59  CACHELIN4000
+*Read TBC settings in TBC command..
+*
+*Revision 2.13  1995/02/19  01:51:33  CACHELIN4000
+*fix Function Host unknown function handling
+*
+*Revision 2.12  1995/02/11  16:46:26  CACHELIN4000
+*Add TBC(Output) command
+*
+*Revision 2.11  1995/02/01  17:56:58  CACHELIN4000
+*Add Pause, TBC commands
+*
+*Revision 2.10  1995/01/12  12:06:25  CACHELIN4000
+*SetWindow noe updates prevviewmode, #5 for close all, Proj/Proj (#4) ignored
+*
+*Revision 2.9  1994/12/24  15:43:46  CACHELIN4000
+*Comment out SWITCHER ARexx message interception
+*
+*Revision 2.8  1994/12/22  20:26:38  CACHELIN4000
+*RemFuncHost() before closing ports, to keep ARexx from breaking with lib still in list but no port for it.
+*
+*Revision 2.7  1994/12/21  17:44:38  CACHELIN4000
+*Add RxRecordClip, RxRecordStop, makeicon, gettype. Eliminate EW_Project checks
+*
+*Revision 2.6  1994/12/16  21:03:15  CACHELIN4000
+*Add RecordClip arexx command
+*
+*Revision 2.5  1994/12/03  18:34:31  CACHELIN4000
+*Added lots of f'ns, like RxSetTag()
+*
+*Revision 2.4  1994/11/29  14:45:16  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.3  1994/11/18  16:52:34  CACHELIN4000
+*Add commands, fix reply freeing
+*
+*Revision 2.2  1994/11/16  01:18:27  CACHELIN4000
+*Add Macro capability, SET_VIEW command
+*
+*Revision 2.1  1994/08/29  21:09:15  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  16:23:36  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  15:56:34  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  14:43:53  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+*	12-17-92	Steve H		Last Update
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
+#include <rexx/storage.h>
+#include <rexx/rxslib.h>
+#include <rexx/errors.h>
+#include <crouton_all.h>
+
+#include <edit.h>
+#include <editwindow.h>
+#include <project.h>
+#include <grazer.h>
+#include <gadgets.h>
+#include <tags.h>
+#include <panel.h>
+#include <editswit.h>
+#include <projectrexx.h>
+#include <flyer.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+#include <proto/rexxsyslib.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#endif
+
+/*********************************************/
+//#define SERDEBUG	1
+#include <serialdebug.h>
+/*********************************************/
+
+#define REXX_VERSION 36L
+
+/**** Static prototypes ****/
+static BOOL RxGetType_core(struct RexxMsg *RexxMsg, struct FastGadget *FG);
+static BOOL RxGetTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname);
+static BOOL RxSetTag_core(struct RexxMsg *RexxMsg,	struct FastGadget *FG, char *tagname, char *tagvalue);
+static BOOL RxCheckTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname);
+static BOOL RxTagSavable_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname);
+
+
+#define IS_REPLY(m)     ( m->rm_Node.mn_Node.ln_Type == NT_REPLYMSG )
+#define IS_FUNCTION(m)  ( (m->rm_Action & RXCODEMASK) == RXFUNC )
+#define HAS_RESULT(m)   ( m->rm_Action & RXFF_RESULT )
+#define ARG_NUM(m)      ((int)(m->rm_Action & RXARGMASK))
+#define ARG3(rmp) (rmp->rm_Args[3])
+#define ARG4(rmp) (rmp->rm_Args[4])
+#define ARG5(rmp) (rmp->rm_Args[5])
+#define ARG6(rmp) (rmp->rm_Args[6])
+#define ERR_BADMESS     ERR10_010
+#define ERR_FNRETURN    ERR10_012
+#define ERR_UNKNOWN_FN  ERR10_015
+#define ERR_BADARGNUM   ERR10_017
+#define ERR_BADARG      ERR10_018
+#define RESULT_MAX			127
+
+extern struct NewProject NewProject;
+extern struct NewGrazer NewGrazer;
+extern struct FastGadget **PtrProject,*CurFG,*SKellFG;
+extern struct Screen *EditScreen;
+extern struct EditWindow *EditTop,*EditBottom;
+extern WORD ViewMode,PrevViewMode;
+extern struct ESParams1 ESparams1;
+extern struct ESParams2 ESparams2;
+extern struct ESParams3 ESparams3;
+extern struct ESParams4 ESparams4;
+extern struct MsgPort *EditPort,*SwitPort;
+extern far struct TagHelp TagNames[];
+extern ULONG CurFlyDrive,CurFlySource,CurFlyTracks,CurCompMode;
+extern LONG	FlyerDriveCount;
+extern struct Library *FlyerBase;
+extern far UBYTE 	TBC_Input[];
+extern struct TBCctrl		TBC_dat,TBC_bak;
+extern struct SystemPrefs Config;
+extern far char	AppNames[][MAX_APPNAME_LEN+1];
+extern far char	AppCommand[][MAX_APPCMD_LEN+1];
+extern UBYTE AppFlags[];
+extern far char	ToolNames[][MAX_TOOLNAME_LEN+1];
+extern far char	ToolCommand[][MAX_TOOLCMD_LEN+1];
+extern ULONG TotalAppNum,TotalToolsNum;
+extern UBYTE ToolFlags[];
+extern UBYTE	*FlyerDrives[];
+extern ULONG NumSysApps,NumSysTools;
+
+static struct MsgPort *ARexxPort = NULL;
+struct Library *RexxSysBase = NULL;
+static char result[RESULT_MAX+1];
+
+
+struct ClipCrUD {
+	ULONG	FORM;		// FORM
+	ULONG	fSize;	// FORMSize
+	ULONG	CrUD;		// CrUD
+	ULONG	Type;		// TYPE
+	ULONG	cSize;	// 8
+	ULONG	Clip;		// CLIP
+	ULONG	ClipEnd;		// NULL
+	ULONG	LIBS;		// LIBS
+	ULONG	lSize;	// 0x18
+	ULONG	lOff;		// 0xFFFFFCD0
+	UWORD	lHuh;		// 0x0010
+	UBYTE	lName[18]; // "effects.library"
+	ULONG	TAGS;		// TAGS
+	ULONG	tSize;	// 4
+	ULONG	TagsEnd; // NULL
+};
+
+#define ID_CLIP  0x434C4950
+#define ID_STIL  0x5354494C
+
+struct ClipCrUD rxCrUD = { 0x464F524D,0,0x43725544,0x54595045,8,
+		ID_CLIP,0,
+		0x4C494253,0x18,0xFFFFFCD0,0x0010,"effects.library",
+		0x54414753,4,NULL};
+
+
+//extern UWORD GetEditListLen(struct EditWindow *Edit);
+
+static struct ExtFastGadget *rx_GetProjNode(
+	struct EditWindow *Edit,
+	signed long			 nodenum )
+{
+	struct FastGadget		*fg;
+
+	if( Edit->Node.Type==EW_PROJECT )
+	{
+		fg = *(((struct Project *)Edit->Special)->PtrPtr);
+
+		if ( nodenum > 0 )
+		{
+			if ( !(fg = GetProjNode(fg,nodenum)) )
+			{
+				fg = (struct FastGadget *)GetLastEditNode(Edit);
+			}
+		}	/* zero or negative nodenums select first gad */
+	}
+
+	return((struct ExtFastGadget *)fg);
+}
+
+
+
+
+/****** ARexxPort/OpenARexxPort *************************************
+*
+*   NAME
+*	OpenARexxPort
+*
+*   SYNOPSIS
+*	struct MsgPort *OpenARexxPort(VOID)
+*
+*   FUNCTION
+*	Opens port "PROJECT_REXX_PORT",
+*	returns pointer to port (so caller can get mp_SigBit)
+*	Caller must call CloseARexxPort() and NOT close port himself
+*
+*********************************************************************
+*/
+struct MsgPort *OpenARexxPort(VOID)
+{
+	if (!(RexxSysBase = (struct Library *)
+		OpenLibrary("rexxsyslib.library",REXX_VERSION))) return(NULL);
+
+	ARexxPort = CreatePort("PROJECT_REXX_PORT", 0L);
+	return(ARexxPort);
+}
+
+BOOL RemFuncHost()
+{
+  struct RexxMsg *msg;
+  struct MsgPort *port;
+  if( !(msg = CreateRexxMsg(ARexxPort,"","PROJECT_REXX_PORT")) )
+    return( FALSE );
+  msg->rm_Action  = RXREMLIB | RXFF_NONRET;
+  msg->rm_Args[0] = (STRPTR) "PROJECT_REXX_PORT";
+  Forbid();
+  if( ( port = FindPort( (UBYTE *) "REXX" ) ) != NULL )
+    PutMsg( port, (struct Message *) msg );
+  else
+  {
+    ClearRexxMsg( msg, 16 );
+    DeleteRexxMsg( msg );
+    msg = NULL;
+  }
+  Permit();
+  return( (BOOL) (msg != NULL) );
+}
+
+
+/****** ARexxPort/CloseARexxPort *************************************
+*
+*   NAME
+*	CloseARexxPort
+*
+*   SYNOPSIS
+*	VOID CloseARexxPort(VOID)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+VOID CloseARexxPort(VOID)
+{
+	RemFuncHost();
+	if (RexxSysBase) {
+		CloseLibrary(RexxSysBase);
+		RexxSysBase = NULL;
+	}
+	if (ARexxPort) {
+		DeletePort(ARexxPort);
+		ARexxPort = NULL;
+	}
+}
+
+/****** ARexxPort/FillReply ************************************
+*
+*   NAME
+*	FillReply
+*
+*   SYNOPSIS
+*	void FillReply(struct RexxMsg *msg, LONG rc, char *result, LONG errc)
+*
+*   FUNCTION
+*	Fill ARexx message with result/error code
+*
+*********************************************************************
+*/
+void FillReply(struct RexxMsg *msg, LONG rc, char *result, LONG errc)
+{
+  msg->rm_Result1 = rc;
+  msg->rm_Result2 = (LONG) NULL;
+  if( (result!=NULL) && (rc==RC_OK) && ((msg->rm_Action&RXFF_RESULT)!=0) )
+      msg->rm_Result2 = (LONG)CreateArgstring(result,strlen(result));
+  else if( rc != RC_OK ) msg->rm_Result2 = errc;
+}
+
+void DUMPREXXMSG(struct RexxMsg *RexxMsg)
+{
+#ifdef SERDEBUG
+	int i;
+	if( IS_FUNCTION(RexxMsg) )
+	{
+		DUMPSTR(ARG0(RexxMsg));
+		DUMPSTR("( ");
+		for(i=1; i<=ARG_NUM(RexxMsg); i++)
+		{
+			DUMPSTR(RexxMsg->rm_Args[i]);
+			DUMPSTR(", ");
+		}
+		DUMPSTR(" )");
+	}
+	else DUMPMSG(ARG0(RexxMsg));
+#endif
+	return;
+}
+
+/****** ARexxPort/ARexxMacro ************************************
+*
+*   NAME
+*	ARexxMacro
+*
+*   SYNOPSIS
+*	BOOL ARexxMacro(char *macro)
+*
+*   FUNCTION
+*	Send a filename to ARexx resident process for execution,
+*	ARexx returns reply immediately, without waiting for script to end
+*
+*********************************************************************
+*/
+BOOL ARexxMacro(char *macro)
+{
+	struct RexxMsg *msg;
+	struct MsgPort *port;
+	DUMPSTR("Send Macro: ");
+	DUMPMSG(macro);
+	if( !(msg = CreateRexxMsg(ARexxPort,NULL,NULL)) ) // should be freed on reply!
+		return( FALSE );
+	msg->rm_Action  = RXCOMM|RXFF_NOIO;
+	if( !(msg->rm_Args[0]=CreateArgstring(macro,strlen(macro))) )
+		return(FALSE);
+	msg->rm_Args[1] = (STRPTR) 0;
+	Forbid();
+		if( ( port = FindPort( (UBYTE *) "AREXX" ) ) != NULL )
+			PutMsg( port, (struct Message *) msg );
+	Permit();
+	if(!port)
+	{
+		DeleteArgstring( ARG0(msg) );
+		DeleteRexxMsg( msg );
+		msg = NULL;
+	}
+	return( (BOOL) (msg != NULL) );
+}
+
+/****** ARexxPort/RexxMacro ************************************
+*
+*   NAME
+*	RexxMacro
+*
+*   SYNOPSIS
+*	BOOL RexxMacro(char *macro)
+*
+*   FUNCTION
+*	Send a filename to ARexx resident process for execution,
+*	ARexx returns reply after script returns. Dangerous to use.
+*
+*********************************************************************
+*/
+BOOL RexxMacro(char *macro)
+{
+	struct RexxMsg *msg;
+	struct MsgPort *port;
+	DUMPSTR("Send Synchronous Macro: ");
+	DUMPMSG(macro);
+	if( !(msg = CreateRexxMsg(ARexxPort,NULL,NULL)) ) // replies go to ARexxPort
+		return( FALSE );
+	msg->rm_Action  = RXCOMM|RXFF_NOIO;
+	if( !(msg->rm_Args[0]=CreateArgstring(macro,strlen(macro))) )
+		return(FALSE);
+	msg->rm_Args[1] = (STRPTR) 0;
+	Forbid();
+		if( ( port = FindPort( (UBYTE *) "REXX" ) ) != NULL )
+			PutMsg( port, (struct Message *) msg );
+	Permit();
+	if(!port)
+	{
+		DeleteArgstring( ARG0(msg) );
+		DeleteRexxMsg( msg );
+		msg = NULL;
+	}
+	return( (BOOL) (msg != NULL) );
+}
+
+
+/****** ARexxPort/ReplyClientMsg ************************************
+*
+*   NAME
+*	ReplyClientMsg
+*
+*   SYNOPSIS
+*	BOOL ReplyClientMsg(struct EditWindow *Edit,char *Reply)
+*
+*   FUNCTION
+*    NONE, Old Jr. stuff
+*
+*********************************************************************
+*/
+BOOL ReplyClientMsg(struct EditWindow *Edit,char *Reply)
+{
+	BOOL Success = FALSE;
+	struct RexxMsg *RexxMsg;
+
+	if ((Edit->Location == EW_REQUEST) && Reply && (Edit->SaveMsg)) {
+
+		Edit->Close(Edit);
+
+		RexxMsg = Edit->SaveMsg;
+		Edit->SaveMsg = NULL;
+		RexxMsg->rm_Result1 = RC_OK;
+		RexxMsg->rm_Result2 = 0;
+
+		if (RexxMsg->rm_Action & RXFF_RESULT) {
+			RexxMsg->rm_Result2 = (LONG)CreateArgstring(Reply,strlen(Reply));
+		}
+
+		Edit->Free(Edit);
+
+		ReplyMsg((struct Message *)RexxMsg);
+		Success = TRUE;
+	}
+	return(Success);
+}
+
+/****** ARexxPort/HandleAuxDone *************************************
+*
+*   NAME
+*	HandleAuxDone
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleAuxDone(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+struct EditWindow *HandleAuxDone(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct Grazer *Grazer;
+	char *Reply = NULL;
+
+	if (Edit->Node.Type == EW_GRAZER) {
+		Grazer = (struct Grazer *)Edit->Special;
+		Reply = GetCString(Grazer->Path);
+	}
+	ReplyClientMsg(Edit,Reply);
+	return(NULL);	// tell caller Edit was Freed
+}
+
+/****** ARexxPort/RxSetWindows ************************************
+*
+*   NAME
+*	RxSetWindows
+*
+*   SYNOPSIS
+*	BOOL RxSetWindows(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Change views between project/files, project/Switcher, etc.
+*		ARGS: View# (0-4)
+*
+*********************************************************************
+*/
+static BOOL RxSetWindows(struct RexxMsg *RexxMsg)
+{
+	UWORD TV,retval;
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg)==0)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	retval = ViewMode;		// We'll return this (old mode)
+	TV=PrevViewMode;
+	PrevViewMode=ViewMode;
+	ViewMode=atoi(ARG1(RexxMsg));
+
+	DUMPUDECW("Set_View( ", ViewMode, " ) \\");
+
+	if(ViewMode>=7)		// Disallow bogus values
+		ViewMode=0;
+	if(ViewMode==PrevViewMode) // No change!
+		PrevViewMode=TV;
+	else switch(ViewMode)
+	{
+		case VIEW_PROJ_FILES:
+		case VIEW_FILES_FILES:
+		case VIEW_PROJ_SWIT:
+		case VIEW_PROJ:
+			SetView(ViewMode);
+			if(EditTop) RedrawPopupText(EditTop);
+			UpdateDisplay(EditTop);					// Redraw top window
+			break;
+		case VIEW_PROJ_PROJ: // Would ask for Project/Project editing source... too interactive for ARexx?
+			UpdateDisplay(EditTop);					// Redraw top window
+			break;
+		case 5:		// "----"
+		case 6:		// Empty/Switcher.. special rexx-only mode ??
+			PrevViewMode=VIEW_PROJ_PROJ;
+			ViewMode=VIEW_PROJ_FILES;
+			ESparams1.Data1=GUI_T_NONE|GUI_B_SWIT;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+		break;
+	}
+
+	stcl_d(result,(long)retval);				// Return previous view
+	FillReply(RexxMsg,RC_OK,result,0);
+
+	return(TRUE);
+}
+
+/****** ARexxPort/RxGetScreen ************************************
+*
+*   NAME
+*	RxGetScreen
+*
+*   SYNOPSIS
+*	BOOL RxGetScreen(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Return editor/switcher screen address
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxGetScreen(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	stcl_d(result,(LONG)EditScreen);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxReqTell ************************************
+*
+*   NAME
+*	RxReqTell
+*
+*   SYNOPSIS
+*	BOOL RxReqTell(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Put up requester with title and up to 3 lines, return 1 or 0
+*		ARGS: Title, [line1,[line2,[line3]]]
+*
+*********************************************************************
+*/
+static BOOL RxReqTell(struct RexxMsg *RexxMsg)
+{
+	int n=ARG_NUM(RexxMsg);
+	DUMPREXXMSG(RexxMsg);
+	switch(n)
+	{
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 1:
+			if( DoTellReqPanel(ARG1(RexxMsg),NULL,NULL,NULL) )
+				FillReply(RexxMsg,RC_OK,"1",0);
+			else
+				FillReply(RexxMsg,RC_OK,"0",0);
+			break;
+		case 2:
+			if( DoTellReqPanel(ARG1(RexxMsg),ARG2(RexxMsg),NULL,NULL) )
+				FillReply(RexxMsg,RC_OK,"1",0);
+			else
+				FillReply(RexxMsg,RC_OK,"0",0);
+			break;
+		case 3:
+			if( DoTellReqPanel(ARG1(RexxMsg),ARG2(RexxMsg),ARG3(RexxMsg),NULL) )
+				FillReply(RexxMsg,RC_OK,"1",0);
+			else
+				FillReply(RexxMsg,RC_OK,"0",0);
+			break;
+		case 4:
+		default:
+			if( DoTellReqPanel(ARG1(RexxMsg),ARG2(RexxMsg),ARG3(RexxMsg),ARG4(RexxMsg)) )
+				FillReply(RexxMsg,RC_OK,"1",0);
+			else
+				FillReply(RexxMsg,RC_OK,"0",0);
+			break;
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxReqButtons ************************************
+*
+*   NAME
+*	RxReqButtons
+*
+*   SYNOPSIS
+*	BOOL RxReqButtons(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Put up requester with title and up to 4 button lines
+*  "defaults" is a string of 0/1's specifying default states
+*  Returns string of 0/1's for each final button state, or
+*  "CANCEL" if user cancelled requester
+*		ARGS: Title, defaults, label1,[label2,[label3,[label4]]]
+*
+*********************************************************************
+*/
+static BOOL RxReqButtons(struct RexxMsg *RexxMsg)
+{
+	int i,n,count;
+	char	*title,*labels[4],*p,temp[5];
+	UBYTE	states[4];
+
+	DUMPREXXMSG(RexxMsg);
+
+	n=ARG_NUM(RexxMsg);
+
+	if (n<3)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	count = n-2;
+
+	title = ARG1(RexxMsg);
+	p = ARG2(RexxMsg);
+
+	for (i=0; i<4; i++)
+		labels[i] = NULL;
+
+	if (count>=1)
+		labels[0] = ARG3(RexxMsg);
+	if (count>=2)
+		labels[1] = ARG4(RexxMsg);
+	if (count>=3)
+		labels[2] = ARG5(RexxMsg);
+	if (count>=4)
+		labels[3] = ARG6(RexxMsg);
+
+	for (i=0; i<count; i++)
+	{
+		if (labels[i] == NULL)			// Labels must exist, even if an empty string!
+			labels[i] = "";
+		states[i] = ((*p++)=='1')?1:0;
+	}
+
+	if (!DoButtonsReqPanel(title,n-2,labels,states))
+	{
+		FillReply(RexxMsg,RC_OK,"CANCEL",0);
+		return(FALSE);
+	}
+
+	p = temp;
+	for (i=0; i<count; i++)
+		*p++ = states[i]?'1':'0';
+	*p = 0;
+
+	FillReply(RexxMsg,RC_OK,temp,0);
+
+	return(TRUE);
+}
+
+
+
+/****** ARexxPort/RxReqOpen ************************************
+*
+*   NAME
+*	RxReqOpen
+*
+*   SYNOPSIS
+*	BOOL RxReqOpen(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Put up asynchronous requester with title and up to 3 lines
+*		ARGS: Title, [line1,[line2,[line3]]]
+*
+*********************************************************************
+*/
+static BOOL RxReqOpen(struct RexxMsg *RexxMsg)
+{
+	int n=ARG_NUM(RexxMsg);
+	char *mes[5]={"","","","",""};
+	DUMPREXXMSG(RexxMsg);
+	switch(n)
+	{
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 4:
+			mes[3]=ARG4(RexxMsg);
+		case 3:
+			mes[2]=ARG3(RexxMsg);
+		case 2:
+			mes[1]=ARG2(RexxMsg);
+		case 1:
+		default:
+			mes[0]=ARG1(RexxMsg);
+	}
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	if(EditTop)
+		OpenNoticeWindow(EditTop->Window,mes,n,FALSE);
+	else
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxReqClose ************************************
+*
+*   NAME
+*	RxReqClose
+*
+*   SYNOPSIS
+*	BOOL RxReqClose(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Close asynchronoius requester
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxReqClose(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	CloseNoticeWindow();
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxReqError ************************************
+*
+*   NAME
+*	RxReqError
+*
+*   SYNOPSIS
+*	BOOL RxReqError(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Error Message at top of screen
+*		ARGS: String
+*
+*********************************************************************
+*/
+static BOOL RxReqError(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(ARG_NUM(RexxMsg))
+		DisplayMessage(ARG1(RexxMsg));
+	else
+		DisplayMessage(NULL);
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxReqTime ************************************
+*
+*   NAME
+*	RxReqTime
+*
+*   SYNOPSIS
+*	BOOL RxReqTime(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Time code string requester -- alters/returns time string like 'HH:MM:SS:FF'
+*		ARGS: Title, [time]
+*
+*********************************************************************
+*/
+static BOOL RxReqTime(struct RexxMsg *RexxMsg)
+{
+	char tc[16];
+	int n=ARG_NUM(RexxMsg);
+	BOOL succ=FALSE;
+
+	DUMPREXXMSG(RexxMsg);
+
+	switch(n)
+	{
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 1:
+			strcpy(tc,"00:00:00:00");
+			succ = DoTimeReqPanel(ARG1(RexxMsg),tc);
+			break;
+		case 2:
+		default:
+			strcpy(tc,ARG2(RexxMsg));
+			succ = DoTimeReqPanel(ARG1(RexxMsg),tc);
+			break;
+	}
+
+	if (succ)
+		FillReply(RexxMsg,RC_OK,tc,0);
+	else
+		FillReply(RexxMsg,RC_OK,"CANCEL",0);
+
+	return(succ);
+}
+
+/****** ARexxPort/RxReqNum ************************************
+*
+*   NAME
+*	RxReqNum
+*
+*   SYNOPSIS
+*	BOOL RxReqNum(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+* Put up number requester with optional min,max limits
+*		ARGS: Title, [num,[min,[max]]]
+*
+*********************************************************************
+*/
+static BOOL RxReqNum(struct RexxMsg *RexxMsg)
+{
+	int n=ARG_NUM(RexxMsg),max=0xFFFFFF,min=0,v=0;
+	char	num[20];
+	BOOL	succ=FALSE;
+
+	DUMPREXXMSG(RexxMsg);
+	switch(n)
+	{
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 4:
+		default:
+			max=atol(ARG4(RexxMsg));		// non-default max
+		case 3:
+			min=atol(ARG3(RexxMsg));		// non-default min
+		case 2:
+			v=atol(ARG2(RexxMsg));			// non-default starting value
+		case 1:
+			succ = DoNumReqPanel(ARG1(RexxMsg),&v,min,max);
+			break;
+	}
+
+	if (succ)
+	{
+		stcl_d(num,v);
+		FillReply(RexxMsg,RC_OK,num,0);			// Return user's number
+	}
+	else
+		FillReply(RexxMsg,RC_OK,"CANCEL",0);
+
+	return(succ);
+}
+
+/****** ARexxPort/RxReqStr ************************************
+*
+*   NAME
+*	RxReqStr
+*
+*   SYNOPSIS
+*	BOOL RxReqStr(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	String requester
+*		ARGS: Title, [String]
+*
+*********************************************************************
+*/
+char Req_Str[82];
+static BOOL RxReqStr(struct RexxMsg *RexxMsg)
+{
+	int n=ARG_NUM(RexxMsg);
+	BOOL succ=FALSE;
+
+	DUMPREXXMSG(RexxMsg);
+	switch(n)
+	{
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 1:
+			*Req_Str=0;
+			succ = DoStrReqPanel(ARG1(RexxMsg),Req_Str,82);
+			break;
+		case 2:
+		default:
+			strncpy(Req_Str,ARG2(RexxMsg),81);
+			succ = DoStrReqPanel(ARG1(RexxMsg),Req_Str,82);
+			break;
+	}
+
+	if (succ)
+		FillReply(RexxMsg,RC_OK,Req_Str,0);
+	else
+		FillReply(RexxMsg,RC_OK,"CANCEL",0);
+
+	return(succ);
+}
+
+/****** ARexxPort/RxReqFlyerJog ************************************
+*
+*   NAME
+*	RxReqFlyerJog
+*
+*   SYNOPSIS
+*	BOOL RxReqFlyerJog(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Allows user to jog/shuttle a Flyer clip to pick 1 or 2 points
+*  Returns a string containing time of the point in frames.  If two points
+*  are requested, returns both delimited by a space.  Returns "CANCEL" if user cancels
+*		ARGS: Title, Name, [#points]
+*
+*********************************************************************
+*/
+static BOOL RxReqFlyerJog(struct RexxMsg *RexxMsg)
+{
+	char inbuff[21],outbuff[10],*out;
+	int points,n=ARG_NUM(RexxMsg);
+	BOOL	succ=FALSE;
+
+	DUMPREXXMSG(RexxMsg);
+
+	switch(n)
+	{
+		case 0:
+		case 1:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+		case 2:
+			points = 1;
+			break;
+		case 3:
+		default:
+			points=atol(ARG3(RexxMsg));
+			break;
+	}
+
+	if (points==1)
+		out = NULL;
+	else
+		out = outbuff;
+
+	succ = DoFlyJogReqPanel(ARG1(RexxMsg),ARG2(RexxMsg),&inbuff[0],out);
+
+	if (succ)
+	{
+		if (points==2)
+		{
+			strcat(inbuff," ");
+			strcat(inbuff,outbuff);
+		}
+		FillReply(RexxMsg,RC_OK,inbuff,0);
+	}
+	else
+		FillReply(RexxMsg,RC_OK,"CANCEL",0);
+
+	return(succ);
+}
+
+/****** ARexxPort/RxLoadProj ************************************
+*
+*   NAME
+*	RxLoadProj
+*
+*   SYNOPSIS
+*	BOOL RxLoadProj(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Load Project
+*		ARGS:	Project name (full path)
+*
+*********************************************************************
+*/
+static BOOL RxLoadProj(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	else
+	{
+		ESparams2.Data1=0;
+		ESparams2.Data2=(LONG)ARG1(RexxMsg);
+		if( !SendSwitcherReply(ES_LoadProject,&ESparams2) )
+		{
+			if (EditTop->Node.Type == EW_PROJECT)
+				InitSetupProject(EditTop);
+			FillReply(RexxMsg,RC_OK,NULL,0);
+		}
+		else
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	}
+	return(TRUE);
+}
+
+/****** ARexxPort/RxSaveProj ************************************
+*
+*   NAME
+*	RxSaveProj
+*
+*   SYNOPSIS
+*	BOOL RxSaveProj(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Save Project
+*		ARGS:	Project name (full path)
+*
+*********************************************************************
+*/
+static BOOL RxSaveProj(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	else
+	{
+		ESparams2.Data1=0;
+		ESparams2.Data2=(LONG)ARG1(RexxMsg);
+
+		if( !SendSwitcherReply(ES_SaveProject,&ESparams2) )
+			FillReply(RexxMsg,RC_OK,NULL,0);
+		else
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxPlayProj ************************************
+*
+*   NAME
+*	RxPlayProj
+*
+*   SYNOPSIS
+*	BOOL RxPlayProj(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Play Project
+*		ARGS:	none
+*
+*********************************************************************
+*/
+static BOOL RxPlayProj(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(!EditTop)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	else
+		HandlePlay(EditTop,NULL);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxUpdateProj ************************************
+*
+*   NAME
+*	RxUpdateProj
+*
+*   SYNOPSIS
+*	BOOL RxUpdateProj(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Update Project.  Use after modifying crouton tags so that the
+*  total running time display is correct, and that any needed
+*  imagery refresh is performed.
+*		ARGS:	none
+*
+*********************************************************************
+*/
+static BOOL RxUpdateProj(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(!EditTop)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	else
+	{
+		CalcRunningTime();		// Re-calculate sequence total time
+		FillReply(RexxMsg,RC_OK,NULL,0);
+	}
+	return(TRUE);
+}
+
+/****** ARexxPort/RxLoadCrouton ************************************
+*
+*   NAME
+*	RxLoadCrouton
+*
+*   SYNOPSIS
+*	BOOL RxLoadCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Load Crouton -- Adds named crouton to end of project
+*		ARGS:	CroutonName, <INSERT>
+*
+*********************************************************************
+*/
+static BOOL RxLoadCrouton(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget	*FG;
+
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	else
+	{
+//Whoever commented this first line out should be shot with flaming nerf balls... (Arn)
+//Crashes if editor's in files/files view!
+		if( EditTop && (EditTop->Node.Type == EW_PROJECT) && (FG=AllocProj(ARG1(RexxMsg))) )
+//		if( EditTop && (FG=AllocProj(ARG1(RexxMsg))) )
+		{
+			if ((ARG_NUM(RexxMsg)==2) && (!stricmp("INSERT",ARG2(RexxMsg))))
+				InsertProjNode(EditTop,CurFG,FG);
+			else
+				AddProjTail((struct Project *)EditTop->Special,FG);
+			NewLengthUpdate(EditTop);
+			ESparams1.Data1=(LONG)FG;
+			if(SendSwitcherReply(ES_Select,&ESparams1))
+			{
+				CurFG=SKellFG=FG;
+				FillReply(RexxMsg,RC_OK,"1",0);
+			}
+			else
+			{
+				CurFG=SKellFG=NULL;
+				SendSwitcher(ES_SelectDefault,NULL);
+				FillReply(RexxMsg,RC_OK,"0",0);
+			}
+
+			UpdateDisplay(EditTop);					// Redraw project
+		}
+		else
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxDeleteCrouton ***********************************
+*
+*   NAME
+*	RxDeleteCrouton
+*
+*   SYNOPSIS
+*	BOOL RxDeleteCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Delete Crouton -- Deletes currently selected crouton from project
+*		ARGS:	none
+*
+*********************************************************************
+*/
+static BOOL RxDeleteCrouton(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	// Can only remove from projects (prohibited from deleting from drive)!
+	if( EditTop && (EditTop->Node.Type == EW_PROJECT) && CurFG )
+	{
+		RemoveProjNode(EditTop,CurFG);		// Remove it from project
+		FreeProjectNode(CurFG);					// Free it
+		NewLengthUpdate(EditTop);				// Recalc project lenght & display
+		SetCurrentTime(-1);						// Will be nothing hilited now, so erase this
+
+		UpdateDisplay(EditTop);					// Redraw project
+
+		CurFG=SKellFG=NULL;
+		SendSwitcher(ES_SelectDefault,NULL);
+		FillReply(RexxMsg,RC_OK,"0",0);
+	}
+	else
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxRunCrouton ************************************
+*
+*   NAME
+*	RxRunCrouton
+*
+*   SYNOPSIS
+*	BOOL RxRunCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Run Crouton without adding to project
+*		ARGS:	CroutonName
+*
+*********************************************************************
+*/
+static BOOL RxRunCrouton(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget	*FG;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	else
+	{
+		ESparams2.Data1=(LONG)ARG1(RexxMsg);
+		ESparams2.Data2=(LONG)1;
+		if( FG=(struct FastGadget *)SendSwitcherReply(ES_LoadCrouton,&ESparams2))
+		{
+			ESparams1.Data1=(LONG)FG;
+			SendSwitcherReply(ES_Select,&ESparams1);
+			SendSwitcherReply(ES_Auto,&ESparams1);
+			SendSwitcherReply(ES_FreeCrouton,&ESparams1);
+			FillReply(RexxMsg,RC_OK,NULL,0);
+		}
+		else
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	}
+	return(TRUE);
+}
+
+/****** ARexxPort/RxPickCrouton ************************************
+*
+*   NAME
+*	RxPickCrouton
+*
+*   SYNOPSIS
+*	BOOL RxPickCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Pick Crouton -- Selects Crouton
+*		ARGS:	0 args ==> deselect allRow,Column or no args to
+*		ARGS:	1 args ==> Number OR "FIRST" or "LAST"
+*		ARGS:	2 args ==> Row,Column
+*
+*********************************************************************
+*/
+static BOOL RxPickCrouton(struct RexxMsg *RexxMsg)
+{
+	ULONG	row=1,col,num;
+	DUMPREXXMSG(RexxMsg);
+//	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+	if( !EditTop )
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	switch( ARG_NUM(RexxMsg) )
+	{
+		case 0: // deselect all
+			DeselectOtherEdit(EditBottom);
+			break;
+		case 1: // Crouton number supplied
+			if(!stricmp("FIRST",ARG1(RexxMsg)))
+				row=ew_NavigateNodeNum(EditTop,0);
+			else if(!stricmp("LAST",ARG1(RexxMsg)))
+				row=ew_NavigateNodeNum(EditTop,LONG_MAX);
+			else if ( (num=atol(ARG1(RexxMsg))) >= 0 )
+				row=ew_NavigateNodeNum(EditTop,num);
+			break;
+		case 2: // Crouton coord.s supplied
+		default:
+			row=atol(ARG1(RexxMsg)) - 1;
+			col=atol(ARG2(RexxMsg)) - 1;
+			num=(row<<3)+col;
+			row=ew_NavigateNodeNum(EditTop,num);
+			break;
+	}
+
+	if(row==0)	/* No error */
+	{
+		strcpy(result,"OK");
+		FillReply(RexxMsg,RC_OK,result,0);
+	}
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxCroutonName ************************************
+*
+*   NAME
+*	RxCroutonName
+*
+*   SYNOPSIS
+*	BOOL RxCroutonName(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	returns Crouton name
+*
+*		ARGS:	[Row,Column]
+*
+*********************************************************************
+*/
+static BOOL RxCroutonName(struct RexxMsg *RexxMsg)
+{
+	ULONG	row=1,col,num;
+	char *name="";
+
+	DUMPREXXMSG(RexxMsg);
+//	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+	if( !EditTop )
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	if( ARG_NUM(RexxMsg)==2 )
+	{
+		row=atol(ARG1(RexxMsg)) - 1;
+		col=atol(ARG2(RexxMsg)) - 1;
+		num=(row<<3)+col;
+		ew_NavigateNodeNum(EditTop,num);
+	}
+	if(CurFG) name=((struct ExtFastGadget *)CurFG)->FileName;
+	FillReply(RexxMsg,RC_OK,name,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxCroutonSelected *********************************
+*
+*   NAME
+*	RxCroutonSelected
+*
+*   SYNOPSIS
+*	BOOL RxCroutonSelected(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	returns Crouton selected status
+*
+*		ARGS:	[Row,Column]
+*
+*********************************************************************
+*/
+static BOOL RxCroutonSelected(struct RexxMsg *RexxMsg)
+{
+	ULONG	row=1,col,num;
+	struct ExtFastGadget	*fg = NULL;
+	char	*selected = "0";
+
+	DUMPREXXMSG(RexxMsg);
+//	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+	if( !EditTop )
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	if( ARG_NUM(RexxMsg)==2 )
+	{
+		row=atol(ARG1(RexxMsg)) - 1;
+		col=atol(ARG2(RexxMsg)) - 1;
+		num=(row<<3)+col;
+
+		if ( fg = rx_GetProjNode(EditTop,num) )
+		{
+			if ( GetEditNodeStatus(EditTop,(struct EditNode *)fg) != EN_NORMAL )
+			{
+				selected = "1";
+			}
+		}
+	}
+
+	FillReply(RexxMsg,RC_OK,selected,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxCroutonsInProject *********************************
+*
+*   NAME
+*	RxCroutonsInProject
+*
+*   SYNOPSIS
+*	BOOL RxCroutonsInProject(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	returns number of Croutons in the project
+*
+*		ARGS:	[Row,Column]
+*
+*********************************************************************
+*/
+static BOOL RxCroutonsInProject(struct RexxMsg *RexxMsg)
+{
+	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(TRUE);
+	}
+	else
+	{
+		stcl_d(result,(long)GetEditListLen(EditTop));
+		FillReply(RexxMsg,RC_OK,result,0);
+		return(TRUE);
+	}
+
+}
+
+/****** ARexxPort/RxSwitcher ************************************
+*
+*   NAME
+*	RxSwitcher
+*
+*   SYNOPSIS
+*	BOOL RxSwitcher(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Wrapper for old switcher arexx messages
+*		ARGS: switcher command + whatever args it needs
+*
+*********************************************************************
+*/
+static BOOL RxSwitcher(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if( SwitPort )
+	{
+		PutMsg( SwitPort, (struct Message *)RexxMsg );
+		RexxMsg=NULL; // hopefully this will make handler skip reply...
+	}
+	else FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxGetType ************************************
+*
+*   NAME
+*	RxGetType
+*
+*   SYNOPSIS
+*	BOOL RxGetType(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Return Crouton Type
+*		ARGS:	[coords]
+*
+*********************************************************************
+*/
+static BOOL RxGetType(struct RexxMsg *RexxMsg)
+{
+	ULONG	row=1,col,num;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if( ARG_NUM(RexxMsg)==2 )
+	{
+		row=atol(ARG1(RexxMsg)) - 1;
+		col=atol(ARG2(RexxMsg)) - 1;
+		num=(row<<3)+col;
+		ew_NavigateNodeNum(EditTop,num);
+	}
+
+	return(RxGetType_core(RexxMsg,CurFG));
+}
+
+/****** ARexxPort/RxNewGetType ************************************
+*
+*   NAME
+*	RxNewGetType
+*
+*   SYNOPSIS
+*	BOOL RxGetType(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Return Crouton Type from specified crouton
+*		ARGS:	crouton #
+*
+*********************************************************************
+*/
+static BOOL RxNewGetType(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget *FG;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg) < 1)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	FG = (struct FastGadget *) GetEditNode(EditTop, atol(ARG1(RexxMsg))+1);
+
+	return(RxGetType_core(RexxMsg,FG));
+}
+
+/****** ARexxPort/RxGetType_core ***********************************
+*
+*   NAME
+*	RxGetType_core
+*
+*   SYNOPSIS
+*	BOOL RxGetType_core(struct RexxMsg *RexxMsg, struct FastGadget *FG)
+*
+*   FUNCTION
+*	Internal function to do work of returning Crouton Type from the
+*	specified FastGadget.
+*
+*********************************************************************
+*/
+static BOOL RxGetType_core(struct RexxMsg *RexxMsg, struct FastGadget *FG)
+{
+	ULONG	type=0;
+	char name[5];
+
+	if(!FG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+
+	type=((struct ExtFastGadget *)FG)->ObjectType;
+	*((ULONG *)name) = type;
+	name[4] = '\0';
+
+	FillReply(RexxMsg,RC_OK,name,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxGetTag ************************************
+*
+*   NAME
+*	RxGetTag
+*
+*   SYNOPSIS
+*	BOOL RxGetTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Return Tag value, may be 0 if tag doesn't exist OR tag has value of 0
+*		ARGS:	Tag name
+*
+*   NOTE
+*	Use RxNewGetTag when possible, as it is safer
+*
+*********************************************************************
+*/
+static BOOL RxGetTag(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	return(RxGetTag_core(RexxMsg,CurFG,ARG1(RexxMsg)));
+}
+/****** ARexxPort/RxNewGetTag *********************************
+*
+*   NAME
+*	RxNewGetTag
+*
+*   SYNOPSIS
+*	BOOL RxNewGetTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Return Tag value from specified crouton, 0 if tag doesn't exist OR tag has value of 0
+*		ARGS:	crouton #, Tag name
+*
+*********************************************************************
+*/
+static BOOL RxNewGetTag(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget *FG;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg) < 2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	FG = (struct FastGadget *) GetEditNode(EditTop, atol(ARG1(RexxMsg))+1);
+
+	return(RxGetTag_core(RexxMsg,FG,ARG2(RexxMsg)));
+}
+
+/****** ARexxPort/RxGetTag_core *************************************
+*
+*   NAME
+*	RxGetTag_core
+*
+*   SYNOPSIS
+*	BOOL RxGetTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+*
+*   FUNCTION
+*  Internal function to do work of getting specified tag value from
+*  specified FastGadget.  Returns 0 if tag doesn't exist OR tag value = 0
+*
+*********************************************************************
+*/
+static BOOL RxGetTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+{
+	ULONG i=1;
+	LONG TagValue=0;
+
+	if(!FG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,tagname) )
+		i++;
+
+	if(*(TagNames[i].th_Name)==0) // Found array terminator not tag
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+
+	if(TagNames[i].th_Type==0)
+	{
+		TagValue=GetValue(FG,0x80000000|i);
+		stcl_d(result,TagValue);
+	}
+	else
+	{
+		TagValue=GetTable(FG,i,result,RESULT_MAX);
+	}
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxSetTag ************************************
+*
+*   NAME
+*	RxSetTag
+*
+*   SYNOPSIS
+*	BOOL RxSetTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Set crouton tag value
+*		ARGS: Tag name, Value
+*
+*   NOTE
+*	Use RxNewSetTag when possible, as it is safer
+*
+*********************************************************************
+*/
+static BOOL RxSetTag(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg)<2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	return(RxSetTag_core(RexxMsg, CurFG, ARG1(RexxMsg), ARG2(RexxMsg)));
+}
+
+/****** ARexxPort/RxNewSetTag ************************************
+*
+*   NAME
+*	RxNewSetTag
+*
+*   SYNOPSIS
+*	BOOL RxNewSetTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Set crouton tag value
+*		ARGS: Crouton #, Tag name, Value
+*
+*********************************************************************
+*/
+static BOOL RxNewSetTag(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget *FG;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg)<3)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	FG = (struct FastGadget *) GetEditNode(EditTop, atol(ARG1(RexxMsg))+1);
+
+	return(RxSetTag_core(RexxMsg, FG, ARG2(RexxMsg), ARG3(RexxMsg)));
+}
+
+/****** ARexxPort/RxSetTag_core ************************************
+*
+*   NAME
+*	RxSetTag_core
+*
+*   SYNOPSIS
+*	BOOL RxSetTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG,
+*     char *tagname, char *tagvalue)
+*
+*   FUNCTION
+*	Internal function to do work of putting specified tag value to
+*	specified FastGadget.
+*
+*********************************************************************
+*/
+static BOOL RxSetTag_core(struct RexxMsg *RexxMsg,
+	struct FastGadget *FG, char *tagname, char *tagvalue)
+{
+	ULONG i=1;
+
+	if(!FG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+
+	if (!RxGetTag_core(RexxMsg,FG,tagname))	// First, get current value of tag --> "result"
+		return(FALSE);									// Stop if failed
+
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,tagname) )
+		i++;
+
+	if(*(TagNames[i].th_Name)==0) // Found array terminator not tag
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+
+	if(TagNames[i].th_Type==0)
+	{
+		PutValue(FG,0x80000000|i,atol(tagvalue) );
+	}
+	else
+	{
+		PutTable(FG, i, tagvalue, strlen(tagvalue)+1 );
+	}
+	FillReply(RexxMsg,RC_OK,result,0);		// Return previous value as found by RxGetTag()
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxCheckTag ************************************
+*
+*   NAME
+*	RxCheckTag
+*
+*   SYNOPSIS
+*	BOOL RxCheckTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Check existance of Tag in crouton, return size
+*		ARGS:	Tag name
+*
+*   NOTE
+*	Use RxNewCheckTag when possible, as it is safer
+*
+*********************************************************************
+*/
+static BOOL RxCheckTag(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	return(RxCheckTag_core(RexxMsg,CurFG,ARG1(RexxMsg)));
+}
+
+/****** ARexxPort/RxNewCheckTag ************************************
+*
+*   NAME
+*	RxNewCheckTag
+*
+*   SYNOPSIS
+*	BOOL RxNewCheckTag(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Check existance of Tag in specified crouton, return size
+*		ARGS:	crouton #, Tag name
+*
+*********************************************************************
+*/
+static BOOL RxNewCheckTag(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget *FG;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg) < 2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	FG = (struct FastGadget *) GetEditNode(EditTop, atol(ARG1(RexxMsg))+1);
+
+	return(RxCheckTag_core(RexxMsg,FG,ARG2(RexxMsg)));
+}
+
+/****** ARexxPort/RxCheckTag_core **********************************
+*
+*   NAME
+*	RxCheckTag_core
+*
+*   SYNOPSIS
+*	BOOL RxCheckTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+*
+*   FUNCTION
+*	Internal function to do work of checking existance of Tag in crouton, returns size
+*
+*********************************************************************
+*/
+static BOOL RxCheckTag_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+{
+	ULONG i=1;
+
+	if(!FG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		DUMPMSG("FG NOT FOUND");
+		return(FALSE);
+	}
+
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,tagname) )
+		i++;
+		if(*(TagNames[i].th_Name)==0) // Found array terminator not tag
+		{
+			DUMPMSG("TAG NOT FOUND");
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+			return(FALSE);
+		}
+
+//	if((TagNames[i].th_Type)==0)
+//		stcl_d(result,CheckTag(FG,0x80000000|i));		//CheckTag causing tags goaway
+//	else
+//		stcl_d(result,CheckTag(FG,i));
+
+	FillReply(RexxMsg,RC_OK,"1",0);
+	//FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxTagSavable *************************************
+*
+*   NAME
+*	RxTagSavable
+*
+*   SYNOPSIS
+*	BOOL RxTagSavable(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Mark tag as to be saved in next project save
+*		ARGS:	Tag name
+*
+*   NOTE
+*	Use RxNewTagSavable when possible, as it is safer
+*
+*********************************************************************
+*/
+static BOOL RxTagSavable(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	return(RxTagSavable_core(RexxMsg,CurFG,ARG1(RexxMsg)));
+}
+
+/****** ARexxPort/RxNewTagSavable *************************************
+*
+*   NAME
+*	RxNewTagSavable
+*
+*   SYNOPSIS
+*	BOOL RxNewTagSavable(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Mark tag as to be saved in next project save
+*		ARGS:	crouton #, Tag name
+*
+*********************************************************************
+*/
+static BOOL RxNewTagSavable(struct RexxMsg *RexxMsg)
+{
+	struct FastGadget *FG;
+
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg) < 2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	FG = (struct FastGadget *) GetEditNode(EditTop, atol(ARG1(RexxMsg))+1);
+
+	return(RxTagSavable_core(RexxMsg,FG,ARG2(RexxMsg)));
+}
+
+
+/****** ARexxPort/RxTagSavable_core **********************************
+*
+*   NAME
+*	RxTagSavable_core
+*
+*   SYNOPSIS
+*	BOOL RxTagSavable_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+*
+*   FUNCTION
+*	Internal function to mark tag as to be saved in next project save
+*
+*********************************************************************
+*/
+static BOOL RxTagSavable_core(struct RexxMsg *RexxMsg, struct FastGadget *FG, char *tagname)
+{
+	ULONG i=1;
+
+	if(!FG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,tagname) )
+		i++;
+
+	if(*(TagNames[i].th_Name)==0) // Found array terminator not tag
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+
+	if(TagNames[i].th_Type==0)
+		MakeTagSavable(FG,0x80000000|i);
+	else
+		MakeTagSavable(FG,i);
+
+	FillReply(RexxMsg,RC_OK,"1",0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxCroutonTime *************************************
+*
+*   NAME
+*	RxCroutonTime
+*
+*   SYNOPSIS
+*	BOOL RxCroutonTime(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Calculates currently selected croutons current start time in project
+*		ARGS:	none
+*
+*********************************************************************
+*/
+static BOOL RxCroutonTime(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+
+	if(!CurFG)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+
+	stcl_d(result,(long)GetStartTimeInSequence(CurFG));
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxStopCrouton ************************************
+*
+*   NAME
+*	RxStopCrouton
+*
+*   SYNOPSIS
+*	BOOL RxStopCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Aborts currently playing crouton (clip)
+*
+*		ARGS:  none
+*
+*********************************************************************
+*/
+static BOOL RxStopCrouton(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	DHD_Abort(0);
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxCroutonSpot( ************************************
+*
+*   NAME
+*	RxCroutonSpot
+*
+*   SYNOPSIS
+*	BOOL RxCroutonSpot(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			return crouton position in grid
+*
+*		ARGS:
+*
+*********************************************************************
+*/
+static BOOL RxCroutonSpot(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	*result=0;
+
+	if ( !EditTop )
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	else
+	{
+		LONG		nodenum;
+
+		nodenum = GetProjNodeOrder(EditTop,CurFG);
+
+		stcl_d(result,nodenum);
+	}
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxRecordClip ************************************
+*
+*   NAME
+*	RxRecordClip
+*
+*   SYNOPSIS
+*	BOOL RxRecordClip(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Record a named flyer clip, won't overwrite existing clip w/ same name
+*		ARGS: ClipName [, # of Fields, Source, Compression Mode]
+*			if fields=0, recording continues 'til drive is full
+*			omitting source or mode will use last selected mode
+*
+*********************************************************************
+*/
+static BOOL RxRecordClip(struct RexxMsg *RexxMsg)
+{
+	int Fields=0, Src=CurFlySource, Mode=CurCompMode, res;
+	char *clip;
+	DUMPREXXMSG(RexxMsg);
+	switch(ARG_NUM(RexxMsg))
+	{
+		case 4:
+			Mode=atoi(ARG4(RexxMsg));
+		case 3:
+			Src=atoi(ARG3(RexxMsg));
+		case 2:
+			Fields=atol(ARG2(RexxMsg));
+		case 1:
+			clip = (char *)ARG1(RexxMsg);
+			break;
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+	}
+	res = RecordClip(clip,Fields,Src,Mode);
+	stcl_d(result,res);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxRecordStop ************************************
+*
+*   NAME
+*	RxRecordStop
+*
+*   SYNOPSIS
+*	BOOL RxRecordStop(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Stop Recording
+*		ARGS: none
+*
+*********************************************************************
+*/
+static BOOL RxRecordStop(struct RexxMsg *RexxMsg)
+{
+	Flyer_AbortRecord();						// Stop recording
+	DHD_InitPlay("",0);						// Put Flyer back into play mode
+	DisplayNormalSprite();
+
+
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxRecordPause ************************************
+*
+*   NAME
+*	RxRecordPause
+*
+*   SYNOPSIS
+*	BOOL RxRecordPause(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Pause Recording
+*		ARGS: Pause=1 for Pause, 0 for resume
+*
+*********************************************************************
+*/
+static BOOL RxRecordPause(struct RexxMsg *RexxMsg)
+{
+	if(ARG_NUM(RexxMsg))
+	{
+		Flyer_Pause((atol(ARG1(RexxMsg))==1) ? 1:0);
+		FillReply(RexxMsg,RC_OK,NULL,0);
+		return(TRUE);
+	}
+	FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+	return(FALSE);
+}
+
+
+/****** ARexxPort/RxRecordAppend ************************************
+*
+*   NAME
+*	RxRecordAppend
+*
+*   SYNOPSIS
+*	BOOL RxRecordAppend(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Record a named flyer clip, append fields existing clip
+*		ARGS: ClipName , # of Fields, [Source, Compression Mode]
+*			if fields=0, recording continues 'til drive is full
+*			omitting source or mode will use last selected mode
+*
+*********************************************************************
+*/
+static BOOL RxRecordAppend(struct RexxMsg *RexxMsg)
+{
+	int Fields=0, Src=CurFlySource, Mode=CurCompMode, res;
+	char *clip;
+	DUMPREXXMSG(RexxMsg);
+	switch(ARG_NUM(RexxMsg))
+	{
+		case 4:
+			Mode=atoi(ARG4(RexxMsg));
+		case 3:
+			Src=atoi(ARG3(RexxMsg));
+		case 2:
+			Fields=atol(ARG2(RexxMsg));
+			clip = (char *)ARG1(RexxMsg);
+			break;
+		case 1:
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+	}
+	res = RecordAppend(clip,Fields,Src,Mode);
+	stcl_d(result,res);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxStartClip ************************************
+*
+*   NAME
+*	RxStartClip
+*
+*   SYNOPSIS
+*	BOOL RxStartClip(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Start a named flyer clip, won't overwrite existing clip w/ same name
+*		ARGS: ClipName [,  Source, Compression Mode]
+*			omitting source or mode will use last selected mode
+*
+*********************************************************************
+*/
+static BOOL RxStartClip(struct RexxMsg *RexxMsg)
+{
+	int Src=CurFlySource, Mode=CurCompMode, res=0;
+	char *clip;
+	DUMPREXXMSG(RexxMsg);
+	switch(ARG_NUM(RexxMsg))
+	{
+		case 3:
+			Mode=atoi(ARG3(RexxMsg));
+		case 2:
+			Src=atoi(ARG2(RexxMsg));
+		case 1:
+			clip = (char *)ARG1(RexxMsg);
+			break;
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+	}
+	stcl_d(result,res);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+/****** ARexxPort/RxPrefs ************************************
+*
+*   NAME
+*	RxPrefs
+*
+*   SYNOPSIS
+*	BOOL RxPrefs(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Adjust Toaster settings for inputs 3 and 4
+*		ARGS: [value] (if value is omitted, current setting is returned)
+*			Setting is bit mask for inputs 3(bit 0) and 4(bit 1). Bit set means
+*			Flyer has that input, 0 means it is live toaster input.
+*********************************************************************
+*/
+static BOOL RxPrefs(struct RexxMsg *RexxMsg)
+{
+	LONG	I=0;
+
+	ESparams1.Data1=(LONG)&Config;
+	SendSwitcherReply(ES_GetPrefs,&ESparams1);
+	if(ARG_NUM(RexxMsg)<1)
+	{ // Read settings
+		if(Config.Flags1&(1<<spB_FlyerVID3))
+			I |= 1;
+		if(Config.Flags1&(1<<spB_FlyerVID4))
+			I |= 2;
+		stcl_d(result,I);
+		FillReply(RexxMsg,RC_OK,result,0);
+		return(TRUE);
+	}
+	else
+	{
+		I=atol(ARG1(RexxMsg));
+		if(I&1) Config.Flags1 |= (1<<spB_FlyerVID3);
+		else Config.Flags1 &= ~(1<<spB_FlyerVID3);
+		if(I&2) Config.Flags1 |= (1<<spB_FlyerVID4);
+		else Config.Flags1 &= ~(1<<spB_FlyerVID4);
+		ESparams1.Data1=(LONG)&Config;
+		SendSwitcherReply(ES_SetPrefs,&ESparams1);
+		SendSwitcherReply(ES_SavePrefs,&ESparams1);
+		FillReply(RexxMsg,RC_OK,NULL,0);
+		return(TRUE);
+	}
+}
+
+/****i* ARexxPort/RxTBC ************************************
+*
+*   NAME
+*	RxTBC
+*
+*   SYNOPSIS
+*	BOOL RxTBC(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Adjust Flyer TBC settings
+*		ARGS: Setting,[value] (if value is omitted, current setting is returned
+*			Setting May be 1 of: (cap.s are min. abbrev.)
+*				Bright(-64 - 63), Contrast(0-127), Saturation(0-127),
+*				HUe(-64-63), Fader(0-255), Phase(0-2047),
+*				HorizAdj(0-909), Key(0-3), Mode(0-2)(for keyer),
+*				Encoder(0-15), Decoder(0-8),
+*				Termination(0-31), Input(0-3), Out(0,1)
+*********************************************************************
+*/
+static BOOL RxTBC(struct RexxMsg *RexxMsg)
+{
+	struct PanelLine	tpl;
+	LONG type,val;
+	char *c,Read=0;
+	if(!FlyerBase)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	if(ARG_NUM(RexxMsg)<1)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	if(ARG_NUM(RexxMsg)<2)
+	{
+		Read=1; // Read TBC settings
+		ESparams2.Data1 =(LONG) HACK_TBCR;
+		ESparams2.Data2 =(LONG) &TBC_dat;
+		SendSwitcherReply(ES_Hack,&ESparams2);
+	}
+	c=ARG1(RexxMsg);
+	tpl.Param = &val;
+	tpl.PropGadg=(struct Gadget *)1;
+	switch(c[0])
+	{
+		case 'O': case 'o':
+			if(Read) break;
+			if(atol(c)==1)
+			{
+				ESparams2.Data1 =(LONG) HACK_TBCO;
+				ESparams2.Data2 =(LONG) &TBC_dat;
+			}
+			else {
+				ESparams2.Data1 =(LONG) HACK_TBCC;
+				ESparams2.Data2 =(LONG) &TBC_dat;
+			}
+			SendSwitcherReply(ES_Hack,&ESparams2);
+			break;
+		case 'B': case 'b':
+			if(Read)
+			{
+				val=TBC_dat.Bright;
+			}
+			else {
+				type = TBC_BRT;
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,-64,63);
+			}
+			break;
+		case 'C': case 'c':
+			type = TBC_CON;
+			if(Read)
+			{
+				val=TBC_dat.Contrast;
+			}
+			else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,127);
+			}
+			break;
+		case 'S': case 's':
+			type = TBC_SAT;
+			if(Read)
+			{
+				val=TBC_dat.Sat;
+			}
+			else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,127);
+			}
+
+			break;
+		case 'H': case 'h':
+			if( (c[1]=='U') || (c[1]=='u') )
+			{
+				type = TBC_HUE;
+				if(Read)
+				{
+					val=TBC_dat.Hue;
+				}
+				else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,-64,63);
+				}
+			}
+			else {
+				type = TBC_HPHZ;
+				if(Read)
+				{
+					val=TBC_dat.HorAdj;
+				}
+				else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,909);
+				}
+			}
+			break;
+		case 'F': case 'f':
+			type = TBC_FAD;
+			if(Read)
+			{
+				val=TBC_dat.Fader;
+			}
+			else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,255);
+			}
+			break;
+		case 'P': case 'p':
+			type = TBC_CPHZ;
+			if(Read)
+			{
+				val=TBC_dat.Phase;
+			}
+			else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,0x7ff);
+			}
+			break;
+		case 'K': case 'k':
+			tpl.PropGadg=0;
+			type = TBC_KEY;
+			if(Read)
+			{
+				val=0;
+				if(TBC_dat.KeyerFlags&TBCKF_KEYONB)	val|=1<<1;
+				if(TBC_dat.KeyerFlags&TBCKF_FADEROUT)	val|=1;
+			}
+			else {
+				tpl.Param =(LONG *)atol(ARG2(RexxMsg));
+			}
+			break;
+		case 'M': case 'm':
+			tpl.PropGadg=0;
+			type = TBC_KEYM;
+			if(Read)
+			{
+				val=0;
+				if(TBC_dat.KeyerFlags&TBCKF_MODE0)
+					if(TBC_dat.KeyerFlags&TBCKF_MODE1)
+						val=2;
+					else
+						val=1;
+			}
+			else {
+				tpl.Param =(LONG *)atol(ARG2(RexxMsg));
+			}
+			break;
+		case 'E': case 'e':
+			tpl.PropGadg=0;
+			type = TBC_ENC;
+			if(Read)
+			{
+				val=0;
+				if(TBC_dat.EncFlags&TBCEF_KILLCOLOR)	val|=1<<2;
+				if(TBC_dat.EncFlags&TBCEF_BARS)				val|=1<<1;
+				if(TBC_dat.Flags&TBCGF_BYPASS)				val|=1;
+				if(TBC_dat.Flags&TBCGF_FREEZE)				val|=1<<3;
+			}
+			else {
+				tpl.Param =(LONG *)atol(ARG2(RexxMsg));
+			}
+			break;
+		case 'I': case 'i':
+			type = TBC_INP;
+			if(Read)
+			{
+				val=0;
+				while(TBC_Input[val]!=TBC_dat.InputSel)
+					val++;
+			}
+			else {
+				val = atol(ARG2(RexxMsg));
+				val = BOUND(val,0,TBCSRC_NUM);
+				tpl.PropStart = TBC_Input[val];
+			}
+			break;
+		case 'D': case 'd':
+			tpl.PropGadg=0;
+			type = TBC_DEC;
+			if(Read)
+			{
+				val=0;
+				if(TBC_dat.DecFlags&TBCDF_CHROMAAGC)	val|=1<<2;
+				if(TBC_dat.DecFlags&TBCDF_AGC)				val|=1<<1;
+				if(TBC_dat.DecFlags&TBCDF_MONOCHROME)	val|=1;
+			}
+			else {
+				tpl.Param =(LONG *)atol(ARG2(RexxMsg));
+			}
+			break;
+		case 'T': case 't':
+			tpl.PropGadg=0;
+			type = TBC_TRM;
+			if(Read)
+			{
+				val=0;
+				if(TBC_dat.Term&TBCTF_FADERB)	val|=1<<4;
+				if(TBC_dat.Term&TBCTF_FADERA)	val|=1<<3;
+				if(TBC_dat.Term&TBCTF_OUT)		val|=1<<2;
+				if(TBC_dat.Term&TBCTF_GENIN)	val|=1<<1;
+				if(TBC_dat.Term&TBCTF_COMPIN)	val|=1;
+			}
+			else {
+				tpl.Param =(LONG *)atol(ARG2(RexxMsg));
+			}
+			break;
+	}
+	if(Read)
+	{
+		stcl_d(result,val);
+		FillReply(RexxMsg,RC_OK,result,0);
+		return(TRUE);
+	}
+	else {
+		CTRL_TBCSet(&tpl,NULL,(APTR)type);
+		FillReply(RexxMsg,RC_OK,NULL,0);
+		return(TRUE);
+	}
+
+}
+
+
+/****** ARexxPort/RxMakeClipIcon ************************************
+*
+*   NAME
+*	RxMakeClipIcon
+*
+*   SYNOPSIS
+*	BOOL RxMakeClipIcon(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Record a named flyer clip, won't overwrite existing clip w/ same name
+*		ARGS: ClipName [, Field ]
+*
+*
+*
+*********************************************************************
+*/
+static BOOL RxMakeClipIcon(struct RexxMsg *RexxMsg)
+{
+	int Field=0;
+	char *clip;
+	DUMPREXXMSG(RexxMsg);
+	rxCrUD.Clip = ID_CLIP;
+	switch(ARG_NUM(RexxMsg))
+	{
+		case 3:
+			if( (*ARG3(RexxMsg)=='s') || (*ARG3(RexxMsg)=='S') )
+				rxCrUD.Clip = ID_STIL;
+		case 2:
+			if(rxCrUD.Clip == ID_STIL)
+				Field=0;
+			else
+				Field=atol(ARG2(RexxMsg));
+		case 1:
+			clip = (char *)ARG1(RexxMsg);
+			break;
+		case 0:
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			return(FALSE);
+			break;
+	}
+	ESparams4.Data1=(LONG)clip;
+	ESparams4.Data2=(LONG)&rxCrUD;
+	ESparams4.Data3=(LONG)sizeof(struct ClipCrUD);
+	ESparams4.Data4=(LONG)Field;
+	DisplayWaitSprite();
+	SendSwitcherReply(ES_MakeClipIcon,&ESparams4);
+	DisplayNormalSprite();
+	FillReply(RexxMsg,RC_OK,NULL,0);
+}
+
+
+/****** ARexxPort/RxAddSlice ************************************
+*
+*   NAME
+*	RxAddSlice
+*
+*   SYNOPSIS
+*	BOOL RxAddSlice(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Add a Name and command to 'Programs' popup
+*
+*		ARGS: Slice Name(28 chars max), command string(127 chars max), flags where:
+*			Name appears in popup, runs command as either rexx or dos script
+*			depending on flags bit APPF_AREXX.  Returns number in popup sequence.
+*			N.B. The editor waits for Dos commands to return, thus an app. that will
+*			not finish immediately should be preceeded by the 'run' command.
+*
+*********************************************************************
+*/
+static BOOL RxAddSlice(struct RexxMsg *RexxMsg)
+{
+	UBYTE F=0;
+	DUMPREXXMSG(RexxMsg);
+	if(ARG_NUM(RexxMsg)<2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	if(ARG_NUM(RexxMsg)>2)
+		F=atoi(ARG3(RexxMsg));
+
+	if (TotalAppNum < MAX_APPNAMES)
+	{
+		strncpy(&(AppNames[TotalAppNum][0]), ARG1(RexxMsg), MAX_APPNAME_LEN);
+		strncpy(&(AppCommand[TotalAppNum][0]), ARG2(RexxMsg), MAX_APPCMD_LEN);
+		AppFlags[TotalAppNum]=F;
+		stcl_d(result,TotalAppNum++);
+		FillReply(RexxMsg,RC_OK,result,0);
+		return(TRUE);
+	}
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+}
+
+
+/****** ARexxPort/RxRemSlice ************************************
+*
+*   NAME
+*	RxRemSlice
+*
+*   SYNOPSIS
+*	BOOL RxRemSlice(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION  Remove user-slice from 'Programs' popup
+*
+*		ARGS: Slice index (position in popup) as returned by AddSlice
+*
+*********************************************************************
+*/
+static BOOL RxRemSlice(struct RexxMsg *RexxMsg)
+{
+	ULONG i=NumSysApps,j;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if( (i<NumSysApps) || (i>=TotalAppNum))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	for(j=i+1;j<TotalAppNum; i++,j++)
+	{
+		strncpy(&(AppNames[i][0]), &(AppNames[j][0]), MAX_APPNAME_LEN);
+		strncpy(&(AppCommand[i][0]), &(AppCommand[j][0]), MAX_APPCMD_LEN);
+		AppFlags[i] = AppFlags[j];
+	}
+	AppNames[i][0]=0;
+	AppCommand[i][0]=0;
+	TotalAppNum--;
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxSaySliceName ************************************
+*
+*   NAME
+*	RxSaySliceName
+*
+*   SYNOPSIS
+*	BOOL RxSaySliceName(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return user-slice name as it appears in Programs popup
+*
+*		ARGS: Slice index (position in popup) as returned by AddSlice
+*
+*********************************************************************
+*/
+static BOOL RxSaySliceName(struct RexxMsg *RexxMsg)
+{
+	ULONG i;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if(i<TotalAppNum)
+		FillReply(RexxMsg,RC_OK,AppNames[i],0);
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxSaySliceCmd ************************************
+*
+*   NAME
+*	RxSaySliceCmd
+*
+*   SYNOPSIS
+*	BOOL RxSaySliceCmd(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return user-slice command string
+*
+*		ARGS: Slice index (position in popup) as returned by AddSlice
+*
+*********************************************************************
+*/
+static BOOL RxSaySliceCmd(struct RexxMsg *RexxMsg)
+{
+	ULONG i;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if(i<TotalAppNum)
+		FillReply(RexxMsg,RC_OK,AppCommand[i],0);
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+/****** ARexxPort/RxSliceIndex ************************************
+*
+*   NAME
+*	RxSliceIndex
+*
+*   SYNOPSIS
+*	BOOL RxSliceIndex(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return slice index (position in popup)
+*
+*		ARGS: User-slice command string
+*
+*********************************************************************
+*/
+static BOOL RxSliceIndex(struct RexxMsg *RexxMsg)
+{
+	ULONG i=0;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	while(strcmp(ARG1(RexxMsg),AppNames[i]) && (i<TotalAppNum) )
+		i++;
+	if(i<TotalAppNum)
+	{
+		stcl_d(result,i);
+		FillReply(RexxMsg,RC_OK,result,0);
+	}
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxAddTool ************************************
+*
+*   NAME
+*	RxAddTool
+*
+*   SYNOPSIS
+*	BOOL RxAddTool(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Add a Name and command to 'Tools' popup
+*
+*		ARGS: Tool Name(28 chars max), command string(127 chars max), flags where:
+*			Name appears in popup, runs command as either rexx or dos script
+*			depending on flags bit APPF_AREXX.  Returns number in popup sequence.
+*			N.B. The editor waits for Dos commands to return, thus an app. that will
+*			not finish immediately should be preceeded by the 'run' command.
+*
+*********************************************************************
+*/
+static BOOL RxAddTool(struct RexxMsg *RexxMsg)
+{
+	UBYTE F=0;
+	DUMPREXXMSG(RexxMsg);
+	if(ARG_NUM(RexxMsg)<2)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	if(ARG_NUM(RexxMsg)>2)
+		F=atoi(ARG3(RexxMsg));
+
+	if (TotalToolsNum < MAX_TOOLNAMES)
+	{
+		strncpy(&(ToolNames[TotalToolsNum][0]), ARG1(RexxMsg), MAX_TOOLNAME_LEN);
+		strncpy(&(ToolCommand[TotalToolsNum][0]), ARG2(RexxMsg), MAX_TOOLCMD_LEN);
+		ToolFlags[TotalToolsNum]=F;
+		stcl_d(result,TotalToolsNum++);
+		FillReply(RexxMsg,RC_OK,result,0);
+		return(TRUE);
+	}
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+}
+
+
+/****** ARexxPort/RxRemTool ************************************
+*
+*   NAME
+*	RxRemTool
+*
+*   SYNOPSIS
+*	BOOL RxRemTool(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION  Remove user-Tool from 'Tools' popup
+*
+*		ARGS: Tool index (position in popup) as returned by AddTool
+*
+*********************************************************************
+*/
+static BOOL RxRemTool(struct RexxMsg *RexxMsg)
+{
+	ULONG i=NumSysTools,j;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if( (i<NumSysTools) || (i>=TotalToolsNum))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	for(j=i+1;j<TotalToolsNum; i++,j++)
+	{
+		strncpy(&(ToolNames[i][0]), &(ToolNames[j][0]), MAX_TOOLNAME_LEN);
+		strncpy(&(ToolCommand[i][0]), &(ToolCommand[j][0]), MAX_TOOLCMD_LEN);
+		ToolFlags[i] = ToolFlags[j];
+	}
+	ToolNames[i][0]=0;
+	ToolCommand[i][0]=0;
+	TotalToolsNum--;
+	FillReply(RexxMsg,RC_OK,NULL,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxSayToolName ************************************
+*
+*   NAME
+*	RxSayToolName
+*
+*   SYNOPSIS
+*	BOOL RxSayToolName(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return user-Tool name as it appears in "Tools" popup
+*
+*		ARGS: Tool index (position in popup) as returned by AddTool
+*
+*********************************************************************
+*/
+static BOOL RxSayToolName(struct RexxMsg *RexxMsg)
+{
+	ULONG i;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if(i<TotalToolsNum)
+		FillReply(RexxMsg,RC_OK,ToolNames[i],0);
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxSayToolCmd ************************************
+*
+*   NAME
+*	RxSayToolCmd
+*
+*   SYNOPSIS
+*	BOOL RxSayToolCmd(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return user-Tool command string
+*
+*		ARGS: Tool index (position in popup) as returned by AddTool
+*
+*********************************************************************
+*/
+static BOOL RxSayToolCmd(struct RexxMsg *RexxMsg)
+{
+	ULONG i;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+	i=atol(ARG1(RexxMsg));
+	if(i<TotalToolsNum)
+		FillReply(RexxMsg,RC_OK,ToolCommand[i],0);
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+/****** ARexxPort/RxToolIndex ************************************
+*
+*   NAME
+*	RxToolIndex
+*
+*   SYNOPSIS
+*	BOOL RxToolIndex(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION	return Tool index (position in popup)
+*
+*		ARGS: User-Tool command string
+*
+*********************************************************************
+*/
+static BOOL RxToolIndex(struct RexxMsg *RexxMsg)
+{
+	ULONG i=0;
+	DUMPREXXMSG(RexxMsg);
+	if(!ARG_NUM(RexxMsg))
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+	}
+
+	while(strcmp(ARG1(RexxMsg),ToolNames[i]) && (i<TotalToolsNum) )
+		i++;
+	if(i<TotalToolsNum)
+	{
+		stcl_d(result,i);
+		FillReply(RexxMsg,RC_OK,result,0);
+	}
+	else
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxGetPath ************************************
+*
+*   NAME
+*	RxGetPath
+*
+*   SYNOPSIS
+*	BOOL RxGetPath(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Return current path in bottom grazer window, if any
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxGetPath(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	*result=0;
+	if ( EditBottom && EditBottom->Node.Type == EW_GRAZER )
+	{
+		struct SmartString	*s;
+		s = ((struct Grazer *)EditBottom->Special)->Path;
+		strncpy(result,GetCString(s),RESULT_MAX);
+	}
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+
+/****** ARexxPort/RxStartFile ************************************
+*
+*   NAME
+*	RxStartFile
+*
+*   SYNOPSIS
+*	BOOL RxStartFile(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Open Grazer as file requester, ude GetFile to query result
+*		ARGS: Title, Initial path, Initial file
+*
+*********************************************************************
+*/
+static BOOL RxStartFile(struct RexxMsg *RexxMsg)
+{
+	char *tit="",*path="",*file="";
+	DUMPREXXMSG(RexxMsg);
+
+	if(ARG_NUM(RexxMsg)>=3)
+		file = (char *)ARG3(RexxMsg);
+	if(ARG_NUM(RexxMsg)>1)
+		path = (char *)ARG2(RexxMsg);
+	if(ARG_NUM(RexxMsg)>0)
+		tit = (char *)ARG1(RexxMsg);
+	*result=0;
+	GrazerGetFile(tit,path,file,result,RESULT_MAX);
+	FillReply(RexxMsg,RC_OK,"",0);
+	return(TRUE);
+}
+
+
+
+/****** ARexxPort/RxGetFile ************************************
+*
+*   NAME
+*	RxGetFile
+*
+*   SYNOPSIS
+*	BOOL RxGetFile(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Return result of Grazer as file requester:
+*				"" if requester is up, 0 if canceled, or name
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxGetFile(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(*result==1) FillReply(RexxMsg,RC_OK,"0",0);
+	else FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxFlyerDrive ************************************
+*
+*   NAME
+*	RxFlyerDrive
+*
+*   SYNOPSIS
+*	BOOL RxFlyerDrive(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Return flyer status code
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxFlyerDrive(struct RexxMsg *RexxMsg)
+{
+	int n;
+	DUMPREXXMSG(RexxMsg);
+	if(!FlyerBase || !FlyerDriveCount)
+	{
+		FillReply(RexxMsg,RC_OK,"",0);
+		return(TRUE);
+	}
+	n= (int) ARG1(RexxMsg);
+	if (n<FlyerDriveCount)
+		FillReply(RexxMsg,RC_OK,FlyerDrives[n],0);
+	else FillReply(RexxMsg,RC_OK,"",0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxFlyerStatus ************************************
+*
+*   NAME
+*	RxFlyerStatus
+*
+*   SYNOPSIS
+*	BOOL RxFlyerStatus(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*			Return flyer drive name based on index in internal list, or ""
+*		ARGS: Drive number, starting at 0
+*
+*********************************************************************
+*/
+static BOOL RxFlyerStatus(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	if(!FlyerBase || !FlyerDriveCount)
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+		return(FALSE);
+	}
+	stcl_d(result,Flyer_CheckRecord());				// Get Flyer error value (i.e. ERR_BUSY)
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+/****** ARexxPort/RxDummy ************************************
+*
+*   NAME
+*	RxDummy
+*
+*   SYNOPSIS
+*	BOOL RxDummy(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	Do nothing... who you calling dummy?
+*		ARGS: NONE
+*
+*********************************************************************
+*/
+static BOOL RxDummy(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	sprintf(result,"Command: %s  Under Construction.",ARG0(RexxMsg));
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+static BOOL RxAddRefreshPort(struct RexxMsg *RexxMsg)
+{
+	DUMPREXXMSG(RexxMsg);
+	sprintf(result,"Command: %s  Under Construction.",ARG0(RexxMsg));
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+}
+
+
+struct RexxFunc {
+	STRPTR FuncName;
+	BOOL (*FuncHandler)(struct RexxMsg *);
+};
+
+#define RX_WINDOWS		"SET_VIEW"
+#define RX_SCREEN			"GETSCREEN"
+#define RX_REQ_TELL		"REQ_TELL"
+#define RX_REQ_ERROR		"REQ_ERROR"
+#define RX_REQ_TIME		"REQ_TIME"
+#define RX_REQ_NUM		"REQ_NUMBER"
+#define RX_REQ_OPEN		"REQ_OPEN"
+#define RX_REQ_CLOSE		"REQ_CLOSE"
+#define RX_REQ_STRING	"REQ_STRING"
+#define RX_REQ_BUTTONS	"REQ_BUTTONS"
+#define RX_REQ_FLYJOG	"REQ_FLYERJOG"
+#define RX_PROJ_LOAD		"PROJECTLOAD"
+#define RX_PROJ_SAVE		"PROJECTSAVE"
+#define RX_PROJ_PLAY		"PROJECTPLAY"
+#define RX_PROJ_STOP		"PROJECTSTOP"
+#define RX_PROJ_UPDATE	"PROJECTUPDATE"
+#define RX_CR_LOAD		"CROUTONLOAD"
+#define RX_CR_DELETE		"CROUTONDELETE"
+#define RX_CR_RUN			"CROUTONRUN"
+#define RX_CR_PICK		"CROUTONPICK"
+#define RX_CR_NAME		"CROUTONNAME"
+#define RX_CR_SELECTED	"CROUTONSELECTED"
+#define RX_CR_STOP		"CROUTONSTOP"
+#define RX_CR_SPOT		"CROUTONSPOT"
+#define RX_CR_TYPE		"CROUTONTYPE"
+#define RX_CR_GET			"CROUTONGETTAG"
+#define RX_CR_SET			"CROUTONSETTAG"
+#define RX_CR_CHECK		"CROUTONCHECKTAG"
+#define RX_CR_SAVETAG	"CROUTONSAVETAG"
+#define RX_CRN_TYPE		"CRNUMTYPE"
+#define RX_CRN_GET		"CRNUMGETTAG"
+#define RX_CRN_SET		"CRNUMSETTAG"
+#define RX_CRN_CHECK		"CRNUMCHECKTAG"
+#define RX_CRN_SAVETAG	"CRNUMSAVETAG"
+#define RX_CR_TIME		"CROUTONTIME"
+#define RX_RECORD			"RECORDCLIP"
+#define RX_REC_STOP		"RECORDSTOP"
+#define RX_REC_PAUSE		"RECORDPAUSE"
+#define RX_MAKEICON		"MAKEICON"
+#define RX_TBC				"TBC"
+#define RX_SWITCHER		"SWITCHER"
+
+static struct RexxFunc RexxFunc[] = {
+//	{ RX_SWITCHER		, RxSwitcher		},
+	{ RX_RECORD			, RxRecordClip		},
+	{ RX_REC_STOP		, RxRecordStop		},
+	{ "RECORDADD"		, RxRecordAppend	},
+	{ RX_REC_PAUSE		, RxRecordPause	},
+	{ RX_REQ_TELL		, RxReqTell			},
+	{ RX_REQ_ERROR		, RxReqError		},
+	{ RX_REQ_TIME		, RxReqTime			},
+	{ RX_REQ_NUM		, RxReqNum			},
+	{ RX_REQ_OPEN		, RxReqOpen			},
+	{ RX_REQ_CLOSE		, RxReqClose		},
+	{ RX_REQ_STRING	, RxReqStr			},
+	{ RX_REQ_BUTTONS	, RxReqButtons		},
+	{ RX_REQ_FLYJOG	, RxReqFlyerJog	},
+	{ RX_PROJ_LOAD	 	, RxLoadProj		},
+	{ RX_PROJ_SAVE	 	, RxSaveProj		},
+	{ RX_PROJ_PLAY	 	, RxPlayProj		},
+	{ RX_PROJ_STOP	 	, RxStopCrouton	},
+	{ RX_PROJ_UPDATE	, RxUpdateProj		},
+	{ RX_CR_LOAD		, RxLoadCrouton	},
+	{ RX_CR_DELETE		, RxDeleteCrouton	},
+	{ RX_CR_RUN			, RxRunCrouton		},
+	{ RX_WINDOWS		, RxSetWindows		},
+	{ RX_SCREEN			, RxGetScreen		},
+	{ RX_CR_PICK		, RxPickCrouton	},
+	{ RX_CR_NAME		, RxCroutonName	},
+	{ RX_CR_SELECTED	, RxCroutonSelected	},
+	{ RX_CR_STOP		, RxStopCrouton	},
+	{ RX_CR_SPOT		, RxCroutonSpot	},
+	{ RX_CR_TYPE		, RxGetType			},
+	{ RX_CR_GET			, RxGetTag			},
+	{ RX_CR_SET			, RxSetTag			},
+	{ RX_CR_CHECK		, RxCheckTag		},
+	{ RX_CR_SAVETAG	, RxTagSavable		},
+
+	{ RX_CRN_TYPE		, RxNewGetType		},
+	{ RX_CRN_GET		, RxNewGetTag		},
+	{ RX_CRN_SET		, RxNewSetTag		},
+	{ RX_CRN_CHECK		, RxNewCheckTag	},
+	{ RX_CRN_SAVETAG	, RxNewTagSavable	},
+
+	{ RX_CR_TIME		, RxCroutonTime	},
+	{ RX_TBC				, RxTBC				},
+	{ RX_MAKEICON		, RxMakeClipIcon	},
+	{ "CROUTONSINPROJECT", RxCroutonsInProject },
+	{ "ADDPROGRAM"		, RxAddSlice		},
+	{ "REMPROGRAM"		, RxRemSlice		},
+	{ "PROGRAMNAME"	, RxSaySliceName	},
+	{ "PROGRAMCMD"		, RxSaySliceCmd	},
+	{ "PROGRAMNUM"		, RxSliceIndex		},
+	{ "ADDTOOL"			, RxAddTool			},
+	{ "REMTOOL"			, RxRemTool			},
+	{ "TOOLNAME"		, RxSayToolName	},
+	{ "TOOLCMD"			, RxSayToolCmd		},
+	{ "TOOLNUM"			, RxToolIndex		},
+	{ "CURRENTPATH"	, RxGetPath			},
+	{ "STARTFILEREQ"	, RxStartFile		},
+	{ "QUERYFILEREQ"	, RxGetFile			},
+	{ "FLYERDRIVE"		, RxFlyerDrive		},
+	{ "FLYERSTATUS"	, RxFlyerStatus	},
+	{ "FLYEROUT"		, RxPrefs			},
+	{ NULL, NULL }
+};
+
+
+/****** ARexxPort/HandleARexxPort ***********************************
+*
+*   NAME
+*	HandleARexxPort
+*
+*   SYNOPSIS
+*	BOOL HandleARexxPort(VOID)
+*
+*   FUNCTION
+*	Handles one or more msgs at our arexx port
+**
+*	SEE ALSO
+*	projectrexx.h
+*
+*********************************************************************
+*/
+BOOL HandleARexxPort(VOID)
+{
+	struct RexxMsg *RexxMsg;
+	struct RexxFunc *Func;
+	BOOL ExitCode = FALSE;
+
+	DUMPMSG("HandleARexxPort ");
+	while (RexxMsg = (struct RexxMsg *)GetMsg(ARexxPort))
+	{
+		if( IS_REPLY(RexxMsg) )
+		{
+			DUMPSTR("Got ARexx Reply To: ");
+			DUMPMSG(ARG0(RexxMsg));
+			DeleteArgstring( ARG0(RexxMsg) );
+			DeleteRexxMsg( RexxMsg );
+		}
+		else
+		{
+			DUMPSTR("Got ARexx Oessage: ");
+			DUMPMSG(ARG0(RexxMsg));
+			if( !IS_FUNCTION(RexxMsg) )
+			{
+				FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADMESS);
+			}
+			else if( ARG0(RexxMsg) )
+			{
+				// go through function list and try to find handler
+				for( Func = &RexxFunc[0]; Func->FuncName; Func++ )
+				{
+					if (!(stricmp(Func->FuncName,ARG0(RexxMsg)) ))
+					{
+						DUMPMSG(Func->FuncName);
+						Func->FuncHandler(RexxMsg);
+						break;
+					}
+				} // if unknown f'n Send WARN,1 to allow further library scanning!
+				if(!Func->FuncName) FillReply(RexxMsg,RC_WARN,NULL,1);
+			}
+			else FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+			if(RexxMsg) ReplyMsg((struct Message *)RexxMsg);  // for switcher pass-thru...???
+		}
+	}
+	return(ExitCode);
+}
+
+// end of arexxport.c
+@
+
+
+2.40
+log
+@Added CRNUMTYPE.
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.39 1995/11/17 15:13:13 Flick Exp Flick $
+d5 3
+d1942 1
+d1948 6
+d1955 4
+a1958 9
+	if(*(TagNames[i].th_Name)==0) // Found array terminator not tag
+	{
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARG);
+		return(FALSE);
+	}
+	if(TagNames[i].th_Type==0)
+		stcl_d(result,CheckTag(FG,0x80000000|i));
+	else
+		stcl_d(result,CheckTag(FG,i));
+d1961 1
+@
+
+
+2.39
+log
+@Fixed lack of reply from PROJUPDATE
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.38 1995/11/15 18:36:13 Flick Exp Flick $
+d5 3
+d187 1
+d1558 1
+a1558 2
+	ULONG	row=1,col,num,type;
+	char name[5];
+d1561 1
+d1569 61
+a1629 1
+	if(CurFG) type=((struct ExtFastGadget *)CurFG)->ObjectType;
+d1632 1
+d3284 1
+d3333 1
+@
+
+
+2.38
+log
+@Grafted in new versions of SetTag, GetTag, CheckTag, and TagSavable that work
+with a specified crouton, rather than the currently selected one (CurFG)
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.37 1995/11/08 15:30:10 Flick Exp Flick $
+d5 4
+d1191 1
+@
+
+
+2.37
+log
+@Defines for Tools/Programs popups removed, are now found in Edit.h -- Much safer!
+AddTool/AddProgram functions now return an error when limit is reached (was not
+before, would crash editor!)
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.36 1995/10/28 03:48:47 Flick Exp Flick $
+d5 5
+d175 1
+a175 1
+/*****8***************************************/
+d179 7
+d1580 3
+a1586 2
+	ULONG i=1;
+	LONG TagValue=0;
+d1588 2
+a1589 1
+	if(!CurFG)
+d1591 1
+a1591 1
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+d1594 24
+a1617 1
+	if(!ARG_NUM(RexxMsg))
+d1622 32
+a1653 1
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,ARG1(RexxMsg)) )
+d1655 1
+d1661 1
+d1664 1
+a1664 1
+		TagValue=GetValue(CurFG,0x80000000|i);
+d1669 1
+a1669 1
+		TagValue=GetTable(CurFG,i,result,RESULT_MAX);
+d1675 1
+d1688 3
+a1694 1
+	ULONG i=1;
+d1697 28
+a1724 2
+	if (!RxGetTag(RexxMsg))		// First, get current value of tag --> "result"
+		return(FALSE);				// Stop if failed
+d1726 1
+a1726 1
+	if(!CurFG)
+d1728 1
+a1728 1
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+d1731 27
+a1757 1
+	if(ARG_NUM(RexxMsg)<2)
+d1759 1
+a1759 1
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+d1762 5
+a1766 1
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,ARG1(RexxMsg)) )
+d1768 1
+d1774 1
+d1777 1
+a1777 1
+		PutValue(CurFG,0x80000000|i,atol(ARG2(RexxMsg)) );
+d1781 1
+a1781 1
+		PutTable( CurFG, i, ARG2(RexxMsg), strlen(ARG2(RexxMsg))+1 );
+d1787 1
+d1800 3
+a1806 1
+	ULONG i=1;
+d1808 2
+a1809 1
+	if(!CurFG)
+d1811 1
+a1811 1
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+d1814 25
+a1838 1
+	if(!ARG_NUM(RexxMsg))
+d1843 30
+a1872 1
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,ARG1(RexxMsg)) )
+d1874 1
+d1881 1
+a1881 1
+		stcl_d(result,CheckTag(CurFG,0x80000000|i));
+d1883 1
+a1883 1
+		stcl_d(result,CheckTag(CurFG,i));
+d1902 3
+a1908 1
+	ULONG i=1;
+d1911 1
+a1911 1
+	if(!CurFG)
+d1913 1
+a1913 1
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_FNRETURN);
+d1916 25
+a1940 1
+	if(!ARG_NUM(RexxMsg))
+d1945 31
+a1975 1
+	while(*(TagNames[i].th_Name) && stricmp(TagNames[i].th_Name,ARG1(RexxMsg)) )
+d1977 1
+d1985 1
+a1985 1
+		MakeTagSavable(CurFG,0x80000000|i);
+d1987 1
+a1987 1
+		MakeTagSavable(CurFG,i);
+d3214 4
+d3261 6
+@
+
+
+2.36
+log
+@Added CROUTONSAVETAG to mark tags as savable
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.35 1995/10/14 10:25:21 Flick Exp Flick $
+d5 3
+d146 1
+a188 12
+/*** These are ripped out of GraphicHelp.c -- THEY MUST MATCH!!!! ***/
+#define NUM_APPNAMES 6
+#define MAX_APPNAMES 25
+#define MAX_APPNAME_LEN 28
+#define MAX_APPCMD_LEN  127
+#define APPF_AREXX		1<<0  // Mask: bit0 clear ==> Dos Execute, set ==> Arexx
+
+#define NUM_TOOLS		12
+#define MAX_TOOLNAMES 25
+#define MAX_TOOLNAME_LEN 28
+#define MAX_TOOLCMD_LEN  127
+
+a208 1
+extern ULONG TotalAppNum;
+d212 1
+a212 1
+extern ULONG TotalToolsNum;
+d215 2
+d2387 15
+a2401 6
+	strncpy(&(AppNames[TotalAppNum][0]), ARG1(RexxMsg), MAX_APPNAME_LEN);
+	strncpy(&(AppCommand[TotalAppNum][0]), ARG2(RexxMsg), MAX_APPCMD_LEN);
+	AppFlags[TotalAppNum]=F;
+	stcl_d(result,TotalAppNum++);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+d2421 1
+a2421 1
+	ULONG i=NUM_APPNAMES,j;
+d2429 1
+a2429 1
+	if( (i<NUM_APPNAMES) || (i>=TotalAppNum))
+d2587 15
+a2601 6
+	strncpy(&(ToolNames[TotalToolsNum][0]), ARG1(RexxMsg), MAX_TOOLNAME_LEN);
+	strncpy(&(ToolCommand[TotalToolsNum][0]), ARG2(RexxMsg), MAX_TOOLCMD_LEN);
+	ToolFlags[TotalToolsNum]=F;
+	stcl_d(result,TotalToolsNum++);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+d2621 1
+a2621 1
+	ULONG i=NUM_TOOLS,j;
+d2629 1
+a2629 1
+	if( (i<NUM_TOOLS) || (i>=TotalToolsNum))
+@
+
+
+2.35
+log
+@SET_VIEW command now returns number of the previous view
+SET_VIEW, CROUTONLOAD, CROUTONDELETE now refresh the appropriate windows
+when done.
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.34 1995/10/12 16:09:16 Flick Exp Flick $
+d5 5
+d1708 47
+d2956 1
+d2999 1
+@
+
+
+2.34
+log
+@Added "INSERT" option to CROUTONLOAD, reinstated EW_PROJECT test (Enf hits!)
+Added CROUTONDELETE, CROUTONTIME
+Fixed CROUTONSETTAG, was returning last value fetched with GETTAG!?!
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.33 1995/10/10 00:34:24 Flick Exp Flick $
+d5 5
+d552 1
+a552 1
+	UWORD TV=	PrevViewMode;
+d554 1
+d560 3
+d565 1
+d567 1
+d580 1
+d583 1
+d595 4
+d1229 2
+d1264 2
+@
+
+
+2.33
+log
+@Changed RxReqTime, RxReqStr, RxReqNum to return "CANCEL" if cancel button pressed (not dflt val)
+Also did some cleanup of some REAL UGLY handling of variable number of args to these
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.32 1995/10/06 15:42:43 Flick Exp Flick $
+d5 4
+d557 2
+a558 1
+	if(ViewMode>5) ViewMode=0;
+d563 4
+a566 2
+		case 0:	case 1:
+		case 2:	case 3:
+d570 1
+a570 1
+		case 4: // Would ask for Project/Project editing source... too interactive for ARexx?
+d572 4
+a575 3
+		case 5:	 // Empty/Switcher.. special rexx-only mode ??
+			PrevViewMode=4;
+			ViewMode=0;
+d1174 1
+a1174 1
+*		ARGS:	CroutonName
+d1181 1
+d1190 4
+a1193 3
+//		if( EditTop && (EditTop->Node.Type == EW_PROJECT)
+//				&& (FG=AllocProj(ARG1(RexxMsg))) )
+		if( EditTop && (FG=AllocProj(ARG1(RexxMsg))) )
+d1195 4
+a1198 1
+			AddProjTail((struct Project *)EditTop->Special,FG);
+d1219 38
+d1604 4
+a1626 16
+/*
+
+Pat, I think the problem here is that Arnie refers to ARG1(RexxMsg) but
+ that is the TAG NAME, and the TAG VALUE is really ARG2(RexxMsg).
+
+This arexx function has 2 args, as opposed to CHECKTAG and GETTAG which
+ ONLY have 1 arg (each), and I think it is just a typo based on making
+ SETTAG 'identical' to GETTAG and CHECKTAG when it really has to be a
+ bit different.
+
+This is Arnie's code:
+
+		PutValue(CurFG,0x80000000|i,atol(ARG1(RexxMsg)) );
+
+My alternative follows:
+*/
+a1630 10
+
+/*
+but I'm not sure how to modify this next line which probably needs
+a corresponding change to reflect that the TAG VALUE is coming from
+ARG2(RexxMsg)
+
+DW
+*/
+
+//		PutTable( CurFG, i, ARG1(RexxMsg), strlen(ARG1(RexxMsg))+1 );
+d1633 1
+a1633 1
+	FillReply(RexxMsg,RC_OK,result,0);
+d1681 31
+d2872 1
+d2883 1
+d2912 1
+d2925 1
+@
+
+
+2.32
+log
+@Added ReqFlyerJog command, RecordStop now returns to normal sprite
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.31 1995/10/05 18:28:45 Flick Exp Flick $
+d5 3
+d837 2
+d840 1
+d849 1
+a849 4
+			if( DoTimeReqPanel(ARG1(RexxMsg),tc) )
+				FillReply(RexxMsg,RC_OK,tc,0);
+			else
+				FillReply(RexxMsg,RC_OK,"00:00:00:00",0);
+d854 1
+a854 4
+			if( DoTimeReqPanel(ARG1(RexxMsg),tc) )
+				FillReply(RexxMsg,RC_OK,tc,0);
+			else
+				FillReply(RexxMsg,RC_OK,ARG1(RexxMsg),0);
+d857 7
+a863 1
+	return(TRUE);
+d882 1
+a882 1
+	int n=ARG_NUM(RexxMsg),max=0xFFFFFF,min=0,v;
+d884 2
+a892 18
+		case 1:
+			v=DoNumReqPanel(ARG1(RexxMsg),0,min,max);
+			stcl_d(num,v);
+			FillReply(RexxMsg,RC_OK,num,0);
+			break;
+		case 2:
+			v=atol(ARG2(RexxMsg));
+			v=DoNumReqPanel(ARG1(RexxMsg),v,min,max);
+			stcl_d(num,v);
+			FillReply(RexxMsg,RC_OK,num,0);
+			break;
+		case 3:
+			v=atol(ARG2(RexxMsg));
+			min=atol(ARG3(RexxMsg));
+			v=DoNumReqPanel(ARG1(RexxMsg),v,min,max);
+			stcl_d(num,v);
+			FillReply(RexxMsg,RC_OK,num,0);
+			break;
+d895 7
+a901 6
+			v=atol(ARG2(RexxMsg));
+			min=atol(ARG3(RexxMsg));
+			max=atol(ARG4(RexxMsg));
+			v=DoNumReqPanel(ARG1(RexxMsg),v,min,max);
+			stcl_d(num,v);
+			FillReply(RexxMsg,RC_OK,num,0);
+d904 10
+a913 1
+	return(TRUE);
+d934 2
+d945 1
+a945 4
+			if( DoStrReqPanel(ARG1(RexxMsg),Req_Str,82) )
+				FillReply(RexxMsg,RC_OK,Req_Str,0);
+			else
+				FillReply(RexxMsg,RC_OK,"",0);
+d950 1
+a950 4
+			if( DoStrReqPanel(ARG1(RexxMsg),Req_Str,82) )
+				FillReply(RexxMsg,RC_OK,Req_Str,0);
+			else
+				FillReply(RexxMsg,RC_OK,"",0);
+d953 7
+a959 1
+	return(TRUE);
+@
+
+
+2.31
+log
+@Record functions now use improved Flyer_ functions, not DHD_Abort(0)!!!
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.30 1995/10/03 18:05:13 Flick Exp Flick $
+d5 3
+d960 62
+d1769 5
+a1773 2
+	Flyer_AbortRecord();
+	DHD_InitPlay("",0);
+d2751 1
+a2751 1
+	stcl_d(result,Flyer_CheckRecord());
+d2803 1
+d2841 1
+@
+
+
+2.30
+log
+@Updated for Tools/Programs popup w/ more items
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.29 1995/10/03 13:59:01 Flick Exp Flick $
+d5 3
+d1704 1
+a1704 1
+	DHD_Abort(0);
+d1728 1
+a1728 1
+		DHD_Pause((atol(ARG1(RexxMsg))==1) ? 1:0);
+d2683 1
+a2683 1
+	stcl_d(result,DHD_CheckRecord());
+@
+
+
+2.29
+log
+@Added cmds for custom tool popup items: AddTool,RemTool,ToolName,ToolCmd,ToolNum
+Fixed bug in AddProgram that would have crashed bad when trying to make 26th item (limit is 25!)
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.28 1995/09/28 11:29:30 pfrench Exp Flick $
+d5 4
+d163 1
+a163 1
+#define NUM_APPNAMES 5
+d169 1
+a169 1
+#define NUM_TOOLS		9
+@
+
+
+2.28
+log
+@Added RxCroutonsInProject
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.27 1995/09/13 12:03:32 Flick Exp pfrench $
+d5 3
+d158 1
+d160 1
+a160 1
+#define MAX_APPNAMES 100
+d165 5
+d189 1
+d191 5
+a195 1
+extern UBYTE	AppFlags[];
+a196 1
+extern far char	AppCommand[][MAX_APPCMD_LEN+1];
+d2345 191
+d2765 20
+a2784 20
+	{ RX_PROJ_LOAD	 , RxLoadProj			},
+	{ RX_PROJ_SAVE	 , RxSaveProj			},
+	{ RX_PROJ_PLAY	 , RxPlayProj			},
+	{ RX_PROJ_STOP	 , RxStopCrouton		},
+	{ RX_PROJ_UPDATE, RxUpdateProj		},
+	{ RX_CR_LOAD		 , RxLoadCrouton	},
+	{ RX_CR_RUN			 , RxRunCrouton	},
+	{ RX_WINDOWS		 , RxSetWindows	},
+	{ RX_SCREEN			 , RxGetScreen		},
+	{ RX_CR_PICK		 , RxPickCrouton	},
+	{ RX_CR_NAME		 , RxCroutonName	},
+	{ RX_CR_SELECTED	 , RxCroutonSelected	},
+	{ RX_CR_STOP		 , RxStopCrouton	},
+	{ RX_CR_SPOT		 , RxCroutonSpot	},
+	{ RX_CR_TYPE		 , RxGetType		},
+	{ RX_CR_GET			 , RxGetTag			},
+	{ RX_CR_SET			 , RxSetTag			},
+	{ RX_CR_CHECK		 , RxCheckTag		},
+	{ RX_TBC				 , RxTBC				},
+	{ RX_MAKEICON		 , RxMakeClipIcon	},
+d2786 16
+a2801 11
+	{ "ADDPROGRAM"	 , RxAddSlice			},
+	{ "REMPROGRAM"	 , RxRemSlice			},
+	{ "PROGRAMNAME"	 , RxSaySliceName	},
+	{ "PROGRAMCMD"	 , RxSaySliceCmd		},
+	{ "PROGRAMNUM"	 , RxSliceIndex		},
+	{ "CURRENTPATH"	 , RxGetPath		},
+	{ "STARTFILEREQ" , RxStartFile		},
+	{ "QUERYFILEREQ" , RxGetFile			},
+	{ "FLYERDRIVE"	 , RxFlyerDrive		},
+	{ "FLYERSTATUS"	 , RxFlyerStatus	},
+	{ "FLYEROUT"		 , RxPrefs			},
+@
+
+
+2.27
+log
+@Added REQ_BUTTONS and PROJUPDATE commands
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.26 1995/09/07 17:32:01 pfrench Exp Flick $
+d5 3
+d216 2
+d1263 1
+a1263 1
+*	RxCroutonName
+d1307 31
+d2581 1
+@
+
+
+2.26
+log
+@Fixed Load/Save Project and added CroutonSelected
+command.
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.25 1995/08/07 09:33:44 Flick Exp pfrench $
+d5 4
+a316 1
+
+d622 75
+d797 1
+a797 1
+*	Time code string requester -- alters/returns time string like 'HH;MM:SS:FF'
+d1033 30
+d1810 1
+a1810 1
+/****** ARexxPort/RxTBC ************************************
+d2046 1
+a2046 1
+		CTRL_TBCSet(&tpl,(APTR)type);
+d2481 1
+a2481 1
+#define RX_REQ_ERROR	"REQ_ERROR"
+d2485 1
+a2485 1
+#define RX_REQ_CLOSE	"REQ_CLOSE"
+d2487 6
+a2492 4
+#define RX_PROJ_LOAD	"PROJECTLOAD"
+#define RX_PROJ_SAVE	"PROJECTSAVE"
+#define RX_PROJ_PLAY	"PROJECTPLAY"
+#define RX_PROJ_STOP	"PROJECTSTOP"
+d2506 1
+a2506 1
+#define RX_REC_PAUSE	"RECORDPAUSE"
+d2512 13
+a2524 12
+//	{ RX_SWITCHER		 , RxSwitcher			},
+	{ RX_RECORD			 , RxRecordClip		},
+	{ RX_REC_STOP		 , RxRecordStop		},
+	{ "RECORDADD"		 , RxRecordAppend		},
+	{ RX_REC_PAUSE	 , RxRecordPause	},
+	{ RX_REQ_TELL		 , RxReqTell			},
+	{ RX_REQ_ERROR	 , RxReqError			},
+	{ RX_REQ_TIME		 , RxReqTime			},
+	{ RX_REQ_NUM		 , RxReqNum				},
+	{ RX_REQ_OPEN		 , RxReqOpen				},
+	{ RX_REQ_CLOSE	 , RxReqClose			},
+	{ RX_REQ_STRING	 , RxReqStr				},
+d2528 2
+a2529 1
+	{ RX_PROJ_STOP	 , RxStopCrouton	},
+d2531 2
+a2532 2
+	{ RX_CR_RUN			 , RxRunCrouton		},
+	{ RX_WINDOWS		 , RxSetWindows		},
+d2539 5
+a2543 5
+	{ RX_CR_TYPE		 , RxGetType			},
+	{ RX_CR_GET			 , RxGetTag				},
+	{ RX_CR_SET			 , RxSetTag				},
+	{ RX_CR_CHECK		 , RxCheckTag			},
+	{ RX_TBC				 , RxTBC					},
+d2545 2
+a2546 2
+	{ "ADDPROGRAM"	 , RxAddSlice	},
+	{ "REMPROGRAM"	 , RxRemSlice	},
+d2548 6
+a2553 6
+	{ "PROGRAMCMD"	 , RxSaySliceCmd	},
+	{ "PROGRAMNUM"	 , RxSliceIndex	},
+	{ "CURRENTPATH"	 , RxGetPath	},
+	{ "STARTFILEREQ" , RxStartFile	},
+	{ "QUERYFILEREQ" , RxGetFile	},
+	{ "FLYERDRIVE"	 , RxFlyerDrive	},
+d2555 1
+a2555 1
+	{ "FLYEROUT"		 , RxPrefs				},
+@
+
+
+2.25
+log
+@Added (cast) to appease warning
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.24 1995/06/05 13:59:55 pfrench Exp Flick $
+d5 3
+d209 25
+d880 1
+a880 1
+		if(SendSwitcherReply(ES_LoadProject,&ESparams2))
+d918 2
+a919 1
+		if(SendSwitcherReply(ES_SaveProject,&ESparams2))
+d1147 46
+d1237 1
+a1237 1
+	char name[5]="";
+d1249 1
+d2387 1
+d2424 1
+@
+
+
+2.24
+log
+@Fixed copy-paste code typo in checktag
+@
+text
+@d3 5
+a7 2
+* $Id: ArexxPort.c,v 2.23 1995/05/31 18:33:08 pfrench Exp pfrench $
+* $Log: ArexxPort.c,v $
+d2222 1
+a2222 1
+	n=ARG1(RexxMsg);
+@
+
+
+2.23
+log
+@Added Dan's fixes to SetCroutonTag
+@
+text
+@d3 1
+a3 1
+* $Id: ArexxPort.c,v 2.22 1995/05/08 15:14:07 pfrench Exp $
+d5 3
+d1321 1
+a1321 1
+	if(ARG_NUM(RexxMsg)<2)
+@
+
+
+2.22
+log
+@Fixed CroutonPick(0)
+@
+text
+@d3 1
+a3 1
+* $Id: ArexxPort.c,v 2.21 1995/04/24 15:13:55 pfrench Exp pfrench $
+d5 3
+d1259 12
+d1272 4
+d1279 11
+a1289 1
+		PutTable( CurFG, i, ARG1(RexxMsg), strlen(ARG1(RexxMsg))+1 );
+@
+
+
+2.21
+log
+@Fixed couple of arexx bugs
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPort.c,v 2.20 1995/03/16 16:20:02 CACHELIN4000 Exp pfrench $
+* $Log: ARexxPort.c,v $
+d1041 1
+a1041 3
+			if(num=atol(ARG1(RexxMsg)))
+				row=ew_NavigateNodeNum(EditTop,num);
+			else if(!stricmp("FIRST",ARG1(RexxMsg)))
+d1045 2
+@
+
+
+2.20
+log
+@Add RECORDADD, FLYEROUT commands.
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPOrt.c,v 2.19 1995/03/10 18:38:37 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: ARexxPOrt.c,v $
+d249 1
+a249 1
+*	
+d1053 6
+a1058 2
+	if(row)
+		FillReply(RexxMsg,RC_OK,NULL,0);
+d1060 1
+d1062 2
+a1063 1
+	return((BOOL)(row==0));
+d1349 2
+a1350 1
+	if(!CurFG)
+d1354 8
+@
+
+
+2.19
+log
+@Support flyerstill in MAKECLIPICON
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPOrt.c,v 2.18 1995/03/07 15:58:22 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d153 1
+d1441 1
+a1441 1
+/****** ARexxPort/RxStartClip ************************************
+d1444 1
+a1444 1
+*	RxStartClip
+d1447 1
+a1447 1
+*	BOOL RxStartClip(struct RexxMsg *RexxMsg)
+d1450 3
+a1452 2
+*	Start a named flyer clip, won't overwrite existing clip w/ same name
+*		ARGS: ClipName [,  Source, Compression Mode]
+d1457 1
+a1457 1
+static BOOL RxStartClip(struct RexxMsg *RexxMsg)
+d1459 1
+a1459 1
+	int Src=CurFlySource, Mode=CurCompMode, res=0;
+d1464 2
+d1467 1
+a1467 1
+			Mode=atoi(ARG3(RexxMsg));
+d1469 1
+a1469 2
+			Src=atoi(ARG2(RexxMsg));
+		case 1:
+d1472 1
+d1478 1
+d1484 2
+a1485 1
+/****** ARexxPort/RxAddClipFrames ************************************
+d1488 1
+a1488 1
+*	RxAddClipFrames
+d1491 1
+a1491 1
+*	BOOL RxAddClipFrames(struct RexxMsg *RexxMsg)
+d1494 3
+a1496 2
+*		Add some colorframes to named flyer clip which was opened with startclip,
+*		ARGS: ClipName, # of colorframes
+d1500 1
+a1500 1
+static BOOL RxAddClipFrames(struct RexxMsg *RexxMsg)
+d1502 1
+a1502 1
+	int Fields=0;
+d1505 1
+a1505 1
+	if(ARG_NUM(RexxMsg)==0)
+d1507 11
+a1517 2
+		FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+		return(FALSE);
+d1519 2
+a1520 4
+	if(ARG_NUM(RexxMsg)>1)
+		Fields=atol(ARG2(RexxMsg));
+	clip = (char *)ARG1(RexxMsg);
+	FillReply(RexxMsg,RC_OK,NULL,0);
+d1524 1
+a1524 3
+
+
+/****** ARexxPort/RxEndClip ************************************
+d1527 1
+a1527 1
+*	RxEndClip
+d1530 1
+a1530 1
+*	BOOL RxEndClip(struct RexxMsg *RexxMsg)
+d1533 4
+a1536 3
+*		Close the named flyer clip,
+*		ARGS: ClipName
+*
+d1539 1
+a1539 1
+static BOOL RxEndClip(struct RexxMsg *RexxMsg)
+d1541 27
+a1567 8
+	int Fields=0, Src=CurFlySource, Mode=CurCompMode, res;
+	char *clip;
+	DUMPREXXMSG(RexxMsg);
+	clip = (char *)ARG1(RexxMsg);
+	res = RecordClip(clip,Fields,Src,Mode);
+	stcl_d(result,res);
+	FillReply(RexxMsg,RC_OK,result,0);
+	return(TRUE);
+a1569 4
+
+
+
+
+d1584 1
+a1584 1
+*				HorizAdj(0-909), Key(0-3), Mode(0-2)(for keyer), 
+d2270 4
+a2296 3
+	{ RX_RECORD			 , RxRecordClip		},
+	{ RX_REC_STOP		 , RxRecordStop		},
+	{ RX_REC_PAUSE	 , RxRecordPause	},
+d2309 1
+@
+
+
+2.18
+log
+@Add FLYERDRIVE, FLYERSTATUS commands
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPort.c,v 2.17 1995/03/06 13:21:27 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: ARexxPort.c,v $
+d159 28
+d1804 1
+d1807 3
+d1811 4
+a1814 1
+			Field=atol(ARG2(RexxMsg));
+d1824 2
+a1825 2
+	ESparams4.Data2=(LONG)0;				// currently no CrUD
+	ESparams4.Data3=(LONG)0;
+d2165 1
+a2165 1
+	stcl_d(result,DHD_CheckRecord);
+@
+
+
+2.17
+log
+@Add REQ_OPEN,REQ_CLOSE,CURRENTPATH commands, groundwork for single-framing SW
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.16 1995/03/05 17:05:02 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d143 1
+d150 1
+d2074 57
+d2237 2
+@
+
+
+2.16
+log
+@Add STARTFILEREQ, QUERYFILEREQ commands
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPOrt.c,v 2.15 1995/02/25 16:02:10 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: ARexxPOrt.c,v $
+d535 66
+d626 1
+d1333 1
+a1333 1
+			Mode=atoi(ARG2(RexxMsg));
+d1335 1
+a1335 1
+			Src=atoi(ARG2(RexxMsg));
+d1400 103
+d2113 2
+d2143 2
+@
+
+
+2.15
+log
+@Add Programs popup commands: AddProgram, RemProgram, ProgramName, ProgramCmd, ProgramNum.
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPort.c,v 2.14 1995/02/22 10:15:59 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: ARexxPort.c,v $
+d1342 1
+a1342 1
+*				Bright(-64 - 63), Contrast(0-127), Saturation(0-127), 
+d1800 1
+a1800 1
+	else 
+d1809 87
+a1991 1
+	{ "REMPROGRAM"	 , RxRemSlice	},
+d1995 3
+@
+
+
+2.14
+log
+@Read TBC settings in TBC command..
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.13 1995/02/19 01:51:33 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d114 7
+d137 4
+a140 1
+
+d309 1
+a309 1
+*	ARexx returns reply after script returns.
+d1185 1
+a1185 1
+/****** ARexxPort/Rx ************************************
+d1188 1
+a1188 1
+*	Rx
+d1191 1
+a1191 1
+*	BOOL Rx(struct RexxMsg *RexxMsg)
+d1194 1
+d1196 1
+a1196 1
+*		ARGS:
+d1208 1
+a1208 1
+/****** ARexxPort/Rx ************************************
+d1211 1
+a1211 1
+*	Rx
+d1214 1
+a1214 1
+*	BOOL Rx(struct RexxMsg *RexxMsg)
+d1217 1
+d1227 5
+d1361 1
+a1361 1
+	if(ARG_NUM(RexxMsg)<2) 
+d1615 192
+d1900 6
+@
+
+
+2.13
+log
+@fix Function Host unknown function handling
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.12 1995/02/11 16:46:26 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d1341 7
+a1347 2
+	if(ARG_NUM(RexxMsg)<2) Read=1; // Read TBC settings
+
+@
+
+
+2.12
+log
+@Add TBC(Output) command
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.11 1995/02/01 17:56:58 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d1735 2
+a1736 2
+				}
+				if(!Func->FuncName) FillReply(RexxMsg,RC_ERROR,NULL,ERR_UNKNOWN_FN);
+@
+
+
+2.11
+log
+@Add Pause, TBC commands
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.10 1995/01/12 12:06:25 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d1311 1
+a1311 1
+*		ARGS: Setting,[value] (if va;lue is omitted, current setting is returned
+d1317 1
+a1317 1
+*				Termination(0-31), Input(0-3)
+d1342 13
+@
+
+
+2.10
+log
+@SetWindow noe updates prevviewmode, #5 for close all, Proj/Proj (#4) ignored
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.9 1994/12/24 15:43:46 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d46 1
+a46 1
+* Confidental and Proprietary. All rights reserved. 
+d66 1
+d69 1
+d115 3
+d1272 252
+d1628 1
+d1630 1
+d1658 2
+@
+
+
+2.9
+log
+@Comment out SWITCHER ARexx message interception
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.8 1994/12/22 20:26:38 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d102 1
+a102 1
+extern WORD ViewMode;
+d390 1
+d397 1
+d400 4
+a403 2
+	if(ViewMode>4) ViewMode=0;
+	switch(ViewMode)
+d405 9
+a413 25
+		case 0:   // Project/Files
+			ESparams1.Data1=GUI_T_PROJ|GUI_B_GRAZ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_PROJECT,TOP_SMALL,EW_GRAZER);
+		break;
+		case 1:	 // Files/Files
+			ESparams1.Data1=GUI_T_GRAZ|GUI_B_GRAZ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_GRAZER,TOP_SMALL,EW_GRAZER);
+		break;
+		case 2:	 // Project/Switcher
+			MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY);
+			ESparams1.Data1=GUI_T_PROJ|GUI_B_SWIT;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(TRUE);
+		break;
+		case 3:	 // Big Project
+			ESparams1.Data1=GUI_T_NONE|GUI_B_PROJ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+		break;
+		case 4:	 // Empty/Switcher.. special rexx-only mode ??
+@
+
+
+2.8
+log
+@RemFuncHost() before closing ports, to keep ARexx from breaking with lib still in list but no port for it.
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.7 1994/12/21 17:44:38 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d1381 1
+a1381 1
+	{ RX_SWITCHER		 , RxSwitcher			},
+@
+
+
+2.7
+log
+@Add RxRecordClip, RxRecordStop, makeicon, gettype. Eliminate EW_Project checks
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.6 1994/12/16 21:03:15 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d133 22
+d170 1
+@
+
+
+2.6
+log
+@Add RecordClip arexx command
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.5 1994/12/03 18:34:31 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d96 2
+d356 1
+a356 1
+BOOL RxSetWindows(struct RexxMsg *RexxMsg)
+d418 1
+a418 1
+BOOL RxGetScreen(struct RexxMsg *RexxMsg)
+d440 1
+a440 1
+BOOL RxReqTell(struct RexxMsg *RexxMsg)
+d493 1
+a493 1
+BOOL RxReqError(struct RexxMsg *RexxMsg)
+d518 1
+a518 1
+BOOL RxReqTime(struct RexxMsg *RexxMsg)
+d562 1
+a562 1
+BOOL RxReqNum(struct RexxMsg *RexxMsg)
+d619 1
+a619 1
+BOOL RxReqStr(struct RexxMsg *RexxMsg)
+d662 1
+a662 1
+BOOL RxLoadProj(struct RexxMsg *RexxMsg)
+d700 1
+a700 1
+BOOL RxSaveProj(struct RexxMsg *RexxMsg)
+d720 29
+d763 1
+a763 1
+BOOL RxLoadCrouton(struct RexxMsg *RexxMsg)
+d774 3
+a776 2
+		if( EditTop && (EditTop->Node.Type == EW_PROJECT)
+				&& (FG=AllocProj(ARG1(RexxMsg))) )
+d813 1
+a813 1
+BOOL RxRunCrouton(struct RexxMsg *RexxMsg)
+d856 1
+a856 1
+BOOL RxPickCrouton(struct RexxMsg *RexxMsg)
+d860 2
+a861 1
+	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+d910 1
+a910 1
+BOOL RxCroutonName(struct RexxMsg *RexxMsg)
+d916 2
+a917 1
+	if( !EditTop || (EditTop->Node.Type != EW_PROJECT) )
+d949 1
+a949 1
+BOOL RxSwitcher(struct RexxMsg *RexxMsg)
+d961 34
+d1009 1
+a1009 1
+BOOL RxGetTag(struct RexxMsg *RexxMsg)
+d1058 1
+a1058 1
+BOOL RxSetTag(struct RexxMsg *RexxMsg)
+d1105 1
+a1105 1
+BOOL RxCheckTag(struct RexxMsg *RexxMsg)
+d1149 1
+a1149 1
+BOOL RxStopCrouton(struct RexxMsg *RexxMsg)
+d1152 1
+a1152 1
+	*result=0;
+d1171 1
+a1171 1
+BOOL RxCroutonSpot(struct RexxMsg *RexxMsg)
+a1178 1
+
+d1195 1
+a1195 1
+BOOL RxRecordClip(struct RexxMsg *RexxMsg)
+d1222 66
+d1303 1
+a1303 1
+BOOL RxDummy(struct RexxMsg *RexxMsg)
+d1311 1
+a1311 1
+BOOL RxAddRefreshPort(struct RexxMsg *RexxMsg)
+d1342 1
+d1347 2
+d1360 2
+d1370 1
+d1374 3
+a1376 1
+	{ RX_RECORD			 , RxRecordClip			},
+@
+
+
+2.5
+log
+@Added lots of f'ns, like RxSetTag()
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.4 1994/11/29 14:45:16 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d95 1
+d281 1
+a281 1
+*
+d671 1
+a671 1
+			if (EditTop->Node.Type == EW_PROJECT) 
+d1108 45
+d1175 7
+d1209 1
+d1232 1
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.3 1994/11/18 16:52:34 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d37 1
+a37 1
+
+d47 1
+d81 1
+a81 1
+
+d85 1
+d90 2
+d95 1
+d99 1
+a99 1
+*   NAME   
+d169 20
+d316 1
+a316 1
+*	
+a332 36
+/****** ARexxPort/PortGetCrouton ************************************
+*
+*   NAME
+*	PortGetCrouton
+*
+*   SYNOPSIS
+*	BOOL PortGetCrouton(struct RexxMsg *RexxMsg)
+*
+*   FUNCTION
+*	some weird stuff Jr. was playing with
+*
+*********************************************************************
+*/
+BOOL PortGetCrouton(struct RexxMsg *RexxMsg)
+{
+/*
+	struct EditWindow *Edit;
+	struct Gadget *Gadget;
+	struct Screen *Screen;
+
+	if (Screen = (struct Screen *)RexxMsg->rm_Args[2]) {
+		NewGrazer.NewEdit.TopEdge = Screen->Height - NewGrazer.NewEdit.Height;
+		NewGrazer.NewEdit.Screen = Screen;
+	}
+
+	if (Edit = OpenAuxWindow((struct NewEditWindow *)&NewGrazer)) {
+		Edit->SaveMsg = RexxMsg;
+		Gadget = FindGadget(Edit->Gadgets,ID_COMMON_ALL);
+		Gadget->UserData = (APTR)HandleAuxDone;
+	}
+*/
+	return(FALSE); // do not return message now
+}
+
+
+
+d349 1
+d395 22
+d434 1
+d470 25
+d513 1
+d557 1
+d613 1
+d655 1
+d693 1
+d728 1
+d777 1
+d801 167
+d969 46
+d1016 39
+d1056 3
+d1060 21
+d1082 21
+d1104 21
+d1134 1
+d1136 1
+d1140 14
+a1153 6
+#define RX_PROJ_LOAD	"PROJECT_LOAD"
+#define RX_PROJ_SAVE	"PROJECT_SAVE"
+#define RX_PROJ_PLAY	"PROJECT_PLAY"
+#define RX_PROJ_STOP	"PROJECT_STOP"
+#define RX_CR_LOAD		"CROUTON_LOAD"
+#define RX_CR_RUN			"CROUTON_RUN"
+d1156 1
+a1156 1
+	{ RX_WINDOWS		 , RxSetWindows		},
+d1158 1
+d1166 9
+d1189 1
+a1189 6
+*
+*	Supported Functions:
+*
+*	CroutonID = GetCrouton(PromptString,Screen)	// Screen is NULL from rexx
+*
+*
+d1234 1
+a1234 1
+			ReplyMsg((struct Message *)RexxMsg);
+@
+
+
+2.3
+log
+@Add commands, fix reply freeing
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.2 1994/11/16 01:18:27 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d80 1
+a80 1
+extern struct FastGadget **PtrProject;
+d351 1
+d412 1
+d463 2
+a464 1
+*	Time code string requester
+d507 1
+d562 1
+d605 1
+d621 3
+d625 1
+d642 1
+d674 2
+a675 1
+*	Load Crouton
+d693 52
+d777 1
+d787 2
+a788 1
+//	{ RX_CR_LOAD		 , RxLoadCrouton	},
+d845 1
+@
+
+
+2.2
+log
+@Add Macro capability, SET_VIEW command
+@
+text
+@d3 5
+a7 2
+* $Id: ArexxPort.c,v 2.1 1994/08/29 21:09:15 CACHELIN4000 Exp CACHELIN4000 $
+* $Log: ArexxPort.c,v $
+d77 2
+d81 1
+d167 1
+a167 1
+*	Send a filename to ARexx resident process for execution, 
+d178 1
+a178 1
+	if( !(msg = CreateRexxMsg(ARexxPort,NULL,NULL)) )
+d190 1
+a190 1
+		ClearRexxMsg( msg, 16 );
+d229 1
+a229 1
+		ClearRexxMsg( msg, 16 );
+d336 15
+d398 297
+d700 11
+a710 1
+#define RX_WINDOWS	"SET_VIEW"
+d712 8
+a719 2
+	{ RX_WINDOWS , RxSetWindows},
+	{ RX_GET_CROUTON,PortGetCrouton },
+a748 1
+	BOOL ReturnMsg = FALSE, OurFunc = FALSE;
+d758 2
+a759 1
+			return(ExitCode);
+d761 1
+a761 5
+		DUMPSTR("Got ARexx Message: ");
+		DUMPMSG(ARG0(RexxMsg));
+		if( !IS_FUNCTION(RexxMsg) )
+			FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADMESS);
+		else if( ARG0(RexxMsg) )
+d763 7
+a769 2
+			// go through function list and try to find handler
+			for( Func = &RexxFunc[0]; Func->FuncName; Func++ )
+d771 2
+a772 1
+				if (!(stricmp(Func->FuncName,ARG0(RexxMsg)) ))
+d774 5
+a778 3
+					OurFunc = TRUE;
+					ReturnMsg = Func->FuncHandler(RexxMsg);
+					break;
+d780 1
+d782 2
+a783 1
+			if(!Func->FuncName) FillReply(RexxMsg,RC_ERROR,NULL,ERR_UNKNOWN_FN);
+a784 6
+		else FillReply(RexxMsg,RC_ERROR,NULL,ERR_BADARGNUM);
+
+// if (!OurFunc), msg not for us
+// if (ReturnMsg), function wants us to return msg now (Return1/2 already filled)
+
+		ReplyMsg((struct Message *)RexxMsg);
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: ARexxPort.c,v 2.0 94/02/17 16:23:36 Kell Exp Locker: CACHELIN4000 $
+* $Log:	ARexxPort.c,v $
+d38 1
+d48 1
+a48 3
+#include <arexxport.p>
+#include <handlecommon.p>
+#include <gadgethelp.p>
+d51 5
+d58 14
+d74 2
+d106 1
+a106 1
+*   NAME   
+d129 102
+d233 1
+a233 1
+*   NAME   
+d240 1
+a240 1
+*	
+d272 1
+a272 1
+*   NAME   
+a288 1
+
+a290 1
+
+d298 1
+a298 1
+*   NAME   
+d305 1
+a305 1
+*	
+d311 1
+d325 2
+a326 1
+	} 
+d330 60
+d392 1
+a392 1
+*   NAME   
+d404 1
+a404 1
+*	
+a410 10
+struct RexxFunc {
+	STRPTR FuncName;
+	BOOL (*FuncHandler)(struct RexxMsg *);
+};
+
+static struct RexxFunc RexxFunc[] = {
+	{ RX_GET_CROUTON,PortGetCrouton },
+	{ NULL, NULL } 
+};
+
+d418 20
+a437 15
+	while (RexxMsg = (struct RexxMsg *)GetMsg(ARexxPort)) {
+
+/* printf("Args0:%s\nArgs1:%s\nCommAddr:%s\nFileExt:%s\n",
+	RexxMsg->rm_Args[0],RexxMsg->rm_Args[1],
+	RexxMsg->rm_CommAddr,RexxMsg->rm_FileExt);
+*/
+
+	// if its a function host call, and there's a first arg,
+		if (((RexxMsg->rm_Action & RXCODEMASK) == RXFUNC) &&
+			(RexxMsg->rm_Args[0])) {
+
+	// go through function list and try to find handler
+			Func = &RexxFunc[0];
+			while (Func->FuncName) {
+				if (!(stricmp(Func->FuncName,RexxMsg->rm_Args[0]))) {
+a441 1
+				Func++;
+d443 1
+d445 1
+d449 2
+a450 2
+		if ((!OurFunc) || (ReturnMsg)) 
+			ReplyMsg(&RexxMsg->rm_Node);
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@d3 1
+a3 1
+* $Id: ARexxPort.c,v 2.0 94/02/17 15:56:34 Kell Exp $
+d5 3
+@

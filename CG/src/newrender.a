@@ -1,0 +1,2401 @@
+********************************************************************
+* newrender.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: newrender.a,v 2.3 1995/12/14 13:24:03 Holt Exp $
+*
+* $Log: newrender.a,v $
+*Revision 2.3  1995/12/14  13:24:03  Holt
+*/
+*
+*Revision 2.2  1995/12/13  19:03:38  Holt
+**** empty log message ***
+*
+*Revision 2.1  1995/08/31  15:39:46  Holt
+**** empty log message ***
+*
+*Revision 2.0  1995/08/31  15:10:52  Holt
+*FirstCheckIn
+*
+*
+*
+**********************************************************************
+********************************************************************
+* newrender.a
+*
+* Copyright 1993 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* 10-3-89	Steve H.	Created this file
+* 3-22-93	Steve H.	Last update
+* Sun Nov 21 16:22:53 1993 AC
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include	"exec/memory.i"
+	include "graphics/gfx.i"
+	include "graphics/text.i"
+	include "libraries/dos.i"
+	include "hardware/custom.i"
+	include "hardware/dmabits.i"
+	include "hardware/intbits.i"
+	include "hardware/blit.i"
+
+	include "lib/exec_lib.i"
+	include "lib/dos_lib.i"
+	include "lib/graphics_lib.i"
+
+	include	"modular.i"
+	include	"data.xref"
+	include "commonrgb.i"
+	include "book.i"
+	include "buffer.i"
+	include "toastfont.i"
+	include "graphichelp.i"
+	include "newrender.i"
+
+	include "fastblitter.i"
+	include "instinct.i"
+	include "vtdebug.i"
+
+	xref	_GfxBase
+	xref	_OutlineTable
+	xref	_BrushDeltaY
+	xref	_CharTop
+	xref	_StripTop
+
+TOTAL_WRITE_LINES	equ	480
+PAGE_WIDTH equ 752
+GRAD_CHANNELS equ 4
+SERDEBUG	equ 1
+	include "serialdebug.i"	; Ken's routines
+
+***********
+* call from C to a Toaster library function
+ IFND FINAL_CODE
+TLABEL MACRO
+	xdef	_\1
+_\1
+	move.l	a5,-(sp)
+	move.l	GlobalData,a5
+	move.l	gb_ToasterBase(a5),a5
+	cmp.l	#0,a5
+	beq.s	.NoCall
+	CALLTL	\1
+	bra.s	.Exit
+.NoCall
+	moveq.l	#TRUE,d0	; fake success
+.Exit
+	move.l	(sp)+,a5
+	rts
+	ENDM
+ ENDC
+
+***********
+* call from C to a Toaster library function
+ IFD FINAL_CODE
+TLABEL MACRO
+	xdef	_\1
+_\1
+	move.l	a5,-(sp)
+	move.l	GlobalData,a5
+	move.l	gb_ToasterBase(a5),a5
+	CALLTL	\1
+	move.l	(sp)+,a5
+	rts
+	ENDM
+ ENDC
+
+	section	,code
+*********************************************************************
+; IFD SERDEBUG
+; XLABEL _DumpMem
+;	DUMPMEM <DumpMem>,(a0),d0
+;	rts
+; ENDC
+
+
+
+; Stolen from EDIT/ToastSupport.a !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+	IFD	SERDEBUG
+**********************************************************************
+* DUMPMSG(->STRING)				;adds CR+LF
+* DUMPSTR(->STRING)				;no CR+LF
+* DUMPTXT(->STRING\\STRING\\STRING\\ etc)	;\\ = CR+LF
+* DUMPREG(->STRING)			
+* DUMPMEM(->STRING,->BLOCK,SIZE)		
+* DUMPHEX(->STRING,->BLOCK,SIZE)		
+* DUMPNUM(->STRING\\STRING\\STRING etc.,num)			;\\ = CR+LF
+* DUMPUDECx(->STRING\\STRING\\etc.,num,->STRING\\STRING\\etc.)  ;\\ = CR+LF
+* DUMPSDECx(->STRING\\STRING\\etc.,num,->STRING\\STRING\\etc.)  ;\\ = CR+LF
+* DUMPHEXIx(->STRING\\STRING\\etc.,num,->STRING\\STRING\\etc.)  ;\\ = CR+LF
+* DUMPBITSx(->STRING\\STRING\\etc.,num,->STRING\\STRING\\etc.)  ;\\ = CR+LF
+
+USESTRINGPOINTERS set	1
+
+** VOID __asm DumpMsg(register __a0 UBYTE *);
+ XLABEL _DumpMsg
+	DUMP_MSG (a0)
+	rts
+
+** VOID __asm DumpStr(register __a0 UBYTE *);
+ XLABEL _DumpStr
+	DUMP_STR (a0)
+	rts
+
+** VOID __asm DumpTxt(register __a0 UBYTE *);
+ XLABEL _DumpTxt
+	DUMP_TXT (a0)
+	rts
+
+** VOID __asm DumpReg(register __a0 UBYTE *);
+ XLABEL _DumpReg
+	DUMP_REG (a0)
+	rts
+
+** VOID __asm DumpMem(register __a0 UBYTE *,register __a1 APTR,register __d0 ULONG);
+ XLABEL _DumpMem
+	DUMP_MEM (a0),(a1),d0
+	rts
+
+** VOID __asm DumpHex(register __a0 UBYTE *,register __a1 APTR,register __d0 ULONG);
+ XLABEL _DumpHex
+	DUMP_HEX (a0),(a1),d0
+	rts
+
+** VOID __asm DumpNum(register __a0 UBYTE *,register __d0 LONG);
+ XLABEL _DumpNum
+	DUMP_NUM (a0),d0
+	rts
+
+*---------------------------------------------------
+** VOID __asm DumpUDecB(register __a0 UBYTE *,register __d0 UBYTE,register __a1 UBYTE *);
+ XLABEL _DumpUDecB
+	DUMP_UDEC.B (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpSDecB(register __a0 UBYTE *,register __d0 BYTE,register __a1 UBYTE *);
+ XLABEL _DumpSDecB
+	DUMP_SDEC.B (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpHexiB(register __a0 UBYTE *,register __d0 BYTE,register __a1 UBYTE *);
+ XLABEL _DumpHexiB
+	DUMP_HEXI.B (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpBitsB(register __a0 UBYTE *,register __d0 BYTE,register __a1 UBYTE *);
+ XLABEL _DumpBitsB
+	DUMP_BITS.B (a0),d0,(a1)
+	rts
+
+*---------------------------------------------------
+** VOID __asm DumpUDecW(register __a0 UBYTE *,register __d0 UWORD,register __a1 UBYTE *);
+ XLABEL _DumpUDecW
+	DUMP_UDEC.W (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpSDecW(register __a0 UBYTE *,register __d0 WORD,register __a1 UBYTE *);
+ XLABEL _DumpSDecW
+	DUMP_SDEC.W (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpHexiW(register __a0 UBYTE *,register __d0 WORD,register __a1 UBYTE *);
+ XLABEL _DumpHexiW
+	DUMP_HEXI.W (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpBitsW(register __a0 UBYTE *,register __d0 WORD,register __a1 UBYTE *);
+ XLABEL _DumpBitsW
+	DUMP_BITS.W (a0),d0,(a1)
+	rts
+
+*---------------------------------------------------
+** VOID __asm DumpUDecL(register __a0 UBYTE *,register __d0 ULONG,register __a1 UBYTE *);
+ XLABEL _DumpUDecL
+	DUMP_UDEC.L (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpSDecL(register __a0 UBYTE *,register __d0 LONG,register __a1 UBYTE *);
+ XLABEL _DumpSDecL
+	DUMP_SDEC.L (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpHexiL(register __a0 UBYTE *,register __d0 LONG,register __a1 UBYTE *);
+ XLABEL _DumpHexiL
+	DUMP_HEXI.L (a0),d0,(a1)
+	rts
+
+** VOID __asm DumpBitsL(register __a0 UBYTE *,register __d0 LONG,register __a1 UBYTE *);
+ XLABEL _DumpBitsL
+	DUMP_BITS.L (a0),d0,(a1)
+	rts
+
+	ALLDUMPS
+
+	ENDC	;IFD SERDEBUG
+
+*------------------------------------------
+* Stubs if you don't want any debug statements.
+* The calls to these routines still exist!!! ****!!!!!*****
+
+	IFND	SERDEBUG
+ XLABEL _DumpMsg
+ XLABEL _DumpStr
+ XLABEL _DumpTxt
+ XLABEL _DumpReg
+ XLABEL _DumpMem
+ XLABEL _DumpHex
+ XLABEL _DumpNum
+ XLABEL _DumpUDecB
+ XLABEL _DumpSDecB
+ XLABEL _DumpHexiB
+ XLABEL _DumpBitsB
+ XLABEL _DumpUDecW
+ XLABEL _DumpSDecW
+ XLABEL _DumpHexiW
+ XLABEL _DumpBitsW
+ XLABEL _DumpUDecL
+ XLABEL _DumpSDecL
+ XLABEL _DumpHexiL
+ XLABEL _DumpBitsL
+	rts
+	ENDC	;IFND	SERDEBUG
+
+; Stolen from EDIT/ToastSupport.a !!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+*********************************************************************
+* ToasterBase stubs
+ TLABEL LoadRGBPicture
+ TLABEL SoftSpriteOn
+ TLABEL SoftSpriteOnScreen
+ TLABEL SoftSpriteOff
+ TLABEL LockProject
+ TLABEL ReDoDisplay
+ TLABEL DisplayNormalSprite
+ TLABEL DisplayWaitSprite
+ TLABEL AllInterruptsOff
+ TLABEL AllInterruptsOn
+ TLABEL Wait4Top
+ TLABEL DoSafeWrite
+ TLABEL	SendRGBExtInit
+ TLABEL	SendRGBExtBeginRegion
+ TLABEL	SendRGBAddLine
+ TLABEL	SendRGBAddComposite
+ TLABEL	SendRGBRegion
+ TLABEL	SendRGBCleanup
+ TLABEL	LoadIFF24OrFS
+ TLABEL	FreeIFF24OrFS
+ TLABEL	MKPIconRGB
+ TLABEL	MKPIcon
+ TLABEL	GrabIcon
+ TLABEL	Icon_CopyLines
+ TLABEL	StartSavePIcon
+ TLABEL	StopSavePIcon
+ TLABEL	StopSavePIconRGB
+ TLABEL	StopSaveIcon644
+ TLABEL	StopSaveRGBPIcon644
+ TLABEL	PCON_Save
+
+*********************************************************************
+ IFD SERDEBUG
+
+ XLABEL _WaitButton
+	WAIT4RMB
+	rts
+
+	xref	_GfxBase
+
+* AAR -- junk 
+ XLABEL _JunkBM
+	movem.l	d2-d7/a2-a6,-(sp)
+	move.l	_GfxBase,a6
+* AAR -- JUNK
+	DUMPREG <JUNK>
+* AAR -- JUNKBM
+	DUMPMEM <JUNKBM>,(a0),#bm_SIZEOF
+	XSYS	BltBitMap
+
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+ ENDC
+
+****** NewRender/AlphaIntoByteMap ***********************************
+*
+*   NAME
+*	AlphaIntoByteMap
+*
+*   SYNOPSIS
+*	VOID __asm AlphaIntoByteMap(
+*		register __a0 struct BitMap *SourceBitMap, (must be 2bp deep)
+*		register __d0 UWORD SrcLeftEdge,
+*		register __d1 UWORD SrcTopEdge,
+*		register __a1 struct ByteMap *DestByteMap, (must be 3byteplanes deep)
+*		register __d2 UWORD DestLeftEdge,
+*		register __d3 UWORD DestTopEdge,
+*		register __d4 UWORD Width,
+*		register __d5 UWORD Height
+*		register __a2 struct TrueColor *TrueColor,
+*		register __a3 struct CGLine *Line,
+*		register __d6 BOOL RenderingFace, //  only used for brushes
+*		register __a4 struct TrueColor *GradColor); // NULL for solid chars, 1 for fills
+*
+*   FUNCTION
+*		Takes into account tc_Alpha and SourceBitMap's value (0-3)
+*		Uses to do "A over B" into DestByteMap
+*
+*********************************************************************`
+ XLABEL _AlphaIntoByteMap
+	movem.l	d2-d7/a2-a6,-(sp)
+	move.w	d4,Width
+  clr.w  Ypos
+
+  move.w  d1,SrcYOffset
+  move.w  d3,DstYOffset
+  move.l (a2),TopColor
+
+ IFD SERDEBUG
+;	move.l	(a4),d7  ; enforcer hit if NULL
+;	DUMPREG <AlphaIntoByteMap_d7>
+;	DUMPMEM <ByteMap>,(a1),#mbym_SIZEOF
+ ENDC
+
+* setup LINE_BRUSH
+	movem.l	d0-d2/a0-a2,-(sp)
+	tst.w	d6		; rendering face?
+	beq.s	NotBr
+	cmp.b	#LINE_BRUSH,line_Type(a3)
+	bne.s	NotBr
+	move.w	#TRUE,Brush
+	move.b	tc_Alpha(a2),BrushRGBA+tc_Alpha
+	move.l	line_Text+text_Attr(a3),a0
+	move.w	attr_ID(a0),d0
+	XJSR	_GetData
+	tst.l	d0
+	beq.s	AbortExit
+	move.l	d0,a0
+	move.l	ld_Data(a0),a0	; picture structure
+*	lea.l	PIC_RGB(a0),a0	; not needed - 1st in struct
+	move.l	a0,BrushByteMap
+	beq.s	AbortExit
+*	bsr		BMGurm
+
+	move.w	bym_BytesPerRow(a0),d0
+	move.w	d0,BrushBPR
+	move.w	_BrushDeltaY,d2	; y offset into brush data
+	mulu.w	d0,d2	; row offset into each plane
+	lea.l	bym_REDBuffer(a0),a0
+	lea.l	BrushPixPl,a2
+	moveq.l	#3-1,d1
+NextP
+	move.l	(a0)+,a1
+	add.l	d2,a1
+	move.l	a1,12(a2)	; store BrushRowPl
+	move.l	a1,(a2)+	; store BrushPixPl
+	dbra	d1,NextP
+;	bra.s	SetD
+	bra	SetD
+AbortExit
+	movem.l	(sp)+,d0-d2/a0-a2
+	bra		Exit
+
+* Build table of possible Ca, also alphas
+NotBr
+
+  movem.l d0-d3,-(sp) ; LET'S PARE THIS TO A MIN
+
+	clr.w	Brush
+  clr.w Gradient
+  clr.l SpecFill
+
+  move.l #4-1,d6       ; this should be after grad check!!
+	lea.l	DeltaRGBg,a5
+.cleanuploop
+  move.l #0,(a5)+  ; Clear old DeltaRGB
+  dbra d6,.cleanuploop
+
+  move.l a4,d6              ; Color=NULL => Solid
+  beq  .NoG
+
+  move.l #1,SpecFill
+  cmp.l a2,a4               ; Color=topcolor => SpecFill
+  beq  .NoG
+
+  clr.l SpecFill       ; else color grad
+  move.l (a4),BotColor
+  move.w #TRUE,Gradient
+  move.w line_TotalHeight(a3),LineHeight
+  move.w line_FaceMinY(a3),FaceMinY
+  move.w line_YOffset(a3),LineYOff
+
+  IFD xSERDEBUG
+    move.w _StripTop,FaceMinY
+    move.w _CharTop,LineYOff
+	 DUMPMEM <Entry: TC BC SrcY DstY CharTop Striptop>,TopColor,#16
+    move.w line_FaceMinY(a3),FaceMinY
+    move.w line_YOffset(a3),LineYOff
+   DUMPMEM <Entry: TC BC SrcY DstY  LineYOff FaceMinY>,TopColor,#16
+  ENDC
+
+  clr.l d6
+  move.w line_YOffset(a3),d6
+  tst.w d3  ; non-zero on first strip filled==> d1=0
+  beq .NOT_FIRST
+  move.w _CharTop,d6
+  sub.w line_FaceMinY(a3),d6
+  sub.w line_YOffset(a3),d6  ; dist from top of tallest char to current char
+  move.w d6,SrcYOffset
+  bra .Y_OK
+
+.NOT_FIRST
+ IFD SERDEBUG
+;	DUMPMEM <NotFirst FixY: TC BC SrcY DstY  LineYOff FaceMinY>,TopColor,#16
+ ENDC
+
+;************************************************
+; This chunk may derive value for srcY in all NOT_FIRST cases
+; SrcY = 120 - (LineYOff mod 120 )  for 2nd strips
+
+  clr.l d6
+  move.w line_YOffset(a3),d6
+  divu.w #120,d6
+  move.w d6,d3     ; # of strips before 1st filled strip
+  swap d6      ; remainder = LineYOff mod 120
+  move.w d6,LineYOff
+  sub.w #120,d6
+  neg.w d6          ; distance into char at top of 2nd strip
+  clr.l d1
+  move.w  _StripTop,d1
+  subq.w #1,d1   ; don't count first strip, 119/120 instead of 120/120
+  divu.w #120,d1 ; # of strips from top -1
+  sub.w d3,d1    ; # of strips from top - strips from 1st filled
+  mulu.w #120,d1
+  add.w d1,d6    ; distance into char at top of current strip
+  sub.w line_FaceMinY(a3),d6
+  move.w d6,SrcYOffset
+;*************************************************
+
+.Y_OK
+ IFD xSERDEBUG
+	DUMPMEM <OK: TC BC SrcY DstY LineYOff FaceMinY>,TopColor,#16
+ ENDC
+
+
+.NoG
+  movem.l (sp)+,d0-d3  ; PARE UNSTACK TOO!!
+
+	move.l	a2,a0	; color
+	lea.l	SrcRGBTable,a1
+	bsr		_BuildRGBTable
+SetD
+	movem.l	(sp)+,d0-d2/a0-a2
+
+* figure src byte offset into planes
+	move.w	d0,d6
+	and.w	#$000f,d6
+	move.w	d6,StartSrcBit ; so can start on any bit
+	lsr.w	#3,d0	; round down
+	and.l	#$0000fffe,d0
+	move.w	bm_BytesPerRow(a0),d7
+	mulu.w	d7,d1
+	add.l	d1,d0	; src byte offset
+
+* forget src modulo - too hard to calc
+	move.w	d7,SrcBytesPerRow
+
+* figure dest byte offset into byte plane
+	and.l	#$0000ffff,d2
+	move.w	mbym_BytesPerRow(a1),d7
+	mulu.w	d7,d3
+	add.l	d3,d2	; dest byte offset
+
+* figure dest modulo
+	move.w	d7,d3
+	sub.w	d4,d3	; dest modulo (only actual width put into bytemap)
+	move.w	d3,DestModulo
+
+* do 16 pixels at a time
+	move.l	bm_Planes(a0),a2	; src plane 0
+	add.l	d0,a2
+	move.l	a2,SrcPlane0
+	move.l	bm_Planes+4(a0),a3	; src plane 1
+	add.l	d0,a3
+	move.l	a3,SrcPlane1
+	move.l	mbym_Planes(a1),a4		; dest R
+	add.l	d2,a4
+	move.l	mbym_Planes+4(a1),a5	; dest G
+	add.l	d2,a5
+	move.l	mbym_Planes+8(a1),a6	; dest B
+	add.l	d2,a6
+	lea.l	SrcRGBTable,a1
+	move.w	d5,d7	; height
+
+ IFD SERDEBUG
+;	move.l	a4,TR
+;	move.l	a5,TG
+;	move.l	a6,TB
+ ENDC
+
+*************************************************
+* seperated for speed reasons
+	tst.w	Brush
+	beq		NotBrush
+
+* do next row
+BNextRow
+	move.w	Width,d6	; in pixels
+
+* account for StartSrcBit each row
+	move.w	(a2)+,d2
+	move.w	(a3)+,d3
+	moveq.l	#16,d5	; #bits left
+
+	move.w	StartSrcBit,d1
+	beq.s	BFirstWordEntry
+	lsl.w	d1,d2
+	lsl.w	d1,d3
+	sub.w	d1,d5
+BSSBDone
+	bra.s	BFirstWordEntry
+
+********************
+* get next word
+BNextWord
+	move.w	(a2)+,d2	; LS bit
+	move.w	(a3)+,d3	; MS bit
+	moveq.l	#16,d5	; #bits left
+BFirstWordEntry
+
+* see if less than 16 pixels left this row (last word on row)
+	cmp.w	d5,d6
+	bhs.s	BOK
+	move.w	d6,d5	; do all that's left
+BOK
+	sub.w	d5,d6	; d6 left after this row
+	subq.w	#1,d5	; for dbra
+
+****************************
+* next pixel of word
+BNextPixel
+* new source color each pixel for LINE_BRUSH
+	movem.l	a1-a3,-(sp)
+	lea.l	BrushRGBA,a0
+	lea.l	BrushPixPl,a3
+	move.l	(a3),a2
+	move.b	(a2)+,tc_Red(a0)
+	move.l	a2,(a3)+
+	move.l	(a3),a2
+	move.b	(a2)+,tc_Green(a0)
+	move.l	a2,(a3)+
+	move.l	(a3),a2
+	move.b	(a2)+,tc_Blue(a0)
+	move.l	a2,(a3)
+	lea.l	SrcRGBTable,a1
+	bsr		_BuildRGBTable
+	movem.l	(sp)+,a1-a3
+
+	moveq.l	#0,d1	; alpha
+	add.w	d3,d3	; put leftmost bit in extend
+	addx.w	d1,d1
+	add.w	d2,d2
+	addx.w	d1,d1	; now have alpha 0-3
+	move.l	a1,a0
+	add.w	d1,a0	; src table
+
+	moveq.l	#0,d4
+	move.b	(a0),d4		; src red (Ca)
+	moveq.l	#0,d0
+	move.b	(a4),d0		; dest red (Cb)
+	bsr		CalcColor
+	add.w	d4,d0
+	move.b	d0,(a4)+	; Red
+
+	moveq.l	#0,d4
+	move.b	4(a0),d4
+	moveq.l	#0,d0
+	move.b	(a5),d0
+	bsr		CalcColor
+	add.w	d4,d0
+	move.b	d0,(a5)+	; Green
+
+	moveq.l	#0,d4
+	move.b	8(a0),d4
+	moveq.l	#0,d0
+	move.b	(a6),d0
+	bsr		CalcColor
+	add.w	d4,d0
+	move.b	d0,(a6)+	; Blue
+
+	dbra	d5,BNextPixel
+	tst.w	d6			; done with this row?
+	bne		BNextWord	; no
+
+	subq.w	#1,d7	; row
+	beq		Exit
+
+* setup for next row
+	move.w	BrushBPR,d0
+	moveq.l	#3-1,d1
+	lea.l	BrushPixPl,a2
+.SNBR
+	move.l	12(a2),a0	; get BrushRowPl
+	add.w	d0,a0
+	move.l	a0,12(a2)	; store BrushRowPl
+	move.l	a0,(a2)+	; store BrushPixPl
+	dbra	d1,.SNBR
+
+	move.w	SrcBytesPerRow,d0
+	move.l	SrcPlane0,a2
+	add.w	d0,a2
+	move.l	a2,SrcPlane0
+	move.l	SrcPlane1,a3
+	add.w	d0,a3
+	move.l	a3,SrcPlane1
+
+	move.w	DestModulo,d0
+	add.w	d0,a4
+	add.w	d0,a5
+	add.w	d0,a6
+	bra		BNextRow
+
+*************************************************
+* non LINE_BRUSH
+NotBrush
+
+  tst.l SpecFill
+  bne .NotCGrad
+  tst.w Gradient
+  beq .NotCGrad
+	movem.l	d0-d7/a0-a6,-(sp)
+* figure delta R,G,B per line
+  lea.l TopColor,a1
+  lea.l BotColor,a0
+	lea.l	DeltaRGBg,a5
+	lea.l	CurrentRGBg,a6
+	moveq.l	#GRAD_CHANNELS-1,d2   ; rgb loop  Would using a 4 make alpha gradients?
+* figure delta per line
+
+	moveq.l	#0,d3       ; not needed ?
+  move.w SrcYOffset,d3
+	moveq.l	#0,d4       ; not needed ?
+	move.w LineHeight,d4
+.NextD
+	moveq.l	#0,d0
+	move.b	(a1)+,d0    ; topcolor
+	lsl.w	#8,d0
+	moveq.l	#0,d5       ; not needed ?
+  move.w  d0,d5       ; save topcolor*256
+	moveq.l	#0,d1
+	move.b	(a0)+,d1
+	lsl.w	#8,d1
+
+	sub.l	d0,d1         ; delta/box * $100
+  move.l d1,d0
+
+	beq.s	.DltaZero
+	divs	d4,d0
+  move.w  d0,d6
+.DltaZero
+	move.w	d0,(a5)+	  ; delta/line * $100
+  muls.w  d3,d0
+	add.w	d5,d0
+	move.w	d0,(a6)+	  ; starting value
+
+	dbra	d2,.NextD
+
+ IFD xSERDEBUG
+	lea.l	CurrentRGBg,a6
+	DUMPMEM <CurRGB>,(a6),#8
+ ENDC
+
+	movem.l	(sp)+,d0-d7/a0-a6
+.NotCGrad
+
+
+* do next row
+NextRow
+  tst.w Gradient
+  beq.s .NoGrad
+  tst.l SpecFill
+  bne.s .NoGrad
+ IFD SERDEBUG
+;  DUMPREG <NOT NoGrad>
+ ENDC
+	movem.l	d0-d3/a0-a6,-(sp)
+	lea.l	CurrentRGBg,a6
+	lea.l	DeltaRGBg,a5
+  lea.l TopColor,a4
+  moveq.l #GRAD_CHANNELS-1,d3
+.nxtclr
+	move.w	(a6),d0 ; color
+	move.w	(a5)+,d1 ; delta
+	add.w	d1,d0
+	move.w	d0,(a6)+
+	add.w	#$80,d0	; round up
+	lsr.w	#8,d0	; get $00-$ff
+  move.b d0,(a4)+   ; 8-bit current color
+	dbra	d3,.nxtclr
+
+;  lea.l CurColor,a0
+  lea.l TopColor,a0
+;  move.l #1637,d5
+	lea.l	SrcRGBTable,a1
+	bsr		_BuildRGBTable
+	movem.l	(sp)+,d0-d3/a0-a6
+
+.NoGrad
+
+;  move.l #1638,d5  ; 0x666
+	move.w	Width,d6	; in pixels
+
+* account for StartSrcBit each row
+	move.w	(a2)+,d2
+	move.w	(a3)+,d3
+	moveq.l	#16,d5	; #bits left
+
+	move.w	StartSrcBit,d1
+	beq.s	FirstWordEntry
+	lsl.w	d1,d2
+	lsl.w	d1,d3
+	sub.w	d1,d5
+.SSBDone
+	bra.s	FirstWordEntry
+
+********************
+* get next word
+NextWord
+	move.w	(a2)+,d2	; LS bit
+	move.w	(a3)+,d3	; MS bit
+	moveq.l	#16,d5	; #bits left
+FirstWordEntry
+
+* see if less than 16 pixels left this row (last word on row)
+	cmp.w	d5,d6
+	bhs.s	.OK
+	move.w	d6,d5	; do all that's left
+.OK
+	sub.w	d5,d6	; d6 left after this row
+	subq.w	#1,d5	; for dbra
+
+****************************
+* next pixel of word
+NextPixel
+
+  tst.l SpecFill
+  beq.s .stdclr
+  move.w d6,d1    ; Remaining pixels after word
+  add.w d5,d1     ; Remaining pixels in word
+  sub.w Width,d1
+  move.w d1,Xpos
+  lea.l TopColor,a0
+  bsr FillFun
+	lea.l	SrcRGBTable,a1
+	bsr		_BuildRGBTable
+	lea.l	SrcRGBTable,a1
+.stdclr
+
+	moveq.l	#0,d1	; alpha
+	add.w	d3,d3	; put leftmost bit in extend
+	addx.w	d1,d1
+	add.w	d2,d2
+	addx.w	d1,d1	; now have alpha 0-3
+	move.l	a1,a0
+	add.w	d1,a0	; src table
+
+	moveq.l	#0,d4
+	move.b	(a0),d4		; src red (Ca)
+	moveq.l	#0,d0
+	move.b	(a4),d0		; dest red (Cb)
+	bsr.s	CalcColor
+	add.w	d4,d0
+	move.b	d0,(a4)+	; Red
+
+	moveq.l	#0,d4
+	move.b	4(a0),d4
+	moveq.l	#0,d0
+	move.b	(a5),d0
+	bsr.s	CalcColor
+	add.w	d4,d0
+	move.b	d0,(a5)+	; Green
+
+	moveq.l	#0,d4
+	move.b	8(a0),d4
+	moveq.l	#0,d0
+	move.b	(a6),d0
+	bsr.s	CalcColor
+	add.w	d4,d0
+	move.b	d0,(a6)+	; Blue
+
+	dbra	d5,NextPixel
+	tst.w	d6			; done with this row?
+	bne	NextWord	; no
+
+  move.w d7,d0      ; Remaining rows
+  neg.w d0
+  add.w Height,d0
+  move.w d0,Ypos
+
+	subq.w	#1,d7	; row
+	beq.s	Exit
+
+* setup for next row
+	move.w	SrcBytesPerRow,d0
+	move.l	SrcPlane0,a2
+	add.w	d0,a2
+	move.l	a2,SrcPlane0
+	move.l	SrcPlane1,a3
+	add.w	d0,a3
+	move.l	a3,SrcPlane1
+
+	move.w	DestModulo,d0
+	add.w	d0,a4
+	add.w	d0,a5
+	add.w	d0,a6
+	bra		NextRow
+
+Exit
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+************************************
+* d0 - Cb
+* d1 - alpha
+* a1 - RGBA table
+* Calculates (1 - alpha)Cb
+*
+CalcColor
+	movem.l	d1-d2,-(sp)
+	moveq.l	#0,d2
+	add.w	#12,d1	; get to alphas
+	move.b	0(a1,d1.w),d2	; got alpha ($00-$ff)
+	move.w	#$ff,d1
+	sub.w	d2,d1		; now alpha ($ff-$00)
+	bne.s	.NotZ
+	moveq.l	#0,d0
+	bra.s	.Exit	; zero alpha -> zero value color
+.NotZ
+	cmp.b	#$ff,d1
+	beq.s	.Exit	; full value color
+	mulu.w	d1,d0	; $ff00
+	add.w	#$80,d0	; round up
+	lsr.w	#8,d0	; now ($00-$ff)
+.Exit
+	movem.l	(sp)+,d1-d2
+	rts
+
+ IFD SERDEBUG
+DumpRGB
+	move.l	TR,a0
+	add.l	#752*4,a0
+	DUMPMEM	<Red>,(a0),#64
+	move.l	TG,a0
+	add.l	#752*4,a0
+	DUMPMEM	<Grn>,(a0),#64
+	move.l	TB,a0
+	add.l	#752*4,a0
+	DUMPMEM	<Blu>,(a0),#64
+	rts
+ ENDC
+
+
+ IFD xSERDEBUG
+	movem.l	d0-d3,-(sp)
+  move.w Xpos,d0
+  move.w Ypos,d1
+  move.w Width,d2
+  move.w Height,d3
+  DUMPREG <FillFun>
+	movem.l	(sp)+,d0-d3
+ ENDC
+****** NewRender/FillFn **************************************
+*
+* uses UWORD Xpos, Ypos, Width, Height to fill in SrcRGBTable
+* leaves color in a0
+**********************
+FillFun
+  move.l #$FF0080FF,(a0)
+  rts
+
+****** NewRender/BuildRGBTable **************************************
+*
+*   NAME
+*	BuildRGBTable
+*
+*   SYNOPSIS
+*	BOOL __asm BuildRGBTable(
+*		register __a0 struct TrueColor *TrueColor;
+*		register __a1 UBYTE Table[12];
+*
+*   FUNCTION
+*		Builds table of form:
+*			0R,1/3R,2/3R,1R,
+*			0G,1/3G,2/3G,1G,
+*			0B,1/3B,2/3B,1B,
+*			0A,1/3A,2/3A,1A
+*		taking tc_Alpha into account as well for R,G,B entries
+*
+*********************************************************************
+ XLABEL _BuildRGBTable
+	movem.l	d2-d3,-(sp)
+	moveq.l	#0,d2
+	move.b	tc_Alpha(a0),d2
+	move.l	d2,d3
+	cmp.b	#$ff,d2
+	bne.s	.GoOn
+	addq.w	#1,d2	; allow max value (from $00 to $100)
+.GoOn
+	moveq.l	#4-1,d0	; -1 for dbra
+
+.NextColor
+	tst.w	d0	; alpha?
+	bne.s	.NA
+	move.l	d3,d1		; get straight alpha ($00-$ff)
+	bra.s	.GA
+.NA
+	moveq.l	#0,d1
+	move.b	(a0)+,d1
+	mulu.w	d2,d1		; mult by user-def alpha (now $00 to $ff00)
+	add.w	#$80,d1		; round up
+	lsr.w	#8,d1		; now have user-def alpha adjusted color ($00-$ff)
+.GA
+	clr.b	(a1)		; 0 R
+	move.b	d1,3(a1)	; 1 R
+	mulu.w	#$5555,d1	; multiple by 1/3
+	add.l	#$8000,d1	; round up
+	swap.w	d1
+	move.b	d1,1(a1)	; 1/3 R
+	add.b	d1,d1
+	move.b	d1,2(a1)	; 2/3 R
+	add.w	#4,a1
+	dbra	d0,.NextColor
+
+	movem.l	(sp)+,d2-d3
+	rts
+
+****** NewRender/DoAsmOutline ***************************************
+*
+*   NAME
+*	DoAsmOutline
+*
+*   SYNOPSIS
+*	VOID __asm DoAsmOutline(
+*		register __a0 struct BitMap *SourceBM,
+*		register __a1 struct Rectangle *SourceRect,
+*		register __a2 struct RastPort *DestRP,
+*		register __d0 WORD DestMinX,
+*		register __d1 WORD DestMinY,
+*		register __d2 UWORD OutlineType);
+*
+*   FUNCTION
+*		Actually creates the 2bp outline
+*
+*********************************************************************`
+ XLABEL _DoAsmOutline
+	movem.l	d2-d7/a2-a6,-(sp)
+	move.l	a0,a3	; SourceBM
+	move.l	a1,a4	; SourceRect
+	move.l	_GfxBase,a6
+
+	lea.l	_OutlineTable,a0
+	lsl.w	#2,d2
+	move.l	0(a0,d2.w),a5	; ptr to outline data
+
+	move.w	d0,d2	; DestX
+	move.w	d1,d3	; DestY
+	move.w	d1,dA	; DestY
+
+	move.w	ra_MaxX(a4),d0	; calc Width/Height for call
+	move.w	ra_MinX(a4),d1
+	sub.w	  d1,d0
+	addq.w	#1,d0
+	move.w	d0,d4	; Width
+	move.w	ra_MaxY(a4),d0
+	move.w	ra_MinY(a4),d1
+	sub.w	  d1,d0
+	addq.w	#1,d0
+	move.w	d0,Height
+
+	move.w	(a5)+,d5	; width of mask in bytes-1
+	move.w	d5,SaveWidth ; saved for later
+	move.w	d2,SaveX	; save MinX
+NextRow2
+	move.w	SaveWidth,d5	; width of mask in bytes - 1
+NextByte
+	move.b	(a5)+,d6
+	beq		DoDone
+	moveq.l	#8-1,d7		; bit# to test
+NextBit
+	btst.l	d7,d6
+	beq.s	.Skip
+
+	movem.l	d5-d6,-(sp)
+	move.l	a3,a0			; srcbm
+	move.w	ra_MinX(a4),d0	; srcx
+	move.w	ra_MinY(a4),d1	; srcy
+	move.l	a2,a1 			; destrp
+							; d2,d3 already destX,destY
+							; d4 already Width
+	move.w	Height,d5
+	move.w	#$00e0,d6		; "OR"
+	XSYS	BltBitMapRastPort
+	movem.l	(sp)+,d5-d6
+.Skip
+	addq.w	#1,d2			; +1 destX
+	dbra	d7,NextBit
+	dbra	d5,NextByte
+
+	move.w	SaveX,d2		; restore MinX
+	addq.w	#1,d3			  ; +1 destY
+	bra.s	NextRow2
+
+ IFD ubba
+	movem.l	d5-d6,-(sp)
+	move.l	a3,a0     			; srcbm
+	move.w	ra_MinX(a4),d0	; srcx
+	move.w	ra_MinY(a4),d1	; srcy
+	move.l	a2,a1 		    	; destrp
+	move.w	SaveX,d2	    	; restore MinX
+  addq.w  #4,d2
+	move.w	dA,d3
+	move.w	Height,d5
+	move.w	#$0050,d6		    ; ""
+	XSYS	BltBitMapRastPort
+	movem.l	(sp)+,d5-d6
+ ENDC
+
+DoDone
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+
+
+****** NewRender/DoBMOutline ***************************************
+*
+*   NAME
+*	DoBMOutline
+*
+*   SYNOPSIS
+*	VOID __asm DoBMOutline(
+*		register __a0 struct BitMap *SourceBM,
+*		register __a1 struct Rectangle *SourceRect,
+*		register __a2 struct BitMap *DestBM,
+*		register __d0 WORD DestMinX,
+*		register __d1 WORD DestMinY,
+*		register __d2 UWORD OutlineType);
+*
+*   FUNCTION
+*		Actually creates the 2bp outline
+*
+*********************************************************************`
+ XLABEL _DoBMOutline
+	movem.l	d2-d7/a2-a6,-(sp)
+	move.l	a0,a3	; SourceBM
+	move.l	a1,a4	; SourceRect
+	move.l	_GfxBase,a6
+
+	lea.l	_OutlineTable,a0
+	lsl.w	#2,d2
+	move.l	0(a0,d2.w),a5	; ptr to outline data
+
+	move.w	d0,d2	; DestX
+	move.w	d1,d3	; DestY
+	move.w	d1,dA	; DestY
+
+	move.w	ra_MaxX(a4),d0	; calc Width/Height for call
+	move.w	ra_MinX(a4),d1
+	sub.w	  d1,d0
+	addq.w	#1,d0
+	move.w	d0,d4	; Width
+	move.w	ra_MaxY(a4),d0
+	move.w	ra_MinY(a4),d1
+	sub.w	  d1,d0
+	addq.w	#1,d0
+	move.w	d0,Height
+
+	move.w	(a5)+,d5	; width of mask in bytes-1
+	move.w	d5,SaveWidth ; saved for later
+	move.w	d2,SaveX	; save MinX
+oNextRow2
+	move.w	SaveWidth,d5	; width of mask in bytes - 1
+oNextByte
+	move.b	(a5)+,d6
+	beq		DooDone
+	moveq.l	#8-1,d7		; bit# to test
+oNextBit
+	btst.l	d7,d6
+	beq.s	.Skip
+
+	movem.l	d5-d7,-(sp)
+	move.l	a3,a0			; srcbm
+	move.w	ra_MinX(a4),d0	; srcx
+	move.w	ra_MinY(a4),d1	; srcy
+	move.l	a2,a1 			; destrp
+							; d2,d3 already destX,destY
+							; d4 already Width
+	move.w	Height,d5
+	move.w	#$00e0,d6		; "OR"
+	move.w	#1,d7	; plane mask
+	sub.l	a2,a2
+	XSYS	BltBitMap
+	move.l	a1,a2
+	movem.l	(sp)+,d5-d7
+.Skip
+	addq.w	#1,d2			; +1 destX
+	dbra	d7,oNextBit
+	dbra	d5,oNextByte
+
+	move.w	SaveX,d2		; restore MinX
+	addq.w	#1,d3			  ; +1 destY
+	bra.s	oNextRow2
+
+DooDone
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+
+
+****** NewRender/RenderBackground ***********************************
+*
+*   NAME
+*	RenderBackground
+*
+*   SYNOPSIS
+*	VOID __asm RenderBackground(
+*		register __a0 struct ByteMap *ByteMap,
+*		register __a1 struct CGPage *Page,
+*		register __a2 struct Rectangle *Strip)
+*
+*   FUNCTION
+*		Renders page background for strip
+*
+*********************************************************************`
+ XLABEL _RenderBackground
+	movem.l	d2-d7/a2-a6,-(sp)
+	move.l	a0,a3	; bytemap
+	move.l	a1,a4	; page
+
+;	DUMPMSG <EnterRenderBack>
+
+	move.b	page_Type(a4),d0
+	cmp.b	#PAGE_STATIC,d0
+	bne.s	.NotStat
+.Black
+	lea.l	HoldColor,a5
+	clr.l	(a5)
+	bra.s	.Solid
+.NotStat
+	cmp.b	#PAGE_BUFFER,d0
+	bne		.Exit
+
+******************************************
+	move.b	page_Background(a4),d0
+	cmp.b	#BACKGROUND_SOLID,d0
+	bne.s	.NotSolid
+	lea.l	page_TopBackground(a4),a5
+.Solid
+
+	move.w	ra_MaxY(a2),d3
+	move.w	ra_MinY(a2),d2
+	sub.w	d2,d3
+	addq.w	#1,d3
+	move.w	mbym_BytesPerRow(a3),d2
+	mulu.w	d2,d3	; bytes per plane
+	lea.l	mbym_Planes(a3),a3
+	moveq.l	#3-1,d2
+
+.NextPlane
+	move.l	(a3)+,a0	; MemBlock
+	moveq.l	#0,d0
+	move.b	(a5)+,d0	; FillValue
+	move.l	d3,d1		; MemSize
+	XJSR	ByteFillMemory
+	dbra	d2,.NextPlane	
+	bra		.Exit
+
+******************************************
+.NotSolid
+	cmp.b	#BACKGROUND_GRADATION,d0
+	bne		.NotGrad
+
+* figure delta R,G,B per line
+	lea.l	page_TopBackground(a4),a0
+	lea.l	page_BottomBackground(a4),a1
+	lea.l	DeltaRGB,a5
+	lea.l	CurrentRGB,a6
+	moveq.l	#3-1,d2
+	move.w	ra_MinY(a2),d3
+
+* figure delta per line
+.NextD
+	moveq.l	#0,d0
+	move.b	(a1)+,d0
+	lsl.w	#8,d0
+	moveq.l	#0,d1
+	move.b	(a0)+,d1
+	lsl.w	#8,d1
+	sub.l	d1,d0		; delta/page * $100
+	beq.s	.DeltaZero
+	divs	#TOTAL_WRITE_LINES,d0
+.DeltaZero
+	move.w	d0,(a5)+	; delta/line * $100
+	muls.w	d3,d0		; start at line MinY
+
+	add.w	d0,d1
+	move.w	d1,(a6)+	; starting value
+
+	dbra	d2,.NextD
+
+* setup loop
+	move.w	ra_MaxY(a2),d2
+	move.w	ra_MinY(a2),d3
+	sub.w	d3,d2	; height-1 for dbra
+	moveq.l	#0,d4	; current offset
+	moveq.l	#0,d5
+	move.w	mbym_BytesPerRow(a3),d5
+
+* loop for this strip
+.NextLine
+	lea.l	CurrentRGB,a4
+	lea.l	mbym_Planes(a3),a5
+	moveq.l	#3-1,d3	; # colors
+.NextColor
+	move.w	(a4),d0	; FillValue
+	move.w	d0,d6
+	add.w	#$80,d0	; round up
+	lsr.w	#8,d0	; get $00-$ff
+	move.l	(a5)+,a0
+	add.l	d4,a0	; MemBlock
+	move.l	d5,d1	; MemSize
+	XJSR	ByteFillMemory
+
+* figure next color
+	move.w	6(a4),d7	; delta
+	add.w	d7,d6
+	move.w	d6,(a4)+
+	dbra	d3,.NextColor
+
+	add.l	d5,d4	; ByteOffset += BytesPerRow;
+	dbra	d2,.NextLine
+
+	bra		.Exit
+
+******************************************
+.NotGrad
+	cmp.b	#BACKGROUND_RGB_BUFFER,d0
+	bne		.Exit
+
+	move.l	GlobalData,a0
+	move.l	gb_CommonRGBA(a0),d0
+	beq		.Black	; black if no CommonRGB buffer open
+	move.l	d0,a5
+	move.l	gb_ExecLibrary(a0),a6
+
+	move.w	ra_MaxY(a2),d2
+	move.w	ra_MinY(a2),d1
+	sub.w	d1,d2	; height-1 for dbra
+
+	lea.l	mbym_Planes(a3),a0
+	move.l	a0,d5	; ptr to plane0
+
+	move.l	PIC_RGB+bym_REDBuffer(a5),a3
+	move.l	PIC_RGB+bym_GREENBuffer(a5),a4
+	move.l	PIC_RGB+bym_BLUEBuffer(a5),a5
+
+	move.w	ra_MinY(a2),d3
+	mulu.w	#CommonBufferWidth,d3	; starting offset
+	add.l	d3,a3
+	add.l	d3,a4
+	add.l	d3,a5
+	moveq.l	#0,d4	; byte offset into bytemap
+
+;	DUMPREG <Entering Loop CommonRGBA>
+
+.NextLine3
+	move.l	d5,a2	; plane 0
+
+	move.l	a3,a0
+	move.l	(a2)+,a1
+	add.l	d4,a1
+	move.l	#PAGE_WIDTH,d0
+	XSYS	CopyMem
+	add.w	#CommonBufferWidth,a3
+
+	move.l	a4,a0
+	move.l	(a2)+,a1
+	add.l	d4,a1
+	move.l	#PAGE_WIDTH,d0
+	XSYS	CopyMem
+	add.w	#CommonBufferWidth,a4
+
+	move.l	a5,a0
+	move.l	(a2),a1
+	add.l	d4,a1
+	move.l	#PAGE_WIDTH,d0
+	XSYS	CopyMem
+	add.w	#CommonBufferWidth,a5
+
+	add.l	#PAGE_WIDTH,d4
+	dbra	d2,.NextLine3
+
+.Exit
+;	DUMPMSG <ExitRenderBack>
+	movem.l	(sp)+,d2-d7/a2-a6
+	rts
+
+*********************************************************************`
+* Clips rectangle to nearest word boundaries
+*
+* a0 - source rect, a1 - dest rect
+*
+WordClipRect
+	move.w	ra_MinX(a0),d0
+	and.w	#$fff0,d0
+	move.w	d0,ra_MinX(a1)
+	move.w	ra_MaxX(a0),d0
+	and.w	#$fff0,d0
+	add.w	#15,d0		; rightmost bit
+	move.w	d0,ra_MaxX(a1)
+	move.w	ra_MinY(a0),ra_MinY(a1)
+	move.w	ra_MaxY(a0),ra_MaxY(a1)
+	rts
+
+****** NewRender/SetupBInfo *****************************************
+*
+*   NAME
+*	SetupBInfo
+*
+*   SYNOPSIS
+*	BOOL __asm SetupBInfo(
+*		register __a0 struct BitMap *SourceBitMap,
+*		register __a1 struct Rectangle *Rect,
+*		register __a2 struct BitMap *DestBitMap,
+*		register __a3 struct BInfo *BInfo)
+*
+*   FUNCTION
+*		Sets up BInfo structure for DoWordBlitPlane()
+*
+********************************************************************`
+ XLABEL SetupBInfo
+	movem.l	a4-a5,-(sp)
+
+* clip rects to word boundaries
+	move.l	a0,a5			; sourceBM
+	move.l	a1,a0			; Rect
+	move.l	a1,a4			; save temporarily
+	lea.l	bi_Rect(a3),a1 ; clipped Rect
+	bsr.s	WordClipRect
+
+* get masks for first/last words
+	move.w	ra_MinX(a4),d0	; org
+	sub.w	bi_Rect+ra_MinX(a3),d0	; clipped
+	move.w	#$ffff,d1		; first word mask
+	lsr.w	d0,d1
+	move.w	d1,bi_FWM(a3)
+
+	move.w	bi_Rect+ra_MaxX(a3),d0	; clipped
+	sub.w	ra_MaxX(a4),d0	; org
+	move.w	#$ffff,d1		; last word mask
+	lsl.w	d0,d1
+	move.w	d1,bi_LWM(a3)
+
+	move.w	bi_Rect+ra_MaxX(a3),d0
+	sub.w	bi_Rect+ra_MinX(a3),d0
+	lsr.w	#4,d0
+	addq.w	#1,d0
+	move.w	d0,bi_Width(a3)
+
+	move.w	bi_Rect+ra_MaxY(a3),d0
+	addq.w	#1,d0
+	sub.w	bi_Rect+ra_MinY(a3),d0
+	move.w	d0,bi_Height(a3)
+
+	lsl.w	#6,d0
+	move.w	bi_Width(a3),d1
+	or.w	d1,d0
+	move.w	d0,bi_BltSize(a3)
+
+	move.w	bm_BytesPerRow(a5),d0
+	add.w	d1,d1	; now width in bytes
+	sub.w	d1,d0
+	move.w	d0,bi_SrcModulo(a3)
+
+	move.w	bm_BytesPerRow(a2),d0
+	sub.w	d1,d0
+	move.w	d0,bi_DstModulo(a3)
+
+	move.w	bm_BytesPerRow(a5),d0
+	move.w	bi_Rect+ra_MinY(a3),d1
+	mulu.w	d1,d0
+	moveq.l	#0,d1
+	move.w	bi_Rect+ra_MinX(a3),d1
+	lsr.w	#3,d1	; now byte offset
+	add.l	d1,d0
+	move.l	d0,bi_SrcOffset(a3)
+
+	move.w	bm_BytesPerRow(a2),d0
+	move.w	bi_Rect+ra_MinY(a3),d2
+	mulu.w	d2,d0
+	add.l	d1,d0
+	move.l	d0,bi_DstOffset(a3)
+
+	movem.l	(sp)+,a4-a5
+	rts
+
+****** NewRender/PreFixKeyAlpha *************************************
+*
+*   NAME   
+*	PreFixKeyAlpha
+*
+*   SYNOPSIS
+*	VOID __asm PreFixKeyAlpha(
+*		register __a0 struct BitMap *AlphaBM,
+*		register __a1 struct Rectangle *Rect,
+*		register __a2 struct BitMap *TempBM
+*		register __d0 UWORD Alpha);
+*
+*   FUNCTION
+*		1) existing alpha = %11 -> temp0
+*		(if existing alpha %11, then leave face alone)
+*
+*********************************************************************`
+ XLABEL _PreFixKeyAlpha
+	movem.l	d7/a2-a6,-(sp)
+	link	a6,#-bi_SizeOf
+	move.w	d0,d7
+	move.l	GlobalData,a4
+	move.l	a0,a5
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+	move.w	bi_SrcModulo(a3),bi_AModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_BModulo(a3)
+	move.w	bi_DstModulo(a3),bi_DModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_AOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_BOffset(a3)
+	move.l	bi_DstOffset(a3),bi_DOffset(a3)
+
+	move.l	bm_Planes(a5),bi_APlane(a3)
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	clr.l	bi_CPlane(a3)
+	move.l	bm_Planes(a2),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$c0,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+* setup for transp face if needed (if existing alpha > 0)
+	cmp.w	#$aa,d7
+	bhs		.Done
+
+	move.l	bm_Planes+8(a2),bi_DPlane(a3)
+	clr.w	bi_DModulo(a3)
+	clr.l	bi_DOffset(a3)
+
+* already A&B setup
+*	move.l	bm_Planes(a5),bi_APlane(a3)
+*	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$fc,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+.Done
+	XJSR	ReturnBlitter
+
+	unlk	a6
+	movem.l	(sp)+,d7/a2-a6
+	rts
+
+****** NewRender/FixKeyAlpha ****************************************
+*
+*   NAME   
+*	FixKeyAlpha
+*
+*   SYNOPSIS
+*	VOID __asm FixKeyAlpha(
+*		register __a0 struct BitMap *FaceBM,
+*		register __a1 struct Rectangle *Rect,
+*		register __a2 struct BitMap *TempBM,
+*		register __d0 UWORD Alpha);
+*
+*   FUNCTION
+*		2) face %01,%10,%11 -> temp1
+*		3) (temp1 and temp0) or faceX ->faceX
+*
+* also:
+* if Face Color->Alpha transp, fake it in CharAlpha (at 2 bits)
+* since AlphaIntoByteMap() can only handle constant Color->Alpha
+*
+*********************************************************************`
+ XLABEL _FixKeyAlpha
+	movem.l	d7/a2-a6,-(sp)
+	move.w	d0,d7
+	link	a6,#-bi_SizeOf
+	move.l	GlobalData,a4
+	move.l	a0,a5
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+* 2)
+	move.w	bi_SrcModulo(a3),bi_AModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_BModulo(a3)
+	move.w	bi_DstModulo(a3),bi_DModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_AOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_BOffset(a3)
+	move.l	bi_DstOffset(a3),bi_DOffset(a3)
+
+	move.l	bm_Planes(a5),bi_APlane(a3)
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	clr.l	bi_CPlane(a3)
+	move.l	bm_Planes+4(a2),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$fc,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+* 3)
+	move.w	bi_DstModulo(a3),bi_AModulo(a3)
+	move.w	bi_DstModulo(a3),bi_BModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_CModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_DModulo(a3)
+	move.l	bi_DstOffset(a3),bi_AOffset(a3)
+	move.l	bi_DstOffset(a3),bi_BOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_COffset(a3)
+	move.l	bi_SrcOffset(a3),bi_DOffset(a3)
+
+	move.l	bm_Planes+4(a2),bi_APlane(a3)
+	move.l	bm_Planes(a2),bi_BPlane(a3)
+	move.l	bm_Planes(a5),bi_CPlane(a3)
+	move.l	bm_Planes(a5),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$ba,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+	move.l	bm_Planes+4(a5),bi_CPlane(a3)
+	move.l	bm_Planes+4(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+********
+* transp face fix
+* only where existing alpha (BEFORE face) > 0
+	cmp.w	#$aa,d7
+	bhs		.Done
+
+	move.l	bm_Planes+8(a2),bi_APlane(a3) ; done in PreFix()
+	clr.w	bi_AModulo(a3)
+	clr.l	bi_AOffset(a3)
+
+	move.w	bi_SrcModulo(a3),bi_BModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_BOffset(a3)
+	move.w	bi_SrcModulo(a3),bi_DModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_DOffset(a3)
+	clr.l	bi_CPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$0c,bi_BltCon0(a3) ; clear dest
+
+* 2/3: clear LS plane
+	cmp.w	#$88,d7
+	blo.s	.A1
+	move.l	bm_Planes(a5),bi_BPlane(a3)
+	move.l	bm_Planes(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+	bra.s	.Done
+
+* 1/3: clear MS plane
+.A1
+	cmp.w	#$44,d7
+	blo.s	.A2
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	move.l	bm_Planes+4(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+	bra.s	.Done
+
+* 0/3: clear both planes
+.A2
+	move.l	bm_Planes(a5),bi_BPlane(a3)
+	move.l	bm_Planes(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	move.l	bm_Planes+4(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+.Done
+	XJSR	ReturnBlitter
+
+	unlk	a6
+	movem.l	(sp)+,d7/a2-a6
+	rts
+
+****** NewRender/FixScrollAlpha *************************************
+*
+*   NAME   
+*	FixScrollAlpha
+*
+*   SYNOPSIS
+*	VOID __asm FixScrollAlpha(
+*		register __a0 struct BitMap *BitMap,
+*		register __a1 struct Rectangle *Rect,
+*		register __a2 struct BitMap *Temp)
+*
+*   FUNCTION
+*		0) remove face from Outline
+*		1) where Face = %01 or = %10 -> Temp
+*		2) (temp and Outline = 0) or Face(x) -> Face(x)
+*
+*********************************************************************`
+ IFD ASDFG
+ XLABEL _FixScrollAlpha
+	movem.l	a2-a6,-(sp)
+	link	a6,#-bi_SizeOf
+	move.l	GlobalData,a4
+	move.l	a0,a5
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+
+* remove face from OS plane
+	move.w	bi_SrcModulo(a3),bi_AModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_BModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_CModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_DModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_AOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_BOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_COffset(a3)
+	move.l	bi_SrcOffset(a3),bi_DOffset(a3)
+
+	move.l	bm_Planes(a5),bi_APlane(a3)
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	move.l	bm_Planes+8(a5),bi_CPlane(a3)
+	move.l	bm_Planes+8(a5),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$02,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+* calc Face 01 or 10 into Temp
+	move.l	bm_Planes(a5),bi_APlane(a3)
+	move.l	bm_Planes+4(a5),bi_BPlane(a3)
+	clr.l	bi_CPlane(a3)
+	move.l	bm_Planes(a2),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$3c,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+* Face plane 0 fix
+	move.l	bm_Planes(a2),bi_APlane(a3)
+	move.l	bm_Planes+8(a5),bi_BPlane(a3)
+	move.l	bm_Planes(a5),bi_CPlane(a3)
+	move.l	bm_Planes(a5),bi_DPlane(a3)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$ba,bi_BltCon0(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+* Face plane 1 fix
+	move.l	bm_Planes+4(a5),bi_CPlane(a3)
+	move.l	bm_Planes+4(a5),bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+	XJSR	ReturnBlitter
+
+	unlk	a6
+	movem.l	(sp)+,a2-a6
+	rts
+ ENDC
+
+****** NewRender/ORIntoMS *******************************************
+*
+*   NAME   
+*	ORIntoMS
+*
+*   SYNOPSIS
+*	BOOL __asm ORIntoMS(
+*		register __a0 struct BitMap *BitMap,
+*		register __a1 struct Rectangle *Rect)
+*
+*   FUNCTION
+*		ORs bitplanes 0,1 into 2, destroying anything there
+*
+*********************************************************************`
+ XLABEL _ORIntoMS
+	movem.l	a2-a6,-(sp)
+	link	a6,#-bi_SizeOf
+	move.l	GlobalData,a4
+
+	move.l	a0,a2	; src=dest
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+
+	move.l	bm_Planes(a2),bi_APlane(a3)
+	move.l	bm_Planes+4(a2),bi_BPlane(a3)
+	clr.l	bi_CPlane(a3)
+	move.l	bm_Planes+8(a2),bi_DPlane(a3)
+
+	move.w	bi_SrcModulo(a3),bi_AModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_BModulo(a3)
+	move.w	bi_SrcModulo(a3),bi_DModulo(a3)
+
+	move.l	bi_SrcOffset(a3),bi_AOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_BOffset(a3)
+	move.l	bi_SrcOffset(a3),bi_DOffset(a3)
+
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$fc,bi_BltCon0(a3)
+
+ IFD SERDEBUG
+;	lea.l	-bi_SizeOf(a6),a0
+;	DUMPMEM	<bi>,(a0),#bi_SizeOf
+ ENDC
+
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+
+	XJSR	ReturnBlitter
+
+	unlk	a6
+	movem.l	(sp)+,a2-a6
+	rts
+
+****** NewRender/AlphaIntoBitMap ***********************************
+*
+*   NAME   
+*	AlphaIntoBitMap
+*
+*   SYNOPSIS
+*	BOOL __asm AlphaIntoBitMap(
+*		register __a0 struct BitMap *SourceBitMap,
+*		register __a1 struct Rectangle *Rect,
+*		register __a2 struct BitMap *DestBitMap,
+*		register __a3 struct BitMap *TempBitMap,
+*		register __d0 UWORD Alpha);
+*
+*   FUNCTION
+*		Takes into account tc_Alpha and SourceBitMap's value (0-3)
+*		Rect must be same for both Source and Dest,
+*		BitMaps can be different dimensions
+*
+*********************************************************************`
+ XLABEL _AlphaIntoBitMap
+	movem.l	d2/d7/a2-a6,-(sp)
+	link	a6,#-bi_SizeOf
+	move.l	GlobalData,a4
+	move.l	a0,a5			; sourceBM
+	move.w	d0,d7			; Alpha
+	lsr.w	#6,d7			; now 0-3
+	beq		AExit			; if source alpha zero, forget it
+	move.l	a3,bi_TempBM-bi_SizeOf(a6)
+
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+
+*******************
+* LS Plane: 4 source blit (3 x 3 source blits)
+	move.l	bi_TempBM-bi_SizeOf(a6),a3
+
+* first, assume Dest0 = 0, store in Temp0
+	move.l	bm_Planes+4(a5),bi_APlane-bi_SizeOf(a6)
+	move.l	bm_Planes(a5),bi_BPlane-bi_SizeOf(a6)
+	move.l	bm_Planes+4(a2),bi_CPlane-bi_SizeOf(a6)
+	move.l	bm_Planes(a3),bi_DPlane-bi_SizeOf(a6)
+
+	move.w	bi_SrcModulo-bi_SizeOf(a6),bi_AModulo-bi_SizeOf(a6)
+	move.w	bi_SrcModulo-bi_SizeOf(a6),bi_BModulo-bi_SizeOf(a6)
+	move.w	bi_DstModulo-bi_SizeOf(a6),bi_CModulo-bi_SizeOf(a6)
+	clr.w	bi_DModulo-bi_SizeOf(a6) ; mod not needed on TempBM
+
+	move.l	bi_SrcOffset-bi_SizeOf(a6),bi_AOffset-bi_SizeOf(a6)
+	move.l	bi_SrcOffset-bi_SizeOf(a6),bi_BOffset-bi_SizeOf(a6)
+	move.l	bi_DstOffset-bi_SizeOf(a6),bi_COffset-bi_SizeOf(a6)
+	clr.l	bi_DOffset-bi_SizeOf(a6)
+
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$c4,bi_BltCon0-bi_SizeOf(a6)
+	lea.l	-bi_SizeOf(a6),a0
+	bsr		ConstAlpha
+	bsr		DoWordBlitPlane
+
+* now, assume Dest0 = 1, store in Temp1
+	move.l	bm_Planes+4(a3),bi_DPlane-bi_SizeOf(a6)
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$ef,bi_BltCon0-bi_SizeOf(a6)
+	lea.l	-bi_SizeOf(a6),a0
+	bsr		ConstAlpha
+	bsr		DoWordBlitPlane
+
+* now, use Temp0,Temp1,Dest0 to figure Dest0
+	move.l	bm_Planes(a3),bi_APlane-bi_SizeOf(a6)
+	move.l	bm_Planes+4(a3),bi_BPlane-bi_SizeOf(a6)
+	move.l	bm_Planes(a2),bi_CPlane-bi_SizeOf(a6)
+	move.l	bm_Planes(a2),bi_DPlane-bi_SizeOf(a6)
+
+	clr.w	bi_AModulo-bi_SizeOf(a6)
+	clr.w	bi_BModulo-bi_SizeOf(a6)
+	move.w	bi_DstModulo-bi_SizeOf(a6),bi_CModulo-bi_SizeOf(a6)
+	move.w	bi_DstModulo-bi_SizeOf(a6),bi_DModulo-bi_SizeOf(a6)
+
+	clr.l	bi_AOffset-bi_SizeOf(a6)
+	clr.l	bi_BOffset-bi_SizeOf(a6)
+	move.l	bi_DstOffset-bi_SizeOf(a6),bi_COffset-bi_SizeOf(a6)
+	move.l	bi_DstOffset-bi_SizeOf(a6),bi_DOffset-bi_SizeOf(a6)
+
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+BC0F_SRCC+$d8,bi_BltCon0-bi_SizeOf(a6)
+	lea.l	-bi_SizeOf(a6),a0
+	bsr		DoWordBlitPlane
+
+*******************
+* MS Plane: OR source1 into dest1
+	cmp.w	#1,d7	; alpha == 1?
+	beq		.Skip1	; if so, MS source plane gets cleared -> no blit
+	move.l	bm_Planes+4(a5),bi_APlane-bi_SizeOf(a6)
+	move.l	bm_Planes+4(a2),bi_BPlane-bi_SizeOf(a6)
+	clr.l	bi_CPlane-bi_SizeOf(a6)
+	move.l	bm_Planes+4(a2),bi_DPlane-bi_SizeOf(a6)
+
+	move.w	bi_SrcModulo-bi_SizeOf(a6),bi_AModulo-bi_SizeOf(a6)
+	move.w	bi_DstModulo-bi_SizeOf(a6),bi_BModulo-bi_SizeOf(a6)
+	move.w	bi_DstModulo-bi_SizeOf(a6),bi_DModulo-bi_SizeOf(a6)
+
+	move.l	bi_SrcOffset-bi_SizeOf(a6),bi_AOffset-bi_SizeOf(a6)
+	move.l	bi_DstOffset-bi_SizeOf(a6),bi_BOffset-bi_SizeOf(a6)
+	move.l	bi_DstOffset-bi_SizeOf(a6),bi_DOffset-bi_SizeOf(a6)
+
+	move.w	#BC0F_DEST+BC0F_SRCA+BC0F_SRCB+$fc,bi_BltCon0-bi_SizeOf(a6)
+	lea.l	-bi_SizeOf(a6),a0
+	bsr		DoWordBlitPlane
+.Skip1
+	XJSR	ReturnBlitter
+AExit
+	unlk	a6
+	movem.l	(sp)+,d2/d7/a2-a6
+	rts
+
+*********************************************************************`
+* Take constant alpha into account
+*
+ConstAlpha
+	cmp.w	#1,d7	; if alpha == 1, MS src plane clear
+	bne.s	.Not1
+;	clr.l	bi_APlane(a0)
+;	and.w	#~BC0F_SRCA,bi_BltCon0(a0) ; don't use DMA - use zero
+	or.w	#$30,bi_BltCon0(a0) ; round src %10 -> %01
+	bra.s	.Exit
+.Not1
+	cmp.w	#2,d7	; if alpha == 2, LS src plane clear
+	bne.s	.Exit
+	clr.l	bi_BPlane(a0)
+	and.w	#~BC0F_SRCB,bi_BltCon0(a0) ; don't use DMA - use zero
+.Exit
+	rts
+
+*********************************************************************`
+* 
+* VOID __asm DoWordBlitPlane(
+*		register __a0 struct BInfo *Binfo)
+*
+ XLABEL DoWordBlitPlane
+	movem.l	d2/a2-a6,-(sp)
+	lea.l	_custom,a6
+	moveq.l	#0,d2
+
+	WAIT4BLITTER a6
+
+	move.w	bi_BltCon0(a0),bltcon0(a6) ; do first!
+	move.w	d2,bltcon1(a6)
+	move.w	bi_FWM(a0),bltafwm(a6)
+	move.w	bi_LWM(a0),bltalwm(a6)
+
+* Order of blitter registers is C,B,A,D
+	lea.l	bltcmod(a6),a1
+	lea.l	bltcpt(a6),a2
+	lea.l	bltcdat(a6),a3
+	lea.l	bi_CPlane(a0),a4
+	moveq.l	#4-1,d1	; # blitter regs
+NextReg
+	tst.w	d1
+	beq.s	.D	; skip on d reg
+	move.w	d2,(a3)+				; dat
+.D
+
+	move.l	(a4)+,d0
+	beq.s	.NoPlane
+	add.l	bi_COffset-bi_BPlane(a4),d0
+	move.l	d0,(a2)					; ptr
+	move.w	bi_CModulo-bi_BPlane(a4),(a1)		; mod
+.NoPlane
+	add.w	#2,a1
+	add.w	#4,a2
+	dbra	d1,NextReg
+
+	move.w	bi_BltSize(a0),bltsize(a6)
+
+	movem.l	(sp)+,d2/a2-a6
+	rts
+
+****** NewRender/LW2AfterPlanes ********************************
+*
+*   NAME   
+*	LW2AfterPlanes
+*
+*   SYNOPSIS
+*	UBYTE *__asm LW2AfterPlanes(
+*		register __a0 struct BitMap *BM)
+*
+*   FUNCTION
+*		assumes Planes word aligned and word sized
+*
+*********************************************************************`
+ XLABEL _LW2AfterPlanes
+	bsr.s	_WordAfterPlanes
+ XLABEL _RoundLW2
+	add.l	#7,d0
+	and.l	#$fffffff8,d0
+	rts
+
+****** NewRender/WordAfterPlanes ***********************************
+*
+*   NAME   
+*	WordAfterPlanes
+*
+*   SYNOPSIS
+*	UBYTE *__asm WordAfterPlanes(
+*		register __a0 struct BitMap *BM)
+*
+*   FUNCTION
+*		assumes Planes word aligned and word sized
+*
+*********************************************************************`
+ XLABEL _WordAfterPlanes
+	move.w	bm_BytesPerRow(a0),d0
+	mulu.w	bm_Rows(a0),d0
+	moveq.l	#0,d1
+	move.b	bm_Depth(a0),d1
+	subq.w	#1,d1
+	lsl.w	#2,d1
+	add.w	#bm_Planes,d1
+	move.l	0(a0,d1.w),a0	; plane last plane ptr
+	add.l	a0,d0			; add plane size
+	rts
+
+****** NewRender/ClearWordRect **************************************
+*
+*   NAME   
+*	ClearWordRect
+*
+*   SYNOPSIS
+*	VOID __asm ClearWordRect(
+*		register __a0 struct BitMap *BM,
+*		register __a1 struct Rectangle *Rect)
+*
+*   FUNCTION
+*		word sized Rect
+*
+*********************************************************************`
+ XLABEL _ClearWordRect
+	movem.l	d2/a2-a6,-(sp)
+	link	a6,#-bi_SizeOf
+	move.l	GlobalData,a4
+
+	move.l	a0,a2	; src=dest
+	lea.l	-bi_SizeOf(a6),a3
+	bsr		SetupBInfo
+
+	XJSR	StealBlitter
+
+	clr.l	bi_APlane(a3)
+	clr.l	bi_BPlane(a3)
+	clr.l	bi_CPlane(a3)
+	move.w	bi_SrcModulo(a3),bi_DModulo(a3)
+	move.l	bi_SrcOffset(a3),bi_DOffset(a3)
+	move.w	#BC0F_DEST+$00,bi_BltCon0(a3)
+
+	lea.l	bm_Planes(a2),a5
+	moveq.l	#0,d2
+	move.b	bm_Depth(a2),d2
+	subq.w	#1,d2
+
+.NextPlane
+	move.l	(a5)+,bi_DPlane(a3)
+	move.l	a3,a0
+	bsr		DoWordBlitPlane
+	dbra	d2,.NextPlane
+
+	XJSR	ReturnBlitter
+	unlk	a6
+	movem.l	(sp)+,d2/a2-a6
+	rts
+
+****** NewRender/CopyAllAttributes *********************************
+*
+*   NAME
+*	CopyAllAttributes
+*
+*   SYNOPSIS
+*	VOID __asm CopyAllAttributes(
+*		register __a0 struct Attributes *A,
+*		register __a1 struct Attributes *B)
+*
+*   FUNCTION
+*
+*
+*********************************************************************`
+ XLABEL _CopyAllAttributes
+	move.l	a6,-(sp)
+	move.l	_AbsExecBase,a6
+	move.l	#attr_SizeOf,d0
+	XSYS	CopyMem
+	move.l	(sp)+,a6
+	rts
+
+****** NewRender/CompareAllAttrib **************************************
+*
+*   NAME
+*	CompareAllAttrib
+*
+*   SYNOPSIS
+*	BOOL __asm CompareAllAttrib(
+*		register __a0 struct Attributes *A,
+*		register __a1 struct Attributes *B)
+*
+*   FUNCTION
+*		returns TRUE if all Attribute of A == B, else FALSE
+*
+*********************************************************************`
+ XLABEL _CompareAllAttrib
+	move.l	d2,-(sp)
+	move.w	#attr_SizeOf-1,d2
+.Next
+	move.b	(a0)+,d0
+	move.b	(a1)+,d1
+	cmp.b	d0,d1
+	bne.s	.Not
+	dbra	d2,.Next
+	moveq.l	#TRUE,d0
+	bra.s	.Exit
+.Not
+	moveq.l	#FALSE,d0
+.Exit
+	move.l	(sp)+,d2
+	rts
+
+****** NewRender/CompareAttrib **************************************
+*
+*   NAME
+*	CompareAttrib
+*
+*   SYNOPSIS
+*	BOOL __asm CompareAttrib(
+*		register __a0 struct Attributes *A,
+*		register __a1 struct Attributes *B,
+*		register __d0 UWORD Attribute)
+*
+*   FUNCTION
+*		returns TRUE if Attribute of A == B, else FALSE
+*
+*********************************************************************`
+ XLABEL _CompareAttrib
+	movem.l	d2/a2-a3,-(sp)
+	lea.l	AttrTable,a2
+	lsl.w	#2,d0
+	add.w	d0,a2
+	move.w	(a2)+,d0	; offset
+	add.w	d0,a0
+	add.w	d0,a1
+	move.w	(a2),d2	; size
+	subq.w	#1,d2	; dbra
+.NextByte
+	move.b	(a0)+,d0
+	move.b	(a1)+,d1
+	cmp.b	d0,d1
+	bne.s	.Not
+	dbra	d2,.NextByte
+	moveq.l	#TRUE,d0
+	bra.s	.Exit
+.Not
+	moveq.l	#FALSE,d0
+.Exit
+	movem.l	(sp)+,d2/a2-a3
+	rts
+
+****** NewRender/SetAttrib ********************************************
+*
+*   NAME
+*	SetAttrib
+*
+*   SYNOPSIS
+*	VOID __asm SetAttrib(
+*		register __a0 struct Attributes *Attr,
+*		register __a1 UBYTE *Value,
+*		register __d0 UWORD Attribute)
+*
+*   FUNCTION
+*		Copies Attribute from Value into Attr->(Field)
+*
+*********************************************************************`
+ XLABEL _SetAttrib
+	movem.l	a2/a6,-(sp)
+
+ IFD SERDEBUG
+;  DUMPMEM <SetAttrib>,(a1),#1
+;  DUMPMEM <Attrib>,(a0),#attr_SizeOf
+ ENDC
+
+	move.l	_AbsExecBase,a6
+	lea.l	AttrTable,a2
+	lsl.w	#2,d0
+	add.w	d0,a2
+	move.w	(a2)+,d1	; offset
+	add.w	d1,a0		; now points to dest
+	moveq.l	#0,d0
+	move.w	(a2),d0		; size
+	exg		a0,a1
+	XSYS	CopyMem
+	movem.l	(sp)+,a2/a6
+	rts
+
+****** NewRender/GetAttrib ********************************************
+*
+*   NAME
+*	GetAttrib
+*
+*   SYNOPSIS
+*	VOID __asm GetAttrib(
+*		register __a0 struct Attributes *Attr,
+*		register __a1 UBYTE *Value,
+*		register __d0 UWORD Attribute)
+*
+*   FUNCTION
+*		Copies Attribute from Attr->(Field) into Value
+*
+*********************************************************************`
+ XLABEL _GetAttrib
+	movem.l	a2/a6,-(sp)
+
+	move.l	_AbsExecBase,a6
+	lea.l	AttrTable,a2
+	lsl.w	#2,d0
+	add.w	d0,a2
+	move.w	(a2)+,d1	; offset
+	add.w	d1,a0		; now points to src
+	moveq.l	#0,d0
+	move.w	(a2),d0		; size
+	XSYS	CopyMem
+
+	movem.l	(sp)+,a2/a6
+	rts
+
+****** NewRender/KeyRawFcn ******************************************
+*
+*   NAME
+*	KeyRawFcn
+*
+*   SYNOPSIS
+*	APTR __asm KeyRawFcn(
+*		register __a0 struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*********************************************************************`
+ XLABEL _KeyRawFcn
+	moveq.l	#0,d0
+	move.w	im_Code(a0),d1
+	cmp.w	#$70,d1
+	bhs.s	.Exit
+	lea.l	RawKeyTable,a0
+	lsl.w	#2,d1
+	move.l	0(a0,d1.w),d0
+.Exit
+	rts
+
+ XLABEL _KeyFunction
+	lea.l	FunctionKeyTable,a0
+	sub.w	#$50,d0
+	lsl.w	#2,d0
+	move.l	0(a0,d0.w),d0
+.Exit
+	rts
+
+ XLABEL _CaseSwitcher
+;	DUMPMSG <CaseSwitcher..>
+	moveq.l	#TRUE,d0
+	rts
+
+***************************************
+ IFD SERDEBUG
+Gurm
+	DUMPMEM <Gurm>,(a0),#128
+	rts
+BMGurm
+	DUMPMEM <ByteMap>,(a0),#48
+	rts
+BrGurm
+	DUMPMEM <Brush>,(a0),#96
+	rts
+ ENDC
+
+	RDUMP
+	MDUMP
+
+***************************************
+	section	,data
+HoldColor
+TR
+	dc.l	0
+TG
+	dc.l	0
+TB
+	dc.l	0
+SrcPlane0
+	dc.l	0
+SrcPlane1
+	dc.l	0
+StartSrcBit
+	dc.w	0	; from 0-15, 0 is no effect
+SaveWidth
+Width
+	dc.w	0
+Height			; SaveWidth/Height/SaveX used in DoAsmOutline
+SrcBytesPerRow
+	dc.w	0
+SaveX
+DestModulo
+	dc.w	0
+SrcRGBTable
+	dcb.b	16,0
+
+CurrentRGB		; gradations
+	dcb.b	6,0
+DeltaRGB		; gradations, must come right after CurrentRGB
+	dcb.b	6,0
+
+CurrentRGBg		; line gradations
+	dcb.b	8,0
+DeltaRGBg		;  must come right after CurrentRGBg
+	dcb.b	8,0
+
+GURM_PILE  ; may prevent some overflow from stomping color
+  dcb.b 8,0
+SpecFill
+  dc.l  0
+dA
+  dc.l  0
+TopColor
+  dc.l  0
+BotColor
+  dc.l  0
+SrcYOffset
+  dc.w  0
+DstYOffset
+  dc.w  0
+LineYOff
+  dc.w  0
+FaceMinY
+  dc.w  0
+LineHeight
+  dc.w  0
+Xpos
+  dc.w  0
+Ypos
+  dc.w  0
+Gradient
+  dc.w  FALSE
+* used only if LINE_BRUSH
+Brush
+	dc.w	FALSE
+BrushBPR
+	dc.w	0
+BrushByteMap
+	dc.l	0
+BrushPixPl
+	dc.l	0,0,0
+BrushRowPl
+	dc.l	0,0,0
+BrushRGBA
+	dcb.b	4,0
+
+****************************
+* Attribute Offset, Size (for Get/Set)
+AttrTable
+	dc.w	attr_FaceColor,(trgb_SizeOf*5)
+	dc.w	attr_ID,2
+	dc.w	attr_ShadowLength,2
+	dc.w	attr_ShadowType,1
+	dc.w	attr_OutlineType,1
+	dc.w	attr_ShadowDirection,1
+	dc.w	attr_ShadowPriority,1
+	dc.w	attr_SpecialFill,4
+
+****************************
+* AlphaIntoBitMap
+
+* rectangle rounded to word boundaries
+WordRect
+	dcb.b	ra_SIZEOF,0
+
+	xref	_CaseLeft,_CaseRight,_CaseEnd,_CaseHome,_CaseDown,_CaseUp
+	xref	_CasePageUp,_CasePageDown,_CaseBackspace,_CaseDelete
+	xref	_CaseHelp
+
+	xref	_CaseShadowType,_CaseShadowDir,_CaseShadowLength,_CaseOutline
+	xref	_CaseShadowPriority,_CaseJustify,_CaseTab,_CaseRender
+	xref	_CaseRenderLine,_CaseTake,_CaseRenderDisk,_CaseEscape
+	xref	_CaseAmiga,_CaseHotKey,_CaseSwallow
+
+****************************
+	cnop	0,2
+ XLABEL RawKeyTable
+	dc.l	NULL,NULL,NULL,NULL		; 00-03
+	dc.l	NULL,NULL,NULL,NULL		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	NULL,NULL,NULL,_CaseSwallow	; 0c-0f
+
+	dc.l	NULL,NULL,NULL,NULL		; 10-03
+	dc.l	NULL,NULL,NULL,NULL		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	NULL,_CaseEnd,_CaseDown,_CasePageDown		; 0c-0f
+
+	dc.l	NULL,NULL,NULL,NULL		; 20-03
+	dc.l	NULL,NULL,NULL,NULL		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	NULL,_CaseLeft,_CaseSwallow,_CaseRight		; 0c-0f
+
+	dc.l	NULL,NULL,NULL,NULL		; 30-03
+	dc.l	NULL,NULL,NULL,NULL		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	_CaseSwallow,_CaseHome,_CaseUp,_CasePageUp		; 0c-0f
+
+;; 	dc.l	_CaseHotKey,_CaseBackspace,_CaseTab,NULL		; 40-03 (space,backsp,tab,enter)
+	dc.l	NULL,_CaseBackspace,_CaseTab,NULL		; 40-03 (space,backsp,tab,enter)
+	dc.l	_CaseDown,_CaseEscape,_CaseDelete,NULL		; 04-07
+	dc.l	NULL,NULL,_CasePageUp,NULL		; 08-0b
+	dc.l	_CaseUp,_CaseDown,_CaseRight,_CaseLeft		; 0c-0f
+
+	dc.l	NULL,NULL,NULL,NULL		; 50-03
+	dc.l	NULL,NULL,NULL,NULL		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	NULL,NULL,_CasePageDown,_CaseHelp		; 0c-0f
+
+;;  	dc.l	NULL,NULL,NULL,NULL  ; _CaseHotKey		; 60-03      ctl is last one
+	dc.l	NULL,NULL,NULL,_CaseHotKey		; 60-03      ctl is last one
+	dc.l	NULL,NULL,_CaseAmiga,_CaseAmiga		; 04-07
+	dc.l	NULL,NULL,NULL,NULL		; 08-0b
+	dc.l	NULL,NULL,NULL,NULL		; 0c-0f
+
+FunctionKeyTable
+	dc.l	_CaseShadowType,_CaseShadowDir,_CaseShadowLength,_CaseOutline
+	dc.l	_CaseShadowPriority,_CaseJustify,_CaseRenderDisk,_CaseRenderLine
+	dc.l	_CaseRender,_CaseTake
+
+	end
+* end of newrender.a

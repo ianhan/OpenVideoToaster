@@ -1,0 +1,3498 @@
+head	1.9;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+1.9
+date	96.12.09.17.37.24;	author Holt;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	95.11.21.11.29.18;	author Flick;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	95.10.19.02.51.45;	author Flick;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	95.10.10.01.39.55;	author Flick;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	95.09.08.11.46.31;	author Flick;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	95.09.07.09.20.41;	author Flick;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	95.08.15.16.45.57;	author Flick;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	95.05.04.17.13.01;	author Flick;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.05.03.10.42.38;	author Flick;	state Exp;
+branches;
+next	1.0;
+
+1.0
+date	95.05.02.11.04.43;	author Flick;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+1.9
+log
+@turned off debuging
+@
+text
+@/*********************************************************************\
+*
+* $Acts.c - Action handling functions$
+*
+* $Id: acts.c,v 1.8 1995/11/21 11:29:18 Flick Exp Holt $
+*
+* $Log: acts.c,v $
+*Revision 1.8  1995/11/21  11:29:18  Flick
+*ActsReset now gets stub, so it just gets flags arg now
+*Jog/Shuttle CD-ROM defer is now >4 minutes per use
+*
+*Revision 1.7  1995/10/19  02:51:45  Flick
+*ChangeAudio() function now works on audio channel(s) allocated for last clip played
+*Refuses to touch anything if it's ceased, tries to handle user changing # chans requested
+*
+*Revision 1.6  1995/10/10  01:39:55  Flick
+*Removed test in ChangeAudio which was preventing adjustint volume "live" on split-out audio
+*portions of video clip.  Added args for GetClipInfo calls
+*
+*Revision 1.5  1995/09/08  11:46:31  Flick
+*Fixed bug when beginning jog/shuttle: if clip not found, would go ahead and
+*allocate audio channels, frame finder, and leave open count ++'d
+*
+*Revision 1.4  1995/09/07  09:20:41  Flick
+*Slight changes to jog/shuttle (4.06 release)
+*
+*Revision 1.3  1995/08/15  16:45:57  Flick
+*First release (4.05)
+*
+*Revision 1.2  1995/05/04  17:13:01  Flick
+*Phx/Flyer duality improved, some stub code moved into AmiShar.c
+*
+*Revision 1.1  1995/05/03  10:42:38  Flick
+*Automated prototypes, and reduced includes when possible
+*
+*Revision 1.0  1995/05/02  11:04:43  Flick
+*FirstCheckIn
+*
+*
+* Copyright (c) 1995 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+*	08/24/94		Marty	created
+*	02/06/95		Marty	Ported to C
+\*********************************************************************/
+
+#define	LOCALDEBUG		0			// Debugging switch for this module only
+
+#include <Types.h>
+#include <Flyer.h>
+#include <Exec.h>
+#include <Errors.h>
+#include <Acts.h>
+#include <Subs.h>
+#include <FileSys.h>
+//#include <Switcher.h>
+#include <SMPTE.h>
+#include <Vid.h>
+#include <Audio.h>
+#include <Heads.h>
+#include <SCSI.h>
+#include <Debug.h>
+
+#include <string.h>			// SAS include
+
+#include <proto.h>
+#include <acts.ps>
+
+
+extern const ULONG SRAMbase;		// Base of shared SRAM memory map
+extern struct JogInfo JogMach;
+extern struct ENGINE Engine[];
+#define	baseof_Engine	LOVIDMACHNUM
+extern UBYTE	VideoMode;
+extern struct FBUF Vbufctrl[NUMVIDCHANS][NUMVIDBUFS];
+#define	baseof_Vbufctrl	LOVIDMACHNUM
+extern struct FRAMEHDR (*Vhdrs)[NUMVIDCHANS][NUMVIDBUFS];
+#define	baseof_Vhdrs	LOVIDMACHNUM
+extern struct FBUF Abufctrl[NUMAUDCHANS][NUMAUDBUFS];
+#define	baseof_Abufctrl	LOAUDMACHNUM
+extern struct FRAMEHDR (*Ahdrs)[NUMAUDCHANS];
+#define	baseof_Ahdrs	LOAUDMACHNUM
+extern UWORD	AudSize[NUMAUDCHANS][NUMAUDBUFS];
+#define	baseof_AudSize		LOAUDMACHNUM
+extern struct MACHINE AVmachine[NUMVIDCHANS+NUMAUDCHANS];
+#define	baseof_AVmachine	LOVIDMACHNUM
+extern UBYTE	OppChan[NUMSCSICHANS];
+extern struct DriveStuff	DrvInfo[NUMSCSIDRIVES];
+extern struct SMPTEINFO	LastSMPTE;
+extern union ANYHDR (*mischdrs)[NUMVIDCHANS+NUMAUDCHANS];
+extern UBYTE	ProhibitSCSIdirect;
+extern BOOL		VidPaused;
+extern struct Semaphore	SCSIsema[NUMSCSICHANS];
+extern struct Semaphore	VidChanSemas[NUMVIDCHANS];
+extern struct PlayArgs NullAudioArgs;			// All audio args/flags = 0
+extern UBYTE gl_LastPlayAudChan;
+
+
+#if DBUGON
+extern struct AUDIOMACH	audmach[NUMAUDCHANS];		// Audio state machines
+extern #define	baseof_audmach		1
+#endif
+
+/*
+ *	ActsReset - Reset parameters
+ */
+void ActsReset(ULONG flags)
+{
+	DBUG(print(DB_ALWAYS,"Seriousness=%d\n",flags);)
+
+	AbortSequence();					// If sequencing, stop and cleanup
+
+	InitActs();
+
+	VideoReset(flags);
+	AudioReset(flags);
+}
+
+
+/*
+ * LocateField - Find block for a specified field in a clip
+ */
+UBYTE LocateField(ACTION *action)
+{
+	FlyerVolume		*volume;
+	struct FinderInfo	FindInfo;
+	char		*name;
+	BYTEBITS	clipflags;				// Unused
+	UBYTE		clipaudchans;			// Unused
+	ULONG		clipID, headlist;		// Unused
+	ULONG		field;
+	UBYTE		error = ERR_OKAY;
+
+	// Get ptr to volume & name structures
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+	name = (char *)(volume->v_Name + SRAMbase);
+	field = action->a_VidStartField;
+
+	DBUG(
+		print(DB_PROJECT,"LocFld: drv=%b name='%s' fld=%l\n",volume->v_SCSIdrive,name,field);
+	)
+
+	// Lookup info for clip, fill in FinderInfo structure
+	FindInfo.drive = volume->v_SCSIdrive;
+	error = GetNamedClipInfo(
+		FindInfo.drive,					// Drive
+		name,									// Name
+		&FindInfo.startblk,				// ->Start block
+		&FindInfo.indexblk,				// ->Index table block
+		&FindInfo.clipflds,				// ->Max field #
+		&clipflags,							// ->ClipFlags
+		&clipaudchans,						// ->AudChans
+		&clipID								// ->clipID
+	);
+	if (error != ERR_OKAY)
+	{
+		DBUG(print(DB_SEQ,"GNCI failed:%b\n",error);)
+		return(error);
+	}
+
+	// Now find the specific field we're interested in
+	error = LocateFrame(&FindInfo,field,&action->a_StartBlk,&headlist);
+
+	DBUG(print(DB_PROJECT,"Result %b (blk %l)\n",error,action->a_StartBlk);)
+
+	return(error);
+}
+
+
+/*
+ *	LocateFrame - Convert frame specification to raw numbers
+ */
+UBYTE LocateFrame(struct FinderInfo *finfo,		// Info on clip to search
+						ULONG		startfield,
+						ULONG		*block,
+						ULONG		*headlist)
+{
+	struct FINDMACH	*finder;
+	union ANYHDR	*workblk;
+	UBYTE	err;
+	ULONG	frame,huntblk;
+
+
+	frame = Fields2Frames(startfield,FALSE);
+
+	/* If we have an index table, do a fast search */
+	if (finfo->indexblk)
+	{
+		if (startfield >= finfo->clipflds)
+			return(ERR_BADPARAM);
+
+		/* Allocate a frame finder to use */
+		finder = NULL;
+		err = FindFrameInit(finfo->drive,finfo->indexblk,FALSE,finfo->clipflds,&finder,&(*headlist));
+		if (err != ERR_OKAY)
+			return(err);
+
+		// ********************************************
+		// *** Locate specific frame in clip (fast) ***
+		// ********************************************
+
+		DBUG(printchar(DB_OPS,'y');)
+
+		err = FindFrame(finder,frame,&(*block));
+
+//		DBUG(print(DB_OPS,"[%b]",err);)
+
+		FindFrameFree(finder);				// Free frame-finder
+
+		if (err == ERR_OKAY)
+		{
+//			action->a_StartBlk = *block;		// Modify action ?!?
+			DBUG(print(DB_OPS,"Frame blk:%l\n",*block);)
+		}
+		return(err);
+	}
+	else
+	{
+		// We have no index table, so do a linear search
+		huntblk = finfo->startblk+1;		// Point to 1st frame in clip
+
+		// ********************************************
+		// *** Locate specific frame in clip (slow) ***
+		// ********************************************
+
+		DBUG(printchar(DB_OPS,'z');)
+
+		workblk = AllocSRAM(1);		// Scratch SRAM blk
+		if (workblk == NULL)
+			return(ERR_NOMEM);
+
+		for (;;)
+		{
+			/* Check if goes too high */
+//			if (huntblk > ???)
+//			{
+//				err = ERR_CMDFAILED;
+//				break;
+//			}
+
+			/* DMA block to DRAM to header buffer */
+			err = ScsiReadSRAM(finfo->drive,huntblk,MISCDRAM+0,workblk,HEADERLEN);
+			if (err != ERR_OKAY)
+				break;
+
+			if (workblk->fh.fh_id != ID_CFRM)
+			{
+				err = ERR_CMDFAILED;
+				break;
+			}
+
+			if (frame > workblk->fh.fh_frmnum)			// Need to go forward in clip
+			{
+				if (workblk->fh.fh_nextfrm == 0)
+					break;
+				huntblk += workblk->fh.fh_nextfrm;
+			}
+			else if (frame < workblk->fh.fh_frmnum)		// Need to go backwards in clip
+			{
+				if (workblk->fh.fh_prevfrm == 0)
+					break;
+				huntblk += workblk->fh.fh_prevfrm;
+			}
+			else													// Found frame
+			{
+				err = ERR_OKAY;
+				break;
+			}
+		}
+		FreeSRAM(workblk,1);										// Free back to pool
+		return(err);
+	}
+}
+
+
+/*
+ *	GetNamedClipInfo - Lookup info on a named clip
+ */
+UBYTE GetNamedClipInfo(	UBYTE	drive,
+						char		*name,
+						ULONG		*startblk,
+						ULONG		*indexblk,
+						ULONG		*maxflds,
+						BYTEBITS	*flags,
+						UBYTE		*audchans,
+						ULONG		*clipID)
+{
+	UBYTE		err;
+	GRIP		*newgrip;
+
+	err = FS_Locate(drive,0,0,name,&newgrip,&(*startblk));
+	if (err == ERR_OKAY)
+	{
+		*clipID = newgrip->g_header;					// Associates to clip on drive
+		/* Get clip info */
+		err = GetClipInfo(drive,*startblk,
+			&(*flags),&(*indexblk),&(*maxflds),&(*audchans),NULL);
+
+		FreeGrip(drive,newgrip);
+	}
+
+//	DBUG(print(DB_OPS,"Clip Starts:%l, Index:%l, audchans:%b, flags:%b\n",
+//		*startblk,*indexblk,*audchans,*flags);)
+
+	return(err);
+}
+
+
+/*
+ * SearchArgs - Set search clip and/or parameters
+ */
+UBYTE SearchArgs(ACTION *action, UBYTE flag)
+{
+	FlyerVolume		*volume;
+	struct ENGINE		*ep;
+	struct FINDMACH	*fmach;
+	struct JogInfo		*jog;
+	GRIP		*newgrip;
+	UBYTE		err,buf,audchans,achan;
+	BOOL		vtimflg;
+	ULONG		startblk,chancount;
+	BYTEBITS	clipflags;
+	ULONG		headlist;		// Unused
+
+	ULONG		index;
+	ULONG		maxfld;
+//	BYTEBITS	flags=0;
+//#define	FLG_TOOKVID	(1<<0)
+	UBYTE		error;
+
+	// Get ptr to action & volume structures
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+
+	DBUG(
+		print(DB_PROJECT,"Args:Name=%s Code=%b Flags=%b Perm=%b chan=%b\n",
+			(char *)(volume->v_Name+SRAMbase),flag,action->a_Flags,action->a_PermissFlags,action->a_Channel);
+	)
+
+	jog = &JogMach;
+
+//	CommandBusy(ptr);				// Processing begun
+	error = ERR_OKAY;
+
+	if (flag)
+	{
+		if (flag == 1)			// Setting up for search
+		{
+			DBUG(printchar(DB_OPS,'1');)
+
+			if ((++jog->ji_nestcount) > 1)
+			{
+				DBUG(print(DB_PROJECT,"Jog Already Open!\n");)
+				goto abort;
+			}
+
+			DBUG(print(DB_PROJECT,"Jog Open\n");)
+
+			/* First, find named clip */
+			error = FS_Locate(volume->v_SCSIdrive,0,0,
+				(char *)(volume->v_Name+SRAMbase),&newgrip,&startblk);
+			if (error != ERR_OKAY)
+			{
+				jog->ji_nestcount--;			// Restore open count
+				goto abort;
+			}
+
+			/* Get clip info -- # fields, index location */
+			err = GetClipInfo(volume->v_SCSIdrive,startblk,&clipflags,
+				&index,&maxfld,&audchans,NULL);
+			jog->ji_clipflags = clipflags;
+			jog->ji_fields = maxfld;
+			jog->ji_numaudchans = audchans;
+			jog->ji_monochan = 0;					// Improve this!
+
+			FreeGrip(volume->v_SCSIdrive,newgrip);
+
+			// *********************************
+			// *** Wait for vid channel free ***
+			// *********************************
+			DBUG(printchar(DB_OPS,'2');)
+//			if (cont == 0)					// User abort?
+//			{
+//				error = ERR_ABORTED;
+//				jog->ji_nestcount--;			// Restore open count
+//				goto abort;
+//			}
+
+			jog->ji_channel = action->a_Channel;
+			jog->ji_aflags = action->a_Flags;
+
+			if (AF_VIDEO & action->a_Flags)
+			{
+				// Wait until channel is free
+				ObtainSemaphore(&VidChanSemas[jog->ji_channel]);
+
+//				while (VidChanBusy[jog->ji_channel])
+//				{
+//					DBUG(printchar(DB_OPS,'e');)
+//					Delay(1);
+//				}
+//
+//				/* Take video channel, now that it's free */
+//				VidChanBusy[jog->ji_channel] = TRUE;
+
+//				flags |= FLG_TOOKVID;
+			}
+		}
+		else												// Modifying search
+		{
+			// Must wait until previous DSP events are done and free
+			WaitJogDSPsettled(jog);
+
+			ep = GetEngine(jog->ji_machnum);
+
+			/* If audio looping, I must do this! */
+			if (!(EFLG_AUDMUTE & ep->e_flags))
+			{
+				// Let engine disable audio
+				EngineCommand(jog->ji_machnum,AVCMD_AUDCHG,0,0,&NullAudioArgs,0);
+//				AudioDisable(jog->ji_audchan);
+			}
+
+			DBUG(print(DB_TEST,"dumping %b\n",jog->ji_audchan);)
+			FreeAudioChan(jog->ji_audchan,TRUE);		// Disconnect and quiet audio
+		}
+
+		if (AF_VIDEO & action->a_Flags)
+			vtimflg = TRUE;
+		else
+			vtimflg = FALSE;
+
+		/* Allocate audio channel(s) */
+		chancount = CountAudChans(action->a_Flags);
+		jog->ji_audchan = AllocAudioChan(chancount,vtimflg);
+
+		DBUG(print(DB_TEST,"Wanted %b, got chan %b\n",chancount,jog->ji_audchan);)
+
+		if (AF_VIDEO & action->a_Flags)
+			jog->ji_machnum = jog->ji_channel;
+		else
+			jog->ji_machnum = NUMVIDCHANS+jog->ji_audchan-1;
+
+		/* If setting up, allocate a frame finder for us to use */
+		if (flag == 1)
+		{
+			fmach = &jog->ji_finder;
+
+			err = FindFrameInit(volume->v_SCSIdrive,index,TRUE,maxfld,&fmach,&headlist);
+			if (err != ERR_OKAY)
+				error = ERR_CMDFAILED;
+		}
+
+//		DBUG(print(DB_TEST,"Wants %d channels, gave %d/%d\n",
+//			chancount,jog->ji_machnum,jog->ji_audchan);)
+//NO LONGER DO THIS, WE'LL SPECIFY AUDIO INFO AT EACH FRMADV!
+//		Engine[jog->ji_machnum-baseof_Engine].e_audchan = jog->ji_audchan;
+
+		// Make sure these are inactive on first entry to DoSearch
+		jog->ji_dspup1.ae_active = FALSE;
+		jog->ji_dspup2.ae_active = FALSE;
+		jog->ji_dspdn1.ae_active = FALSE;
+		jog->ji_dspdn2.ae_active = FALSE;
+	}
+	else
+	{
+		if ((--jog->ji_nestcount) != 0)
+		{
+			DBUG(print(DB_PROJECT,"Jog dummy close!\n");)
+			goto abort;
+		}
+		DBUG(print(DB_PROJECT,"Jog Close\n");)
+
+		ProhibitSCSIdirect = 1;		// Get ready to allow CD-ROM's
+
+		ep = GetEngine(jog->ji_machnum);
+		if (VideoMode == VM_PLAY)
+		{
+			/* Wait for any queued video to take */
+			while (ep->e_1stevent)		// Wait for no queued events
+			{
+				DBUG(printchar(DB_OPS,'d');)
+				Delay(1);
+			}
+
+			/* Wait for audio to disable */
+			while (!(EFLG_HOLD & ep->e_flags))
+			{
+				DBUG(printchar(DB_OPS,'D');)
+				Delay(1);
+			}
+
+			/* If audio looping, I must do this! */
+			if (!(EFLG_AUDMUTE & ep->e_flags))
+			{
+				DBUG(print(DB_OPS,"Dis");)
+
+				// Let engine disable audio
+				EngineCommand(jog->ji_machnum,AVCMD_AUDCHG,0,0,&NullAudioArgs,0);
+//				AudioDisable(ep->e_audchan);
+
+				// Wait for audio disable to "take", otherwise we might free channel
+				// before it's disabled.  This would mean the DSP volume would not
+				// be brought to 0, since this is not possible to quiet the audio
+				// channels when disabled from IRQ code.  We must disable, then free
+				while (ep->e_1stevent)		// Wait for no queued events
+				{
+					DBUG(printchar(DB_OPS,'/');)
+					Delay(1);
+				}
+			}
+			else
+			{
+				DBUG(print(DB_OPS,"Not");)
+			}
+
+			achan = jog->ji_audchan;
+
+//All this will be done for us by FreeAudioChan (below)
+//			dsp1.ae_time = 0;
+//			dsp1.ae_chan = achan;
+//			dsp1.ae_volume = 0;
+//			dsp1.ae_pan = 0;
+//			dsp1.ae_rate = 0;
+//			AddAudEvent(&dsp1);						// Send volume down
+//
+//			if (audmach[achan-baseof_audmach].am_stereo)
+//			{
+//				dsp2.ae_time = 0;
+//				dsp2.ae_chan = achan+1;
+//				dsp2.ae_volume = 0;
+//				dsp2.ae_pan = 0;
+//				dsp2.ae_rate = 0;
+//				AddAudEvent(&dsp2);					// Send volume down
+//				WaitAudEvent(&dsp2);					// Wait til it occurs
+//			}
+//			WaitAudEvent(&dsp1);						// Wait til it occurs
+		}
+		else
+		{
+			DBUG(print(DB_OPS,"RecMode!\n");)
+		}
+
+		DBUG(print(DB_OPS,"freeing %b\n",jog->ji_audchan);)
+		FreeAudioChan(jog->ji_audchan,TRUE);		// Disconnect and quiet audio
+
+		DBUG(
+		if (audmach[jog->ji_audchan-baseof_audmach].am_enbl)
+			print(DB_OPS,"Whoa!  Audchan %d is still enabled!\n",jog->ji_audchan);
+		)
+
+//		ep->e_audchan = 0;
+
+		/* Maybe go to matte color, per USEMATTE */
+		if ((AF_VIDEO & action->a_Flags) && (AF_USEMATTE & action->a_Flags))
+		{
+			buf = GetNextVideoBuffer(jog->ji_channel,TRUE);
+//			DBUG(print(DB_OPS,"Buf %d\n",buf);)
+//!!!		I really MUST wait for 'buf' to be empty!!!
+
+			MakeMatteFrame(jog->ji_channel,buf);					// (Bumps e_userbuf)
+
+			/* Advance to black frame */
+			EngineCommand(jog->ji_channel,AVCMD_PLAY,0,1,&NullAudioArgs,0);
+		}
+
+		FindFrameFree(&jog->ji_finder);				// Free frame-finder
+//		if (FLG_TOOKVID & flags)
+		if (AF_VIDEO & jog->ji_aflags)		// Check video flag on Jog Open
+			ReleaseSemaphore(&VidChanSemas[jog->ji_channel]);		// Release video channel
+//			VidChanBusy[jog->ji_channel] = FALSE;
+	}
+
+abort:
+//	CommandDone(ptr);
+
+	DBUG(print(DB_OPS,"OK\n");)
+
+	return(error);
+}
+
+
+/*
+ *	DoSearch - Find specified frame in clip
+ */
+UBYTE DoSearch(ACTION *action)
+{
+	FlyerVolume		*volume;
+	struct FRAMEHDR	*FrmHdrPtr;
+	struct ENGINE		*ep;
+	struct JogInfo		*jog;
+	struct FBUF			*ctrlptr;
+	struct PlayArgs 	myaudargs;
+	UBYTE	buf,achan,numaudchans,machnum,error;
+	UWORD	addr;
+	BYTEBITS	cmdflags;
+	ULONG		frame,time;
+
+
+	ProhibitSCSIdirect = 255;		// Long time til maybe allow SCSI directs
+
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+
+	error = ERR_OKAY;
+
+	jog = &JogMach;
+
+	DBUG(print(DB_PROJECT,"(V:%l A:%l) ",action->a_VidStartField,action->a_AudStartField);)
+
+	// 'field' not 'frame' here...
+	frame = (AF_VIDEO & action->a_Flags)?action->a_VidStartField:action->a_AudStartField;
+
+	DBUG(
+//		print(DB_PROJECT,"DoSrch:Action=%l,Volume=%l,Name=%l\n",(ULONG)action,(ULONG)volume,(ULONG)volume->v_Name);
+		print(DB_PROJECT,"Do:Fld=%l Flags=%b Perm=%b chan=%b ",
+			frame,action->a_Flags,action->a_PermissFlags,action->a_Channel);
+		print(DB_PROJECT,"vol1=%w vol2=%w pan1=%w pan2=%w\n",
+			action->a_VolSust1,action->a_VolSust2,action->a_AudioPan1,action->a_AudioPan2);
+	)
+
+//	DBUG(print(DB_PROJECT,"Field %l out of (%l)\n",frame,jog->ji_fields);)
+	if (frame >= jog->ji_fields)
+		return(ERR_BADPARAM);
+
+	frame = Fields2Frames(frame,FALSE);
+
+	machnum = jog->ji_machnum;
+
+	ep = GetEngine(machnum);
+
+
+	// ****************************
+	// *** Find specified field ***
+	// ****************************
+
+	DBUG(printchar(DB_OPS,'A');)
+	error = FindFrame(&jog->ji_finder,frame,&action->a_StartBlk);
+	if (error != ERR_OKAY)
+	{
+//		DBUG(print(DB_PROJECT,"Bailing 1 out %b\n",error);)
+		goto abort;
+	}
+//	DBUG(print(DB_OPS,"Found at block %l\n",action->a_StartBlk);)
+
+
+	/* Shut off video flag if clip has no video */
+	if ((AF_VIDEO & action->a_Flags)
+	&& (!(CIF_HASVIDEO & jog->ji_clipflags)))
+	{
+		action->a_Flags &= ~AF_VIDEO;
+	}
+
+	/* Disallow more audio channels than clip has */
+	numaudchans = CountAudChans(action->a_Flags);
+	if ((numaudchans > 0) && (jog->ji_numaudchans == 0))
+	{
+		action->a_Flags &= ~AF_AUDIOL;		// Allow no audio
+		action->a_Flags &= ~AF_AUDIOR;
+		numaudchans = 0;
+	}
+	else if ((numaudchans == 2) && (jog->ji_numaudchans < 2))
+	{
+		action->a_Flags &= ~AF_AUDIOR;		// Allow mono only
+		numaudchans = jog->ji_numaudchans;
+	}
+
+
+	// ************************************
+	// *** Wait for new video to "take" ***
+	// ************************************
+	DBUG(printchar(DB_OPS,'B');)
+
+//	while (ep->e_syncflag == TRUE) { }
+	while (ep->e_1stevent)
+	{
+		DBUG(printchar(DB_OPS,'d');)
+		Delay(1);
+	}
+
+	if (machnum <= HIVIDMACHNUM)
+	{
+//		buf		= GetNextVideoBuffer(machnum,TRUE);			// Maybe shouldn't wait?!!!
+		buf		= GetNextVideoBuffer(machnum,FALSE);		// Doesn't wait!!!
+		ctrlptr	= &Vbufctrl[machnum-baseof_Vbufctrl][buf];
+		FrmHdrPtr= &(*Vhdrs)[machnum-baseof_Vhdrs][buf];
+		addr = ctrlptr->bf_addr;
+	}
+	else
+	{
+		buf		= GetAudioBuffer(machnum);
+		ctrlptr	= &Abufctrl[machnum-baseof_Abufctrl][buf];
+		FrmHdrPtr= &(*Ahdrs)[machnum-baseof_Ahdrs];
+		addr = ctrlptr->bf_addr + 1;	// Skip where hdr goes
+	}
+
+	DBUG(printchar(DB_OPS,'C');)
+
+	/* Read block to DRAM to header buffer */
+	error = ScsiReadSRAM(volume->v_SCSIdrive,action->a_StartBlk,addr,FrmHdrPtr,HEADERLEN);
+	if (error != ERR_OKAY)
+	{
+//		DBUG(print(DB_PROJECT,"Bailing 2 out %b\n",error);)
+		goto abort;
+	}
+
+	DBUG(printchar(DB_OPS,'D');)
+
+	if (FrmHdrPtr->fh_id != ID_CFRM)
+	{
+		error = ERR_CMDFAILED;
+//		DBUG(print(DB_PROJECT,"Bailing 3 out %b\n",error);)
+		goto abort;
+	}
+
+	DBUG(print(DB_SIZE,"%b ",FrmHdrPtr->fh_fld[1].fi_vlen);)
+
+	error = DoSMPTE(FrmHdrPtr,(AF_VIDEO & action->a_Flags)?
+										action->a_VidStartField:
+										action->a_AudStartField);
+
+	DBUG(printchar(DB_OPS,'E');)
+
+	/* Save cheaters */
+	jog->ji_finder.fm_prev_blk = action->a_StartBlk + FrmHdrPtr->fh_prevfrm;
+	jog->ji_finder.fm_prev_frm = frame-1;
+	jog->ji_finder.fm_next_blk = action->a_StartBlk + FrmHdrPtr->fh_nextfrm;
+	jog->ji_finder.fm_next_frm = frame+1;
+
+	error = ERR_OKAY;
+
+	/* User wants to see/hear this frame? */
+	if ((AF_VIDEO & action->a_Flags)
+	||  (AF_AUDIOL & action->a_Flags)
+	||  (AF_AUDIOR & action->a_Flags))
+	{
+// MOVED THIS BELOW IN AUDIO SECTION, AND MORE IMPORTANTLY, AFTER BIG SCSI READ
+//		WaitJogDSPsettled(jog);
+
+		DBUG(printchar(DB_OPS,'F');)
+
+		/* Read entire frame (without header) to DRAM buffer */
+		error = DoSCSI(volume->v_SCSIdrive,SCMD_READ,
+			action->a_StartBlk+1,(APTR)addr,FrmHdrPtr->fh_chunklen-HEADERLEN);
+		if (error != ERR_OKAY)
+		{
+//			DBUG(print(DB_PROJECT,"Bailing 4 out %b\n",error);)
+			goto abort;
+		}
+
+		DBUG(printchar(DB_OPS,'G');)
+
+		ctrlptr->bf_empty = FALSE;		// not empty
+
+		cmdflags = 0;
+
+		/* Set auto-mute on/off */
+		if (APF_AUTOMUTE & action->a_PermissFlags)
+			cmdflags |= AVCF_AUDMUTE;
+		else
+			cmdflags &= ~AVCF_AUDMUTE;
+
+		/* This doesn't seem real legal! */
+//		AVmachine[machnum-baseof_AVmachine].m_volume = action->a_VolSust1;
+
+		if (!(AF_VIDEO & action->a_Flags))
+		{
+			/* Audio-only needs size */
+			AudSize[machnum-baseof_AudSize][buf] = FrmHdrPtr->fh_audlen;
+		}
+
+		// Need better method for this...
+//		time = (GetFieldClock()+4) & ~3;			// Do it at next color-frame boundary
+		time = GetFieldClock();
+		if (((time & 3)==0) && (ep->e_field != 1))
+			time += 0;									// Can probably make it in time for this field
+		else
+			time = (time+4) & ~3;					// Will have to wait til next color-frame
+
+// ARE WE PICKING "time" WISELY IN ALL CIRCUMSTANCES?  (NO!) INVESTIGATE
+// Using the formula GetFieldClock()+5) & ~3 seems much more reliable, but it's too slow to shuttle!
+
+		DBUG(printchar(DB_OPS,'H');)
+
+		DBUG(print(DB_PROJECT,"Buf=%d\n",buf);)
+
+		/* Advance to next frame (maybe with audio also) */
+		myaudargs.AudChan = jog->ji_audchan;					// Audio off/channel for clip
+		myaudargs.MonoChan = jog->ji_monochan;				// Mono L/R channel selector
+		myaudargs.NumAudChans = jog->ji_numaudchans;		// Number of audio channels
+		myaudargs.Flags = cmdflags;
+		EngineCommand(machnum,AVCMD_ADVFRM,time,1,&myaudargs,0);
+		if (machnum <= HIVIDMACHNUM)
+			BumpUserVidBufNum(ep);
+		else
+			BumpUserAudBufNum(ep);
+
+		DBUG(printchar(DB_OPS,'I');)
+
+		// This sends volume events every frame -- Do this only on a change?!?!?!
+		if ((AF_AUDIOL & action->a_Flags) || (AF_AUDIOR & action->a_Flags))
+		{
+			DBUG(printchar(DB_OPS,'J');)
+
+			// Must wait until previous DSP events are free again
+			//IF NEED BE, MAKE 2 SETS SO WE CAN DOUBLE-BUFFER!
+			WaitJogDSPsettled(jog);
+
+			achan = jog->ji_audchan;
+
+			jog->ji_dspup1.ae_time = time;
+			jog->ji_dspup1.ae_chan = achan;
+			jog->ji_dspup1.ae_volume = action->a_VolSust1;
+			jog->ji_dspup1.ae_pan = action->a_AudioPan1;
+			jog->ji_dspup1.ae_rate = action->a_VolAttack;
+			AddAudEvent(&jog->ji_dspup1);						// Send volume up
+
+			if (jog->ji_numaudchans == 2)
+//			if (audmach[achan-baseof_audmach].am_stereo)
+			{
+				jog->ji_dspup2.ae_time = time;
+				jog->ji_dspup2.ae_chan = achan+1;
+				jog->ji_dspup2.ae_volume = action->a_VolSust2;
+				jog->ji_dspup2.ae_pan = action->a_AudioPan2;
+				jog->ji_dspup2.ae_rate = action->a_VolAttack;
+				AddAudEvent(&jog->ji_dspup2);					// Send volume up
+
+				if (APF_AUTOMUTE & action->a_PermissFlags)
+				{
+					jog->ji_dspdn2.ae_time = time+4;
+					jog->ji_dspdn2.ae_chan = achan+1;
+					jog->ji_dspdn2.ae_volume = 0;
+					jog->ji_dspdn2.ae_pan = 0;
+					jog->ji_dspdn2.ae_rate = 0;
+					AddAudEvent(&jog->ji_dspdn2);						// Send volume down
+				}
+				else
+					jog->ji_dspdn2.ae_active = FALSE;
+			}
+
+			if (APF_AUTOMUTE & action->a_PermissFlags)
+			{
+				jog->ji_dspdn1.ae_time = time+4;
+				jog->ji_dspdn1.ae_chan = achan;
+				jog->ji_dspdn1.ae_volume = 0;
+				jog->ji_dspdn1.ae_pan = 0;
+				jog->ji_dspdn1.ae_rate = 0;
+				AddAudEvent(&jog->ji_dspdn1);						// Send volume down
+			}
+			else
+				jog->ji_dspdn1.ae_active = FALSE;
+		}
+
+		DBUG(printchar(DB_OPS,'K');)
+	}
+		
+abort:
+//	CommandDone(ptr);
+
+	DBUG(print(DB_PROJECT,"Error=%b\n",error);)
+
+	return(error);
+}
+
+
+static void WaitJogDSPsettled(struct JogInfo *jog)
+{
+	WaitAudEvent(&jog->ji_dspup1);					// Wait til it occurs
+	WaitAudEvent(&jog->ji_dspdn1);					// Wait til it occurs
+	if (jog->ji_numaudchans == 2)
+	{
+		WaitAudEvent(&jog->ji_dspup2);				// Wait til it occurs
+		WaitAudEvent(&jog->ji_dspdn2);				// Wait til it occurs
+	}
+}
+
+
+/*
+ *	FlyerRecord - Multitasking Video/Audio Record
+ */
+UBYTE FlyerRecord(ACTION *action, UBYTE *contflag)
+{
+	FlyerVolume	*volume;
+	struct MACHINE	*avm;
+	GRIP		*newgrip;
+	ULONG		fake1;
+	UBYTE		err,numaudchans,error,audchan,machnum;
+	BOOL		vtimflg,clipflg,ownSCSI=FALSE;
+	char		*name;
+
+
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+	name = (char *)(volume->v_Name + SRAMbase);
+
+//	CommandBusy(ptr);				// Processing begun
+	error = ERR_OKAY;
+
+	// ***********************************
+	// *** Check parameters for errors ***
+	// ***********************************
+	DBUG(printchar(DB_OPS,'1');)
+
+	DBUG(
+		print(DB_PROJECT,"Rec: name='%s'\n",name);
+		print(DB_PROJECT,"drive=%b Flags=%b Perm=%b chan=%b ",
+			volume->v_SCSIdrive,action->a_Flags,action->a_PermissFlags,action->a_Channel);
+		print(DB_PROJECT,"vflds=%l/%l aflds=%l/%l ",
+			action->a_VidStartField,action->a_VidFieldCount,action->a_AudStartField,action->a_AudFieldCount);
+		print(DB_PROJECT,"Audio: vol1=%w vol2=%w pan1=%w pan2=%w ",
+			action->a_VolSust1,action->a_VolSust2,action->a_AudioPan1,action->a_AudioPan2);
+		print(DB_PROJECT,"Audio: atk=%w dcy=%w GoClock=%l\n",
+			action->a_VolAttack,action->a_VolDecay,action->a_GoClock);
+	)
+
+	/* Make sure we've not lost color phase */
+	EnsureColorPhase();
+
+//	/* Re-zero the drive to defer T-Cals as long as possible */
+//	DBUG(print(U.DB_SCSI,"Zero!\n");)
+//	err = DoSCSI(volume->v_SCSIdrive,SCMD_ZERO,0,NULL,0);
+//	if (err != ERR_OKAY)
+//	{
+//		error = err;
+//		goto abort;
+//	}
+
+	/* Illegal channel numbers? */
+	if ((action->a_Channel > (NUMVIDCHANS-1))
+	|| (volume->v_SCSIdrive > (NUMSCSIDRIVES-1)))
+	{
+		error = ERR_BADPARAM;				// Set Error code
+		goto abort;
+	}
+
+	if (VideoMode != VM_RECORD)			// In Record mode?
+	{
+		error = ERR_WRONGMODE;			// Set Error code
+		goto abort;
+	}									// Make sure we have something spec'd to do
+
+	if ((!(AF_VIDEO & action->a_Flags))
+	&& (!(AF_AUDIOL & action->a_Flags))
+	&& (!(AF_AUDIOR & action->a_Flags)))
+	{
+		error = ERR_BADPARAM;
+		goto abort;
+	}
+
+	if ((name) && (*name != 0))			// Name specified
+	{
+		/* Make sure name is unique */
+		err = FS_Locate(volume->v_SCSIdrive,0,0,name,&newgrip,&fake1);
+		if (err == ERR_OKAY)
+		{
+			FreeGrip(volume->v_SCSIdrive,newgrip);
+			error = ERR_EXISTS;
+			goto abort;
+		}
+
+		error = ERR_OKAY;
+		clipflg = TRUE;		// Do name record
+	}
+	else										// Raw blocks specified
+	{
+		clipflg = FALSE;		// Do raw record
+		action->a_VidStartField = 0;	// Must have, to return last fld
+		action->a_AudStartField = 0;	// Must have, to return last fld
+	}
+
+
+	// ***************************************************************
+	// *** With video? Wait for SCSI channel free to use for video ***
+	// ***************************************************************
+	DBUG(printchar(DB_OPS,'2');)
+
+	if (AF_VIDEO & action->a_Flags)
+	{
+		// Wait here until I have exclusive use of this SCSI channel
+		ObtainSemaphore(&SCSIsema[volume->v_SCSIdrive >> 3]);
+
+		ownSCSI = TRUE;
+	}
+
+
+	// ******************************************************
+	// *** Wait for Machine free to use, setup for record ***
+	// ******************************************************
+	DBUG(printchar(DB_OPS,'3');)
+
+//	if (AF_VIDEO & action->a_Flags)
+//	{
+//		while (!AllocAVMachine(action->a_Channel))		// Always TRUE now!
+//		{
+//			if (GetSignals() & SIGF_ABORT)					// User abort?
+//			{
+//				error = ERR_ABORTED;
+//				goto abort;
+//			}
+//
+//			Delay(1);			// Sleep 1 tick and then we'll try again
+//		}
+//	}
+
+	if (clipflg)
+	{
+		/* Find preferred free space to use part of */
+		/* This fills in StartBlk,EndBlk */
+		error = GetFreeSpace(volume->v_SCSIdrive,0,FALSE,
+			&action->a_StartBlk,
+			&action->a_EndBlk
+		);
+		if (error != ERR_OKAY)
+			goto abort;
+	}
+
+	if (action->a_StartBlk == 0)
+		goto abort;
+
+
+	if (AF_VIDEO & action->a_Flags)
+		vtimflg = TRUE;
+	else
+		vtimflg = FALSE;
+
+	/* Allocate number of audio channels desired (if any) */
+	numaudchans = CountAudChans(action->a_Flags);
+	audchan = AllocAudioChan(numaudchans,vtimflg);
+
+	DBUG(print(DB_TEST,"Wanted %b, got chan %b\n",numaudchans,audchan);)
+
+	if (audchan == 0)
+	{
+		numaudchans = 0;
+		/* If no video requested, and got no audio, fail */
+		if (!(AF_VIDEO & action->a_Flags))
+		{
+			error = ERR_NOAUDIOCHAN;
+			goto abort;
+		}
+	}
+	else
+	{
+		AudioEnable(audchan);			// Enable for recording (redundant???)
+	}
+
+	if (AF_VIDEO & action->a_Flags)
+		machnum = action->a_Channel;
+	else
+		machnum = NUMVIDCHANS + audchan-1;
+
+	InitAVMachine(machnum);			// Ready to use
+
+	avm = &AVmachine[machnum-baseof_AVmachine];
+	avm->m_mode			= REC;
+	avm->m_sdrive		= volume->v_SCSIdrive;
+	avm->m_startaddr	= action->a_StartBlk;
+	avm->m_stopaddr	= action->a_EndBlk;
+	DBUG(print(DB_OPS,"Recording range %l-%l\n",avm->m_startaddr,avm->m_stopaddr);)
+
+	avm->m_goclock		= action->a_GoClock;
+
+	avm->m_stopfrm = (AF_VIDEO & action->a_Flags)?
+								action->a_VidFieldCount:
+								action->a_AudFieldCount;
+
+
+	avm->m_stopfrm = Fields2Frames(avm->m_stopfrm,TRUE);
+
+	avm->m_numaudchans	= numaudchans;
+	avm->m_achan			= audchan;
+
+
+	// ****************************************
+	// ****************************************
+	// *** Maintain recording (until stops) ***
+	// ****************************************
+	// ****************************************
+	DBUG(printchar(DB_OPS,'4');)
+
+	/* Call the video/audio record machine */
+	DoRecMachine(machnum, contflag);
+	DBUG(print(DB_TEST,"Back4\n");)
+
+	error = avm->m_error;
+
+	DBUG(print(DB_TEST,"DoRec error %b\n",error);)
+
+	/* Compute last field played */
+	action->a_LastFieldDone = (AF_VIDEO & action->a_Flags)?
+											action->a_VidStartField:
+											action->a_AudStartField;
+
+	action->a_LastFieldDone += Frames2Fields(avm->m_frmsdone)-1;
+
+	/* Make into a clip? */
+	if (clipflg && (
+	(error == ERR_OKAY) ||
+	(error == ERR_EXHAUSTED) ||
+	(error == ERR_DROPPEDFLDS) ||
+	(error == ERR_ABORTED)))
+	{
+
+		DBUG(print(DB_OPS,"End blk:%l\n",avm->m_stopaddr);)
+
+//		flags = 0;
+//		if (AF_VIDEO & action->a_Flags)
+//			flags |= CIF_HASVIDEO;
+//
+//		if ((AF_AUDIOL & action->a_Flags)
+//		|| (AF_AUDIOR & action->a_Flags))
+//			flags |= CIF_HASAUDIO;
+
+		if (avm->m_stopaddr > action->a_StartBlk)			// Something to save?
+		{
+			err = NewFile(volume->v_SCSIdrive,action->a_StartBlk,
+				avm->m_stopaddr-action->a_StartBlk,0,name,FALSE,0,&newgrip);
+			if (err != ERR_OKAY)
+				error = err;
+			else
+				FreeGrip(volume->v_SCSIdrive,newgrip);		// Throw it away
+		}
+	}
+
+	DBUG(print(DB_TEST,"Here we be...(chan %b)\n",avm->m_achan);)
+
+	AudioDisable(avm->m_achan);
+	FreeAudioChan(avm->m_achan,FALSE);
+//	FreeAVMachine(machnum);				// Does nothing now!
+
+abort:
+
+	// Free SCSI channel to be used by others
+	if (ownSCSI)
+		ReleaseSemaphore(&SCSIsema[volume->v_SCSIdrive >> 3]);
+
+	return(error);
+}
+
+
+/*
+ *	ChangeAudio - Change audio control during play
+ */
+void ChangeAudio(APTR ptr)
+{
+	struct CMD_ORG {
+		UWORD		opcode;
+		UBYTE		cont;
+		UBYTE		error;
+		ULONG		actptr;
+	};
+	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+	ACTION			*action;
+	struct ENGINE	*ep;
+	struct MACHINE	*avm;
+	struct DSPevent	dsp1,dsp2;
+	UBYTE	machnum,chancount,achan;
+	BOOL	doit,vtimflg;
+
+	doit	= FALSE;
+
+	action = (ACTION *)(cmdptr->actptr + SRAMbase);	// Get ptr to action structure
+
+	DBUG(
+		print(DB_PROJECT,"Chg:Flags=%b, vol1=%w vol2=%w pan1=%w pan2=%w\n",
+			action->a_Flags,action->a_VolSust1,action->a_VolSust2,action->a_AudioPan1,action->a_AudioPan2);
+	)
+
+
+	// Hack to use the audchan(s) of the last play cmd (better than nothing!)
+	achan = gl_LastPlayAudChan;
+	DBUG(print(DB_PROJECT,"gl_LastChan=%b\n",achan);)
+	if (achan==0)
+		achan = 7;					 		// +r_AudChan-1 --- !!!
+
+	if (AF_VIDEO & action->a_Flags)
+	{
+		vtimflg = TRUE;
+		machnum = action->a_Channel;
+	}
+	else
+	{
+		vtimflg = FALSE;
+		machnum = NUMVIDCHANS+achan-1;
+	}
+
+	avm = &AVmachine[machnum-baseof_AVmachine];
+	ep = GetEngine(machnum);
+
+	chancount = CountAudChans(action->a_Flags);
+
+	if ((chancount > 0) && (avm->m_numaudchans == 0))
+	{
+//		avm->m_numaudchans = chancount;
+//		avm->m_achan = AllocAudioChan(chancount,vtimflg);
+
+//		avm->m_achan = achan;
+
+		doit = TRUE;
+
+		DBUG(print(DB_TEST,"Wanted %b, got chan %b\n",chancount,avm->m_achan);)
+		DBUG(print(DB_OPS,"Audio on!\n");)
+	}
+	else if ((chancount == 0) && (avm->m_numaudchans != 0))
+	{
+//		AudioDisable(avm->m_achan);				// Disconnect audio
+//		FreeAudioChan(avm->m_achan,TRUE);		// Quiet and free channel
+//		avm->m_numaudchans = 0;
+//		avm->m_achan = 0;
+
+		chancount = 2;		// Hack! To make (0) audio channels really go silent below
+//		avm->m_achan = achan;
+
+		doit = TRUE;
+		DBUG(print(DB_OPS,"Audio off!\n");)
+	}
+	else
+	{
+//		avm->m_achan = achan;
+
+		chancount = avm->m_numaudchans;			// Set DSP for # chans we started with
+		if (chancount==2)
+			action->a_Flags |= (AF_AUDIOL | AF_AUDIOR);		// We'll set both then
+
+		// Just wants new envelope on the fly
+		// Will do this below...
+	}
+
+	if (chancount > 0)
+	{
+//		Removed this test, as it makes leading/trailing audio splits unable to mix-down live
+//		since they are stand-alone audio and therefore on another engine from the video
+//		Seems like problem this was put here to solve has gone away???
+//		if ((ep->e_audenbl)		// Only allow if audio is still pumping
+//		|| ((action->a_VolSust1==0) && (action->a_VolSust2==0)))		// Okay to go silent, tho
+
+// This new test relies on the hack in Seq.c that keeps the base audio channel in this
+// global only as long as the last clip is still playing, so we skip all this if it's stopped
+		if (gl_LastPlayAudChan)
+		{
+			/* Bring volume up */
+			dsp1.ae_time	= 0;
+			dsp1.ae_chan	= achan;
+			if (AF_AUDIOL & action->a_Flags)
+			{
+				dsp1.ae_volume	= action->a_VolSust1;
+				dsp1.ae_pan		= action->a_AudioPan1;
+			}
+			else
+			{
+				dsp1.ae_volume	= action->a_VolSust2;
+				dsp1.ae_pan		= action->a_AudioPan2;
+			}
+			dsp1.ae_rate	= action->a_VolAttack;
+			AddAudEvent(&dsp1);		// Send volume up
+
+			if (chancount == 2)
+			{
+				dsp2.ae_time	= 0;
+				dsp2.ae_chan	= achan+1;
+				dsp2.ae_volume	= action->a_VolSust2;
+				dsp2.ae_pan		= action->a_AudioPan2;
+				dsp2.ae_rate	= action->a_VolAttack;
+				AddAudEvent(&dsp2);		// Send volume up
+
+				WaitAudEvent(&dsp2);		// Wait til it occurs
+			}
+			WaitAudEvent(&dsp1);		// Wait til it occurs
+		}
+	}
+
+	if (doit)
+	{
+		ep->e_audchan = achan;			// Legal !!!???
+//		ep->e_flags |= EFLG_AUDCHG;
+	}
+}
+
+
+/*
+ * CountAudChans - Convert audio channel request flags into a channel count
+ */
+UBYTE CountAudChans(BYTEBITS flags)
+{
+	UBYTE	count;
+
+	count = 0;
+
+	if (AF_AUDIOL & flags)
+		count++;
+
+	if (AF_AUDIOR & flags)
+		count++;
+
+	return(count);
+}
+
+
+/*
+ * ClipSMPTE -- fill in SMPTE time for clip (start time)
+ */
+void ClipSMPTE(UBYTE	drive, ULONG blk)
+{
+	union ANYHDR	*workblk;
+	UBYTE	err;
+
+	ClearMemory(&LastSMPTE,sizeof(struct SMPTEINFO)); 		// Blank out
+
+	workblk = &(*mischdrs)[0];
+
+	/* Read block to DRAM to header buffer */
+	err = ScsiReadSRAM(drive,blk,MISCDRAM+3,workblk,HEADERLEN);
+	if (err == ERR_OKAY)
+	{
+		if (workblk->fh.fh_id == ID_CFRM)
+			DoSMPTE(workblk,0);
+	}
+}
+
+
+/*
+ * DoSMPTE - Decode SMPTE info for field pair
+ */
+UBYTE DoSMPTE(APTR hdraddr, ULONG field)
+{
+	struct FRAMEHDR	*FrmHdrPtr;
+	struct FLDINFO		*fip;
+	ULONG	whichpair,i;
+	UBYTE	err = ERR_OKAY;
+
+	FrmHdrPtr = (struct FRAMEHDR *)hdraddr;
+	whichpair = ((field % 4) / 2) * 2 + 1;		// 1 or 3
+	
+	ClearMemory(&LastSMPTE,sizeof(struct SMPTEINFO)); 		// Blank out
+
+	for (i=0;i<=1;i++)
+	{
+		fip = &FrmHdrPtr->fh_fld[whichpair+i-baseof_fhfld];
+		if (fip->fi_serlen != 0)
+			err = DecodeSMPTE(fip->fi_serlen,&LastSMPTE,fip);
+	}
+	return(err);
+}
+
+
+/*
+ *	InitActs - Initialization code
+ */
+void InitActs(void)
+{
+//	ULONG		i;
+
+//	// Video and SCSI channels all free
+//	for (i=0;i<NUMVIDCHANS;i++)
+//		VidChanBusy[i] = FALSE;
+
+//	for (i=0;i<NUMSCSICHANS;i++)
+//	{
+//		ScsiChanBusy[i] = FALSE;
+//		ScsiChanUser[i] = 0xFF;
+//	}
+
+//	// Spawn video tasks
+//	for (i=0;i<NUMVIDCHANS;i++)
+//	{
+//		NewList(&VidTaskQueues[i]);			// Init queue
+//
+//		VidTasks[i] = StartTask((PROC)&VideoTask,5,VIDEOTASKSTACKSIZE,i);
+//
+//		DBUG(print(DB_ALWAYS,"VidTask (%b) @@ %l\n",i,VidTasks[i]);)
+//	}
+}
+@
+
+
+1.8
+log
+@ActsReset now gets stub, so it just gets flags arg now
+Jog/Shuttle CD-ROM defer is now >4 minutes per use
+@
+text
+@d5 1
+a5 1
+* $Id: Acts.c,v 1.7 1995/10/19 02:51:45 Flick Exp Flick $
+d7 5
+a11 1
+* $Log: Acts.c,v $
+d47 1
+a47 1
+#define	LOCALDEBUG		1			// Debugging switch for this module only
+@
+
+
+1.7
+log
+@ChangeAudio() function now works on audio channel(s) allocated for last clip played
+Refuses to touch anything if it's ceased, tries to handle user changing # chans requested
+@
+text
+@d5 1
+a5 1
+* $Id: Acts.c,v 1.6 1995/10/10 01:39:55 Flick Exp Flick $
+d8 4
+d103 1
+a103 1
+void ActsReset(APTR ptr)
+a104 11
+	struct CMD_ORG {
+		UWORD		opcode;
+		UBYTE		pad;
+		UBYTE		error;
+		ULONG		flags;
+	};
+	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+	ULONG		flags;
+
+	flags = cmdptr->flags;
+
+d595 1
+a595 1
+	ProhibitSCSIdirect = 20;		// 20 more secs til maybe allow SCSI directs
+@
+
+
+1.6
+log
+@Removed test in ChangeAudio which was preventing adjustint volume "live" on split-out audio
+portions of video clip.  Added args for GetClipInfo calls
+@
+text
+@d5 1
+a5 1
+* $Id: Acts.c,v 1.5 1995/09/08 11:46:31 Flick Exp Flick $
+d8 4
+d88 2
+a415 1
+//			ep = &Engine[jog->ji_machnum-baseof_Engine];
+a477 1
+//		ep = &Engine[jog->ji_machnum-baseof_Engine];
+d610 2
+a630 1
+//	ep = &Engine[machnum-baseof_Engine];
+d781 2
+a782 1
+// ARE WE PICKING "time" WISELY IN ALL CIRCUMSTANCES?  INVESTIGATE
+d1157 1
+a1157 1
+	UBYTE	machnum,chancount;
+d1169 7
+d1184 1
+a1184 1
+		machnum = NUMVIDCHANS+7-1; 		// +r_AudChan-1 --- !!!
+a1187 1
+//	ep = &Engine[machnum-baseof_Engine];
+d1196 3
+d1212 1
+d1219 6
+d1236 4
+d1243 11
+a1253 3
+			dsp1.ae_chan	= avm->m_achan;
+			dsp1.ae_volume	= action->a_VolSust1;
+			dsp1.ae_pan		= action->a_AudioPan1;
+d1260 1
+a1260 1
+				dsp2.ae_chan	= avm->m_achan+1;
+d1274 1
+a1274 1
+		ep->e_audchan = avm->m_achan;			// Legal !!!???
+@
+
+
+1.5
+log
+@Fixed bug when beginning jog/shuttle: if clip not found, would go ahead and
+allocate audio channels, frame finder, and leave open count ++'d
+@
+text
+@d5 1
+a5 1
+* $Id: acts.c,v 1.4 1995/09/07 09:20:41 Flick Exp Flick $
+d7 5
+a11 1
+* $Log: acts.c,v $
+d294 1
+a294 1
+			&(*flags),&(*indexblk),&(*maxflds),&(*audchans));
+d366 1
+a366 1
+				&index,&maxfld,&audchans);
+d1209 5
+a1213 2
+		if ((ep->e_audenbl)		// Only allow if audio is still pumping
+		|| ((action->a_VolSust1==0) && (action->a_VolSust2==0)))		// Okay to go silent, tho
+@
+
+
+1.4
+log
+@Slight changes to jog/shuttle (4.06 release)
+@
+text
+@d5 1
+a5 1
+* $Id: Acts.c,v 1.3 1995/08/15 16:45:57 Flick Exp Flick $
+d7 4
+a10 1
+* $Log: Acts.c,v $
+d354 31
+a384 1
+			if (error == ERR_OKAY)
+d386 4
+a389 15
+				/* Get clip info -- # fields, index location */
+				err = GetClipInfo(volume->v_SCSIdrive,startblk,&clipflags,
+					&index,&maxfld,&audchans);
+				jog->ji_clipflags = clipflags;
+				jog->ji_fields = maxfld;
+				jog->ji_numaudchans = audchans;
+				jog->ji_monochan = 0;					// Improve this!
+
+				FreeGrip(volume->v_SCSIdrive,newgrip);
+
+				// *********************************
+				// *** Wait for vid channel free ***
+				// *********************************
+				DBUG(printchar(DB_OPS,'2');)
+//				if (cont == 0)					// User abort?
+d391 2
+a392 2
+//					error = ERR_ABORTED;
+//					goto abort;
+a393 14
+
+				jog->ji_channel = action->a_Channel;
+				jog->ji_aflags = action->a_Flags;
+
+				if (AF_VIDEO & action->a_Flags)
+				{
+					// Wait until channel is free
+					ObtainSemaphore(&VidChanSemas[jog->ji_channel]);
+
+//					while (VidChanBusy[jog->ji_channel])
+//					{
+//						DBUG(printchar(DB_OPS,'e');)
+//						Delay(1);
+//					}
+d395 2
+a396 2
+//					/* Take video channel, now that it's free */
+//					VidChanBusy[jog->ji_channel] = TRUE;
+d398 1
+a398 2
+//					flags |= FLG_TOOKVID;
+				}
+@
+
+
+1.3
+log
+@First release (4.05)
+@
+text
+@d5 1
+a5 1
+* $Id: acts.c,v 1.2 1995/05/04 17:13:01 Flick Exp Flick $
+d7 4
+a10 1
+* $Log: acts.c,v $
+d78 4
+d88 12
+a99 7
+//	struct CMD_ORG {
+//		UWORD		opcode;
+//		UBYTE		cont;
+//		UBYTE		error;
+//		ULONG		flags;
+//	};
+//	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+d105 2
+a106 2
+//	BlackOut();
+	AudioReset();
+d410 1
+d499 4
+d526 4
+d531 1
+a531 1
+		DBUG(print(DB_TEST,"freeing %b\n",jog->ji_audchan);)
+d533 6
+d668 2
+a669 1
+		buf		= GetNextVideoBuffer(machnum,TRUE);			// Maybe shouldn't wait?!!!
+d722 2
+a723 2
+		// Must wait until previous DSP events are free again
+		WaitJogDSPsettled(jog);
+d765 2
+d787 6
+d838 1
+a838 1
+		DBUG(printchar(DB_OPS,'J');)
+d1147 5
+d1160 1
+a1160 1
+		machnum = NUMVIDCHANS; 		// +r_AudChan-1 --- !!!
+d1184 3
+d1198 10
+a1207 7
+		/* Bring volume up */
+		dsp1.ae_time	= 0;
+		dsp1.ae_chan	= avm->m_achan;
+		dsp1.ae_volume	= action->a_VolSust1;
+		dsp1.ae_pan		= action->a_AudioPan1;
+		dsp1.ae_rate	= action->a_VolAttack;
+		AddAudEvent(&dsp1);		// Send volume up
+d1209 8
+a1216 8
+		if (chancount == 2)
+		{
+			dsp2.ae_time	= 0;
+			dsp2.ae_chan	= avm->m_achan+1;
+			dsp2.ae_volume	= action->a_VolSust2;
+			dsp2.ae_pan		= action->a_AudioPan2;
+			dsp2.ae_rate	= action->a_VolAttack;
+			AddAudEvent(&dsp2);		// Send volume up
+d1218 3
+a1220 1
+			WaitAudEvent(&dsp2);		// Wait til it occurs
+a1221 1
+		WaitAudEvent(&dsp1);		// Wait til it occurs
+@
+
+
+1.2
+log
+@Phx/Flyer duality improved, some stub code moved into AmiShar.c
+@
+text
+@d5 1
+a5 1
+* $Id: acts.c,v 1.1 1995/05/03 10:42:38 Flick Exp Flick $
+d8 3
+d32 1
+d39 1
+a47 7
+struct AVmsg {
+	struct VidMsg	msg;
+	ACTION			action;
+	FlyerVolume		volume;
+};
+
+extern	struct TaskCtrl	*ThisTask;
+d49 1
+a49 1
+extern struct FINDMACH JogMach;
+a52 2
+extern struct AUDIOMACH	audmach[];
+#define	baseof_audmach		1
+d71 3
+a73 95
+
+BOOL	VidChanBusy[NUMVIDCHANS];		// Arbitrates use of the video channels
+BOOL	ScsiChanBusy[NUMSCSICHANS];	// Arbitrates use of the SCSI channels
+UBYTE	ScsiChanUser[NUMSCSICHANS];
+
+struct List VidTaskQueues[NUMVIDCHANS];	// Queues for video tasks
+struct TaskCtrl *VidTasks[NUMVIDCHANS];	// Video tasks
+
+ULONG	Kludge;
+struct ActVolCombo *JogCombo;		// Allocated for jog/shuttle
+
+
+
+/*
+ * VideoTask - Handle activities for a video channel (A or B)
+ */
+static void __regargs VideoTask(ULONG arg)
+{
+	register struct VidMsg *msg;
+	struct List *myqueue;
+	UBYTE	chan;
+
+	chan = (UBYTE)arg;
+	myqueue = &VidTaskQueues[chan];
+
+	DBUG(print(DB_VIDTASK,"!VideoTask%b alive, queue = %l\n",chan,myqueue);)
+
+	for (;;) {
+		DBUG(print(DB_VIDTASK,"!Snooze\n");)
+
+		// Go to sleep until a message arrives in queue
+		Wait(SIGF_QUEUE);
+
+		ClearSignals(SIGF_ABORT);		// Don't abort on past abort signals
+
+		DBUG(print(DB_VIDTASK,"!Awake\n");)
+
+		for (;;) {
+			Disable();
+			// Remove top message from queue
+			msg = (struct VidMsg *)RemHead(myqueue);
+			Enable();
+
+			DBUG(print(DB_VIDTASK,"!Msg = %l\n",msg);)
+
+			if (msg==NULL)
+				break;								// Queue empty, so go back to sleep
+
+			/****** Perform Video operation ******/
+
+			DBUG(print(DB_VIDTASK,"Playing...\n");)
+
+			msg->vm_Error = FlyerPlay(msg->vm_Action);			// Do it!
+
+			if (msg->vm_SigBit >= 0) {
+				DBUG(print(DB_VIDTASK,"!Signalling sender (%l)\n",msg->vm_Sender);)
+
+				// Signal message's sender that we're done
+				Signal(msg->vm_Sender,1<<msg->vm_SigBit);
+			}
+			else {
+				DBUG(print(DB_VIDTASK,"!Non-signalling\n");)
+			}
+//			DBUG(print(DB_ALWAYS,"Freeing AVmsg %l\n",msg);)
+			if (msg->vm_FreeMe)
+				FreeVec(msg);		// Free msg and all associated structures
+		}
+	}
+}
+
+
+/*
+ * QueueUpVideo - queue a video event to Video Task
+ */
+void QueueUpVideo(	struct VidMsg *msg,
+							UBYTE	channel,
+							ACTION	*action,
+							BOOL		freeit)
+{
+
+	DBUG(print(DB_VIDTASK,"Building VM message\n");)
+
+	// Build Video message
+	msg->vm_Node.priority = 0;
+	msg->vm_Sender = ThisTask;		// Sender is me
+	msg->vm_Error = 0;
+	msg->vm_FreeMe = freeit;		// Whether to free it when done or not
+	msg->vm_Action = action;		// Link action structure to msg
+
+	// Sort message into queue for CPU DMA device task
+	Disable();
+	AddTail((struct Node *)msg,&VidTaskQueues[channel]);
+	Enable();
+
+	DBUG(print(DB_VIDTASK,"Signalling device\n");)
+a74 4
+	// Signal task to wake up, if not already
+	Signal(VidTasks[channel],SIGF_QUEUE);
+}
+
+d89 2
+d92 2
+a93 1
+	DisplayMatte();
+d99 1
+a99 1
+ *	LocateFrame - Convert frame specification to raw numbers (Exec-ized now)
+d101 1
+a101 5
+UBYTE LocateFrame(ACTION	*action,
+						ULONG		*block,
+						ULONG		*headlist,
+						BYTEBITS	*flags,
+						UBYTE		*audchans)
+d103 2
+a104 6
+	struct FINDMACH	*finder;
+	FlyerVolume	*volume;
+	union ANYHDR	*workblk;
+	UBYTE		err;
+	GRIP		*newgrip;
+	ULONG		ndx,maxflds,startblk,frame;
+d106 5
+d112 4
+d117 3
+a119 1
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+d121 17
+a137 4
+// **************************************************
+// *** Check parameters for errors/begin locating ***
+// **************************************************
+	DBUG(printchar(DB_OPS,'x');)
+d139 2
+a140 1
+	name = (char *)(volume->v_Name + SRAMbase);						// Get ptr to name
+d142 1
+a142 5
+	if (*name == 0) {						// No name specified
+		action->a_VidStartField = 0;	// Must have to return last fld
+		action->a_AudStartField = 0;	// Must have to return last fld
+		return(ERR_OKAY);					// Done
+	}
+d144 2
+a145 1
+	action->a_EndBlk = 0;			// Avoid careless arg stopping clip
+a146 10
+	err = FS_Locate(volume->v_SCSIdrive,0,0,name,&newgrip,&startblk);
+	if (err != ERR_OKAY)
+		return(err);
+	else {
+		/* Get clip info -- # fields, index location */
+		err = GetClipInfo(volume->v_SCSIdrive,startblk,
+			&(*flags),&ndx,&maxflds,&(*audchans));
+
+		FreeGrip(volume->v_SCSIdrive,newgrip);
+	}
+d148 12
+a159 14
+//	/* Shut off video flag if clip has no video */
+//	if ((AF_VIDEO & action->a_Flags)
+//	&& (!(CIF_HASVIDEO & (*flags)))) {
+//		action->a_Flags &= ~AF_VIDEO;
+//	}
+//	/* Disallow more audio channels than clip has */
+//	wantchans = CountAudChans(action->a_Flags);
+//	if ((wantchans > 0) && (*audchans == 0)) {
+//		action->a_Flags &= ~AF_AUDIOL;		// Allow no audio
+//		action->a_Flags &= ~AF_AUDIOR;
+//	}
+//	if ((wantchans == 2) && (*audchans < 2)) {
+//		action->a_Flags &= ~AF_AUDIOR;		// Allow mono only
+//	}
+a160 1
+	DBUG(print(DB_OPS,"Clip Start:%l Index:%l\n",startblk,ndx);)
+d162 1
+a162 5
+	frame = Fields2Frames(
+		(AF_VIDEO & action->a_Flags)?
+			action->a_VidStartField:
+			action->a_AudStartField,
+		FALSE);
+d165 4
+a168 9
+	if (ndx) {
+		if (AF_VIDEO & action->a_Flags) {
+			if (action->a_VidStartField >= maxflds)
+				return(ERR_BADPARAM);
+		}
+		else {
+			if (action->a_AudStartField >= maxflds)
+				return(ERR_BADPARAM);
+		}
+d172 1
+a172 1
+		err = FindFrameInit(volume->v_SCSIdrive,ndx,FALSE,maxflds,&finder,&(*headlist));
+d188 2
+a189 1
+		if (err == ERR_OKAY) {
+d191 1
+a191 1
+			DBUG(print(DB_OPS,"Frame blk:%l\n",action->a_StartBlk);)
+d195 2
+a196 1
+	else {
+d198 1
+a198 1
+		action->a_StartBlk = startblk+1;		// Point to 1st frame in clip
+d210 2
+a211 1
+		for (;;) {
+d213 2
+a214 1
+//			if (action->a_StartBlk > ???) {
+d220 1
+a220 1
+			err = ScsiReadSRAM(volume->v_SCSIdrive,action->a_StartBlk,MISCDRAM+0,workblk,HEADERLEN);
+d224 2
+a225 1
+			if (workblk->fh.fh_id != ID_CFRM) {
+d230 2
+a231 1
+			if (frame > workblk->fh.fh_frmnum) {			// Need to go forward in clip
+d234 1
+a234 1
+				action->a_StartBlk += workblk->fh.fh_nextfrm;
+d236 2
+a237 1
+			else if (frame < workblk->fh.fh_frmnum) {		// Need to go backwards in clip
+d240 1
+a240 1
+				action->a_StartBlk += workblk->fh.fh_prevfrm;
+d242 2
+a243 1
+			else {													// Found frame
+a253 2
+#if 0
+
+d255 1
+a255 1
+ * BeginJog_cmd - Prepare to jog/shuttle a clip
+d257 8
+a264 1
+UBYTE BeginJog_cmd(APTR ptr, APTR *reply)
+d266 2
+a267 54
+	struct CMD_ORG {
+		FlyerVolume vol;
+	};
+	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+	FlyerVolume	*volume;
+	UBYTE	err;
+	ULONG	volextsize;
+
+	volume = &cmdptr->vol;
+
+	if (JogCombo)					// Don't nest, free previous
+		FreeVec(JogCombo);
+
+	volextsize = sizeof(struct FlyerVolume) + volume->v_PathLen +1;
+	JogCombo = (struct ActVolCombo *)AllocVec(sizeof(ACTION)+volextsize);
+	if (JogCombo == NULL)
+		return(ERR_NOMEM);
+
+	memcpy(&JogCombo->vol,volume,volextsize);		// Copy vol struct & name string
+
+	memset(&JogCombo->act,0,sizeof(ACTION));
+	JogCombo->act.a_Volume = &JogCombo->vol;		// Link together
+	JogCombo->act.a_Flags = AF_VIDEO | AF_AUDIOL | AF_AUDIOR;
+	JogCombo->act.a_Channel = 0;											// chan;
+	JogCombo->act.a_PermissFlags = 0;
+	JogCombo->act.a_VolSust1 =
+		JogCombo->act.a_VolSust2 = 0xFFFF;
+	JogCombo->act.a_AudioPan1 = 0x7FFF;
+	JogCombo->act.a_AudioPan2 = -0x8000;
+
+	err = SearchArgs(&JogCombo->act,1);			// Setup
+
+	return(err);
+}
+
+
+const struct	SwitcherItem	SWlist_JogSetup[] = {
+	SWIT_REG_AMUX,		MM_FLYA,
+	SWIT_REG_FADER,	0x00,			// Fader to A side
+	SWIT_REG_PVMUX,	PM_MAIN
+};
+
+
+/*
+ * DoJog_cmd - Perform jog/shuttle
+ */
+UBYTE DoJog_cmd(APTR ptr, APTR *reply)
+{
+	struct CMD_ORG {
+		ULONG	field;
+		UBYTE	audiovol;
+	};
+	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+	UBYTE	err;
+d269 7
+a275 5
+	if (JogCombo) {
+		JogCombo->act.a_VidStartField = cmdptr->field;
+		JogCombo->act.a_AudStartField = cmdptr->field;
+		JogCombo->act.a_VolSust1 =
+		JogCombo->act.a_VolSust2 = cmdptr->audiovol << 8;
+d277 1
+a277 4
+		err = DoSearch(&JogCombo->act);			// Find and view/hear
+
+		// Setup MUX'es to see jog
+		SendSwitcherList((APTR)SWlist_JogSetup,sizeof(SWlist_JogSetup),FALSE);
+a278 6
+	else
+		err = ERR_CMDFAILED;
+
+	return(err);
+}
+
+d280 2
+a281 15
+/*
+ * EndJog_cmd - Shut down jog/shuttle
+ */
+UBYTE EndJog_cmd(APTR ptr, APTR *reply)
+{
+	UBYTE	err;
+
+	if (JogCombo) {
+		err = SearchArgs(&JogCombo->act,0);	// Tear down
+
+		FreeVec(JogCombo);
+		JogCombo = NULL;
+	}
+	else
+		err = ERR_CMDFAILED;
+a285 1
+#endif
+a286 1
+
+d295 1
+d303 4
+a306 4
+	ULONG		__index;
+	ULONG		__maxfld;
+	BYTEBITS	__flags;
+#define	FLG_TOOKVID	(1<<0)
+a308 1
+
+d312 7
+d322 11
+a332 1
+	__flags = 0;
+a333 3
+	if (flag) {
+		if (flag == 1) {			// Setting up for search
+			DBUG(printchar(DB_OPS,'1');)
+d339 2
+a340 1
+			if (error == ERR_OKAY) {
+d343 5
+a347 3
+					&__index,&__maxfld,&audchans);
+				JogMach.fm_clipflags = clipflags;
+				JogMach.fm_numaudchans = audchans;
+d355 2
+a356 1
+//				if (cont == 0) {					// User abort?
+d361 16
+a376 2
+				if (AF_VIDEO & action->a_Flags) {
+					while (VidChanBusy[action->a_Channel]) { }
+d378 1
+a378 3
+					/* Take video channel, now that it's free */
+					VidChanBusy[action->a_Channel] = TRUE;
+					__flags |= FLG_TOOKVID;
+d382 17
+a398 2
+		else {												// Modifying search
+			FreeAudioChan(JogMach.fm_audchan);		// Disconnect audio
+d408 1
+a408 1
+		JogMach.fm_audchan = AllocAudioChan(chancount,vtimflg);
+d410 2
+d413 1
+a413 1
+			JogMach.fm_machnum = action->a_Channel;
+d415 1
+a415 1
+			JogMach.fm_machnum = NUMVIDCHANS+JogMach.fm_audchan-1;
+d418 3
+a420 2
+		if (flag == 1) {
+			fmach = &JogMach;
+d422 1
+a422 1
+			err = FindFrameInit(volume->v_SCSIdrive,__index,TRUE,__maxfld,&fmach,&headlist);
+d427 10
+a436 1
+		Engine[JogMach.fm_machnum-baseof_Engine].e_audchan = JogMach.fm_audchan;
+d438 9
+a446 1
+	else {
+d449 4
+a452 4
+		DBUG(print(DB_PROJECT,"Jog Close\n");)
+
+		ep = &Engine[JogMach.fm_machnum-baseof_Engine];
+		if (VideoMode == VM_PLAY) {
+d454 5
+a458 1
+			while (ep->e_1stevent) {}		// Wait for no queued events
+d461 25
+a485 1
+			while (!(EFLG_HOLD & ep->e_flags)) {}
+d487 21
+a507 8
+			/* If no auto loop-once on audio, I must do this! */
+			if (!(EFLG_AUDONCE & ep->e_flags))
+				AudioDisable(ep->e_audchan);
+
+			achan = JogMach.fm_audchan;
+			AddAudEvent(0,achan,0,0,0);
+			if (audmach[achan-baseof_audmach].am_stereo)
+				AddAudEvent(0,achan+1,0,0,0);
+d510 3
+a512 2
+		FreeAudioChan(JogMach.fm_audchan);		// Disconnect audio
+		ep->e_audchan = 0;
+d515 17
+a531 12
+		if ((AF_VIDEO & action->a_Flags) && (AF_USEMATTE & action->a_Flags)) {
+			buf = GetNextVideoBuffer(action->a_Channel);
+			MakeMatteFrame(action->a_Channel,buf);
+
+			/* Advance to next frame */
+			VideoCommand(action->a_Channel,VCMD_ADVFRM,0);
+		}
+
+		FindFrameFree(&JogMach);				// Free frame-finder
+//		if (FLG_TOOKVID & __flags)
+		if (AF_VIDEO & action->a_Flags)
+			VidChanBusy[action->a_Channel] = FALSE;
+d537 2
+d551 1
+a551 1
+	struct FINDMACH	*fp;
+d553 2
+a554 1
+	UBYTE	buf,achan,numaudchans;
+d556 2
+a557 4
+
+	ULONG		__frame;
+	UBYTE		__machnum;
+	UBYTE		error;
+a563 1
+//	CommandBusy(ptr);		// Mark command as in progress
+d566 5
+d572 5
+a576 2
+		print(DB_OPS,"Action=%l,Volume=%l,Name=%l\n",(ULONG)action,(ULONG)volume,(ULONG)volume->v_Name);
+		print(DB_OPS,"Flags=%b,Chan=%b\n",action->a_Flags,action->a_Channel);
+d579 5
+a583 3
+	__frame = Fields2Frames(((AF_VIDEO & action->a_Flags)?
+										action->a_VidStartField:
+										action->a_AudStartField),FALSE);
+d585 1
+a585 2
+	fp = &JogMach;
+	__machnum = fp->fm_machnum;
+d587 2
+a588 1
+	ep = &Engine[__machnum-baseof_Engine];
+d595 2
+a596 3
+	DBUG(printchar(DB_OPS,'p');)
+	error = FindFrame(fp,__frame,&action->a_StartBlk);
+
+d598 2
+d601 2
+d607 2
+a608 1
+	&& (!(CIF_HASVIDEO & JogMach.fm_clipflags))) {
+d613 3
+a615 2
+	numaudchans = CountAudChans(action->a_Flags);	// Redundant
+	if ((numaudchans > 0) && (JogMach.fm_numaudchans == 0)) {
+d620 2
+a621 1
+	else if ((numaudchans == 2) && (JogMach.fm_numaudchans < 2)) {
+d623 1
+a623 1
+		numaudchans = JogMach.fm_numaudchans;
+d630 1
+a630 1
+	DBUG(printchar(DB_OPS,'q');)
+d633 5
+a637 2
+	while (ep->e_1stevent) { }
+
+d639 5
+a643 4
+	if (__machnum <= HIVIDMACHNUM) {
+		buf		= GetNextVideoBuffer(__machnum);
+		ctrlptr	= &Vbufctrl[__machnum-baseof_Vbufctrl][buf];
+		FrmHdrPtr= &(*Vhdrs)[__machnum-baseof_Vhdrs][buf];
+d646 5
+a650 4
+	else {
+		buf		= GetAudioBuffer(__machnum);
+		ctrlptr	= &Abufctrl[__machnum-baseof_Abufctrl][buf];
+		FrmHdrPtr= &(*Ahdrs)[__machnum-baseof_Ahdrs];
+d654 2
+d659 2
+d662 3
+d666 2
+a667 1
+	if (FrmHdrPtr->fh_id != ID_CFRM) {
+d669 1
+d673 2
+d679 2
+d682 6
+a687 4
+	fp->fm_prev_blk = action->a_StartBlk + FrmHdrPtr->fh_prevfrm;
+	fp->fm_prev_frm = __frame-1;
+	fp->fm_next_blk = action->a_StartBlk + FrmHdrPtr->fh_nextfrm;
+	fp->fm_next_frm = __frame+1;
+d692 7
+a698 1
+	||  (AF_AUDIOR & action->a_Flags)) {
+d703 2
+d706 1
+d708 2
+d712 2
+d716 1
+a716 1
+			ep->e_flags |= EFLG_AUDONCE;
+d718 1
+a718 1
+			ep->e_flags &= ~EFLG_AUDONCE;
+d721 1
+a721 1
+//		AVmachine[__machnum-baseof_AVmachine].m_volume = action->a_VolSust1;
+d723 2
+a724 1
+		if (!(AF_VIDEO & action->a_Flags)) {
+d726 1
+a726 1
+			AudSize[__machnum-baseof_AudSize][buf] = FrmHdrPtr->fh_audlen;
+d729 7
+a735 212
+		/* Advance to next frame */
+		VideoCommand(__machnum,VCMD_ADVFRM,0);
+
+		// This sends volume-up events every frame -- Quite a waste!!!
+		if ((AF_AUDIOL & action->a_Flags) || (AF_AUDIOR & action->a_Flags)) {
+			achan = fp->fm_audchan;
+			AddAudEvent(0,achan,action->a_VolSust1,action->a_AudioPan1,action->a_VolAttack);
+			if (audmach[achan-baseof_audmach].am_stereo)
+				AddAudEvent(0,achan+1,action->a_VolSust2,action->a_AudioPan2,action->a_VolAttack);
+		}
+
+		DBUG(printchar(DB_OPS,'u');)
+	}
+		
+abort:
+//	CommandDone(ptr);
+
+	return(error);
+}
+
+
+#if 0
+
+const struct	SwitcherItem	SWlist_SeeA[] = {
+	SWIT_REG_AMUX,		MM_FLYA,
+	SWIT_REG_FADER,	0
+};
+
+
+UBYTE PlayClip_cmd(APTR ptr, APTR *reply)
+{
+	struct CMD_ORG {
+		ULONG	type;
+		ULONG	inpoint;
+		ULONG	outpoint;
+		FlyerVolume vol;
+	};
+	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+	FlyerVolume	*volume;
+	UBYTE	err;
+	ULONG	flds;
+
+	volume = &cmdptr->vol;
+
+	flds = cmdptr->outpoint - cmdptr->inpoint;
+
+	// Setup MUX'es to see clip
+	SendSwitcherList((APTR)SWlist_SeeA,sizeof(SWlist_SeeA),TRUE);
+
+	err = PlayClip(0,volume->v_SCSIdrive,
+		(char *)(cmdptr->vol.v_Name+SRAMbase),FALSE,cmdptr->inpoint,flds);
+
+	return(err);
+}
+
+
+UBYTE Stop_cmd(APTR ptr, APTR *reply)
+{
+	UBYTE	err = ERR_OKAY;
+
+	DBUG(print(DB_ALWAYS,"Sending aborts\n");)
+
+#if 0
+	AbortSequence();							// If sequencing, stop and cleanup
+#endif
+
+	Signal(VidTasks[0],SIGF_ABORT);		// Abort video 0, if possible
+	Signal(VidTasks[1],SIGF_ABORT);		// Abort video 1, if possible
+
+	return(err);
+}
+
+#endif
+
+
+/*
+ * PlayClip - Play a clip
+ */
+UBYTE PlayClip(	UBYTE chan,
+						UBYTE drive,
+						char *clipname,
+						BOOL sync,
+						ULONG	field,
+						ULONG fields)
+{
+#if 0
+	struct AVmsg	*avmsg;
+	UBYTE	err;
+	BYTE	sigbit;
+	ULONG	plen;
+
+	plen = strlen(clipname);
+
+	avmsg = (struct AVmsg *)AllocVec(sizeof(struct AVmsg)+plen+1);	// AllocExtend
+	if (avmsg == 0)
+		return(ERR_NOMEM);
+
+//	DBUG(print(DB_ALWAYS,"PlayClip made AVmsg=%l, queuing...\n",avmsg);)
+
+	if (sync) {
+		sigbit = AllocSignal();
+		DBUG(print(DB_ALWAYS,"SigBit=%b\n",sigbit);)
+		if (sigbit < 0)
+			return(ERR_CMDFAILED);		//!!!???
+	}
+	else
+		sigbit = -1;
+
+	memset(&avmsg->volume,0,sizeof(FlyerVolume));
+	memcpy(avmsg->volume.v_Name,clipname,plen+1);
+	avmsg->volume.v_PathLen = plen;
+	avmsg->volume.v_SCSIdrive = drive;
+
+	memset(&avmsg->action,0,sizeof(ACTION));
+
+	avmsg->action.a_Volume = &avmsg->volume;
+	avmsg->action.a_Flags = AF_VIDEO | AF_AUDIOL | AF_AUDIOR;
+	avmsg->action.a_Channel = chan;
+	avmsg->action.a_PermissFlags = 0;
+	avmsg->action.a_VidStartField = field;
+	avmsg->action.a_VidFieldCount = fields;
+	avmsg->action.a_VolSust1 =
+		avmsg->action.a_VolSust2 = 0xFFFF;
+	avmsg->action.a_AudioPan1 = 0x7FFF;
+	avmsg->action.a_AudioPan2 = -0x8000;
+	avmsg->action.a_VolAttack = 3;
+	avmsg->action.a_VolDecay = 3;
+
+	avmsg->msg.vm_SigBit = sigbit;
+
+	QueueUpVideo(&avmsg->msg,chan,&avmsg->action,TRUE);	// Play it and free msg
+
+	if (sync) {
+		DBUG(print(DB_VIDTASK,"waiting...\n");)
+
+		Wait(1<<sigbit);			// Wait for it to finish
+
+		err = avmsg->msg.vm_Error;
+
+		DBUG(print(DB_ALWAYS,"PlayClip returned err %b\n",err);)
+
+		FreeSignal(sigbit);
+
+		return(err);
+	}
+	else
+		return(ERR_OKAY);
+#else
+	return(ERR_OKAY);
+#endif
+}
+
+
+/*
+ *	FlyerPlay - Multitasking Video/Audio Play
+ */
+UBYTE FlyerPlay(ACTION *action)
+{
+	FlyerVolume	*volume;
+	struct MACHINE	*avm;
+	struct PRIVHEADENTRY	MyHead;
+	UBYTE error;
+	UBYTE	err,numaudchans,schan,otherchan;
+	BOOL	vtimflg,go,scsidone,seqplay;
+	ULONG	fldclk,fields,decayfld,leadtime;
+	char	*name;
+
+	UBYTE		__audchan;
+	UBYTE		__machnum;
+	BYTEBITS	__flags;
+#define	FLG_TOOKVID		(1<<0)
+#define	FLG_TOOKSCSI	(1<<1)
+#define	FLG_USEHEAD		(1<<2)
+#define	FLG_TRYHEAD		(1<<3)
+#define	FLG_SPLITIN 	(1<<4)	// Audio split at beginning
+#define	FLG_SPLITOUT	(1<<5)	// Audio split at end
+	UBYTE		__shdrive;
+	ULONG		__shaddr;
+	ULONG		__shlen;
+	BYTEBITS	__clipflags;
+	UBYTE		__clipaudchans;
+	ULONG		__headlist;
+
+
+	ProhibitSCSIdirect = 2;		// 2 more secs til maybe allow SCSI directs
+
+	volume = (struct FlyerVolume *)(action->a_Volume + SRAMbase);
+	name = (char *)(volume->v_Name + SRAMbase);
+	schan = volume->v_SCSIdrive >> 3;
+
+	numaudchans = CountAudChans(action->a_Flags);		// # desired
+
+//	CommandBusy(ptr);				// Processing begun
+	error = ERR_OKAY;
+
+	__flags = 0;
+
+	/* Make sure we've not lost color phase -- only if live play */
+	if (!(APF_USEHEADS & action->a_PermissFlags))
+		EnsureColorPhase();
+
+//	if (ForceFlags1 != 0)
+//		action->a_Flags = ForceFlags1;
+//
+//	if (ForceFlags2 != 0)
+//		action->a_PermissFlags = ForceFlags2;
+
+	if (APF_USEHEADS & action->a_PermissFlags)
+		__flags |= FLG_TRYHEAD;
+	else
+		__flags &= ~FLG_TRYHEAD;
+
+d737 1
+a737 35
+// ***********************************
+// *** Check parameters for errors ***
+// ***********************************
+	DBUG(printchar(DB_OPS,'1');)
+
+// TESTING ONLY!
+//	action->a_Flags &= ~AF_NOPREROLL;
+
+	DBUG(
+		print(DB_PROJECT,"Play: name='%s'\n",name);
+		print(DB_PROJECT,"Play: drive=%b Flags=%b Perm=%b chan=%b ",
+			volume->v_SCSIdrive,action->a_Flags,action->a_PermissFlags,action->a_Channel);
+		print(DB_PROJECT,"vflds=%l/%l aflds=%l/%l ",
+			action->a_VidStartField,action->a_VidFieldCount,action->a_AudStartField,action->a_AudFieldCount);
+		print(DB_PROJECT,"Audio: vol1=%w vol2=%w pan1=%w pan2=%w ",
+			action->a_VolSust1,action->a_VolSust2,action->a_AudioPan1,action->a_AudioPan2);
+		print(DB_PROJECT,"Audio: atk=%w dcy=%w GoClock=%l\n",
+			action->a_VolAttack,action->a_VolDecay,action->a_GoClock);
+		print(DB_PROJECT,"Total Aud: %l/%l\n",
+			action->a_TotalAudStart,action->a_TotalAudLength);
+	)
+
+	/* Constrain audio to video fields (A/V clips) */
+	/* Don't touch audio-only clips! */
+	if (AF_VIDEO & action->a_Flags) {
+		if (action->a_AudStartField < action->a_VidStartField) {
+			action->a_AudStartField = action->a_VidStartField;
+			DBUG(print(DB_PROJECT,"AudIn moved to %l\n",action->a_AudStartField);)
+		}
+
+		if ((action->a_AudStartField+action->a_AudFieldCount) > (action->a_VidStartField+action->a_VidFieldCount)) {
+			action->a_AudFieldCount = (action->a_VidStartField+action->a_VidFieldCount)-action->a_AudStartField;
+			DBUG(print(DB_PROJECT,"AudLen moved to %l\n",action->a_AudFieldCount);)
+		}
+	}
+d739 1
+a739 22
+	/* No subtotal/total audio difference in live play */
+	if (!(APF_USEHEADS & action->a_PermissFlags)) {
+		action->a_TotalAudStart  = action->a_AudStartField;
+		action->a_TotalAudLength = action->a_AudFieldCount;
+	}
+
+	/* Illegal channel numbers? */
+	if (((action->a_Channel != 0xFF) && (action->a_Channel > (NUMVIDCHANS-1)))
+	|| (volume->v_SCSIdrive > (NUMSCSIDRIVES-1))) {
+		error = ERR_BADPARAM;
+		goto abort;
+	}
+	else if (VideoMode != VM_PLAY) {				// In Play mode?
+		error = ERR_WRONGMODE;
+		goto abort;
+	}								// Make sure we have something spec'd to do
+	else if ((!(AF_VIDEO & action->a_Flags))
+	&& (!(AF_AUDIOL & action->a_Flags))
+	&& (!(AF_AUDIOR & action->a_Flags))) {
+		error = ERR_BADPARAM;
+		goto abort;
+	}
+d741 8
+a748 4
+	/* Wildcard for channel? */
+	if (action->a_Channel == 0xFF) {
+		if (VidChanBusy[0])
+			action->a_Channel = 1;
+d750 1
+a750 99
+			action->a_Channel = 0;
+	}
+
+
+// *********************************************************
+// *** Convert clip name, frame # into raw block numbers ***
+// *********************************************************
+	DBUG(printchar(DB_OPS,'2');)
+
+	err = LocateFrame(action,&action->a_StartBlk,&__headlist,
+		&__clipflags,&__clipaudchans);
+
+	if ((err != ERR_OKAY)					// Proceed with play
+	&& (err != ERR_OLDDATA)) {				// Play from clip start
+		DBUG(print(DB_PROJECT,"Locate failed:%b\n",err);)
+		error = err;
+		goto abort;
+	}
+
+	if (action->a_StartBlk == 0)		// No valid place to start?
+		goto abort;
+
+	/* Dont touch if raw clip */
+	if ((name != 0) && (*name != 0)) {
+		/* Shut off video flag if clip has no video */
+		if ((AF_VIDEO & action->a_Flags)
+		&& (!(CIF_HASVIDEO & __clipflags))) {
+			action->a_Flags &= ~AF_VIDEO;
+		}
+
+		/* Disallow more audio channels than clip has */
+//		numaudchans = CountAudChans(action->a_Flags);	// Redundant
+		if ((numaudchans > 0) && (__clipaudchans == 0)) {
+			action->a_Flags &= ~AF_AUDIOL;		// Allow no audio
+			action->a_Flags &= ~AF_AUDIOR;
+			numaudchans = 0;
+		}
+		else if ((numaudchans == 2) && (__clipaudchans < 2)) {
+			action->a_Flags &= ~AF_AUDIOR;		// Allow mono only
+			numaudchans = __clipaudchans;
+		}
+	}
+
+	DBUG(print(DB_PROJECT,"Updated Flags = %b\n",action->a_Flags);)
+
+	DBUG(print(DB_CLOCK,"[%l]",GetFieldClock());)
+
+
+	// **********************************
+	// *** Wait for specified go time ***
+	// **********************************
+	DBUG(printchar(DB_OPS,'3');)
+
+	/* Did time already pass? */
+	fldclk = GetFieldClock();
+	if ((action->a_GoClock != 0) && (action->a_GoClock < fldclk)) {
+		DBUG(print(DB_ALARMS,"Late(%l)",fldclk);)
+		error = ERR_CLIPLATE;				// Warn, but play
+	}
+
+	do {
+		if (GetSignals() & SIGF_ABORT) {					// User abort?
+			error = ERR_ABORTED;
+			goto abort;
+		}
+
+		go = FALSE;
+
+		fldclk = GetFieldClock();
+
+		if ((fldclk % 4) == 0) {				// Wait til at field 1
+			if (AF_NOPREROLL & action->a_Flags) {
+//				if (action->a_GoClock == 0)
+				if (action->a_GoClock <= fldclk) {
+					action->a_GoClock = fldclk+8;		// Start 2 frames from now
+					go = TRUE;
+				}
+				else {
+					if ((fldclk+8) >= action->a_GoClock)
+						go = TRUE;
+				}
+			}
+			else {
+//				if (action->a_GoClock == 0) 
+				if (action->a_GoClock <= fldclk) {
+					action->a_GoClock = fldclk+(NUMVIDBUFS*4)+4;	// Start n frames from now
+					go = TRUE;
+				}
+				else {
+					leadtime = 4*NUMVIDBUFS + 4;
+//					if ((AF_VIDEO & action->a_Flags) && (leadtime > action->a_VidFieldCount)) {
+//						leadtime = action->a_VidFieldCount;
+//					}
+
+			  		if ((fldclk+leadtime) >= action->a_GoClock)
+						go = TRUE;
+				}
+			}
+		}
+d752 1
+a752 2
+		if (!go)
+			Delay(1);			// Sleep 1 tick and then we'll try again
+d754 30
+a783 37
+	} while (!go);			// Wait until time to go
+
+	DBUG(print(DB_CLOCK,"%l ",fldclk);)
+
+	if (AF_VIDEO & action->a_Flags) {
+
+		// ***********************************
+		// *** Wait for video channel free ***
+		// ***********************************
+		DBUG(printchar(DB_OPS,'4');)
+
+		for (;;) {
+			if (GetSignals() & SIGF_ABORT) {						// User abort?
+				error = ERR_ABORTED;
+				goto abort;
+			}
+
+			if (!(VidChanBusy[action->a_Channel])) {
+				/* Take video channel, if it's free */
+				VidChanBusy[action->a_Channel] = TRUE;
+				__flags |= FLG_TOOKVID;
+				break;
+			}
+
+			if (APF_STEALOURVIDEO & action->a_PermissFlags) {
+				DBUG(print(DB_OPS,"BREAK!");)
+				AVmachine[action->a_Channel-baseof_AVmachine].m_die = TRUE;	// Kill video
+
+				// Wait for channel stream to die
+				DBUG(printchar(DB_OPS,'5');)
+
+				while (VidChanBusy[action->a_Channel]) {
+					Delay(1);			// Sleep 1 tick and then we'll try again
+					if (GetSignals() & SIGF_ABORT) {					// User abort?
+						error = ERR_ABORTED;
+						goto abort;
+					}
+d785 2
+a786 4
+
+				VidChanBusy[action->a_Channel] = TRUE;
+				__flags |= FLG_TOOKVID;
+				break;
+d789 8
+a796 3
+			if (APF_ERRIFBUSY & action->a_PermissFlags) {
+				error = ERR_CHANINUSE;				// Give up quickly
+				goto abort;
+d798 2
+d802 1
+a802 71
+
+		// ***************************************************
+		// *** Wait for SCSI channel free to use for video ***
+		// ***************************************************
+		DBUG(printchar(DB_OPS,'6');)
+
+		for (;;) {
+			if (GetSignals() & SIGF_ABORT) {					// User abort?
+				error = ERR_ABORTED;
+				goto abort;
+			}
+
+			if (!(ScsiChanBusy[schan])) {
+				/* Take SCSI channel, if it's free */
+				AllocScsi(action->a_Channel,schan);
+				__flags |= FLG_TOOKSCSI;
+				break;										// Ready to proceed
+			}
+			else if ((FLG_TRYHEAD & __flags)
+			&& (!(ScsiChanBusy[OppChan[schan]]))) {
+			/* If other channel is free, look for a head */
+				otherchan = OppChan[schan];
+
+				/* Find an AV head in list which contains the start point */
+				err = FindHead(volume->v_SCSIdrive,__headlist,action->a_VidStartField,FALSE,&MyHead);
+				if (err == ERR_OKAY) {
+					AllocScsi(action->a_Channel,otherchan);
+					__flags |= FLG_TOOKSCSI;
+					/* Calculate location of desired field in head */
+					__shaddr = MyHead.phe_auxblk+(action->a_StartBlk-MyHead.phe_mainblk);
+					__shlen	= MyHead.phe_blklength-(action->a_StartBlk-MyHead.phe_mainblk);
+					__shdrive= MyHead.phe_drive;
+					DBUG(print(DB_HEADS,"Head info:(%b) %l len:%l\n",__shdrive,__shaddr,__shlen);)
+
+					__flags |= FLG_USEHEAD;		// Use head data
+					break;							// Ready to proceed
+				}
+				else {
+					__flags &= ~FLG_TRYHEAD;		// Don't try this again
+				}
+			}
+
+			/* No free SCSI channel found yet */
+
+			/* Time to go!? Gives 3 frames startup time on cuts-only */
+			if ((GetFieldClock()+12) >= action->a_GoClock) {
+				if (APF_KILLOTHERVIDEO & action->a_PermissFlags) {
+					DBUG(print(DB_OPS,"BREAK!");)
+					AVmachine[ScsiChanUser[schan]-baseof_AVmachine].m_die = TRUE;	// Kill video
+
+					// Wait for channel stream to die
+					DBUG(printchar(DB_OPS,'7');)
+
+					while (ScsiChanBusy[schan]) {
+						Delay(1);			// Sleep 1 tick and then we'll try again
+						if (GetSignals() & SIGF_ABORT) {				// User abort?
+							error = ERR_ABORTED;
+							goto abort;
+						}
+					}
+
+					AllocScsi(action->a_Channel,schan);
+					__flags |= FLG_TOOKSCSI;
+					break;											// Ready to proceed
+				}
+				else if (APF_ERRIFBUSY & action->a_PermissFlags) {
+					error = ERR_CHANINUSE;				// Give up quickly
+					goto abort;
+				}
+			}
+		}
+d804 3
+a806 25
+	else {
+
+		// ******************************************
+		// *** Special split-audio handling stuff ***
+		// ******************************************
+		DBUG(printchar(DB_OPS,'^');)
+
+		/* Should we maybe only do a head search if we are trying to */
+		/* play audio from an A/V clip?  Or should we always try? */
+
+		if (FLG_TRYHEAD & __flags) {
+			/* Find an audio head in list which contains the start point */
+			err = FindHead(volume->v_SCSIdrive,__headlist,action->a_AudStartField,TRUE,&MyHead);
+			if (err == ERR_OKAY) {
+				/* Calculate location of desired field in audio head */
+				__shaddr = MyHead.phe_auxblk+(2*MONOAUDFRAME+1) *
+					Fields2Frames(action->a_AudStartField-MyHead.phe_startfld,FALSE);
+				__shlen	= (2*MONOAUDFRAME+1) *
+					Fields2Frames(action->a_AudFieldCount,TRUE);
+				__shdrive= MyHead.phe_drive;
+				__flags |= FLG_USEHEAD;		// Using audio head
+				DBUG(print(DB_HEADS,"AudHead:(%b) %l len:%l\n",__shdrive,__shaddr,__shlen);)
+			}
+		}
+	}
+d808 1
+d810 2
+a811 10
+	// ****************************************************
+	// *** Wait for Machine free to use, setup for play ***
+	// ****************************************************
+	DBUG(printchar(DB_OPS,'8');)
+
+	seqplay = (APF_USEHEADS & action->a_PermissFlags)?TRUE:FALSE;
+
+	if (AF_VIDEO & action->a_Flags) {		// Need to wait only if with video
+		while (!AllocAVMachine(action->a_Channel)) {
+			Delay(1);			// Sleep 1 tick and then we'll try again
+a812 6
+			if (GetSignals() & SIGF_ABORT) {					// User abort?
+				error = ERR_ABORTED;
+				goto abort;
+			}
+		}
+	}
+d814 8
+a821 241
+	vtimflg = (AF_VIDEO & action->a_Flags)?TRUE:FALSE;
+
+	DBUG(print(DB_OPS,"(vtimflg = %b, numchans = %b)\n",vtimflg,numaudchans);)
+
+	/* Allocate number of audio channels desired (if any) */
+//	numaudchans = CountAudChans(action->a_Flags);	// Redundant
+	if (numaudchans > 0) {
+		/*********************************/
+		/* Split-audio seaming mechanism */
+		/*********************************/
+
+		/* Are we missing some audio on front end? (Skip if live) */
+		if ((seqplay)&&(action->a_AudStartField != action->a_TotalAudStart)) {
+			/* Maybe part of split audio, try to reattach */
+			__audchan = RestoreAudSplit(volume->v_SCSIdrive,action,vtimflg);
+
+			/* Did split reattach succeed? */
+			if (__audchan != 0) {
+				/* Split -- re-attach to previous allocated chans */
+				__flags |= FLG_SPLITIN;
+
+				/* What if # channels differs from split-split??? */
+			}
+			// If failed, must be just a clipped audio track
+			// In which case, we'll allocate channel(s) normally
+		}
+
+		/* Unless we reattached to a split, allocate chans normally */
+		if (!(FLG_SPLITIN & __flags)) {
+			__audchan = AllocAudioChan(numaudchans,vtimflg);
+		}
+
+		/* Is back end split? Skip if live play */
+		if (seqplay
+		&& ((action->a_AudStartField+action->a_AudFieldCount)
+		 != (action->a_TotalAudStart+action->a_TotalAudLength))) {
+			/* Keep allocation open for split */
+			__flags |= FLG_SPLITOUT;
+			SaveAudSplit(volume->v_SCSIdrive,action,__audchan);
+		}
+	}
+	else {
+		__audchan = 0;
+	}
+
+	DBUG(print(DB_OPS,"(audchan = %b)\n",__audchan);)
+
+	if (__audchan == 0) {
+		numaudchans = 0;
+		/* If no video requested, and got no audio, fail */
+		if (!(AF_VIDEO & action->a_Flags)) {
+			error = ERR_NOAUDIOCHAN;
+			goto abort;
+		}
+	}
+
+	if (AF_VIDEO & action->a_Flags)
+		__machnum = action->a_Channel;
+	else
+		__machnum = NUMVIDCHANS + __audchan-1;
+
+	InitAVMachine(__machnum);			// Ready to use
+
+	avm = &AVmachine[__machnum-baseof_AVmachine];
+	avm->m_mode		= PLAY;
+	avm->m_sdrive	= volume->v_SCSIdrive;
+	avm->m_quick	= (AF_NOPREROLL & action->a_Flags)?TRUE:FALSE;	// Skip pre-roll?
+
+//	/* For trailing split audio, wait until buffer free to fill */
+//	avm->m_splitwait = (FLG_SPLITIN & __flags)?TRUE:FALSE;
+//	/* If trailing split follows, don't flush buffer at end */
+//	avm->m_splitout = (FLG_SPLITOUT & __flags)?TRUE:FALSE;
+
+	if (AF_USEMATTE & action->a_Flags)
+		avm->m_flags |= MF_GOMATTE;		// Put up matte at end
+							
+	avm->m_startaddr	= action->a_StartBlk;
+	avm->m_stopaddr	= action->a_EndBlk;
+	if (FLG_USEHEAD & __flags) {
+		avm->m_flags |= MF_INHEAD;
+		avm->m_shdrive	= __shdrive;				// Head drive
+		avm->m_shaddr	= __shaddr;				// Head block
+		avm->m_shmax	= __shaddr + __shlen;	// End of head
+
+		DBUG(print(DB_HEADS,"Head start:%l end:%l\n",avm->m_shaddr,avm->m_shmax);)
+	}
+
+	// If playing all channels from audio-only clip,
+	// Use special mode which reads multiple frames at
+	// once.  If not using all channels or if reading
+	// audio from an A/V clip, cannot use this mode
+
+	if ((!(CIF_HASVIDEO & __clipflags)) && (numaudchans == __clipaudchans))
+		avm->m_flags |= MF_GROUPREADS;
+
+	avm->m_goclock = action->a_GoClock;
+
+	if (AF_VIDEO & action->a_Flags) {
+		fields = action->a_VidFieldCount;
+		/* If audio starts later, adjust attackclk */
+		avm->m_attackclk = avm->m_goclock + (action->a_AudStartField-action->a_VidStartField);
+	}
+	else {
+		fields = action->a_AudFieldCount;
+		avm->m_attackclk = avm->m_goclock;
+	}
+	avm->m_stopfrm	= Fields2Frames(fields,TRUE);
+	avm->m_numaudchans = numaudchans;
+	avm->m_achan	= __audchan;
+	avm->m_volume	= action->a_VolSust1;
+
+	/* Handle mono correctly */
+	if (numaudchans == 1) {
+		if (AF_AUDIOL & action->a_Flags) {
+			avm->m_monochan = 0;
+			// a_VolSust1 already correct
+		}
+		else {
+			action->a_VolSust1 = action->a_VolSust2;		// Copy mono volume
+			avm->m_monochan = 1;
+			// Audio-only playback machine cannot correctly play
+			// right-only channel from stereo clip.  So in this
+			// case, we use left channel audio with volume
+			// specified for the right channel
+			if (!(AF_VIDEO & action->a_Flags))
+				avm->m_monochan = 0;
+		}
+	}
+
+	avm->m_volume2	= action->a_VolSust2;
+	avm->m_pan		= action->a_AudioPan1;
+	avm->m_pan2		= action->a_AudioPan2;
+	avm->m_attack	= action->a_VolAttack;
+	avm->m_decay	= action->a_VolDecay;
+
+//	THIS FUDGE HELPS CLEAN UP SPLIT-AUDIO TICKS
+//	if (avm->m_decay == 0)
+//		avm->m_decay = 1;
+
+//	Make sure folks dont ask for more than we have
+//	if (avm->m_attack > action->a_AudFieldCount)
+//		avm->m_attack = action->a_AudFieldCount;
+//
+//	/* Do same for decay??? */
+
+	/* If indefinite play, queue no decay */
+	if (action->a_AudFieldCount == 0) {
+		avm->m_decayclk = 0;
+	}	/* If too short for complete audio ramps, intersect smartly */
+	else if ((avm->m_attack + avm->m_decay) > action->a_TotalAudLength) {
+		/* Use ratios to calculate crossover point */
+		decayfld = (avm->m_attack * action->a_TotalAudLength) / (avm->m_attack+avm->m_decay);
+		avm->m_decayclk = avm->m_attackclk + decayfld;
+		/* Shorten decay time to hit 0 */
+		avm->m_decay = action->a_TotalAudLength - decayfld;
+	}
+	else {
+		avm->m_decayclk = avm->m_attackclk + action->a_TotalAudLength - avm->m_decay;
+	}
+
+	// For instantaneous attacks, allow to go full
+	//	before ramping down, else won't hear at all
+	if (avm->m_attackclk == avm->m_decayclk)
+		avm->m_decayclk++;
+
+	// Allow ramping across splits
+	if (FLG_SPLITIN & __flags) {
+		/* Already set up/down events on first segment */
+		avm->m_attackclk = 0;
+		avm->m_decayclk = 0;
+	}
+
+	DBUG(print(DB_PROJECT,"Go=%l, atk=%l\n",
+		avm->m_goclock,avm->m_attackclk);)
+
+
+	// ***************************************
+	// ***************************************
+	// *** Maintain playback (until stops) ***
+	// ***************************************
+	// ***************************************
+	DBUG(print(DB_OPS,"9%b",action->a_Channel);)
+
+//	avm = &AVmachine[__machnum-baseof_AVmachine];	// Redundant
+
+	do {
+//		if ((cont == 1) && ((GetFieldClock()+8) >= action->a_GoClock))
+//			cont = 2;		// RT_STARTED should return now!
+
+//		/* If user requesting abort, initiate shut-down */
+		if (GetSignals() & SIGF_ABORT) {					// User abort?
+			error = ERR_ABORTED;
+			avm->m_break = TRUE;	// STOP!
+		}
+
+		/* Call the correct play machine again */
+		if (AF_VIDEO & action->a_Flags)
+			scsidone = PlayVidMachine(__machnum);	// Video and maybe audio
+		else
+			scsidone = PlayAudioMachine(__machnum);	// Audio only
+
+		/* If player is finished with SCSI, let's free resource now! */
+		if (scsidone) {
+			if (FLG_TOOKSCSI & __flags) {
+				FreeScsi(action->a_Channel,0xFF);
+
+				__flags &= ~FLG_TOOKSCSI;			// Released
+
+				DBUG(print(DB_HEADS,"f%b",action->a_Channel);)
+			}
+		}
+	} while (avm->m_active);
+
+	/* Don't stomp on this warning error */
+	if (error != ERR_CLIPLATE)
+		error = avm->m_error;
+
+	/* Compute last field played */
+	action->a_LastFieldDone = (AF_VIDEO & action->a_Flags)?
+											action->a_VidStartField:
+											action->a_AudStartField;
+
+	action->a_LastFieldDone += Frames2Fields(avm->m_frmsdone)-1;
+
+//	/* If switched off head, clear USEHEAD flag */
+//	if (!(MF_INHEAD & avm->m_flags))
+//		__flags &= ~FLG_USEHEAD;
+
+	/* Free audio channel(s), unless splits to another */
+	if (!(FLG_SPLITOUT & __flags))
+		FreeAudioChan(avm->m_achan);
+	else
+		DoAudSplit(avm->m_achan);				// Hand off control now
+
+	FreeAVMachine(__machnum);
+
+
+abort:
+	if (FLG_TOOKSCSI & __flags) {				// Still haven't freed scsi?
+		DBUG(printchar(DB_HEADS,'F');)
+		FreeScsi(action->a_Channel,0xFF);
+a822 6
+	if (FLG_TOOKVID & __flags)
+		VidChanBusy[action->a_Channel] = FALSE;
+
+//	CommandDone(ptr);
+
+	return(error);
+d829 1
+a829 1
+UBYTE FlyerRecord(ACTION *action)
+d835 3
+a837 2
+	UBYTE		err,numaudchans;
+	BOOL		vtimflg;
+a838 6
+	UBYTE		error;
+	BOOL		__clipflg;
+	char		*__name;
+	UBYTE		__audchan;
+	UBYTE		__machnum;
+
+a839 2
+	ProhibitSCSIdirect = 2;		// 2 more secs til maybe allow SCSI directs
+
+d841 1
+a841 1
+	__name = (char *)(volume->v_Name + SRAMbase);
+d852 1
+a852 1
+		print(DB_PROJECT,"Rec: name='%s'\n",__name);
+d869 2
+a870 1
+//	if (err != ERR_OKAY) {
+d877 2
+a878 1
+	|| (volume->v_SCSIdrive > (NUMSCSIDRIVES-1))) {
+d883 2
+a884 1
+	if (VideoMode != VM_RECORD) {			// In Record mode?
+d891 2
+a892 1
+	&& (!(AF_AUDIOR & action->a_Flags))) {
+d897 2
+a898 1
+	if ((__name != 0) && (*__name != 0)) {			// Name specified
+d900 3
+a902 2
+		err = FS_Locate(volume->v_SCSIdrive,0,0,__name,&newgrip,&fake1);
+		if (err == ERR_OKAY) {
+d909 1
+a909 1
+		__clipflg = TRUE;		// Do name record
+d911 3
+a913 2
+	else {									// Raw blocks specified
+		__clipflg = FALSE;		// Do raw record
+d924 4
+a927 4
+	if (AF_VIDEO & action->a_Flags) {
+		while (DrvInfo[volume->v_SCSIdrive].DoingVideo) {
+			Delay(1);			// Sleep 1 tick and then we'll try again
+		}
+d929 1
+a929 1
+		DrvInfo[volume->v_SCSIdrive].DoingVideo = TRUE;
+d938 13
+a950 4
+	if (GetSignals() & SIGF_ABORT) {					// User abort?
+		error = ERR_ABORTED;
+		goto abort;
+	}
+d952 2
+a953 7
+	if (AF_VIDEO & action->a_Flags) {
+		while (!AllocAVMachine(action->a_Channel)) {
+			Delay(1);			// Sleep 1 tick and then we'll try again
+		}
+	}
+
+	if (__clipflg) {
+d956 4
+a959 2
+		error = GetFreeSpace(volume->v_SCSIdrive,0,FALSE,&action->a_StartBlk,
+			&action->a_EndBlk);
+d975 1
+a975 1
+	__audchan = AllocAudioChan(numaudchans,vtimflg);
+d977 1
+a977 1
+	DBUG(print(DB_AUDIO,"Wanted %b, got chan %b\n",numaudchans,__audchan);)
+d979 2
+a980 1
+	if (__audchan == 0) {
+d983 2
+a984 1
+		if (!(AF_VIDEO & action->a_Flags)) {
+d989 3
+a991 2
+	else {
+		AudioEnable(__audchan);			// Enable for recording
+d995 1
+a995 1
+		__machnum = action->a_Channel;
+d997 1
+a997 1
+		__machnum = NUMVIDCHANS + __audchan-1;
+d999 1
+a999 1
+	InitAVMachine(__machnum);			// Ready to use
+d1001 1
+a1001 1
+	avm = &AVmachine[__machnum-baseof_AVmachine];
+d1006 2
+d1018 1
+a1018 1
+	avm->m_achan			= __audchan;
+d1028 3
+a1030 1
+//	avm = &AVmachine[__machnum-baseof_AVmachine];	// Redundant
+d1032 1
+a1032 8
+	do {
+//		/* If user requesting abort, initiate shut-down */
+		if (GetSignals() & SIGF_ABORT) {					// User abort?
+			error = ERR_ABORTED;
+			avm->m_break = TRUE;	// STOP!
+		}
+
+//		VidPaused = (cont == 0xFF)?TRUE:FALSE;		// Paused?
+d1034 1
+a1034 5
+		/* Call the record machine again */
+		DoRecMachine(__machnum);
+	} while (avm->m_active);							// Done?
+
+	error = avm->m_error;
+d1044 1
+a1044 1
+	if (__clipflg && (
+d1048 2
+a1049 1
+	(error == ERR_ABORTED))) {
+d1061 10
+a1070 4
+		err = NewFile(volume->v_SCSIdrive,action->a_StartBlk,
+			avm->m_stopaddr-action->a_StartBlk,0,__name,FALSE,0,&newgrip);
+		if (err != ERR_OKAY)
+			error = err;
+d1072 1
+a1072 2
+		FreeGrip(volume->v_SCSIdrive,newgrip);		// Throw it away
+	}
+d1075 2
+a1076 2
+	FreeAudioChan(avm->m_achan);
+	FreeAVMachine(__machnum);
+d1079 4
+a1082 2
+	DrvInfo[volume->v_SCSIdrive].DoingVideo = FALSE;
+//	CommandDone(ptr);
+d1101 1
+d1103 1
+d1111 2
+a1112 1
+	if (AF_VIDEO & action->a_Flags) {
+d1116 2
+a1117 1
+	else {
+d1122 4
+d1127 5
+a1131 5
+	
+	avm = &AVmachine[machnum-baseof_AVmachine];
+	if ((chancount > 0) && (avm->m_numaudchans == 0)) {
+		avm->m_numaudchans = chancount;
+		avm->m_achan = AllocAudioChan(chancount,vtimflg);
+d1133 2
+d1137 6
+a1142 4
+	else if ((chancount == 0) && (avm->m_numaudchans != 0)) {
+		FreeAudioChan(avm->m_achan);
+		avm->m_numaudchans = 0;
+		avm->m_achan = 0;
+d1146 34
+a1179 4
+
+	if (doit) {
+		Engine[machnum-baseof_Engine].e_audchan = avm->m_achan;
+		Engine[machnum-baseof_Engine].e_flags |= EFLG_AUDCHG;
+a1183 56
+///*
+// *	FSdata2file - Convert raw data into a file (testing only)
+// */
+//void FSdata2file(APTR ptr)
+//{
+//	struct CMD_ORG {
+//		UWORD		opcode;
+//		UBYTE		cont;
+//		UBYTE		error;
+//		ULONG		actptr;
+//	}
+//	register struct CMD_ORG *cmdptr = (struct CMD_ORG *)ptr;
+//	ACTION	*action;
+//	FlyerVolume	*volume;
+//	APTR	name;
+//	GRIP	*newgrip;
+//	ULONG	length;
+//	ULONG	frames;
+//	ULONG	index;
+//	ULONG	dummy;
+//	ULONG	destblk;
+//	UBYTE	err;
+//
+//	/* Cannot insert CLIPHDR in front of raw data */
+//	/* So remove this entire function -- it's not useful anymore */
+//
+//	action = (ACTION *)(cmdptr->actptr + SRAMbase);	// Get ptr to action structure
+//	volume = (FlyerVolume *)(action->a_Volume + SRAMbase);
+//	cmdptr->error = MeasureClip(volume->v_SCSIdrive,action->a_StartBlk,action->a_VidFieldCount,length,index,frames);
+//		
+//	if (cmdptr->error == ERR_OKAY) {
+//		if (action->a_MatteY == 0x1234) {
+//			cmdptr->error = GetFreeSpace(action->a_MatteI,0,FALSE,&destblk,&dummy);
+//
+//			DBUG(print(DB_OPS,"Copying to chan %b at block %l\n",action->a_MatteI,destblk);)
+//
+//			cmdptr->error = CopyData(volume->v_SCSIdrive,(action->a_MatteI * 8) + 0,action->a_StartBlk,destblk,length,FALSE);
+//			volume->v_SCSIdrive = (action->a_MatteI * 8)+0;
+//			index = index - action->a_StartBlk + destblk;
+//			action->a_StartBlk = destblk;
+//		}
+//		else {
+//			return;
+//		}
+//
+//		if (cmdptr->error == ERR_OKAY) {
+//			name = volume->v_Name + SRAMbase;	// Get address of filename
+//
+//			/* Removed 'index' and 'frames * 4' */
+//			cmdptr->error = NewFile(volume->v_SCSIdrive,action->a_StartBlk,length,0,name,FALSE,0,&newgrip);
+//			err = FreeGrip(volume->v_SCSIdrive,newgrip);		// Throw it away
+//		}
+//	}
+//}
+
+
+d1187 1
+a1187 1
+static UBYTE CountAudChans(BYTEBITS flags)
+d1217 2
+a1218 1
+	if (err == ERR_OKAY) {
+d1240 2
+a1241 1
+	for (i=0;i<=1;i++) {
+a1250 51
+ * AllocScsi - Allocate SCSI channel for major video use
+ */
+void AllocScsi(UBYTE	user, UBYTE	chan)
+{
+	DBUG(print(DB_INTERN,"Alloc %b %b\n",chan,user);)
+
+	ScsiChanBusy[chan] = TRUE;
+	ScsiChanUser[chan] = user;
+}
+
+
+/*
+ * FreeScsi - Free SCSI channel for major video use
+ */
+void FreeScsi(UBYTE user, UBYTE chan)
+{
+	DBUG(print(DB_INTERN,"Free %b %b ",chan,user);)
+
+	/* Wildcard replacement? */
+	if (chan == 0xFF) {
+		chan = 0;
+		for (;;) {
+			if (ScsiChanUser[chan] == user)				// Match?
+				break;
+
+			if (++chan >= NUMSCSICHANS)
+				return;
+		}
+	}
+
+	DBUG(print(DB_INTERN,"(%b)\n",chan);)
+	ScsiChanBusy[chan] = FALSE;
+	ScsiChanUser[chan] = 0xFF;
+}
+
+
+/*
+ * SwitchScsi - Switch SCSI channel allocations
+ */
+void SwitchScsi(UBYTE oldchan, UBYTE newchan)
+{
+	UBYTE	user;
+
+	user = ScsiChanUser[oldchan];
+	DBUG(print(DB_INTERN,"Switch (%b)%b->%b\n",user,oldchan,newchan);)
+	FreeScsi(user,oldchan);
+	AllocScsi(user,newchan);
+}
+
+
+/*
+d1255 1
+a1255 1
+	ULONG		i;
+d1257 9
+a1265 3
+	// Video and SCSI channels all free
+	for (i=0;i<NUMVIDCHANS;i++)
+		VidChanBusy[i] = FALSE;
+d1267 9
+a1275 13
+	for (i=0;i<NUMSCSICHANS;i++) {
+		ScsiChanBusy[i] = FALSE;
+		ScsiChanUser[i] = 0xFF;
+	}
+
+	// Spawn video tasks
+	for (i=0;i<NUMVIDCHANS;i++) {
+		NewList(&VidTaskQueues[i]);			// Init queue
+
+		VidTasks[i] = StartTask((PROC)&VideoTask,5,VIDEOTASKSTACKSIZE,i);
+
+		DBUG(print(DB_ALWAYS,"VidTask (%b) @@ %l\n",i,VidTasks[i]);)
+	}
+@
+
+
+1.1
+log
+@Automated prototypes, and reduced includes when possible
+@
+text
+@d5 1
+a5 1
+* $Id: acts.c,v 1.0 1995/05/02 11:04:43 Flick Exp Flick $
+d8 3
+a25 1
+#include <Phoenix.h>
+d30 2
+a31 2
+#include <Switcher.h>
+#include <Ops.h>
+d213 1
+a213 1
+	volume = action->a_Volume;
+d220 1
+a220 1
+	name = volume->v_Name;						// Get ptr to name
+d351 1
+d450 2
+d476 1
+a476 1
+	volume = action->a_Volume;
+d489 2
+a490 1
+			error = FS_Locate(volume->v_SCSIdrive,0,0,volume->v_Name,&newgrip,&startblk);
+d615 1
+a615 1
+	volume = action->a_Volume;
+d754 2
+d782 2
+a783 1
+	err = PlayClip(0,volume->v_SCSIdrive,cmdptr->vol.v_Name,FALSE,cmdptr->inpoint,flds);
+d795 1
+d797 1
+d805 2
+d818 1
+d880 3
+d919 2
+a920 2
+	volume = action->a_Volume;
+	name = volume->v_Name;
+d1552 2
+a1553 2
+	volume = action->a_Volume;
+	__name = volume->v_Name;
+@
+
+
+1.0
+log
+@FirstCheckIn
+@
+text
+@d5 1
+a5 1
+* $Id$
+d7 3
+a9 1
+* $Log$
+d11 1
+d23 1
+a25 2
+#include <Phoenix.h>
+#include <Subs.h>
+d27 1
+a28 2
+#include <Seq.h>
+#include <FileSys.h>
+a29 1
+#include <Scsi.h>
+a32 4
+#include <MemMan.h>
+#include <Hard.h>
+#include <Ser.h>
+#include <Misc.h>
+d37 4
+a83 4
+
+/*** Private Prototypes ***/
+static void __regargs VideoTask(ULONG arg);
+static UBYTE CountAudChans(BYTEBITS flags);
+@

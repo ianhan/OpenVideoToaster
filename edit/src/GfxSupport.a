@@ -1,0 +1,808 @@
+********************************************************************
+* $GfxSupport.a$
+* $Id: GfxSupport.a,v 2.1 1994/03/05 21:04:22 CACHELIN4000 Exp $
+* $Log: GfxSupport.a,v $
+*Revision 2.1  1994/03/05  21:04:22  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  16:23:39  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  15:56:37  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  14:43:56  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1993 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* 4-27-93	Steve H.	Created this file
+* 4-27-93	Steve H.	Last update
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include	"exec/memory.i"
+	include "intuition/intuition.i"
+	include	"libraries/dos.i"
+	include "dos/doshunks.i"
+	include	"modular.i"
+	include "lib/graphics_lib.i"
+	include "lib/intuition_lib.i"
+	include	"lib/dos_lib.i"
+	include "crouton_lib.i"
+
+DARK_PEN	equ	0
+DGREY_PEN	equ	1
+LGREY_PEN	equ	2
+LIGHT_PEN	equ	3
+BORDER_PEN	equ	4
+
+hunk_low	equ	HUNK_UNIT	;for range checking hunks
+hunk_hi		equ	HUNK_INDEX
+
+	section	,code
+******* DrawBorderBoxRP *****************************************************`
+*
+*   NAME   
+*	DrawBorderBoxRP -- draw box with border on rast port.
+*
+*   SYNOPSIS
+*	DrawBorderBoxRP(XPos,YPos,Width,Heigth,RastPort,PaletteArray,
+*	               BlackBorderFlag)
+*	                 d0   d1   d2     d3      a0         a1
+*	                    d4
+*
+*   FUNCTION
+*
+*   INPUTS
+*	XPos            - pixels from left edge
+*	YPos            - pixels from top edge
+*	Width           - Width of box in pixels
+*	Heigth          - Height of box in pixels
+*	RastPort        - RastPort to draw in
+*	PaletteArray    - Byte array of colors to be used.
+*
+*	if borderflag set
+*		background,border,lightcolor,darkcolor
+*	ifborderflag clear
+*		 background,lightcolor,darkcolor
+*
+*	BlackBorderFlag - 1=surround border with single pixel of black
+*	                  0=don't
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+ XLABEL _DrawBorderBoxRP
+ XLABEL DrawBorderBoxRP
+	movem.l	d0-d3/a0-a6,-(sp)
+
+	tst	d4
+	beq		.borderless
+
+	moveq.l	#0,d0
+	move.b	(a1)+,d0			;pen for background
+
+	lea	AbsBoxDarkBorder,a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set border color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set light color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set dark color
+
+
+	move.l	4*4(SP),a1		;rastport
+	move.l	_AsmGfxBase,a6
+	XSYS	SetAPen
+
+	movem.l	(sp),d0-d1
+
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+	add.l	d0,d2	; X2 = X1 + Width
+	add.l	d1,d3	; Y2 = Y1 + Height
+
+	addq.w	#3,d0	;Adjust for new border type
+	addq.w	#3,d1
+	subq.l	#3,d2
+	subq.l	#3,d3
+
+	move.l	4*4(SP),a1		;rastport
+	XSYS	RectFill
+
+	movem.l	(sp),d0-d3
+
+	lea	AbsBoxDarkBorder,a0
+	bsr	FigureNewXYArray
+
+	move.l	4*4(SP),a0		;rastport
+	lea.l	AbsBoxDarkBorder,a1
+	moveq.l	#0,d0
+	move.l	d0,d1
+	move.l	_AsmIntuitionBase,a6
+	XSYS	DrawBorder
+
+	moveq.l	#LIGHT_PEN,d0
+	move.l	4*4(SP),a1		;rastport
+	move.l	_AsmGfxBase,a6
+	XSYS	SetAPen
+	bra.s	.exit
+
+
+.borderless
+	moveq.l	#0,d0
+	move.b	(a1)+,d0			;pen for background
+	lea	AbsBoxLightBorder,a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set light color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set dark color
+
+	move.l	4*4(SP),a1		;rastport
+	move.l	_AsmGfxBase,a6
+	XSYS	SetAPen
+
+	movem.l	(sp),d0-d1
+
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+	add.l	d0,d2	; X2 = X1 + Width
+	add.l	d1,d3	; Y2 = Y1 + Height
+
+	addq.w	#2,d0	;Adjust for new border type
+	addq.w	#2,d1
+	subq.l	#2,d2
+	subq.l	#2,d3
+
+	move.l	4*4(SP),a1		;rastport
+	XSYS	RectFill
+
+	movem.l	(sp),d0-d3
+
+	lea	AbsBoxLightBorder,a0
+	bsr.s	FigureNewXYArrayBorderLess
+
+	move.l	4*4(SP),a0		;rastport
+	lea.l	AbsBoxLightBorder,a1
+	moveq.l	#0,d0
+	move.l	d0,d1
+	move.l	_AsmIntuitionBase,a6
+	XSYS	DrawBorder
+
+	moveq.l	#LIGHT_PEN,d0
+	move.l	4*4(SP),a1		;rastport
+	move.l	_AsmGfxBase,a6
+	XSYS	SetAPen
+
+.exit
+	movem.l	(sp)+,d0-d3/a0-a6
+
+	rts
+
+*******************************************************************
+* ULONG FigureNewXYArray
+*
+* Summary
+*	calculates pairs of XY coords for round Border structures
+*
+* Upon Entry
+*	a0 - ptr to linked list of border structures (3)
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Note
+*	This function fills in the data table for three border structures.
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureNewXYArray
+
+	movem.l	d0-d7/a0-a1,-(sp)
+
+	move.l	a0,a2
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+
+	move.l	bd_XY(a2),a0	;first border Structure
+	bsr.s	FigureBorder
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureLightEdge
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureDarkEdge
+
+	movem.l	(sp)+,d0-d7/a0-a1
+
+	rts
+
+*******************************************************************
+* ULONG FigureNewXYArrayBorderLess
+*
+* Summary
+*	calculates pairs of XY coords for round Border structures
+*
+* Upon Entry
+*	a0 - ptr to linked list of border structures (2)
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Note
+*	This function fills in the data table for three border structures.
+*	It does not put a dark border arround the outside of the box.
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureNewXYArrayBorderLess
+
+	movem.l	d0-d7/a0-a1,-(sp)
+
+	move.l	a0,a2
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+
+;	move.l	bd_XY(a2),a0	;first border Structure
+;	bsr	FigureBorder
+
+;	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+
+	subq.l	#1,d0
+	subq.l	#1,d1
+	addq.l	#2,d2
+	addq.l	#2,d3
+
+	move.l	bd_XY(a2),a0
+	bsr.s	FigureLightEdge
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureDarkEdge
+
+	movem.l	(sp)+,d0-d7/a0-a1
+
+	rts
+
+
+FigureBorder
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	move.w	d1,d5
+
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	add.w	d2,d4
+	subq.w	#3+3,d4
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	addq.l	#3,d4
+	addq.l	#3,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	add.w	d3,d5
+	sub.w	#3+3,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	subq.w	#3,d4
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	subq.w	#3,d4
+	subq.w	#3,d5
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	move.w	d1,d5
+	addq.l	#3,d5
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	move.w	d1,d5
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+
+FigureLightEdge
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	move.w	d1,d5
+
+	addq.w	#1,d4
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	add.w	d3,d5
+	subq.w	#3+3,d5
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	addq.w	#1,d4
+	addq.w	#1,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	subq.w	#1,d4
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	move.w	d1,d5
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	move.w	d0,d4
+	add.w	d2,d4
+	subq.w	#3,d4
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x10
+	move.w	d5,(a0)+	;y10
+
+	subq.w	#2,d4
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x11
+	move.w	d5,(a0)+	;y11
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+
+FigureDarkEdge
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	add.w	d2,d4
+	subq.w	#2,d4
+	move.w	d1,d5
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	addq.w	#1,d4
+	addq.w	#1,d5
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	add.w	d3,d5
+	subq.w	#3+3,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	subq.w	#2,d4
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	add.w	d2,d4
+	subq.w	#3+3,d4
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	move.w	d1,d5
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	subq.w	#1,d4
+	move.w	d4,(a0)+	;x10
+	move.w	d5,(a0)+	;y10
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+
+*******************************************
+ XLABEL _cuntsetjmp
+	MOVEA.L     0004(A7),A0
+	MOVEM.L     D1-D7/A1-A7,0004(A0)
+	MOVE.L      0000(A7),0000(A0)
+;	MOVEA.L     0004,A1
+;	BTST        #0004,0129(A1)
+;	BEQ.B       Exit
+;	FMOVEM.X    FP0-FP7,003C(A0)
+	MOVEQ       #00,D0
+	RTS
+
+ XLABEL _cuntlongjmp
+    MOVE.L      0008(A7),D0
+    MOVEA.L     0004(A7),A0
+    TST.L       D0
+    BNE.B       Cunt
+    ADDQ.L      #1,D0
+Cunt
+;    MOVEA.L     0004,A1
+;    BTST        #0004,0129(A1)
+;    BEQ.B       0046
+;    FMOVEM.X    003C(A0),FP0-FP7
+    MOVEM.L     0004(A0),D1-D7/A1-A7
+    MOVE.L      0000(A0),0000(A7)
+	rts
+
+******* CommonRGB/FindDebugHunk *********************************************
+*
+*   NAME   
+*	FindDebugHunk -- Searches a loader file for a debug hunk.
+*
+*   SYNOPSIS
+*	length = FindDebugHunk(hunktype,filehandle)
+*	                          d0         a0
+*
+* a0 struct BufferLock *BL
+* d0 HunkType
+*
+*   FUNCTION
+*	This function will seek from the start of a file to the first
+*	hunk_debug in the file.  It returns with the file pointer
+*	at the first byte of the debug hunk.  If this is not the debug
+*	hunk that you are looking for, seek forward length bytes and
+*	call FindDebugHunk again.
+*
+*   INPUTS
+*	hunktype   - 0 for debug or hunk type eg HUNK_OVERLAY (1013)
+*	filehandle - dos file handle
+*
+*   RESULT
+*	length - This is the length of the debug hunk in bytes
+*	         (0 if error. Call IOErr for reason).
+*
+*   EXAMPLE
+*
+*   NOTES
+*	If this function fails but IoErr returns no error then you have a
+*	bad object module
+*
+*	This function is called by StartLoadRGBPicture if you pass it an
+*	exe file.  It will look of an Iff file inside a debug hunk.
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+
+ XLABEL _FindDebugHunk
+
+FindDebugHunk:
+	tst.l	d0
+	bne.s	.noparam
+	move.l	#HUNK_DEBUG,d0
+.noparam
+	movem.l	d0-d3/a0-a1/a6,-(sp)
+;;	move.l	TB_DOSBase(a5),a6			;dosbase
+	move.l	_AsmCroutonBase,a6
+
+.bugsearch
+
+	move.l	4*4(sp),a0				;file handle
+	bsr	GetChunkType
+	bne	900$					;error reading
+.restart
+	and.l	#$3fffffff,d0				;strip chip/fast data
+	cmp.l	#hunk_low,d0				;is it a valid file
+	blt	900$
+	cmp.l	#hunk_hi,d0
+	bgt	900$
+
+;	cmp.l	#HUNK_DEBUG,d0
+	cmp.l	(sp),d0
+	beq	.isdebug
+	
+
+	cmp.l	#HUNK_BSS,d0
+	beq.s	.bugsearch
+
+
+	cmp.l	#HUNK_END,d0
+	bne.s	.notend
+.doendorbreak
+	move.l	4*4(sp),a0				;file handle
+	bsr	ReadLong
+	bne	900$
+	exg.l	d0,d1
+	bra.s	.restart
+.notend
+
+	cmp.l	#HUNK_BREAK,D0
+	beq.s	.doendorbreak
+
+	cmp.l	#HUNK_SYMBOL,d0
+	beq.s	.reloc
+
+	cmp.l	#HUNK_OVERLAY,d0
+	beq.s	.hunkplusone
+
+.notsymbol
+	cmp.l	#HUNK_RELOC32,d0
+	bne.s	.notreloc
+
+.reloc
+	tst.l	d1
+	beq.s	.bugsearch
+	addq.l	#1,d1					;hunk number
+	lsl.l	#2,d1
+	move.l	d1,d2					;length to seek
+	move.l	4*4(sp),a0				;file handle
+	move.l	#OFFSET_CURRENT,d3
+	XSYS	BufferSeek
+
+	move.l	4*4(sp),a0				;file handle
+	bsr.s	ReadLong
+	bne.s	900$					;error reading
+	move.l	d0,d1
+	bra.S	.reloc
+
+.notreloc
+	cmp.l	#HUNK_HEADER,d0				;not an exe file
+	bne.s	.generalhunk
+
+	tst.l	d1
+	bne.s	900$					;not a supported
+							;exe function.
+							;self loading libs.
+
+;	move.l	4*4(sp),a0				;file handle
+;	bsr	ReadLong
+;	bne.s	900$					;error reading
+;	addq.l	#2,d0					;skip over first and last
+;	move.l	d0,d1
+
+
+	move.l	4*4(sp),a0
+	bsr.s	GetChunkType				;read 2 longs
+	bne.s	900$
+	move.l	4*4(sp),a0				;file handle
+	bsr.s	ReadLong
+	bne.s	900$
+	neg.l	d1
+	add.l	d0,d1
+.hunkplusone
+	addq.l	#1,d1
+.generalhunk
+	and.l	#$3fffffff,d1				;strip chip/fast data
+	lsl.l	#2,d1
+	move.l	d1,d2					;length to seek
+	move.l	4*4(sp),a0				;file handle
+	move.l	#OFFSET_CURRENT,d3
+	XSYS	BufferSeek
+
+	bra	.bugsearch
+900$
+	moveq.l	#0,d1					;error code
+.isdebug
+	lsl.l	#2,d1					;longs to bytes
+	move.l	d1,(sp)					;return length in d0
+	movem.l	(sp)+,d0-d3/a0-a1/a6
+	rts
+
+******* CommonRGB/GetChunkType **********************************************
+*
+*   NAME   
+*	GetChunkType -- Reads next two long from file into d0/d1
+*
+*   SYNOPSIS
+*	GetChunkType(filehandle)
+*	Z                a0
+*
+*   FUNCTION
+*	This function reads the next two long words from an open file and
+*	returns with them in d0/d1
+*
+*   INPUTS
+*	filehandle    - some file handle.
+*   RESULT
+*	Z flag        - set if read was sucessfull
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+GetChunkType:
+	movem.l	d0-d3/a0-a1,-(sp)
+	move.l	sp,d2
+;;	move.l	a0,d1
+	moveq.l	#8,d3
+	XSYS	BufferRead
+
+;;	cmp.l	d0,d3
+	tst.l	d0
+	movem.l	(sp)+,d0-d3/a0-a1
+	rts
+
+******i CommonRGB/ReadLong **********************************************
+*
+*   NAME   
+*	ReadLong -- Reads long from file into d0
+*
+*   SYNOPSIS
+*	GetChunkType(filehandle)
+*	Z                a0
+*
+*   FUNCTION
+*	This function reads the next long word from an open file and
+*	returns with it in d0
+*
+*   INPUTS
+*	filehandle    - some file handle.
+*   RESULT
+*	Z flag        - set if read was sucessfull
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+ReadLong:
+	movem.l	d0-d3/a0-a1,-(sp)
+	move.l	sp,d2
+;;	move.l	a0,d1
+	moveq.l	#4,d3
+	XSYS	BufferRead
+
+;;	cmp.l	d0,d3
+	tst.l	d0
+100$	movem.l	(sp)+,d0-d3/a0-a1
+	rts
+
+GetLong	MACRO
+	bsr.w	ReadLong
+	bne.w	\1
+	endm
+
+*****************************************************************************
+* VOID __asm CopyCrut(
+*	register __a0 struct BitMap *SrcBM,
+*	register __a1 struct BitMap *DstBM,
+*	register __d0 WORD DestX,
+*	register __d1 WORD DestY,
+*	register __d2 WORD Height)
+*
+ XLABEL _CopyCrut
+	movem.l	a2-a3/d2-d5,-(sp)
+
+* calc dest plane offset
+	move.w	bm_BytesPerRow(a1),d4
+	mulu.w	d1,d4
+	lsr.w	#3,d0
+	add.w	d0,d4	; d4 now offset
+
+* dest plane modulo
+	move.w	bm_BytesPerRow(a1),d1
+	sub.w	#10,d1
+	moveq.l	#0,d3
+	move.b	bm_Depth(a0),d3
+	move.b	bm_Depth(a1),d5
+	cmp.b	d3,d5
+	bge.s	.OK
+	move.b	d5,d3
+.OK
+
+	sub.b	#1,d3	; #planes	
+	sub.w	#1,d2	; height
+	lea.l	bm_Planes(a0),a0
+	lea.l	bm_Planes(a1),a1
+
+.NextP
+	move.l	(a0)+,a2	; src
+	move.l	(a1)+,a3	; dest
+	add.w	d4,a3
+	move.w	d2,d5	; height
+
+.NextL
+	move.l	(a2)+,(a3)+  ; Copy 10 bytes
+	move.l	(a2)+,(a3)+
+	move.w	(a2)+,(a3)+
+	add.w	d1,a3
+	dbra	d5,.NextL
+
+	dbra	d3,.NextP
+
+	movem.l	(sp)+,a2-a3/d2-d5
+	rts
+
+*******************************`
+	section	,data
+
+ XLABEL _AsmGfxBase
+	dc.l	0
+ XLABEL _AsmIntuitionBase
+	dc.l	0
+ XLABEL _AsmCroutonBase
+	dc.l	0
+
+AbsBoxXY1	dcb.w	9*2,0
+AbsBoxXY2	dcb.w	11*2,0
+AbsBoxXY3	dcb.w	10*2,0
+
+* used in DrawBorderBox()
+AbsBoxDarkBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	BORDER_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,9 ; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY1	; bd_XY
+	dc.l	AbsBoxLightBorder	; bd_NextBorder
+
+AbsBoxLightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY2	; bd_XY
+	dc.l	AbsBoxGreyBorder	; bd_NextBorder
+
+AbsBoxGreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+* end of gfxsupport.a

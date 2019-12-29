@@ -1,0 +1,77 @@
+head	2.1;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.1
+date	94.10.04.20.28.34;	author pfrench;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.29.17.52.34;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.1
+log
+@Added lutc.c and removed nodebug
+@
+text
+@;********************************************************************
+;* $RCSfile: withfile,v $ - starting point of all new batch files
+;*
+;* Copyright (c)1992 NewTek, Inc.
+;* Confidental and Proprietary. All rights reserved. 
+;*
+;* $Id: withfile,v 2.0 1992/05/29 17:52:34 Kell Exp pfrench $
+;*
+;*********************************************************************
+FROM
+ cfx:obj/LutLib.o+
+ cfx:obj/lut0.o+
+ cfx:obj/lut1.o+
+ cfx:obj/lut2.o+
+ cfx:obj/lut3.o+
+ cfx:obj/lut4.o+
+ cfx:obj/lut5.o+
+ cfx:obj/lut6.o+
+ cfx:obj/lut7.o+
+ cfx:obj/lut8.o+
+ cfx:obj/lut9.o+
+ cfx:obj/lutA.o+
+ cfx:obj/lutB.o+
+ cfx:obj/lutC.o+
+ cfx:obj/LutBits.o+
+ cfx:obj/LutRam.o
+TO VT:exe/Toaster/AuxLibs/ChromaFX
+BATCH
+BUFSIZE 10000 
+MAP ram:ChromaFX.map
+PLAIN
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@d2 1
+a2 1
+;* $RCSfile: withoutfile,v $ - starting point of all new batch files
+d7 1
+a7 1
+;* $Id: withoutfile,v 2.2 92/05/28 13:33:36 Kell Exp $
+d24 1
+a27 1
+NODEBUG
+@

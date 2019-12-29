@@ -1,0 +1,99 @@
+head	2.2;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.2
+date	94.10.06.18.36.07;	author pfrench;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.02.23.14.20.08;	author Finch;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.19.00.03.56;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.2
+log
+@Added drawafterchanging global
+@
+text
+@********************************************************************
+* LUT6.i
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LUT6.i,v 2.1 1993/02/23 14:20:08 Finch Exp pfrench $
+*
+* $Log: LUT6.i,v $
+*Revision 2.1  1993/02/23  14:20:08  Finch
+*Removed FindGridCrouton
+*
+*Revision 2.0  92/05/19  00:03:56  Hartford
+*
+*********************************************************************
+
+	PAGE
+*************************************************************************
+*									*
+*	LUT6:								*
+*									*
+*	Contains the Global Code for LUT6 Module.			*
+*									*
+*	19.April 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XREF	LUT_MakeEditMark
+	XREF	LUT_MakeEditLine
+	XREF	LUT_DrawEditMark
+	XREF	LUT_DoStep
+	XREF	LUT_DoKeySwitchVideo
+	XREF	LUT_DoKeySwitchVideoTb
+	XREF	LUT_FindLUTData
+	XREF	LUT_CountLULData
+	XREF	LUT_SwitchLULData
+	XREF	LUT_NumbericKeyPadEntry
+	XREF	LUT_DoStringGadget
+	XREF	LUT_PrintNumberText
+	XREF	LUT_PrintNumber
+	XREF	LUT_DoRestoreDefault
+	XREF	LUT_DrawAfterChanging
+@
+
+
+2.1
+log
+@Removed FindGridCrouton
+@
+text
+@d7 1
+a7 1
+* $Id: LUT6.i,v 2.0 92/05/19 00:03:56 Hartford Exp Locker: Finch $
+d9 4
+a12 1
+* $Log:	LUT6.i,v $
+d42 1
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT6.i and t:,RCSt1A02997f0 differ
+@

@@ -1,0 +1,1544 @@
+head	2.26;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.26
+date	95.02.22.10.13.36;	author CACHELIN4000;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	95.01.31.18.48.44;	author pfrench;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.12.06.19.47.10;	author CACHELIN4000;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.11.29.13.10.05;	author pfrench;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.11.12.17.31.39;	author CACHELIN4000;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.11.09.15.43.00;	author CACHELIN4000;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.10.27.23.44.03;	author CACHELIN4000;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.10.20.22.01.29;	author CACHELIN4000;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.10.14.13.37.54;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.09.28.11.29.31;	author CACHELIN4000;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.09.27.17.24.13;	author CACHELIN4000;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.09.24.10.57.26;	author CACHELIN4000;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.09.20.22.50.35;	author pfrench;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.08.11.16.54.13;	author pfrench;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.08.02.21.47.38;	author pfrench;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.08.01.15.55.35;	author pfrench;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.07.31.14.40.52;	author pfrench;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.07.04.18.40.03;	author CACHELIN4000;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.06.22.10.46.38;	author CACHELIN4000;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.06.07.15.20.21;	author CACHELIN4000;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.03.13.07.53.28;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.03.12.20.00.17;	author CACHELIN4000;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.03.11.09.32.11;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.03.07.20.55.43;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.03.07.02.48.48;	author CACHELIN4000;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.03.02.21.04.44;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.17.16.24.22;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.26
+log
+@Check flyerbase before building list, etc.
+@
+text
+@/********************************************************************
+* $filelist.c$
+* $Id: FileList.c,v 2.25 1995/01/31 18:48:44 pfrench Exp CACHELIN4000 $
+* $Log: FileList.c,v $
+*Revision 2.25  1995/01/31  18:48:44  pfrench
+*Hacked to create fly_tape device, will cause grazer.c to
+*do a tape-restore.
+*
+*Revision 2.24  1994/12/06  19:47:10  CACHELIN4000
+*Add call to sort in Controls, unused compare and swap..
+*
+*Revision 2.23  1994/11/29  13:10:05  pfrench
+*Added CDROM directory optimizations
+*                 
+*Revision 2.22  1994/11/12  17:31:39  CACHELIN4000
+*put LoadNodeImage() in BuildDeviceList()
+*
+*Revision 2.21  1994/11/09  15:43:00  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.20  94/10/27  23:44:03  CACHELIN4000
+*Add more device name recognition kiudges, PC_DOS ID..
+*
+*Revision 2.19  94/10/20  22:01:29  CACHELIN4000
+*Attempt to determine unformatted devices... i.e. add a bunch of serial messages..
+*
+*Revision 2.18  94/10/14  13:37:54  CACHELIN4000
+*Add CheckFlyerDrives() call to BuildFlyerList()
+*
+*Revision 2.17  94/09/28  11:29:31  CACHELIN4000
+*Remove FlyerDrive Listing from BuildDeviceList, create BuildFlyerList()
+*
+*Revision 2.16  94/09/27  17:24:13  CACHELIN4000
+*change Flyer recognition for DiskType='FLY0'
+*
+*Revision 2.15  94/09/24  10:57:26  CACHELIN4000
+*Flyer Drive detection
+*
+*Revision 2.14  94/09/20  22:50:35  pfrench
+*Many modifications to work with directory cacheing
+*
+*Revision 2.13  1994/08/11  16:54:13  pfrench
+*Disabled (temporarily, at least). Projects saving from
+*withing the grazer's path string gadget.
+*
+*Revision 2.12  1994/08/02  21:47:38  pfrench
+*Cleaned up getdevtask() as it wasn't properly doing
+*a forbid/permit for its operations.
+*
+*Revision 2.11  1994/08/01  15:55:35  pfrench
+*Now filters out some file if in requester mode.
+*
+*Revision 2.10  1994/07/31  14:40:52  pfrench
+*Now helps out grazer for file-save requester.
+*
+*Revision 2.9  1994/07/04  18:40:03  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.8  94/06/22  10:46:38  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.7  94/06/07  15:20:21  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.6  94/03/13  07:53:28  Kell
+*Change the way debug statements are handled.
+*
+*Revision 2.5  94/03/12  20:00:17  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.4  94/03/11  09:32:11  Kell
+**** empty log message ***
+*
+*Revision 2.3  94/03/07  20:55:43  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  14:44:40  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <dos/dos.h>
+#include <dos/dosextens.h>
+#include <stdio.h>
+#include <string.h>
+#include <crouton_all.h>
+
+#include <filelist.h>
+#include <grazer.h>
+#include <flyer.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+
+#ifndef PROTO_PASS
+#include <proto.h>
+#endif
+
+/****************************************/
+//#define SERDEBUG	1
+#include <serialdebug.h>
+
+#define LIST_DB  NA("BuildFileList")
+#define LIST_DB2 NA("IsFileValid")
+/****************************************/
+
+#define ADD_TAPEDRIVE	TRUE
+
+// #define DEV_DEBUG 1
+#define MAX_DOS_LENGTH 30
+#define FLOPPY_DOS		0x444F5300 // OFS
+#define DRIVE1_DOS		0x444F5301 // FFS (also FFS floppies ... duh)
+#define DRIVE2_DOS		0x444F5302
+#define DRIVE3_DOS		0x444F5303
+#define DRIVE4_DOS		0x444F5304
+#define DRIVE5_DOS		0x444F5305
+#define FLYER_DOS			0x464C5900
+#define PC_DOS				0x4D534400 // MSD0
+
+char TrackName[] = "trackdisk.device",TempDev[32];
+extern struct Library *FlyerBase;
+
+//*******************************************************************
+VOID __regargs RemoveFreeNode(struct SmartNode *Node,
+		VOID (*FreeNode)(struct SmartNode *Node))
+{
+	Remove((struct Node *)Node);
+	FreeNode(Node);
+}
+
+
+/****** FileList/BuildFileList **************************************
+*
+*   NAME
+*	BuildFileList
+*
+*   SYNOPSIS
+*	BOOL BuildFileList(struct SmartString *Path,ULONG ValidAttributes,struct List *List,
+*		struct SmartNode *(*CreateNode)(struct SmartString *Name),
+*		VOID (*FreeNode)(struct SmartNode *Node),
+*		VOID (*NodeFIB)(struct SmartNode *,struct FileInfoBlock *,
+*		UWORD DOSClass),
+*		UWORD GetClass(struct SmartNode *))
+*
+*   FUNCTION
+*	Assumes all nodes are SmartNodes,
+*	Frees any existing List as well,
+*	Calls CreateNode when needs a new node,
+*	Calls NodeFIB when wants client to fill in FIB info
+*
+*   INPUTS
+*	if Dir NULL, or points to NULL string, build list of devices instead
+*
+*********************************************************************
+*/
+BOOL BuildFileList(struct SmartString *Path,ULONG ValidAttributes,struct List *List,
+	struct SmartNode *(*CreateNode)(struct SmartString *Name),
+	VOID (*FreeNode)(struct SmartNode *Node),
+	VOID (*NodeFIB)(struct SmartNode *,struct FileInfoBlock *,UWORD DOSClass),
+	UWORD GetClass(struct SmartNode *))
+{
+	struct SmartNode *SmartNode = NULL;
+	BPTR DirLock = NULL,OldCD;
+	struct FileInfoBlock *Fib = NULL;
+	BOOL Success = FALSE,OldCDValid=FALSE;
+	struct SmartString *TempString = NULL;
+
+	if (!Path || (!SmartStringLength(Path)))
+		return(BuildDeviceList(ValidAttributes,List,CreateNode,FreeNode,
+			NodeFIB,GetClass));
+
+	if (DirLock = Lock(GetCString(Path),ACCESS_READ))
+	{
+		if (Fib = AllocMem(sizeof(struct FileInfoBlock),MEMF_CLEAR))
+		{
+			if (Examine(DirLock, Fib))
+			{
+				if (Fib->fib_DirEntryType < 0)
+				{
+					goto ErrorExit; // make sure not file
+				}
+				OldCD = CurrentDir(DirLock);
+				OldCDValid = TRUE;
+
+				if ( IsCDROMDirectory(DirLock,Fib) )
+				{
+ 					/* Directory has ".allicons" file, and is CD-ROM */
+ 					Success = BuildFileListFromCDROM(List,DirLock,Fib);
+ 				}
+				else
+				{
+					while (ExNext(DirLock,Fib))
+					{
+						if (IsFileValid(Fib,ValidAttributes))
+						{
+							if (TempString = AllocSmartString(Fib->fib_FileName,NULL))
+							{
+								SmartNode = CreateNode(TempString);
+								FreeSmartString(TempString);
+								if (!SmartNode) goto ErrorExit;
+
+								NodeFIB(SmartNode,Fib,0);
+
+								if ( LoadNodeImage((struct GrazerNode *)SmartNode) )
+								{
+									AddTail(List,(struct Node *)SmartNode);
+								}
+								else
+								{
+									if( ((struct GrazerNode *)SmartNode)->BitMap )
+										FreeIconBM(((struct GrazerNode *)SmartNode)->BitMap);
+									FreeSmartNode(SmartNode);
+								}
+							} else goto ErrorExit;
+						}
+					}
+
+					Success = TRUE; // assume ERROR_NO_MORE_ENTRIES
+				}
+			} // examine
+		} // alloc mem
+	}
+
+ErrorExit:
+//  DisplayNormalSprite();
+	if (OldCDValid) CurrentDir(OldCD);
+	if (DirLock) UnLock(DirLock);
+	if (Fib) FreeMem(Fib,sizeof(struct FileInfoBlock));
+// if any kind of error, keep partially complete list
+	return(Success);
+}
+
+WORD __regargs NameType(char *C)
+{
+	if ((C[0] == 'D') && (C[1] == 'F') && (C[2] >= '0') && (C[2] <= '9') &&
+		(C[3] == ':'))
+		return(CR_FLOPPY);
+
+	if ((C[0] == 'R') && (C[1] == 'A') && (C[2] == 'M') && (C[3] == ':'))
+		return(CR_FLOPPY);
+
+	if ((C[0] == 'F') && (C[1] == 'L') && (C[2] == 'Y') && (C[3] == ':'))
+		return(CR_FLYER);
+
+	if ((C[0] == 'C') && (C[1] == 'D') && (C[2] >= '0') && (C[2] <= '9') &&
+		(C[3] == ':'))
+		return(CR_CDROM);
+
+	return(CR_DRIVE);
+}
+
+//*******************************************************************
+WORD __inline VolType(ULONG	DiskType, LONG handler)
+{
+	switch(DiskType)
+	{
+		case PC_DOS:
+			DUMPMSG("PC Floppy!");
+			return(CR_FLOPPY);
+			break;
+		case FLOPPY_DOS:
+			DUMPMSG("Floppy!");
+			return(CR_FLOPPY);
+			break;
+		case DRIVE1_DOS:
+		case DRIVE2_DOS:
+		case DRIVE3_DOS:
+		case DRIVE4_DOS:
+		case DRIVE5_DOS:
+			DUMPMSG("Drive!");
+			if(handler) return(CR_CDROM); // handler is really BSTR, NULL for Amiga FS
+			return(CR_DRIVE);
+			break;
+		case FLYER_DOS:
+			DUMPMSG("Flyer!");
+			return(CR_FLYER);
+			break;
+	}
+	DUMPMSG("Unknown!");
+	return(CR_UNKNOWN);
+}
+
+//*******************************************************************
+char *__regargs FindDevTask(struct MsgPort *T)
+{
+	struct DosInfo *DosInfo;
+	struct DosList *DosList;
+	unsigned char blen;
+	unsigned char *bstr,*cstr = NULL;
+
+	Forbid();
+
+	DosInfo = (struct DosInfo *)BADDR(DOSBase->dl_Root->rn_Info);
+	DosList = (struct DosList *)BADDR(DosInfo->di_DevInfo);
+	while (DosList)
+	{
+		if (	(DosList->dol_Type == DLT_DEVICE) &&
+				(DosList->dol_Task == T))
+		{
+			bstr = (char *)(BADDR(DosList->dol_Name));
+			cstr = &TempDev[0];
+
+			blen = *bstr++;
+			cstr[blen] = ':';
+			cstr[blen+1] = 0;
+
+			while (blen--)
+				*cstr++ = *bstr++;
+
+			cstr = &TempDev[0];
+			break;
+		}
+		DosList = (struct DosList *)BADDR(DosList->dol_Next);
+	}
+
+	Permit();
+
+	return(cstr);
+}
+
+/****** FileList/BuildDeviceList ************************************
+*
+*   NAME
+*	BuildDeviceList
+*
+*   SYNOPSIS
+*	BOOL BuildDeviceList(ULONG ValidAttributes,struct List *List,
+*		struct SmartNode *(*CreateNode)(struct SmartString *Name),
+*		VOID (*FreeNode)(struct SmartNode *Node),
+*		VOID (*NodeFIB)(struct SmartNode *,struct FileInfoBlock *,
+*		UWORD DOSClass),
+*		UWORD GetClass(struct SmartNode *))
+*
+*   FUNCTION
+*
+*********************************************************************
+*/
+//*******************************************************************
+BOOL BuildDeviceList(ULONG ValidAttributes,struct List *List,
+	struct SmartNode *(*CreateNode)(struct SmartString *Name),
+	VOID (*FreeNode)(struct SmartNode *Node),
+	VOID (*NodeFIB)(struct SmartNode *,struct FileInfoBlock *,
+	UWORD DOSClass),
+	UWORD GetClass(struct SmartNode *))
+{
+	struct SmartNode *SmartNode = NULL, *OldSmartNode;
+	struct DosInfo *DosInfo;
+	struct DosList *DosList;
+	UBYTE *Src,Temp[MAX_DOS_LENGTH+1];
+	ULONG L,Valid;
+	struct InfoData *InfoData = NULL;
+	BPTR MyLock;
+	BOOL Success = FALSE;
+	struct SmartString *TempStr=NULL;
+	struct GrazerNode *GNode;
+	char *Name;
+
+	if (InfoData = AllocMem(sizeof(struct InfoData),MEMF_CLEAR))
+	{
+		Forbid();
+		DosInfo = (struct DosInfo *)BADDR(DOSBase->dl_Root->rn_Info);
+		DosList = (struct DosList *)BADDR(DosInfo->di_DevInfo);
+		Valid = ValidAttributes;
+
+/****************/
+// First pass (during Forbid()), just get info
+		while (DosList)
+		{
+
+	// get device name
+			Src = (char *)BADDR(DosList->dol_Name);
+			L = Src[0];
+			strncpy(&Temp[0],&Src[1],L);
+			Temp[L] = 0;
+			strcat(&Temp[0],":");
+			if ((!(TempStr=AllocSmartString(Temp,NULL)))
+				|| (!(SmartNode = CreateNode(TempStr))))
+			{
+				Permit();
+				goto Exit;
+			}
+
+			FreeSmartString(TempStr);
+			TempStr = NULL;
+
+			GNode = (struct GrazerNode *)SmartNode;
+
+			switch (DosList->dol_Type)
+			{
+				case DLT_DEVICE:
+					DUMPHEXIL("Node: ",(LONG)SmartNode," ");
+					DUMPSTR(Temp);
+					DUMPHEXIL(" Device DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+					if (Valid & VALID_DEVICES) {
+						NodeFIB(SmartNode,NULL,EN_DEVICE);
+//						GNode->Type = NameType(Temp);
+//						DUMPHEXIL("D Node->Type: ",GNode->Type,"\\");
+					}
+					break;
+				case DLT_DIRECTORY:
+					if (Valid & VALID_ASSIGNS)
+						NodeFIB(SmartNode,NULL,EN_ASSIGN);
+					break;
+				case DLT_VOLUME:
+					DUMPHEXIL("Node: ",(LONG)SmartNode," ");
+					DUMPSTR(Temp);
+					DUMPHEXIL("Volume DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+					if (Valid & VALID_VOLUMES)
+					{
+						NodeFIB(SmartNode,NULL,EN_VOLUME);
+/*
+						if (Name = FindDevTask(DosList->dol_Task))
+						{
+							GNode->Type = VolType(DosList->dol_misc.dol_volume.dol_DiskType,DosList->dol_misc.dol_handler.dol_Handler);
+							DUMPHEXIL("V Node->Type: ",GNode->Type,"\\");
+						}
+*/
+					}
+					break;
+			}
+			AddTail(List,(struct Node *)SmartNode);
+			DosList = (struct DosList *)BADDR(DosList->dol_Next);
+		}
+		Permit();
+/****************/
+// Second pass, try to Lock() it
+
+		SmartNode = (struct SmartNode *)List->lh_Head;
+		while (SmartNode->MinNode.mln_Succ) 
+		{
+			OldSmartNode = SmartNode;
+			GNode = (struct GrazerNode *)OldSmartNode;
+			SmartNode = (struct SmartNode *)SmartNode->MinNode.mln_Succ;
+			switch (GetClass(OldSmartNode)) {
+				case EN_UNDEFINED:
+					RemoveFreeNode(OldSmartNode,FreeNode);
+					break;
+
+				case EN_DEVICE:
+				case EN_ASSIGN:
+				case EN_VOLUME:
+					MyLock = NULL;
+					if (SmartStringLength(OldSmartNode->Name))
+					{
+						Name=GetCString(OldSmartNode->Name);
+						MyLock = Lock( Name ,ACCESS_READ);
+					}
+					if (!MyLock)
+					{
+						DUMPSTR(Name);
+						DUMPSTR(" cannot be Locked...");
+						DUMPHEXIL("Node: ",(LONG)OldSmartNode,"\\");
+						RemoveFreeNode(OldSmartNode,FreeNode);
+					}
+					else
+					{
+						if(Info(MyLock,InfoData))
+						{
+							if( ((InfoData->id_DiskState != ID_VALIDATED)
+							&& (InfoData->id_DiskState != ID_WRITE_PROTECTED))
+							||( (GNode->Type=VolType(InfoData->id_DiskType,NULL)) == CR_UNKNOWN)  )
+							{
+								DUMPSTR(Name);
+								DUMPMSG("  Not a valid DOS disk\n");
+								RemoveFreeNode(OldSmartNode,FreeNode);
+							} else
+							{
+								DUMPSTR(Name);
+								DUMPHEXIL(" id_DiskType: ",InfoData->id_DiskType,"	");
+								DUMPHEXIL("Node->Type: ",GNode->Type,"\\");
+								NodeFIB(OldSmartNode,NULL,GetClass(OldSmartNode));
+								LoadNodeImage(GNode);
+							}
+						} else
+						{
+							RemoveFreeNode(OldSmartNode,FreeNode);
+							DUMPMSG("  Unable to do Info().");
+						}
+						UnLock(MyLock);
+					}
+					break;
+			}
+		}
+
+		Success = TRUE;
+	}
+Exit:
+	if (TempStr) FreeSmartString(TempStr);
+	if (InfoData) FreeMem(InfoData,sizeof(struct InfoData));
+
+#if ADD_TAPEDRIVE
+	if ( Valid & (VALID_VOLUMES|VALID_DEVICES) )
+	{
+		strcpy(Temp,"FLY_TAPE:");
+
+		if ( TempStr = AllocSmartString(Temp,NULL) )
+		{
+			if ( SmartNode = CreateNode(TempStr) )
+			{
+				NodeFIB(SmartNode,NULL,EN_DEVICE);
+				((struct GrazerNode *)SmartNode)->Type = CR_FLYER;
+				LoadNodeImage((struct GrazerNode *)SmartNode);
+				AddTail(List,(struct Node *)SmartNode);
+			}
+
+			FreeSmartString(TempStr);
+		}
+	}
+#endif
+	return(Success);
+}
+
+/****** FileList/IsFileValid ****************************************
+*
+*   NAME
+*	IsFileValid
+*
+*   SYNOPSIS
+*	BOOL IsFileValid(struct FileInfoBlock *fib, ULONG Valid)
+*
+*   FUNCTION
+*
+*********************************************************************
+*/
+BOOL IsFileValid(struct FileInfoBlock *fib, ULONG Valid)
+{
+	BOOL Result = FALSE;
+	UWORD Length;
+
+	if ((Valid & VALID_FILES) && (fib->fib_DirEntryType < 0))
+	{
+		Length = strlen(fib->fib_FileName);
+		if (Length)
+		{
+#ifndef SHOW_DOT_I
+	      if (stricmp(".i",&fib->fib_FileName[Length-2]))
+#endif
+			if (Valid & VALID_INFO_FILES) // if user wants ".info" files, OK
+				Result = TRUE;
+			else if (stricmp(".info",&fib->fib_FileName[Length-5]))
+				Result = TRUE;
+		}
+	}
+	else
+	{
+		if ((Valid & VALID_DIRECTORIES) && (fib->fib_DirEntryType >= 0))
+			Result = TRUE;
+	}
+
+	if( Result )
+	{
+		DEBUGSTR(LIST_DB2,"Valid File: ");
+		DEBUGMSG(LIST_DB2,fib->fib_FileName);
+	}
+	return(Result);
+}
+
+void BuildFlyerList()
+{
+	struct DosInfo *DosInfo;
+	struct DosList *DosList;
+	UBYTE *Src,Temp[MAX_DOS_LENGTH+1];
+	ULONG L;
+
+	if(!FlyerBase) return;
+	Forbid();
+		DosInfo = (struct DosInfo *)BADDR(DOSBase->dl_Root->rn_Info);
+		DosList = (struct DosList *)BADDR(DosInfo->di_DevInfo);
+		while (DosList)
+		{
+			Src = (char *)BADDR(DosList->dol_Name);
+			L = Src[0];
+			strncpy(&Temp[0],&Src[1],L);
+			Temp[L] = 0;
+			strcat(&Temp[0],":");
+			switch (DosList->dol_Type)
+			{
+				case DLT_DEVICE:
+					break;
+				case DLT_DIRECTORY:
+					break;
+				case DLT_VOLUME:
+					DUMPHEXIL("Volume DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+					if(DosList->dol_misc.dol_volume.dol_DiskType == FLYER_DOS)
+						AddFlyerDrive(Temp);
+					break;
+			}
+			DosList = (struct DosList *)BADDR(DosList->dol_Next);
+		}
+	Permit();
+	CheckFlyerDrives();
+	SortFlyerDrives();
+	return;
+}
+
+#define IS_AUDIO_DRIVE(FVI)		((FVI->Flags&FVIF_AUDIOREADY) && !(FVI->Flags&FVIF_VIDEOREADY))
+// CompareElements() returns: if <0, A<B; if =0, A=B; if >0, A>B
+int CompareFlyerDrives(void *Drives, LONG IndexA, LONG IndexB)
+{
+	UBYTE **fds = Drives;
+	struct FlyerVolInfo *fviA=NULL,*fviB=NULL;
+	DUMPUDECL("Comparing Drive ",IndexA," and ");
+	DUMPUDECL("Drive ",IndexB," \\");
+	DUMPSTR(fds[IndexA]);
+	DUMPMSG(fds[IndexB]);
+
+	fviA = GetFlyerInfo(fds[IndexA]);
+	fviB = GetFlyerInfo(fds[IndexB]);
+	if(!fviA)
+	{
+		if(fviB) return(-1);
+		else return(0);
+	}
+	else if(!fviB)
+	{
+		if(fviA) return(1);
+		else return(0);
+	}
+	else if(IS_AUDIO_DRIVE(fviA))
+	{
+		if(!IS_AUDIO_DRIVE(fviB)) return(-1);
+	}
+	else if(IS_AUDIO_DRIVE(fviB)) return(1);
+
+// Now either both are audio or neither is
+	if(fviA->Largest > fviB->Largest) return(1);
+	if(fviA->Largest < fviB->Largest) return(-1);
+	return(0);
+}
+
+void SwapFlyerDrives(void *Drives, LONG IndexA, LONG IndexB)
+{
+	UBYTE **fds = Drives, *t;
+	DUMPSTR("Swapping ");
+	DUMPSTR(fds[IndexA]);
+	DUMPSTR(" And ");
+	DUMPMSG(fds[IndexB]);
+	t=fds[IndexA];
+	fds[IndexA] = fds[IndexB];
+	fds[IndexB]=t;
+}
+
+// end of filelist.c
+@
+
+
+2.25
+log
+@Hacked to create fly_tape device, will cause grazer.c to
+do a tape-restore.
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.24 1994/12/06 19:47:10 CACHELIN4000 Exp pfrench $
+d5 4
+d124 1
+d126 2
+a127 1
+// BOOL MakeFlyerList=TRUE;
+d570 1
+@
+
+
+2.24
+log
+@Add call to sort in Controls, unused compare and swap..
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.23 1994/11/29 13:10:05 pfrench Exp CACHELIN4000 $
+d5 3
+d108 2
+d357 2
+a358 1
+	if (InfoData = AllocMem(sizeof(struct InfoData),MEMF_CLEAR)) {
+d366 2
+a367 1
+		while (DosList) {
+d376 2
+a377 1
+				|| (!(SmartNode = CreateNode(TempStr)))) {
+d381 1
+d384 1
+d387 2
+a388 1
+			switch (DosList->dol_Type) {
+d428 2
+a429 1
+		while (SmartNode->MinNode.mln_Succ) {
+d483 1
+d489 20
+@
+
+
+2.23
+log
+@Added CDROM directory optimizations
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.22 1994/11/12 17:31:39 CACHELIN4000 Exp pfrench $
+d5 3
+d88 1
+d557 1
+d561 34
+d596 11
+@
+
+
+2.22
+log
+@put LoadNodeImage() in BuildDeviceList()
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.21 1994/11/09 15:43:00 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d174 2
+a175 1
+				while (ExNext(DirLock,Fib))
+d177 6
+a182 1
+					if (IsFileValid(Fib,ValidAttributes))
+d184 1
+a184 1
+						if (TempString = AllocSmartString(Fib->fib_FileName,NULL))
+d186 1
+a186 11
+							SmartNode = CreateNode(TempString);
+							FreeSmartString(TempString);
+							if (!SmartNode) goto ErrorExit;
+
+							NodeFIB(SmartNode,Fib,0);
+
+							if ( LoadNodeImage((struct GrazerNode *)SmartNode) )
+							{
+								AddTail(List,(struct Node *)SmartNode);
+							}
+							else
+d188 18
+a205 5
+								if( ((struct GrazerNode *)SmartNode)->BitMap )
+									FreeIconBM(((struct GrazerNode *)SmartNode)->BitMap);
+								FreeSmartNode(SmartNode);
+							}
+						} else goto ErrorExit;
+d207 2
+a209 1
+				Success = TRUE; // assume ERROR_NO_MORE_ENTRIES
+@
+
+
+2.21
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: FileList.c,v 2.20 94/10/27 23:44:03 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	FileList.c,v $
+d91 1
+a91 1
+// #define SERDEBUG	1
+d236 2
+d442 1
+@
+
+
+2.20
+log
+@Add more device name recognition kiudges, PC_DOS ID..
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.19 94/10/20 22:01:29 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d232 1
+d234 1
+d242 1
+d247 1
+d251 1
+d362 2
+a363 1
+						GNode->Type = NameType(Temp);
+a375 3
+//						DUMPSTR(Temp);
+//						DUMPMSG(" Valid");
+//						DUMPHEXIL("Volume DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+d377 1
+a379 1
+//							DUMPMSG(Name);
+d381 1
+d383 1
+d397 1
+a397 1
+
+d426 1
+a426 4
+							// any "DOSx" is OK
+							|| ( ((InfoData->id_DiskType&0xffffff00)!=(ID_DOS_DISK&0xffffff00))
+							// any "FLYx" is OK
+							&& ((InfoData->id_DiskType&0xffffff00)!=(FLYER_DOS & 0xffffff00)) ) )
+d434 2
+a435 1
+								DUMPHEXIL(" DiskType: ",InfoData->id_DiskType,"\\");
+a449 2
+//	MakeFlyerList=FALSE;
+
+@
+
+
+2.19
+log
+@Attempt to determine unformatted devices... i.e. add a bunch of serial messages..
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.18 94/10/14 13:37:54 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d101 1
+d210 7
+a216 1
+	if ((C[0] == 'N') && (C[1] == 'D') && (C[2] >= '0') && (C[2] <= '9') &&
+d228 1
+@
+
+
+2.18
+log
+@Add CheckFlyerDrives() call to BuildFlyerList()
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.17 94/09/28 11:29:31 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d338 3
+a342 1
+						DUMPHEXIL("Device DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+d351 3
+d356 3
+a358 2
+						DUMPSTR(Temp);
+						DUMPHEXIL("Volume DiskType: ",DosList->dol_misc.dol_volume.dol_DiskType,"\\");
+d362 1
+a362 1
+							DUMPMSG(Name);
+a364 4
+//						if(MakeFlyerList)
+//							if(DosList->dol_misc.dol_volume.dol_DiskType == FLYER_DOS)
+//								AddFlyerDrive(Temp);
+
+d394 7
+a400 1
+					if (!MyLock) RemoveFreeNode(OldSmartNode,FreeNode);
+d413 1
+a414 1
+								DUMPMSG("  Not a valid DOS disk\n");
+@
+
+
+2.17
+log
+@Remove FlyerDrive Listing from BuildDeviceList, create BuildFlyerList()
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.16 94/09/27 17:24:13 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d230 1
+d507 1
+@
+
+
+2.16
+log
+@change Flyer recognition for DiskType='FLY0'
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.15 94/09/24 10:57:26 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d93 1
+a93 1
+BOOL MakeFlyerList=TRUE;
+d344 1
+d349 1
+a349 3
+//							if(MakeFlyerList)
+//								if(DosList->dol_misc.dol_volume.dol_DiskType == FLYER_DOS)
+//									AddFlyerDrive(Temp);
+d352 4
+d402 2
+a404 3
+								if(InfoData->id_DiskType == FLYER_DOS)
+									if(MakeFlyerList)
+										AddFlyerDrive(Name);
+d418 1
+a418 1
+	MakeFlyerList=FALSE;
+d470 37
+@
+
+
+2.15
+log
+@Flyer Drive detection
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.14 94/09/20 22:50:35 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d73 1
+a73 1
+#define SERDEBUG	1
+d88 1
+a88 2
+#define FLYER_DOS			0x444F5309
+
+d99 1
+a200 4
+	if ((C[0] == 'S') && (C[1] == 'D') && (C[2] >= '0') && (C[2] <= '9') &&
+		(C[3] == ':'))
+		return(CR_FLYER);
+
+d345 3
+a347 3
+							if(MakeFlyerList)
+								if(DosList->dol_misc.dol_volume.dol_DiskType == FLYER_DOS)
+									AddFlyerDrive(Temp);
+a356 1
+		MakeFlyerList=FALSE;
+d375 4
+a378 1
+					 MyLock = Lock(GetCString(OldSmartNode->Name),ACCESS_READ);
+d380 5
+a384 9
+					else {
+
+#ifdef DEV_DEBUG
+printf("Device: %s Type:%d Lock()ed for ACCESS_READ OK.\n",
+	OldSmartNode->Node.ln_Name,OldSmartNode->Node.ln_Type);
+#endif
+
+						if (Info(MyLock,InfoData)) {
+							if (((InfoData->id_DiskState != ID_VALIDATED)
+d386 6
+a391 5
+
+		// any "DOSx" is OK
+				|| ((InfoData->id_DiskType & 0xffffff00) != 
+					(ID_DOS_DISK & 0xffffff00))) {
+
+d393 3
+a395 5
+#ifdef DEV_DEBUG
+printf("  Not a valid DOS disk\n");
+#endif
+							} else {
+
+d397 3
+a399 1
+
+d401 2
+a402 2
+
+						} else {
+d404 1
+a404 3
+#ifdef DEV_DEBUG
+printf("  Unable to do Info().\n");
+#endif
+d413 1
+d423 1
+a423 1
+*   NAME   
+@
+
+
+2.14
+log
+@Many modifications to work with directory cacheing
+@
+text
+@d3 5
+a7 2
+* $Id: FileList.c,v 2.13 1994/08/11 16:54:13 pfrench Exp pfrench $
+* $Log: FileList.c,v $
+d70 1
+a70 1
+// #define SERDEBUG	1
+d79 7
+d88 1
+a88 1
+
+d99 1
+a99 1
+*   NAME   
+a187 17
+/****** FileList/BuildDeviceList ************************************
+*
+*   NAME
+*	BuildDeviceList
+*
+*   SYNOPSIS
+*	BOOL BuildDeviceList(ULONG ValidAttributes,struct List *List,
+*		struct SmartNode *(*CreateNode)(struct SmartString *Name),
+*		VOID (*FreeNode)(struct SmartNode *Node),
+*		VOID (*NodeFIB)(struct SmartNode *,struct FileInfoBlock *,
+*		UWORD DOSClass),
+*		UWORD GetClass(struct SmartNode *))
+*
+*   FUNCTION
+*
+*********************************************************************
+*/
+d198 4
+d206 22
+d265 17
+d331 1
+d342 1
+d346 4
+a349 1
+							GNode->Type = NameType(Name);
+d358 1
+a358 1
+
+d441 1
+a441 1
+	if ((Valid & VALID_FILES) && (fib->fib_DirEntryType < 0)) 
+@
+
+
+2.13
+log
+@Disabled (temporarily, at least). Projects saving from
+withing the grazer's path string gadget.
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.12 1994/08/02 21:47:38 pfrench Exp pfrench $
+d5 4
+d117 1
+a117 1
+	struct SmartNode *SmartNode;
+a122 11
+	// Remove from tail, freeing in reverse order, which is more
+	// system friendly, also quicker.
+	while ( SmartNode = (struct SmartNode *)RemTail(List) )
+	{
+		if( ((struct GrazerNode *)SmartNode)->BitMap)
+			FreeIconBM(((struct GrazerNode *)SmartNode)->BitMap);
+//		PathDevToVol(SmartNode->Name);
+		FreeSmartNode(SmartNode);
+	}
+	SmartNode = NULL;
+
+a126 1
+TryAgain:
+a167 25
+#ifdef TRY_WITHOUT
+	else
+	{
+		// Name typed in is not a directory, check and see if
+		// if we are requesting a file for saving something,
+		// and if so, set the new file path and success flags.
+		struct GrazerRequest	*gr;
+
+		if ( gr = global_gr )
+		{
+			if ( gr->gr_Flags & GRAZREQ_ALLOWCREATE )
+			{
+				// No valid pathname set as of yet.
+				gr->gr_Flags &= ~(GRAZREQ_VALIDFILENAME);
+
+				if ( gr->gr_FilePath) FreeSmartString(gr->gr_FilePath);
+
+				if ( gr->gr_FilePath = DuplicateSmartString(Path) )
+				{
+					gr->gr_Flags |= GRAZREQ_VALIDFILENAME;
+				}
+			}
+		}
+	}
+#endif /* TRY_WITHOUT */
+d401 1
+a401 1
+  {
+d404 1
+a404 1
+    {
+d406 1
+a406 1
+      if (stricmp(".i",&fib->fib_FileName[Length-2]))
+d408 4
+a411 4
+				if (Valid & VALID_INFO_FILES) // if user wants ".info" files, OK
+					Result = TRUE;
+				else if (stricmp(".info",&fib->fib_FileName[Length-5]))
+					Result = TRUE;
+a412 1
+
+d414 2
+a415 2
+  else
+  {
+d419 6
+a424 5
+  if(Result)
+  {
+    DEBUGSTR(LIST_DB2,"Valid File: ");
+    DEBUGMSG(LIST_DB2,fib->fib_FileName);
+  }
+@
+
+
+2.12
+log
+@Cleaned up getdevtask() as it wasn't properly doing
+a forbid/permit for its operations.
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.11 1994/08/01 15:55:35 pfrench Exp pfrench $
+d5 4
+d176 1
+d200 1
+@
+
+
+2.11
+log
+@Now filters out some file if in requester mode.
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.10 1994/07/31 14:40:52 pfrench Exp pfrench $
+d5 3
+d240 4
+a243 2
+	WORD A;
+	char *C,*D;
+d247 17
+a263 14
+	while (DosList) {
+		if ((DosList->dol_Type == DLT_DEVICE) &&
+			(DosList->dol_Task == T)) {
+			C = (char *)(BADDR(DosList->dol_Name));
+			D = &TempDev[0];
+			A = C[0];
+			D[A] = ':';
+			D[A+1] = 0;
+			C++;
+			while (A) {
+				*D++ = *C++;
+				A--;
+			}
+			return(TempDev);
+d267 4
+a270 1
+	return(NULL);
+d330 2
+a331 1
+					if (Valid & VALID_VOLUMES) {
+d333 2
+a334 1
+						if (Name = FindDevTask(DosList->dol_Task)) {
+@
+
+
+2.10
+log
+@Now helps out grazer for file-save requester.
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.9 1994/07/04 18:40:03 CACHELIN4000 Exp pfrench $
+d5 3
+d106 1
+a106 1
+	struct SmartNode *SmartNode,*Next;
+d112 11
+a122 20
+// AAR: changed ifdef _STUF_
+#ifdef JUNIORS_STUF_WORKS
+	if (ListLength(List) > 0) FreeSmartList(List); // also does NewList
+		// !!! if GNode->BitMap, not freed!
+#else
+  if (ListLength(List) > 0)
+  {
+    DEBUGMSG(LIST_DB,"Freeing old 'Smart' List");
+  	SmartNode = (struct SmartNode *)List->lh_Head;
+	  while (Next = (struct SmartNode *)SmartNode->MinNode.mln_Succ)
+    {
+      if( ((struct GrazerNode *)SmartNode)->BitMap)
+        FreeIconBM(((struct GrazerNode *)SmartNode)->BitMap);
+//			PathDevToVol(SmartNode->Name);
+		  FreeSmartNode(SmartNode);
+		  SmartNode=Next;
+	  }
+	  NewList(List);
+    SmartNode = NULL;
+  }
+#endif
+d130 38
+a167 27
+	if (Fib = AllocMem(sizeof(struct FileInfoBlock),MEMF_CLEAR)) {
+	if (Examine(DirLock, Fib)) {
+		if (Fib->fib_DirEntryType < 0) {
+			goto ErrorExit; // make sure not file
+		}
+		OldCD = CurrentDir(DirLock);
+		OldCDValid = TRUE;
+//   	DisplayWaitSprite();
+    DEBUGMSG(LIST_DB,"Ready to Examine dir.");
+		while (ExNext(DirLock,Fib)) {
+			if (IsFileValid(Fib,ValidAttributes)) {
+				if (TempString = AllocSmartString(Fib->fib_FileName,NULL)) {
+					SmartNode = CreateNode(TempString);
+					FreeSmartString(TempString);
+         DEBUGMSG(LIST_DB,"Freed Temp. 'Smart' String.");
+					if (!SmartNode) goto ErrorExit;
+					NodeFIB(SmartNode,Fib,0);
+         DEBUGMSG(LIST_DB,"Got FIB, going for the Image...");
+					LoadNodeImage((struct GrazerNode *)SmartNode);
+
+					AddTail(List,(struct Node *)SmartNode);
+				} else goto ErrorExit;
+			}
+		}
+		Success = TRUE; // assume ERROR_NO_MORE_ENTRIES
+	} // examine
+	} // alloc mem
+d373 1
+a373 1
+					NodeFIB(OldSmartNode,NULL,GetClass(OldSmartNode));
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: FIleList.c,v 2.8 94/06/22 10:46:38 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	FIleList.c,v $
+d134 2
+a135 1
+	if (DirLock = Lock(GetCString(Path),ACCESS_READ)) {
+d164 24
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: FileList.c,v 2.7 94/06/07 15:20:21 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	FileList.c,v $
+d50 1
+a50 1
+//#define SERDEBUG	1
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: FileList.c,v 2.6 94/03/13 07:53:28 Kell Exp Locker: CACHELIN4000 $
+d5 3
+d187 1
+a187 1
+		return(GT_FLOPPY);
+d191 1
+a191 1
+		return(GT_CDROM);
+d193 1
+a193 1
+	return(GT_NORMAL);
+@
+
+
+2.6
+log
+@Change the way debug statements are handled.
+@
+text
+@Binary files FileList.c and t:,RCSt1A70f0d80 differ
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@Binary files filelist.c and t:,RCSt1A70c3330 differ
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@Binary files FileList.c and t:,RCSt1A70d45a8 differ
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: filelist.c,v 2.2 94/03/07 02:48:48 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d51 3
+d109 1
+a109 1
+    DumpMsg("Freeing old 'Smart' List");
+d136 1
+a136 1
+    DumpMsg("Ready to Examine dir.");
+d142 1
+a142 1
+         DumpMsg("Freed Temp. 'Smart' String.");
+d145 1
+a145 1
+         DumpMsg("Got FIB, going for the Image...");
+d398 2
+a399 2
+    DumpStr("Valid File: ");
+    DumpMsg(fib->fib_FileName);
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@Binary files FileList.c and t:,RCSt1A70e85a8 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files FileList.c and t:,RCSt1A70d2be0 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files FileList.c and t:,RCSt1A7195c18 differ
+@

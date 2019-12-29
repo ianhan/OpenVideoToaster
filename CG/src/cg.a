@@ -1,0 +1,1580 @@
+********************************************************************
+* cg.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: cg.a,v 2.1 1995/08/31 15:39:46 Holt Exp $
+*
+* $Log: cg.a,v $
+*Revision 2.1  1995/08/31  15:39:46  Holt
+**** empty log message ***
+*
+*Revision 2.0  1995/08/31  15:06:28  Holt
+*FirstCheckIn
+*
+*
+*
+**********************************************************************
+********************************************************************
+* cg.a
+*
+* Copyright ©1993 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* 1-29-89	Steve H.	Created this file.
+* 5-14-90	Steve H.	Major revision - check for corrupt memory bugs.
+* 9-4-91	Steve H.	Ripped out old copper list stuff
+* 11-22-91	Steve H.	Added buffered indicator to GetFirstLine()
+* 11-29-91	Steve H.	Added NewCurrentPage()
+* 12-21-91	Steve H.	Save last book load/save in gb_BookProject
+* 2-3-92	Steve H.	GetFirstLine() filters out non-printable characters
+* 2-19-93	Steve H.	Added init of new renderer
+* 2-24-93	Steve H.	New temp/text arrays
+* 2-25-93	Steve H.	Close() after Forbid() FGC_UNLOAD bug
+* 6-3-93	Steve H.	Last update
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include "exec/exec.i"
+	include	"intuition/intuition.i"
+	include	"devices/inputevent.i"
+	include "libraries/dos.i"
+	include "hardware/custom.i"
+
+	include "lib/exec_lib.i"
+	include "lib/diskfont_lib.i"
+	include "lib/dos_lib.i"
+	include "lib/graphics_lib.i"
+
+	include	"modular.i"
+	include "data.xref"
+
+	include	"book.i"
+	include "buffer.i"
+	include "bufferedchar.i"
+	include "cgerror.i"
+	include "cgmessage.i"
+	include	"color.i"
+	include "dodebug.i"
+	include "instinct.i"
+	include "palette.i"
+	include "qualifier.i"
+	include "renderline.i"
+	include "rounding.i"
+	include "commonrgb.i"
+	include "serialdebug.i"
+	include "vthand.i"
+	include "vtdebug.i"
+	include "euc.i"
+
+	xref	_FailFontName
+	xref	ToasterRootPath
+
+* define when Ken gets his stuff working
+* (pass whole book firstline array instead of one line)
+LINE_ARRAY equ 1
+
+* require V2.04 or newer versions
+REQUIRE_LIBRARY	equ	36
+REQUIRE_2_1		equ	38
+
+* SERDEBUG	equ	1
+* DO_DEBUG equ 1
+
+FIRST_LEN equ 14
+
+CALLCR	MACRO
+	move.l	a6,-(sp)
+	move.l	_CroutonBase,a6
+	jsr	_LVO\1(a6)
+	move.l	(sp)+,a6
+	ENDM
+
+
+	section	cgcode,code
+*******************************************************************
+* int main(argc, argv)
+*
+* Summary
+*	Main entry point of program
+*	Loads a4 with ptr to GlobalBSS, there throughout program
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL _main
+ XLABEL main
+	movem.l	a4-a6,-(sp)
+	DUMPMSG <main: Entry>
+	bsr		SetupGlobals
+	tst.l	d0
+	beq		.NoCleanupExit
+	DUMPMSG <main: Globals OK>
+	move.l	d0,a4
+	XJSR	SetupPort	; done first so can use switcher for err msgs
+	tst.l	d0
+	beq		.Exit
+	DUMPMSG <main: port OK>
+	move.l	gb_ToasterBase(a4),a5
+	bsr		MainSetup
+	tst.l	d0
+	beq		.Exit
+	XJSR	InitialBufferSetup
+	DUMPMSG <main: Buffer OK>
+	move.l	a4,a0
+	XJSR	_InitRenderer	; new renderer (after SetupPort,MainSetup)
+	DUMPMSG <main: Renderer Back>
+	tst.w	d0
+	beq	.Clean2
+	DUMPMSG <main: Renderer OK>
+ IFND FINAL_CODE
+	cmp.l	#0,a5
+	beq.s	.NoT
+ ENDC
+	move.l	TB_BootLock(a5),gb_ToasterRoot(a4)
+	move.l	TB_Screen(a5),gb_SwitcherScreen(a4)
+	move.l	TB_Window(a5),gb_SwitcherWindow(a4)
+ IFND FINAL_CODE
+	bra.s	.LDone
+.NoT
+	bsr		GetToasterRoot
+	DUMPMSG <main: Got Root>
+.LDone
+ ENDC
+
+* move to Toaster dir, save old lock for exit
+	move.l	gb_ToasterRoot(a4),d1
+	beq	.Clean2
+	move.l	gb_DOSLibrary(a4),a6
+	XSYS	CurrentDir
+	move.l	d0,OrgLock
+
+ IFND HAPPY_PAK
+  XJSR  _InitARexx
+;	tst.w	d0  ; Let ARexx init fail!!!?
+;	beq.s	.CleanAndExit
+ ENDC
+;  XJSR  _InitIff
+;	tst.w	d0
+;	beq.s	.CleanAndExit
+
+	XJSR	_LockFontDir
+	tst.w	d0
+	beq.s	.CleanAndExit
+
+	XJSR	_InitFontRenderers
+	tst.w	d0
+	beq.s	.CleanAndExit
+
+ IFND FINAL_CODE
+	tst.l	gb_ToasterBase(a4)
+	bne.s	.RealSwitcher
+	bsr		NoSwitcherCG
+	bra.s	.FE
+.RealSwitcher
+ ENDC
+
+	DUMPMSG <Enter CG>
+	bsr		CG
+	DUMPMSG <Exited CG>
+.FE
+	XJSR	_FreeFontRenderers
+
+.CleanAndExit
+	move.l	OrgLock,d1
+	XSYS	CurrentDir	; go back to where we came from
+	XJSR	_FreeFontLock
+ IFND HAPPY_PAK
+  XJSR  _CloseARexx
+ ENDC
+.Clean2
+;  XJSR  _CloseIff
+	move.l	a4,a0
+	XJSR	_FreeRenderer
+.Exit
+	bsr		MainCleanup
+
+.NoCleanupExit
+	DUMPMSG <main: Bailing Dude!!!>
+
+	moveq.l	#0,d0
+	movem.l	(sp)+,a4-a6
+	rts
+
+	bra.s	.Skip
+	dc.b	23,12,13,15
+	dc.b	1,200,127,142
+.Skip
+	rts
+
+*******************************************************************
+* struct GlobalBSS *SetupGlobals()
+*  d0
+*
+* Upon Exit:
+*	d0 pointer to GlobalBSS structure, or NULL
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+SetupGlobals
+	DUMPMSG <SetupGlobals: Entry >
+	move.l	a6,-(sp)
+	move.l	(_AbsExecBase).w,a6
+	bsr		ForceMemoryCleanup
+
+	move.l	#gb_SizeOf,d0
+	move.l	#MEMF_CLEAR,d1
+	XSYS	AllocMem
+	lea.l	GlobalData,a0
+	move.l	d0,(a0)				; store ptr to BSS in DATA
+	beq.s	.Exit
+	DUMPMSG <SetupGlobals: Alloc OK >
+	move.l	d0,a1
+	move.l	a0,gb_GlobalData(a1) ; store ptr to DATA in BSS
+	move.l	a6,gb_ExecLibrary(a1)
+
+.Exit
+	move.l	(sp)+,a6
+	rts
+
+*******************************************************************
+* BOOL MainSetup()
+*                 
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+MainSetup
+	movem.l	d7/a3/a6,-(sp)
+	move.l	gb_ExecLibrary(a4),a6
+	move.l	a6,_SysBase
+	move.l	gb_GlobalData(a4),a3
+
+	clr.b	gb_AAChips(a4)
+	clr.b	gb_AACode(a4)
+ IFND FINAL_CODE
+	cmp.l	#0,a5
+	bne.s	.TTT
+	move.w	_custom+deniseid,d0
+	btst	#2,d0
+	bne.s	.AD
+	move.b	#TRUE,gb_AAChips(a4)
+	bra.s	.AD
+.TTT
+ ENDC
+	move.b	TB_Flags2(a5),d0
+	btst	#AACHIPS_BIT,d0
+	beq.s	.Cl
+	move.b	#TRUE,gb_AAChips(a4)
+.Cl
+	btst	#ECSFETCH_BIT,d0
+	bne.s	.Cl2
+	move.b	#TRUE,gb_AACode(a4)
+.Cl2
+.AD
+
+	moveq.l	#CG_ERROR_GRAPHICS_LIBRARY,d7
+	lea.l	gd_GraphicsName(a3),a1
+	moveq.l	#REQUIRE_LIBRARY,d0
+	XSYS	OpenLibrary
+	move.l	d0,gb_GraphicsLibrary(a4)
+	beq		.Exit
+	move.l	d0,_GfxBase
+
+	moveq.l	#CG_ERROR_INTUITION_LIBRARY,d7
+	lea.l	gd_IntuitionName(a3),a1
+	moveq.l	#REQUIRE_LIBRARY,d0
+	XSYS	OpenLibrary
+	move.l	d0,gb_IntuitionLibrary(a4)
+	beq		.Exit
+	move.l	d0,_IntuitionBase
+
+	moveq.l	#CG_ERROR_DISK_FONT_LIBRARY,d7
+	lea.l	gd_DiskFontName(a3),a1
+	moveq.l	#REQUIRE_LIBRARY,d0
+	XSYS	OpenLibrary
+	move.l	d0,gb_DiskFontLibrary(a4)
+	move.l	d0,_DiskfontBase
+	beq		.Exit
+
+	moveq.l	#CG_ERROR_DOS_LIBRARY,d7
+	lea.l	gd_DOSName(a3),a1
+	moveq.l	#REQUIRE_LIBRARY,d0
+	XSYS	OpenLibrary
+	move.l	d0,gb_DOSLibrary(a4)
+	beq		.Exit
+	move.l	d0,_DOSBase
+
+	lea.l	gd_MyLayersName(a3),a1
+	moveq.l	#REQUIRE_LIBRARY,d0
+	XSYS	OpenLibrary
+	move.l	d0,_LayersBase
+	beq	.Exit
+
+	DUMPMSG <Get Crouton.library>
+	lea.l	gd_CroutonName(a3),a1
+	moveq.l	#0,d0  ; Any version will do.
+	XSYS	OpenLibrary
+	move.l	d0,_CroutonBase
+	beq	.Exit
+
+	DUMPMSG <Get iff.library>
+	XJSR  _InitIff
+	tst.w	d0
+	beq	.Exit
+
+* setup InputEvent struct for call to RawKeyConvert()
+	moveq.l	#CG_ERROR_CONSOLE_DEVICE,d7
+	lea.l	gd_ConsoleName(a3),a0
+	moveq.l	#-1,d0
+	lea.l	gb_ConsoleReq(a4),a1
+	clr.l	MN_REPLYPORT(a1)
+	moveq.l	#0,d1
+	XSYS	OpenDevice
+	tst.l	d0
+	beq.s	.GotConsole ; let's be different, non-zero means error here
+	moveq.l	#FALSE,d0	; return code
+	bra	.Exit
+
+.GotConsole
+	lea.l	gb_ConsoleReq(a4),a0
+	move.l	IO_DEVICE(a0),gb_ConsoleDevice(a4)
+	move.l	IO_DEVICE(a0),_ConsoleDevice
+	bsr		InitDefaults
+
+	moveq.l	#CG_ERROR_INTERFACE_FONT,d7
+	move.l	gb_DiskFontLibrary(a4),a6
+	lea.l	gd_InterfaceFontTA(a3),a0
+	XSYS	OpenDiskFont
+	move.l	d0,gb_InterfaceFont(a4)
+	beq.s	.Exit
+	move.l	d0,_InterfaceFont
+* OS tries to return best match
+	move.l	d0,a1
+	moveq.l	#FALSE,d0	; return code
+	cmp.w	#INTERFACE_FONT_HEIGHT,tf_YSize(a1)
+	bne.s	.Exit
+
+	move.l	#PAGES_PER_BOOK*FIRST_LEN,d0
+	move.l	#MEMF_CLEAR,d1
+	move.l	gb_ExecLibrary(a4),a6
+	XSYS	AllocMem
+	move.l	d0,gb_FirstLines(a4)
+	beq.s	.Exit
+
+	DUMPMSG <Build gadget array>
+	XJSR	_BuildGadgetArray
+
+.TrueExit
+	moveq.l	#CG_ERROR_NONE,d7
+	moveq.l	#TRUE,d0	; success
+
+.Exit
+	tst.l	d7
+	beq.s	.RealExit
+	DUMPMSG <FAIL!>
+	move.l	d7,gb_LastError(a4)
+
+.RealExit
+	movem.l	(sp)+,d7/a3/a6
+	rts
+
+*******************************************************************
+* VOID MainCleanup()
+*
+* Summary
+*	done just before program exit
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+MainCleanup
+	movem.l	a2/a6,-(sp)
+	move.l	gb_ExecLibrary(a4),a6
+
+* if switcher screen up, display wait pointer
+* (EUC fonts may take a long time to free)
+	move.l	gb_ToasterBase(a4),a5
+	move.l	a5,d0
+	beq.s	.NoT
+	CALLTL	DisplayWaitSprite
+.NoT
+
+	move.l	gb_FirstLines(a4),d0
+	beq.s	.NoFL
+	move.l	d0,a1
+	move.l	#PAGES_PER_BOOK*FIRST_LEN,d0
+	XSYS	FreeMem
+.NoFL
+
+	move.l	gb_CurrentBook(a4),d0
+	beq.s	10$
+	move.l	d0,a0
+	XJSR	_FreeBook
+10$
+
+* put the normal sprite back before we Forbid()
+	move.l	a5,d0
+	beq.s	.NoT2
+	CALLTL	DisplayNormalSprite
+.NoT2
+
+* this code only does anything if failed during startup
+	tst.l	gb_HoldMessage(a4)
+	beq.s	.HoldDone
+	move.l	gb_LastError(a4),d0
+	bne.s	.DoRelease
+	moveq.l	#CG_ERROR_INITIALIZE,d0
+.DoRelease
+	XSYS	Forbid	; so I'm not dumped before I'm finished
+	bsr		ReleaseHoldMessage ; unsuccessful reply to FGC_LOAD
+.HoldDone
+
+* now do cleanup
+	tst.b	gb_CGPortOn(a4)
+	beq.s	.PortGone
+	lea.l	gb_MyPort(a4),a1
+	XSYS	RemPort
+.PortGone
+
+* this code happens during normal FGC_UNLOADs
+	move.l	UnloadMsg,d0
+	beq.s	.NotUnload
+	XSYS	Forbid	; be careful not to break this from this point on
+	move.l	d0,a1
+	XSYS	ReplyMsg
+.NotUnload
+
+	move.l	gb_GraphicsLibrary(a4),a6
+	move.l	gb_InterfaceFont(a4),d0
+	beq.s	30$
+	move.l	d0,a1
+	XSYS	CloseFont
+30$
+
+	XJSR _FreeGadgetImagery
+	DUMPMSG <mainCleanup: GadgetImagery Freed>
+
+  XJSR  _CloseIff
+	DUMPMSG <mainCleanup: IFF Closed>
+
+	move.l	gb_ExecLibrary(a4),a6
+	tst.l	gb_ConsoleDevice(a4)
+	beq.s	31$
+	lea.l	gb_ConsoleReq(a4),a1
+	XSYS	CloseDevice
+31$
+	move.l	_LayersBase,d0
+	beq.s	.NoLy
+	move.l	d0,a1
+	XSYS	CloseLibrary
+.NoLy
+	move.l	gb_DOSLibrary(a4),d0
+	beq.s	32$
+	move.l	d0,a1
+	XSYS	CloseLibrary
+32$
+	move.l	gb_DiskFontLibrary(a4),d0
+	beq.s	34$
+	move.l	d0,a1
+	XSYS	CloseLibrary
+34$
+	move.l	gb_IntuitionLibrary(a4),d0
+	beq.s	36$
+	move.l	d0,a1
+	XSYS	CloseLibrary
+36$
+	move.l	gb_GraphicsLibrary(a4),d0
+	beq.s	38$
+	move.l	d0,a1
+	XSYS	CloseLibrary
+38$
+	move.l	_CroutonBase,d0
+	beq.s	39$
+	move.l	d0,a1
+	XSYS	CloseLibrary
+39$
+	DUMPMSG <mainCleanup: Libraries Closed>
+
+* finally, release globals
+	move.l	a4,a1
+	move.l	#gb_SizeOf,d0
+	XSYS	FreeMem
+	DUMPMSG <mainCleanup: Globals Freed>
+
+	bsr.s	ForceMemoryCleanup
+	movem.l	(sp)+,a2/a6
+	rts
+
+*******************************************************************
+* VOID ForceMemoryCleanup(struct Library *ExecLibrary)
+*                                      a6
+* Summary
+*	forces exec to do a memory cleanup
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ForceMemoryCleanup
+ IFD ASDFG
+	move.l	#7000000000,d0
+	moveq.l	#0,d1
+	XSYS	AllocMem
+	tst.l	d0
+	beq.s	.Exit
+	move.l	d0,a1
+	move.l	#7000000000,d0
+	XSYS	FreeMem
+.Exit
+ ENDC
+	rts
+
+*******************************************************************
+* VOID InitDefaults()
+*
+* Summary
+*	sets up defaults in GlobalBSS, including DefaultLine,colors,etc.
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ CLABEL InitDefaults
+* setup default line
+	move.b	#JUSTIFY_CENTER,gb_DefaultLine+line_JustifyMode(a4)
+	move.b	#LINE_TEXT,gb_DefaultLine+line_Type(a4)
+
+	move.l	#DEFAULT_FACE_COLOR,gb_DefaultAttr+attr_FaceColor(a4)
+	move.l	#DEFAULT_SHADOW_COLOR,gb_DefaultAttr+attr_ShadowColor(a4)
+	move.l	#DEFAULT_OUTLINE_COLOR,gb_DefaultAttr+attr_OutlineColor(a4)
+	move.l	#DEFAULT_GRAD_COLOR,gb_DefaultAttr+attr_GradColor(a4)
+	move.l	#DEFAULT_OGRAD_COLOR,gb_DefaultAttr+attr_OGradColor(a4)
+	move.l	#DEFAULT_FILL,gb_DefaultAttr+attr_SpecialFill(a4)
+	clr.w	gb_DefaultAttr+attr_ID(a4)
+	clr.w	gb_LastDefaultFont(a4)
+	move.w	#MIN_SHADOW_LENGTH+SHADOW_INCREMENT,gb_DefaultAttr+attr_ShadowLength(a4)
+	move.b	#SHADOW_CAST,gb_DefaultAttr+attr_ShadowType(a4)
+	move.b	#2,gb_DefaultAttr+attr_OutlineType(a4)
+	move.b	#DIRECTION_NW,gb_DefaultAttr+attr_ShadowDirection(a4)
+	clr.b	gb_DefaultAttr+attr_ShadowPriority(a4)
+
+	move.b	#DEFAULT_KERN,gb_Kerning(a4)
+	rts
+
+ IFND FINAL_CODE
+*******************************************************************
+* VOID NoSwitcherCG()
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+NoSwitcherCG
+	move.b	#TRUE,gb_InterfaceVisible(a4) ; switcher screen up
+
+* initialize a new, empty book
+	XJSR	InitMouseButtons
+	move.w	#MASK_INTERFACE_ON,gb_State(a4) ; we are in edit mode
+
+	XJSR	GetDefaultBook
+	tst.l	d0
+	beq		.Exit
+
+	bsr		FakeOpenShared
+	move.l	d0,gb_CommonRGBA(a4)
+	bsr		FakeRGBData
+	XJSR	InitEditSession
+
+	move.l	gb_CurrentBook(a4),a0
+	XJSR	_InitBookPages
+
+
+	XJSR	OpenInterface
+	moveq.l	#BAR_NORMAL,d0	
+	XJSR	_TemplateOn			; open menu bar
+	XJSR	_OpenCGLayers
+	tst.w	d0
+	beq.s	.Exit
+
+;	XJSR	_DisplayNumVal
+
+;	lea.l	Test,a0
+;	move.l	gb_CurrentBook(a4),a1
+;	XJSR	_DoLoadBook
+;	move.l	gb_CurrentBook(a4),a0
+;	XJSR	_InitBookPages
+
+ IFD SUPPORT_EUC
+	move.l	gb_CurrentBook(a4),a0
+	XJSR	AddEUCBook	; after initbookpages
+ ENDC
+
+	clr.b	gb_ToasterClean(a4)
+	XJSR	NewEditPage			; now can render page
+	XJSR	_RenderCursor
+	XJSR	_DoStartupMacro
+
+	XJSR	_DoCG
+
+;	XJSR	_FreeNumVal
+
+
+	XJSR	_CloseCGLayers
+	XJSR	_ExitEditSession
+	XJSR	CloseInterface
+
+	bsr.s	FakeCloseShared
+	bsr		FreeToasterRoot
+.Exit
+	rts
+
+*************
+FakeOpenShared
+	movem.l	d2/a2/a6,-(sp)
+	move.l	(_AbsExecBase).w,a6
+
+	lea.l	FakePicture,a0
+	move.w	#CommonBufferWidth,PIC_RGB+bym_BytesPerRow(a0)
+	move.w	#CommonBufferHeight,PIC_RGB+bym_Rows(a0)
+	move.b	#3,PIC_RGB+bym_Depth(a0)
+	lea.l	PIC_RGB+bym_REDBuffer(a0),a2
+	moveq.l	#3-1,d2
+
+.NextPlane
+	move.l	#CommonBufferWidth*CommonBufferHeight,d0
+	move.l	#MEMF_CLEAR,d1
+	XSYS	AllocMem
+	move.l	d0,(a2)+
+	dbra	d2,.NextPlane
+
+	lea.l	FakePicture,a0
+	move.l	a0,d0
+
+	movem.l	(sp)+,d2/a2/a6
+	rts
+
+*************
+FakeCloseShared
+	movem.l	d2/a2/a6,-(sp)
+	move.l	(_AbsExecBase).w,a6
+	lea.l	FakePicture,a2
+	lea.l	PIC_RGB+bym_REDBuffer(a2),a2
+	moveq.l	#3-1,d2
+
+.NextPlane
+	move.l	#CommonBufferWidth*CommonBufferHeight,d0
+	move.l	(a2)+,d1
+	beq.s	.Done
+	move.l	d1,a1
+	XSYS	FreeMem
+	dbra	d2,.NextPlane
+.Done
+
+	movem.l	(sp)+,d2/a2/a6
+	rts
+
+FakePicture
+	dcb.b	Picture_SIZEOF,0
+
+*************
+FakeRGBData
+	movem.l	a2-a3,-(sp)
+	move.l	gb_CommonRGBA(a4),d0
+	beq.s	.Exit
+	move.l	d0,a0
+	lea.l	PIC_RGB+bym_REDBuffer(a0),a0
+
+	move.l	(a0)+,a1	; red
+	add.l	#752*100,a1
+	move.l	(a0)+,a2	; green
+	add.l	#752*200,a2
+	move.l	(a0)+,a3	; blue
+	add.l	#752*300,a3
+
+	move.l	#(752*100),d0
+.Next
+	move.b	#$80,(a1)+
+	move.b	#$80,(a2)+
+	move.b	#$80,(a3)+
+	sub.l	#1,d0	
+	bne.s	.Next
+.Exit
+	movem.l	(sp)+,a2-a3
+	rts
+
+*************
+GetToasterRoot
+	movem.l	d2-d3/a6,-(sp)
+
+	move.l	#ToasterRootPath,d1
+	move.l	#ACCESS_READ,d2
+	move.l	gb_DOSLibrary(a4),a6
+	XSYS	Lock
+	move.l	d0,gb_ToasterRoot(a4)
+
+.Exit
+	movem.l	(sp)+,d2-d3/a6
+	rts
+
+***************
+FreeToasterRoot
+	movem.l	d2-d3/a6,-(sp)
+	move.l	gb_DOSLibrary(a4),a6
+
+	move.l	gb_ToasterRoot(a4),d1
+	beq.s	.NoLock
+	XSYS	UnLock
+	clr.l	gb_ToasterRoot(a4)
+.NoLock
+	movem.l	(sp)+,d2-d3/a6
+	rts
+
+ ENDC
+
+*******************************************************************
+* VOID ReleaseHoldMessage(ULONG ErrorStatus);
+*                                 d0
+* Summary
+*	replies to held FGC_LOAD message, if ever gotten
+*	ErrorStatus from CGError.i
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ReleaseHoldMessage
+	DUMPMSG <Got Message>
+	move.l	a6,-(sp)
+	move.l	gb_HoldMessage(a4),d1
+	beq.s	.Exit
+	move.l	d1,a1
+	move.l	d0,tm_CGReply(a1)	; return error status
+	move.l	gb_ExecLibrary(a4),a6
+	XSYS	ReplyMsg
+	DUMPMSG <Replied Message>
+	clr.l	gb_HoldMessage(a4)
+.Exit
+	move.l	(sp)+,a6
+	rts
+
+*******************************************************************
+* VOID CG()
+*
+* Summary
+*	takes messages from switcher, processes them
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+CG
+	movem.l	d2-d4/a2-a6,-(sp)
+	move.l	gb_ToasterBase(a4),a5
+	move.l	gb_ExecLibrary(a4),a6
+	DUMPMSG <CG() entered>
+
+ IFD DO_DEBUG
+	lea.l	MsgA,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	moveq.l	#CG_ERROR_NONE,d0
+	bsr	ReleaseHoldMessage ; successful reply to FGC_LOAD
+	DUMPMSG <Load Returned>
+
+	moveq.l	#0,d0	; Buffer Number
+	CALLTL	OpenCommonRGB
+	move.l	d0,gb_CommonRGBA(a4) ; might be NULL, we can handle this
+
+**************************************
+* while we are still running this task, listen to the switcher
+.WaitLoop
+	lea.l	gb_MyPort(a4),a0
+	XSYS	WaitPort
+
+.GetMsgLoop
+	DUMPMSG <Got Signal>
+	lea.l	gb_MyPort(a4),a0
+	XSYS	GetMsg
+	tst.l	d0
+	beq.s	.WaitLoop
+
+	move.l	d0,a2
+	move.l	tm_FGC_Command(a2),d3
+	XJSR	InitMouseButtons
+
+**************************************
+* case FGC_SELECT:
+	cmp.l	#FGC_SELECT,d3
+	bne		30$
+
+ IFD DO_DEBUG
+	lea.l	Msg1,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.b	gb_InterfaceVisible(a4) ; no requesters
+
+* tm_FastGadget examined by CGSliceCode to see if shift-esc was pressed,
+* in which case CG is dumped with an FGC_UNLOAD
+	clr.l	tm_FastGadget(a2)	; dump CG?
+	XJSR	InitEditSession
+	tst.l	gb_CurrentBook(a4)
+	bne.s	.DoSelect
+
+*************************
+* if no book loaded, try to get default one now
+ IFD DO_DEBUG
+	lea.l	M10,a0
+	bsr		PrintRegDebug
+ ENDC
+	clr.w	gb_BookProject(a4)
+	XJSR	GetDefaultBook
+	tst.l	d0
+	bne.s	.InitNew
+ IFD DO_DEBUG
+	lea.l	M11,a0
+	bsr		PrintRegDebug
+ ENDC
+
+* if unable to get default book, dump CG
+.DumpCG
+	move.l	gb_LastError(a4),d0 ; be descriptive where possible
+	bne.s	.GotDescription
+	moveq.l	#CG_ERROR_LOAD_BOOK,d0
+.GotDescription
+	or.l	#FATAL,d0
+	move.l	d0,tm_CGReply(a2)
+	bra		.ReplyAndContinue
+
+*************************
+.InitNew
+ IFD DO_DEBUG
+	lea.l	M12,a0
+	bsr		PrintRegDebug
+ ENDC
+	move.l	gb_CurrentBook(a4),a0
+	XJSR	_InitBookPages
+
+.DoSelect
+	clr.l	gb_StatusMessage(a4)
+	lea.l	TB_SliceFGL(a5),a0
+	moveq.l	#CGSLICEID,d0
+	CALLTL	IndexFastG
+	cmp.l	TB_FGTarget(a5),d0	; is keypad going to CG?
+	bne.s	.ZeroPage			; if not, call up zero page
+
+	move.w	TB_Number(a5),d0
+	bsr		.SetupCurrentPage	; page zero always there
+	bra.s	.GotPage
+
+.ZeroPage
+	moveq.l	#0,d0
+	bsr		.SetupCurrentPage
+
+.GotPage
+	move.w	tm_CGState(a2),d0
+	or.w	#MASK_INTERFACE_ON,d0
+	and.w	#~(MASK_DIB_READY|MASK_EFFECT_READY|MASK_READY),d0
+	move.w	d0,gb_State(a4)
+
+* try to open CommonRGB if not already open
+	move.l	gb_CommonRGBA(a4),d0	; already open?
+	bne.s	.GotIt
+	moveq.l	#0,d0	; Buffer Number
+	CALLTL	OpenCommonRGB
+	move.l	d0,gb_CommonRGBA(a4)
+	beq.s	.RGBDone
+.GotIt
+ IFD DO_DEBUG
+	lea.l	M13,a0
+	bsr		PrintRegDebug
+ ENDC
+	move.l	d0,a0
+	CALLTL	LockCommonRGB
+	tst.l	d0
+	beq.s	.RGBDone	; zero means no err
+	move.l	gb_CommonRGBA(a4),a0
+	CALLTL	CloseCommonRGB
+	clr.l	gb_CommonRGBA(a4)	; unable to Lock RGB structure
+.RGBDone
+	XJSR	OpenInterface		; opens window,interface
+	tst.l	d0
+	beq		.SelectDone
+ IFD DO_DEBUG
+	lea.l	M14,a0
+	bsr		PrintRegDebug
+ ENDC
+	moveq.l	#BAR_NORMAL,d0
+	XJSR	_TemplateOn			; open menu bar
+	tst.w	d0
+	beq		.SelectDone
+ IFD DO_DEBUG
+	lea.l	M15,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	XJSR	InitializeToaster	; puts interface onscreen
+	move.l	gb_InterfaceScreen(a4),a0
+	CALLTL	SoftSpriteOnScreen
+	move.b	#TRUE,gb_InterfaceVisible(a4)
+
+	XJSR	_OpenCGLayers		; open layers which use switcher memory
+	tst.w	d0
+	beq.s	.SSGone
+ IFD DO_DEBUG
+	lea.l	M16,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.b	gb_ToasterClean(a4)
+	XJSR	NewEditPage			; now can render page
+	XJSR	_InitFSPath
+	XJSR	_RenderCursor
+	XJSR	_DoStartupMacro
+
+	XJSR	_DoCG
+	DUMPMSG <After _DoCG>
+
+.SSGone
+	CALLTL	SoftSpriteOff
+.Gone
+	XJSR	_CloseCGLayers
+	DUMPMSG <Before FreeToaster (with $500 minimum deposit)>
+	XJSR	FreeToaster			; puts switcher onscreen
+	clr.b	gb_InterfaceVisible(a4)
+
+	DUMPMSG <Before ExitEditSession>
+	XJSR	_ExitEditSession	; close menu bar
+	XJSR	CloseInterface		; close interface
+
+	move.w	gb_State(a4),d0
+	btst.l	#BIT_DIB_READY,d0
+
+;; Comment out below AC Dec 28 1994
+;;	beq.s	.NoR
+;;	XJSR	_SetupSwKey
+.NoR
+
+.SelectDone
+ IFD DO_DEBUG
+	lea.l	M17,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	move.l	gb_CommonRGBA(a4),d0
+	beq.s	.RGBDone1
+	move.l	d0,a0
+	CALLTL	UnlockCommonRGB	; don't close until FGC_UNLOAD
+.RGBDone1
+
+	move.w	gb_State(a4),tm_CGState(a2)
+
+ IFD DO_DEBUG
+	lea.l	RetMsg,a0
+	bsr		PrintRegDebug
+ ENDC
+	clr.l	tm_CGReply(a2)	; no errors
+
+* if shift key pressed, tell switcher to dump CG
+;	move.b	gb_Qualifier(a4),d0
+;	cmp.b	#QUALIFIER_SHIFT,d0
+;	bne.s	.ReplyAndContinue
+;	moveq.l	#-1,d0
+;	move.l	d0,tm_FastGadget(a2)	; dump CG
+
+**************************************
+.ReplyAndContinue
+	DUMPMSG <About to Reply>
+	move.l	a2,a1
+	XSYS	ReplyMsg
+	DUMPMSG <Replied>
+	bra		.GetMsgLoop
+
+**************************************
+.SetupCurrentPage
+	move.w	d0,gb_PageNumber(a4)
+	cmp.w	#PAGES_PER_BOOK,d0
+	bge.s	.ReturnZeroPage
+	XJSR	NewCurrentPage
+	move.l	gb_CurrentPage(a4),d0
+	rts
+
+.ReturnZeroPage
+	clr.w	gb_PageNumber(a4)
+	XJSR	NewCurrentPage
+	moveq.l	#FALSE,d0
+	rts
+
+**************************************
+* switcher softsprite OFF upon entry
+*
+* case FGC_NUMVAL:
+30$
+	cmp.l	#FGC_NUMVAL,d3
+	bne		.CheckPrivateKey
+ IFD DO_DEBUG
+	lea.l	Msg2,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.b	gb_InterfaceVisible(a4)
+	clr.l	tm_CGReply(a2)		; no errors
+	tst.l	gb_CurrentBook(a4)	; fails if no book ever loaded
+	beq	.ReplyAndContinue
+
+	move.w	TB_Number(a5),d0
+	bsr.s	.SetupCurrentPage
+	tst.l	d0
+	beq		.ReplyAndContinue
+
+	move.w	tm_CGState(a2),gb_State(a4)
+
+ IFD SERDEBUG
+	move.w	gb_State(a4),d0
+	DUMPREG	<NUMVAL d0 State Entry>
+ ENDC
+
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+
+	move.l	gb_CurrentPage(a4),a0
+	cmp.b	#BACKGROUND_RGB_BUFFER,page_Background(a0)
+	bne.s	.NoRGB
+
+* try to open CommonRGB if not already open
+	move.l	gb_CommonRGBA(a4),d0	; already open?
+	bne.s	.GotIt2
+	moveq.l	#0,d0	; Buffer Number
+	CALLTL	OpenCommonRGB
+	move.l	d0,gb_CommonRGBA(a4)
+	beq.s	.RGBDone2
+.GotIt2
+	move.l	d0,a0
+	CALLTL	LockCommonRGB
+	tst.l	d0
+	beq.s	.RGBDone2	; zero means no err
+	move.l	gb_CommonRGBA(a4),a0
+	CALLTL	CloseCommonRGB
+	clr.l	gb_CommonRGBA(a4)	; unable to Lock RGB structure
+.RGBDone2
+.NoRGB
+
+;	XJSR	OpenDisplay	; opens interface screen for displaying message
+;	XJSR	_DisplayNumVal
+;	or.w	#MASK_INTERFACE_ON,gb_State(a4) ; fake to display it
+
+	XJSR	InitializeToaster	; if STATIC/BUFFER, remove switcher interface
+
+;	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+
+	moveq.l	#FALSE,d2	; skip layers?
+	move.l	gb_CurrentPage(a4),a0
+	move.b	page_Type(a0),d0
+	cmp.b	#PAGE_STATIC,d0
+	beq.s	.Layer
+	cmp.b	#PAGE_BUFFER,d0
+	bne.s	.NoL
+.Layer
+	moveq.l	#TRUE,d2
+	XJSR	_OpenCGLayers		; so these layers can open
+	tst.w	d0
+	beq.s	.Gone2
+.NoL
+	XJSR	RenderSwitcherPage
+
+	tst.w	d2
+	beq.s	.NoL2
+.Gone2
+	XJSR	_CloseCGLayers
+.NoL2
+	DUMPMSG <FreeToasterEntry>
+	XJSR	FreeToaster
+	DUMPMSG <FreeToasterDone>
+.Goned3
+
+;	XJSR	_FreeNumVal
+;	XJSR	CloseDisplay
+
+	move.w	gb_State(a4),tm_CGState(a2)
+
+	move.l	gb_CommonRGBA(a4),d0
+	beq.s	.RGBDone3
+	move.l	d0,a0
+	CALLTL	UnlockCommonRGB	; don't close until FGC_UNLOAD
+.RGBDone3
+	DUMPMSG <EndRSP4>
+
+ IFD DO_DEBUG
+	lea.l	RetMsg,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_FLIP_TO_DIB
+.CheckPrivateKey
+	cmp.l	#FGC_FLIP_TO_DIB,d3
+	bne.s	.CheckPrivateEffect
+ IFD DO_DEBUG
+	lea.l	Msg3,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.l	tm_CGReply(a2)		; no errors
+	tst.l	gb_CurrentBook(a4)	; should never fail
+	beq		.ReplyAndContinue
+
+	move.w	tm_CGState(a2),gb_State(a4)
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+	XJSR	SwitcherFlipToKey
+	move.w	gb_State(a4),tm_CGState(a2)
+
+ IFD SERDEBUG
+	move.w	gb_State(a4),d0
+	DUMPREG	<FLIP_TO_DIB Exit d0>
+ ENDC
+
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_DO_EFFECT
+.CheckPrivateEffect
+	cmp.l	#FGC_DO_EFFECT,d3
+	bne.s	.CheckAuto
+ IFD DO_DEBUG
+	lea.l	Msg4,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.l	tm_CGReply(a2)		; no errors
+	tst.l	gb_CurrentBook(a4)	; should never fail
+	beq		.ReplyAndContinue
+
+	move.w	tm_CGState(a2),gb_State(a4)
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+	XJSR	SwitcherDoEffect ; layers opened in InitToasterScroll()
+	move.w	gb_State(a4),tm_CGState(a2)
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_DO_AUTO_FADE
+.CheckAuto
+	cmp.l	#FGC_DO_AUTO_FADE,d3
+	bne		.CheckLoadBook
+ IFD DO_DEBUG
+	lea.l	Msg5,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.l	tm_CGReply(a2)		; no errors
+	tst.l	gb_CurrentBook(a4)	; should never fail
+	beq		.ReplyAndContinue
+
+	move.w	tm_CGState(a2),gb_State(a4)
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+
+	XJSR	SwitcherAutoFade
+	move.w	gb_State(a4),tm_CGState(a2)
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_LOAD_BOOK   ;;  !!!DUMMIED OUT AHC Fri Dec  9 20:19:33 1994
+
+
+	bra  	.ReplyAndContinue  ;; BYE BYE ... AC 12/9
+
+
+.CheckLoadBook
+	cmp.l	#FGC_LOAD_BOOK,d3
+	bne		.CheckSaveBook
+ IFD DO_DEBUG
+	lea.l	Msg6,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	move.b	#TRUE,gb_InterfaceVisible(a4) ; switcher screen up
+	clr.l	tm_CGReply(a2)	; no errors
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+
+	move.l	gb_DOSLibrary(a4),a6
+	move.l	tm_DirLock(a2),d1
+	XSYS	CurrentDir
+	move.l	gb_ExecLibrary(a4),a6
+
+ IFD DO_DEBUG
+	lea.l	Msg11,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.l	gb_LastError(a4) ; clear any previous error
+	move.w	TB_ProjectNumber(a5),gb_BookProject(a4)
+
+	move.l	tm_FileName(a2),a0
+	move.l	gb_CurrentBook(a4),a1	; old book
+	XJSR	_DoLoadBook
+
+* font name only used if CG_ERROR_FIND_FONT,CG_ERROR_LOAD_FONT
+	move.l	gb_LastError(a4),tm_CGReply(a2)
+	lea.l	_FailFontName,a0
+	move.l	a0,tm_FastGadget(a2) ; return font name
+
+	tst.l	d0
+	bne.s	.InitNewBook
+
+****************
+* if unable to load book, get default one
+
+ IFD DO_DEBUG
+	lea.l	Msg13,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	clr.w	gb_BookProject(a4)
+	XJSR	GetDefaultBook
+	tst.l	d0
+	bne.s	.InitNewBook
+
+ IFD DO_DEBUG
+	lea.l	Msg14,a0
+	bsr		PrintRegDebug
+ ENDC
+
+* if unable to get default book, dump CG
+	move.l	gb_LastError(a4),d0 ; be descriptive where possible
+	bne.s	.GotDescription2
+	moveq.l	#CG_ERROR_LOAD_BOOK,d0
+.GotDescription2
+	or.l	#FATAL,d0
+	move.l	d0,tm_CGReply(a2)
+	clr.b	gb_InterfaceVisible(a4)
+
+	bra		.ReplyAndContinue
+
+****************
+.InitNewBook
+ IFD DO_DEBUG
+	lea.l	Msg12,a0
+	bsr		PrintRegDebug
+ ENDC
+	XJSR	InitEditSession
+	move.l	gb_CurrentBook(a4),a0
+	XJSR	_InitBookPages
+
+ IFD SUPPORT_EUC
+	move.l	gb_CurrentBook(a4),a0
+	XJSR	AddEUCBook	; after initbookpages
+ ENDC
+	clr.b	gb_InterfaceVisible(a4)
+	bra  	.ReplyAndContinue
+
+**************************************
+* FGC_SAVE_BOOK   ;;  !!!DUMMIED OUT AHC Fri Dec  9 20:19:33 1994
+.CheckSaveBook
+
+
+	beq.s	.SaveGood			; just return success, ONLY SAVE FROM CG .. AC 12/9
+
+
+	cmp.l	#FGC_SAVE_BOOK,d3
+	bne.s	.CheckFirstLine
+ IFD DO_DEBUG
+	lea.l	Msg7,a0
+	bsr		PrintRegDebug
+ ENDC
+
+	move.b	#TRUE,gb_InterfaceVisible(a4) ; switcher screen up
+	clr.l	tm_CGReply(a2)	; no errors
+	and.w	#~MASK_INTERFACE_ON,gb_State(a4) ; we are in page mode
+
+	move.l	gb_DOSLibrary(a4),a6
+	move.l	tm_DirLock(a2),d1
+	XSYS	CurrentDir
+	move.l	gb_ExecLibrary(a4),a6
+
+	move.l	gb_CurrentBook(a4),d0
+	beq.s	.SaveGood			; if no book, just return success
+	move.l	d0,a1				; book
+	move.l	tm_FileName(a2),a0
+	XJSR	_SaveBook
+	tst.l	d0
+	beq.s	.SaveFailed
+.SaveGood
+	move.w	TB_ProjectNumber(a5),gb_BookProject(a4)
+	clr.l	tm_CGReply(a2)		; save is good
+	clr.b	gb_InterfaceVisible(a4)
+	bra		.ReplyAndContinue
+
+.SaveFailed
+	move.l	#CG_ERROR_SAVE_BOOK,tm_CGReply(a2)
+	clr.b	gb_InterfaceVisible(a4)
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_GET_FIRST_LINE
+.CheckFirstLine
+	cmp.l	#FGC_GET_FIRST_LINE,d3
+	bne.s	.CheckUnload
+
+ IFD DO_DEBUG
+	lea.l	Msg10,a0
+	bsr		PrintRegDebug
+ ENDC
+
+ IFND LINE_ARRAY
+	move.l	tm_UserData(a2),d0	; page number
+	bsr.s	GetFirstLine
+ ENDC
+
+ IFD LINE_ARRAY
+	move.l	gb_FirstLines(a4),a0
+	XJSR	_BuildFirstLines
+	move.l	gb_FirstLines(a4),d0
+ ENDC
+
+	move.l	d0,tm_CGReply(a2)
+	bra		.ReplyAndContinue
+
+**************************************
+* FGC_UNLOAD
+.CheckUnload
+	cmp.l	#FGC_UNLOAD,d3
+	bne.s	.Unknown
+
+ IFD DO_DEBUG
+	lea.l	Msg8,a0
+	bsr		PrintRegDebug
+ ENDC
+	move.l	a2,UnloadMsg	; don't ReplyMsg() until all done
+	clr.l	tm_CGReply(a2)	; no errors
+
+* Don't close CommonRGB until UNLOAD
+	move.l	gb_CommonRGBA(a4),d0
+	beq.s	.RGBDoneX
+	move.l	d0,a0
+	CALLTL	CloseCommonRGB
+	clr.l	gb_CommonRGBA(a4)
+.RGBDoneX
+
+	movem.l	(sp)+,d2-d4/a2-a6
+	rts
+
+**************************************
+.Unknown
+ IFD DO_DEBUG
+	lea.l	Msg9,a0
+	bsr		PrintRegDebug
+	bsr		PrintDebug
+ ENDC
+	clr.l	tm_CGReply(a2)	; no errors
+	bra		.ReplyAndContinue
+
+*******************************************
+ XLABEL _cuntsetjmp
+	MOVEA.L     0004(A7),A0
+	MOVEM.L     D1-D7/A1-A7,0004(A0)
+	MOVE.L      0000(A7),0000(A0)
+;	MOVEA.L     0004,A1
+;	BTST        #0004,0129(A1)
+;	BEQ.B       Exit
+;	FMOVEM.X    FP0-FP7,003C(A0)
+	MOVEQ       #00,D0
+	RTS
+
+ XLABEL _cuntlongjmp
+    MOVE.L      0008(A7),D0
+    MOVEA.L     0004(A7),A0
+    TST.L       D0
+    BNE.B       Cunt
+    ADDQ.L      #1,D0
+Cunt
+;    MOVEA.L     0004,A1
+;    BTST        #0004,0129(A1)
+;    BEQ.B       0046
+;    FMOVEM.X    003C(A0),FP0-FP7
+    MOVEM.L     0004(A0),D1-D7/A1-A7
+    MOVE.L      0000(A0),0000(A7)
+	rts
+
+ IFND LINE_ARRAY
+*******************************************************************
+* UBYTE *GetFirstLine(ULONG PageNumber)
+*   d0                     d0
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+GetFirstLine
+	movem.l	a2-a3/d2-d4,-(sp)
+
+	move.l	d0,d2
+	move.l	d2,d3
+
+	cmp.w	#PAGES_PER_BOOK,d2
+	bhs.s	.Exit	; page number too big
+	move.w	d2,gb_PageNumber(a4)
+	XJSR	NewCurrentPage
+	move.l	gb_CurrentPage(a4),a0
+	moveq.l	#0,d0	; return value
+
+* try to find a valid line with text on it
+	tst.b	page_Type(a0)	; is it an empty page?
+	beq.s	.Exit		; yes
+	move.l	page_LineList+MLH_HEAD(a0),a0	; first line
+
+.TryNextLine
+	tst.l	line_Node+MLN_SUCC(a0)	; is it a real line?
+	beq.s	.Exit				; nope - we're out of lines
+	tst.b	line_Type(a0)	; seperator line?
+	bne.s	.SetupNext
+	tst.w	line_Text+text_Ascii(a0) ; any text on line?
+	bne.s	.GotTextLine		; yes
+
+.SetupNext
+	move.l	line_Node+MLN_SUCC(a0),a0
+	bra.s	.TryNextLine
+
+.GotTextLine
+	lea.l	line_Text(a0),a2		; source
+	lea.l	gb_ScratchPad(a4),a3	; dest
+	move.l	a3,d4
+
+	tst.b	gb_PageBuffered(a4)
+	beq.s	.NoBuff
+	move.b	#BUFFERED_CHAR,(a3)+
+.NoBuff
+
+	move.l	a2,a0	; source
+	move.l	a3,a1	; dest
+	bsr.s	GetTextInfoString
+
+* filter out non-printable chars
+	move.l	a3,a0
+.NextChar
+	move.b	(a0)+,d0
+	beq.s	.CheckDone
+	cmp.b	#$20,d0
+	blo.s	.NotChar
+	cmp.b	#126,d0
+	bls.s	.CharOK
+.NotChar
+	move.b	#$20,-1(a0)
+.CharOK
+	bra.s	.NextChar
+.CheckDone
+
+	move.l	d4,d0	; return value
+
+ IFD SERDEBUG
+	bsr		FirstLine
+ ENDC
+
+.Exit
+	movem.l	(sp)+,a2-a3/d2-d4
+	rts
+
+*******************************************************************
+* VOID GetTextInfoString(struct TextInfo[], UBYTE *NullTermString)
+*                           a0                   a1
+* Summary
+*	copies interleaved TextInfo string into null terminated string
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+GetTextInfoString
+.NextChar
+	move.w	text_Ascii(a0),d0
+	move.b	d0,(a1)+
+	tst.w	text_Ascii(a0)
+	beq.s	.Exit
+	add.w	#text_SizeOf,a0
+	bra.s	.NextChar
+
+.Exit
+	rts
+ ENDC
+
+*******************************************
+ IFD SERDEBUG
+
+ XLABEL PrintDebug
+	movem.l	a0-a1/d0-d1,-(sp)
+	DUMPREG	<REGS>
+	movem.l	(sp)+,a0-a1/d0-d1
+	rts
+
+ XLABEL PrintRegDebug
+	movem.l	a0-a1/d0-d1,-(sp)
+	DUMPMSG (a0)
+	movem.l	(sp)+,a0-a1/d0-d1
+	rts
+
+Wait
+	DUMPMSG <Nerf>
+	WAIT4RMB
+	rts
+
+FirstLine
+;	DUMPMEM	<firstline>,(a0),#32
+	rts
+ ENDC
+
+ RDUMP
+; MDUMP
+
+*******************************************
+	section	cgdata,data
+ XLABEL _GfxBase
+	dc.l	0
+ XLABEL _LayersBase
+	dc.l	0
+ XLABEL _CroutonBase
+	dc.l	0
+ XLABEL _IntuitionBase
+	dc.l	0
+ XLABEL _SysBase
+	dc.l	0
+ XLABEL _ConsoleDevice
+	dc.l	0
+ XLABEL _DOSBase
+	dc.l	0
+ XLABEL _InterfaceFont
+	dc.l	0
+ XLABEL _DiskfontBase
+	dc.l	0
+UnloadMsg
+	dc.l	0
+RGBLocked
+	dc.w	FALSE
+
+OrgLock
+	dc.l	0
+
+ IFD DO_DEBUG
+MsgA
+	dc.b	"CG",$0d,0
+
+M10
+	dc.b	"no book - getting default book",$0d,0
+M11
+	dc.b	"could not get default book - returning FATAL",$0d,0
+M12
+	dc.b	"got default book",$0d,0
+M13
+	dc.b	"got commonrgb lock",$0d,0
+M14
+	dc.b	"OpenInterface success",$0d,0
+M15
+	dc.b	"TemplateOn success",$0d,0
+M16
+	dc.b	"OpenLayers success",$0d,0
+M17
+	dc.b	"SelectDone",$0d,0
+
+ ENDC
+
+ IFND FINAL_CODE
+Test
+	dc.b	"dh2:project/003.BK.TestBook",0
+	dc.b	"dh2:project/012.BK.D-STORM.smp",0
+ ENDC
+
+	end
+
+* end of $RCSfile: cg.a,v $

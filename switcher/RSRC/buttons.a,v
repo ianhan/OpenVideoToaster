@@ -1,0 +1,2880 @@
+head	2.22;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.22
+date	95.11.13.12.17.27;	author Holt;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	95.02.20.04.47.33;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	95.02.16.20.43.36;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.07.28.13.19.56;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.07.27.20.30.48;	author Kell;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.07.27.20.28.39;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.07.27.20.28.10;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.07.27.19.24.20;	author Kell;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.05.24.21.36.23;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.05.12.13.37.11;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.03.31.13.16.29;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.03.18.09.18.10;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.10.28.00.12.07;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	93.09.02.20.24.06;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	93.06.08.19.47.22;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	93.05.30.13.11.27;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	93.05.14.01.03.47;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	93.05.12.06.32.10;	author Turcotte;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	93.04.17.04.03.31;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	93.04.07.08.45.35;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	93.03.17.16.32.22;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.03.06.00.22.31;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.21.06.04;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.22
+log
+@working on makeing freeze/unfreeze more logical
+@
+text
+@********************************************************************
+* buttons.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental & Proprietary. All rights reserved. 
+*
+* $Id: buttons.a,v 2.21 1995/02/20 04:47:33 Kell Exp Holt $
+*
+* $Log: buttons.a,v $
+*Revision 2.21  1995/02/20  04:47:33  Kell
+*Debugs
+*
+*Revision 2.20  1995/02/16  20:43:36  Kell
+*Now does KillAlphaKey are correct moments.  Killed JRs mode (see comments.).  This allows for Keyed Still support.
+*
+*Revision 2.19  1994/07/28  13:19:56  Kell
+*nothing but nothing
+*
+*Revision 2.18  1994/07/27  20:30:48  Kell
+*No comment
+*
+*Revision 2.17  1994/07/27  20:28:39  Kell
+**** empty log message ***
+*
+*Revision 2.16  1994/07/27  20:28:10  Kell
+**** empty log message ***
+*
+*Revision 2.15  1994/07/27  19:24:20  Kell
+**** empty log message ***
+*
+*Revision 2.14  1994/05/24  21:36:23  Kell
+*FGC_SelectQroutonQ changed to FGC_SelectCommand call
+*
+*Revision 2.13  94/05/12  13:37:11  Kell
+*Now call FGC_SelectCroutonQ
+*
+*Revision 2.12  94/03/31  13:16:29  Kell
+*Fixes to prevent ServeAVEI from showing garbaged interfaces during sequencing. And ServerAVE now also sends out ELH stuff.
+*
+*Revision 2.11  94/03/18  09:18:10  Kell
+*Avoids AVEI during sequencing
+*
+*Revision 2.10  93/10/28  00:12:07  Kell
+*Fixed L
+*Fixed LUToff so it forces TBar to top on the initial TBar drag, so
+*weird takes won't occur.  This fixed problems with ANIM digital FX
+*and TBar drags, while ChromaFX was previously in control.
+*Also, fixed CookTake() so it doesn't stick OLayPri into OLaySec when
+*we are trying to clear OLaySec.  This prevents weird takes that occured
+*when loading stills on the setup screen, while mid-transition.
+*The above ChromaFX bug only occured if DV2 was selected initially.
+*
+*Revision 2.9  93/09/02  20:24:06  Kell
+**** empty log message ***
+*
+*Revision 2.8  93/06/08  19:47:22  Kell
+*New field to prevent Clip from rendering on SetUp screen
+*
+*Revision 2.7  93/05/30  13:11:27  Kell
+*Now allows substituting custom TBar rendering routines in UpdateTBar
+*
+*Revision 2.6  93/05/14  01:03:47  Kell
+**** empty log message ***
+*
+*Revision 2.5  93/05/12  06:32:10  Turcotte
+**** empty log message ***
+*
+*Revision 2.4  93/04/17  04:03:31  Kell
+**** empty log message ***
+*
+*Revision 2.3  93/04/07  08:45:35  Kell
+**** empty log message ***
+*
+*Revision 2.2  93/03/17  16:32:22  Kell
+*New Draw/Comp CroutonImage functions.
+*
+*Revision 2.1  93/03/06  00:22:31  Kell
+**** empty log message ***
+*
+*Revision 2.0  92/05/18  21:06:04  Hartford
+**** empty log message ***
+*
+*********************************************************************
+***************************************************************
+* These routines are called by Effects Croutons, to fix illegal
+* Switcher button combinations, and to handle changes of the Switcher
+* buttons, during transitions.  These routines fix TB_xxxxSec and
+* VTSetUp values.
+*
+* By S.R. Kell,       NewTek Inc.        Dec 1989
+***************************************************************
+
+	include 'assembler.i'
+	include	"exec/types.i"
+	include	"macros.i"
+	include	"elh.i"
+	include "instinct.i"
+	include "eflib.i"
+
+	include "vtdebug.i"
+	include "serialdebug.i"
+
+;;SERDEBUG	set	1
+;;	OPT	O1-	;disable short banch optimization complaints
+
+;;CCODE	SET	0
+
+	XCCODE	Mask2AM	;this is cool
+	XCCODE	Mask2BM ;this is also cool
+	XCCODE	Mask2IS
+	XCCODE	Mask2PV
+	XCCODE	Mask2LK
+
+	XCCODE	AM2Mask
+	XCCODE	BM2Mask
+	XCCODE	IS2Mask
+	XCCODE	PV2Mask
+	XCCODE	LK2Mask
+
+	XCCODE	CookTake	;buttons and hardware
+	XCCODE	CookFreeze	;bottons and some hardware, need to call the serve routine
+	XCCODE	CookOLay	;buttons and hardware
+	XCCODE	CookMain	;etc
+	XCCODE	CookPrvw
+	XCCODE	CookClipA
+	XCCODE	CookKeyButton
+;;	XCCODE	CookMeal
+
+	XCCODE	CookAndServeTake
+	XCODE	CookAndServeFreeze,CookAndServeFREEZE4
+	XCCODE	CookAndServeOLay
+	XCCODE	CookAndServeMain
+	XCCODE	CookAndServePrvw
+	XCCODE	CookAndServeClipA
+	XCCODE	CookAndServeKeyButton
+;;	XCCODE	CookAndServeMeal
+	
+	XCODE	ServeELH,ServeFreeze,ServeAVEI
+
+	XCCODE	SetLoadBank
+	XCCODE	SetSaveBank
+	XCCODE	ShortOutFader
+
+	XCODE	LUToff
+	XCODE	LockToasterELH
+
+	XCCODE	UpdateTBar,UpdateClipA
+	XCODE	EnterShiftedKey,ExitShiftedKey,NoTransFreeze
+
+	XCODE	DrawCroutonImage,CompCroutonImage
+
+	XDATA	ShiftedKey
+
+
+**********************************************
+	SECTION	,DATA
+
+ShiftedKey dc.w	0
+NoShiftedKey	dc.w 0
+
+	cnop	0,4
+	
+	SECTION	,CODE
+
+
+* Looks at TB_MainSec, TB_PrvwSec, TB_OLaySec, TB_VideoFlagSec??, TB_ClipASec
+* And will set AM, BM, PV, IS, CDS, LK appropriately.
+
+*************************************************************
+* Typical mask = MainSec
+	IFD	CCODE
+_Mask2AM
+	ENDC
+
+Mask2AM
+	btst	#B_DV0,d0	
+	bne.s	100$
+	btst	#B_DV1,d0
+	bne.s	110$
+	btst	#B_VIDEO1,d0
+	bne.s	120$
+	btst	#B_VIDEO2,d0
+	bne.s	130$
+	btst	#B_VIDEO3,d0
+	bne.s	140$
+	btst	#B_VIDEO4,d0
+	bne.s	150$
+	btst	#B_ENCODER,d0
+	bne.s	160$
+	bra.s	170$
+
+100$	moveq	#VTI_AM_DAC0,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	moveq	#VTI_AM_DAC1,d0		;FROZEN DV1
+	rts
+120$	moveq	#VTI_AM_VID1,d0
+	rts
+130$	moveq	#VTI_AM_VID2,d0
+	rts
+140$	moveq	#VTI_AM_VID3,d0
+	rts
+150$	moveq	#VTI_AM_VID4,d0
+	rts
+160$	moveq	#VTI_AM_ENCODER,d0
+	rts
+170$	moveq	#VTI_AM_MONO,d0
+	rts
+	
+****************************************************************
+* Typical mask = MainSec
+	IFD	CCODE
+_Mask2BM
+	ENDC
+
+Mask2BM
+	btst	#B_DV0,d0	
+	bne.s	100$
+	btst	#B_DV1,d0
+	bne.s	110$
+	btst	#B_VIDEO1,d0
+	bne.s	120$
+	btst	#B_VIDEO2,d0
+	bne.s	130$
+	btst	#B_VIDEO3,d0
+	bne.s	140$
+	btst	#B_VIDEO4,d0
+	bne.s	150$
+	btst	#B_ENCODER,d0
+	bne.s	160$
+	bra.s	170$
+
+100$	moveq	#VTI_BM_DAC0,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	moveq	#VTI_BM_DAC1,d0		;FROZEN DV1
+	rts
+120$	moveq	#VTI_BM_VID1,d0
+	rts
+130$	moveq	#VTI_BM_VID2,d0
+	rts
+140$	moveq	#VTI_BM_VID3,d0
+	rts
+150$	moveq	#VTI_BM_VID4,d0
+	rts
+160$	moveq	#VTI_BM_ENCODER,d0
+	rts
+170$	moveq	#VTI_BM_MONO,d0
+	rts
+	
+*************************************************************
+* Typical mask = PrvwSec
+* Note if Prvw and Main have LIVE DVE, then this will goof
+	IFD	CCODE
+_Mask2PV
+	ENDC
+Mask2PV
+	btst	#B_DV0,d0	
+	bne.s	100$
+	btst	#B_DV1,d0
+	bne.s	110$
+	btst	#B_VIDEO1,d0
+	bne.s	120$
+	btst	#B_VIDEO2,d0
+	bne.s	130$
+	btst	#B_VIDEO3,d0
+	bne.s	140$
+	btst	#B_VIDEO4,d0
+	bne.s	150$
+	btst	#B_ENCODER,d0
+	bne.s	160$
+	bra.s	170$
+
+100$	moveq	#VTI_PV_DAC0,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	moveq	#VTI_PV_DAC1,d0		;FROZEN DV1
+	rts
+120$	moveq	#VTI_PV_VID1,d0
+	rts
+130$	moveq	#VTI_PV_VID2,d0
+	rts
+140$	moveq	#VTI_PV_VID3,d0
+	rts
+150$	moveq	#VTI_PV_VID4,d0
+	rts
+160$	moveq	#VTI_PV_ENCODER,d0
+	rts
+170$	moveq	#VTI_PV_MAIN,d0
+	rts
+	
+*************************************************************
+* Typical mask = MainSec
+* If VideoFlag = Frozen then this is a don't care
+* If only Prvw is using LIVE DVE, then this looks needs to look a Prvw
+	IFD	CCODE
+_Mask2IS
+	ENDC
+Mask2IS
+	btst	#B_VIDEO1,d0
+	bne.s	120$
+	btst	#B_VIDEO2,d0
+	bne.s	130$
+	btst	#B_VIDEO3,d0
+	bne.s	140$
+	btst	#B_VIDEO4,d0
+	bne.s	150$
+	btst	#B_MAIN,d0
+	bne.s	160$
+	btst	#B_EXTER,d0
+	bne.s	170$
+	btst	#B_ENCODER,d0
+	bne.s	180$
+	bra.s	190$
+
+120$	moveq	#VTI_IS_VID1,d0
+	rts
+130$	moveq	#VTI_IS_VID2,d0
+	rts
+140$	moveq	#VTI_IS_VID3,d0
+	rts
+150$	moveq	#VTI_IS_VID4,d0
+	rts
+160$	moveq	#VTI_IS_MAIN,d0
+	rts
+170$	moveq	#VTI_IS_EXT,d0
+	rts
+180$	moveq	#VTI_IS_ENCODER,d0
+	rts
+190$	moveq	#VTI_IS_MONO,d0
+	rts
+	
+*************************************************************
+	IFD	CCODE
+_Mask2LK
+	ENDC
+Mask2LK
+	btst	#B_DV0,d0	
+	bne.s	100$
+	btst	#B_DV1,d0
+	bne.s	110$
+	btst	#B_VIDEO1,d0
+	bne.s	120$
+	btst	#B_VIDEO2,d0
+	bne.s	130$
+	btst	#B_VIDEO3,d0
+	bne.s	140$
+	btst	#B_VIDEO4,d0
+	bne.s	150$
+	btst	#B_ENCODER,d0
+	bne.s	160$
+	bra.s	170$
+
+100$	moveq	#VTI_LK_DAC0,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	moveq	#VTI_LK_DAC1,d0		;FROZEN DV1
+	rts
+120$	moveq	#VTI_LK_VID1,d0
+	rts
+130$	moveq	#VTI_LK_VID2,d0
+	rts
+140$	moveq	#VTI_LK_VID3,d0
+	rts
+150$	moveq	#VTI_LK_VID4,d0
+	rts
+160$	moveq	#VTI_LK_ENCODER,d0
+	rts
+170$	moveq	#VTI_LK_EXT,d0
+	rts
+	
+*******************************************************************
+* AM2Mask(d0=AM,a5->TB)
+
+	IFD	CCODE
+_AM2Mask
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	AM2Mask
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+AM2Mask
+	cmpi.w	#VTI_AM_VID1,d0
+	beq.s	100$
+	cmpi.w	#VTI_AM_VID2,d0
+	beq.s	110$
+	cmpi.w	#VTI_AM_VID3,d0
+	beq.s	120$
+	cmpi.w	#VTI_AM_VID4,d0
+	beq.s	130$
+	cmpi.w	#VTI_AM_DAC0,d0
+	beq.s	140$
+	cmpi.w	#VTI_AM_DAC1,d0
+	beq.s	150$
+	cmpi.w	#VTI_AM_ENCODER,d0
+	beq.s	160$
+	bra.s	170$
+
+100$	move.w	#M_VIDEO1,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	move.w	#M_VIDEO2,d0		;FROZEN DV1
+	rts
+120$	move.w	#M_VIDEO3,d0
+	rts
+130$	move.w	#M_VIDEO4,d0
+	rts
+140$	move.w	#M_DV0,d0
+	bsr	FixLiveMask
+	rts
+150$	move.w	#M_DV1,d0
+	rts
+160$	move.w	#M_ENCODER,d0
+	rts
+170$	move.w	#M_MONO,d0
+	rts
+
+*******************************************************************
+* BM2Mask(d0=BM,a5->TB)
+
+	IFD	CCODE
+_BM2Mask
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	BM2Mask
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+BM2Mask
+	cmpi.w	#VTI_BM_VID1,d0
+	beq.s	100$
+	cmpi.w	#VTI_BM_VID2,d0
+	beq.s	110$
+	cmpi.w	#VTI_BM_VID3,d0
+	beq.s	120$
+	cmpi.w	#VTI_BM_VID4,d0
+	beq.s	130$
+	cmpi.w	#VTI_BM_DAC0,d0
+	beq.s	140$
+	cmpi.w	#VTI_BM_DAC1,d0
+	beq.s	150$
+	cmpi.w	#VTI_BM_ENCODER,d0
+	beq.s	160$
+	bra.s	170$
+
+100$	move.w	#M_VIDEO1,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	move.w	#M_VIDEO2,d0		;FROZEN DV1
+	rts
+120$	move.w	#M_VIDEO3,d0
+	rts
+130$	move.w	#M_VIDEO4,d0
+	rts
+140$	move.w	#M_DV0,d0
+	bsr	FixLiveMask
+	rts
+150$	move.w	#M_DV1,d0
+	rts
+160$	move.w	#M_ENCODER,d0
+	rts
+170$	move.w	#M_MONO,d0
+	rts
+
+*******************************************************************
+	IFD	CCODE
+_IS2Mask
+	ENDC
+IS2Mask
+	cmpi.w	#VTI_IS_VID1,d0
+	beq.s	100$
+	cmpi.w	#VTI_IS_VID2,d0
+	beq.s	110$
+	cmpi.w	#VTI_IS_VID3,d0
+	beq.s	120$
+	cmpi.w	#VTI_IS_VID4,d0
+	beq.s	130$
+	cmpi.w	#VTI_IS_MAIN,d0
+	beq.s	140$
+	cmpi.w	#VTI_IS_EXT,d0
+	beq.s	150$
+	cmpi.w	#VTI_IS_ENCODER,d0
+	beq.s	160$
+	bra.s	170$
+
+100$	move.w	#M_VIDEO1,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	move.w	#M_VIDEO2,d0		;FROZEN DV1
+	rts
+120$	move.w	#M_VIDEO3,d0
+	rts
+130$	move.w	#M_VIDEO4,d0
+	rts
+140$	move.w	#M_MAIN,d0
+	rts
+150$	move.w	#M_EXTER,d0
+	rts
+160$	move.w	#M_ENCODER,d0
+	rts
+170$	move.w	#M_MONO,d0
+	rts
+	
+*******************************************************************
+* PV2Mask(d0=PV,a5->TB)
+
+	IFD	CCODE
+_PV2Mask
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	PV2Mask
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+PV2Mask
+	cmpi.w	#VTI_PV_VID1,d0
+	beq.s	100$
+	cmpi.w	#VTI_PV_VID2,d0
+	beq.s	110$
+	cmpi.w	#VTI_PV_VID3,d0
+	beq.s	120$
+	cmpi.w	#VTI_PV_VID4,d0
+	beq.s	130$
+	cmpi.w	#VTI_PV_DAC0,d0
+	beq.s	140$
+	cmpi.w	#VTI_PV_DAC1,d0
+	beq.s	150$
+	cmpi.w	#VTI_PV_ENCODER,d0
+	beq.s	160$
+	bra.s	170$
+
+100$	move.w	#M_VIDEO1,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	move.w	#M_VIDEO2,d0		;FROZEN DV1
+	rts
+120$	move.w	#M_VIDEO3,d0
+	rts
+130$	move.w	#M_VIDEO4,d0
+	rts
+140$	move.w	#M_DV0,d0
+	bsr.s	FixLiveMask
+	rts
+150$	move.w	#M_DV1,d0
+	rts
+160$	move.w	#M_ENCODER,d0
+	rts
+170$	move.w	#M_MAIN,d0
+	rts
+
+*******************************************************************
+* LK2Mask(d0=LK,a5->TB)
+
+	IFD	CCODE
+_LK2Mask
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	LK2Mask
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+LK2Mask
+	cmpi.w	#VTI_LK_VID1,d0
+	beq.s	100$
+	cmpi.w	#VTI_LK_VID2,d0
+	beq.s	110$
+	cmpi.w	#VTI_LK_VID3,d0
+	beq.s	120$
+	cmpi.w	#VTI_LK_VID4,d0
+	beq.s	130$
+	cmpi.w	#VTI_LK_DAC0,d0
+	beq.s	140$
+	cmpi.w	#VTI_LK_DAC1,d0
+	beq.s	150$
+	cmpi.w	#VTI_LK_ENCODER,d0
+	beq.s	160$
+	bra.s	170$
+
+100$	move.w	#M_VIDEO1,d0		;LIVE DVE or FROZEN DV0 = DV0
+	rts
+110$	move.w	#M_VIDEO2,d0		;FROZEN DV1
+	rts
+120$	move.w	#M_VIDEO3,d0
+	rts
+130$	move.w	#M_VIDEO4,d0
+	rts
+140$	move.w	#M_DV0,d0
+	bsr.s	FixLiveMask
+	rts
+150$	move.w	#M_DV1,d0
+	rts
+160$	move.w	#M_ENCODER,d0
+	rts
+170$	move.w	#M_EXTER,d0
+	rts
+
+*******************************************************************
+* FixLiveMask(d0=Mask,a5->TB)
+* This uses the Hardware IS mux to determine ANALOG source for LIVE
+* DVE, instead of looking at any TB_....Save values.
+* This is used by the Hardware2Mask Routines
+
+	IFD	CCODE
+_FixLiveMask
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	FixLiveMask
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+FixLiveMask:
+	movem.l	d1/a0,-(sp)
+	DEA.l	TB_VTSetUp,a0
+	ELHTEST_ABSE	a0	
+	beq.s	145$		;jump if frozen
+	TURNLIVEDVEON	d0
+	move.w	d0,d1
+	ELHGET_IS	a0,d0
+	bsr	IS2Mask
+	BITPUT_R.w	M_VIDEO,d0,d1
+	move.w	d1,d0
+145$	movem.l	(sp)+,d1/a0
+	rts
+
+*******************************************************************
+*******************************************************************
+* When not in a transition, this code sets up the hardware when the
+* take button is clicked on.
+* If LUMKEY was on, then it stays turned off. 
+* 
+* CookTake(a5->TB)
+
+	IFD	CCODE
+_CookTake	move.l	a5,-(sp)
+		movea.l	8(sp),a5
+		bsr.s	CookTake
+		movea.l	(sp)+,a5
+		rts
+	ENDC
+
+CookTake:
+	movem.l	d0-d1/a0-a2,-(sp)
+
+	XJSR	StashStates
+
+	GET.l	TB_EFXbase,d0
+	beq.s	1118$
+	movea.l	d0,a2
+	move.l	EF_TriMarkedEFX(a2),d0
+	beq.s	1110$
+	move.l	d0,a0
+	btst.b	#TRIMARK_BIT,FG_Flags1(a0)
+	beq.s	118$
+	bclr.b	#TRIMARK_BIT,FG_Flags1(a0)
+	cmp.l	TB_EfxFG(a5),d0
+	beq.s	118$
+	CALLTL	DoHiLiteRemove
+118$	tst.l	EF_TriMarkedLUT(a2)
+	bne.s	1110$
+	clr.l	EF_TriMarkedEFX(a2)
+	
+1110$	move.l	EF_TriMarkedFade(a2),d0
+	beq.s	1118$
+	move.l	d0,a0
+	bclr.b	#TRIMARK_BIT,FG_Flags1(a0)
+	cmp.l	TB_EfxFG(a5),d0
+	beq.s	1112$
+	CALLTL	DoHiLiteRemove
+1112$	clr.w	EF_TValFade(a2)
+	clr.l	EF_TriMarkedFade(a2)
+
+1118$	bsr	ExitShiftedKey
+	
+	DEA.l	TB_VTSetUp,a0
+
+* Swap imagery
+	GET.w	TB_MainSec,d0
+	move.w	TB_PrvwSec(a5),TB_MainSec(a5)
+	PUT.w	d0,TB_PrvwSec
+
+	cmp.w	TB_MainSec(a5),d0	;new 12-30-91 keeps main ~= prvw
+	bne.s	4$
+	GET.w	TB_OLaySec,d0
+	beq.s	4$
+	PUT.w	d0,TB_PrvwSec
+
+4$	clr.w	TB_OLaySec(a5)	;will this break the CG ???????
+	clr.w	TB_TValSec(a5)	;added 1-22-92 
+	clr.w	TB_TBarTime(a5)
+
+	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	bne.s	10$
+
+	move.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	GET.w	TB_MainSec,d0
+	bra.s	25$
+
+10$	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	beq.s	20$
+	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne.s	30$
+
+20$	move.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	GET.w	TB_PrvwSec,d0
+
+25$	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	beq.s	27$
+	cmpi.w	#M_DV1,d0
+	bne.s	29$
+
+27$	bsr	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	move.w	#M_MONO,d0
+
+29$	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+30$	bsr	MainOLayClip
+
+	movem.l	(sp)+,d0-d1/a0-a2
+	rts
+
+***************************************************
+* When not in a transition, this code sets up the hardware when the
+* freeze/thaw button is clicked on.
+* If LUMKEY was on, then it stays on. 
+* CookFreeze(a5->TB)
+
+	IFD	CCODE
+_CookFreeze	move.l	a5,-(sp)
+		movea.l	8(sp),a5
+		bsr.s	CookFreeze
+		movea.l	(sp)+,a5
+		rts
+	ENDC
+
+CookFreeze:
+	DUMPMSG	<CookFreeze>
+	movem.l	d0-d1/a0,-(sp)
+
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a0
+
+	GET.w	TB_VideoFlagSec,d0
+	cmpi.w	#VIDEOTYPE_LIVE,d0
+	beq	50$			;jump if live video
+	DUMPMSG	<froze!>
+* frozen
+
+	GET.w	TB_OLaySec,d0
+	ISDVEINUSE	d0
+	bne.s	8$
+
+	GET.w	TB_MainSec,d0
+	ISDVEINUSE	d0
+	bne.s	8$
+
+	GET.w	TB_PrvwSec,d0
+	ISDVEINUSE	d0
+	bne.s	8$
+
+	CALLTL	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+* assume it was live and only analog is shown, so flood both banks
+* with Prvw source
+	CALLTL	InterruptsOff
+	lea.l	elh2(pc),a0		;->VTSetUp destroyed
+	CALLTL	SendELHList2Toaster
+	moveq	#7,d0
+7$	CALLTL	Wait4Top
+	dbra	d0,7$
+	CALLTL	InterruptsOn
+
+8$	GET.w	TB_OLaySec,d0
+	ISLIVEDVEON	d0
+	beq.s	5$
+	move.w	TB_OLayFroze(a5),TB_OLaySec(a5)
+
+5$	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	beq.s	10$
+	move.w	TB_MainFroze(a5),TB_MainSec(a5)
+
+10$	move.w	TB_PrvwFroze(a5),TB_PrvwSec(a5)
+	bsr	MainOLayClip
+	bra	666$
+
+* live
+50$
+;	XJSR	makefrzpanellive
+;	XJSR	makefrzpanelfreeze	
+
+;;	PUT.b	#M_LUTBUS_NONE,TB_LutBus
+;;	ELHCLEAR_LUT	a0
+
+;;	ELHSET_LINP	a0	;done by MainOLayClip
+
+	tst.w	ShiftedKey
+	beq.s	51$
+	clr.w	TB_OLaySec(a5)
+
+	bsr	ExitShiftedKey
+
+51$	ELHTEST_LUT	a0
+	beq.s	70$		;will still call LUToff just to be safe
+
+* If coming out of LUT & going live. Make sure DV1 isn't shown before
+* going live. LutBus will never goto LIVE DVE!
+	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	bne.s	72$
+	GET.w	TB_OLaySec,d0
+	cmpi.w	#M_DV1,d0
+	bne.s	70$
+	GET.w	TB_OLaySave,d0
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_OLaySec
+	bra.s	70$
+
+72$	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne.s	74$
+	GET.w	TB_MainSec,d0
+	cmpi.w	#M_DV1,d0
+	bne.s	70$
+	GET.w	TB_MainSave,d0
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_MainSec
+	bra.s	70$
+
+74$	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	bne.s	70$
+	GET.w	TB_PrvwSec,d0
+	cmpi.w	#M_DV1,d0
+	bne.s	70$
+	GET.w	TB_PrvwSave,d0
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_PrvwSec
+
+70$	CALLTL	KillAlphaKey
+	bsr	LUToff
+
+	GET.w	TB_OLaySec,d0
+	ISFROZENDVEON	d0
+	beq.s	55$
+	GET.w	TB_OLaySave,d0
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_OLaySec
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+	GET.w	TB_MainSec,d0
+	ISFROZENDVEON	d0
+	beq.s	52$
+	GET.w	TB_MainSave,d0
+	TURNLIVEDVEOFF	d0	
+	PUT.w	d0,TB_MainSec
+
+52$	GET.w	TB_PrvwSec,d0
+	ISFROZENDVEON	d0
+	beq.s	55$
+	GET.w	TB_PrvwSave,d0
+	TURNLIVEDVEOFF	d0	
+	PUT.w	d0,TB_PrvwSec
+	bra	100$
+;-----
+55$	GET.w	TB_MainSec,d0
+	ISFROZENDVEON	d0
+	beq.s	60$
+	GET.w	TB_MainSave,d0
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_MainSec
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+	GET.w	TB_PrvwSec,d0
+	ISFROZENDVEON	d0
+	beq.s	60$
+	GET.w	TB_PrvwSave,d0
+	TURNLIVEDVEOFF	d0	
+	PUT.w	d0,TB_PrvwSec
+	bra.s	100$
+
+;-----
+60$	GET.w	TB_PrvwSec,d0
+	ISFROZENDVEON	d0
+	beq.s	100$
+	GET.w	TB_PrvwSave,d0
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_PrvwSec
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+* if DVEs are to be shown, flood DVs with live DVE source 1st
+100$	GET.w	TB_OLaySec,d0
+	ISLIVEDVEON	d0
+	beq.s	110$
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_OLaySec
+	bsr.s	300$
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_OLaySec
+	bra.s	200$
+
+110$	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	beq.s	120$
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_MainSec
+	bsr.s	300$
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_MainSec
+	bra.s	200$
+
+120$	GET.w	TB_PrvwSec,d0
+	ISLIVEDVEON	d0
+	beq.s	200$		;jump if no rows have live DVE (just analog)
+	TURNLIVEDVEOFF	d0
+	PUT.w	d0,TB_PrvwSec
+	bsr.s	300$
+	TURNLIVEDVEON	d0
+	PUT.w	d0,TB_PrvwSec
+
+200$	bsr	MainOLayClip
+
+666$	movem.l	(sp)+,d0-d1/a0
+	rts
+
+* flood banks just prior to going to live DVE
+300$	move.w	#1,NoShiftedKey
+	bsr	MainOLayClip
+
+	CALLTL	InterruptsOff
+	move.l	d0,-(sp)
+	move.w	#VIDEOTYPE_LIVE,d0
+	CALLTL	FreezeThawDVE
+	moveq	#7,d0
+307$	CALLTL	Wait4Top
+	dbra	d0,307$
+	movem.l	(sp)+,d0
+
+	JUMPTL	InterruptsOn
+
+elh2	dc.b	EH2,EHEND
+
+	CNOP	0,2
+
+***************************************************
+* When not in a transition, this code sets up the hardware when the 
+* OverLay row is clicked on.
+* CookOLay(a5->TB)
+
+	IFD	CCODE
+_CookOLay	move.l	a5,-(sp)
+		movea.l	8(sp),a5
+		bsr.s	CookOLay
+		movea.l	(sp)+,a5
+		rts
+	ENDC
+
+
+CookOLay:
+	movem.l	d0-d1/a0,-(sp)
+
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a0
+	GET.w	TB_OLaySec,d0
+
+***!!!**
+* Before 10-27-93 this jump wasn't here.  It would mess up when loading
+* stillstores from the setup screen, while in a transition, because the
+* wrong number of takes would occur (suppose to be only one take).
+* Now if OLaySec is cleared, it says cleared, before it would force
+* in OLayPri!!!!!  Is this ever a problem???????
+	beq	666$		;jump if nothing selected
+
+	ISANALOGINUSE	d0	
+	bne.s	5$		;jump if any VID1-4 or BKG are selected
+	ISFROZENDVEON	d0
+	bne.s	5$		;jump if only DV0 or DV1 selected
+
+* bogus, DV1 and DV0 selected without any analog
+	move.w	TB_OLayPri(a5),TB_OLaySec(a5)	;ignore button press
+	bra	666$
+
+5$	GET.w	TB_ClipASec,d0
+	beq.s	100$			;jump if min clip = foreground
+	cmpi.w	#ClipAMax,d0
+	beq.s	100$			;jump if max clip = background
+
+	tst.b	TB_KeyModeSec+1(a5)
+	bmi.s	35$			;jump if keying on black
+
+* Keying on white
+	neg.w	d0
+	add.w	#ClipAMax,d0
+
+* Keying on black
+35$	subq.w	#1,d0
+	ELHPUT_LKA_R	a0,d0
+
+100$	GET.w	TB_OLaySec,d0
+	ISLIVEDVEON	d0
+	beq.s	10$		;jump if live dve is off	
+	
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+	TURNLIVEDVEOFF	TB_MainSec(a5)	
+	TURNLIVEDVEOFF	TB_PrvwSec(a5)	
+	bsr	ExitShiftedKey
+	bra	30$
+
+10$	tst.b	TB_LutBus(a5)
+	bne.s	115$
+
+	ISFROZENDVEON	d0
+	bne.s	20$
+
+* Massage for shifted key mode
+
+	GET.w	TB_MainSec,d1
+	ISLIVEDVEON	d1
+	beq.s	30$
+	TURNLIVEDVEOFF	TB_MainSec(a5)
+
+* MainOLayClip will do the necessary freeze, and make sure Prvw isn't DV1	
+	bra.s	30$
+
+*Lut mode
+115$	BITCLEAR.w M_DV0,d0
+	bne.s	16$		;was analog & OK
+	GET.w	TB_OLayPri,d0
+	BITCLEAR.w M_DV0,d0
+	PUT.w	d0,TB_OLaySec	;may be null
+	beq.s	666$
+
+16$	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	beq.s	30$
+
+	PUT.b	#M_LUTBUS_OLAY,TB_LutBus	;steal lutbus from PRVW
+
+	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	beq.s	17$
+	cmpi.w	#M_DV1,d0
+	bne.s	19$
+
+17$	bsr	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	move.w	#M_MONO,d0
+
+19$	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+	bra.s	30$
+
+20$	cmpi.w	#M_DV0,d0
+	beq.s	25$
+	cmpi.w	#M_DV1,d0
+	bne.s	30$
+25$	bsr	ExitShiftedKey
+
+30$	BITSET.w	M_KeyEnable,TB_KeyModeSec(a5)	;turn on key button
+	ELHGET_CDS	a0,d0
+	cmpi.w	#VTI_CDS_CD,d0
+	bne.s	666$		;preserve current Key mode, ie DIB, DIBGR
+	ELHPUT_CDS_I	a0,VTI_CDS_LUMKEY ;let DoTake know were doing LumKey
+
+666$	bsr	MainOLayClip
+	movem.l	(sp)+,d0-d1/a0
+	rts
+
+***************************************************
+* When not in a transition, this code sets up the hardware when the main
+* row is clicked on.
+* CookMain(a5->TB)
+
+	IFD	CCODE
+_CookMain	move.l	a5,-(sp)
+			movea.l	8(sp),a5
+			bsr.s	CookMain
+			movea.l	(sp)+,a5
+			rts
+	ENDC
+
+CookMain:
+	movem.l	a0/d0,-(sp)
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a0
+
+	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	beq.s	10$		;jump if live dve is off
+
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+	TURNLIVEDVEOFF	TB_OLaySec(a5)	
+	TURNLIVEDVEOFF	TB_PrvwSec(a5)	
+	bra.s	30$
+
+10$	tst.b	TB_LutBus(a5)
+	beq.s	20$
+
+*Lut mode
+	BITCLEAR.w M_DV0,d0
+	bne.s	16$		;was analog & OK
+	GET.w	TB_MainPri,d0
+	BITCLEAR.w M_DV0,d0
+	bne.s	15$
+	GET.w	TB_MainSave,d0
+	BITCLEAR.w M_DVE,d0
+	bne.s	15$
+	move.w	#M_DV1,d0
+15$	PUT.w	d0,TB_MainSec
+
+16$	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne.s	30$
+
+	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	beq.s	17$
+	cmpi.w	#M_DV1,d0
+	bne.s	19$
+
+17$	bsr	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	move.w	#M_MONO,d0
+
+19$	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+	bra.s	30$
+
+20$	cmpi.w	#M_DV0,d0
+	bne.s	30$
+	bsr	ExitShiftedKey
+
+30$	bsr	MainOLayClip
+
+	movem.l	(sp)+,a0/d0
+	rts
+
+***************************************************
+* When not in a transition, this code sets up the hardware when the
+* preview row is clicked on. This doesn't call MainOLayClip so it is
+* independent of what is happening there, with the exception of LIVE DVE
+* being used elsewhere. So, this code might even be useful when mid-transition
+* on some "non-transition effects", such as LumKey Trails.
+
+* CookPrvw(a5->TB)
+
+	IFD	CCODE
+_CookPrvw	move.l	a5,-(sp)
+			movea.l	8(sp),a5
+			bsr.s	CookPrvw
+			movea.l	(sp)+,a5
+			rts
+	ENDC
+
+CookPrvw:
+	movem.l	a0/d0-d1,-(sp)
+
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a0
+	GET.w	TB_PrvwSec,d0
+	move.w	d0,d1
+
+	ISLIVEDVEON	d0
+	beq.s	5$		;jump if frozen
+
+	GET.w	TB_OLaySec,d0
+	ISLIVEDVEON	d0
+	bne	20$
+	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	bne	20$
+
+;ok to be live
+	move.w	d1,d0
+	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+	bra	10$	
+	
+5$	tst.b	TB_LutBus(a5)
+	bne.s	12$
+	
+	tst.w	ShiftedKey
+	beq.s	10$
+
+*Lut mode or ShiftedKey
+12$	BITCLEAR.w M_DV0,d1
+	bne.s	8$		;was analog & OK
+	GET.w	TB_PrvwPri,d1
+	BITCLEAR.w M_DV0,d1
+	bne.s	6$
+	GET.w	TB_PrvwSave,d1
+	BITCLEAR.w M_DVE,d1
+	bne.s	6$
+	move.w	#M_DV1,d1
+6$	PUT.w	d1,TB_PrvwSec
+
+8$	tst.w	ShiftedKey
+	bne.s	10$		;LUT mode & shifted mode are incompatible
+
+*Lut mode
+	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	bne.s	10$
+
+	move.w	d1,d0
+	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	beq.s	7$
+	cmpi.w	#M_DV1,d0
+	bne.s	9$
+
+7$	bsr	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	move.w	#M_MONO,d0
+
+9$	bsr	Mask2IS
+	ELHPUT_IS_R	a0,d0
+	bra.s	10$
+
+;not ok to be live
+20$	TURNLIVEDVEOFF	d1
+22$	PUT.w	d1,TB_PrvwSec
+
+;---
+10$	move.w	d1,d0
+
+	ISFROZENDVEON	d1	;was pre 12-11-91 ISANALOGINUSE beq.s
+	bne.s	30$
+	PUT.w	d1,TB_PrvwSave
+	bra.s	40$
+30$	PUT.w	d1,TB_PrvwFroze
+
+40$	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	bne.s	50$
+	move.w	#M_DV0,d0
+
+50$	bsr	Mask2PV
+	ELHPUT_PV_R	a0,d0
+
+	movem.l	(sp)+,a0/d0-d1
+	rts
+
+***************************************************
+* When not in a transition, this code sets up the hardware when
+* ClipA or KeyButton is changed.
+* CookClipA(a5->TB)
+
+	IFD	CCODE
+_CookKeyButton:
+_CookClipA
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookClipA
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookKeyButton:
+CookClipA:
+	movem.l	d0/a0,-(sp)
+
+	XJSR	StashStates
+
+	GET.w	TB_ClipASec,d0
+	beq.s	100$			;jump if min clip = foreground
+
+	cmpi.w	#ClipAMax,d0
+	beq.s	100$			;jump if max clip = background
+
+	tst.b	TB_KeyModeSec+1(a5)
+	bmi.s	30$			;jump if keying on black
+
+* Keying on white
+	neg.w	d0
+	add.w	#ClipAMax,d0
+
+* Keying on black
+30$	subq.w	#1,d0
+	DEA.l	TB_VTSetUp,a0
+	ELHPUT_LKA_R	a0,d0
+
+100$	tst.w	TB_KeyModeSec(a5)
+	bmi.s	110$		;jump if keying is now on
+
+*keying turned off
+	tst.w	TB_OLaySec(a5)
+	beq.s	110$
+
+*Turing keying off, clears out the overlay 
+	clr.w	TB_OLaySec(a5)
+	bsr	ExitShiftedKey
+
+	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	bne.s	110$
+	move.b	#M_LUTBUS_PRVW,TB_LutBus(a5)	;save lut mode
+
+110$	bsr.s	MainOLayClip
+	movem.l	(sp)+,d0/a0	
+	rts
+
+*********************************************
+* called by Main, ClipA, KeyButton, OLay Cook, etc, routines, 
+* At this point all of the buttons are mostly ok, and IS/LKA are ok.
+MainOLayClip movem.l	a0/d0-d1,-(sp)
+
+* see if it is possible to do Shifted Key
+	tst.w	NoShiftedKey
+	bne	799$
+
+	tst.b	TB_LutBus(a5)	
+	bne	799$		;jump if in lut mode
+
+	GET.w	TB_OLaySec,d0
+	
+	DUMPHEXI.w	<OLay =1>,d0,<\>
+
+	ISANALOGINUSE	d0
+	beq.s	799$		;jump if frozen DVE or blank
+	
+	ISLIVEDVEON	d0
+	bne.s	799$		;jump if live DVE
+
+* OLay is an analog source
+
+	GET.w	TB_MainSec,d0
+	ISLIVEDVEON	d0
+	bne.s	799$		;jump if live DVE
+
+	cmpi.w	#M_DV0,d0
+	beq.s	799$		;jump if main DV1 is selected
+
+* It's OK to do shifted key
+	GET.w	TB_PrvwSec,d0
+	ISLIVEDVEON	d0
+	beq.s	710$
+	TURNLIVEDVEOFF	d0
+	bra.s	720$
+	
+710$	cmpi.w	#M_DV0,d0
+	bne.s	730$
+	move.w	#M_DV1,d0
+720$	PUT.w	d0,TB_PrvwSec
+
+730$	cmpi.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec(a5)
+	beq.s	740$
+	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	bsr	ServeFreeze
+
+740$	bsr	EnterShiftedKey
+
+*----------------------
+* This code is very important! It always needs to be executed to assume
+* the ****save & ****froze values are correct
+
+799$	clr.w	NoShiftedKey
+	DEA.l	TB_VTSetUp,a0
+	
+	DUMPHEXI.w	<OLay 2=>,TB_OLaySec(a5),<\>
+
+	GET.w	TB_OLaySec,d0
+	bne.s	505$		;jump if it isn't blank
+	bsr	ExitShiftedKey
+
+;; THIS CAN'T GO HERE BECAUSE WE HAVEN'T SENT OUT AM/BM YET, SO WE CAN
+;; TO AN INSTALLAVEI IN THE FOLLOWING ROUTINE.
+;;	CALLTL	KillAlphaKey	;if OLay is null no key can exist THIS COULD SEND OUT HEADERS
+	bra.s	510$
+
+505$	ISFROZENDVEON	d0	;was ISANALOGINUSE beq.s pre 12-11-91
+	bne.s	500$
+	PUT.w	d0,TB_OLaySave
+	bra.s	510$
+500$	PUT.w	d0,TB_OLayFroze
+
+510$	GET.w	TB_MainSec,d0
+	ISFROZENDVEON	d0	;was ISANALOGINUSE beq.s pre 12-11-91
+	bne.s	520$
+	PUT.w	d0,TB_MainSave
+	bra.s	530$
+520$	PUT.w	d0,TB_MainFroze
+
+530$	GET.w	TB_PrvwSec,d0
+	ISFROZENDVEON	d0	;was ISANALOGINUSE beq.s pre 12-11-91
+	bne.s	540$
+	PUT.w	d0,TB_PrvwSave
+	bra.s	550$
+540$	PUT.w	d0,TB_PrvwFroze
+
+550$	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	bne.s	552$
+	move.w	#M_DV0,d0
+552$	bsr	Mask2PV
+	ELHPUT_PV_R	a0,d0	;prvw always setup ok	
+;-----------
+
+*setup key input always	if it is on OLay Bus (is this safe???)
+	tst.b	TB_LutBus(a5)	
+	beq.s	3$		;jump if not in lut mode
+	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	beq.s	300$	
+3$	GET.w	TB_OLaySec,d0
+	beq.s	300$
+4$	bsr	Mask2LK
+	ELHPUT_LK_R	a0,d0
+
+*------------
+* When Keying over LUTified Main there are several incompatibilities. 
+* Can't key analog over a BW Lut of a different analog source
+* Can't key DV1 over a BW Lut of an analog source.
+* Color Luts of DV1 can't exist.
+* When keying Analog over a BW Lut of DV2, the key will be from DV2!
+
+300$	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne	5$
+	
+	XCALL	GetLutBus	;d0 = lutbus's key mask
+	GET.w	TB_MainSec,d1
+	cmpi.b	#LUTMODE_BW,TB_LutMode(a5)
+	bne	340$		;jump if color lut
+
+	DUMPHEXI.w	<OLay 3=>,TB_OLaySec(a5),<\>
+
+	cmp.w	TB_OLaySec(a5),d1
+	bne.s	5$
+
+	CALLTL	Mask2IS
+	ELHPUT_IS_R	a0,d0		
+
+	GET.w	TB_OLaySec,d0
+	CALLTL	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	bra.s	5$
+
+340$	cmpi.w	#M_DV1,d1
+	bne.s	5$
+
+	CALLTL	Mask2LK
+	ELHPUT_LK_R	a0,d0
+	ELHPUT_IS_I	a0,VTI_IS_MONO
+
+*------------
+5$
+	DUMPHEXI.w	<OLay 4=>,TB_OLaySec(a5),<\>
+
+	GET.w	TB_MainSec,d0	;AM will = this if JRs mode (BM unaffected)
+	ELHGET_CDS	a0,d1
+	cmpi.w	#VTI_CDS_CD,d1
+	beq	7$		;jump if standard CD keying
+
+	cmpi.w	#VTI_CDS_LUMKEY,d1
+	bne	190$		;jump if JRs mode
+
+;standard CD or LUMKEY keying
+7$	GET.w	TB_OLaySec,d1
+	beq	190$		;jump if OLay row is blank
+
+	tst.w	TB_KeyModeSec(a5)
+	bpl	190$		;jump if keying is off
+
+	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	beq.s	9$
+	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	beq.s	9$
+
+* no luts involved in the Key
+8$	cmp.w	d1,d0
+	beq	200$		;jump if OLay=Main, don't really lumkey
+	
+9$	move.w	d1,d0
+	GET.w	TB_ClipASec,d1
+	beq	180$		;jump if clip is zero, show foreground
+
+	GET.w	TB_MainSec,d0
+	cmpi.w	#ClipAMax,d1	;jump if clip is max,  show background
+	beq	190$
+
+;---------------
+;;	GET.w	TB_OLaySec,d0
+;;	move.w	d0,d1
+;;	bsr	Mask2LK
+;;	ELHPUT_LK_R	a0,d0
+;;	move.w	d1,d0
+
+	ELHSET_NOKEYSHIFT	a0	;assume standard key
+	GET.w	TB_OLaySec,d0
+	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	beq.s	24$
+	tst.w	ShiftedKey
+	beq.s	25$
+	
+	CALLTL	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+24$	ELHCLEAR_NOKEYSHIFT	a0
+	move.w	#M_DV0,d0
+
+25$	GET.w	TB_MainSec,d1
+	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne.s	27$
+	move.w	#M_DV0,d1
+
+*turn on Lumkey
+27$	ELHPUT_CDS_I	a0,VTI_CDS_LUMKEY
+
+	ELHSET_NOKEYINVERT	a0	;assume keying on black
+	tst.b	TB_KeyModeSec+1(a5)
+	bmi.s	80$		;jump if keying on black
+*keying on white
+	ELHCLEAR_NOKEYINVERT	a0
+
+*keying on black
+80$	bsr	Mask2BM		;OLay
+	ELHPUT_BM_R	a0,d0	
+
+	move.w	d1,d0
+	bsr	Mask2AM
+	ELHPUT_AM_R	a0,d0	;Main
+	bra	666$
+
+180$	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	bne.s	200$
+	bra.s	195$
+
+190$	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	bne.s	200$
+195$	move.w	#M_DV0,d0	;LUT
+
+* show AMandBM on same source, used by non-CD / non-LUMKEY keying
+* also used by Non-LumKeyed buttons
+200$
+	DUMPHEXI.w	<OLay 5=>,TB_OLaySec(a5),<\>
+
+	bsr	SetAMandBM
+
+666$	ELHSET_LINR	a0
+
+* Only freeze->live DVE, and digital effects turn lut off
+;;	ELHCLEAR_LUT	a0
+;;	ELHSET_LINP	a0
+
+	ELHCLEAR_LINP	a0
+	ELHTEST_LUT	a0
+	bne.s	680$
+		
+	ELHSET_LINP	a0	;standard non-transition mode = LINP set
+				;unless you are using LUT mode
+
+680$
+	DUMPHEXI.w	<OLay 6=>,TB_OLaySec(a5),<\>
+
+	tst.w	TB_OLaySec(a5)
+	bne	888$
+
+	CALLTL	KillAlphaKey	;Make sure AVEI is fixed up
+
+	DUMPHEXI.w	<OLay 7=>,TB_OLaySec(a5),<\>
+
+888$	movem.l	(sp)+,a0/d0-d1
+	rts
+
+*-----------------------
+* (VTSetUp, Mask)
+*    a0      d0	  if JR's mode, only update AM (=Main)
+* As for 4.0 this requires the OLay Bus to refect the need to keep a non-LumKey key
+SetAMandBM:
+	movem.w	d0-d1,-(sp)
+
+	move.w	d0,d1
+	bsr	Mask2AM
+	ELHPUT_AM_R	a0,d0
+
+	ELHGET_CDS	a0,d0
+	cmpi.w	#VTI_CDS_LUMKEY,d0
+	beq.s	8$		;jump if LUMKEY was on
+
+	tst.w	TB_OLaySec(a5)		;new for 4.0 JRs mode now requires correct OLaySec **!!
+	bne.s	10$			;new for 4.0  **!!
+
+**!! REMOVED JUST BEFORE 4.0 shipped
+;;	cmpi.w	#VTI_CDS_CD,d0
+;;	bne.s	10$		;jump if CDS != CD, JRs mode
+
+8$
+* Lumkey or other keying may have been on, so turn it off
+	ELHPUT_CDS_I		a0,VTI_CDS_CD
+	ELHPUT_CD_I		a0,VTI_CD_SHOWB	 ;just to make sure
+	ELHSET_NOKEYINVERT	a0
+	ELHSET_NOKEYSHIFT	a0
+
+	move.w	d1,d0
+	bsr	Mask2BM
+	ELHPUT_BM_R	a0,d0
+
+10$	movem.w	(sp)+,d0-d1
+	rts
+
+*******************************************************************
+ServeELH:
+	CALLTL	InterruptsOff
+	move.l	d0,-(sp)
+	moveq	#2,d0
+	XJSR	ChangeIS
+	move.l	(sp)+,d0
+	CALLTL	SendELH2Toaster
+	JUMPTL	InterruptsOn
+
+*******************************************************************
+ServeAVEI:
+	CALLTL	InterruptsOff
+	move.l	d0,-(sp)
+	moveq	#2,d0
+	XJSR	ChangeIS
+	move.l	(sp)+,d0
+
+	btst.b	#4,TB_DisplayRenderMode(a5)
+	beq.s	10$			;jump if not sequencing
+	CALLTL	InstallAVEdoELH	
+	bra.s	20$
+
+10$	CALLTL	InstallAVEIdoELH
+20$	JUMPTL	InterruptsOn
+
+*******************************************************************
+ServeFreeze:
+	DUMPMSG	<ServeFreeze>
+	CALLTL	InterruptsOff
+	move.l	d0,-(sp)
+	moveq	#2,d0
+	XJSR	ChangeIS
+	GET.w	TB_VideoFlagSec,d0
+	CALLTL	FreezeThawDVE
+	move.l	(sp)+,d0
+;	XJSR	Panelupdate
+	JUMPTL	InterruptsOn
+
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServeTake
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServeTake	
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServeTake
+	bsr	CookTake
+	bra	ServeELH
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServeFreeze
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServeFreeze
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServeFreeze
+	bsr	CookFreeze	
+	bra.s	ServeFreeze
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServeOLay
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServeOLay
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServeOLay
+	bsr	CookOLay
+	bra	ServeELH
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServeMain
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServeMain	
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServeMain
+	bsr	CookMain
+	bra	ServeELH
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServePrvw
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServePrvw	
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServePrvw
+	bsr	CookPrvw
+	bra	ServeELH
+
+*******************************************************************
+	IFD	CCODE
+_CookAndServeKeyButton
+_CookAndServeClipA
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	CookAndServeClipA	
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+CookAndServeKeyButton
+CookAndServeClipA
+	bsr	CookClipA
+	bra	ServeELH
+
+***************************************
+* UpdateTBar(a5->TB)
+	IFD	CCODE
+_UpdateTBar:
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	UpdateTBar
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+UpdateTBar:
+	SAVE	d0/d1/a0/a1/a3/a4
+	GET.l	TB_TBarFGL,a3		; no checking....
+	move.l	FG_Function(a3),a1
+	move.l	#FGC_UPDATE,d0
+	SAVE	d0/a3/a5
+	jsr	(a1)
+	lea	12(sp),sp
+	
+	GET.l	TB_CustomTBarRendering,d0
+	beq.s	10$
+	movea.l	d0,a0
+	jsr	(a0)
+	bra.s	20$
+
+10$	move.l	a3,a0
+	GET.l	TB_TBarFGL,a0
+	GET.l	TB_Window,a1
+;;	CLEARA	a2		;not on a requester
+	moveq	#1,d0
+	CLEAR	d1
+	CALLTL	DrawFastGList
+
+* If TBar has moved from Top or Bottom, or To Top or Bottom then update
+* the indicator.
+20$	GET.w	TB_TValSec,d0
+	beq.s	100$
+	
+	cmpi.w	#TValMax,d0
+	beq.s	100$
+
+	GET.w	TB_TValPri,d0
+	beq.s	1000$
+
+	cmpi.w	#TValMax,d0
+	bne.s	2000$
+	bra.s	1000$
+
+100$	GET.w	TB_TValPri,d0
+	beq.s	2000$
+	
+	cmpi.w	#TValMax,d0
+	beq.s	2000$
+
+1000$	DEA	TB_TBarFGL,a0
+	moveq	#TBEFXID,d0
+	CALLTL	IndexFastG
+	move.l	d0,a3			; no checking....
+	move.l	FG_Function(a3),a1
+	move.l	#FGC_UPDATE,d0
+	SAVE	d0/a3/a5
+	jsr	(a1)
+	lea	12(sp),sp
+
+	GET.l	TB_CustomMidTransRendering,d0
+	beq.s	1010$
+	movea.l	d0,a0
+	jsr	(a0)
+	bra.s	2000$
+
+1010$	move.l	a3,a0
+	GET.l	TB_Window,a1
+;;	CLEARA	a2		;not on a requester
+	moveq	#1,d0
+	CLEAR	d1
+	CALLTL	DrawFastGList
+2000$:
+	move.w	TB_TValSec(a5),TB_TValPri(a5)
+	REST	d0/d1/a0/a1/a3/a4
+	rts
+
+***************************************
+* UpdateClipA(a5->TB)
+	IFD	CCODE
+_UpdateClipA:
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	UpdateClipA
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+UpdateClipA:
+	SAVE	d0/d1/a0/a1/a3/a4
+	GET.l	TB_ClipFGL,a3		; no checking....
+	move.l	FG_Function(a3),a1
+	move.l	#FGC_UPDATE,d0
+	SAVE	d0/a3/a5
+	jsr	(a1)
+	lea	12(sp),sp
+
+	GET.l	TB_CustomClipRendering,d0
+	beq.s	5$
+	movea.l	d0,a0
+	jsr	(a0)
+	bra.s	10$	
+
+5$	move.l	a3,a0
+	GET.l	TB_ClipFGL,a0
+	GET.l	TB_Window,a1
+;;	CLEARA	a2		;not on a requester
+	moveq	#1,d0
+	CLEAR	d1
+	CALLTL	DrawFastGList
+	XJSR	PrintClip
+
+10$	move.w	TB_ClipASec(a5),TB_ClipAPri(a5)
+	REST	d0/d1/a0/a1/a3/a4
+	rts
+
+***************************************
+* CompCroutonImage(->FG, ->TB)
+*		     a0    a5
+CompCroutonImage
+	movem.l	d0-d1/a0-a3/a6,-(sp)
+	lea	_LVOCompFastGList(a5),a2
+	bra.s	crouimage
+
+***************************************
+* DrawCroutonImage(->FG, ->TB)
+*		     a0    a5
+DrawCroutonImage
+	movem.l	d0-d1/a0-a3/a6,-(sp)
+	lea	_LVODrawFastGList(a5),a2
+
+crouimage:
+	movea.l	a0,a3
+
+	moveq	#0,d0			; get IndexID into interface NumPad
+	move.w	FG_IndexID(a3),d0
+	divu	#TBFG_GRIDSIZE,d0
+
+	GET.l	TB_ToolBoxGrids,a0	; check if FG selected is within
+	GET.l	TB_ToolBoxPTR,d1	; the active grid on Switcher
+	sub.l	a0,d1			; interface
+	lsr.w	#2,d1
+	cmp.w	d1,d0
+	bne.s	666$			; no update if not on current grid
+
+	GET.l	TB_SYSBase,a6	
+	CALLROM	Forbid		
+	CALLTL	SoftSpriteOff	
+
+	movea.l	a3,a0
+	GET.l	TB_Window,a1
+;;	suba.l	a2,a2		;not on a requester
+	moveq	#1,d0		;only one FG
+	moveq	#0,d1		;offset into bm
+	jsr	(a2)		:DrawFastGList or CompFastGList
+
+	CALLTL	SoftSpriteOn
+	GET.l	TB_SYSBase,a6
+	CALLROM	Permit
+
+666$	movem.l	(sp)+,d0-d1/a0-a3/a6
+	rts
+
+***************************************
+* SetLoadBank(a5->TB)	;assume already frozen (so main is correct)
+	IFD	CCODE
+_SetLoadBank:
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	SetLoadBank
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+SetLoadBank:
+	movem.l	d0-d1/a0,-(sp)
+
+	DEA	TB_VTSetUp,a0
+
+	GET.w	TB_PrvwFroze,d0
+	GET.w	TB_MainSec,d1
+	ISFROZENDVEON	d1
+	bne.s	10$	
+
+	GET.w	TB_OLaySec,d1
+	ISFROZENDVEON	d1
+	beq.s	50$
+
+* Main or OLay is DV1 or DV2
+10$	cmp.w	d0,d1		;don't allow main=prvw
+	bne.s	50$
+	BITNOT.w M_DV0!M_DV1,d0
+	PUT.w	d0,TB_PrvwFroze
+
+50$	PUT.w	d0,TB_PrvwSec
+
+	cmpi.w	#M_DV0,d0
+	beq.s	120$		;jump if DV0 is showing
+	ELHSET_OBR	a0	;load into DV1
+	bra.s	150$
+120$	ELHCLEAR_OBR	a0	;load into DV0
+150$	movem.l	(sp)+,d0-d1/a0
+	rts
+
+***************************************
+* SetSaveBank(a5->TB)
+	IFD	CCODE
+_SetSaveBank:
+	move.l	a5,-(sp)
+	movea.l	8(sp),a5
+	bsr.s	SetSaveBank
+	movea.l	(sp)+,a5
+	rts
+	ENDC
+
+SetSaveBank:
+	movem.l	d0/a0,-(sp)
+
+	DEA	TB_VTSetUp,a0
+
+* Was using PRVW bank up until 6-8-93!!!!!!!!!!!
+	GET.w	TB_MainFroze,d0
+	PUT.w	d0,TB_MainSec
+
+100$	cmpi.w	#M_DV0,d0
+	beq.s	120$		;jump if DV0 is showing
+	ELHCLEAR_OBR	a0	;save DV1
+	bra.s	150$
+120$	ELHSET_OBR	a0	;save DV0
+150$	movem.l	(sp)+,d0/a0
+	rts
+
+*******************************************************************
+* ShortOutFader(Mask, a5->TB)
+* Is this used by anyone? I use CookMain instead!
+* Show a source out of Program.  Does not affect the buttons, nor LUT.
+ 
+	IFD	CCODE
+_ShortOutFader	move.l	a5,-(sp)
+		movea.l	8(sp),a5
+		move.l	4(sp),d0
+		bsr.s	ShortOutFader
+		movea.l	(sp)+,a5
+		rts
+	ENDC
+
+ShortOutFader:
+	movem.l	d0-d1/a0,-(sp)
+	lea	TB_VTSetUp(a5),a0
+
+	move.w	d0,d1
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+
+	move.w	d1,d0
+	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+
+* standard state of non-transition mode
+;;	PUT.b	#M_LUTBUS_NONE,TB_LutBus
+;;	ELHCLEAR_LUT	a0
+
+	ELHCLEAR_LINP	a0
+	ELHTEST_LUT	a0
+	bne.s	10$
+
+;;	move.w	d1,d0
+;;	CALLTL	Mask2IS
+;;	ELHPUT_IS_R	a0,d0
+
+	ELHSET_LINP	a0
+
+10$	ELHSET_LINR	a0
+	ELHPUT_CDS_I	a0,VTI_CDS_CD
+	ELHPUT_CD_I	a0,VTI_CD_SHOWB
+	ELHSET_NOKEYINVERT	a0
+	ELHSET_NOKEYSHIFT	a0
+	
+;;	CALLTL	InstallAVEIdoELH	
+	CALLTL	SendELH2Toaster
+
+	CALLTL	KillAlphaKey	;probably not needed because
+				;we probably don't have key shown
+
+	movem.l	(sp)+,d0-d1/a0	;Killed by NoTrazFreeze or DoTake
+	rts
+
+***************************************
+* LUToff(a5->TB) Turn off lut mode, fix buttons, crouton imagery etc.
+* If LUT is being used with another EFX crouton, both icons are
+* un-trimarked and the EFX (non LUT) crouton is selected.
+* Sends out the LUToffed ELH bits (didn't pre 12-26-91)
+LUToff
+	movem.l	d0-d7/a0-a6,-(sp)	;the FG cmds may use all regs
+
+* make sure its not on a LUT crouton
+	GET.l	TB_EFXbase,d0
+	bne.s	5$
+	bsr	555$
+	bra.s	20$
+
+5$	move.l	d0,a0
+	tst.w	EF_OldTBar(a0)
+	bge.s	10$			;jump if not start of effect
+
+	tst.w	TB_TValPri(a5)
+	bne.s	10$			;jump if not start of effect
+
+* Since start of Transition, force 1st use of TBar/Auto to be at position 0.
+* This will prevent the DoTakeNoKey() below from messing up.
+
+	GET.w	TB_TValSec,d1
+	move.l	d1,-(sp)		;stash TValSec
+
+	PUT.w	#0,TB_TValSec
+	clr.w	TB_TBarTime(a5)
+	
+	bsr.s	100$
+
+	move.l	(sp)+,d0
+	PUT.w	d0,TB_TValSec	;restore TValSec
+	bra.s	20$
+
+10$	bsr.s	100$
+20$	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+*------------------------
+100$	move.l	EF_TriMarkedLUT(a0),d0
+	beq.s	444$
+
+	cmp.l	TB_EfxFG(a5),d0
+	bne.s	444$
+
+* were're on a LUT crouton
+
+	move.l	EF_TriMarkedEFX(a0),d0
+	beq.s	444$
+
+	move.l	d0,a0
+	move.l	FG_Function(a0),d0
+	beq.s	444$
+
+	CALLTL FGC_SelectCommand	;was SelectCroutonQ pre 4.0
+;;	movem.l	a0/a5,-(sp)
+;;	move.l	#FGC_SELECTQ,-(sp)
+;;	move.l	d0,a0
+;;	jsr	(a0)			;Select EFX crouton
+;;	lea	12(sp),sp
+
+	CALLTL	ReDoDisplay		;ugly but the best I can do now
+	
+* selection (actually removal of LUT crouton) clears the EFX TriMark
+	
+* no longer on a LUT crouton, or there is no LUT crouton, or unable to jump to EFX crouton
+444$	GET.l	TB_EFXbase,a0
+	move.l	EF_TriMarkedLUT(a0),d0
+	beq.s	555$
+	clr.l	EF_TriMarkedLUT(a0)
+	move.l	d0,a0
+	bclr.b	#TRIMARK_BIT,FG_Flags1(a0)
+	CALLTL	DoHiLiteRemove
+
+*------------------------
+* Croution imagery all straighted up.
+555$	DEA.l	TB_VTSetUp,a0
+	ELHTEST_LUT	a0
+	beq.s	666$		;was jump to 10$
+
+	ELHCLEAR_LUT	a0
+	ELHSET_LINP	a0	* LINP may be set/clear if TSE or TDE transition
+	PUT.b	#M_LUTBUS_NONE,TB_LutBus
+	PUT.l	#0,TB_ColorCycle	;what if someone else is using this??
+
+	CALLTL	DoTakeNoKey	;get out of special Keying and/or EFX transition
+				;This will send out an ELH sprite if Take was needed!!!!	
+
+;;	ELHCLEAR_LUT	a0
+;;	ELHSET_LINP	a0	* LINP may be set/clear if TSE or TDE transition
+;;	PUT.b	#M_LUTBUS_NONE,TB_LutBus
+;;	PUT.l	#0,TB_ColorCycle	;what if someone else is using this??
+
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain	;sends out a sprite!!!
+
+* Grab MATTE into DV0 to destroy LUT data ???????
+
+666$	rts
+
+***************************************
+* LockToasterELH(a5->TB, d0=mode)
+*
+* mode = 1 for lock, 0 for unlock
+* Put the Toaster into shut down or non-shut down mode.
+* On shut down, does a take if required,
+* so CDS=CD/LumKey, and CD = VTI_CD_SHOWB.  LUT is shut off forgood.
+
+LockToasterELH:
+	movem.l	d0-d1/a0-a2,-(sp)
+
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a2
+
+	tst.w	d0
+	beq.s	3$
+
+	CALLTL	DoTakeNoKey
+
+	DEA.l	TB_VTSetUp,a2
+	ELHTEST_LUT	a2
+	beq.s	40$		;still call LUToff just to be safe
+	CALLTL	LUToff
+	
+	move.l	d0,-(sp)
+	ELHGET_IS	a2,d0
+	moveq	#0,d1
+	CALLTL	Grab1Bank	;destroy LUT data
+	move.l	(sp)+,d0
+	bra.s	42$
+40$	bsr	LUToff
+
+* Show Analog or Frozen, but no LIVE DVE
+42$	GET.w	TB_MainSec,d1
+	ISLIVEDVEON	d1
+	beq.s	32$
+	TURNLIVEDVEOFF	d1
+	PUT.w	d1,TB_MainSec
+
+32$	GET.w	TB_PrvwSec,d1
+	ISLIVEDVEON	d1
+	beq.s	33$
+	TURNLIVEDVEOFF	d1
+	PUT.w	d1,TB_PrvwSec
+
+33$	DEA.l	TB_VTSetUp,a2
+	ELHTEST_ABSE	a2
+	beq.s	35$		;jump if already frozen
+	PUT.w	#VIDEOTYPE_FREEZE4,TB_VideoFlagSec
+	bsr	ServeFreeze
+
+35$	bsr	CookPrvw
+	bsr	CookAndServeMain	
+
+3$	ELHSET_NOLOCK	a2
+	tst.w	d0
+	beq.s	4$
+	ELHCLEAR_NOLOCK	a2
+	
+* Setup EH4, Header 4, ELH4
+4$	lea	TB_EffectsBase+EFB_ELHSprites1(a5),a0
+	GETCURRENT	a0
+	move.l	TB_CurrentSprite1Ctrl(a5),(a0)+
+	move.l	VTSU_BI+SUBI_EH4B(a2),d0
+	ori.l	#$f000f000,d0		;Lines#s (necessary??)
+	move.l	d0,(a0)+
+
+	lea	TB_EffectsBase+EFB_ELHSprites0(a5),a1
+	GETCURRENT	a1
+	move.l	TB_CurrentSprite0Ctrl(a5),(a1)+
+	move.l	VTSU_RG+SURG_EH4R(a2),d0
+	andi.l	#~$f0008000,d0
+	ori.l	#(VTI_E4<<16)!$7000,d0
+	tst.w	TB_VideoFlagSec(a5)
+	bne.s	10$			;jump if not live
+	ori.w	#VTF_CERB,d0		;make live
+10$	move.l	d0,(a1)+
+	
+
+* since the toaster is shut down, it is safe not to do much
+	move.w	#240-1,d0
+	move.l	#$f<<28,d1	;being safe not to allow transparency
+15$	move.l	d1,(a0)+
+	move.l	d1,(a1)+
+	dbra	d0,15$
+
+	clr.l	(a0)
+	clr.l	(a1)
+
+	lea	TB_EffectsBase+EFB_ELHSprites0(a5),a0
+	GETCURRENTANDFLIP	a0
+	lea	TB_EffectsBase+EFB_ELHSprites1(a5),a1
+	GETCURRENTANDFLIP	a1
+	CALLTL	SendSprites2Toaster
+	CALLTL	Wait4Top	;probably not necessary
+
+	movem.l	(sp)+,d0-d1/a0-a2
+	rts
+
+*********************************************************
+* This will depend on a SendELH2Toaster (or whatever) to actually activate it
+EnterShiftedKey:
+	movem.l	d0-d2/a0-a2,-(sp)
+	tst.w	ShiftedKey
+	bne	666$
+	move.w	#1,ShiftedKey
+
+	XJSR	StashStates
+
+*-------------
+* linear LUT ramp
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0   ;->buff
+	movea.l	a0,a1
+
+	moveq	#125,d0		;quad counter
+	
+	IFD	CRAP
+	GET.w	TB_ClipASec,d1
+	move.b	d1,d2
+	lsl.w	#8,d1
+	move.b	d2,d1
+	move.w	d1,d2
+	swap	d1
+	move.w	d2,d1
+	ENDC
+
+	move.l	#$07070707,d1	;found experimentally (was #$04040404,d1)
+
+	move.l	#$02020202,d2
+110$	move.l	d1,(a1)+
+	add.l	d2,d1
+	dbra	d0,110$
+
+	move.l	a0,a1
+	move.l	#504,d0		;top interlaced line (252)
+	moveq	#4,d1		;4 interlaced lines
+	moveq	#0,d2		;bank
+	CALLTL	SendBytes2ToasterAVEI	;will freeze it
+
+* NOTE!!!! The above call could be 1/4th as long, if we made a function like
+* WriteYIQBlockAVEI, that took a YByte buffer as a parameter, instead of YIQ
+* We could call it WriteBytes2BlockAVEI
+
+;;	move.w	#1,EF_TrashedBorder(a4)	;signal as trashed
+
+*-------------
+* Build The Sprite.
+	movea.l	TB_EffectsBase+EFB_BuffA(a5),a0   ;->buff
+	movea.l	a0,a1
+	move.w	#59,d0
+	move.l	#(252<<24)!(253<<16)!(252<<8)!253,d1
+
+120$	move.l	d1,(a1)+
+	dbra	d0,120$
+	move.b	#252,(a1)
+
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A1
+	GETCURRENTANDFLIP	A1
+	MOVE.L	A1,TB_CurrentSprite1(a5)
+
+	MOVEQ.L	#0,D0
+	MOVE.L	#SPRITEHEIGHT,D1	;#241
+	MOVEQ.L	#B2SNORM,D2
+	CALLTL	Bytes2Sprite1
+
+	movea.l	a1,a2
+;;	GET.l	TB_CurrentSprite1,a2	; a new DVESprite1
+	GET.l	TB_CurrentCopList,a0
+	GET.l	TB_CurrentSpriteTable,a1
+	CALLTL	AttachSprite1
+
+*-------------
+* Get into LUT mode
+	DEA.l	TB_VTSetUp,a0
+	ELHSET_LUT	a0
+	ELHSET_OBR	a0
+	ELHCLEAR_LINP	a0
+
+	GET.w	TB_OLaySec,d0
+	CALLTL	Mask2IS
+	ELHPUT_IS_R	a0,d0
+
+666$	movem.l	(sp)+,d0-d2/a0-a2
+	rts
+
+*********************************************************
+ExitShiftedKey:
+	movem.l	d0/a0,-(sp)
+	tst.w	ShiftedKey
+	beq	666$	
+	clr.w	ShiftedKey
+
+	XJSR	StashStates
+
+	DEA.l	TB_VTSetUp,a0
+
+	GET.w	TB_OLaySec,d0
+	bne.s	5$
+
+	GET.w	TB_MainSec,d0
+	cmpi.w	#M_DV0,d0
+	bne.s	10$
+	GET.w	TB_MainPri,d0
+	bra.s	10$
+
+5$	cmpi.w	#M_DV0,d0
+	bne.s	10$
+	GET.w	TB_OLayPri,d0
+
+10$	move.l	d0,-(sp)
+	CALLTL	Mask2BM
+	ELHPUT_BM_R	a0,d0
+	move.l	(sp)+,d0
+
+	CALLTL	Mask2LK
+	ELHPUT_LK_R	a0,d0	
+
+	GET.w	TB_MainSec,d0
+	cmpi.w	#M_DV0,d0
+	bne.s	20$
+	GET.w	TB_MainPri,d0
+20$	CALLTL	Mask2AM
+	ELHPUT_AM_R	a0,d0
+		
+	ELHCLEAR_LUT		a0
+	ELHSET_LINP		a0
+	ELHSET_LINR		a0
+	ELHSET_NOKEYSHIFT	a0
+
+	bsr	ServeELH
+
+	moveq	#1,d0		;bank 0
+
+	CALLTL	RestoreBorderAVEI	;does a CookAndServeFREEZE4
+
+666$	movem.l	(sp)+,d0/a0
+	rts
+
+**********************************************************
+* NoTransFreeze(->TB)
+NoTransFreeze
+	movem.l	d0-d1/a0,-(sp)
+	DUMPMSG	<NoTransFreeze>
+	CALLTL	DoTake	;will keep LumKeying if not mid-transition
+			;And as of 4.0 keep Alpha Keys ***!!!
+
+	DEA.l	TB_VTSetUp,a0
+	ELHTEST_LUT	a0
+	beq.s	10$		;still call LUToff just to be safe
+	CALLTL	LUToff
+	
+	ELHGET_IS	a0,d0
+	moveq	#0,d1
+	CALLTL	Grab1Bank	;destroy LUT data
+	bra.s	20$
+
+10$	CALLTL	LUToff
+20$	movem.l	(sp)+,d0-d1/a0
+
+;;	bra.s	CookAndServeFREEZE4
+
+* NOTE! CookAndServeFREEZE4 must follow
+
+**********************************************
+* not the standard FreezeButton logic, PRVW may end up not on a froze bank
+* NOTE! This must follow NoTransFreeze
+* 8 field freeze, or LIVE will get turned off
+* WARNING: If you have LIVE DVE, and you call FreezeThawDVE or call some
+* function that freezes the DVE, then this will not fix up the LIVE buttons.
+* But instead you should call this function first or do a ProcessFreezeThaw
+* and a CookAndServeMain after the video is frozen.
+
+* Various Freeze related functions:
+* The following 3 functions are high level.  They can handle LUT, LUMKEY etc.
+* CookFreeze, CookAndServeFreeze, CookAndServeFREEZE4
+* The CookAndServeFREEZE4 will put the machine into frozen video if not
+* already frozen, without forcing the frozen Prvw to a bank.
+* CookFreeze, and CookAndServeFreeze are intended for the FGC_FREEZE handling.
+
+* MidTrans or NonMidTrans lowlevel functions for fixing buttons:
+* ProcessFreezeThaw, ProcessFreezeButton ;don't resolve multiple live DVEs
+* CookFreezeThaw, CookFreezeButton	 ;resolve multiple DVEs
+* the Thaw routines don't force frozen Prvw to a bank, the Button ones do.
+
+CookAndServeFREEZE4
+	movem.l	d0/a0,-(sp)
+	DEA.l	TB_VTSetUp,a0
+	ELHTEST_ABSE	a0
+	beq.s	10$		;jump if already frozen
+
+	move.w	#VIDEOTYPE_FREEZE4,d0
+	PUT.w	d0,TB_VideoFlagSec
+	XJSR	ProcessFreezeThaw
+	CALLTL	CookMain
+	bsr	ServeFreeze
+
+10$	movem.l	(sp)+,d0/a0
+	rts
+
+**********************************************
+	ALLDUMPS
+@
+
+
+2.21
+log
+@Debugs
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.20 1995/02/16 20:43:36 Kell Exp Kell $
+d10 3
+d732 1
+d742 2
+a744 1
+* frozen
+d786 3
+d1623 1
+d1631 1
+d1634 1
+d2358 1
+a2358 1
+
+@
+
+
+2.20
+log
+@Now does KillAlphaKey are correct moments.  Killed JRs mode (see comments.).  This allows for Keyed Still support.
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.19 1994/07/28 13:19:56 Kell Exp Kell $
+d10 3
+d1298 1
+a1298 1
+	bne.s	799$
+d1301 1
+a1301 1
+	bne.s	799$		;jump if in lut mode
+d1304 3
+d1348 2
+d1404 1
+a1404 1
+	bne.s	5$
+d1409 3
+a1411 1
+	bne.s	340$		;jump if color lut
+d1432 4
+a1435 1
+5$	GET.w	TB_MainSec,d0	;AM will = this if JRs mode (BM unaffected)
+d1520 4
+a1523 1
+200$	bsr.s	SetAMandBM
+d1538 5
+a1542 2
+680$	tst.w	TB_OLaySec(a5)
+	bne.s	888$
+d1545 2
+@
+
+
+2.19
+log
+@nothing but nothing
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.18 1994/07/27 20:30:48 Kell Exp Kell $
+d10 3
+d823 2
+a824 1
+70$	bsr	LUToff
+d1290 1
+a1290 1
+* At this point all of the keys are mostly ok, and IS/LKA are ok.
+d1345 4
+d1422 1
+a1422 1
+5$	GET.w	TB_MainSec,d0
+d1425 1
+a1425 1
+	beq.s	7$		;jump if standard CD keying
+d1495 1
+a1495 1
+	bra.s	666$
+d1522 6
+a1527 1
+680$	movem.l	(sp)+,a0/d0-d1
+d1533 1
+d1543 1
+a1543 1
+	bne.s	7$		;jump if LUMKEY was off
+d1545 11
+a1555 3
+* Lumkey was on, so turn it off
+	ELHPUT_CDS_I	a0,VTI_CDS_CD
+	ELHPUT_CD_I	a0,VTI_CD_SHOWB	 ;just to make sure
+a1557 1
+	bra.s	8$
+d1559 1
+a1559 4
+7$	cmpi.w	#VTI_CDS_CD,d0
+	bne.s	10$		;jump if CDS != CD, JRs mode
+
+8$	move.w	d1,d0
+d1615 1
+a1615 1
+	bra.s	ServeELH
+d1643 1
+a1643 1
+	bra.s	ServeELH
+d1657 1
+a1657 1
+	bra.s	ServeELH
+d1671 1
+a1671 1
+	bra.s	ServeELH
+d1687 1
+a1687 1
+	bra.s	ServeELH
+d1975 4
+a1978 1
+	movem.l	(sp)+,d0-d1/a0
+d2328 1
+@
+
+
+2.18
+log
+@No comment
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.17 1994/07/27 20:28:39 Kell Exp Kell $
+d10 3
+d100 1
+a100 1
+	XCCODE	Mask2BM
+@
+
+
+2.17
+log
+@*** empty log message ***
+@
+text
+@d5 1
+a5 1
+* Confidental and Proprietary. All rights reserved. 
+d7 1
+a7 1
+* $Id: buttons.a,v 2.16 1994/07/27 20:28:10 Kell Exp Kell $
+d10 3
+d96 1
+a96 1
+	XCCODE	Mask2AM
+@
+
+
+2.16
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.15 1994/07/27 19:24:20 Kell Exp Kell $
+d10 3
+@
+
+
+2.15
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.14 1994/05/24 21:36:23 Kell Exp Kell $
+d10 3
+@
+
+
+2.14
+log
+@FGC_SelectQroutonQ changed to FGC_SelectCommand call
+@
+text
+@d7 1
+a7 1
+* $Id: buttons.a,v 2.13 94/05/12 13:37:11 Kell Exp Locker: Kell $
+d9 4
+a12 1
+* $Log:	buttons.a,v $
+@
+
+
+2.13
+log
+@Now call FGC_SelectCroutonQ
+@
+text
+@Binary files buttons.a and t:,RCSt1A70c3c00 differ
+@
+
+
+2.12
+log
+@Fixes to prevent ServeAVEI from showing garbaged interfaces during sequencing. And ServerAVE now also sends out ELH stuff.
+@
+text
+@Binary files buttons.a and t:,RCSt1A70c37d8 differ
+@
+
+
+2.11
+log
+@Avoids AVEI during sequencing
+@
+text
+@Binary files buttons.a and t:,RCSt1A70c32a0 differ
+@
+
+
+2.10
+log
+@Fixed L
+Fixed LUToff so it forces TBar to top on the initial TBar drag, so
+weird takes won't occur.  This fixed problems with ANIM digital FX
+and TBar drags, while ChromaFX was previously in control.
+Also, fixed CookTake() so it doesn't stick OLayPri into OLaySec when
+we are trying to clear OLaySec.  This prevents weird takes that occured
+when loading stills on the setup screen, while mid-transition.
+The above ChromaFX bug only occured if DV2 was selected initially.
+@
+text
+@Binary files buttons.a and t:,RCSt1A70c3278 differ
+@
+
+
+2.9
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78b9080 differ
+@
+
+
+2.8
+log
+@New field to prevent Clip from rendering on SetUp screen
+@
+text
+@Binary files buttons.a and t:,RCSt1A78b04a8 differ
+@
+
+
+2.7
+log
+@Now allows substituting custom TBar rendering routines in UpdateTBar
+@
+text
+@Binary files buttons.a and t:,RCSt1A78b0150 differ
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78b0280 differ
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78a2aa8 differ
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@Binary files Buttons.a and t:,RCSt1A74bb670 differ
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78a3b98 differ
+@
+
+
+2.2
+log
+@New Draw/Comp CroutonImage functions.
+@
+text
+@Binary files buttons.a and t:,RCSt1A78a44c0 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78a3d00 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files buttons.a and t:,RCSt1A78a3c58 differ
+@

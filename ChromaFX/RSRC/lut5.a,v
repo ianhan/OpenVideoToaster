@@ -1,0 +1,1220 @@
+head	2.2;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.2
+date	94.10.28.12.46.26;	author pfrench;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.04.06.14.19.05;	author Finch2;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.18.23.58.53;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.2
+log
+@Now uses chromafx_support directory
+@
+text
+@********************************************************************
+* LUT5.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lut5.a,v 2.1 1993/04/06 14:19:05 Finch2 Exp pfrench $
+*
+* $Log: lut5.a,v $
+*Revision 2.1  1993/04/06  14:19:05  Finch2
+**** empty log message ***
+*
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT5"
+	section LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUT0.i"
+	Include	"LUT2.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTB.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT_GenerateNormal:						*
+*									*
+*	Makes a Normal Color Map.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Edit Buffer To Generate Map Into.		*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= At This Address, Map Is Stored.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GenerateNormal
+LUT_GenerateNormal:
+	MOVEM.L	D0-D1/A0,-(A7)		; Save Calling State.
+*
+*	Fill Start Of Buffer With Black.
+*
+	MOVEQ.L	#0,D1			; Initial Value.
+	MOVEQ.L	#18-1,D0		; Loop Counter, Old 20.
+GENOR1	MOVE.B	D1,(A0)+		; Save Red.
+	MOVE.B	D1,(A0)+		; Save Green.
+	MOVE.B	D1,(A0)+		; Save Blue.
+	DBF	D0,GENOR1		; Loop Until Done.
+*
+*	Loop And Fill First 1/2 With Present Color.
+*
+	MOVEQ.L	#2,D1			; Initial Value.
+	MOVEQ.L	#32-1,D0		; Loop Counter.
+GENOR2	MOVE.B	D1,(A0)+		; Save Red.
+	MOVE.B	D1,(A0)+		; Save Green.
+	MOVE.B	D1,(A0)+		; Save Blue.
+	ADDQ.W	#4,D1			; Increment Until Done.
+	DBF	D0,GENOR2		; Loop Until Done.
+*
+*	Loop And Fill Second 1/2 With Present Color.
+*
+	MOVE.W	#128,D1			; Initial Value.
+	MOVEQ.L	#32-1,D0		; Loop Counter.
+GENOR3	MOVE.B	D1,(A0)+		; Save Red.
+	MOVE.B	D1,(A0)+		; Save Green.
+	MOVE.B	D1,(A0)+		; Save Blue.
+	ADDQ.W	#4,D1			; Increment Until Done.
+	DBF	D0,GENOR3		; Loop Until Done.
+*
+*	Fill End Of Buffer With Last Color.
+*
+	MOVEQ.L	#LUT_EditBufSz-64-18-1,D0 ; Loop Counter.
+	MOVEQ.L	#-1,D1			; Value of 255.
+GENOR4	MOVE.B	D1,(A0)+		; Save Red.
+	MOVE.B	D1,(A0)+		; Save Green.
+	MOVE.B	D1,(A0)+		; Save Blue.
+	DBF	D0,GENOR4		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_GenerateNegative:						*
+*									*
+*	Makes a Negative Color Map.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Edit Buffer To Generate Map Into.		*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= At This Address, Map Is Stored.			*
+*									*
+*	23.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GenerateNegative
+LUT_GenerateNegative:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Fill End Of Buffer With Black.
+*
+	ADDA.W	#LUT_EditBufLn,A0	; Address of End Of Buffer.
+	MOVEQ.L	#0,D1			; Initial Value.
+	MOVEQ.L	#LUT_EditBufSz-64-18-1,D0 ; Loop Counter.
+GENEG1	MOVE.B	D1,-(A0)		; Save Blue.
+	MOVE.B	D1,-(A0)		; Save Green.
+	MOVE.B	D1,-(A0)		; Save Red.
+	DBF	D0,GENEG1		; Loop Until Done.
+*
+*	Loop And Fill First 1/2 With Present Color.
+*
+	MOVEQ.L	#2,D1			; Initial Value.
+	MOVEQ.L	#32-1,D0		; Loop Counter.
+GENEG2	MOVE.B	D1,-(A0)		; Save Blue.
+	MOVE.B	D1,-(A0)		; Save Green.
+	MOVE.B	D1,-(A0)		; Save Red.
+	ADDQ.W	#4,D1			; Increment Until Done.
+	DBF	D0,GENEG2		; Loop Until Done.
+*
+*	Loop And Fill Second 1/2 With Present Color.
+*
+	MOVE.W	#128,D1			; Initial Value.
+	MOVEQ.L	#32-1,D0		; Loop Counter.
+GENEG3	MOVE.B	D1,-(A0)		; Save Blue.
+	MOVE.B	D1,-(A0)		; Save Green.
+	MOVE.B	D1,-(A0)		; Save Red.
+	ADDQ.W	#4,D1			; Increment Until Done.
+	DBF	D0,GENEG3		; Loop Until Done.
+*
+*	Fill Start Of Buffer With Last Color.
+*
+	MOVEQ.L	#18-1,D0		; Loop Counter, Old 20.
+	MOVEQ.L	#-1,D1			; Value of 255.
+GENEG4	MOVE.B	D1,-(A0)		; Save Blue.
+	MOVE.B	D1,-(A0)		; Save Green.
+	MOVE.B	D1,-(A0)		; Save Red.
+	DBF	D0,GENEG4		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_Spread:							*
+*									*
+*	Performes a Spread In LUT Mode.					*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Starting Color Index To Spread From.			*
+*	D1.L	= Ending   Color Index To Spread To.			*
+*	A0.L	= Address of Edit Buffer To Spread Into.		*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	A Spread Is Performed On The Screen.				*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_Spread
+LUT_Spread:
+	MOVEM.L	D0-D7/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make Sure The Values Are Within Range.
+*
+	CMP.L	D1,D0			; Is Ending > Staring?
+	BCS.S	SPRED1			; Jump If Within Range.
+	EXG.L	D0,D1			; Ok, Now They Are In Order.
+SPRED1	MOVEA.L	A0,A1			; Get Ending Value.
+	ADDA.L	D1,A1			; Times 1.
+	ADDA.L	D1,A1			; Times 2.
+	ADDA.L	D1,A1			; Times 3.
+	MOVEQ.L	#0,D2			; Get Ending Value.
+	MOVE.B	(A1)+,D2		; Get Red.
+	SWAP.W	D2			; Put In High Position.
+	MOVE.B	(A1)+,D2		; Get Green.
+	LSL.W	#8,D2			; Put In High Position.
+	MOVE.B	(A1)+,D2		; Get Blue.
+	ADDA.L	D0,A0			; Point To Starting Address.
+	ADDA.L	D0,A0			; Times 2.
+	ADDA.L	D0,A0			; Times 3.
+	SUB.L	D1,D0			; Make Delta.
+	NEG.L	D0			; The Other Way Around.
+	CMPI.W	#2,D0			; Delta == 0 or 1?
+	BCS.S	SPRED7			; Exit If One in Width.
+	MOVE.L	D2,D1			; D1.L = Ending RGB Value.
+*
+*	Make Delta Red.
+*
+	MOVE.L	D1,D3			; D3.L = Make Delta Increment.
+	CLR.W	D3			; Clear Low Bits.
+	SWAP.W	D3			; D3.L = Delta Increment.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.B	(A0)+,D2		; D2.L = Base  Position.
+	SUB.L	D2,D3			; D3.L = Total Increment.
+	ASL.W	#4,D2			; Times 16.
+	ASL.W	#4,D3			; Times 16.
+	DIVS.W	D0,D3			; D3.W = Red Delta Increment.
+	BPL.S	SPRED2			; Jump If Going in Positive Direction.
+	ADDI.W	#$10,D2			; Point Past Ending Position.
+	ADD.W	D3,D2			; Pre-Decrement.
+*
+*	Make Delta Green.
+*
+SPRED2	MOVEQ.L	#0,D5			; Clear High Bits.
+	MOVE.W	D1,D5			; D5.L = Make Delta Increment.
+	LSR.W	#8,D5			; D5.L = Delta Increment.
+	MOVEQ.L	#0,D4			; Clear High Bits.
+	MOVE.B	(A0)+,D4		; D4.L = Base  Position.
+	SUB.L	D4,D5			; D5.L = Total Increment.
+	ASL.W	#4,D4			; Times 16.
+	ASL.W	#4,D5			; Times 16.
+	DIVS.W	D0,D5			; D5.W = Red Delta Increment.
+	BPL.S	SPRED3			; Jump If Going in Positive Direction.
+	ADDI.W	#$10,D4			; Point Past Ending Position.
+	ADD.W	D5,D4			; Pre-Decrement.
+*
+*	Make Delta Blue.
+*
+SPRED3	MOVEQ.L	#0,D7			; Clear Low Bits.
+	MOVE.B	D1,D7			; D7.L = Delta Increment.
+	MOVEQ.L	#0,D6			; Clear High Bits.
+	MOVE.B	(A0)+,D6		; D6.L = Base  Position.
+	SUB.L	D6,D7			; D7.L = Total Increment.
+	ASL.W	#4,D6			; Times 16.
+	ASL.W	#4,D7			; Times 16.
+	DIVS.W	D0,D7			; D7.W = Red Delta Increment.
+	BPL.S	SPRED4			; Jump If Going in Positive Direction.
+	ADDI.W	#$10,D6			; Point Past Ending Position.
+	ADD.W	D7,D6			; Pre-Decrement.
+*
+*	Loop and Do The Spread.
+*
+SPRED4	SUBQ.W	#1,D0			; Loop One Less Times.
+	BRA.S	SPRED6			; Loop & Do the SPRD.
+SPRED5	MOVE.W	D2,D1			; Get RED Setting.
+	LSR.W	#4,D1			; Move Down.
+	MOVE.B	D1,(A0)+		; Save New RED.
+	MOVE.W	D4,D1			; Get GREEN Setting.
+	LSR.W	#4,D1			; Move Down.
+	MOVE.B	D1,(A0)+		; Save New GREEN.
+	MOVE.W	D6,D1			; Get BLUE Setting.
+	LSR.W	#4,D1			; Move Down.
+	MOVE.B	D1,(A0)+		; Save New BLUE.
+SPRED6	ADD.W	D7,D6			; Sum in Delta BLUE.
+	ADD.W	D5,D4			; Sum in Delta GREEN.
+	ADD.W	D3,D2			; Sum in Delta RED.
+	DBF	D0,SPRED5		; Do For Number of Elements.
+*
+*	Exit Subroutine.
+*
+SPRED7	MOVEM.L	(A7)+,D0-D7/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_Spectrum:							*
+*									*
+*	Performes a Spectrum In LUT Mode.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Starting Color Index To Spectrum From.		*
+*	D1.L	= Ending   Color Index To Spectrum To.			*
+*	A0.L	= Address of Edit Buffer To Spectrum Into.		*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	A Spectrum Is Performed On The Screen.				*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_Spectrum
+LUT_Spectrum:
+	MOVEM.L	D0-D7/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make Sure The Values Are Within Range.
+*
+	CMP.L	D1,D0			; Is Ending > Staring?
+	BCS.S	SPECT1			; Jump If Within Range.
+	EXG.L	D0,D1			; Ok, Now They Are In Order.
+SPECT1	LEA.L	0(A0,D1.L),A1		; Get Ending   Value Address.
+	ADDA.L	D1,A1			; Times 2.
+	ADDA.L	D1,A1			; Times 3.
+	ADDA.L	D0,A0			; Get Starting Value Address.
+	ADDA.L	D0,A0			; Times 2.
+	ADDA.L	D0,A0			; Times 3.
+	SUB.L	D0,D1			; Make Delta.
+	CMPI.W	#2,D1			; Delta == 0 or 1?
+	BCS	SPECT8			; Exit If One in Width.
+	MOVE.B	(A1)+,D0		; Get Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A1)+,D0		; Get Green.
+	LSL.W	#8,D0			; Put In High Position.
+	MOVE.B	(A1)+,D0		; Get Blue.
+	BSR	RGBHSI			; D0.L = HHSI Ending Values.
+	MOVE.L	D0,D2			; D2.L = HHSI Ending Values.
+	MOVE.B	(A0)+,D0		; Get Red.
+	SWAP.W	D0 			; Put In High Position.
+	MOVE.B	(A0)+,D0		; Get Green.
+	LSL.W	#8,D0			; Put In High Position.
+	MOVE.B	(A0)+,D0		; Get Blue.
+	BSR	RGBHSI			; D0.L = HHSI Starting Values.
+	MOVE.L	D0,D6			; D6.L = HHSI Starting Values.
+	MOVE.L	D2,-(A7)		; TOS  = HHSI Ending   Values.
+*
+*	Make Delta Hue.
+*
+	MOVE.L	D2,D3			; D3.L = Ending   Position.
+	MOVE.L	D6,D2			; D2.L = Starting Position.
+	CLR.W	D3			; Clear Low Bits.
+	SWAP.W	D3			; D3.L = Starting Position.
+	SWAP.W	D2			; D2.L = Ending   Position.
+	SUB.W	D2,D3			; D3.L = Total Increment.
+	BMI.S	SPECT2			; Jump If Spread >= 1/2.
+	NOT.W	D3			; Go the Long Way Around.
+	DIVU.W	D1,D3			; D3.L = HUE Increment.
+	NOT.W	D3			; Put Back Right Side Up.
+	BRA.S	SPECT3			; Loop & Do the SPRD.
+SPECT2	DIVU.W	D1,D3			; D3.L = HUE Increment.
+*
+*	Make Delta Saturation.
+*
+SPECT3	MOVE.L	D6,D4			; D4.L = Starting Position.
+	MOVE.L	(A7),D5			; D5.L = Ending   Position.
+	LSR.W	#4,D4			; Put in Low Position.
+	ANDI.W	#$FF0,D4		; Leave Only SATURATION Starting.
+	LSR.W	#4,D5			; Put in Low Position.
+	ANDI.W	#$FF0,D5		; Leave Only SATURATION Ending.
+	SUB.W	D4,D5			; D5 = Total Increment.
+	EXT.L	D5			; For Divide.
+	DIVS.W	D1,D5			; D5 = SATURATION Delta Increment.
+	BPL.S	SPECT4			; Jump If Going in Positive Direction.
+	ADDI.W	#$10,D4			; Point Past Ending Position.
+	ADD.W	D5,D4			; Pre-Decrement.
+*
+*	Make Delta Intensity.
+*
+SPECT4	MOVE.L	(A7)+,D7		; D7.L = Ending Position.
+	ANDI.W	#$FF,D7			; Leave Only Intensity Ending.
+	ANDI.W	#$FF,D6			; Leave Only Intensity Starting.
+	ASL.W	#4,D6			; Times In Upper Position.
+	ASL.W	#4,D7			; Times In Upper Position.
+	SUB.W	D6,D7			; D7.L = Total Increment.
+	EXT.L	D7			; For Divide.
+	DIVS.W	D1,D7			; D7.W = Intensity Delta Increment.
+	BPL.S	SPECT5			; Jump If Going in Positive Direction.
+	ADDI.W	#$10,D6			; Point Past Ending Position.
+	ADD.W	D7,D6			; Pre-Decrement.
+*
+*	Loop and Do The Spectrum.
+*
+SPECT5	SUBQ.W	#1,D1			; Loop One Less Times.
+	BRA.S	SPECT7			; Loop & Do the SPRD.
+SPECT6	MOVE.W	D2,D0			; Get HUE Setting.
+	SWAP.W	D0			; D0.L = HHXX.
+	MOVE.W	D6,D0			; Get Intensity Setting.
+	LSR.W	#4,D0			; Move Down to Intensity.
+	MOVE.B	D0,(A0)			; Save New Intensity.
+	MOVE.W	D4,D0			; Get SATURATION Setting.
+	LSL.W	#4,D0			; Move Down to SATURATION.
+	ANDI.W	#$FF00,D0		; Remove All But SATURATION.
+	OR.B	(A0),D0			; Save New SATURATION.
+	BSR	HSIRGB			; Convert Back to 0RGB.
+	MOVE.B	D0,2(A0)		; Save Blue.
+	LSR.L	#8,D0
+	MOVE.B	D0,1(A0)		; Save Green.
+	LSR.L	#8,D0
+	MOVE.B	D0,(A0)			; Save Red.
+	ADDQ.L	#3,A0			; Move To Next Position.
+SPECT7	ADD.W	D7,D6			; Sum in Delta Intensity.
+	ADD.W	D5,D4			; Sum in Delta Saturation.
+	ADD.W	D3,D2			; Sum in Delta Hue.
+	DBF	D1,SPECT6		; Do For Number of Elements.
+*
+*	Exit Subroutine.
+*
+SPECT8	MOVEM.L	(A7)+,D0-D7/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_RandomSpread:						*
+*									*
+*	Performes a Random Spread In LUT Mode.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Starting Color Index To Random From.			*
+*	D1.L	= Ending   Color Index To Random To.			*
+*	A0.L	= Address of Edit Buffer To Random Into.		*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	A Random Is Performed On The Screen.				*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_RandomSpread
+LUT_RandomSpread:
+	MOVEM.L	D0-D1/A0,-(A7)		; Save Calling State.
+*
+*	Loop and Fill Buffer With Random Numbers.
+*
+	CMP.L	D1,D0			; Is Ending > Staring?
+	BCS.S	RSPRD1			; Jump If Within Range.
+	EXG.L	D0,D1			; Ok, Now They Are In Order.
+RSPRD1	ADDA.L	D0,A0			; Times 1.
+	ADDA.L	D0,A0			; Times 2.
+	ADDA.L	D0,A0			; Times 3.
+	SUB.L	D0,D1			; D1.L = Loop Counter - 1.
+	ADDQ.L	#1,D1			; D1.L = Loop Counter.
+	MOVE.L	D1,D0			; Go Times 3.
+	ADD.L	D1,D1			; Times 2.
+	ADD.L	D0,D1			; Times 3.
+	BRA.S	RSPRD3			; Start Looping.
+RSPRD2	BSR.S	LUT_Random		; D0.L = Random Number.
+	LSR.W	#8,D0			; Get Most Random Bits.
+	MOVE.B	D0,(A0)+		; Save Result.
+RSPRD3	DBF	D1,RSPRD2		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_Random:							*
+*									*
+*	Generates a Sequence of Random Numbers.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.W	= Value of Random Number.				*
+*									*
+*	25.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+*	Intialize With $2336.
+*
+	XDEF	LUT_Random
+LUT_Random:
+	MOVE.W	LTE_RandomNu(A4),D0	; Get Old Random Value.
+	MULU.W	#02053,D0		; Multiply By Constant.
+	ADDI.L	#13849,D0		; Offset By Constant.
+	MOVE.W	D0,LTE_RandomNu(A4)	; Save Result.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_SnowSpread:							*
+*									*
+*	Performes The Snow Spectrum In LUT Mode.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Starting Color Index To Snow From.			*
+*	D1.L	= Ending   Color Index To Snow To.			*
+*	A0.L	= Address of Edit Buffer To Snow Into.			*
+*									*
+*	Output:								*
+*									*
+*	A Snow Spectrum Is Performed On The Screen.			*
+*									*
+*	26.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SnowSpread
+LUT_SnowSpread:
+	MOVEM.L	D0-D2/A0,-(A7)		; Save Calling State.
+*
+*	Set The Source and Destination Address.
+*
+	CMP.L	D1,D0			; Is Ending > Staring?
+	BCS.S	SNOWS1			; Jump If Within Range.
+	EXG.L	D0,D1			; Ok, Now They Are In Order.
+SNOWS1	ADDA.W	D0,A0			; Address of Destination.
+	ADDA.W	D0,A0
+	ADDA.W	D0,A0
+	SUB.W	D0,D1			; D1.W = Number of Items - 1.
+	MOVEQ.L	#-1,D2			; Set High To $FF.
+	CLR.W	D2			; Set Low  To $00.
+	BTST.L	#0,D0			; Which Way To Start?
+	BEQ.S	SNOWS3			; Jump If Starting At Zero.
+SNOWS2	SWAP.W	D2
+SNOWS3	MOVE.B	D2,(A0)+		; Save Red.
+	MOVE.B	D2,(A0)+		; Save Green.
+	MOVE.B	D2,(A0)+		; Save Blue.
+	DBF	D1,SNOWS2		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AllocateLUTList:						*
+*									*
+*	Allocates the List of LUT Data Structures.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The LUT List Data is Allocated and Initilized.			*
+*									*
+*	31.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_AllocateLUTList
+LUT_AllocateLUTList:
+	MOVEM.L	D0-D2/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Get Ready To Allocate The Memory.
+*
+	TST.L	LTE_LULPtr(A4)		; Memory Already Allocated?
+	BNE.S	ALUTL4			; Exit If Memory Already There.
+	BCLR.B	#LTEF_DataLoaded,LTE_Flags(A4) ; Cannot Be Loaded.
+	SUBA.L	A2,A2			; Head List Pointer.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	MOVE.L	A6,D0			; Check Sys Base for NULL.
+	BEQ.S	ALUTL4			; Exit On NULL Pointer.
+	MOVEQ.L	#100-1,D2		; D2.L = Number of LUT's to Allocate.
+*
+*	Allocate The Memory And Add It To The List.
+*
+ALUTL1	MOVE.L	#LUL_Sizeof,D0		; D0.L = Number of Bytes.
+	MOVE.L	#MEMF_PUBLIC!MEMF_CLEAR,D1 ; D1.L = Memory Type.
+	JSR	_LVOAllocMem(A6)	; Allocate The Memory.
+	TST.L	D0			; Did We Get The Memory?
+	BEQ.S	ALUTL4			; Jump If Not Allcated.
+	MOVE.L	A2,D1			; Head Of List?
+	BEQ.S	ALUTL2			; Jump If Head Of List.
+	MOVE.L	D0,LUL_Next(A2)		; Place Link In List.
+	MOVEA.L	D0,A2			; Next Position In List.
+	BRA.S	ALUTL3			; Skip Else Part.
+ALUTL2	MOVEA.L	D0,A2			; A2.L = Head of List.
+	MOVE.L	D0,LTE_LULPtr(A4)	; Store Head of List.
+*
+*	Now Initilize This Area With Default Data.
+*
+ALUTL3	MOVE.L	A4,-(A7)		; Save Pointer To LUT Base.
+	LEA.L	LUL_LUT(A2),A4		; A4.L = Address of LUT Base.
+	BSR	LUT_InitEBuf		; Initilize The Buffer.
+	MOVEA.L	(A7)+,A4		; Return Pointer To LUT Base.
+	DBF	D2,ALUTL1		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+ALUTL4	MOVEM.L	(A7)+,D0-D2/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreeLUTList:							*
+*									*
+*	Frees the List of LUT Data Structures.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The LUT List Data is Freed and Initilized.			*
+*									*
+*	31.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FreeLUTList
+LUT_FreeLUTList:
+	MOVEM.L	D0-D2/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Get Ready To Free The Memory.
+*
+	MOVE.L	LTE_LULPtr(A4),D0	; Memory Already Freed?
+	BEQ.S	FLUTL2			; Exit If Memory Already Freed.
+	MOVEA.L	D0,A2			; Head List Pointer.
+	CLR.L	LTE_LULPtr(A4)		; Null Out the Pointer.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+*
+*	Free The Memory And Add It To The List.
+*
+FLUTL1	MOVE.L	#LUL_Sizeof,D0		; D0.L = Number of Bytes.
+	MOVEA.L	A2,A1			; A1.L = Address of Memory to Remove.
+	MOVEA.L	LUL_Next(A2),A2		; A2.L = Next Position In List.
+	JSR	_LVOFreeMem(A6)		; Free The Memory.
+	MOVE.L	A2,D1			; At End Of List?
+	BNE.S	FLUTL1			; Jump If Not End Of List.
+*
+*	Signal Data Not Loaded.
+*
+FLUTL2	BCLR.B	#LTEF_DataLoaded,LTE_Flags(A4) ; Cannot Be Loaded.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	WriteLUTList:							*
+*									*
+*	Writes The Current LUT List To The Disk.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Data Is Written To The Disk.				*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	CC	== Zero -> No Error.					*
+*	CC	!= Zero -> Error Occured.				*
+*									*
+*	31.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+LUT_FileName:
+	DC.B	'ChromaFX_Support/ChromaFX.Effects',0
+*
+LUT_FileID	EQU	('L'<<24)!('U'<<16)!('T'<<8) ; LUT0
+*
+AFZ_LUT_Sizeof	EQU	0			; ( 4 ) LUT_Sizeof.
+AFZ_VerNumber	EQU	AFZ_LUT_Sizeof+4	; ( 4 ) Version Number of File.
+AFZ_GridCrouton	EQU	AFZ_VerNumber+4		; ( 4 ) Grid Crouton Array.
+AFZ_PAD		EQU	AFZ_GridCrouton+4	; ( 12 ) PAD.
+AFZ_Sizeof	EQU	AFZ_PAD+12		; Sizeof Structure.
+*
+	XDEF	LUT_WriteLUTList
+LUT_WriteLUTList:
+	MOVEM.L	D1-D7/A0-A6,-(A7)	; Save Calling State.
+*
+*	If There Is Data There, Open File To Save It To The Disk.
+*
+	MOVEA.L	TB_DOSBase(A5),A6	; A6.L = Address of DOS Base.
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+	TST.L	LTE_LULPtr(A4)		; Anything There To Save?
+	BNE.S	WRLUL1			; Jump If Something To Save.
+	MOVEQ.L	#LUT_ListError,D7	; D7.L = Nothing To Save.
+	BRA	WRLUL8			; Exit Subroutine.
+WRLUL1	MOVE.L	TB_BootLock(A5),D1	; D1.L = Address of Lock.
+	BNE.S	WRLUL2			; Jump If We Got The Lock.
+	MOVEQ.L	#LUT_DirError,D7	; D7.L = Cannot Find Toaster/Effects.
+	BRA	WRLUL8			; Exit Subroutine.
+WRLUL2	JSR	_LVOCurrentDir(A6)	; D0.L = Old Directory.
+	MOVE.L	#LUT_FileName,D1	; D1.L = Address of File Name.
+	MOVE.L	#MODE_NEWFILE,D2	; D2.L = Value of File Mode.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	MOVE.L	D0,D5			; D5.L = Address of Lock.
+	BNE.S	WRLUL3			; Jump If We Opened The File.
+	MOVEQ.L	#LUT_OpenError,D7	; D7.L = Cannot Open File For Output.
+	BRA.S	WRLUL8			; Exit Subroutine.
+*
+*	Write The Header Of The File.
+*
+WRLUL3	MOVEA.L	LTE_LULPtr(A4),A0	; A0.L = Head of List.
+	MOVEQ.L	#0,D0			; D0.L = Count of Items In List.
+WRLUL4	ADDQ.L	#1,D0			; Increment Count.
+	MOVEA.L	LUL_Next(A0),A0		; Next Element In List.
+	MOVE.L	A0,D1			; At End Of List?
+	BNE.S	WRLUL4			; Loop Until All Done.
+	CLR.L	-(A7)			; PAD.
+	CLR.L	-(A7)
+	CLR.L	-(A7)
+	MOVE.L	LTE_GridCrouton(A4),-(A7) ; Grid Crouton Array.
+	CLR.L	-(A7)			; Version Number.
+	MOVE.L	#LUT_Sizeof,-(A7)	; Structure Size of.
+	MULU.W	#LUT_Sizeof,D0		; D0.L = Number of Bytes In File.
+	ADDI.L	#AFZ_Sizeof,D0		; Plus Size of Version Number & Count.
+	MOVE.L	D0,-(A7)		; Number of Bytes.
+	MOVE.L	#LUT_FileID,-(A7)	; Save LUT Flag.
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A7,D2			; D2.L = Address of Data To Write.
+	MOVEQ.L	#AFZ_Sizeof+8,D3	; D3.L = Number of Bytes To Write.
+	JSR	_LVOWrite(A6)		; Write Data To Disk.
+	ADDA.L	D3,A7			; Restore Stack Position.
+	CMP.L	D0,D3			; Write Successful?
+	BNE.S	WRLUL6			; Exit On Write Error.
+*
+*	Loop and Write The Data.
+*
+	MOVEA.L	LTE_LULPtr(A4),A2	; A2.L = Head of List.
+WRLUL5	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A2,D2			; D2.L = Address of File Data.
+	ADDQ.L	#LUL_LUT,D2		; Move To Lut Data.
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Number of Bytes.
+	JSR	_LVOWrite(A6)		; Write Data To Disk.
+	CMP.L	D0,D3			; Write Successful?
+	BNE.S	WRLUL6			; Exit On Write Error.
+	MOVEA.L	LUL_Next(A2),A2		; Next Element In List.
+	MOVE.L	A2,D1			; At End Of List?
+	BNE.S	WRLUL5			; Jump If Not End Of List.
+	BRA.S	WRLUL7			; Skip Else Part.
+*
+*	Flag Write Error.
+*
+WRLUL6	MOVEQ.L	#LUT_WriteError,D7	; D7.L = Cannot Write Data.
+*
+*	Close The File.
+*
+WRLUL7	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Exit Subroutine.
+*
+WRLUL8	MOVE.L	D7,D0			; Set Condition Code.
+	MOVEM.L	(A7)+,D1-D7/A0-A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ReadLUTList:							*
+*									*
+*	Reads The Current LUT List Off The Disk.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Data Is Read From The Disk.					*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	CC	== Zero -> No Error.					*
+*	CC	!= Zero -> Error Occured.				*
+*									*
+*	17.June 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ReadLUTList
+LUT_ReadLUTList:
+	MOVEM.L	D1-D7/A0-A6,-(A7)	; Save Calling State.
+	SUBA.W	#AFZ_Sizeof+8,A7	; Make Buffer On Stack.
+*
+*	If the Data Is Loaded, Don't Reload It.
+*
+	MOVEQ.L	#0,D7			; Assume No Error.
+	BTST.B	#LTEF_DataLoaded,LTE_Flags(A4) ; Is The Data Already Loaded?
+	BNE	RDLUL9			; Exit If Data Already Loaded.
+*
+*	If There Is a List There, Open File and Load Data Off The Disk.
+*
+	MOVEA.L	TB_DOSBase(A5),A6	; A6.L = Address of DOS Base.
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+	TST.L	LTE_LULPtr(A4)		; Anything There To Load Into?
+	BNE.S	RDLUL1			; Jump If Something To Load Into.
+	MOVEQ.L	#LUT_ListError,D7	; D7.L = Nothing To Load Data Into.
+	BRA	RDLUL8			; Exit Subroutine.
+RDLUL1	MOVE.L	TB_BootLock(A5),D1	; D1.L = Address of Lock.
+	BNE.S	RDLUL2			; Jump If We Got The Lock.
+	MOVEQ.L	#LUT_DirError,D7	; D7.L = Cannot Find Toaster/Effects.
+	BRA	RDLUL8			; Exit Subroutine.
+RDLUL2	JSR	_LVOCurrentDir(A6)	; D0.L = Old Directory.
+	MOVE.L	#LUT_FileName,D1	; D1.L = Address of File Name.
+	MOVE.L	#MODE_OLDFILE,D2	; D2.L = Value of File Mode.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	MOVE.L	D0,D5			; D5.L = Address of Lock.
+	BNE.S	RDLUL3			; Jump If We Opened The File.
+	MOVEQ.L	#LUT_OpenError,D7	; D7.L = Cannot Open File For Input.
+	BRA.S	RDLUL8			; Exit Subroutine.
+*
+*	Read The Header Of The File.
+*
+RDLUL3	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A7,D2			; D2.L = Address of Data To Read.
+	MOVEQ.L	#AFZ_Sizeof+8,D3	; D3.L = Number of Bytes To Read.
+	JSR	_LVORead(A6)		; Read Data To Disk.
+	MOVE.L	0(A7),D2		; D2.L = Value of LUT.
+	MOVE.L	4(A7),D4		; D4.L = Number of Bytes.
+	MOVE.L	8+AFZ_LUT_Sizeof(A7),D1	; D1.L = Sizeof LUT Structure.
+	CMP.L	D0,D3			; Read Successful?
+	BNE.S	RDLUL6			; Exit On Read Error.
+	CMPI.L	#LUT_FileID,D2		; LUT Flag.
+	BNE.S	RDLUL6			; Exit On Error.
+	CMPI.L	#LUT_Sizeof,D1		; Sizeof LUT.
+	BNE.S	RDLUL6			; Exit On Error.
+	MOVE.L	8+AFZ_GridCrouton(A7),LTE_GridCrouton(A4) ; Read Grid Crouton.
+	SUBQ.L	#8,D4			; Remove Header Size.
+	DIVU.W	D1,D4			; D4.W = Number of LUT's In File.
+*
+*	Loop and Read The Data.
+*
+	BSR	LUT_CycleModeOffSwitcher	; Turn Off LUT Mode.
+	MOVEA.L	LTE_LULPtr(A4),A2	; A2.L = Head of List.
+	MOVEQ.L	#-1,D1			; Set CC != Zero.
+	BRA.S	RDLUL5			; Start Looping.
+RDLUL4	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A2,D2			; D2.L = Address of File Data.
+	ADDQ.L	#LUL_LUT,D2		; Move To Lut Data.
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Number of Bytes.
+	JSR	_LVORead(A6)		; Read Data To Disk.
+	ANDI.B	#~((1<<LUTF_MapChange)+(1<<LUTF_GridAssign)),LUL_LUT+LUT_Flags(A2)
+	MOVE.B	LUL_LUT+LUT_DisplayMode(A2),LUL_LUT+LTR_DisplayMode(A2)
+	CMP.L	D0,D3			; Read Successful?
+	BNE.S	RDLUL6			; Exit On Read Error.
+	MOVEA.L	LUL_Next(A2),A2		; Next Element In List.
+	MOVE.L	A2,D1			; At End Of List?
+RDLUL5	DBEQ	D4,RDLUL4		; Loop For The Count.
+	BSET.B	#LTEF_DataLoaded,LTE_Flags(A4) ; Everything Is Ok.
+	BRA.S	RDLUL7			; Skip Else Part.
+*
+*	Flag Read Error.
+*
+RDLUL6	MOVEQ.L	#LUT_ReadError,D7	; D7.L = Cannot Read Data.
+*
+*	Close The File.
+*
+RDLUL7	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Exit Subroutine.
+*
+RDLUL8	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A4) ; Make Sure New Map Is Sent.
+RDLUL9	ADDA.W	#AFZ_Sizeof+8,A7	; Restore Stack Position.
+	MOVE.L	D7,D0			; Set Condition Code.
+	MOVEM.L	(A7)+,D1-D7/A0-A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ReadLUTDefault:							*
+*									*
+*	Reads The Current LUT Default Off The Disk.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Numbered LUT to Read The Default.			*
+*	A0.L	= Address of Numbered LUT Data Area.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Data Is Read From The Disk.					*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	CC	== Zero -> No Error.					*
+*	CC	!= Zero -> Error Occured.				*
+*									*
+*	17.June 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+LUT_DefaultName:
+	DC.B	'ChromaFX_Support/ChromaFX.Default',0
+*
+	XDEF	LUT_ReadLUTDefault
+LUT_ReadLUTDefault:
+	MOVEM.L	D1-D7/A0-A6,-(A7)	; Save Calling State.
+	MOVE.L	D0,D6			; D6.L = Value of Default LUT.
+	MOVEA.L	A0,A4			; A4.L = Address Of LUT Area.
+*
+*	If There Is a List There, Open File and Load Data Off The Disk.
+*
+	MOVEA.L	TB_DOSBase(A5),A6	; A6.L = Address of DOS Base.
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+	MOVE.L	A4,D0			; Anything There To Load Into?
+	BNE.S	RDLUD1			; Jump If Something To Load Into.
+	MOVEQ.L	#LUT_ListError,D7	; D7.L = Nothing To Load Data Into.
+	BRA	RDLUD8			; Exit Subroutine.
+RDLUD1	MOVE.L	TB_BootLock(A5),D1	; D1.L = Address of Lock.
+	BNE.S	RDLUD2			; Jump If We Got The Lock.
+	MOVEQ.L	#LUT_DirError,D7	; D7.L = Cannot Find Toaster/Effects.
+	BRA	RDLUD8			; Exit Subroutine.
+RDLUD2	JSR	_LVOCurrentDir(A6)	; D0.L = Old Directory.
+	MOVE.L	#LUT_DefaultName,D1	; D1.L = Address of File Name.
+	MOVE.L	#MODE_OLDFILE,D2	; D2.L = Value of File Mode.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	MOVE.L	D0,D5			; D5.L = Address of Lock.
+	BNE.S	RDLUD3			; Jump If We Opened The File.
+	MOVEQ.L	#LUT_OpenError,D7	; D7.L = Cannot Open File For Input.
+	BRA.S	RDLUD8			; Exit Subroutine.
+*
+*	Read The Header Of The File.
+*
+RDLUD3	MOVEQ.L	#AFZ_Sizeof+8,D3	; D3.L = Number of Bytes To Read.
+	SUBA.L	D3,A7			; Make Buffer On Stack.
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A7,D2			; D2.L = Address of Data To Read.
+	JSR	_LVORead(A6)		; Read Data To Disk.
+	MOVE.L	(A7)+,D2		; D2.L = Value of LUT.
+	MOVE.L	(A7)+,D4		; D4.L = Number of Bytes.
+	MOVE.L	(A7)+,D1		; D1.L = Sizeof LUT Structure.
+	ADDA.W	#AFZ_Sizeof-4,A7	; Struct Size - Sizeof LUT Struct.
+	CMP.L	D0,D3			; Read Successful?
+	BNE.S	RDLUD6			; Exit On Read Error.
+	CMPI.L	#LUT_FileID,D2		; LUT Flag.
+	BNE.S	RDLUD6			; Exit On Error.
+	CMPI.L	#LUT_Sizeof,D1		; Sizeof LUT.
+	BNE.S	RDLUD6			; Exit On Error.
+	SUBQ.L	#8,D4			; Remove Header Size.
+	DIVU.W	D1,D4			; D4.W = Number of LUT's In File.
+*
+*	Their Needs To Be At Least This Much Data.
+*
+	CMP.L	D4,D6			; Is There Enough Data?
+	BCC.S	RDLUD6			; Exit If Not Enough Data.
+*
+*	Loop and Read The Data.
+*
+	MOVEQ.L	#0,D1			; Set CC == Zero.
+	BRA.S	RDLUD5			; Start Looping.
+RDLUD4	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Number of Bytes.
+	SUBA.L	D3,A7			; A7.L = Address of Temp Buffer.
+	MOVE.L	A7,D2			; D2.L = Address of File Data.
+	JSR	_LVORead(A6)		; Read Data To Disk.
+	ADDA.L	D3,A7			; Restore Stack Position.
+	CMP.L	D0,D3			; Read Successful?
+RDLUD5	DBNE	D6,RDLUD4		; Loop For The Count.
+	BNE.S	RDLUD6			; Exit On Read Error.
+*
+*	Ok, Now Read The Data.
+*
+	BSR	LUT_CycleModeOffEditor	; Turn LUT Mode Off.
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A4,D2			; D2.L = Address of File Data.
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Number of Bytes.
+	JSR	_LVORead(A6)		; Read Data To Disk.
+	ORI.B	#((1<<LUTF_MapChange)+(1<<LUTF_GridAssign)),LUT_Flags(A4)
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Flags.
+	CMP.L	D0,D3			; Read Successful?
+	BEQ.S	RDLUD7			; Jump If Read Successful.
+	BSR	LUT_InitEBuf		; Error, Place Buffer In Initial State.
+*
+*	Flag Read Error.
+*
+RDLUD6	MOVEQ.L	#LUT_ReadError,D7	; D7.L = Cannot Read Data.
+*
+*	Close The File.
+*
+RDLUD7	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Exit Subroutine.
+*
+RDLUD8	MOVE.L	D7,D0			; Set Condition Code.
+	MOVEM.L	(A7)+,D1-D7/A0-A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MapErrorMessageOk:						*
+*									*
+*	Puts Up an Error Message, for Color Map Error.			*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	An Error Message Is Put On The Screen.				*
+*									*
+*	22.Dec 1991 Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MapErrorMessageOk
+LUT_MapErrorMessageOk:
+	MOVEM.L	D0-D1/A0-A3,-(A7)	; Save Calling State.
+*
+*	Put Up The Requestor.
+*
+	MOVEQ.L	#0,D0			; Other Positive IDCMP.
+	MOVEQ.L	#0,D1			; Other Negative IDCMP.
+	LEA.L	CreateTx(PC),A0		; A0.L = Address of First String.
+	LEA.L	TakeMinTx(PC),A1	; A1.L = Address of Second String.
+	SUBA.L	A2,A2			; A2.L = Address of Ok String.
+	LEA.L	LUT_Ok(PC),A3		; A3.L = Address of Cancel String.
+	CALLTL	DoSwitcherRequester	; Put Up The Requester.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FileErrorMessage:						*
+*									*
+*	Puts Up an Error Message, for File IO Error.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Error Message.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	An Error Message Is Put On The Screen.				*
+*									*
+*	26.Jun 1991 Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FileErrorMessage
+LUT_FileErrorMessage:
+	MOVEM.L	D0-D1/A0-A3,-(A7)	; Save Calling State.
+*
+*	Get Address of Error String.
+*
+	LEA.L	LUT_ErrorMessages(PC),A1 ;A1.L = Address of Error Table.
+	BRA.S	FIEFM2			; Start Looping.
+FIEFM1	TST.B	(A1)+			; At End Of String?
+	BNE.S	FIEFM1			; Loop Until End Of String Found.
+FIEFM2	DBF	D0,FIEFM1		; Loop Until Done.
+*
+*	Put Up The Requestor.
+*
+	MOVEQ.L	#0,D0			; Other Positive IDCMP.
+	MOVEQ.L	#0,D1			; Other Negative IDCMP.
+	LEA.L	LUT_Title(PC),A0	; A0.L = Address of First String.
+	SUBA.L	A2,A2			; A2.L = Address of Ok String.
+	LEA.L	LUT_Ok(PC),A3		; A3.L = Address of Cancel String.
+	CALLTL	DoSwitcherRequester	; Put Up The Requester.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FileErrorMessageRetry:						*
+*									*
+*	Puts Up an Error Message, for File IO Error.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Error Message.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	An Error Message Is Put On The Screen.				*
+*	D0.L	= Value of Return Code.					*
+*									*
+*	26.Jun 1991 Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FileErrorMessageRetry
+LUT_FileErrorMessageRetry:
+	MOVEM.L	D1/A0-A3,-(A7)		; Save Calling State.
+*
+*	Get Address of Error String.
+*
+	LEA.L	LUT_ErrorMessages(PC),A1 ;A1.L = Address of Error Table.
+	BRA.S	FIEFR2			; Start Looping.
+FIEFR1	TST.B	(A1)+			; At End Of String?
+	BNE.S	FIEFR1			; Loop Until End Of String Found.
+FIEFR2	DBF	D0,FIEFR1		; Loop Until Done.
+*
+*	Put Up The Requestor.
+*
+	MOVEQ.L	#0,D0			; Other Positive IDCMP.
+	MOVEQ.L	#0,D1			; Other Negative IDCMP.
+	LEA.L	LUT_Title(PC),A0	; A0.L = Address of First String.
+	LEA.L	LUT_Retry(PC),A2	; A2.L = Address of Ok String.
+	LEA.L	LUT_Cancel(PC),A3	; A3.L = Address of Cancel String.
+	CALLTL	DoSwitcherRequester	; Put Up The Requester.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1/A0-A3		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_Title
+LUT_Title:
+	DC.B	'ChromaFX'
+	XDEF	LUT_TitleLn
+LUT_TitleLn	EQU	*-LUT_Title
+	DC.B	0
+*
+	XDEF	LUT_Ok
+LUT_Ok:	DC.B	'OK',0
+	XDEF	LUT_Retry
+LUT_Retry: DC.B	'Retry',0
+	XDEF	LUT_Cancel
+LUT_Cancel: DC.B 'Cancel',0
+*
+*	Error Message Text.
+*
+	XDEF	LUT_ErrorMessages
+LUT_ErrorMessages:
+	DC.B	'Execution Without Error.',0
+	DC.B	'No Memory For ChromaFX Data.',0
+	DC.B	'Cannot Find Toaster/Effects.',0
+	DC.B	'Cannot Open ChromaFX File.',0
+	DC.B	'Cannot Read ChromaFX File.',0
+	DC.B	'Cannot Write ChromaFX File.',0
+	DC.B	'Cannot Read ChromaFX Still Store.',0
+	DC.B	'Cannot Write ChromaFX Still Store.',0
+*
+CreateTx:
+	DC.B	'ChromaFX preset not found.',0
+TakeMinTx:
+	DC.B	'(Creating it will take a few moments)',0
+	END
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: LUT5.a,v 2.0 92/05/18 23:58:53 Hartford Exp Locker: Finch2 $
+d9 3
+a11 1
+* $Log:	LUT5.a,v $
+d13 1
+d672 1
+a672 1
+	DC.B	'ChromaFX/ChromaFX.Effects',0
+d902 1
+a902 1
+	DC.B	'ChromaFX/ChromaFX.Default',0
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT5.a and t:,RCSt1A786ea90 differ
+@

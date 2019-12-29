@@ -1,0 +1,11 @@
+GenAm Macro Assembler Copyright © HiSoft 1985-93
+All Rights Reserved - version 3.04
+
+Assembling cfx:src/lutC.a
+Pass 1
+Pass 2
+
+0 errors found
+28123 lines assembled into 592 bytes, Amiga linkable relocatable code
+3 optimisations saving 12 bytes
+850010 bytes used

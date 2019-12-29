@@ -1,0 +1,54 @@
+head     2.0;
+branch   ;
+access   ;
+symbols  ;
+locks    ; strict;
+comment  @*@;
+
+
+2.0
+date     92.05.19.00.03.39;  author Hartford;  state Exp;
+branches ;
+next     ;
+
+
+desc
+@@
+
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* LUTLib.i
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id$
+*
+* $Log$
+*
+*********************************************************************
+
+	PAGE
+*************************************************************************
+*									*
+*	LUT Lib:							*
+*									*
+*	Contains Global Lib Base Structure.				*
+*									*
+*	11.June 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XREF	LUTLibrary		; LUT Library Base.
+	XREF	LUT_NumberString	; ASCII Number String.
+	XREF	LUT_GridNString1	; ASCII Grid Number String 1.
+	XREF	LUT_GridNString2	; ASCII Grid Number String 2.
+	XREF	LUT_GridNString3	; ASCII Grid Number String 3.
+	XREF	LUT_GridNString4	; ASCII Grid Number String 4.
+@

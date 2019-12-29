@@ -1,0 +1,3325 @@
+2d1
+< 	include "ram:mod.i"
+4c3,5
+< min_chip	set	1024 			;30JAN92; 10*1024 ;12*1024
+---
+> ;;;DEBUGGER set 1
+> 		;july01
+> min_chip	set	1024 ;30JAN92; 10*1024 ;12*1024
+8,12c9,13
+< BIGMAXBUFFER	set (200*1024)
+< MAXBUFFER	set BIGMAXBUFFER 		;ok...code works with big buffer
+< ;BIGEXTRA	set 10*1024	 		;wants this much extra b4 hamtools display
+< ;BIGEXTRA	set 13*1024	 		;wants this much extra b4 hamtools display MAY19
+< BIGEXTRA	set min_chip 			;toolreq ;july01;(11*1024)+512  ;wants this much extra b4 hamtools display JUNE16 (10+13)/2 Kbytes
+---
+> BIGMAXBUFFER	set (63*1024)
+> MAXBUFFER	set BIGMAXBUFFER ;ok...code works with big buffer
+> ;BIGEXTRA	set 10*1024	 ;wants this much extra b4 hamtools display
+> ;BIGEXTRA	set 13*1024	 ;wants this much extra b4 hamtools display MAY19
+> BIGEXTRA	set min_chip ;toolreq ;july01;(11*1024)+512  ;wants this much extra b4 hamtools display JUNE16 (10+13)/2 Kbytes
+14c15
+< MINBUFF		set 100				;100 bytes, minimum file buffer
+---
+> MINBUFF		set 100	;100 bytes, minimum file buffer
+18,19c19,20
+< 	include	"exec/memory.i" 		;needed for AllocMem/AllocRemeber requirements
+< 	include "graphics/gfx.i"		;bitmap struct
+---
+> 	include	"exec/memory.i" ;needed for AllocMem/AllocRemeber requirements
+> 	include "graphics/gfx.i"	;bitmap struct
+21,27d21
+< 	include	"lib/exec_lib.i"
+< 
+< 	include	"ps:LayOut.i"
+< 	include	"ps:serialdebug.i"
+< 
+< 
+< 
+31,33c25,27
+< 	xdef AllocHires,FreeHires		;allocates bitmap for hires screen
+< 	xdef AllocHamTool,FreeHamTool		;allocates bitmap for palette screen
+< 	xdef AllocLoBrushMask			;allocs/copies LoResMask_ bitplane
+---
+> 	xdef AllocHires,FreeHires	;allocates bitmap for hires screen
+> 	xdef AllocHamTool,FreeHamTool	;allocates bitmap for palette screen
+> 	xdef AllocLoBrushMask	;allocs/copies LoResMask_ bitplane
+35c29
+< 	xdef AllocPasteMaskClone		;copy of brush mask bitplane (rtn'd in d0/a0)
+---
+> 	xdef AllocPasteMaskClone	;copy of brush mask bitplane (rtn'd in d0/a0)
+39,51c33,46
+< 	xdef AllocUnDo,FreeUnDo			;AltPasteChip, AltPasteFast
+< 	xdef CleanupMemory			;clears out unused drivers, etc.
+< 	xdef CopyPic				;copies ScreenBitMap to SwapBitMap (rubthru/swap)
+< 	xdef CopySuperDouble			;copy UnDoBitMap to Doublebitmap
+< 	xdef CopySuperScreen			;copy UnDoBitMap to Screenbitmap (ham only)
+< 	xdef CopyScreenSuper			;copy Screen->superbitmap (filertns, only)
+< 	xdef DoubleUndo				;d5=#bytes to copy, d1=offset to first line
+< 	xdef EnsureExtraChip			;march22'89, alloc/de-alloc, flag rtn
+< 	xdef FreeAllMemory			;frees all memories.o managed memory (abort/end)
+< 	;;xdef FreeBitMap			;only called FROM Composite.asm
+< 	xdef FreeLoResMask			;remove 'anti-alias' mask (textstuff.o ref')
+< 	xdef FreeOneRemember			;call with d0=ptr to memory
+< 	xdef FreeOneVariable			;call with a0=ptr to variable
+---
+> 	xdef AllocUnDo,FreeUnDo
+> 		;AltPasteChip, AltPasteFast
+> 	xdef CleanupMemory	;clears out unused drivers, etc.
+> 	xdef CopyPic		;copies ScreenBitMap to SwapBitMap (rubthru/swap)
+> 	xdef CopySuperDouble	;copy UnDoBitMap to Doublebitmap
+> 	xdef CopySuperScreen	;copy UnDoBitMap to Screenbitmap
+> 	xdef CopyScreenSuper	;copy Screen->superbitmap (filertns, only)
+> 	xdef DoubleUndo		;d5=#bytes to copy, d1=offset to first line
+> 	xdef EnsureExtraChip	;march22'89, alloc/de-alloc, flag rtn
+> 	xdef FreeAllMemory	;frees all memories.o managed memory (abort/end)
+> 	;;xdef FreeBitMap		;only called FROM Composite.asm
+> 	xdef FreeLoResMask	;remove 'anti-alias' mask (textstuff.o ref')
+> 	xdef FreeOneRemember	;call with d0=ptr to memory
+> 	xdef FreeOneVariable	;call with a0=ptr to variable
+53,56c48,51
+< 	xdef GrabBigFileBuffer			;BIGmaxbuffer
+< ;july01;	xdef GrabExtraChip		;used by main.o OpenBigPic to grab some chipmem
+< 	xdef GrabFileBuffer			;does an alloc' if needed; iffload.o
+< 	xdef GrabLoadPlane0			;does an alloc' if needed; iffload.o
+---
+> 	xdef GrabBigFileBuffer	;BIGmaxbuffer
+> ;july01;	xdef GrabExtraChip	;used by main.o OpenBigPic to grab some chipmem
+> 	xdef GrabFileBuffer	;does an alloc' if needed; iffload.o
+> 	xdef GrabLoadPlane0	;does an alloc' if needed; iffload.o
+58,59c53,54
+< 	xdef IndicatedUndo			;d1=first y line, d5=#lines
+< 	xdef IndSingleUndo			;d1=first y line, d5=#lines single bitplane
+---
+> 	xdef IndicatedUndo	;d1=first y line, d5=#lines
+> 	xdef IndSingleUndo	;d1=first y line, d5=#lines single bitplane
+61,63c56,58
+< 	xdef IntuitionAllocAnyCleared 		;alloc any type, but cleared fer sure
+< 	xdef IntuitionAllocChip			;used in main.o for bitmaps
+< 	xdef IntuitionAllocChipNC		;composite.o, chip but Not Cleared
+---
+> 	xdef IntuitionAllocAnyCleared 	;alloc any type, but cleared fer sure
+> 	xdef IntuitionAllocChip	;used in main.o for bitmaps
+> 	xdef IntuitionAllocChipNC	;composite.o, chip but Not Cleared
+65,71c60,66
+< 	;;xdef IntuitionFreeRemember		;main.o, at end, when really done.
+< 	xdef MarkedUnDo				;used by special drawmodes for quick undo
+< 	xdef MergeCut				;sets mask, rubthru, calls repaint
+< 	xdef PartialUnDo			;copy UnDoBitMap  to screenbitmap
+< 	xdef QUICKCopy				;d0=count, a0/a1 = addresses
+< 	xdef QUICKSwap				;d0=count, a0/a1 = addresses
+< 	xdef RestoreCPUnDo 			;xdef CopyCPUnDoSuper ;copy cpundo to UnDoBitMap
+---
+> 	;;xdef IntuitionFreeRemember	;main.o, at end, when really done.
+> 	xdef MarkedUnDo			;used by special drawmodes for quick undo
+> 	xdef MergeCut			;sets mask, rubthru, calls repaint
+> 	xdef PartialUnDo		;copy UnDoBitMap  to screenbitmap
+> 	xdef QUICKCopy		;d0=count, a0/a1 = addresses
+> 	xdef QUICKSwap		;d0=count, a0/a1 = addresses
+> 	xdef RestoreCPUnDo ;xdef CopyCPUnDoSuper ;copy cpundo to UnDoBitMap
+75c70
+< 	xdef SwapSwap				;alternate/rubthru screen swap
+---
+> 	xdef SwapSwap			;alternate/rubthru screen swap
+81,82c76,77
+< 	xref AltPasteBitMap_			;other, 'swap' brush
+< 	xref AltPasteBitMap_Planes_		;other, 'swap' brush
+---
+> 	xref AltPasteBitMap_		;other, 'swap' brush
+> 	xref AltPasteBitMap_Planes_	;other, 'swap' brush
+84c79
+< 	xref BB_BitMap_				;'regular' brush (whole picture size)
+---
+> 	xref BB_BitMap_	;'regular' brush (whole picture size)
+86,87c81,82
+< 	xref BigPicHt_				;#rows in a std screen/bitmap
+< 	xref BigPicWt_				;#pixels in a std row   (lword)
+---
+> 	xref BigPicHt_		;#rows in a std screen/bitmap
+> 	xref BigPicWt_		;#pixels in a std row   (lword)
+89,92c84,87
+< 	xref BufferLen_				;iffload.o
+< 	xref bytes_per_row_			;#bytes in a std row   (lword)
+< 	xref CPUnDoBitMap_			;cut/paste  undo
+< 	xref CPUnDoBitMap_Planes_		;cut/paste undo
+---
+> 	xref BufferLen_		;iffload.o
+> 	xref bytes_per_row_		;#bytes in a std row   (lword)
+> 	xref CPUnDoBitMap_		;cut/paste undo
+> 	xref CPUnDoBitMap_Planes_	;cut/paste undo
+94c89
+< 	xref SwapBitMap_Planes_			;alternate/swap screen
+---
+> 	xref SwapBitMap_Planes_	;alternate/swap screen
+99,101c94,96
+< 	xref FileBufferPtr_			;iffload.o
+< 	xref FlagBitMapSaved_			;byte =-1 if UnDoBitMap saved but not restored
+< 	xref FlagCDet_				;"really" need create determine?
+---
+> 	xref FileBufferPtr_	;iffload.o
+> 	xref FlagBitMapSaved_	;byte =-1 if UnDoBitMap saved but not restored
+> 	xref FlagCDet_		;"really" need create determine?
+103c98
+< 	xref FlagCutPaste_			;cutpaste mode on?
+---
+> 	xref FlagCutPaste_	;cutpaste mode on?
+111,113c106,108
+< 	xref LoadPlane0Ptr_	 		;SLong
+< 	xref LoadPlanesLen_	 		;SLong len of ALL
+< 	xref LoadPlane_pixels_	 		;SWordhow many pixels we can handle (or want?)
+---
+> 	xref LoadPlane0Ptr_	 ;SLong
+> 	xref LoadPlanesLen_	 ;SLong len of ALL
+> 	xref LoadPlane_pixels_	 ;SWordhow many pixels we can handle (or want?)
+115,119c110,114
+< 	xref PasteBitMap_			;brush image
+< 	xref PasteBitMap_Planes_		;brush image
+< 	xref paste_height_			;#rows in PasteBitMap
+< 	xref paste_width_			;#cols in PasteBitMap
+< 	xref paste_leftblank_			;#pixels before 1st masked pixel in a brush
+---
+> 	xref PasteBitMap_		;brush image
+> 	xref PasteBitMap_Planes_	;brush image
+> 	xref paste_height_		;#rows in PasteBitMap
+> 	xref paste_width_		;#cols in PasteBitMap
+> 	xref paste_leftblank_	;#pixels before 1st masked pixel in a brush
+122c117
+< 	xref altpaste_leftblank_		;#pixels before 1st masked pixel in a brush
+---
+> 	xref altpaste_leftblank_	;#pixels before 1st masked pixel in a brush
+127,128c122,123
+< 	xref PlaneSize_				;#bytes in a std plane (lword)
+< 	xref PMBM_Planes_			;Paste Mask Bit Map _Plane adr var
+---
+> 	xref PlaneSize_			;#bytes in a std plane (lword)
+> 	xref PMBM_Planes_		;Paste Mask Bit Map _Plane adr var
+131,132c126,127
+< 	xref ScreenBitMap_			;big picture, viewable screen
+< 	xref ScreenBitMap_Planes_		;big picture, viewable screen
+---
+> 	xref ScreenBitMap_		;big picture, viewable screen
+> 	xref ScreenBitMap_Planes_	;big picture, viewable screen
+134,135c129,130
+< 	xref UnDoBitMap_			;backup pic ("superbitmap") of screen
+< 	xref UnDoBitMap_Planes_			;backup pic ("superbitmap") of screen
+---
+> 	xref UnDoBitMap_		;backup pic ("superbitmap") of screen
+> 	xref UnDoBitMap_Planes_	;backup pic ("superbitmap") of screen
+138,148c133,137
+< 	xref AreaBufferPtr_			;list of endpts (4bytes per...)
+< 	xref AreaBufferLen_
+< 	xref AreaChunkLen_			;#endpts, really
+< 	xref AreaVectorPtr_			;list of endpts (*5*bytes per...)
+< 	xref AreaVectorLen_			;.long
+< 
+<  ifd paint2000
+< ;SERDEBUG	equ	1
+<  endc
+< ;SERDEBUG	equ	1
+< 
+---
+> 	xref	AreaBufferPtr_		;list of endpts (4bytes per...)
+> 	xref	AreaBufferLen_
+> 	xref	AreaChunkLen_	;#endpts, really
+> 	xref	AreaVectorPtr_	;list of endpts (*5*bytes per...)
+> 	xref	AreaVectorLen_	;.long
+151c140
+< 	RTS					;KLUDGEOUT "FREEAREASTUFF", get it at startup, keep it, July131990
+---
+> 	RTS	;KLUDGEOUT "FREEAREASTUFF", get it at startup, keep it, July131990
+153c142
+< 	clr.l	AreaChunkLen_(BP)		;march24'89...really, #of endpts
+---
+> 	clr.l	AreaChunkLen_(BP)	;march24'89...really, #of endpts
+156c145
+< 	bsr.s	9$				;free it, shorter opcode
+---
+> 	bsr.s	9$			;free it, shorter opcode
+164,165c153,154
+< 	tst.l	AreaBufferPtr_(BP) 		;buffer already there? JULY131990
+< 	bne.s	5$		  		;yep...early out, always get buffers JULY131990
+---
+> 	tst.l	AreaBufferPtr_(BP) ;buffer already there? JULY131990
+> 	bne.s	5$		   ;yep...early out, always get buffers JULY131990
+180,184c169,173
+< 	lea	AreaChunkLen_(BP),a2		;march24'89...really, #of endpts
+< 	;move.l	#(9*31000),d0			;31k endpts (.word ctr later)
+< 	;move.l	#(9*5000),d0			;5k endpts (.word ctr later) (45k)
+< 	;move.l	#(9*7000),d0			;5k endpts (.word ctr later) (=~63k)
+< 	move.l	#7000,d0			;7k endpts (.word ctr later) (=~63k)
+---
+> 	lea	AreaChunkLen_(BP),a2	;march24'89...really, #of endpts
+> 	;move.l	#(9*31000),d0	;31k endpts (.word ctr later)
+> 	;move.l	#(9*5000),d0	;5k endpts (.word ctr later) (45k)
+> 	;move.l	#(9*7000),d0	;5k endpts (.word ctr later) (=~63k)
+> 	move.l	#7000,d0	;7k endpts (.word ctr later) (=~63k)
+186c175
+< 	move.l	d0,(a2)				;save requested len
+---
+> 	move.l	d0,(a2)		;save requested len
+190,197c179,186
+< 	clr.L	-(sp)				;fast adr ;...STACK
+< 	clr.L	-(sp)				;chip adr
+< 	asl.L	#2,d0				;*4 for fast alloc
+< 	bsr	IntuitionAllocMain		;any really, but fast prefer'd
+< 	move.l	d0,4(sp)			;STACK usage offset 4 FASTMEM
+< 	move.l	(a2),d0				;#endpts
+< 	asl.L	#2,d0				;*4
+< 	add.l	(a2),d0				;*5 for chip (graphics area fill requ'ment)
+---
+> 	clr.L	-(sp)		;fast adr ;...STACK
+> 	clr.L	-(sp)		;chip adr
+> 	asl.L	#2,d0		;*4 for fast alloc
+> 	bsr	IntuitionAllocMain	;any really, but fast prefer'd
+> 	move.l	d0,4(sp)	;STACK usage offset 4 FASTMEM
+> 	move.l	(a2),d0		;#endpts
+> 	asl.L	#2,d0		;*4
+> 	add.l	(a2),d0		;*5 for chip (graphics area fill requ'ment)
+199c188
+< 	move.l	d0,(sp)				;STACK usage offset 0 CHIPMEM
+---
+> 	move.l	d0,(sp)		;STACK usage offset 0 CHIPMEM
+201,202c190,191
+< chkfast:					;have chip...have fast too?
+< 	tst.l	4(sp)				;fastmem adr
+---
+> chkfast:			;have chip...have fast too?
+> 	tst.l	4(sp)		;fastmem adr
+204,205c193,194
+< delboth:					;nope
+< 	lea	(sp),a0				;temp var for chipmem adr
+---
+> delboth:			;nope
+> 	lea	(sp),a0		;temp var for chipmem adr
+207c196
+< 	lea	4(sp),a0			;temp var for fastmem adr
+---
+> 	lea	4(sp),a0	;temp var for fastmem adr
+210,216c199,206
+< 	movem.l	(sp)+,d0/d1			;(a2).l=#endpts, d0=chipmemptr, d1=fastmemptr
+< 	tst.l	d0				;adr zero is invalid (both valid or both dead)
+< 	bne.s	gotit_gab			;subr returns flagZERO
+< 	move.l	(a2),d0				;current requested #pts
+< 	asr.l	#1,d0				;half it
+< 	move.l	d0,(a2)				;save requested #pts...need for ending calcs
+< 	bne.s	tryallocarea			;...and try again
+---
+> 	movem.l	(sp)+,d0/d1
+> 			;(a2).l=#endpts, d0=chipmemptr, d1=fastmemptr
+> 	tst.l	d0		;adr zero is invalid (both valid or both dead)
+> 	bne.s	gotit_gab	;subr returns flagZERO
+> 	move.l	(a2),d0		;current requested #pts
+> 	asr.l	#1,d0		;half it
+> 	move.l	d0,(a2)		;save requested #pts...need for ending calcs
+> 	bne.s	tryallocarea	;...and try again
+218,219c208,209
+< 	move.l	d1,AreaBufferPtr_(BP)		;fastmem pref....contour endpts
+< 	move.l	d0,AreaVectorPtr_(BP)		;chipmem
+---
+> 	move.l	d1,AreaBufferPtr_(BP)	;fastmem pref....contour endpts
+> 	move.l	d0,AreaVectorPtr_(BP)	;chipmem
+223,225c213,215
+< 	move.l	d0,AreaBufferLen_(BP)		;*4bytes per entry
+< 	add.l	(a2),d0				;+1 "=" *5
+< 	move.l	d1,AreaVectorLen_(BP)		;*5bytes per entry (chipmem/graphics)
+---
+> 	move.l	d0,AreaBufferLen_(BP)	;*4bytes per entry
+> 	add.l	(a2),d0			;+1 "=" *5
+> 	move.l	d1,AreaVectorLen_(BP)	;*5bytes per entry (chipmem/graphics)
+229c219
+< 	tst.l	AreaBufferPtr_(BP)		;return zero or NE (note:->a_reg no flag fx)
+---
+> 	tst.l	AreaBufferPtr_(BP)	;return zero or NE (note:->a_reg no flag fx)
+235,236c225,226
+< GrabBigFileBuffer:				;"big" buffer for default picture...
+< 	lea	FileBufferPtr_(BP),a0		;address of...
+---
+> GrabBigFileBuffer:	;"big" buffer for default picture...
+> 	lea	FileBufferPtr_(BP),a0	;address of...
+241,242c231,232
+< 	move.l	d0,BufferLen_(BP)		;save requested len
+< 	;bsr	IntuitionAllocMain		;AnyCleared
+---
+> 	move.l	d0,BufferLen_(BP)	;save requested len
+> 	;bsr	IntuitionAllocMain	;AnyCleared
+244c234
+< 	movem.l	(sp)+,d1/a0-a2/a6		;a0=filebufferptr_
+---
+> 	movem.l	(sp)+,d1/a0-a2/a6	;a0=filebufferptr_
+246,247c236,237
+< 	move.l	d0,(a0)				;address (any?...sets/clears zero flag)
+< 	move.l	d0,a0				;return zero or NE
+---
+> 	move.l	d0,(a0)		;address (any?...sets/clears zero flag)
+> 	move.l	d0,a0		;return zero or NE
+255,258c245,248
+<  xdef EnsureLittleExtraChip 			;ensure 'extra' chipmem avail, returns ZERO flag
+< EnsureLittleExtraChip:				;ensure 'extra' chipmem avail, returns ZERO flag
+< 						;only ref'd by ShowFReq...may07'89
+< 						;also ref'd by Do/InitMagnify May15
+---
+>  xdef EnsureLittleExtraChip 	;ensure 'extra' chipmem avail, returns ZERO flag
+> EnsureLittleExtraChip:		;ensure 'extra' chipmem avail, returns ZERO flag
+> 				;only ref'd by ShowFReq...may07'89
+> 				;also ref'd by Do/InitMagnify May15
+260c250
+< 	;move.l	#(6*1024),d0			;6k only allows magnify 1x on a 512k PAL
+---
+> 	;move.l	#(6*1024),d0	;6k only allows magnify 1x on a 512k PAL
+268,269c258,259
+< 	move.l	#MEMF_CHIP,d1
+< 	CALLIB	Exec,AvailMem
+---
+> 		move.l	#MEMF_CHIP,d1
+> 		CALLIB	Exec,AvailMem
+271,272c261,262
+< 	scc	d0				;only 'sets' a byte
+< 	ext.w	d0				;sets zero/not zero flag (not= if ok)
+---
+> 	scc	d0	;only 'sets' a byte
+> 	ext.w	d0	;sets zero/not zero flag (not= if ok)
+275,280c265,274
+< ;MAY16 late....
+<  xdef EnsureLotsaExtraChip 			;ensure 'extra' chipmem avail, returns ZERO flag
+< EnsureLotsaExtraChip:				;ensure 'extra' chipmem avail, returns ZERO flag
+< 	;move.l	#30*1024,d0			;for initmagnify...
+< 	;move.l	#26*1024,d0			;for initmagnify... (16Kmin mag, 10K hamtool)
+< 	move.l	#chipreq,d0			;june30
+---
+> 	;MAY16 late....
+>  xdef EnsureLotsaExtraChip 	;ensure 'extra' chipmem avail, returns ZERO flag
+> EnsureLotsaExtraChip:		;ensure 'extra' chipmem avail, returns ZERO flag
+> 
+> 	;move.l	#30*1024,d0	;for initmagnify...
+> 	;move.l	#26*1024,d0	;for initmagnify... (16Kmin mag, 10K hamtool)
+> 
+> 
+> 	move.l	#chipreq,d0	;june30
+> 
+282c276,277
+< ;account for existance of hamtools ;june14
+---
+> 
+> 		;account for existance of hamtools ;june14
+284c279
+< 	tst.l	ToolWindowPtr_(BP)		;window on ham tool screen
+---
+> 	tst.l	ToolWindowPtr_(BP)	;window on ham tool screen
+286,287c281,282
+< ;june30;sub.l	#10*1024,d0			;reduce requ'd free mem amt, since tools open
+< 	sub.l	#toolreq,d0			;10*1024,d0	;reduce requ'd free mem amt, since tools open
+---
+> 	;june30;sub.l	#10*1024,d0	;reduce requ'd free mem amt, since tools open
+> 	sub.l	#toolreq,d0	;10*1024,d0	;reduce requ'd free mem amt, since tools open
+295,296c290,291
+<  xdef EnsureBigExtraChip 			;ensure 'extra' chipmem avail, returns ZERO flag
+< EnsureBigExtraChip:				;ensure 'extra' chipmem avail, returns ZERO flag
+---
+>  xdef EnsureBigExtraChip 	;ensure 'extra' chipmem avail, returns ZERO flag
+> EnsureBigExtraChip:		;ensure 'extra' chipmem avail, returns ZERO flag
+300c295
+< ;account for existance of hamtools ;june14
+---
+> 		;account for existance of hamtools ;june14
+302c297
+< 	tst.l	ToolWindowPtr_(BP)		;window on ham tool screen
+---
+> 	tst.l	ToolWindowPtr_(BP)	;window on ham tool screen
+304,305c299,300
+< 	;sub.l	#10*1024,d0			;reduce requ'd free mem amt, since tools open
+< 	sub.l	#toolreq,d0			;reduce requ'd free mem amt, since tools open
+---
+> 	;sub.l	#10*1024,d0	;reduce requ'd free mem amt, since tools open
+> 	sub.l	#toolreq,d0	;reduce requ'd free mem amt, since tools open
+312c307
+< EnsureExtraChip:				;ensure 'extra' chipmem avail, returns ZERO flag
+---
+> EnsureExtraChip:		;ensure 'extra' chipmem avail, returns ZERO flag
+314c309
+< 	move.l	#BIGEXTRA,d0			;amt of chipk to 'reserve' for system
+---
+> 	move.l	#BIGEXTRA,d0		;amt of chipk to 'reserve' for system
+319,321c314,316
+< GrabExtraChip:					;used by main.o OpenBigPic to grab some chipmem
+< 	lea	ExtraChipPtr_(BP),a0		;address of...
+< 	bsr	FreeOneVariable			;returns a0 still valid (var ptr)
+---
+> GrabExtraChip:	;used by main.o OpenBigPic to grab some chipmem
+> 	lea	ExtraChipPtr_(BP),a0	;address of...
+> 	bsr	FreeOneVariable		;returns a0 still valid (var ptr)
+323,324c318,319
+< 	movem.l	d1/a0-a2/a6,-(sp)		;note: a0 = filebufferptr var adr
+< 	move.l	#BIGEXTRA,d0			;amt of chipk to 'reserve' for system
+---
+> 	movem.l	d1/a0-a2/a6,-(sp)	;note: a0 = filebufferptr var adr
+> 	move.l	#BIGEXTRA,d0		;amt of chipk to 'reserve' for system
+326c321
+< 	move.l	d0,ExtraChipPtr_(BP)		;returns zero flag
+---
+> 	move.l	d0,ExtraChipPtr_(BP)	;returns zero flag
+330,332c325,327
+< GrabLittleExtraChip:				;may18late...used by 'grab file buffer'
+< 	lea	ExtraChipPtr_(BP),a0		;address of...
+< 	bsr	FreeOneVariable			;returns a0 still valid (var ptr)
+---
+> GrabLittleExtraChip:	;may18late...used by 'grab file buffer'
+> 	lea	ExtraChipPtr_(BP),a0	;address of...
+> 	bsr	FreeOneVariable		;returns a0 still valid (var ptr)
+334c329
+< 	movem.l	d1/a0-a2/a6,-(sp)		;note: a0 = filebufferptr var adr
+---
+> 	movem.l	d1/a0-a2/a6,-(sp)	;note: a0 = filebufferptr var adr
+336,343c331,333
+< 	;move.l	#7*1024,d0 ;#BIGEXTRA,d0 	;amt of chipk to 'reserve' for system MAY19
+< 	;move.l	#3*1024,d0 ;#BIGEXTRA,d0 	;amt of chipk to 'reserve' for system MAY19
+<  ifd paint2000
+< 	move.l	#6*1024,d0 ;#BIGEXTRA,d0 	;amt of chipk to 'reserve' for system MAY19
+<  endc
+<  ifd paintAA
+< 	move.l	#8*1024,d0 ;#BIGEXTRA,d0 	;amt of chipk to 'reserve' for system MAY19
+<  endc
+---
+> 	;move.l	#7*1024,d0 ;#BIGEXTRA,d0 ;amt of chipk to 'reserve' for system MAY19
+> 	;move.l	#3*1024,d0 ;#BIGEXTRA,d0 ;amt of chipk to 'reserve' for system MAY19
+> 	move.l	#8*1024,d0 ;#BIGEXTRA,d0 ;amt of chipk to 'reserve' for system MAY19
+345c335
+< 	move.l	d0,ExtraChipPtr_(BP)		;returns zero flag
+---
+> 	move.l	d0,ExtraChipPtr_(BP)	;returns zero flag
+350,352c340,342
+< GrabFileBuffer:					;does an alloc' if needed; iffload.o
+< 	lea	FileBufferPtr_(BP),a0		;address of...
+< 	bsr	FreeOneVariable			;returns a0 still valid (var ptr)
+---
+> GrabFileBuffer:	;does an alloc' if needed; iffload.o
+> 	lea	FileBufferPtr_(BP),a0	;address of...
+> 	bsr	FreeOneVariable		;returns a0 still valid (var ptr)
+359c349
+< ;;MAY19...loses directory if lowmem situ'
+---
+> ;		;MAY19...loses directory if lowmem situ'
+362c352
+< ;	tst.b	FlagCloseWB_(BP)		;"close wbench and hamtools" mode?
+---
+> ;	tst.b	FlagCloseWB_(BP)	;"close wbench and hamtools" mode?
+365c355
+< ;1$	
+---
+> ;1$
+367,368c357,358
+< ;	;bsr	GrabExtraChip			;10k file 'cancel/continue' requester
+< ;	bsr	GrabLittleExtraChip		;6k file 'cancel/continue' requester
+---
+> ;	;bsr	GrabExtraChip		;10k file 'cancel/continue' requester
+> ;	bsr	GrabLittleExtraChip	;6k file 'cancel/continue' requester
+371,372c361,362
+< 	lea	FileBufferPtr_(BP),a0		;address of...
+< 	movem.l	d1/a0-a2/a6,-(sp)		;note: a0 = filebufferptr var adr
+---
+> 	lea	FileBufferPtr_(BP),a0	;address of...
+> 	movem.l	d1/a0-a2/a6,-(sp)	;note: a0 = filebufferptr var adr
+376,377c366,367
+< 	CALLIB	Exec,AvailMem			;rtns d0=largest avail
+< 	tst.l	d0				;any fastmem?
+---
+> 	CALLIB	Exec,AvailMem	;rtns d0=largest avail
+> 	tst.l	d0		;any fastmem?
+380,381c370,371
+< 	CALLIB	Exec,AvailMem			;rtns d0=largest avail
+< 006$	move.l	#MAXBUFFER,d1			;63k+4
+---
+> 	CALLIB	Exec,AvailMem	;rtns d0=largest avail
+> 006$	move.l	#MAXBUFFER,d1	;63k+4
+383,385c373,375
+< 	bcc.s	007$				;largest is bigger than 63K
+< 	asr.l	#1,d0				;largest/2
+< 	move.l	d0,d1				;largest
+---
+> 	bcc.s	007$	;largest is bigger than 63K
+> 	asr.l	#1,d0	;largest/2
+> 	move.l	d0,d1	;largest
+388c378
+< ;;;may21;;;move.l	#MAXBUFFER,d1		;63k+4
+---
+> 	;;;may21;;;move.l	#MAXBUFFER,d1	;63k+4
+390c380
+< 	move.l	(a2),d0				;current//requested size
+---
+> 	move.l	(a2),d0	;current//requested size
+392c382
+< 2$	move.l	d1,d0				;63k+4	;set largest
+---
+> 2$	move.l	d1,d0	;63k+4	;set largest
+394,405c384,395
+< 3$	cmp.l	d1,d0				;(d0=len requested)<=63k?
+< 	bcc.s	2$				;nope...set max
+< 4$	move.l	d0,(a2)				;save requested len
+< 
+< 	bsr	IntuitionAllocAnyCleared 	;need CLEARED for linemode endptbuffer
+< 	bne.s	gotit_gfb			;subr returns flagZERO
+< 	move.l	(a2),d0				;current requested len
+< 	asr.l	#1,d0				;half it
+< 
+< 	beq.s	gotit_gfb			;no memory	;APRIL11'89
+< 	cmp.l	#MINBUFF,d0			;arbitrary, minimum buff size?
+< 	beq.s	gotit_gfb			;no memory	;APRIL11'89
+---
+> 3$	cmp.l	d1,d0		;(d0=len requested)<=63k?
+> 	bcc.s	2$		;nope...set max
+> 4$	move.l	d0,(a2)		;save requested len
+> 
+> 	bsr	IntuitionAllocAnyCleared ;need CLEARED for linemode endptbuffer
+> 	bne.s	gotit_gfb	;subr returns flagZERO
+> 	move.l	(a2),d0		;current requested len
+> 	asr.l	#1,d0		;half it
+> 
+> 	beq.s	gotit_gfb	;no memory	;APRIL11'89
+> 	cmp.l	#MINBUFF,d0		;arbitrary, minimum buff size?
+> 	beq.s	gotit_gfb	;no memory	;APRIL11'89
+407,408c397,398
+< 	;bne.s	4$				;...and try again
+< 	bra.s	4$				;...and try again
+---
+> 	;bne.s	4$		;...and try again
+> 	bra.s	4$		;...and try again
+411,413c401,403
+< 	move.l	d0,-(sp)			;just alloc'd file buffer
+< 	lea	ExtraChipPtr_(BP),a0		;address of...
+< 	bsr.s	FreeOneVariable			;returns a0 still valid (var ptr)
+---
+> 	move.l	d0,-(sp)		;just alloc'd file buffer
+> 	lea	ExtraChipPtr_(BP),a0	;address of...
+> 	bsr.s	FreeOneVariable		;returns a0 still valid (var ptr)
+418,419c408,409
+< 	move.l	d0,(a0)				;address (any?...sets/clears zero flag)
+< 	move.l	d0,a0				;return zero or NE
+---
+> 	move.l	d0,(a0)		;address (any?...sets/clears zero flag)
+> 	move.l	d0,a0		;return zero or NE
+423,428c413,423
+< GrabLoadPlane0:					;does an alloc' if needed; iffload.o, ->a0...
+< 	lea	LoadPlane0Ptr_(BP),a0		;address of...
+< 	move.l	(a0),d0				;any?
+< 	bne.s	endof_glp			;already gotit
+< 
+< 	move.l	#2048*25/8,d0			;(enuff for 1024 pixels, 24bit RGB, PLUS MASK)
+---
+> GrabLoadPlane0:	;does an alloc' if needed; iffload.o, ->a0...
+> 	lea	LoadPlane0Ptr_(BP),a0	;address of...
+> 	move.l	(a0),d0			;any?
+> 	bne.s	endof_glp		;already gotit
+> 
+> 	;move.l	#1024,d0	;how many bytes (enuff for 1024 pixels)
+> 	;move.l	#3*1024,d0	;how many bytes (enuff for 1024 pixels, 24bit RGB)
+> 	;NOV91;move.l	#4*1024,d0	;(enuff for 1024 pixels, 24bit RGB, PLUS MASK)
+> 	;20NOV91;move.l	#4*1024+(1024/8),d0	;(enuff for 1024 pixels, 24bit RGB, PLUS MASK)
+> 	;20NOV91;		;^^^^^^^ allows for up to 2k wide RGB files NOV91
+> 	move.l	#2048*25/8,d0	;(enuff for 1024 pixels, 24bit RGB, PLUS MASK)
+429a425
+> 	;bsr.s	IntuitionAllocAnyCleared
+431c427
+< 	move.l	d0,(a0)				;address (any?...sets/clears zero flag)
+---
+> 	move.l	d0,(a0)		;address (any?...sets/clears zero flag)
+433c429
+< 	move.l	d0,a0				;doesn't change flags, rtns 0 or NE
+---
+> 	move.l	d0,a0		;doesn't change flags, rtns 0 or NE
+445,458c441,499
+< FreeOneVariable:				;A0=Address of variable to free, RETURNS a0 unmolested
+< 	move.l	(a0),d0				;address of memory to free
+< 	clr.l	(a0)				;(say it's gone...)
+< 
+< FreeOneRemember:				;D0=Address of memory to free, RETURNS a0 unmolested
+< 	tst.l	d0				;address to free mem?
+< 	beq	finalend_f1r			;none...get outta here
+< 
+< 	movem.l	d0/a0/a1/a6,-(sp)		;messes up d1
+< 	xjsr	FreeToaster			;d0=adr to free
+< 	bne	endof_f1r			;it was a toaster//chip chunk, done.
+< 	xjsr	FreeToasterFAST			;d0=adr to free
+< 	bne	endof_f1r			;it was a toaster//fast, done.
+< 	lea	RememberKey_(BP),a0		;remember list, look for mem chunk
+---
+> FreeOneVariable:	;A0=Address of variable to free, RETURNS a0 unmolested
+> 	move.l	(a0),d0	;address of memory to free
+> 	clr.l	(a0)	;(say it's gone...)
+> 
+> FreeOneRemember:	;D0=Address of memory to free, RETURNS a0 unmolested
+> 	tst.l	d0			;address to free mem?
+> 	beq	finalend_f1r		;none...get outta here
+> 
+>     IFD DEBUGGER	;basestuff.i
+>  	xjsr	DebugFreeOne	;prints d0, crlf
+> 	;28JAN92;xjsr	checkavail		;debugme.asm
+>    ENDC
+> 
+> 	movem.l	d0/a0/a1/a6,-(sp)	;messes up d1
+> 
+> 	xjsr	FreeToaster		;d0=adr to free
+>   IFD DEBUGGER
+> 	bne	debug_freeonetoast
+>   ENDC ;DEBUGGER
+> 	bne	endof_f1r		;it was a toaster//chip chunk, done.
+> 
+> 	xjsr	FreeToasterFAST		;d0=adr to free
+> 	bne	endof_f1r		;it was a toaster//fast, done.
+> 
+> 	lea	RememberKey_(BP),a0	;remember list, look for mem chunk
+> 
+>   IFD DEBUGGER
+> 	move.l	d0,-(sp)
+> 
+> 	xjsr	debugCRLF		;debugme.asm
+> 
+> 	move.l	(a0),d0		;printout 1st remember struct
+>  	xjsr debug_print_longword
+> 	move.l	d0,a0
+> 
+> 	move.l	4(a0),d0		;size
+>  	xjsr debug_print_longword
+> 	move.l	8(a0),d0		;memory adr
+>  	xjsr debug_print_longword
+> 
+> 	xjsr	debugCRLF		;debugme.asm
+> 	move.l	(a0),d0
+>  	xjsr debug_print_longword
+> 
+> 	move.l	d0,a0
+> 	move.l	(a0),d0
+>  	xjsr debug_print_longword
+> 	move.l	d0,a0
+> 	move.l	(a0),d0
+>  	xjsr debug_print_longword
+> 	move.l	d0,a0
+> 	move.l	(a0),d0
+>  	xjsr debug_print_longword
+> 
+> 	xjsr	debugCRLF		;debugme.asm
+> 
+> 	lea	RememberKey_(BP),a0	;remember list, look for mem chunk
+> 	move.l	(sp)+,d0
+>   ENDC ;DEBUGGER
+461,473c502,520
+< 	move.l	a0,a1				;a1=save prev for de-linking
+< 	move.l	(a0),d1				;d1=rm_NextRemember
+< 	beq.s	endof_f1r			;nothing in list (why?...)
+< 	move.l	d1,a0				;a0=next/current
+< 	cmp.l	rm_Memory(a0),d0		;this chunk aptr to our memry?
+< 	bne.s	f1restart			;nope...reloop till endalist
+< f1gotm:	
+< ;	move.l	rm_NextRemember(a0),rm_NextRemember(a1) ;prev<==NEXT after me
+< 	move.l	(a0),(a1)			;prev<==NEXT after me	;de-link me...ao=me, a1=prev
+< ;free this 'remember' struct  & its memory chunk
+< 	clr.l	(a0)				;rm_NextRemember(a0) ;points to nOOne, now.
+< ;	move.l	a0,-(sp)			;temp pointer to a remember struct
+< ;	lea	(sp),a0				;"pointer to a remember pointer"...
+---
+> 	move.l	a0,a1			;a1=save prev for de-linking
+> 	move.l	(a0),d1			;d1=rm_NextRemember
+> 	beq.s	endof_f1r		;nothing in list (why?...)
+> 	move.l	d1,a0			;a0=next/current
+> 	cmp.l	rm_Memory(a0),d0	;this chunk aptr to our memry?
+> 	bne.s	f1restart		;nope...reloop till endalist
+> f1gotm:	;move.l	rm_NextRemember(a0),rm_NextRemember(a1) ;prev<==NEXT after me
+> 	move.l	(a0),(a1) ;prev<==NEXT after me	;de-link me...ao=me, a1=prev
+>   IFD DEBUGGER
+> 	move.l	d0,a1
+> 	move.l	rm_RememberSize(a0),d0
+> 	xjsr	DebugFreeTwo	;prints a1,d0, crlf ("found" remember...)
+>   ENDC ;DEBUGGER
+> 
+> 		;free this 'remember' struct  & its memory chunk
+> 	clr.l	(a0)		;rm_NextRemember(a0) ;points to nOOne, now.
+> 
+> ;	move.l	a0,-(sp)	;temp pointer to a remember struct
+> ;	lea	(sp),a0		;"pointer to a remember pointer"...
+476c523,525
+< 	xjsr	IntuFreeRemember 		;intuitionrtns.asm;;JULY121990...FreeRemember replacement
+---
+> 
+> 	xjsr	IntuFreeRemember ;intuitionrtns.asm;;JULY121990...FreeRemember replacement
+> 
+477a527,530
+> ;28JAN92;  IFD DEBUGGER
+> ;28JAN92;	xjsr	checkavail		;debugme.asm
+> ;28JAN92;	xjsr	debugCRLF		;debugme.asm
+> ;28JAN92;  ENDC
+481a535,544
+>   IFD DEBUGGER
+> debug_freeonetoast:
+> 	movem.l	(sp),d0/a0/a1/a6	;restore args...
+> 	;;;xjsr	DebugFreeOne		;display "toaster chip"
+> 	;28JAN92;xjsr	checkavail		;debugme.asm
+> 	;28JAN92;xjsr	debugCRLF		;debugme.asm
+> 	movem.l	(sp)+,d0/a0/a1/a6
+> 	rts
+>   ENDC ;DEBUGGER
+> 
+483c546
+< 	xdef IntuitionAllocChipJunk		;"junk"=not-cleared!
+---
+> 	xdef IntuitionAllocChipJunk	;"junk"=not-cleared!
+485,487c548,550
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	move.l	#MEMF_CHIP,d1
+< 	bra.s	main_subentry
+---
+> 		movem.l	d1/a0/a1/a6,-(sp)
+> 		move.l	#MEMF_CHIP,d1
+> 		bra.s	main_subentry
+492,509c555,570
+< 	moveM.l	(sp)+,d1			;memsize, moveM opcode leaves Zflag alone
+< 	bne	gotit				;get memory? (test still valid from subr)
+< 	move.l	d1,d0				;restate original size spec, try 'slowmem' now
+< 
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	moveq	#0,d1				;"any" type spec
+< ;DONT WORK, MAR91;moveq	#MEMF_CHIP,d1		;specifying 'chip' enables ToasterChip MAR91
+< 	bra.s	main_subentry
+< 
+< tryfast:
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	move.l	#MEMF_FAST,d1			;just fast (NOT cleared)
+< 	bra.s	main_subentry
+< 
+< tryfastc:
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	move.l	#MEMF_FAST!MEMF_CLEAR,d1
+< 	bra.s	main_subentry
+---
+> 	moveM.l	(sp)+,d1	;memsize, moveM opcode leaves Zflag alone
+> 	bne	gotit		;get memory? (test still valid from subr)
+> 	move.l	d1,d0		;restate original size spec, try 'slowmem' now
+> 
+> 		movem.l	d1/a0/a1/a6,-(sp)
+> 		moveq	#0,d1		;"any" type spec
+> 		;DONT WORK, MAR91;moveq	#MEMF_CHIP,d1	;specifying 'chip' enables ToasterChip MAR91
+> 		bra.s	main_subentry
+> 
+> tryfast:	movem.l	d1/a0/a1/a6,-(sp)
+> 		move.l	#MEMF_FAST,d1	;just fast (NOT cleared)
+> 		bra.s	main_subentry
+> 
+> tryfastc:	movem.l	d1/a0/a1/a6,-(sp)
+> 		move.l	#MEMF_FAST!MEMF_CLEAR,d1
+> 		bra.s	main_subentry
+511c572
+< IntuitionAllocAnyCleared: 			;alloc any type, but cleared fer sure
+---
+> IntuitionAllocAnyCleared: 	;alloc any type, but cleared fer sure
+514,516c575,577
+< 	moveM.l	(sp)+,d1			;memsize, moveM opcode leaves Zflag alone
+< 	bne.s	gotit				;get memory? (test still valid from subr)
+< 	move.l	d1,d0				;restate original size spec, try 'slowmem' now
+---
+> 	moveM.l	(sp)+,d1	;memsize, moveM opcode leaves Zflag alone
+> 	bne.s	gotit		;get memory? (test still valid from subr)
+> 	move.l	d1,d0		;restate original size spec, try 'slowmem' now
+519,521c580,582
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	move.l	#MEMF_CHIP,d1 			;*not* cleared, for composite.o
+< 	bra.s	main_subentry
+---
+> 		movem.l	d1/a0/a1/a6,-(sp)
+> 		move.l	#MEMF_CHIP,d1 ;*not* cleared, for composite.o
+> 		bra.s	main_subentry
+524,534c585,596
+< 	movem.l	d1/a0/a1/a6,-(sp)
+< 	move.l	#MEMF_CHIP!MEMF_CLEAR,d1 	;*chip* gets cleared
+< main_subentry:					;if chip type, try toaster alloc'
+< 	btst	#MEMB_CHIP,d1
+< 	;bne.s	notchipnotoast
+< 	bEQ.s	notchipnotoast			;chip bit not set, no toaster-chip! LATEMAY1990
+< 	xjsr	AllocToaster			;returns ZERO flag, a0=adr
+< 	beq.s	notchipnotoast
+< 	xjsr	ClearMemA0D0			;strokeb.asm
+< 	move.l	a0,d0				;adr of alloc'd memory
+< 	bra.s	did_alloc
+---
+> 		movem.l	d1/a0/a1/a6,-(sp)
+> 		move.l	#MEMF_CHIP!MEMF_CLEAR,d1 ;*chip* gets cleared
+> main_subentry:
+> 			;if chip type, try toaster alloc'
+> 		btst	#MEMB_CHIP,d1
+> 		;bne.s	notchipnotoast
+> 		bEQ.s	notchipnotoast	;chip bit not set, no toaster-chip! LATEMAY1990
+> 		xjsr	AllocToaster	;returns ZERO flag, a0=adr
+> 		beq.s	notchipnotoast
+> 		xjsr	ClearMemA0D0	;strokeb.asm
+> 		move.l	a0,d0		;adr of alloc'd memory
+> 		bra.s	did_alloc
+536,550c598,619
+< ;	or.w	#MEMF_PUBLIC,d1			;enables clear of chipmem(?)
+< 	lea	RememberKey_(BP),a0
+< 	movem.l	d0/d1/a0,-(sp)			;size, type are saved
+< 	bclr	#MEMB_CLEAR,d1			;*never* let system clear memory
+< ;	CALLIB	Intuition,AllocRemember		***!!!
+< 	xjsr	IntuAllocRemember		;intuitionrtns.asm  JULY151990
+< 
+< 	move.L	d0,8(sp)			;save d0=new alloc address ("a0" on stack)
+< 	beq.s	done_alloc			;bad_alloc
+< 	move.l	4(sp),d1			;d1=type
+< 	btst	#MEMB_CLEAR,d1
+< 	beq.s	done_alloc			;don't need to clear it...
+< 	move.l	d0,a0				;adr of memory
+< 	move.l	(sp),d0				;size of alloc'd area
+< 	xjsr	ClearMemA0D0			;strokeb.asm ;KLUDGEOUT,WANT,NEED,JULY151990;
+---
+> 
+> ;KLUDGEOUT,JULY081990;		or.w	#MEMF_PUBLIC,d1		;enables clear of chipmem(?)
+> 		lea	RememberKey_(BP),a0
+> 
+> 	movem.l	d0/d1/a0,-(sp)		;size, type are saved
+> 		bclr	#MEMB_CLEAR,d1	;*never* let system clear memory
+> 
+>     IFD DEBUGGER	;basestuff.i
+> 	xjsr	DebugAllocRemember
+>     ENDC DEBUGGER	;basestuff.i
+> 
+> 	;JULY151990;	CALLIB	Intuition,AllocRemember
+> 		xjsr	IntuAllocRemember	;intuitionrtns.asm  JULY151990
+> 
+> 		move.L	d0,8(sp)	;save d0=new alloc address ("a0" on stack)
+> 		beq.s	done_alloc	;bad_alloc
+> 		move.l	4(sp),d1	;d1=type
+> 		btst	#MEMB_CLEAR,d1
+> 		beq.s	done_alloc	;don't need to clear it...
+> 		move.l	d0,a0		;adr of memory
+> 		move.l	(sp),d0		;size of alloc'd area
+> 		xjsr	ClearMemA0D0	;strokeb.asm ;KLUDGEOUT,WANT,NEED,JULY151990;
+552,553c621,622
+< 	movem.l	(sp)+,d0/d1			;/a0
+< 	move.l	(sp)+,d0			;adr of alloc memory, or zero
+---
+> 	movem.l	(sp)+,d0/d1 ;/a0
+> 	move.l	(sp)+,d0	;adr of alloc memory, or zero
+555a625,628
+>     IFD DEBUGGER	;basestuff.i
+> 	xjsr	DebugAllocRemember2	;prints d0, crlf
+>     ENDC DEBUGGER	;basestuff.i
+> 
+558,564c631,636
+< 	movem.l	(sp)+,d1/a0/a1/a6
+< 	tst.l	d0				;return zero flag, alloc failed?
+< gotit:	rts					;'rts' for memory alloc subrs
+< 
+< 
+< FreeAllMemory					;frees all memories.o managed memory (abort/end)
+< 	xjsr	CleanupDirRemember 		;dirrtns.o ;delete remembered filenames/dir
+---
+> 		movem.l	(sp)+,d1/a0/a1/a6
+> 		tst.l	d0	;return zero flag, alloc failed?
+> gotit:		rts		;'rts' for memory alloc subrs
+> ;--
+> FreeAllMemory		;frees all memories.o managed memory (abort/end)
+> 	xjsr	CleanupDirRemember ;dirrtns.o ;delete remembered filenames/dir
+567,574c639,640
+< IntuitionFreeRemember:	
+< 	moveq	#-1,d0 ;TRUE
+< ;;	DUMPMEM	<REMEMBER KEY>,(A0),#32
+< 	MOVE.L	(A0),A1
+< ;;	DUMPMEM	<REMEMBER NODE?>,(A1),#32
+< *	JMPLIB	Intuition,FreeRemember
+< *	xjsr	IntuFreeRemember        
+< 	xjmp	FreeAllRemember        
+---
+> IntuitionFreeRemember:	moveq	#-1,d0 ;TRUE
+> 			JMPLIB	Intuition,FreeRemember
+576c642,643
+< GraphicsWaitBlit:				;RETURNS A6 = GraphicsBase
+---
+> 
+> GraphicsWaitBlit:	;RETURNS A6 = GraphicsBase
+582c649
+< MemRegList	reg	d0-d3/a0-a2/a6		;general purp. register list
+---
+> MemRegList	reg	d0-d3/a0-a2/a6	;general purp. register list
+584c651
+< FreeDetTable:					;only called from main for use with toaster/switcher
+---
+> FreeDetTable:	;only called from main for use with toaster/switcher
+593c660
+< 	st	FlagCDet_(BP)			;flags openbigpic/mainloop/iffload
+---
+> 	st	FlagCDet_(BP)		;flags openbigpic/mainloop/iffload
+595,598c662,665
+< 	;move.l	#((16*1024)+4096),d0		;paldif table PLUS brite table
+< 	;move.l	#(16*1024),d0			;8kpaldif table APRIL10'89
+< 	;move.l	#(8*1024)+8,d0			;8kpaldif table APRIL10'89
+< 	;move.l	#(16*1024),d0			;ONLY WANT 8K!!!!!
+---
+> 	;move.l	#((16*1024)+4096),d0	;paldif table PLUS brite table
+> 	;move.l	#(16*1024),d0		;8kpaldif table APRIL10'89
+> 	;move.l	#(8*1024)+8,d0		;8kpaldif table APRIL10'89
+> 	;move.l	#(16*1024),d0		;ONLY WANT 8K!!!!!
+600c667
+< 	move.l	#(8*1024),d0			;only need 8kpaldif table APRIL10'89
+---
+> 	move.l	#(8*1024),d0		;only need 8kpaldif table APRIL10'89
+611,629c678,698
+< 	bne.s	enda_ism			;already have a table
+< 	move.l	#((16*256)+4096),d0		;table of BYTES (4k total)
+< 	bsr	IntuitionAllocMain 		;memories.o, cleared mem alloc
+< 	move.l	d0,(a2)				;ShortMulTablePtr_(BP)
+< 	beq.s	enda_ism			;die, no table
+< 
+< 	move.l	d0,a0				;table starting adr, where we fill w/BYTES
+< 	move.w	#(256-1),d4			;256-1 little tables (zero, 1st table empty)
+< 	moveq	#0,d3				;'table number' (2nd one, really)
+< smloop:	moveq	#(16-1),d2			;16 entries each 'little' table
+< 	moveq	#0,d1				;current total, new total each lil' table
+< lsmloop	add.W	d3,d1				;d1=total+current table number
+< 	move.w	d1,d0				;copy total
+< 	asr.w	#4,d0				;strip lower 4 bits, only saving 8 of 12
+< 	move.B	d0,(a0)+			;save a 8 bit value (we know >>4)
+< 	dbf	d2,lsmloop 			;little table
+< 	addq	#1,d3				;'table number' number (incrementor)
+< 	dbf	d4,smloop			;256 little tables (of 16 entries each)
+< 						;fill in briteness lup
+---
+> 	bne.s	enda_ism	;already have a table
+> 	move.l	#((16*256)+4096),d0	;table of BYTES (4k total)
+> 	bsr	IntuitionAllocMain ;memories.o, cleared mem alloc
+> 	move.l	d0,(a2)		;ShortMulTablePtr_(BP)
+> 	beq.s	enda_ism	;die, no table
+> 
+> 	move.l	d0,a0		;table starting adr, where we fill w/BYTES
+> 	move.w	#(256-1),d4	;256-1 little tables (zero, 1st table empty)
+> 	moveq	#0,d3		;'table number' (2nd one, really)
+> smloop:	moveq	#(16-1),d2	;16 entries each 'little' table
+> 	moveq	#0,d1		;current total, new total each lil' table
+> lsmloop	add.W	d3,d1		;d1=total+current table number
+> 	move.w	d1,d0		;copy total
+> 	asr.w	#4,d0		;strip lower 4 bits, only saving 8 of 12
+> 	move.B	d0,(a0)+	;save a 8 bit value (we know >>4)
+> 	dbf	d2,lsmloop 	;little table
+> 	addq	#1,d3		;'table number' number (incrementor)
+> 	dbf	d4,smloop	;256 little tables (of 16 entries each)
+> 
+> 
+> 		;fill in briteness lup
+631,632c700,701
+< 	move.l	(a2),d0				;shrotmul table just alloc/init'd
+< 	add.l	#((16*256)+4096),d0		;pt just past end of 2nd table
+---
+> 	move.l	(a2),d0			;shrotmul table just alloc/init'd
+> 	add.l	#((16*256)+4096),d0	;pt just past end of 2nd table
+634c703
+< 	moveq	#(16-1),d0			;'red'
+---
+> 	moveq	#(16-1),d0	;'red'
+636c705
+< 	moveq	#(16-1),d1			;BLUE   'rrrBBBggg' for lup of brites
+---
+> 	moveq	#(16-1),d1	;BLUE   'rrrBBBggg' for lup of brites
+638c707
+< 	move.w	d0,d3				;temp highest
+---
+> 	move.w	d0,d3	;temp highest
+641c710
+< 	move.w	d1,d3				;newtemp highest
+---
+> 	move.w	d1,d3	;newtemp highest
+643,644c712,713
+< 	moveq	#(16-1),d2			;green; d3=temp highest
+< gpdlp:	move.w	d3,d4				;temp to fill
+---
+> 	moveq	#(16-1),d2	;green; d3=temp highest
+> gpdlp:	move.w	d3,d4	;temp to fill
+648,649c717,718
+< 1$	asl.b	#4,d4				;<<4...shift integer to upper nybble, clear fract bits
+< 	move.b	d4,-(a0) 			;BRIGHTNESS NOW always has 4 zero'd fraction bits...
+---
+> 1$	asl.b	#4,d4	;<<4...shift integer to upper nybble, clear fract bits
+> 	move.b	d4,-(a0) ;BRIGHTNESS NOW always has 4 zero'd fraction bits...
+657,661c726,731
+< 	;tst.l	d0				;not needed?
+< 	;tst.l	d1				;SET NOT ZERO FLAG!
+< 	moveq	#-1,d0				;set not-zero!
+< enda_ism:					;if aborting, zero is set by inital test
+< 	rts					;initshortmultable
+---
+> 	;tst.l	d0	;not needed?
+> 	;tst.l	d1		;SET NOT ZERO FLAG!
+> 	moveq	#-1,d0	;set not-zero!
+> 
+> enda_ism:			;if aborting, zero is set by inital test
+> 	rts	;initshortmultable
+664c734
+< PasteToFast:					;force swap brush into FAST memory (for BEFORE brush swap)
+---
+> PasteToFast:	;force swap brush into FAST memory (for BEFORE brush swap)
+666,667c736,738
+< 	move.l	a4,-(sp)			;extra a-reg used...
+< 						;outta here if no fast mem to copy to, anyway....JUNE28
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+> 
+> 	;outta here if no fast mem to copy to, anyway....JUNE28
+669,671c740,742
+< 	CALLIB	Exec,AvailMem			;rtns d0=largest avail
+< 	tst.l	d0				;any fastmem?
+< 	beq.s	abort_pastetofast		;no fastmem?
+---
+> 	CALLIB	Exec,AvailMem		;rtns d0=largest avail
+> 	tst.l	d0			;any fastmem?
+> 	beq.s	abort_pastetofast	;no fastmem?
+673,674c744,745
+< 	;lea	AltPasteBitMap_(BP),a4		;bm_ struct
+< 	lea	PasteBitMap_(BP),a4		;bm_ struct
+---
+> 	;lea	AltPasteBitMap_(BP),a4	;bm_ struct
+> 	lea	PasteBitMap_(BP),a4	;bm_ struct
+676,677c747,748
+< 	moveq	#(9-1),d3			;6 ham bitplanes, 7th for mask
+< Paste_tofastplane:	
+---
+> 	moveq	#(7-1),d3		;6 ham bitplanes, 7th for mask
+> Paste_tofastplane:
+679,690c750,761
+< 	mulu	bm_Rows(a4),d0			;'real' planesize for AltPaste bitmap
+< 	bsr	IntuitionAllocMain		;tries for fastmemfirst, d0=alloc'd adr
+< 	beq.s	abort_pastetofast		;no mem?
+< 
+< 	;move.l	d0,-(sp)			;new fast memory
+< 	clr.l	-(sp)				;STACK new bitplane adr
+< 	move.l	d0,a1				;a1=to new bitplane
+< 	;move.l	d0,a0				;a0=newbitplane (temp, in case have to free)
+< 	tst.l	(a2)				;old bitplane
+< 	beq.s	Pfreenp_fast			;....none, oops, free new paste chip
+< 	move.l	a1,(sp)				;save (on stack) new bitplane adr
+< 	move.l	(a2),a0				;a0=from bitplane adr
+---
+> 	mulu	bm_Rows(a4),d0		;'real' planesize for AltPaste bitmap
+> 	bsr	IntuitionAllocMain	;tries for fastmemfirst, d0=alloc'd adr
+> 	beq.s	abort_pastetofast	;no mem?
+> 
+> 	;move.l	d0,-(sp)	;new fast memory
+> 	clr.l	-(sp)		;STACK new bitplane adr
+> 	move.l	d0,a1		;a1=to new bitplane
+> 	;move.l	d0,a0		;a0=newbitplane (temp, in case have to free)
+> 	tst.l	(a2)		;old bitplane
+> 	beq.s	Pfreenp_fast	;....none, oops, free new paste chip
+> 	move.l	a1,(sp)		;save (on stack) new bitplane adr
+> 	move.l	(a2),a0		;a0=from bitplane adr
+692c763
+< 	MOVE.W	(a4),d0				;bm_BytesPerRow(a4),d0
+---
+> 	MOVE.W	(a4),d0	;bm_BytesPerRow(a4),d0
+694,696c765,767
+< 	bsr	QUICKCopy			;d0=count, a0=from address a1=to adr
+< 	move.l	(a2),d0				;d0=old bitplane
+< 	;lea	(a2),a0				;a0=adr of var
+---
+> 	bsr	QUICKCopy	;d0=count, a0=from address a1=to adr
+> 	move.l	(a2),d0		;d0=old bitplane
+> 	;lea	(a2),a0		;a0=adr of var
+698,700c769,771
+< 	bsr	FreeOneRemember 		;Variable	;Remember ;A0=Address of memory to free
+< 	move.l	(sp)+,(a2)+			;new alloc'd bitplane into/replacement adr
+< 	dbeq	d3,Paste_tofastplane		;dont loop if no alloc
+---
+> 	bsr	FreeOneRemember ;Variable	;Remember ;A0=Address of memory to free
+> 	move.l	(sp)+,(a2)+	;new alloc'd bitplane into/replacement adr
+> 	dbeq	d3,Paste_tofastplane	;dont loop if no alloc
+702c773
+< abort_pastetofast:				;...8th first, cutPaste.o switches 7th
+---
+> abort_pastetofast:	;...8th first, cutPaste.o switches 7th
+704a776
+> 
+707c779
+< PasteToChip:					;force swap brush into CHIP memory (for AFTER brush swap)
+---
+> PasteToChip:	;force swap brush into CHIP memory (for AFTER brush swap)
+709,711c781,783
+< 	move.l	a4,-(sp)			;extra a-reg used...
+< 	;lea	AltPasteBitMap_(BP),a4		;bm_ struct
+< 	lea	PasteBitMap_(BP),a4		;bm_ struct
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+> 	;lea	AltPasteBitMap_(BP),a4	;bm_ struct
+> 	lea	PasteBitMap_(BP),a4	;bm_ struct
+713c785
+< 	moveq	#(9-1),d3			;6 ham bitplanes, 7th for mask
+---
+> 	moveq	#(7-1),d3		;6 ham bitplanes, 7th for mask
+716,725c788,797
+< 	mulu	bm_Rows(a4),d0			;'real' planesize for AltPaste bitmap
+< 	bsr	IntuitionAllocChipJunk		;address of new memory in d0 NOT CLR'D
+< 	beq.s	abort_pastetochip		;no mem?
+< 
+< 	clr.l	-(sp)				;STACK new bitplane adr
+< 	move.l	d0,a1				;a1=to new bitplane
+< 	tst.l	(a2)				;old bitplane
+< 	beq.s	Pfreenp_chip			;....none, oops, free new paste chip
+< 	move.l	a1,(sp)				;save (on stack) new bitplane adr
+< 	move.l	(a2),a0				;a0=from bitplane adr
+---
+> 	mulu	bm_Rows(a4),d0		;'real' planesize for AltPaste bitmap
+> 	bsr	IntuitionAllocChipJunk	;address of new memory in d0 NOT CLR'D
+> 	beq.s	abort_pastetochip	;no mem?
+> 
+> 	clr.l	-(sp)		;STACK new bitplane adr
+> 	move.l	d0,a1		;a1=to new bitplane
+> 	tst.l	(a2)		;old bitplane
+> 	beq.s	Pfreenp_chip	;....none, oops, free new paste chip
+> 	move.l	a1,(sp)		;save (on stack) new bitplane adr
+> 	move.l	(a2),a0		;a0=from bitplane adr
+727c799
+< 	MOVE.W	(a4),d0				;bm_BytesPerRow(a4),d0
+---
+> 	MOVE.W	(a4),d0	;bm_BytesPerRow(a4),d0
+729,730c801,802
+< 	bsr	QUICKCopy			;d0=count, a0=from address a1=to adr
+< 	move.l	(a2),d0				;d0=old bitplane
+---
+> 	bsr	QUICKCopy	;d0=count, a0=from address a1=to adr
+> 	move.l	(a2),d0		;d0=old bitplane
+732,734c804,806
+< 	bsr	FreeOneRemember 		;Variable;Remember ;A0=Address of memory to free
+< 	move.l	(sp)+,(a2)+			;new alloc'd bitplane into/replacement adr
+< 	dbeq	d3,Paste_tochipplane		;dont loop if no alloc
+---
+> 	bsr	FreeOneRemember ;Variable	;Remember ;A0=Address of memory to free
+> 	move.l	(sp)+,(a2)+	;new alloc'd bitplane into/replacement adr
+> 	dbeq	d3,Paste_tochipplane	;dont loop if no alloc
+740c812
+< abort_pastetochip:				;...8th first, cutPaste.o switches 7th
+---
+> abort_pastetochip:	;...8th first, cutPaste.o switches 7th
+743c815
+< 	xjmp	EndCutPaste			;removes brush
+---
+> 	xjmp	EndCutPaste		;removes brush
+746c818
+< AltPasteChip:					;force swap brush into CHIP memory (for brush bitmap swap)
+---
+> AltPasteChip:	;force swap brush into CHIP memory (for brush bitmap swap)
+748,749c820,821
+< 	move.l	a4,-(sp)			;extra a-reg used...
+< 	lea	AltPasteBitMap_(BP),a4		;bm_ struct
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+> 	lea	AltPasteBitMap_(BP),a4	;bm_ struct
+751c823
+< 	moveq	#(9-1),d3			;6 ham bitplanes, 7th for mask
+---
+> 	moveq	#(7-1),d3		;6 ham bitplanes, 7th for mask
+754,763c826,837
+< 	mulu	bm_Rows(a4),d0			;'real' planesize for AltPaste bitmap
+< 	bsr	IntuitionAllocChipJunk		;address of new memory in d0 NOT CLR'D
+< 	beq.s	abort_AltPasteChip		;no mem?
+< 	clr.l	-(sp)				;STACK new bitplane adr
+< 	move.l	d0,a1				;a1=to new bitplane
+< 	tst.l	(a2)				;old bitplane
+< 	beq.s	freenp_chip			;....none, oops, free new paste chip
+< 	move.l	a1,(sp)				;save (on stack) new bitplane adr
+< 	move.l	(a2),a0				;a0=from bitplane adr
+< 	move.w	(a4),d0				;bm_BytesPerRow(a4),d0
+---
+> 	mulu	bm_Rows(a4),d0		;'real' planesize for AltPaste bitmap
+> 	bsr	IntuitionAllocChipJunk	;address of new memory in d0 NOT CLR'D
+> 	beq.s	abort_AltPasteChip	;no mem?
+> 
+> 	clr.l	-(sp)		;STACK new bitplane adr
+> 	move.l	d0,a1		;a1=to new bitplane
+> 	tst.l	(a2)		;old bitplane
+> 	beq.s	freenp_chip	;....none, oops, free new paste chip
+> 	move.l	a1,(sp)		;save (on stack) new bitplane adr
+> 	move.l	(a2),a0		;a0=from bitplane adr
+> 
+> 	MOVE.W	(a4),d0	;bm_BytesPerRow(a4),d0
+765,767c839,841
+< 	bsr	QUICKCopy			;d0=count, a0=from address a1=to adr
+< 	move.l	(a2),d0				;d0=old bitplane
+< 	;lea	(a2),a0				;a0=adr of var
+---
+> 	bsr	QUICKCopy	;d0=count, a0=from address a1=to adr
+> 	move.l	(a2),d0		;d0=old bitplane
+> 	;lea	(a2),a0		;a0=adr of var
+769,771c843,845
+< 	bsr	FreeOneRemember 		;Variable Remember ;A0=Address of memory to free
+< 	move.l	(sp)+,(a2)+			;new alloc'd bitplane into/replacement adr
+< 	dbeq	d3,AltPaste_Chipplane		;dont loop if no alloc
+---
+> 	bsr	FreeOneRemember ;Variable	;Remember ;A0=Address of memory to free
+> 	move.l	(sp)+,(a2)+	;new alloc'd bitplane into/replacement adr
+> 	dbeq	d3,AltPaste_Chipplane	;dont loop if no alloc
+773c847
+< abort_AltPasteChip:				;...8th first, cutPaste.o switches 7th
+---
+> abort_AltPasteChip:	;...8th first, cutPaste.o switches 7th
+775a850
+> 
+779c854
+< AltPasteFast:					;force swap brush into FAST memory (for normal stretching)
+---
+> AltPasteFast:	;force swap brush into FAST memory (for normal stretching)
+781,782c856,857
+< 	move.l	a4,-(sp)			;extra a-reg used...
+< 	lea	AltPasteBitMap_(BP),a4		;bm_ struct
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+> 	lea	AltPasteBitMap_(BP),a4	;bm_ struct
+784c859
+< 	moveq	#(9-1),d3			;7th for mask, 8th for work/flood
+---
+> 	moveq	#(7-1),d3		;7th for mask, 8th for work/flood
+787,794c862,869
+< 	mulu	bm_Rows(a4),d0			;'real' planesize for AltPaste bitmap
+< 	bsr	IntuitionAllocMain		;address of FAST memory in d0 NOT CLR'D
+< 	beq.s	abort_AltPasteFast		;no mem?
+< 
+< 	move.l	d0,-(sp)			;new chip memory
+< 	move.l	d0,a1				;a1=to new bitplane
+< 	move.l	(a2),a0				;a0=from old bitplane
+< 	MOVE.W	(a4),d0				;bm_BytesPerRow(a4),d0
+---
+> 	mulu	bm_Rows(a4),d0		;'real' planesize for AltPaste bitmap
+> 	bsr	IntuitionAllocMain	;address of FAST memory in d0 NOT CLR'D
+> 	beq.s	abort_AltPasteFast	;no mem?
+> 
+> 	move.l	d0,-(sp)	;new chip memory
+> 	move.l	d0,a1		;a1=to new bitplane
+> 	move.l	(a2),a0		;a0=from old bitplane
+> 	MOVE.W	(a4),d0	;bm_BytesPerRow(a4),d0
+796,799c871,874
+< 	bsr	QUICKCopy			;d0=count, a0=from address a1=to adr
+< 	lea	(a2),a0				;a0=adr of var
+< 	bsr	FreeOneVariable			;Remember;D0=Address of memory to free
+< 	move.l	(sp)+,(a2)+			;new alloc'd bitplane into/replacement adr
+---
+> 	bsr	QUICKCopy	;d0=count, a0=from address a1=to adr
+> 	lea	(a2),a0		;a0=adr of var
+> 	bsr	FreeOneVariable	;Remember	;D0=Address of memory to free
+> 	move.l	(sp)+,(a2)+	;new alloc'd bitplane into/replacement adr
+802c877
+< abort_AltPasteFast:				;...8th first, cutPaste.o switches 7th
+---
+> abort_AltPasteFast:	;...8th first, cutPaste.o switches 7th
+809c884
+< AllocAltPaste: 					;allocate a bitmap for the "new" cutout brush
+---
+> AllocAltPaste: ;allocate a bitmap for the "new" cutout brush
+810a886,887
+> 
+> 		;AUG011990....disable alloc(and copy to)swap if "hires" mode
+814,815c891,892
+< 	bsr	FreeAltPaste			;remove (possibly wrong sized) bitmap
+< 	movem.l	(sp),MemRegList			;RESTORE ARGS....AUG311990
+---
+> 	bsr	FreeAltPaste		;remove (possibly wrong sized) bitmap
+> 	movem.l	(sp),MemRegList		;RESTORE ARGS....AUG311990
+819,821c896,898
+< 	bsr	ErrorCleanup			;not 'nuff memory, reorganize it
+< 	movem.l	(sp),MemRegList			;RESTORE ARGS....AUG311990
+< 	bsr.s	really_allocAltPaste		;no...try to allocate bitmap
+---
+> 	bsr	ErrorCleanup		;not 'nuff memory, reorganize it
+> 	movem.l	(sp),MemRegList		;RESTORE ARGS....AUG311990
+> 	bsr.s	really_allocAltPaste	;no...try to allocate bitmap
+825c902
+< 	moveq	#0,d0				;set ZERO, no alloc
+---
+> 	moveq	#0,d0			;set ZERO, no alloc
+827c904,906
+< 	st	FlagNeedGadRef_(BP)		;tells main->redohires->redomenu
+---
+> 	st	FlagNeedGadRef_(BP)	;tells main->redohires->redomenu
+> 
+> 		;MAY19
+832c911
+< 	moveq	#0,d0				;zero, no alloc, no extra chip
+---
+> 	moveq	#0,d0			;zero, no alloc, no extra chip
+838d916
+< 
+841c919,921
+< 	move.l	a4,-(sp)			;extra a-reg used...
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+> 
+> 		;digipaint 24
+843,844c923,925
+< 	lea	PasteRGB_(BP),a0		;rgb buffer bitmap for current brush
+< 	tst.l	bm_Planes(a0)			;rgb mode?
+---
+> 		;digipaint 24
+> 	lea	PasteRGB_(BP),a0	;rgb buffer bitmap for current brush
+> 	tst.l	bm_Planes(a0)		;rgb mode?
+846c927
+< 	lea	AltPasteRGB_(BP),a1		;"clip to" new altpaste bitmap
+---
+> 	lea	AltPasteRGB_(BP),a1	;"clip to" new altpaste bitmap
+857,863c938,943
+< 	beq.s	abort_allocAltPaste 		;sanity check
+< 	xjsr	ClipB_RGB			;BrushRGBRtns.asm
+< 						;'clip', a0=from bitmap, a1=to bitmap,
+< 						;d0,d1.w=from x,y   d2,d3.w=wt,ht
+< 						;allocates new rgb buffer
+< 	beq.s	abort_allocAltPaste 		;no mem?...go make an abortion
+< 
+---
+> 	beq.s	abort_allocAltPaste 	;sanity check
+> 	xjsr	ClipB_RGB	;BrushRGBRtns.asm
+> 				;'clip', a0=from bitmap, a1=to bitmap,
+> 				;d0,d1.w=from x,y   d2,d3.w=wt,ht
+> 				;allocates new rgb buffer
+> 	beq.s	abort_allocAltPaste 	;no mem?...go make an abortion
+865c945,946
+< 	lea	AltPasteBitMap_(BP),a4		;bm_ struct
+---
+> 
+> 	lea	AltPasteBitMap_(BP),a4	;bm_ struct
+867c948
+< 	moveq	#(9-1),d3			;7th for mask, 8th for work/flood
+---
+> 	moveq	#(7-1),d3		;7th for mask, 8th for work/flood
+869,871c950,952
+< 	move.l	a0,-(sp)			;stack usage for temp
+< 	lea	PasteBitMap_(BP),a0		;"real" (current) brush
+< 	move.w	bm_Rows(a0),bm_Rows(a4)		;paste->altpaste detail copy
+---
+> 	move.l	a0,-(sp)		;stack usage for temp
+> 	lea	PasteBitMap_(BP),a0	;"real" (current) brush
+> 	move.w	bm_Rows(a0),bm_Rows(a4)	;paste->altpaste detail copy
+873c954
+< 	move.l	(sp)+,a0			;(should avail a-reg?)
+---
+> 	move.l	(sp)+,a0		;(should avail a-reg?)
+876c957
+< 	mulu	bm_Rows(a4),d0			;'real' planesize for AltPaste bitmap
+---
+> 	mulu	bm_Rows(a4),d0		;'real' planesize for AltPaste bitmap
+878c959
+< 	bsr	IntuitionAllocMain		;any memory type, (fast first)
+---
+> 	bsr	IntuitionAllocMain	;any memory type, (fast first)
+881c962
+< 	beq.s	abort_allocAltPaste		;no mem?
+---
+> 	beq.s	abort_allocAltPaste	;no mem?
+883c964
+< 						;...8th first, cutPaste.o switches 7th
+---
+> 					;...8th first, cutPaste.o switches 7th
+893,894c974,975
+< 	st	FlagNeedGadRef_(BP)			;tells main->redohires->redomenu
+< 	lea	AltPasteBitMap_(BP),a0			;swap brush (stretch source)
+---
+> 	st	FlagNeedGadRef_(BP)	;tells main->redohires->redomenu
+> 	lea	AltPasteBitMap_(BP),a0	;swap brush (stretch source)
+897,898c978,979
+< 	lea	AltPasteRGB_(BP),a0			;digipaint 24
+< 	xjmp	FreeB_RGB				;brushrgbrtns.asm, free rgb buffers
+---
+> 	lea	AltPasteRGB_(BP),a0	;digipaint 24
+> 	xjmp	FreeB_RGB		;brushrgbrtns.asm, free rgb buffers
+902c983
+< 	sf	FlagBitMapSaved_(BP)			;flag bitmap not saved
+---
+> 	sf	FlagBitMapSaved_(BP)	;flag bitmap not saved
+905,906c986,987
+< SwapAltPaste:						;exchange brush, 'other' brush (stretch source)
+< 							;SEP171990....disable alloc' of brush if "hires" mode
+---
+> SwapAltPaste:	;exchange brush, 'other' brush (stretch source)
+> 		;SEP171990....disable alloc' of brush if "hires" mode
+913c994
+< 	PEA	EndaSwapAltPaste(pc)			;go "here" when done
+---
+> 	PEA	EndaSwapAltPaste(pc)	;go "here" when done
+917,918c998,999
+< 	bsr	FreeDouble				;temp chip, double buffer
+< 	st	FlagNeedShowPaste_(BP)			;MAY19
+---
+> 	bsr	FreeDouble		;temp chip, double buffer
+> 	st	FlagNeedShowPaste_(BP)	;MAY19
+921c1002
+< 	bsr	FreeLoResMask				;removes "anti-aliasness"
+---
+> 	bsr	FreeLoResMask		;removes "anti-aliasness"
+923c1004
+< 	bne.s	haveabrush				;bra when currently carrying a brush
+---
+> 	bne.s	haveabrush		;bra when currently carrying a brush
+925,927c1006,1008
+< ;NO BRUSH, but asked for a swap, RETRIEVE/CLONE alt->"real"
+< 	tst.l	AltPasteBitMap_Planes_(BP)		;HAVE an alternate?
+< 	beq	easap					;no brush, no alt brush, -> no alloc
+---
+> 		;NO BRUSH, but asked for a swap, RETRIEVE/CLONE alt->"real"
+> 	tst.l	AltPasteBitMap_Planes_(BP)	;HAVE an alternate?
+> 	beq	easap			;no brush, no alt brush, -> no alloc
+930,934c1011,1015
+< 	xjsr	SetAltPointerWait			;SEP021990
+< 	pea	_ClearPointer(pc)			;SEP021990
+< 	xref	FlagFillMode_				;SEP021990
+< 	sf	FlagFillMode_(BP)			;SEP021990
+< 	sf	FlagNeedGadRef_(BP)			;SEP021990
+---
+> 	xjsr	SetAltPointerWait	;SEP021990
+> 	pea	_ClearPointer(pc)	;SEP021990
+> 	xref	FlagFillMode_		;SEP021990
+> 	sf	FlagFillMode_(BP)	;SEP021990
+> 	sf	FlagNeedGadRef_(BP)	;SEP021990
+937c1018
+< 	PEA	AllocAndSaveCPUnDo(pc)			;does super->cpundo
+---
+> 	PEA	AllocAndSaveCPUnDo(pc)	;does super->cpundo
+940,941c1021,1022
+< 	bsr	AltPasteChip				;force swap brush into CHIP memory
+< 	bsr.s	swapptrs				;copy altpaste bitmap data->paste
+---
+> 	bsr	AltPasteChip		;force swap brush into CHIP memory
+> 	bsr.s	swapptrs		;copy altpaste bitmap data->paste
+943,944c1024,1025
+< 	sne	FlagCutPaste_(BP)			;go into cutpaste mode (if HAVE brush)
+< 	bra	PasteToAltCopy				;ensure still have altpaste
+---
+> 	sne	FlagCutPaste_(BP)	;go into cutpaste mode (if HAVE brush)
+> 	bra	PasteToAltCopy		;ensure still have altpaste
+949c1030
+< 	;beq	PasteToAltCopy				;no alternate bitmap yet, go create it
+---
+> 	;beq	PasteToAltCopy		;no alternate bitmap yet, go create it
+952,955c1033,1036
+< 	bsr	PasteToAltCopy				;create altbrush (clone it), clones rgbs, too...
+< 	tst.l	AltPasteBitMap_Planes_(BP)		;is there now an altbrush?
+< 	beq	easap					;no alt brush...end "swap" rtn
+< ;note on AUG311990....fall thru & ensure alt paste is in fast
+---
+> 	bsr	PasteToAltCopy		;create altbrush (clone it), clones rgbs, too...
+> 	tst.l	AltPasteBitMap_Planes_(BP)	;is there now an altbrush?
+> 	beq	easap			;no alt brush...end "swap" rtn
+> 		;note on AUG311990....fall thru & ensure alt paste is in fast
+957,958c1038,1039
+< 	;no need for this...AUG31;BRA	easap		;no alt brush...end "swap" rtn
+< 10$							;then come back and do swap
+---
+> 	;no need for this...AUG31;BRA	easap			;no alt brush...end "swap" rtn
+> 10$					;then come back and do swap
+961c1042
+< 	bsr	AltPasteChip(pc)			;force swap brush into CHIP memory
+---
+> 	bsr	AltPasteChip(pc)	;force swap brush into CHIP memory
+963c1044
+< swapptrs:						;else swap ptrs alt<->real
+---
+> swapptrs:				;else swap ptrs alt<->real
+969,970c1050,1051
+< 	beq.s	easap					;no 'real' brush anymore EITHER
+< 	beq.s	easap					;no 'real' brush anymore EITHER
+---
+> 	beq.s	easap			;no 'real' brush anymore EITHER
+> 	beq.s	easap			;no 'real' brush anymore EITHER
+972c1053
+< ;SEP091190.....inserted routine for txmap...cloning of brush stuff
+---
+> 		;SEP091190.....inserted routine for txmap...cloning of brush stuff
+974,975c1055,1056
+<  xdef MovePasteAlt					;exchange ptrs & vars for brush, alt brush
+< MovePasteAlt:						;exchange ptrs & vars for brush, alt brush
+---
+>  xdef MovePasteAlt		;exchange ptrs & vars for brush, alt brush
+> MovePasteAlt:			;exchange ptrs & vars for brush, alt brush
+980c1061
+< 	MOVE.L	(8*4)+bm_Planes(a1),PMBM_Planes_(BP)	;grab/swap mask plane, too
+---
+> 	MOVE.L	(6*4)+bm_Planes(a1),PMBM_Planes_(BP) ;grab/swap mask plane, too
+1003c1084
+< 	moveq	#bm_Planes+(10*4)-1,d0			;#bytes in a bitmap struct
+---
+> 	moveq	#bm_Planes+(8*4)-1,d0	;#bytes in a bitmap struct
+1005,1007c1086,1088
+< 	move.b	(a0),d1					;1st->temp
+< 	move.b	(a1),(a0)+				;2nd->first
+< 	move.b	d1,(a1)+				;temp->2nd
+---
+> 	move.b	(a0),d1		;1st->temp
+> 	move.b	(a1),(a0)+	;2nd->first
+> 	move.b	d1,(a1)+	;temp->2nd
+1010c1091
+< 							;digipaint pi, digipaint 24, swap rgb bitmaps, too
+---
+> 		;digipaint pi, digipaint 24, swap rgb bitmaps, too
+1015c1096
+< 	moveq	#bm_Planes+(3*4)-1,d0			;#bytes in a rgb-bitmap struct, -1 for db'
+---
+> 	moveq	#bm_Planes+(3*4)-1,d0	;#bytes in a rgb-bitmap struct, -1 for db'
+1017,1019c1098,1100
+< 	move.b	(a0),d1					;1st->temp
+< 	move.b	(a1),(a0)+				;2nd->first
+< 	move.b	d1,(a1)+				;temp->2nd
+---
+> 	move.b	(a0),d1		;1st->temp
+> 	move.b	(a1),(a0)+	;2nd->first
+> 	move.b	d1,(a1)+	;temp->2nd
+1024c1105
+< 	xjmp	InitBitPlanes				;resynch/size new paste stuff
+---
+> 	xjmp	InitBitPlanes	;resynch/size new paste stuff
+1027,1028c1108,1109
+< _ClearPointer:						;SEP021990
+< 	xjmp	ClearPointer				;pointers.asm....kill 'scissors'
+---
+> _ClearPointer:		;SEP021990
+> 	xjmp	ClearPointer	;pointers.asm....kill 'scissors'
+1030,1031c1111,1112
+< PasteToAltCopy: 					;copy current brush bitplane imagery  to 'swap'//alt brush
+< 	bsr	AllocAltPaste				;ensure have a bitmap (CLONES RGB BITMAP, TOO)
+---
+> PasteToAltCopy: ;copy current brush bitplane imagery  to 'swap'//alt brush
+> 	bsr	AllocAltPaste		;ensure have a bitmap (CLONES RGB BITMAP, TOO)
+1042,1043c1123,1124
+< 	lea	PasteBitMap_(BP),a0			;"from" bitmap, visible screenbitmap
+< 	lea	AltPasteBitMap_(BP),a1			;"to" bitmap, 'regular' undo
+---
+> 	lea	PasteBitMap_(BP),a0	;"from" bitmap, visible screenbitmap
+> 	lea	AltPasteBitMap_(BP),a1	;"to" bitmap, 'regular' undo
+1045,1050c1126,1131
+< 	lea	(9*4)+bm_Planes(a0),a2			;from bitplanes
+< 	lea	(9*4)+bm_Planes(a1),a3			;to   bitplanes
+< 	move.W	bm_Rows(a0),d0				;=#rows//#lines current brush
+< 	mulu	(a0),d0	;bm_BytesPerRow(a0),d0		;=planesize for a brush
+< 	moveq	#9-1,d1					;7 bitplanes per brush
+< 	bra	coppa_loop				;(continue like all the other "bitmap copies")
+---
+> 	lea	(7*4)+bm_Planes(a0),a2	;from bitplanes
+> 	lea	(7*4)+bm_Planes(a1),a3	;to   bitplanes
+> 	move.W	bm_Rows(a0),d0		;=#rows//#lines current brush
+> 	mulu	(a0),d0	;bm_BytesPerRow(a0),d0	;=planesize for a brush
+> 	moveq	#7-1,d1			;7 bitplanes per brush
+> 	bra	coppa_loop	;(continue like all the other "bitmap copies")
+1055,1058c1136,1139
+< AllocDouble: 						;allocate a bitmap for the "new" doublebitmap bitmap
+< 	tst.l	DoubleBitMap_Planes_(BP) 		;memory alloc'd?
+< 	bne.s	9$					;had it already
+< 	bsr.s	really_allocDouble			;no...try to allocate bitmap
+---
+> AllocDouble: ;allocate a bitmap for the "new" doublebitmap bitmap
+> 	tst.l	DoubleBitMap_Planes_(BP) ;memory alloc'd?
+> 	bne.s	9$			;had it already
+> 	bsr.s	really_allocDouble	;no...try to allocate bitmap
+1060c1141
+< ;NO WANT RE-organize?;NEED?;march16'89;beq	ErrorCleanup		;not 'nuff memory, reorganize it anyway
+---
+> 	;NO WANT RE-organize?;NEED?;march16'89;beq	ErrorCleanup		;not 'nuff memory, reorganize it anyway
+1063c1144
+< DblRegList	reg	d0-d3/a0-a2/a4/a6		;general purp. register list
+---
+> DblRegList	reg	d0-d3/a0-a2/a4/a6	;general purp. register list
+1067,1069c1148,1150
+< 	lea	DoubleBitMap_(BP),a4			;bitmap struct
+< 	lea	bm_Planes(a4),a2			;table of bitplane ptr adrs
+< 	moveq	#(8-1),d3				;7th for mask, 8th for work/flood
+---
+> 	lea	DoubleBitMap_(BP),a4	;bitmap struct
+> 	lea	bm_Planes(a4),a2	;table of bitplane ptr adrs
+> 	moveq	#(6-1),d3		;7th for mask, 8th for work/flood
+1072c1153
+< 	bsr	IntuitionAllocChipJunk			;address of new memory in d0
+---
+> 	bsr	IntuitionAllocChipJunk	;address of new memory in d0
+1074c1155
+< 	beq.s	abort_allocDouble			;no mem?
+---
+> 	beq.s	abort_allocDouble	;no mem?
+1084c1165,1166
+< ;29JAN92;bra	FreeBitMap
+---
+> 	;29JAN92;bra	FreeBitMap
+>  ;want?
+1087,1089c1169,1171
+< 	bsr	FreeBitMap				;29JAN92
+< 	bsr	QuickCleanupMemory			;29JAN92
+< 	tst.b	FlagCutPaste_(BP)			;just starting to cut a brush?
+---
+> 	bsr	FreeBitMap	;29JAN92
+> 	bsr	QuickCleanupMemory	;29JAN92
+> 	tst.b	FlagCutPaste_(BP)	;just starting to cut a brush?
+1093c1175
+< 	bsr	FreeCPUnDo				;free up extra bitmap memory for "undoing" when cut/pasting
+---
+> 	bsr	FreeCPUnDo	;free up extra bitmap memory for "undoing" when cut/pasting
+1099,1100c1181,1188
+< 	tst.l	PasteBitMap_Planes_(BP)			;HAVE a cutout brush?
+< 	beq.s	killm					;no...just delete loresmask
+---
+> 	tst.l	PasteBitMap_Planes_(BP)	;HAVE a cutout brush?
+> 	beq.s	killm			;no...just delete loresmask
+> 
+> 	;	;june19...helps w/flip effects
+> 	;tst.l	LoResMask_(BP)		;other, lo-res (good) mask?
+> 	;beq.s	ea_flrm			;no lores mask, anyway
+> 	;bsr	GraphicsWaitBlit	;unshow?
+> 
+1102,1105d1189
+< 	;;june19...helps w/flip effects
+< 	;tst.l	LoResMask_(BP)				;other, lo-res (good) mask?
+< 	;beq.s	ea_flrm					;no lores mask, anyway
+< 	;bsr	GraphicsWaitBlit			;unshow?
+1108,1109c1192,1193
+< 	;lea	(6*4)(a2),a2				;point to address of mask
+< 	;move.l	(a2),d0					;existing, "hires"d mask
+---
+> 	;lea	(6*4)(a2),a2		;point to address of mask
+> 	;move.l	(a2),d0		;existing, "hires"d mask
+1111,1112c1195,1196
+< 	move.l	LoResMask_(BP),d1			;other, lo-res (good) mask
+< 	beq.s	ea_flrm					;no lores mask, anyway
+---
+> 	move.l	LoResMask_(BP),d1	;other, lo-res (good) mask
+> 	beq.s	ea_flrm			;no lores mask, anyway
+1114,1117c1198,1201
+< 	;move.l	d1,(a2)					;restore real good mask
+< 	;move.l	d0,LoResMask_(BP)			;hires mask ptr, gonna delete it
+< 							;june20...inserted followin "copy"
+< 	move.l	d1,a0					;copy FROM address (lores mask)
+---
+> 	;move.l	d1,(a2)			;restore real good mask
+> 	;move.l	d0,LoResMask_(BP)	;hires mask ptr, gonna delete it
+> 	;june20...inserted followin "copy"
+> 	move.l	d1,a0			;copy FROM address (lores mask)
+1119,1121c1203,1205
+< 	move.w	(a1),d0					;bm_bytesperrow
+< 	mulu	bm_Rows(a1),d0				;bpr*#rows=#bytes to copy
+< 	move.l	(8*4)+bm_Planes(a1),a1			;TO 7th (mask) bitplane of brush
+---
+> 	move.w	(a1),d0			;bm_bytesperrow
+> 	mulu	bm_Rows(a1),d0		;bpr*#rows=#bytes to copy
+> 	move.l	(6*4)+bm_Planes(a1),a1	;TO 7th (mask) bitplane of brush
+1125,1126c1209,1210
+< 	ASL.W	paste_offsetx_(BP)			;DOUBLE LEFTSIDE/BRUSH CENTER'ING
+< killm:	lea	LoResMask_(BP),a0			;remove
+---
+> 	ASL.W	paste_offsetx_(BP)	;DOUBLE LEFTSIDE/BRUSH CENTER'ING
+> killm:	lea	LoResMask_(BP),a0	;remove
+1130c1214
+< AllocLoBrushMask:					;allocs/copies LoResMask_ bitplane
+---
+> AllocLoBrushMask:		;allocs/copies LoResMask_ bitplane
+1133,1134c1217,1218
+< 	bsr.s	AllocPasteMaskClone			;copy of brush mask bitplane
+< 	move.l	d0,LoResMask_(BP)			;adr or zero
+---
+> 	bsr.s	AllocPasteMaskClone		;copy of brush mask bitplane
+> 	move.l	d0,LoResMask_(BP)	;adr or zero
+1137c1221
+< AllocPasteMaskClone:					;alloc/creates clone of brush mask, returns in d0 and a0
+---
+> AllocPasteMaskClone:	;alloc/creates clone of brush mask, returns in d0 and a0
+1139c1223
+< 	move.w	(a0),d0					;bm_bytesperrow
+---
+> 	move.w	(a0),d0			;bm_bytesperrow
+1141,1145c1225,1229
+< 	beq.s	9$					;no init'd bitmap for cutout brush?
+< ;JUNE20;bsr	IntuitionAllocChipJunk			;march10'89...why wait for blit clear?
+< 	bsr	IntuitionAllocMain			;'loresmask' in fastmem (if possible)
+< 	beq.s	9$					;no alloc'd mask?
+< 	move.l	d0,a1					;copy TO address (new lores mask)
+---
+> 	beq.s	9$			;no init'd bitmap for cutout brush?
+> 	;JUNE20;bsr	IntuitionAllocChipJunk	;march10'89...why wait for blit clear?
+> 	bsr	IntuitionAllocMain	;'loresmask' in fastmem (if possible)
+> 	beq.s	9$			;no alloc'd mask?
+> 	move.l	d0,a1			;copy TO address (new lores mask)
+1147,1149c1231,1233
+< 	move.w	(a0),d0					;bm_bytesperrow
+< 	mulu	bm_Rows(a0),d0				;=#bytes to copy
+< 	move.l	(6*4)+bm_Planes(a0),a0			;FROM 7th (mask) bitplane of brush
+---
+> 	move.w	(a0),d0			;bm_bytesperrow
+> 	mulu	bm_Rows(a0),d0		;=#bytes to copy
+> 	move.l	(6*4)+bm_Planes(a0),a0	;FROM 7th (mask) bitplane of brush
+1151,1153c1235,1237
+< 	;moveq	#-1,d0					;set flag NOT EQUAL
+< 	move.l	a1,d0					;new bitplane adr (sets NE flag)
+< 	move.l	d0,a0					;be nice'n rtn in a0 too?
+---
+> 	;moveq	#-1,d0	;set flag NOT EQUAL
+> 	move.l	a1,d0	;new bitplane adr (sets NE flag)
+> 	move.l	d0,a0	;be nice'n rtn in a0 too?
+1158,1160c1242,1244
+< AllocBrushMaskClone:					;alloc/creates clone of brush mask, returns in d0 and a0
+< 	lea	BB_BitMap_(BP),a0			;'regular' brush (whole picture size)
+< 	move.w	(a0),d0					;bm_bytesperrow
+---
+> AllocBrushMaskClone:	;alloc/creates clone of brush mask, returns in d0 and a0
+> 	lea	BB_BitMap_(BP),a0	;'regular' brush (whole picture size)
+> 	move.w	(a0),d0			;bm_bytesperrow
+1162,1165c1246,1249
+< 	beq.s	9$					;no init'd bitmap for cutout brush?
+< 	bsr	IntuitionAllocChipJunk			;march10'89...why wait for blit clear?
+< 	beq.s	9$					;no alloc'd mask?
+< 	move.l	d0,a1					;copy TO address (new lores mask)
+---
+> 	beq.s	9$			;no init'd bitmap for cutout brush?
+> 	bsr	IntuitionAllocChipJunk	;march10'89...why wait for blit clear?
+> 	beq.s	9$			;no alloc'd mask?
+> 	move.l	d0,a1			;copy TO address (new lores mask)
+1167,1169c1251,1253
+< 	move.w	(a0),d0					;bm_bytesperrow
+< 	mulu	bm_Rows(a0),d0				;=#bytes to copy
+< 	move.l	(6*4)+bm_Planes(a0),a0			;FROM 7th (mask) bitplane of brush
+---
+> 	move.w	(a0),d0			;bm_bytesperrow
+> 	mulu	bm_Rows(a0),d0		;=#bytes to copy
+> 	move.l	(6*4)+bm_Planes(a0),a0	;FROM 7th (mask) bitplane of brush
+1171,1173c1255,1257
+< 	;moveq	#-1,d0					;set flag NOT EQUAL
+< 	move.l	a1,d0					;new bitplane adr (sets NE flag)
+< 	move.l	d0,a0					;be nice'n rtn in a0 too?
+---
+> 	;moveq	#-1,d0	;set flag NOT EQUAL
+> 	move.l	a1,d0	;new bitplane adr (sets NE flag)
+> 	move.l	d0,a0	;be nice'n rtn in a0 too?
+1178,1179c1262,1265
+< AllocPaste: 						;allocate a bitmap for the "new" cutout brush
+< 	movem.l	MemRegList,-(sp)			;AUG011990....disable alloc' of brush if "hires" mode
+---
+> AllocPaste: ;allocate a bitmap for the "new" cutout brush
+> 	movem.l	MemRegList,-(sp)
+> 
+> 		;AUG011990....disable alloc' of brush if "hires" mode
+1183,1186c1269,1272
+< 	bsr	FreePaste				;remove (possibly wrong sized) bitmap
+< 	movem.l	(sp),MemRegList				;RESTORE ARGS....AUG311990
+< 	bsr.s	really_allocpaste			;no...try to allocate bitmap
+< 	tst.l	PasteBitMap_Planes_(BP)			;did we get it?
+---
+> 	bsr	FreePaste		;remove (possibly wrong sized) bitmap
+> 	movem.l	(sp),MemRegList		;RESTORE ARGS....AUG311990
+> 	bsr.s	really_allocpaste	;no...try to allocate bitmap
+> 	tst.l	PasteBitMap_Planes_(BP)	;did we get it?
+1188c1274
+< 	xjsr	GoodByeHamTool				;23JAN92...frees about 10K of CHIP
+---
+> 	xjsr	GoodByeHamTool		;23JAN92...frees about 10K of CHIP
+1190,1192c1276,1278
+< 	movem.l	(sp),MemRegList				;RESTORE ARGS....AUG311990
+< 	bsr.s	really_allocpaste			;no...try to allocate bitmap
+< 	tst.l	PasteBitMap_Planes_(BP)			;did we get it?
+---
+> 	movem.l	(sp),MemRegList		;RESTORE ARGS....AUG311990
+> 	bsr.s	really_allocpaste	;no...try to allocate bitmap
+> 	tst.l	PasteBitMap_Planes_(BP)	;did we get it?
+1196c1282
+< 	bne.s	3$					;ok ok HAVE nuff chipmem
+---
+> 	bne.s	3$			;ok ok HAVE nuff chipmem
+1199c1285
+< 	;bsr	BeepErrorCleanup			;not 'nuff memory, reorganize it
+---
+> 	;bsr	BeepErrorCleanup		;not 'nuff memory, reorganize it
+1207c1293
+< 	move.l	a4,-(sp)				;extra a-reg used...
+---
+> 	move.l	a4,-(sp)		;extra a-reg used...
+1214c1300
+< 	xref	UnDoRGB_				;CLIP BRUSH RGBs FROM UNDO-RGB ARRAY
+---
+> 	xref	UnDoRGB_	;CLIP BRUSH RGBs FROM UNDO-RGB ARRAY
+1220c1306
+< 	tst.l	bm_Planes(a0)				;rgb mode? (= "Datared_")
+---
+> 	tst.l	bm_Planes(a0)	;rgb mode? (= "Datared_")
+1224c1310
+< 	move.w	paste_x_(BP),d0				;d0,1=from x,y
+---
+> 	move.w	paste_x_(BP),d0		;d0,1=from x,y
+1227,1228c1313,1314
+< 	;WANT?;add.w	paste_leftblank_(BP),d2		;account for leftside sup hammods...JULY07
+< 	add.w	paste_leftblank_(BP),d2			;account for leftside sup hammods...OCT31'91
+---
+> 	;WANT?;add.w	paste_leftblank_(BP),d2	;account for leftside sup hammods...JULY07
+> 	add.w	paste_leftblank_(BP),d2	;account for leftside sup hammods...OCT31'91
+1230,1235c1316,1323
+< 	xjsr	ClipB_RGB				;BrushRGBRtns.asm
+< 							;'clip', a0=from bitmap, a1=to bitmap,
+< 							;d0,d1.w=from x,y   d2,d3.w=wt,ht
+< 							;allocates new rgb buffer
+< 	beq.s	abort_allocpaste 			;no mem?...go make an abortion
+< 
+---
+> 	xjsr	ClipB_RGB	;BrushRGBRtns.asm
+> 				;'clip', a0=from bitmap, a1=to bitmap,
+> 				;d0,d1.w=from x,y   d2,d3.w=wt,ht
+> 				;allocates new rgb buffer
+> 	beq.s	abort_allocpaste 	;no mem?...go make an abortion
+>   IFD DEBUGGER
+> 	xjsr	DebugMe11
+>   ENDC
+1237,1238c1325,1327
+< 	;lea	PasteBitMap_Planes_(BP),a2 		;table of addresses
+< 	lea	PasteBitMap_(BP),a4			;bm_ struct
+---
+> 
+> 	;lea	PasteBitMap_Planes_(BP),a2 ;table of addresses
+> 	lea	PasteBitMap_(BP),a4	;bm_ struct
+1240c1329
+< 	moveq	#(9-1),d3				;7th for mask
+---
+> 	moveq	#(7-1),d3		;7th for mask
+1243,1244c1332,1333
+< 	xref paste_leftblank_				;JULY07
+< 	add.w	paste_leftblank_(BP),d0			;account for leftside sup hammods...JULY07
+---
+> 	xref paste_leftblank_		;JULY07
+> 	add.w	paste_leftblank_(BP),d0	;account for leftside sup hammods...JULY07
+1246,1247c1335,1336
+< 	add.w	#31,d0					;round up to even 32 widths
+< 	;add.w	#(31+3),d0				;round up to even 32 widths, +3 for leftedge allow
+---
+> 	add.w	#31,d0			;round up to even 32 widths
+> 	;add.w	#(31+3),d0;round up to even 32 widths, +3 for leftedge allow
+1249,1258c1338,1349
+< 	asr.w	#3,d0					;/8 pixels per byte
+< 	MOVE.W	d0,(a4) ;bm_BytesPerRow(a4)		;stuff/fill bitmap struct for initbitp
+< 	move.w	paste_height_(BP),bm_Rows(a4)		;ditto (scratch.o, initbitpl')
+< 	mulu	paste_height_(BP),d0			;'real' planesize for paste bitmap
+< 
+< 	xref ToastChipPtr_				;ptr to about 367K, passed from TOASTER 31JAN92
+< 	move.l	ToastChipPtr_(BP),-(sp)			;BRUSHES NOT FROM TOASTER CHIP 31JAN92
+< 	move.l	#0,ToastChipPtr_(BP)			;31JAN92
+< 	bsr	IntuitionAllocChipJunk			;d0=result memory NOT CLR'D (quicker)
+< 	move.l	(sp)+,ToastChipPtr_(BP)			;restore toaster chip adr 31JAN92
+---
+> 	asr.w	#3,d0			;/8 pixels per byte
+> 	MOVE.W	d0,(a4) ;bm_BytesPerRow(a4)	;stuff/fill bitmap struct for initbitp
+> 	move.w	paste_height_(BP),bm_Rows(a4)	;ditto (scratch.o, initbitpl')
+> 	mulu	paste_height_(BP),d0	;'real' planesize for paste bitmap
+>   IFD DEBUGGER
+> 	xjsr	DebugMe12
+>   ENDC
+> 	xref ToastChipPtr_	;ptr to about 367K, passed from TOASTER 31JAN92
+> 	move.l	ToastChipPtr_(BP),-(sp)	;BRUSHES NOT FROM TOASTER CHIP 31JAN92
+> 	move.l	#0,ToastChipPtr_(BP)	;31JAN92
+> 	bsr	IntuitionAllocChipJunk	;d0=result memory NOT CLR'D (quicker)
+> 	move.l	(sp)+,ToastChipPtr_(BP)	;restore toaster chip adr 31JAN92
+1260c1351
+< 	beq.s	abort_allocpaste			;no mem?
+---
+> 	beq.s	abort_allocpaste	;no mem?
+1262c1353
+< 	MOVE.L	-4(a2),PMBM_Planes_(BP) 		;paste mask plane, using LAST
+---
+> 	MOVE.L	-4(a2),PMBM_Planes_(BP) ;paste mask plane, using LAST
+1274c1365
+< ;HEY!;TUESDAYMARCH28'89;bsr	UnShowPaste
+---
+> 	;HEY!;TUESDAYMARCH28'89;bsr	UnShowPaste
+1276,1278c1367,1369
+< 	bsr	FreeDouble				;temp chip (never directly seen) bitmap
+< 	bsr	FreeLoResMask				;removes "other mask" MAY19
+< 	clr.l	PMBM_Planes_(BP)			;Paste Mask Bit Map
+---
+> 	bsr	FreeDouble		;temp chip (never directly seen) bitmap
+> 	bsr	FreeLoResMask		;removes "other mask" MAY19
+> 	clr.l	PMBM_Planes_(BP)	;Paste Mask Bit Map
+1282,1283c1373,1374
+< 	lea	PasteRGB_(BP),a0			;digipaint 24
+< 	xjmp	FreeB_RGB				;brushrgbrtns.asm, free rgb buffers
+---
+> 	lea	PasteRGB_(BP),a0		;digipaint 24
+> 	xjmp	FreeB_RGB		;brushrgbrtns.asm, free rgb buffers
+1289,1296c1380,1387
+< 	lea	bm_Planes(a0),a2			;a2=ptr to 6 or 7 bitplane addresses
+< 	moveq	#9-1,d3					;d3=loopcounter
+< freeaplane:						;note:freeonevar is ok to call if vardata=0
+< 	lea	(a2),A0					;"address of bitplane data"
+< 	move.l	(A0),D0					;mem gonna free
+< ;28JAN92;beq.s	abort_freemap
+< 	beq.s	no_freeplane				;28JAN92...help w/double bitmap?
+< 	bsr	FreeOneVariable				;memories.o, frees from remember list
+---
+> 	lea	bm_Planes(a0),a2	;a2=ptr to 6 or 7 bitplane addresses
+> 	moveq	#7-1,d3		;d3=loopcounter
+> freeaplane:			;note:freeonevar is ok to call if vardata=0
+> 	lea	(a2),A0		;"address of bitplane data"
+> 	move.l	(A0),D0		;mem gonna free
+> 	;28JAN92;beq.s	abort_freemap
+> 	beq.s	no_freeplane	;28JAN92...help w/double bitmap?
+> 	bsr	FreeOneVariable	;memories.o, frees from remember list
+1298c1389
+< 	lea	4(a2),a2				;pointer to next bitplane adr in bitmap struct
+---
+> 	lea	4(a2),a2	;pointer to next bitplane adr in bitmap struct
+1301,1302c1392,1393
+< ;	movem.l (sp)+,MemRegList
+< 	moveq	#0,d0					;sets ZERO flag for subr return status
+---
+> 	;movem.l	(sp)+,MemRegList
+> 	moveq	#0,d0			;sets ZERO flag for subr return status
+1305a1397
+> ;--
+1310c1402
+< ;;; xjsr DebugMe1					;AUG301990
+---
+> ;;; xjsr DebugMe1	;AUG301990
+1322c1414
+< 	bsr.s	really_acpundo				;no...try to allocate bitmap
+---
+> 	bsr.s	really_acpundo	;no...try to allocate bitmap
+1329,1330c1421,1422
+< 	lea	ExtraChipPtr_(BP),a0			;address of...
+< 	bsr	FreeOneVariable				;returns a0 still valid (var ptr)
+---
+> 	lea	ExtraChipPtr_(BP),a0	;address of...
+> 	bsr	FreeOneVariable		;returns a0 still valid (var ptr)
+1341c1433
+< 	rts						;AllocCPUnDo
+---
+> 	rts	;AllocCPUnDo
+1343a1436
+> ;;; xjsr DebugMe2	;AUG301990
+1345,1347c1438,1441
+< 							;allocate a bitmap for the undoing cutpaste (may fail)
+< 	lea	CPUnDoBitMap_Planes_(BP),a2		;table of addresses
+< 	moveq	#8-1,d3 ;# planes
+---
+> 
+> 	;allocate a bitmap for the undoing cutpaste (may fail)
+> 	lea	CPUnDoBitMap_Planes_(BP),a2	;table of addresses
+> 	moveq	#6-1,d3 ;# planes
+1350c1444
+< 	bsr	IntuitionAllocMain			;FAST first, if any
+---
+> 	bsr	IntuitionAllocMain		;FAST first, if any
+1352c1446
+< 	beq.s	abort_allocCPUnDo 			;couldn't get required memory...go make an abortion
+---
+> 	beq.s	abort_allocCPUnDo ;couldn't get required memory...go make an abortion
+1362c1456
+< FreeCPUnDo:						;free up extra bitmap memory for "undoing" when cut/pasting
+---
+> FreeCPUnDo:	;free up extra bitmap memory for "undoing" when cut/pasting
+1365,1367c1459,1461
+< ;;;  tst.l	bm_Planes(a0)				;AUG301990
+< ;;;  beq.s 1$						;AUG301990
+< ;;; xjsr DebugMe3					;AUG301990
+---
+> ;;;  tst.l	bm_Planes(a0)	;AUG301990
+> ;;;  beq.s 1$		;AUG301990
+> ;;; xjsr DebugMe3		;AUG301990
+1374c1468
+< AllocUnDo:						;allocate a bitmap for "always needed for painting" undo
+---
+> AllocUnDo:	;allocate a bitmap for "always needed for painting" undo
+1387,1390c1481,1484
+< 	lea	UnDoBitMap_(BP),a0			;table of addresses
+< 	lea	bm_Planes(a0),a2			;a2=table of addrs for alloc'ing
+< 	moveq	#8,d0					;depth
+< 	move.L	BigPicWt_(BP),d1			;var is a .Long
+---
+> 	lea	UnDoBitMap_(BP),a0	;table of addresses
+> 	lea	bm_Planes(a0),a2	;a2=table of addrs for alloc'ing
+> 	moveq	#6,d0			;depth
+> 	move.L	BigPicWt_(BP),d1	;var is a .Long
+1392c1486
+< 	move.w	BigPicHt_(BP),d2			;var is a .Word
+---
+> 	move.w	BigPicHt_(BP),d2	;var is a .Word
+1395c1489
+< 	moveq	#8-1,d3 ;# planes
+---
+> 	moveq	#6-1,d3 ;# planes
+1398c1492
+< 	bsr	IntuitionAllocMain			;FAST first, if any
+---
+> 	bsr	IntuitionAllocMain		;FAST first, if any
+1400c1494
+< 	beq.s	abort_allocUnDo 			;couldn't get required memory...go make an abortion
+---
+> 	beq.s	abort_allocUnDo ;couldn't get required memory...go make an abortion
+1402,1403c1496,1497
+< 	move.l	d0,a0					;address to clear
+< 	xjsr	ClearPlaneA0				;strokeB.o, clearzit
+---
+> 	move.l	d0,a0	;address to clear
+> 	xjsr	ClearPlaneA0	;strokeB.o, clearzit
+1406c1500
+< 	moveq	#-1,d0					;flag success, alloc'd ok	
+---
+> 	moveq	#-1,d0	;flag success, alloc'd ok	
+1415c1509
+< FreeUnDo:						;free up extra bitmap memory for "undoing" when cut/pasting
+---
+> FreeUnDo:	;free up extra bitmap memory for "undoing" when cut/pasting
+1419c1513
+< 	moveq	#0,d0					;flag zero, err in case from alloc undo call
+---
+> 	moveq	#0,d0	;flag zero, err in case from alloc undo call
+1423c1517
+< 	;xjsr	CleanupDirRemember			;dirroutines.o
+---
+> 	;xjsr	CleanupDirRemember	;dirroutines.o
+1425,1427c1519,1521
+< CleanMemAndComp:					;clears out unused drivers, etc. ONLY CLEANS CHIP
+< 	xjsr	FreeComp				;Composite.asm...frees composite rendering
+< 							;if swapRGB but no swap-hamstyle-bitmap, delete swaprgb...JULY161990
+---
+> CleanMemAndComp:		;clears out unused drivers, etc. ONLY CLEANS CHIP
+> 	xjsr	FreeComp	;Composite.asm...frees composite rendering
+> 		;if swapRGB but no swap-hamstyle-bitmap, delete swaprgb...JULY161990
+1429c1523
+< 	bne.s	CleanupMemory				;have swap bitmap
+---
+> 	bne.s	CleanupMemory		;have swap bitmap
+1432,1438c1526,1532
+< CleanupMemory:						;clears out unused drivers, etc. ONLY CLEANS CHIP
+< 							;if "no fast memory", then set the "no wbench//chipmem" flag...june28
+< 	xref Initializing_				;APRIL29
+< 	tst.B	Initializing_(BP)			;startup time?
+< 	bne.s	noforcewb				;yep...dont close hamtools
+< 	tst.L	ScreenPtr_(BP)				;bigpic?
+< 	beq.s	noforcewb				;no screen...dont force wb closed
+---
+> CleanupMemory:		;clears out unused drivers, etc. ONLY CLEANS CHIP
+> 	;if "no fast memory", then set the "no wbench//chipmem" flag...june28
+> 	xref Initializing_		;APRIL29
+> 	tst.B	Initializing_(BP)	;startup time?
+> 	bne.s	noforcewb		;yep...dont close hamtools
+> 	tst.L	ScreenPtr_(BP)		;bigpic?
+> 	beq.s	noforcewb		;no screen...dont force wb closed
+1440,1441c1534,1535
+< 	CALLIB	Exec,AvailMem				;rtns d0=largest avail
+< 	tst.l	d0					;any fastmem?
+---
+> 	CALLIB	Exec,AvailMem	;rtns d0=largest avail
+> 	tst.l	d0		;any fastmem?
+1444c1538
+< 	xjsr	FreeComp				;Composite.asm...frees composite rendering (no use...?)
+---
+> 	xjsr	FreeComp	;Composite.asm...frees composite rendering (no use...?)
+1447,1448c1541,1542
+<  xdef CleanupMemNoWb					;cleans up, but doesnt force flag closewb JUNE28
+< CleanupMemNoWb:						;cleans up, but doesnt force flag closewb JUNE28
+---
+>  xdef CleanupMemNoWb		;cleans up, but doesnt force flag closewb JUNE28
+> CleanupMemNoWb:		;cleans up, but doesnt force flag closewb JUNE28
+1450c1544
+< 	;help!;...xjsr	FreeComp			;Composite.asm...frees composite rendering
+---
+> 	;help!;...xjsr	FreeComp	;Composite.asm...frees composite rendering
+1452c1546
+< 	bsr	FreeDouble				;moved, 29JAN92....might call QuickCleanupMemory
+---
+> 	bsr	FreeDouble		;moved, 29JAN92....might call QuickCleanupMemory
+1454,1456c1548,1550
+< QuickCleanupMemory:					;label - 29JAN92
+< 	lea	ExtraChipPtr_(BP),a0			;address of "extra system guarantee.."
+< 	bsr	FreeOneVariable				;returns a0 still valid (var ptr)
+---
+> QuickCleanupMemory:			;label - 29JAN92
+> 	lea	ExtraChipPtr_(BP),a0	;address of "extra system guarantee.."
+> 	bsr	FreeOneVariable		;returns a0 still valid (var ptr)
+1460,1462c1554,1556
+< 	;april30;xref Initializing_			;APRIL29
+< 	;april30;tst.B	Initializing_(BP)		;startup time?
+< 	;april30;bne.s	GlueChip			;yep...dont close hamtools
+---
+> 	;april30;xref Initializing_		;APRIL29
+> 	;april30;tst.B	Initializing_(BP)	;startup time?
+> 	;april30;bne.s	GlueChip		;yep...dont close hamtools
+1466c1560
+< 	tst.b	FlagCloseWB_(BP)			;"close wbench and hamtools" mode?
+---
+> 	tst.b	FlagCloseWB_(BP)	;"close wbench and hamtools" mode?
+1468c1562
+< 	xjsr	GoodByeHamTool				;alloc'd after wbench?
+---
+> 	xjsr	GoodByeHamTool		;alloc'd after wbench?
+1482c1576
+< ByeByeWorkBench:					;may 12, separate...so not called always
+---
+> ByeByeWorkBench:		;may 12, separate...so not called always
+1484c1578
+< 	tst.b	FlagCloseWB_(BP)			;"close wbench and hamtools" mode?
+---
+> 	tst.b	FlagCloseWB_(BP)	;"close wbench and hamtools" mode?
+1486c1580
+< 	xjsr	GoodByeHamTool				;alloc'd after wbench?
+---
+> 	xjsr	GoodByeHamTool		;alloc'd after wbench?
+1489c1583
+< 	move.l	d0,-(sp)				;closewb result
+---
+> 	move.l	d0,-(sp)			;closewb result
+1491c1585
+< ;may13;	moveq	#4,d1	;4/50s of a second		;MAY13
+---
+> ;may13;	moveq	#4,d1	;4/50s of a second	;MAY13
+1495,1496c1589,1590
+< 	bsr.s	CleanMemAndComp				;GlueChip
+< 	move.l	(sp)+,d0				;closewb result
+---
+> 	bsr.s	CleanMemAndComp		;GlueChip
+> 	move.l	(sp)+,d0		;closewb result
+1501,1502c1595,1596
+< AllocSwap:						;allocate a bitmap for the CutWindow, if needed
+< ;JULY13...reenable...;BRA	FreeSwap		;KLUDGEOUT,DONT WANT....
+---
+> AllocSwap:	;allocate a bitmap for the CutWindow, if needed
+> 	;JULY13...reenable...;BRA	FreeSwap	;KLUDGEOUT,DONT WANT....
+1504c1598
+< ;JULY191990....disable alloc(and copy to)swap if "hires" mode
+---
+> 		;JULY191990....disable alloc(and copy to)swap if "hires" mode
+1515c1609,1611
+< 	bne	EGEG		9$			;we already have an alternate, go use it
+---
+> 	bne.s	9$			;we already have an alternate, go use it
+> 
+> 	xjsr	FreeSwapRGB		;JULY191990...fixes SWAP/rubthru for toaster
+1517,1518c1613,1615
+< 	
+< 	xjsr	FreeSwapRGB				;JULY191990...fixes SWAP/rubthru for toaster
+---
+> 	bsr.s	really_AllocSwap	;...try to allocate bitmap
+> 	tst.l	SwapBitMap_Planes_(BP)	;did we get it?
+> 	bne.s	8$			;yes...
+1520,1523d1616
+< 	bsr.s	really_AllocSwap			;...try to allocate bitmap
+< 	tst.l	SwapBitMap_Planes_(BP)			;did we get it?
+< 	bne.s	8$					;yes...
+< 				
+1538c1631
+< 	bsr	FreeSwap		;not nuff chip left over
+---
+> 	bsr.s	FreeSwap		;not nuff chip left over
+1541c1634
+< EGEG	RTS				9$:	rts
+---
+> 9$:	rts
+1547c1640
+< 	moveq	#8-1,d3 		;# planes
+---
+> 	moveq	#6-1,d3 		;# planes
+1558c1651
+< 	bsr	EnsureExtraChip			;APRIL10'89;GrabExtraChip
+---
+> 	bsr	EnsureExtraChip		;APRIL10'89;GrabExtraChip
+1563c1656
+< ;JULY131990;					;alloc' rgb buffers for swap AFTER ham/fast bitmaps
+---
+> ;JULY131990;		;alloc' rgb buffers for swap AFTER ham/fast bitmaps
+1573c1666
+< 	tst.l	bm_Planes(a0)			;rgb mode? (= "Datared_")
+---
+> 	tst.l	bm_Planes(a0)	;rgb mode? (= "Datared_")
+1579,1586c1672,1677
+< 	move.w	(a0),d2 			;BigPicWt_(BP),d2
+< 	move.w	bm_Rows(a0),d3			;BigPicHt_(BP),d3 ;.word size var only, anyway
+< 	
+< 	
+< 	xjsr	ClipB_RGB			;BrushRGBRtns.asm
+< 						;'clip', a0=from bitmap, a1=to bitmap,
+< 						;d0,d1.w=from x,y   d2,d3.w=wt,ht
+< 						;allocates new rgb buffer
+---
+> 	move.w	(a0),d2 	;BigPicWt_(BP),d2
+> 	move.w	bm_Rows(a0),d3	;BigPicHt_(BP),d3 ;.word size var only, anyway
+> 	xjsr	ClipB_RGB	;BrushRGBRtns.asm
+> 				;'clip', a0=from bitmap, a1=to bitmap,
+> 				;d0,d1.w=from x,y   d2,d3.w=wt,ht
+> 				;allocates new rgb buffer
+1590,1591c1681,1682
+< ;alloc' rgb buffers for swap AFTER ham/fast bitmaps
+< 	xjsr	AllocSwapRGB			;rgbrtns.asm   june281990
+---
+> 		;alloc' rgb buffers for swap AFTER ham/fast bitmaps
+> 	xjsr	AllocSwapRGB		;rgbrtns.asm   june281990
+1593c1684
+< 	beq.s	abort_AllocSwap 		;no mem?...go make an abortion
+---
+> 	beq.s	abort_AllocSwap 	;no mem?...go make an abortion
+1602c1693
+< 	;bra.s	FreeSwap			;alloc of swap failed, delete any bitplanes
+---
+> 	;bra.s	FreeSwap	;alloc of swap failed, delete any bitplanes
+1609c1700
+< 	xjsr	FreeSwapRGB			;JULY141990
+---
+> 	xjsr	FreeSwapRGB	;JULY141990
+1611c1702
+< 	st	FlagNeedGadRef_(BP)		;tells main->redohires->redomenu
+---
+> 	st	FlagNeedGadRef_(BP)	;tells main->redohires->redomenu
+1615,1616c1706,1707
+< 	;;lea	SwapRGB_(BP),a0			;digipaint 24
+< 	;;xjsr	FreeB_RGB			;brushrgbrtns.asm, free rgb buffers
+---
+> 	;;lea	SwapRGB_(BP),a0		;digipaint 24
+> 	;;xjsr	FreeB_RGB		;brushrgbrtns.asm, free rgb buffers
+1621c1712
+< 	tst.l	SwapBitMap_Planes_(BP)		;swap screen exist?
+---
+> 	tst.l	SwapBitMap_Planes_(BP)	;swap screen exist?
+1626,1630c1717,1721
+< 	move.w	d0,-(sp)			;save rub-thru status
+< 	st	FlagRub_(BP)			;force "rub thru" mode for repaint/again
+< 	xjsr	Again	;scratch.o		;this is where we repaint
+< 	move.w	(sp)+,d0			;watch here..Word off stack, Byte next
+< 	move.b	d0,FlagRub_(BP)			;restore rub-thru status (byte)
+---
+> 	move.w	d0,-(sp)		;save rub-thru status
+> 	st	FlagRub_(BP)		;force "rub thru" mode for repaint/again
+> 	xjsr	Again	;scratch.o	;this is where we repaint
+> 	move.w	(sp)+,d0		;watch here..Word off stack, Byte next
+> 	move.b	d0,FlagRub_(BP)		;restore rub-thru status (byte)
+1633c1724
+< SetEntireScreenMask:				;BIG BUG FIX! was using word, now need LONG planesize..
+---
+> SetEntireScreenMask:	;BIG BUG FIX! was using word, now need LONG planesize..
+1635,1636c1726,1727
+< 	movem.l	d0-d5/a2/a3,-(sp)		;d0,d1,d3,d5 used for fill
+< 	move.l	PlaneSize_(BP),d2		;number of bytes in plane
+---
+> 	movem.l	d0-d5/a2/a3,-(sp)	;d0,d1,d3,d5 used for fill
+> 	move.l	PlaneSize_(BP),d2	;number of bytes in plane
+1638c1729
+< 	lea	0(a3,d2.L),a3			;point just past end of mask
+---
+> 	lea	0(a3,d2.L),a3	;point just past end of mask
+1640,1641c1731,1732
+< 	move.l	d2,-(SP)			;LONG STACKIT
+< 	asr.L	#4,d2				;/16 (16 bytes clear per loop)
+---
+> 	move.l	d2,-(SP)	;LONG STACKIT
+> 	asr.L	#4,d2		;/16 (16 bytes clear per loop)
+1651,1654c1742,1745
+< 	move.w	2(sp),d2			;planesize (lword) from stack (s/b <16)
+< 	and.W	#$000f,d2			;enforce <16
+< 	subq.W	#1,d2				;db' type loop
+< 	bcs.s	even_16				;even boundary, no more to copy
+---
+> 	move.w	2(sp),d2	;planesize (lword) from stack (s/b <16)
+> 	and.W	#$000f,d2	;enforce <16
+> 	subq.W	#1,d2		;db' type loop
+> 	bcs.s	even_16	;even boundary, no more to copy
+1659c1750
+< 	lea	4(sp),sp			;TEMPER, saved planesize, counterjunk
+---
+> 	lea	4(sp),sp	;TEMPER, saved planesize, counterjunk
+1661c1752
+< ;	movem.l	(sp)+,d2/d3/d4/a2/a3
+---
+> 	;movem.l	(sp)+,d2/d3/d4/a2/a3
+1665c1756
+< 	sf	FlagBitMapSaved_(BP)		;saveundo clears this, ok for cutp, too
+---
+> 	sf	FlagBitMapSaved_(BP)	;saveundo clears this, ok for cutp, too
+1667,1668c1758,1759
+< 						;REMOVE BLITBRUSH from visible screen
+< 	tst.l	PasteBitMap_Planes_(BP) 	;cutpaste?
+---
+> 		;REMOVE BLITBRUSH from visible screen
+> 	tst.l	PasteBitMap_Planes_(BP) ;cutpaste?
+1670c1761
+< 	PEA	CopyScreenSuper(pc)		;later visiblescreen->super
+---
+> 	PEA	CopyScreenSuper(pc)	;later visiblescreen->super
+1673,1674c1764,1765
+< 	xjsr	UnShowPaste			;cutpaste.o, removes brush from screen
+< 	bsr	FreeDouble			;removes double bitmap (if any)
+---
+> 	xjsr	UnShowPaste	;cutpaste.o, removes brush from screen
+> 	bsr	FreeDouble	;removes double bitmap (if any)
+1676,1679c1767,1770
+< 	movem.l	d0-d7/a0-a6,-(sp)		;YUCK ....CLEANUP
+< 	xjsr	UnDoRGB				;rgbrtns.asm
+< 	xjsr	UnDoComp			;composite.asm...helps w/composite plot
+< 	movem.l	(sp)+,d0-d7/a0-a6		;YUCK ....CLEANUP
+---
+> 	movem.l	d0-d7/a0-a6,-(sp)	;YUCK ....CLEANUP
+> 	xjsr	UnDoRGB			;rgbrtns.asm
+> 	xjsr	UnDoComp		;composite.asm...helps w/composite plot
+> 	movem.l	(sp)+,d0-d7/a0-a6	;YUCK ....CLEANUP
+1681,1682c1772,1773
+< 	PEA	SaveCPUnDo(pc)			;cutpaste's undo when done LATER super->cpundo
+< 	bsr	RestoreCPUnDo			;...NOW cpundo->super
+---
+> 	PEA	SaveCPUnDo(pc)	;cutpaste's undo when done LATER super->cpundo
+> 	bsr	RestoreCPUnDo	;...NOW cpundo->super
+1684,1685c1775,1776
+< 						;"undo for non-cutpaste mode"
+<   IFC 't','f' ;JULY12,1990;			;"undo for non-cutpaste mode"...regular SwapSuperScreen...
+---
+> 		;"undo for non-cutpaste mode"
+>   IFC 't','f' ;JULY12,1990;;"undo for non-cutpaste mode"...regular SwapSuperScreen...
+1687,1690c1778,1781
+< 	beq.s	SwapSuperScreen			;didnt get double, do 'old' swap
+< 	bsr	CopySuperDouble			;super  -> double
+< 	xjsr	MoveDoubleFront			;swap screen<->doublebitmap (cutpaste.o)
+< 	bsr	CopyDoubleSuper 		;old screenimage->super
+---
+> 	beq.s	SwapSuperScreen	;didnt get double, do 'old' swap
+> 	bsr	CopySuperDouble	;super  -> double
+> 	xjsr	MoveDoubleFront	;swap screen<->doublebitmap (cutpaste.o)
+> 	bsr	CopyDoubleSuper ;old screenimage->super
+1696,1697c1787,1788
+<  XDEF SwapSuperScreen				;xdef'd AUG161990...used by CutLoadedBrush in CutPaste.asm
+< SwapSuperScreen:				;swap screenbitmap with UnDoBitMap (normal undo)
+---
+>  XDEF SwapSuperScreen	;xdef'd AUG161990...used by CutLoadedBrush in CutPaste.asm
+> SwapSuperScreen:	;swap screenbitmap with UnDoBitMap (normal undo)
+1699,1700c1790,1791
+< 	lea	UnDoBitMap_(BP),a2		;FROM normal quickundo backup
+< 	lea	ScreenBitMap_(BP),a3		;TO Screen Backup
+---
+> 	lea	UnDoBitMap_(BP),a2	;FROM normal quickundo backup
+> 	lea	ScreenBitMap_(BP),a3	;TO Screen Backup
+1703c1794,1795
+< SwapScreenCPUnDo:				;swap screenbitmap with cpundo
+---
+> SwapScreenCPUnDo:	;swap screenbitmap with cpundo
+> ;;; xjsr DebugMe4	;AUG301990
+1705c1797,1798
+< 	beq	abort_SwapCPUnDo		;this label is in the next routine...
+---
+> 	beq	abort_SwapCPUnDo	;this label is in the next routine...
+> ;;; xjsr DebugMe5	;AUG301990
+1708,1709c1801,1802
+< 	lea	ScreenBitMap_(BP),a2		;FROM Screen Backup
+< 	lea	CPUnDoBitMap_(BP),a3		;TO "speshul" cutpaste UnDo
+---
+> 	lea	ScreenBitMap_(BP),a2	;FROM Screen Backup
+> 	lea	CPUnDoBitMap_(BP),a3	;TO "speshul" cutpaste UnDo
+1714,1715c1807,1813
+< SwapSwap:					;swaps alternate(SwapBitMap) with screen(screenbitmap)
+< ;AUG011990....disable alloc(and copy to)swap if "hires" mode
+---
+> SwapSwap:	;swaps alternate(SwapBitMap) with screen(screenbitmap)
+> 	;;bsr	_debug
+> 	;;pea	_debug(pc)
+> ;;;; xjsr DebugMe
+> 
+> 
+> 		;AUG011990....disable alloc(and copy to)swap if "hires" mode
+1719c1817
+< ;don't swap/swap screen if rgb mode, different sizes
+---
+> 		;don't swap/swap screen if rgb mode, different sizes
+1723,1725c1821,1824
+< ;if have swap rgb, but no swap ham, then ok, too
+< 	tst.L	SwapBitMap_Planes_(BP)		;HAM screen exist? SEP011990
+< 	beq.s	rgbswapok			;...no?, then ok to 'swap' (create new)
+---
+> 		;SEP011990...
+> 		;if have swap rgb, but no swap ham, then ok, too
+> 	tst.L	SwapBitMap_Planes_(BP)	;HAM screen exist? SEP011990
+> 	beq.s	rgbswapok		;...no?, then ok to 'swap' (create new)
+1731c1830
+< 	;cmp.w	#TOASTMAXWT,d0			;CAN't swap if main rgb buffer is NOT sized ok
+---
+> 	;cmp.w	#TOASTMAXWT,d0	;CAN't swap if main rgb buffer is NOT sized ok
+1742a1842
+> 
+1744,1750c1844,1850
+< 	bsr	FreeDouble			;temp chip (never directly seen) bitmap
+< 	bsr	CopyScreenSuper			;JUNE05...fixes paste/undo/swap bug xtra undo
+< 	bsr	CopySuperCPUnDo			;JUNE05...helps, too (?)
+< 
+< ;digipaint pi/rgb
+< ;if no swap screen (creating one with "j" key)
+< ;then ensure that "clear" happens if swap gets alloc'd
+---
+> 	bsr	FreeDouble		;temp chip (never directly seen) bitmap
+> 	bsr	CopyScreenSuper		;JUNE05...fixes paste/undo/swap bug xtra undo
+> 	bsr	CopySuperCPUnDo		;JUNE05...helps, too (?)
+> 
+> 		;digipaint pi/rgb
+> 		;if no swap screen (creating one with "j" key)
+> 		;then ensure that "clear" happens if swap gets alloc'd
+1754,1757c1854
+< 
+< 
+< *	bsr	CopyPic 
+< 	bsr	AllocSwap			;create (blank) swap if none
+---
+> 	bsr	AllocSwap		;create (blank) swap if none
+1761,1762d1857
+< 
+< 
+1770,1771c1865,1866
+< 	;SEP011990;move.l #'Clrs',ActionCode_(BP);setup for next main loop...
+< 	move.l	#'Clrb',ActionCode_(BP)	 	;setup for next main loop...clear to BLACK SEP011990
+---
+> 	;SEP011990;move.l	#'Clrs',ActionCode_(BP)		;setup for next main loop...
+> 	move.l	#'Clrb',ActionCode_(BP)	 ;setup for next main loop...clear to BLACK SEP011990
+1775,1777c1870,1872
+< _SaveUnDoRGB:					;AUG171990...
+< 	xjmp	SaveUnDoRGB			;IS THIS THE PROBLEM? DEH072094	
+< ;	rts
+---
+> _SaveUnDoRGB:			;AUG171990...
+> 	xjmp	SaveUnDoRGB
+> 	;rts
+1780,1784c1875,1876
+< 
+< 
+< 
+< 	PEA	ReallySaveUnDo(pc)		;AUG171990
+< 	PEA	_SaveUnDoRGB(pc)		;AUG171990
+---
+> 	PEA	ReallySaveUnDo(pc)	;AUG171990
+> 	PEA	_SaveUnDoRGB(pc)	;AUG171990
+1786,1787c1878,1879
+< 	PEA	CopySuperCPUnDo(pc)		;when done swapping, screen->super->cpsuperu
+< 	PEA	AllocCPUnDo(pc)			;only alloc's if needed
+---
+> 	PEA	CopySuperCPUnDo(pc)	;when done swapping, screen->super->cpsuperu
+> 	PEA	AllocCPUnDo(pc)		;only alloc's if needed
+1791c1883
+< ;flag all lines as "to be rendered" AUG011990
+---
+> 		;flag all lines as "to be rendered" AUG011990
+1794c1886
+< 	bsr	FreeOneVariable			;resets so "all lines are replotted" in composite
+---
+> 	bsr	FreeOneVariable		;resets so "all lines are replotted" in composite
+1796,1797c1888,1889
+< ;digipaint 24....swap rgb mode pointers
+< 	xref	Datared_			;BigPicRGBredptr_
+---
+> 		;digipaint 24....swap rgb mode pointers
+> 	xref	Datared_	;BigPicRGBredptr_
+1799c1891
+< 	lea	Datared_(BP),a0			;BigPicRGBredptr_(BP),a0
+---
+> 	lea	Datared_(BP),a0	;BigPicRGBredptr_(BP),a0
+1806c1898
+< 	move.l	(a0),d0				;swap red pointers
+---
+> 	move.l	(a0),d0		;swap red pointers
+1810c1902
+< 	move.l	(a0),d0				;swap gr
+---
+> 	move.l	(a0),d0		;swap gr
+1813,1814c1905,1906
+< 		
+< 	move.l	(a0),d0				;swap blue pointers
+---
+> 
+> 	move.l	(a0),d0		;swap blue pointers
+1818c1910
+< 	movem.l	(sp),d0-d3/a0-a3		;restore args (no need?)
+---
+> 	movem.l	(sp),d0-d3/a0-a3	;restore args (no need?)
+1820,1821c1912,1913
+< 	lea	SwapBitMap_(BP),a2		;from alternate
+< 	lea	ScreenBitMap_(BP),a3		;to visible
+---
+> 	lea	SwapBitMap_(BP),a2	;from alternate
+> 	lea	ScreenBitMap_(BP),a3	;to visible
+1826,1834c1918,1925
+< 
+< 	lea	(8*4)+bm_Planes(a2),a2		;from bitmap
+< 	lea	(8*4)+bm_Planes(a3),a3		;to   bitmap
+< 	movem.l	a2/a3/BP,-(sp)			;STACK BITMAP STRUCT PTRS TO ADRS +basepage=a5
+< 
+< 	move.l	PlaneSize_(BP),d2 		;init total #bytes_per_plane to swap
+< 	;move.l	#(5*240),d0			;#bytes swap each time (30 320pix lines)
+< 	;move.l	#(10*240),d0			;#bytes swap each time (60 320pix lines)
+< 	;JULY131990;move.l 	#(5*240),d0	;#bytes swap each time (30 320pix lines)
+---
+> 	lea	(6*4)+bm_Planes(a2),a2	;from bitmap
+> 	lea	(6*4)+bm_Planes(a3),a3	;to   bitmap
+> 	movem.l	a2/a3/BP,-(sp)	;STACK BITMAP STRUCT PTRS TO ADRS +basepage=a5
+> 
+> 	move.l	PlaneSize_(BP),d2 	;init total #bytes_per_plane to swap
+> 	;move.l	#(5*240),d0		;#bytes swap each time (30 320pix lines)
+> 	;move.l	#(10*240),d0		;#bytes swap each time (60 320pix lines)
+> 	;JULY131990;move.l	#(5*240),d0		;#bytes swap each time (30 320pix lines)
+1836,1839c1927,1929
+< 	move.l	#240*3,d0			;approx. 8 lines of (736/8) bytes JULY141990
+< split_swap:					;do all planes, a number of times
+< 	
+< 	sub.l	d0,d2				;total - #to copy
+---
+> 	move.l	#240*3,d0	;approx. 8 lines of (736/8) bytes JULY141990
+> split_swap:			;do all planes, a number of times
+> 	sub.l	d0,d2			;total - #to copy
+1843c1933
+< 	moveq	#8-1,d1				;MAX #planes, counter (already did hambitplanes)
+---
+> 	moveq	#6-1,d1	;MAX #planes, counter (already did hambitplanes)
+1846,1847c1936,1937
+< 	move.l	d3,a0				;from: actual bitplane data address
+< 	add.l	d2,a0				;plane offset, swapping from bottom up
+---
+> 	move.l	d3,a0		;from: actual bitplane data address
+> 	add.l	d2,a0		;plane offset, swapping from bottom up
+1850,1851c1940,1941
+< 	move.l	d3,a1				;to:  ...ditto...
+< 	add.l	d2,a1				;plane offset, now
+---
+> 	move.l	d3,a1		;to:  ...ditto...
+> 	add.l	d2,a1		;plane offset, now
+1853c1943
+< 	bsr.s	QUICKSwap			;subr preserves ALL regs
+---
+> 	bsr.s	QUICKSwap	;subr preserves ALL regs
+1855,1856c1945,1946
+< 	dbf	d1,1$	
+<  2$:	movem.l	(sp),a2/a3/BP	
+---
+> 	dbf	d1,1$
+>  2$:	movem.l	(sp),a2/a3/BP
+1858c1948
+< 	bra.s	split_swap			;endof_Xscu
+---
+> 	bra.s	split_swap	;endof_Xscu
+1861,1862c1951,1952
+< enda_spsw:					;end split swap...copied all (or too many?)
+< 	add.l	d0,d2				;reoffset, amt wanted to swap
+---
+> enda_spsw:	;end split swap...copied all (or too many?)
+> 	add.l	d0,d2		;reoffset, amt wanted to swap
+1864,1865c1954,1955
+< 	move.l	d2,d0				;spec. remaing swap (after rpted -8*240's)
+< 	bra.s	split_swap			;continue, last swap now, tests will fall thru
+---
+> 	move.l	d2,d0		;spec. remaing swap (after rpted -8*240's)
+> 	bra.s	split_swap	;continue, last swap now, tests will fall thru
+1867c1957
+< 	lea	12(sp),sp			;a2/a3/a5;;bitmap struct ptrs, free up stack
+---
+> 	lea	12(sp),sp	;a2/a3/a5;;bitmap struct ptrs, free up stack
+1869c1959
+< 	movem.l	(sp)+,d0-d3/a0-a3		;we definitely destroy d4-d7,a4,a6
+---
+> 	movem.l	(sp)+,d0-d3/a0-a3	;we definitely destroy d4-d7,a4,a6
+1873,1874c1963,1964
+< SwapSuperCPUnDo:				;swap  UnDoBitMap <=> CPUnDoBitMap
+< 						;non-screen swap, quicker, whole bitplanes at a time
+---
+> SwapSuperCPUnDo:	;swap  UnDoBitMap <=> CPUnDoBitMap
+> 			;non-screen swap, quicker, whole bitplanes at a time
+1877a1968,1969
+> ;;; xjsr DebugMe6	;AUG301990
+> 
+1879,1880c1971,1972
+< 	lea	UnDoBitMap_(BP),a3		;TO regular UnDo/SuperBitMap
+< 	lea	CPUnDoBitMap_(BP),a2		;FROM "speshul" cutpaste UnDo
+---
+> 	lea	UnDoBitMap_(BP),a3	;TO regular UnDo/SuperBitMap
+> 	lea	CPUnDoBitMap_(BP),a2	;FROM "speshul" cutpaste UnDo
+1882,1885c1974,1977
+< 	lea	bm_Planes(a2),a2		;from bitmap
+< 	lea	bm_Planes(a3),a3		;to   bitmap
+< 	move.l	PlaneSize_(BP),d0		;init # bytes_per_plane -> lwords_per_plane
+< 	moveq	#8-1,d1				;MAX #planes, counter (already did hambitplanes)
+---
+> 	lea	bm_Planes(a2),a2	;from bitmap
+> 	lea	bm_Planes(a3),a3	;to   bitmap
+> 	move.l	PlaneSize_(BP),d0	;init # bytes_per_plane -> lwords_per_plane
+> 	moveq	#6-1,d1		;MAX #planes, counter (already did hambitplanes)
+1888c1980
+< 	move.l	d3,a0				;from: actual bitplane data address
+---
+> 	move.l	d3,a0		;from: actual bitplane data address
+1891,1892c1983,1984
+< 	move.l	d3,a1				;to:  ...ditto...
+< 	bsr.s	QUICKSwap			;this fast SWAP preserves ALL regs
+---
+> 	move.l	d3,a1		;to:  ...ditto...
+> 	bsr.s	QUICKSwap	;this fast SWAP preserves ALL regs
+1903c1995
+< 	movem.l	(a0)+,d1-d6			;12+8n	60cy
+---
+> 	movem.l	(a0)+,d1-d6		;12+8n	60cy
+1905,1906c1997,1998
+< 	movem.l	d7/a2-a6,-24(a0)		;16+8n	64cy
+< 	movem.l	d1-d6,-24(a1)			;total is 244 cycles to exchg 24 bytes
+---
+> 	movem.l	d7/a2-a6,-24(a0)	;16+8n	64cy
+> 	movem.l	d1-d6,-24(a1)		;total is 244 cycles to exchg 24 bytes
+1923c2015
+< QUICKSwap:  					;d0=count, a0/a1 = addresses MUST call with #>120 2b exg'd !!!
+---
+> QUICKSwap:  ;d0=count, a0/a1 = addresses MUST call with #>120 2b exg'd !!!
+1926c2018,2020
+< ;	bsr.s	QUICKestSwap			;not xdef'd, this subr
+---
+> ;not broken...;  IFC 't','f' ;WANT....but broken?...
+> 
+> ;	bsr.s	QUICKestSwap	;not xdef'd, this subr
+1955a2050,2056
+> ;;;  ENDC ;WANT....but broken?...
+> 			;kludge....setup (again)
+> 	;;asr.L	#2,d0	;/4
+> 	;;beq.s	endof_swappa
+> 
+> 
+> 
+1959a2061,2062
+> 
+> 	;KLUDGE, WANT;dbf	d0,swap1
+1966c2069
+< 	rts					;QUICKSwap
+---
+> 	rts	;QUICKSwap
+1971,1972c2074,2075
+< CopyPic: 					;copy picture to alternate, allocating SwapBitMap if needed
+< 
+---
+> CopyPic: ;copy picture to alternate, allocating SwapBitMap if needed
+> 		;JUNE05
+1974c2077
+< 	bsr	FreeDouble			;temp chip (never directly seen) bitmap
+---
+> 	bsr	FreeDouble		;temp chip (never directly seen) bitmap
+1977,1979c2080,2082
+< 	;bne.s	2$				;we already have an alternate, go use it
+<  	;bsr	AllocSwap			;allocates a bitmap for the CutWindow, if needed
+< 	;beq.s	3$				;abort, can't allocate the memory
+---
+> 	;bne.s	2$		;we already have an alternate, go use it
+>  	;bsr	AllocSwap	;allocates a bitmap for the CutWindow, if needed
+> 	;beq.s	3$		;abort, can't allocate the memory
+1981,1982c2084,2085
+< 	bsr	FreeSwap			;kills rgb buffers, too
+< 	bsr	AllocSwap			;allocates a bitmap for the CutWindow, clones rgb buffers...
+---
+> 	bsr	FreeSwap	;kills rgb buffers, too
+> 	bsr	AllocSwap	;allocates a bitmap for the CutWindow, clones rgb buffers...
+1985,1987c2088,2090
+< 	lea	ScreenBitMap_(BP),a0		;"from" visible screen
+< 	lea	SwapBitMap_(BP),a1		;"to" fastmem swap screen
+< 	bra	finish_undo_blit		;re-use code from "saveundo"
+---
+> 	lea	ScreenBitMap_(BP),a0	;"from" visible screen
+> 	lea	SwapBitMap_(BP),a1	;"to" fastmem swap screen
+> 	bra	finish_undo_blit	;re-use code from "saveundo"
+1989c2092
+< 	rts 					;CopyPic  
+---
+> 	rts ;CopyPic  
+1991,1995c2094,2099
+< CopySuperScreen:				;copy UnDoBitMap to Screenbitmap ONLY USED BY BLITS.o
+< ;blit what is in superbitmap back onto screen/Undo
+< ;next line MUY IMPORTANTE
+< ;refer to showpaste.asm routines show/unshowpaste
+< 	clr.b	FlagReSee_(BP)	 		;clear means brush not on screen
+---
+> CopySuperScreen:	;copy UnDoBitMap to Screenbitmap ONLY USED BY BLITS.o
+> ;;  RTS ;KLUDGE,WANT
+> 	;blit what is in superbitmap back onto screen/Undo
+> 		;next line MUY IMPORTANTE
+> 		;refer to showpaste.asm routines show/unshowpaste
+> 	clr.b	FlagReSee_(BP)	 	;clear means brush not on screen
+1998,2008c2102,2112
+< 	lea	UnDoBitMap_(BP),a2		;"from" fastmem 'clean' undo
+< 	lea	ScreenBitMap_(BP),a3		;"to" visible screen
+< 	lea	(8*4)+bm_Planes(a2),a2		;bitplane ptrs
+< 	lea	(8*4)+bm_Planes(a3),a3
+< 	movem.l	a2/a3/BP,-(sp)			;STACK BITMAP STRUCT PTRS TO ADRS +basepage=a5
+< 
+< 	move.l	PlaneSize_(BP),d2 		;init total #bytes_per_plane to swap
+< 	;move.l	#(8*480),d0			;#bytes to COPY each time
+< 	move.l	#(8*384),d0			;#bytes to COPY each time
+< split_copy:					;do all planes, a number of times
+< 	sub.l	d0,d2				;total - #to copy
+---
+> 	lea	UnDoBitMap_(BP),a2	;"from" fastmem 'clean' undo
+> 	lea	ScreenBitMap_(BP),a3	;"to" visible screen
+> 	lea	(6*4)+bm_Planes(a2),a2	;bitplane ptrs
+> 	lea	(6*4)+bm_Planes(a3),a3
+> 	movem.l	a2/a3/BP,-(sp)	;STACK BITMAP STRUCT PTRS TO ADRS +basepage=a5
+> 
+> 	move.l	PlaneSize_(BP),d2 	;init total #bytes_per_plane to swap
+> 	;move.l	#(8*480),d0		;#bytes to COPY each time
+> 	move.l	#(8*384),d0		;#bytes to COPY each time
+> split_copy:			;do all planes, a number of times
+> 	sub.l	d0,d2			;total - #to copy
+2010c2114
+< 	moveq	#8-1,d1				;MAX #planes, counter (already did hambitplanes)
+---
+> 	moveq	#6-1,d1	;MAX #planes, counter (already did hambitplanes)
+2014,2015c2118,2119
+< 	move.l	d3,a0				;from: actual bitplane data address
+< 	add.l	d2,a0				;plane offset, swapping from bottom up
+---
+> 	move.l	d3,a0		;from: actual bitplane data address
+> 	add.l	d2,a0		;plane offset, swapping from bottom up
+2018,2020c2122,2124
+< 	move.l	d3,a1				;to:  ...ditto...
+< 	add.l	d2,a1				;plane offset, now
+< 	bsr	QUICKCopy			;this fast COPY preserves ALL regs
+---
+> 	move.l	d3,a1		;to:  ...ditto...
+> 	add.l	d2,a1		;plane offset, now
+> 	bsr	QUICKCopy	;this fast COPY preserves ALL regs
+2024c2128
+< 	bra.s	split_copy			;endof_Xscopy
+---
+> 	bra.s	split_copy	;endof_Xscopy
+2026,2027c2130,2131
+< enda_spcopy:					;end split copy...copied all
+< 	add.l	d0,d2				;reoffset, amt wanted to swap, leave d2=adroffs
+---
+> enda_spcopy:	;end split copy...copied all
+> 	add.l	d0,d2		;reoffset, amt wanted to swap, leave d2=adroffs
+2029,2030c2133,2134
+< 	move.l	d2,d0				;spec. remaing swap (after rpted -8*240's)
+< 	bra.s	split_copy			;continue, last swap now, tests will fall thru
+---
+> 	move.l	d2,d0		;spec. remaing swap (after rpted -8*240's)
+> 	bra.s	split_copy	;continue, last swap now, tests will fall thru
+2032c2136
+< 	lea	12(sp),sp			;a2/a3/a5;;bitmap struct ptrs, free up stack
+---
+> 	lea	12(sp),sp	;a2/a3/a5;;bitmap struct ptrs, free up stack
+2034c2138
+< 	movem.l	(sp)+,d0-d3/a0-a3		;we definitely destroy d4-d7,a4,a6
+---
+> 	movem.l	(sp)+,d0-d3/a0-a3	;we definitely destroy d4-d7,a4,a6
+2038c2142,2143
+< SaveCPUnDo:					;save an undo layer while cut/pasting (SuperBitMap => CPUnDo)
+---
+> ;--
+> SaveCPUnDo:	;save an undo layer while cut/pasting (SuperBitMap => CPUnDo)
+2044a2150
+> ;;; xjsr DebugMe7	;AUG301990
+2048,2050c2154,2156
+< RestoreCPUnDo:					;restore saved undo layer (CPUnDoBitMap => UnDoBitMap)
+< 	lea	CPUnDoBitMap_(BP),a0		;FROM UnDo
+< 	lea	UnDoBitMap_(BP),a1		;TO Screen Backup
+---
+> RestoreCPUnDo:	;restore saved undo layer (CPUnDoBitMap => UnDoBitMap)
+> 	lea	CPUnDoBitMap_(BP),a0	;FROM UnDo
+> 	lea	UnDoBitMap_(BP),a1	;TO Screen Backup
+2055c2161,2162
+< 	sf	FlagBitMapSaved_(BP)		;UNDO status updated.(?)..
+---
+> 	sf	FlagBitMapSaved_(BP)	;UNDO status updated.(?)..
+> ;;; xjsr DebugMe8	;AUG301990
+2062c2169
+< 	XDEF ReallySaveUnDo 			;late, mousertns use ONLY once (dobuttondown/draw)
+---
+> 	XDEF ReallySaveUnDo ;late, mousertns use ONLY once (dobuttondown/draw)
+2064c2171,2175
+< 	sf	FlagBitMapSaved_(BP)		;force test to fail, copy to happen...
+---
+> 	sf	FlagBitMapSaved_(BP)	;force test to fail, copy to happen...
+> 
+> SaveUnDo:	;ent'd here from mousertns.o, drawbrush starting
+> ;;  RTS ;KLUDGE,WANT
+> 
+2066d2176
+< SaveUnDo:					;ent'd here from mousertns.o, drawbrush starting
+2068,2074c2178,2184
+< 	tst.l	ScreenPtr_(BP)			;big picture open'd?
+< 	beq.s	su_rts				;SaveUnDo's "rts"
+< 	bsr	AllocUnDo			;allocate a bitmap for the undoing cutpaste (may fail)
+< 
+< 						;late late fixup on '1st paste's undo
+< 	tst.l	PasteBitMap_Planes_(BP)		;cutpaste? (i.e., have a brush?)
+< 	beq.s	1$				;not 'carrying a brush'
+---
+> 	tst.l	ScreenPtr_(BP)		;big picture open'd?
+> 	beq.s	su_rts			;SaveUnDo's "rts"
+> 	bsr	AllocUnDo	;allocate a bitmap for the undoing cutpaste (may fail)
+> 
+> 		;late late fixup on '1st paste's undo
+> 	tst.l	PasteBitMap_Planes_(BP)	;cutpaste? (i.e., have a brush?)
+> 	beq.s	1$			;not 'carrying a brush'
+2076,2077c2186,2187
+< 	bsr	FreeDouble			;temp chip (never directly seen) bitmap
+< 	bsr	AllocCPUnDo			;have a brush, ensure 'undo' bitmap
+---
+> 	bsr	FreeDouble		;temp chip (never directly seen) bitmap
+> 	bsr	AllocCPUnDo		;have a brush, ensure 'undo' bitmap
+2081,2082c2191,2192
+< 	tst.b	FlagBitMapSaved_(BP)		;already saved/copied?
+< 	bne.s	su_rts				;SaveUnDo's "rts"
+---
+> 	tst.b	FlagBitMapSaved_(BP)	;already saved/copied?
+> 	bne.s	su_rts			;SaveUnDo's "rts"
+2085c2195
+< 	beq.s	su_rts				;no 'undo' bitmap to save TO?
+---
+> 	beq.s	su_rts			;no 'undo' bitmap to save TO?
+2089a2200,2205
+> 	;actually, this is done in repaint/scratch.asm....
+> 	;...because the rgb save does not need to happen until repaint...
+> 	;movem.l	d0-d7/a0-a6,-(sp)	;YUCK CLEANUP
+> 	;xjsr	SaveUnDoRGB		;rgbrtns.asm
+> 	;movem.l	(sp)+,d0-d7/a0-a6
+> 
+2096,2098c2212,2218
+< 	lea	UnDoBitMap_(BP),a0		;"from" bitmap, regular undo/screenok
+< 	lea	CPUnDoBitMap_(BP),a1		;"real" undo for cutpaste
+< 	bra.s	finish_undo_blit		;'copy' type routine
+---
+> 	lea	UnDoBitMap_(BP),a0	;"from" bitmap, regular undo/screenok
+> 	lea	CPUnDoBitMap_(BP),a1	;"real" undo for cutpaste
+> ;;;  tst.l	bm_Planes(a0)	;AUG301990
+> ;;;  beq.s 1$		;AUG301990
+> ;;; xjsr DebugMe9		;AUG301990
+> ;;;1$			;AUG301990
+> 	bra.s	finish_undo_blit	;'copy' type routine
+2100c2220
+< CopySuperDouble:				;copy UnDoBitMap(clean undo) to doublebitmap
+---
+> CopySuperDouble:	;copy UnDoBitMap(clean undo) to doublebitmap
+2102c2222
+< 	lea	UnDoBitMap_(BP),a0		;"from" bitmap, 'regular' undo
+---
+> 	lea	UnDoBitMap_(BP),a0	;"from" bitmap, 'regular' undo
+2104c2224
+< 	bra.s	finish_undo_blit		;'copy' type routine (non-visible data)
+---
+> 	bra.s	finish_undo_blit	;'copy' type routine (non-visible data)
+2109,2110c2229,2230
+< 	lea	UnDoBitMap_(BP),a1		;"to" bitmap, 'regular' undo
+< 	bra.s	finish_undo_blit		;'copy' type routine (non-visible data)
+---
+> 	lea	UnDoBitMap_(BP),a1	;"to" bitmap, 'regular' undo
+> 	bra.s	finish_undo_blit	;'copy' type routine (non-visible data)
+2112,2114c2232,2234
+<  xdef CopyScreenCPUnDo				;copy Screenbitmap to UnDoBitMap
+< CopyScreenCPUnDo:				;copy Screenbitmap to UnDoBitMap
+< ;;; xjsr DebugMe10				;AUG301990
+---
+>  xdef CopyScreenCPUnDo	;copy Screenbitmap to UnDoBitMap
+> CopyScreenCPUnDo:	;copy Screenbitmap to UnDoBitMap
+> ;;; xjsr DebugMe10	;AUG301990
+2116,2118c2236,2238
+< 	lea	ScreenBitMap_(BP),a0		;"from" bitmap, visible screenbitmap
+< 	lea	CPUnDoBitMap_(BP),a1		;"to" bitmap, 'regular' undo
+< 	bra.s	finish_undo_blit		;'copy' type routine (non-visible data)
+---
+> 	lea	ScreenBitMap_(BP),a0	;"from" bitmap, visible screenbitmap
+> 	lea	CPUnDoBitMap_(BP),a1	;"to" bitmap, 'regular' undo
+> 	bra.s	finish_undo_blit	;'copy' type routine (non-visible data)
+2120c2240
+< CopyScreenSuper:				;copy Screenbitmap to UnDoBitMap
+---
+> CopyScreenSuper:	;copy Screenbitmap to UnDoBitMap
+2123,2124c2243,2244
+< 	lea	ScreenBitMap_(BP),a0		;"from" bitmap, visible screenbitmap
+< 	lea	UnDoBitMap_(BP),a1		;"to" bitmap, 'regular' undo
+---
+> 	lea	ScreenBitMap_(BP),a0	;"from" bitmap, visible screenbitmap
+> 	lea	UnDoBitMap_(BP),a1	;"to" bitmap, 'regular' undo
+2127,2132c2247,2252
+< 	lea	(8*4)+bm_Planes(a0),a2		;from bitmap
+< 	lea	(8*4)+bm_Planes(a1),a3		;to   bitmap
+< 	move.l	PlaneSize_(BP),d0		;init # bytes_per_plane -> lwords_per_plane
+< 	moveq	#8-1,d1
+< coppa_loop:					;ENTRY POINT, 'bra'd here from PasteToAltCopy
+< 	move.l	-(a2),d3			;bitplane ptr from bitmap struct
+---
+> 	lea	(6*4)+bm_Planes(a0),a2	;from bitmap
+> 	lea	(6*4)+bm_Planes(a1),a3	;to   bitmap
+> 	move.l	PlaneSize_(BP),d0	;init # bytes_per_plane -> lwords_per_plane
+> 	moveq	#6-1,d1
+> coppa_loop:			;ENTRY POINT, 'bra'd here from PasteToAltCopy
+> 	move.l	-(a2),d3	;bitplane ptr from bitmap struct
+2134,2135c2254,2255
+< 	move.l	d3,a0				;from: actual bitplane data address
+< 	move.l	-(a3),d3			;ano' bitplane ptr
+---
+> 	move.l	d3,a0		;from: actual bitplane data address
+> 	move.l	-(a3),d3	;ano' bitplane ptr
+2137,2138c2257,2258
+< 	move.l	d3,a1				;to:actual address
+< 	bsr	QUICKCopy			;.s QUICKCopy ;this fast COPY preserves ALL regs
+---
+> 	move.l	d3,a1		;to:actual address
+> 	bsr	QUICKCopy	;.s QUICKCopy ;this fast COPY preserves ALL regs
+2145c2265
+< PartialUnDo:	;d0=lineoffset a5=Base		;clears from lineoffset to end
+---
+> PartialUnDo:	;d0=lineoffset a5=Base	;clears from lineoffset to end
+2148c2268
+< 	sf	FlagBitMapSaved_(BP)		;byte =-1 if UnDoBitMap is saved but not restored
+---
+> 	sf	FlagBitMapSaved_(BP)	;byte =-1 if UnDoBitMap is saved but not restored
+2152,2153c2272,2273
+< 	lea	(8*4)+bm_Planes(a0),a2		;from bitmap
+< 	lea	(8*4)+bm_Planes(a1),a3		;to   bitmap
+---
+> 	lea	(6*4)+bm_Planes(a0),a2	;from bitmap
+> 	lea	(6*4)+bm_Planes(a1),a3	;to   bitmap
+2155c2275
+< 						;init counter # bytes_per_plane to move
+---
+> 	;init counter # bytes_per_plane to move
+2158,2160c2278,2280
+< 	beq.s	skippitall			;bullet proof
+< 	bmi.s	skippitall			;rocket proof
+< 	moveq	#8-1,d2				;MAX #planes, loop counter
+---
+> 	beq.s	skippitall	;bullet proof
+> 	bmi.s	skippitall	;rocket proof
+> 	moveq	#6-1,d2		;MAX #planes, loop counter
+2162,2163c2282,2283
+< 	move.l	-(a2),d3			;from: actual bitplane data address
+< 	beq.s	skippitall			;done, no bitplane
+---
+> 	move.l	-(a2),d3	;from: actual bitplane data address
+> 	beq.s	skippitall	;done, no bitplane
+2165,2166c2285,2286
+< 	move.l	-(a3),d3			;to:  ...ditto...
+< 	beq.s	skippitall			;done, no bitplane
+---
+> 	move.l	-(a3),d3	;to:  ...ditto...
+> 	beq.s	skippitall	;done, no bitplane
+2168,2171c2288,2291
+< 	adda.l	(sp),a0				;d0=count=(planesize-offset)
+< 	adda.l	(sp),a1				;(sp)=stackedd0=offset
+< 	; bsr.s	QUICKCopy			;preserves ALL registers
+< 	bsr	QUICKCopy			;preserves ALL registers
+---
+> 	adda.l	(sp),a0		;d0=count=(planesize-offset)
+> 	adda.l	(sp),a1		;(sp)=stackedd0=offset
+> 	; bsr.s	QUICKCopy	;preserves ALL registers
+> 	bsr	QUICKCopy	;preserves ALL registers
+2181,2183c2301,2302
+< DoubleUndo:
+< 	DUMPMSG	<DoubleUndo>			;d1=first y line, d5=#lines
+< 	lea	DoubleBitMap_(BP),a1		;"to" chipmem doublebuff
+---
+> DoubleUndo:	;d1=first y line, d5=#lines
+> 	lea	DoubleBitMap_(BP),a1	;"to" chipmem doublebuff
+2186,2188c2305,2307
+< MarkedUnDo:					;undo "only those lines marked in the brushbitmap"
+< 	xjsr	QuickStrokeBounds		;CALC d1=ymin d3=ymax d5=height
+< 	bmi.s	an_rts				;get outta here, nothing marked
+---
+> MarkedUnDo:	; undo "only those lines marked in the brushbitmap"
+> 	xjsr	QuickStrokeBounds	;CALC d1=ymin d3=ymax d5=height
+> 	bmi.s	an_rts			;get outta here, nothing marked
+2192,2194c2311,2313
+< IndSingleUndo:					;d1=first y line, d5=#lines
+< 	lea	ScreenBitMap_(BP),a1		;"to" bitmap
+< 	lea	UnDoBitMap_(BP),a0		;"from" bitmap
+---
+> IndSingleUndo:	;d1=first y line, d5=#lines
+> 	lea	ScreenBitMap_(BP),a1	;"to" bitmap
+> 	lea	UnDoBitMap_(BP),a0	;"from" bitmap
+2196,2197c2315,2316
+< 	mulu	d0,d1				;lineoffset to first line
+< 	mulu	d5,d0				;#bytes to copy = #lines*length_of_line
+---
+> 	mulu	d0,d1		;lineoffset to first line
+> 	mulu	d5,d0		;#bytes to copy = #lines*length_of_line
+2200,2201c2319,2320
+< 	movem.l	d0/d1,-(sp)			;-d2/a0-a3,-(sp)
+< 						;d0(sp)=#bytes d1,4(sp)=offset_start
+---
+> 	movem.l	d0/d1,-(sp)	;-d2/a0-a3,-(sp)
+> 					;d0(sp)=#bytes d1,4(sp)=offset_start
+2203,2205c2322,2324
+< 	lea	(1*4)+bm_Planes(a0),a2		;from bitmap
+< 	lea	(1*4)+bm_Planes(a1),a3		;to   bitmap
+< 	moveq	#(1-1),d2			;MAX #planes, loop counter
+---
+> 	lea	(1*4)+bm_Planes(a0),a2	;from bitmap
+> 	lea	(1*4)+bm_Planes(a1),a3	;to   bitmap
+> 	moveq	#(1-1),d2		;MAX #planes, loop counter
+2212,2213c2331,2332
+< IndicatedUndo:					;d1=first y line, d5=#lines
+< ;AUG171990;	pea	_UnDoRGB(pc)		;ensure rgb buffers "undone"....AUG071990
+---
+> IndicatedUndo:	;d1=first y line, d5=#lines
+> ;AUG171990;	pea	_UnDoRGB(pc)	;ensure rgb buffers "undone"....AUG071990
+2215c2334
+< 	lea	ScreenBitMap_(BP),a1		;"to" bitmap
+---
+> 	lea	ScreenBitMap_(BP),a1	;"to" bitmap
+2217c2336
+< 	lea	UnDoBitMap_(BP),a0		;"from" bitmap
+---
+> 	lea	UnDoBitMap_(BP),a0	;"from" bitmap
+2219,2220c2338,2339
+< 	mulu	d0,d1				;lineoffset to first line
+< 	mulu	d5,d0				;#bytes to copy = #lines*length_of_line
+---
+> 	mulu	d0,d1		;lineoffset to first line
+> 	mulu	d5,d0		;#bytes to copy = #lines*length_of_line
+2223,2224c2342,2343
+< 	movem.l	d0/d1,-(sp)			;-d2/a0-a3,-(sp)
+< 						;d0(sp)=#bytes d1,4(sp)=offset_start
+---
+> 	movem.l	d0/d1,-(sp)	;-d2/a0-a3,-(sp)
+> 					;d0(sp)=#bytes d1,4(sp)=offset_start
+2226,2228c2345,2347
+< 	lea	(8*4)+bm_Planes(a0),a2		;from bitmap
+< 	lea	(8*4)+bm_Planes(a1),a3		;to   bitmap
+< 	moveq	#(8-1),d2			;MAX #planes, loop counter
+---
+> 	lea	(6*4)+bm_Planes(a0),a2	;from bitmap
+> 	lea	(6*4)+bm_Planes(a1),a3	;to   bitmap
+> 	moveq	#(6-1),d2		;MAX #planes, loop counter
+2230,2232c2349,2351
+< 	move.l	-(a2),d3			;from: actual bitplane data address
+< 	beq.s	mskipitall			;done, no bitplane
+< 	add.l	4(sp),d3			;offset to this line
+---
+> 	move.l	-(a2),d3	;from: actual bitplane data address
+> 	beq.s	mskipitall	;done, no bitplane
+> 	add.l	4(sp),d3	;offset to this line
+2235,2237c2354,2356
+< 	move.l	-(a3),d3			;to:  ...ditto...
+< 	beq.s	mskipitall			;done, no bitplane
+< 	add.l	4(sp),d3			;offset to this line
+---
+> 	move.l	-(a3),d3	;to:  ...ditto...
+> 	beq.s	mskipitall	;done, no bitplane
+> 	add.l	4(sp),d3	;offset to this line
+2240c2359
+< 	bsr	QUICKCopy			;preserves ALL registers
+---
+> 	bsr	QUICKCopy	;preserves ALL registers
+2243,2244c2362,2363
+< 	movem.l	(sp)+,d0/d1			;d0-d2/a0-a3
+< 	moveq	#0,d0				;ZERO=success
+---
+> 	movem.l	(sp)+,d0/d1	;d0-d2/a0-a3
+> 	moveq	#0,d0	;ZERO=success
+2247,2249c2366,2368
+< AllocHires:					;allocates bitmap for hires screen, rtns bitmap ptr in a0
+< GW_width	set 640				;hires window for menus, gadgets
+< GW_height	set 150				;*2JULY211990  ;; 083194
+---
+> AllocHires:	;allocates bitmap for hires screen, rtns bitmap ptr in a0
+> GW_width	set 640	;hires window for menus, gadgets
+> GW_height	set 64*2	;*2JULY211990
+2257,2258c2376
+< ;;	moveq	#2,d0				;DEPTH=2, JULY301990;#4,D0		;DEPTH
+< 	moveq	#ToolDepth,d0
+---
+> 	moveq	#2,d0			;DEPTH=2, JULY301990;#4,D0		;DEPTH
+2262,2266d2379
+< 	lea	HiresBitMap_(BP),a0
+< 	moveq.l	#0,d3
+< 	move.b	bm_Depth(a0),d3
+< 	subq.w	#1,d3				;less 1 for dbf
+< 
+2268,2269c2381,2383
+< 
+< 	tst.l	(a2)				;sanity check, already alloc'd?
+---
+> 	;moveq	#4-1,d3 		;FOUR BITPLANES ON HIRES SCREEN
+> 	moveq	#2-1,d3 		;TWO BITPLANES ON HIRES SCREEN JULY301990
+> 	tst.l	(a2)			;sanity check, already alloc'd?
+2273c2387
+< 	bsr	IntuitionAllocChip		;alloc any type, but cleared fer sure
+---
+> 	bsr	IntuitionAllocChip	;alloc any type, but cleared fer sure
+2275c2389
+< 	beq.s	abort_AllocHires 		;no mem?...go make an abortion
+---
+> 	beq.s	abort_AllocHires 	;no mem?...go make an abortion
+2278c2392
+< 	moveq	#-1,d0				;flag "ok"
+---
+> 	moveq	#-1,d0			;flag "ok"
+2280c2394
+< 	lea	HiresBitMap_(BP),a0		;IF "ok", RETURNS BITMAP PTR in a0
+---
+> 	lea	HiresBitMap_(BP),a0	;IF "ok", RETURNS BITMAP PTR in a0
+2283c2397
+< 	moveq	#0,d0				;flag "error"
+---
+> 	moveq	#0,d0			;flag "error"
+2287c2401
+< FreeHires:					;free up hires/gadget screen bitmap memory
+---
+> FreeHires:	;free up hires/gadget screen bitmap memory
+2294,2296c2408,2410
+< AllocHamTool:					;allocates bitmap for Tool screen, rtns bitmap ptr in a0
+< ToolWindow_width	set 640	;ham tools
+< ToolWindow_height	set PSHeight ;+1	;+1 is KLUDGE APRIL13'89
+---
+> AllocHamTool:	;allocates bitmap for Tool screen, rtns bitmap ptr in a0
+> ToolWindow_width	set 320	;ham tools
+> ToolWindow_height	set 34+8 ;+1	;+1 is KLUDGE APRIL13'89
+2304,2309c2418
+<  ifd paint2000
+< 	moveq	#6,d0		;depth
+<  endc
+<  ifd paintAA
+< 	moveq	#8,D0		;DEPTH
+<  endc
+---
+> 	moveq	#6,D0		;DEPTH
+2314,2321c2423,2424
+< 
+<  ifd paintAA
+< 	moveq	#8-1,d3 			;FOUR BITPLANES ON Tool SCREEN
+<  endc
+<  ifd paint2000
+< 	moveq	#6-1,d3 			;FOUR BITPLANES ON Tool SCREEN
+<  endc
+< 	tst.l	(a2)				;sanity check, already alloc'd?
+---
+> 	moveq	#6-1,d3 		;FOUR BITPLANES ON Tool SCREEN
+> 	tst.l	(a2)			;sanity check, already alloc'd?
+2325c2428
+< 	bsr	IntuitionAllocChip		;alloc any type, but cleared fer sure
+---
+> 	bsr	IntuitionAllocChip	;alloc any type, but cleared fer sure
+2327c2430
+< 	beq.s	abort_AllocHamTool 		;no mem?...go make an abortion
+---
+> 	beq.s	abort_AllocHamTool 	;no mem?...go make an abortion
+2329,2334d2431
+< 
+<  ifd paint2000
+< 	move.l	d0,(a2)+			;hack bitmap struct
+< 	move.l	d0,(a2)+
+<  endc
+< 
+2336c2433
+< 	moveq	#-1,d0				;flag "ok"
+---
+> 	moveq	#-1,d0			;flag "ok"
+2338c2435
+< 	lea	ToolBitMap_(BP),a0		;IF "ok", RETURNS BITMAP PTR in a0
+---
+> 	lea	ToolBitMap_(BP),a0	;IF "ok", RETURNS BITMAP PTR in a0
+2341c2438
+< 	moveq	#0,d0				;flag "error"
+---
+> 	moveq	#0,d0			;flag "error"
+2345c2442
+< FreeHamTool:					;free up Tool/gadget screen bitmap memory
+---
+> FreeHamTool:	;free up Tool/gadget screen bitmap memory
+2351,2353c2448,2450
+< 	movem.l	(a0)+,d1-d7/a2-a6 		;12+8n 12+96   108 cy       12long/48 bytes
+< 	movem.l	d1-d7/a2-a6,(a1)		;108
+< 	lea	48(a1),a1			;8 = 248 cycles to move 48 bytes?
+---
+> 	movem.l	(a0)+,d1-d7/a2-a6 ;12+8n 12+96   108 cy       12long/48 bytes
+> 	movem.l	d1-d7/a2-a6,(a1)	;108
+> 	lea	48(a1),a1		;8 = 248 cycles to move 48 bytes?
+2356,2358c2453,2455
+< copy48o:	macro				;\1=offset for a1
+< 	movem.l	(a0)+,d1-d7/a2-a6 		;108cy 4 bytes
+< 	movem.l	d1-d7/a2-a6,\1(a1)		;112cy 6 bytes
+---
+> copy48o:	macro	;\1=offset for a1
+> 	movem.l	(a0)+,d1-d7/a2-a6 	;108cy 4 bytes
+> 	movem.l	d1-d7/a2-a6,\1(a1)	;112cy 6 bytes
+2361c2458
+< copy384:	macro 				;384 bytes, 8*48apiece (preserves d0)
+---
+> copy384:	macro ;384 bytes, 8*48apiece (preserves d0)
+2363,2365c2460,2462
+< 	movem.l	(a0)+,d1-d7/a2-a6 		;12+8n=108 cy   12long/48 bytes
+< 	movem.l	d1-d7/a2-a6,(a1)  		;12+8n=108 cy
+< 	copy48o (1*48)		  		;16+8n=112cy+108=220cy total
+---
+> 	movem.l	(a0)+,d1-d7/a2-a6 ;12+8n=108 cy   12long/48 bytes
+> 	movem.l	d1-d7/a2-a6,(a1)  ;12+8n=108 cy
+> 	copy48o (1*48)		  ;16+8n=112cy+108=220cy total
+2372,2373c2469,2470
+< 	copy48o (7*48)				;so far...1540+108+108+8=1764 cycles
+< 	lea	384(a1),a1			;...to move 384 bytes (roughly 11cycles/word)
+---
+> 	copy48o (7*48)		;so far...1540+108+108+8=1764 cycles
+> 	lea	384(a1),a1	;...to move 384 bytes (roughly 11cycles/word)
+2378,2380c2475,2477
+< copy52o:	macro				;\1=offset for a1
+< 	movem.l	(a0)+,d0-d7/a2-a6 		;108cy 4 bytes
+< 	movem.l	d0-d7/a2-a6,\1(a1)		;112cy 6 bytes
+---
+> copy52o:	macro	;\1=offset for a1
+> 	movem.l	(a0)+,d0-d7/a2-a6 	;108cy 4 bytes
+> 	movem.l	d0-d7/a2-a6,\1(a1)	;112cy 6 bytes
+2384c2481
+< 	move.l	d0,-(sp)			;PRESERVE D0
+---
+> 	move.l	d0,-(sp)	;PRESERVE D0
+2387,2388c2484,2485
+< 	movem.l	(a0)+,d0-d7/a2-a6 		;12+8n=116 cy   13long/52 bytes
+< 	movem.l	d0-d7/a2-a6,(a1)  		;12+8n=116 cy
+---
+> 	movem.l	(a0)+,d0-d7/a2-a6 ;12+8n=116 cy   13long/52 bytes
+> 	movem.l	d0-d7/a2-a6,(a1)  ;12+8n=116 cy
+2405,2406c2502,2503
+< 	copy52o (14*52)				;10 bytes each macro
+< 	copy52o (15*52)				;15*10+8 = 158 bytes, so far
+---
+> 	copy52o (14*52)		;10 bytes each macro
+> 	copy52o (15*52)		;15*10+8 = 158 bytes, so far
+2411c2508
+< 	copy52o (19*52)				;158 + (4*10) = 198 bytes
+---
+> 	copy52o (19*52)	;158 + (4*10) = 198 bytes
+2416c2513
+< 	copy52o (23*52)				;198 + (4*10) = 238 bytes
+---
+> 	copy52o (23*52)	;198 + (4*10) = 238 bytes
+2418,2419c2515,2516
+< 	lea	LOTS(a1),a1			;4 bytes  (162 bytes)
+< 	move.l	(sp)+,d0			;PRESERVE D0
+---
+> 	lea	LOTS(a1),a1	;4 bytes  (162 bytes)
+> 	move.l	(sp)+,d0	;PRESERVE D0
+2422,2424c2519
+< QUICKCopy:					;d0=count, a0=from address a1=to adr
+< 
+< 
+---
+> QUICKCopy:	;d0=count, a0=from address a1=to adr
+2426,2427c2521,2523
+< ;sanity check, july071990, maybe no help?
+< 	cmpa.l	#0,a0				;from adr
+---
+> 
+> 		;sanity check, july071990, maybe no help?
+> 	cmpa.l	#0,a0		;from adr
+2429c2525
+< 	cmpa.l	#0,a1				;to adr
+---
+> 	cmpa.l	#0,a1		;to adr
+2438c2534
+< 	move.l	#LOTS,-(sp)			;digipaint 24..."fill 020's cache"...
+---
+> 	move.l	#LOTS,-(sp)	;digipaint 24..."fill 020's cache"...
+2442,2443c2538,2539
+< 	;copy384				;70+8+4= 92codebytes ('020 cache consideration)
+< 	;copy384				;70+8+4= 92codebytes ('020 cache consideration)
+---
+> 	;copy384	;70+8+4= 92codebytes ('020 cache consideration)
+> 	;copy384	;70+8+4= 92codebytes ('020 cache consideration)
+2446c2542
+< 	sub.L	(sp),d0				;2 bytes ;14cy (macro preserve'd d0)
+---
+> 	sub.L	(sp),d0		;2 bytes ;14cy (macro preserve'd d0)
+2448c2544
+< 	bcc	copyfirstloop			;6 bytes
+---
+> 	bcc	copyfirstloop	;6 bytes
+2456,2457c2552,2553
+< 	copy48					;macro preserves d0, bumps a0,a1
+< ;;;;after fix, use .words...;;;sub.W	#48,d0
+---
+> 	copy48			;macro preserves d0, bumps a0,a1
+> 	;;;;after fix, use .words...;;;sub.W	#48,d0
+2459c2555
+< 	bcc.s	copy48loop			;!BLEAH THIS GOES OVER?
+---
+> 	bcc.s	copy48loop	;!BLEAH THIS GOES OVER?
+2463,2464c2559,2560
+< 	subq.w	#1,d0	;#4,d0			;fix loop end test
+< 	bcs.s	endof_copy			;else copy d0+1 long words
+---
+> 	subq.w	#1,d0	;#4,d0	;fix loop end test
+> 	bcs.s	endof_copy	;else copy d0+1 long words
+2471,2472c2567
+< 	ALLDUMPS
+< 	
+---
+> 

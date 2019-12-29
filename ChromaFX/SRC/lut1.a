@@ -1,0 +1,2934 @@
+********************************************************************
+* LUT1.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: lut1.a,v 2.16 1995/03/06 11:37:32 pfrench Exp $
+*
+* $Log: lut1.a,v $
+*Revision 2.16  1995/03/06  11:37:32  pfrench
+*Changed "setup" button to read "exit"
+*
+*Revision 2.15  1994/10/06  16:22:12  pfrench
+*Added LoadEffect button
+*
+*Revision 2.14  1994/10/05  16:19:56  pfrench
+*Added bitplanes for save effect button
+*
+*Revision 2.13  1994/10/04  20:27:40  pfrench
+*Added hack to save LUTs as ChromaFX croutons
+*
+*Revision 2.12  1994/10/03  12:07:31  pfrench
+*IFD'd out default croutons
+*
+*Revision 2.11  1993/06/08  06:55:10  Kell
+*Fixed hit areas on comment gadgets
+*
+*Revision 2.10  93/05/26  22:48:04  Kell
+**** empty log message ***
+*
+*Revision 2.9  93/05/13  20:09:17  Finch2
+**** empty log message ***
+*
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT1"
+	section	LUT_data,data
+	Include	"Assembler.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT0.i"
+	Include	"LUT3.i"
+	Include	"LUT6.i"
+	Include	"LUT7.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTA.i"
+	Include	"LUTBits.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT Data:							*
+*									*
+*	Contains all the Data For LUT Mode.				*
+*									*
+*	07.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FirstFG
+LUT_FirstFG:
+*
+*	ProgramKey 1 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+512
+_t	SET	TBFG_TOPEDGE+320+31+14
+_w	SET	32
+_h	SET	24
+*
+	XDEF	LUT_ProgramKey1FG
+LUT_ProgramKey1FG:
+	DC.L	LUT_ProgramKey2FG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_ProgramKey1_Img_PTRS
+	DC.L	LUT_PROGRAMKEY1_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_ProgramKey1_Img_PTRS ;FG_PTRTable
+	DC.L	LUT_ProgramPannel	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	ProgramKey 2 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+544
+_t	SET	TBFG_TOPEDGE+320+31+14
+_w	SET	32
+_h	SET	24
+*
+	XDEF	LUT_ProgramKey2FG
+LUT_ProgramKey2FG:
+	DC.L	LUT_ProgramKey3FG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_ProgramKey2_Img_PTRS
+	DC.L	LUT_PROGRAMKEY2_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_ProgramKey2_Img_PTRS ;FG_PTRTable
+	DC.L	LUT_ProgramPannel	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	ProgramKey 3 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+576
+_t	SET	TBFG_TOPEDGE+320+31+14
+_w	SET	32
+_h	SET	24
+*
+	XDEF	LUT_ProgramKey3FG
+LUT_ProgramKey3FG:
+	DC.L	LUT_ProgramKey4FG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_ProgramKey3_Img_PTRS
+	DC.L	LUT_PROGRAMKEY3_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_ProgramKey3_Img_PTRS ;FG_PTRTable
+	DC.L	LUT_ProgramPannel	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	ProgramKey 4 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+608
+_t	SET	TBFG_TOPEDGE+320+31+14
+_w	SET	32
+_h	SET	24
+*
+	XDEF	LUT_ProgramKey4FG
+LUT_ProgramKey4FG:
+	DC.L	LUT_PROGRAMFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_ProgramKey4_Img_PTRS
+	DC.L	LUT_PROGRAMKEY4_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_ProgramKey4_Img_PTRS ;FG_PTRTable
+	DC.L	LUT_ProgramPannel	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Program Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+0		; Pick Area. ( NOT ASSIGNED )
+_t	SET	TBFG_TOPEDGE+0
+_w	SET	0
+_h	SET	0
+*
+_ml	SET	TBFG_LEFTEDGE+512	; Drawing Area.
+_mt	SET	TBFG_TOPEDGE+346+31+14
+_mw	SET	128
+_mh	SET	11
+*
+	XDEF	LUT_PROGRAMFG
+LUT_PROGRAMFG:
+	DC.L	LUT_OkFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DC.L	0,0,0			; gg_GadgetRender, Select, Text.
+	DC.L	0,0			; Mutual Exclude, Special Info.
+	DC.W	0			; Gadget ID.
+	DC.L	0			; General Purpose Data.
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_mw/16-1		; FG_WWidth
+	DC.W	_mh-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_mw/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_mt+_ml/8 ;FG_Offset
+LUT_PROGRAM_Img_PTRS
+	DC.L	LUT_PROGRAM_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_PROGRAM_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Switcher Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528+32
+_t	SET	TBFG_TOPEDGE-5
+_w	SET	80
+_h	SET	20
+*
+	XDEF	LUT_OkFG
+LUT_OkFG:
+	DC.L	LUT_TAKEFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Ok_Img_PTRS
+	DC.L	LUT_OK_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Ok_Img_PTRS		; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Take Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+263+31+10
+_w	SET	96
+_h	SET	38
+*
+	XDEF	LUT_TAKEFG
+LUT_TAKEFG:
+	DC.L	LUT_RestoreDefaultFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_TAKE_Img_PTRS
+	DC.L	LUT_TAKE_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_TAKE_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoTake		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	RestoreDefault Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+64
+_t	SET	TBFG_TOPEDGE+37+31-2
+_w	SET	192
+_h	SET	22
+*
+	XDEF	LUT_RestoreDefaultFG
+LUT_RestoreDefaultFG:
+
+ IFD TOASTER_3
+	DC.L	LUT_Crouton1FG		; gg_NextGadget
+ ENDC ;TOASTER_3
+ IFND TOASTER_3
+	DC.L	LUT_LoadCroutonFG	; gg_NextGadget
+ ENDC ;TOASTER_3
+
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_RestoreDefault_Img_PTRS
+	DC.L	LUT_RestoreDefault_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_RestoreDefault_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoRestoreDefault	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+ IFND TOASTER_3
+*
+*	Load Crouton Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+304
+_t	SET	TBFG_TOPEDGE+15+31-6
+_w	SET	192
+_h	SET	22
+*
+	XDEF	LUT_LoadCroutonFG
+LUT_LoadCroutonFG:
+	DC.L	LUT_SaveCroutonFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_LoadCrouton_Img_PTRS
+	DC.L	LUT_LOADEFFECT_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_LoadCrouton_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoLoadCrouton	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Save Crouton Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+304
+_t	SET	TBFG_TOPEDGE+37+31-2
+_w	SET	192
+_h	SET	22
+*
+	XDEF	LUT_SaveCroutonFG
+LUT_SaveCroutonFG:
+	DC.L	LUT_TopTBarFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_SaveCrouton_Img_PTRS
+	DC.L	LUT_SAVEEFFECT_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_SaveCrouton_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoSaveCrouton	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+ ENDC ;!TOASTER_3
+ IFD TOASTER_3
+*
+*	Crouton 1 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+304
+_t	SET	TBFG_TOPEDGE+009+31-2
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_Crouton1FG
+LUT_Crouton1FG:
+	DC.L	LUT_Crouton2FG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Crouton1_Img_PTRS
+	DC.L	LUT_Crouton1_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Crouton1_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoGridNumber	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Crouton 2 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+352
+_t	SET	TBFG_TOPEDGE+009+31-2
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_Crouton2FG
+LUT_Crouton2FG:
+	DC.L	LUT_Crouton3FG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Crouton2_Img_PTRS
+	DC.L	LUT_Crouton2_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Crouton2_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoGridNumber	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Crouton 3 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+400
+_t	SET	TBFG_TOPEDGE+009+31-2
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_Crouton3FG
+LUT_Crouton3FG:
+	DC.L	LUT_Crouton4FG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Crouton3_Img_PTRS
+	DC.L	LUT_Crouton3_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Crouton3_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoGridNumber	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Crouton 4 Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+448
+_t	SET	TBFG_TOPEDGE+009+31-2
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_Crouton4FG
+LUT_Crouton4FG:
+	DC.L	LUT_TopTBarFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Crouton4_Img_PTRS
+	DC.L	LUT_Crouton4_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Crouton4_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoGridNumber	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+
+ ENDC ;TOASTER_3
+*
+*	Top Of TBar Slider.
+*
+_l	SET	TBFG_LEFTEDGE+400
+_t	SET	TBFG_TOPEDGE+278+9
+_w	SET	32
+_h	SET	7
+*
+	XDEF	LUT_TopTBarFG
+LUT_TopTBarFG:
+	DC.L	LUT_BotTBarFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+	XDEF	LUT_TopTBar_Img_PTRS
+LUT_TopTBar_Img_PTRS
+	DC.L	LUT_TopTBarFG		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_TopTBar_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Bottom Of TBar Slider.
+*
+_l	SET	TBFG_LEFTEDGE+400
+_t	SET	TBFG_TOPEDGE+388+9
+_w	SET	32
+_h	SET	7
+*
+	XDEF	LUT_BotTBarFG
+LUT_BotTBarFG:
+	DC.L	LUT_TBarFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+	XDEF	LUT_BotTBar_Img_PTRS
+LUT_BotTBar_Img_PTRS
+	DC.L	LUT_BotTBarFG		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_BotTBar_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	TBar Slider.
+*
+_l	SET	TBFG_LEFTEDGE+368
+_t	SET	TBFG_TOPEDGE+285+9
+_w	SET	96
+_h	SET	103
+*
+	XDEF	LUT_TBarFG
+LUT_TBarFG:
+	DC.L	LUT_COMMENTBOXFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+	XDEF	LUT_TBar_Img_PTRS
+LUT_TBar_Img_PTRS
+	DC.L	LUT_TBarFG		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_TBar_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoMoveTBar		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Comment Box Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+104	; Pick Area.
+_t	SET	TBFG_TOPEDGE+15+31-4
+_w	SET	108+40
+_h	SET	16
+*
+_ml	SET	TBFG_LEFTEDGE+64	; Drawing Area.
+_mt	SET	_t-2
+_mw	SET	192
+_mh	SET	20
+*
+	XDEF	LUT_COMMENTBOXFG
+LUT_COMMENTBOXFG:
+	DC.L	LUT_FourCroutonBoxesFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DC.L	0,0,0			; gg_GadgetRender, Select, Text.
+	DC.L	0,0			; Mutual Exclude, Special Info.
+	DC.W	0			; Gadget ID.
+	DC.L	0			; General Purpose Data.
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_mw/16-1		; FG_WWidth
+	DC.W	_mh-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_mw/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_mt+_ml/8 ;FG_Offset
+LUT_COMMENTBOX_Img_PTRS
+	DC.L	LUT_COMMENTBOX_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_COMMENTBOX_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoStringGadget	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Crouton Picture Fast Gadgets.
+*
+_l	SET	TBFG_LEFTEDGE+55+8	; Pick Area.
+_t	SET	TBFG_TOPEDGE+15+31-4
+_w	SET	32+12
+_h	SET	16
+*
+_ml	SET	TBFG_LEFTEDGE+304	; Drawing Area.
+_mt	SET	TBFG_TOPEDGE+41+31-2
+_mw	SET	192
+_mh	SET	20
+*
+	XDEF	LUT_FourCroutonBoxesFG
+LUT_FourCroutonBoxesFG:
+	DC.L	LUT_BACKOFLUTMAPFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_mw/16-1		; FG_WWidth
+	DC.W	_mh-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_mw/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_mt+_ml/8 ;FG_Offset
+LUT_FourCroutonBoxes_Img_PTRS
+ IFD TOASTER_3
+	DC.L	LUT_FourCroutonBoxes_BT	; FG_Data
+ ENDC
+ IFND TOASTER_3
+	DC.L	0			; FG_Data
+ ENDC
+
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+
+ IFD TOASTER_3
+	DC.L	LUT_FourCroutonBoxes_Img_PTRS	; FG_PTRTable
+ ENDC
+ IFND TOASTER_3
+	DC.L	0				; FG_PTRTable
+ ENDC
+
+	DC.L	LUT_DoScrollComments	; FG_Function
+	DC.B	0			; FG_LoadFlag
+
+ IFD TOASTER_3
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+ ENDC
+ IFND TOASTER_3
+	DC.B	-1			; FG_DispFlag
+	DC.B	-1			; FG_MouseFlag
+ ENDC
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Back of LUT Map Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+295
+_w	SET	160
+_h	SET	102
+*
+	XDEF	LUT_BACKOFLUTMAPFG
+LUT_BACKOFLUTMAPFG:
+	DC.L	LUT_PRISMFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_BACKOFLUTMAP_Img_PTRS
+	DC.L	LUT_EDITBOTTOMAREA_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_BACKOFLUTMAP_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Prism Background Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+130+31
+_w	SET	480
+_h	SET	18
+*
+	XDEF	LUT_PRISMFG
+LUT_PRISMFG:
+	DC.L	LUT_SLIDBACKFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_PRISM_Img_PTRS
+	DC.L	LUT_EDITPICKAREA_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_PRISM_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Sliders Background Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+196+31
+_w	SET	368
+_h	SET	44
+*
+	XDEF	LUT_SLIDBACKFG
+LUT_SLIDBACKFG:
+	DC.L	LUT_EditColorsFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_SLIDBACK_Img_PTRS
+	DC.L	LUT_EDITBACKGROUNDSLIDER_BT ; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_SLIDBACK_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Edit Colors Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+24	; Was LUT_PickLeft.
+_t	SET	TBFG_TOPEDGE+130+31
+_w	SET	464			; Was 4*96, Now 488 - 24.
+_h	SET	12
+*
+_ml	SET	TBFG_LEFTEDGE+LUT_PickLeft-16
+_mt	SET	_t-8
+_mw	SET	LUT_EditMarkBWd*2
+_mh	SET	LUT_EditMarkHi
+*
+	XDEF	LUT_EditColorsFG
+LUT_EditColorsFG:
+	DC.L	LUT_TransitionFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_mw/16-1		; FG_WWidth
+	DC.W	_mh-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_mw/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_mt+_ml/8 ;FG_Offset
+LUT_EditColors_Img_PTRS
+	DC.L	LUT_EditColorsFG	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_EditColors_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoEditColors	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Transition Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+081+31
+_w	SET	96
+_h	SET	30
+*
+	XDEF	LUT_TransitionFG
+LUT_TransitionFG:
+	DC.L	LUT_FilterFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_TRANSITION_Img_PTRS
+	DC.L	LUT_TRANSITION_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_TRANSITION_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickTransitionFilter ;FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Filter Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+118+31
+_w	SET	96
+_h	SET	30
+*
+	XDEF	LUT_FilterFG
+LUT_FilterFG:
+	DC.L	LUT_CycleArrowFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_FILTER_Img_PTRS
+	DC.L	LUT_FILTER_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_FILTER_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickTransitionFilter ;FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Cycle Arrow Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+177+31
+_w	SET	96
+_h	SET	30
+*
+	XDEF	LUT_CycleArrowFG
+LUT_CycleArrowFG:
+	DC.L	LUT_CycleSFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_CYCLEARROW_Img_PTRS
+	DC.L	LUT_NOCYCLEARROW_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_CYCLEARROW_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_CycleArrowImage	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Cycle S Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+211+31
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_CycleSFG
+LUT_CycleSFG:
+	DC.L	LUT_CycleMFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_CycleS_Img_PTRS
+	DC.L	LUT_SBox_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_CycleS_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickCycleSMF	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Cycle M Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+560
+_t	SET	TBFG_TOPEDGE+211+31
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_CycleMFG
+LUT_CycleMFG:
+	DC.L	LUT_CycleFFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_CycleM_Img_PTRS
+	DC.L	LUT_MBox_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_CycleM_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickCycleSMF	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Cycle F LUT Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+592
+_t	SET	TBFG_TOPEDGE+211+31
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_CycleFFG
+LUT_CycleFFG:
+	DC.L	LUT_NormalFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_CycleF_Img_PTRS
+	DC.L	LUT_FBox_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_CycleF_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickCycleSMF	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Normal Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_NormalFG
+LUT_NormalFG:
+	DC.L	LUT_NegativeFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_NORMAL_Img_PTRS
+	DC.L	LUT_NORMAL_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_NORMAL_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoNormal		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Negative Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+80
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_NegativeFG
+LUT_NegativeFG:
+	DC.L	LUT_SpreadFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_NEGATIVE_Img_PTRS
+	DC.L	LUT_NEGATIVE_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_NEGATIVE_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoNegative		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Spread Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+160
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_SpreadFG
+LUT_SpreadFG:
+	DC.L	LUT_SpectrumFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_SPREAD_Img_PTRS
+	DC.L	LUT_SPREAD_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_SPREAD_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoSpread		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Spectrum Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+224
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_SpectrumFG
+LUT_SpectrumFG:
+	DC.L	LUT_RandomFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_SPECTRUM_Img_PTRS
+	DC.L	LUT_SPECTRUM_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_SPECTRUM_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoSpectrum		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Random Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+288
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_RandomFG
+LUT_RandomFG:
+	DC.L	LUT_SnowFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_RANDOM_Img_PTRS
+	DC.L	LUT_RANDOM_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_RANDOM_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoRandom		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Snow Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+352
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_SnowFG
+LUT_SnowFG:
+	DC.L	LUT_COPYFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_SNOW_Img_PTRS
+	DC.L	LUT_SNOW_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_SNOW_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoSnow		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Copy Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+432
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_COPYFG
+LUT_COPYFG:
+	DC.L	LUT_EXCHANGEFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_COPY_Img_PTRS
+	DC.L	LUT_COPY_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_COPY_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoEditCopy		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Exchange Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+464
+_t	SET	TBFG_TOPEDGE+161+31
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_EXCHANGEFG
+LUT_EXCHANGEFG:
+	DC.L	LUT_BAWFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_EXCHANGE_Img_PTRS
+	DC.L	LUT_EXCHANGE_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_EXCHANGE_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoEditExchange	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Black & White Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+528
+_t	SET	TBFG_TOPEDGE+19+31
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_BAWFG
+LUT_BAWFG:
+	DC.L	LUT_COLORFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_BAW_Img_PTRS
+	DC.L	LUT_BAW_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_BAW_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickColorBW		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Color Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+576
+_t	SET	TBFG_TOPEDGE+19+31
+_w	SET	48
+_h	SET	30
+*
+	XDEF	LUT_COLORFG
+LUT_COLORFG:
+	DC.L	LUT_UpperRangeArrowFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_COLOR_Img_PTRS
+	DC.L	LUT_COLOR_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_COLOR_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickColorBW		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	$FFFF			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Edit Upper Range Arrow Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+272
+_t	SET	TBFG_TOPEDGE+281+15
+_w	SET	32
+_h	SET	16
+*
+	XDEF	LUT_UpperRangeArrowFG
+LUT_UpperRangeArrowFG:
+	DC.L	LUT_LowerRangeArrowFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_UPPERRANGEARROW_Img_PTRS
+	DC.L	LUT_LEFTARROW_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_UPPERRANGEARROW_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickUpperLowerRangeArrow ; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	$FFFF			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Edit Lower Range Arrow Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+272
+_t	SET	TBFG_TOPEDGE+365+15
+_w	SET	32
+_h	SET	16
+*
+	XDEF	LUT_LowerRangeArrowFG
+LUT_LowerRangeArrowFG:
+	DC.L	LUT_UpDownArrowFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_LOWERRANGEARROW_Img_PTRS
+	DC.L	LUT_LEFTARROW_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_LOWERRANGEARROW_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickUpperLowerRangeArrow ; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Edit Up Down Arrow Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+272
+_t	SET	TBFG_TOPEDGE+320+15
+_w	SET	32
+_h	SET	22
+*
+	XDEF	LUT_UpDownArrowFG
+LUT_UpDownArrowFG:
+	DC.L	LUT_INT_SPREADFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_UpDownARROW_Img_PTRS
+	DC.L	LUT_UPDOWNARROWS_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_UpDownARROW_Img_PTRS ;FG_PTRTable
+	DC.L	LUT_PickUpDownRangeArrow ;FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Spread Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+281+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_SPREADFG
+LUT_INT_SPREADFG:
+	DC.L	LUT_INT_SPECTRUMFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_SPREAD_Img_PTRS
+	DC.L	LUT_INT_SPREAD_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_SPREAD_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickSpreadInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	$FFFF			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Spectrum Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+64
+_t	SET	TBFG_TOPEDGE+281+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_SPECTRUMFG
+LUT_INT_SPECTRUMFG:
+	DC.L	LUT_INT_RIGHT_ROTATEFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_SPECTRUM_Img_PTRS
+	DC.L	LUT_INT_SPECTRUM_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_SPECTRUM_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickSpectrumInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Right Rotate Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+307+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_RIGHT_ROTATEFG
+LUT_INT_RIGHT_ROTATEFG:
+	DC.L	LUT_INT_LEFT_ROTATEFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_RIGHT_ROTATE_Img_PTRS
+	DC.L	LUT_INT_RIGHT_ROTATE_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_RIGHT_ROTATE_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickRightRotateInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Left Rotate Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+64
+_t	SET	TBFG_TOPEDGE+307+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_LEFT_ROTATEFG
+LUT_INT_LEFT_ROTATEFG:
+	DC.L	LUT_INT_RIGHT_NUKEFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_LEFT_ROTATE_Img_PTRS
+	DC.L	LUT_INT_LEFT_ROTATE_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_LEFT_ROTATE_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickLeftRotateInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Right Nuke Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+333+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_RIGHT_NUKEFG
+LUT_INT_RIGHT_NUKEFG:
+	DC.L	LUT_INT_LEFT_NUKEFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_RIGHT_NUKE_Img_PTRS
+	DC.L	LUT_INT_RIGHT_NUKE_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_RIGHT_NUKE_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickRightNukeInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Left Nuke Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+64
+_t	SET	TBFG_TOPEDGE+333+15
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_INT_LEFT_NUKEFG
+LUT_INT_LEFT_NUKEFG:
+	DC.L	LUT_INT_POSTERFG	; gg_NextGadget
+	DC.W	_l			; gg_LEFT_NUKEEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_LEFT_NUKE_Img_PTRS
+	DC.L	LUT_INT_LEFT_NUKE_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_LEFT_NUKE_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_PickLeftNukeInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Interpilate Poster Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+16
+_t	SET	TBFG_TOPEDGE+359+15
+_w	SET	96
+_h	SET	22
+*
+	XDEF	LUT_INT_POSTERFG
+LUT_INT_POSTERFG:
+	DC.L	LUT_RGBBoxFG		; gg_NextGadget
+	DC.W	_l			; gg_POSTEREdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_INT_POSTER_Img_PTRS
+	DC.L	LUT_INT_POSTER_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_INT_POSTER_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickPosterInt	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	RGB Box Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+32
+_t	SET	TBFG_TOPEDGE+195+31
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_RGBBoxFG
+LUT_RGBBoxFG:
+	DC.L	LUT_HSIBoxFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_RGBBox_Img_PTRS
+	DC.L	LUT_RGBBOX_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_RGBBox_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_ToggleRGBHSI	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	HSI Box Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+32
+_t	SET	TBFG_TOPEDGE+219+31
+_w	SET	48
+_h	SET	22
+*
+	XDEF	LUT_HSIBoxFG
+LUT_HSIBoxFG:
+	DC.L	LUT_RGBHSITextFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_HSIBox_Img_PTRS
+	DC.L	LUT_HSIBOX_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_HSIBox_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_ToggleRGBHSI	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	$FFFF			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	RGB HSI Text Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+80
+_t	SET	TBFG_TOPEDGE+196+31
+_w	SET	32
+_h	SET	42
+*
+	XDEF	LUT_RGBHSITextFG
+LUT_RGBHSITextFG:
+	DC.L	LUT_RHSliderFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_RGBHSITEXT_Img_PTRS
+	DC.L	LUT_HSITEXT_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_RGBHSITEXT_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Red / Hue Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+198+31
+_w	SET	272
+_h	SET	6
+*
+	XDEF	LUT_RHSliderFG
+LUT_RHSliderFG:
+	DC.L	LUT_GSSliderFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_RHSlider_Img_PTRS
+	DC.L	LUT_SLIDER0_BT	 	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_RHSlider_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoRedHue		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Green / Saturation Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+214+31
+_w	SET	272
+_h	SET	6
+*
+	XDEF	LUT_GSSliderFG
+LUT_GSSliderFG:
+	DC.L	LUT_BISliderFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_GSSlider_Img_PTRS
+	DC.L	LUT_SLIDER0_BT	 	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_GSSlider_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoGreenSaturation	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Blue / Intensity Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+230+31
+_w	SET	272
+_h	SET	6
+*
+	XDEF	LUT_BISliderFG
+LUT_BISliderFG:
+	DC.L	LUT_CHROMAFXTITLEFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_BISlider_Img_PTRS
+	DC.L	LUT_SLIDER0_BT	 	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_BISlider_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoBlueIntensity	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Chroma FX Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+0
+_t	SET	TBFG_TOPEDGE+16
+_w	SET	640
+_h	SET	11
+*
+	XDEF	LUT_CHROMAFXTITLEFG
+LUT_CHROMAFXTITLEFG:
+	DC.L	LUT_BACKOFTOPSLIDERFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_CHROMAFXTITLE_Img_PTRS
+	DC.L	LUT_CHROMAFX_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_CHROMAFXTITLE_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Back of Top Slider Map Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+48
+_t	SET	TBFG_TOPEDGE+105+31
+_w	SET	400
+_h	SET	14
+*
+	XDEF	LUT_BACKOFTOPSLIDERFG
+LUT_BACKOFTOPSLIDERFG:
+	DC.L	LUT_PosterizationFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_BACKOFTOPSLIDER_Img_PTRS
+	DC.L	LUT_TOPSLIDER_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_BACKOFTOPSLIDER_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_DoHighLiteOnOff	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Posterization Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+112
+_t	SET	TBFG_TOPEDGE+109+31
+_w	SET	272
+_h	SET	6
+*
+	XDEF	LUT_PosterizationFG
+LUT_PosterizationFG:
+	DC.L	LUT_FULLPOSTERFG	; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_Posterization_Img_PTRS
+	DC.L	LUT_SLIDER0_BT	 	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_Posterization_Img_PTRS ; FG_PTRTable
+	DC.L	LUT_DoPosterization	; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Full Poster Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+176
+_t	SET	TBFG_TOPEDGE+81+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_FULLPOSTERFG
+LUT_FULLPOSTERFG:
+	DC.L	LUT_NOPOSTERFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_FULLPOSTER_Img_PTRS
+	DC.L	LUT_FULLPOSTER_BT	; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_FULLPOSTER_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickPoster		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	$FFFF			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	No Poster Fast Gadget.
+*
+_l	SET	TBFG_LEFTEDGE+240
+_t	SET	TBFG_TOPEDGE+81+31
+_w	SET	64
+_h	SET	22
+*
+	XDEF	LUT_NOPOSTERFG
+LUT_NOPOSTERFG:
+	DC.L	LUT_ScreenFG		; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DCB.B	gg_SIZEOF-gg_GadgetRender,0 ; clear rest of Gadget structure
+	DC.W	DISPLAYMODE4		; FG_ModeType
+	DC.W	_w/16-1			; FG_WWidth
+	DC.W	_h-1			; FG_Height
+	DC.W	DISPLAYWIDTH/8-_w/8	; FG_Modulus
+	DC.L	DISPLAYWIDTH/8*_t+_l/8	; FG_Offset
+LUT_NOPOSTER_Img_PTRS
+	DC.L	LUT_NOPOSTER_BT		; FG_Data
+	DC.W	1			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	LUT_NOPOSTER_Img_PTRS	; FG_PTRTable
+	DC.L	LUT_PickPoster		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	0			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	$FF			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Fast Gadget That Covers the Entire Screen.
+*
+	XDEF	LUT_ScreenFG
+LUT_ScreenFG:
+	DC.L	0			; gg_NextGadget
+	DC.W	0			; gg_LeftEdge
+	DC.W	0			; gg_TopEdge
+	DC.W	DISPLAYWIDTH		; gg_Width
+	DC.W	DISPLAYHEIGHT		; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DC.L	0			; gg_GadgetRender
+	DC.L	0			; gg_SelectRender
+	DC.L	0			; gg_GadgetText
+	DC.L	0			; gg_MutualExclude
+	DC.L	0			; gg_SpecialInfo
+	DC.W	0			; gg_GadgetID
+	DC.L	0			; gg_UserData
+	DC.W	0			; FG_ModeType
+	DC.W	0			; FG_WWidth
+	DC.W	0			; FG_Height
+	DC.W	0			; FG_Modulus
+	DC.L	0			; FG_Offset
+	DC.L	0			; FG_Data
+	DC.W	0			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	0			; FG_PTRTable
+	DC.L	0			; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	-1			; FG_DispFlag
+	DC.B	0			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+*	Comment Box Gadgets, Read Intuition Gadets, Not Fast Gadgets.
+*
+_l	SET	TBFG_LEFTEDGE+104+8
+_t	SET	TBFG_TOPEDGE+42
+_w	SET	108
+_h	SET	18
+*
+	XDEF	LUT_REALSIG
+LUT_REALSIG:
+	DC.L	0			; gg_NextGadget
+	DC.W	_l			; gg_LeftEdge
+	DC.W	_t			; gg_TopEdge
+	DC.W	_w			; gg_Width
+	DC.W	_h			; gg_Height
+	DC.W	GADGHCOMP		; gg_Flags
+	DC.W	RELVERIFY!GACT_STRINGEXTEND ; gg_Activation
+	DC.W	STRGADGET		; gg_GadgetType
+	DC.L	0			; gg_GadgetRender
+	DC.L	0			; gg_SelectRender
+	DC.L	0			; gg_GadgetText
+	DC.L	0			; gg_MutualExclude
+	DC.L	LUT_COMMENTBOXSI	; gg_SpecialInfo
+	DC.W	0			; gg_GadgetID
+	DC.L	0			; gg_UserData
+*
+	XDEF	LUT_COMMENTBOXSI
+LUT_COMMENTBOXSI
+	DC.L	0,LUT_REALSIGUNDO	; Buffer For String, Backup String.
+	DC.W	0,13,0,0		; Char Pos, Max Length, Buff Pos of Char
+	DC.W	0,0,0,0			; Intuition Use.
+	DC.L	LUT_COMMENTEXT		; si_Extension.
+	DC.L	0,0
+*
+LUT_COMMENTEXT
+	DC.L	0			; sex_Font.
+	DC.B	0,2			; sex_Pens.
+	DC.B	0,2			; sex_ActivePens.
+	DC.L	0			; sex_InitialModes
+	DC.L	0			; sex_EditHook.
+	DC.L	0			; sex_WorkBuffer.
+	DC.L	0,0,0,0			; sex_Reserved.
+*
+LUT_REALSIGUNDO
+	DC.L	0,0,0,0
+*
+*	Intition Gadget to Cover the Whole Background.
+*
+	XDEF	LUT_WHOLEBG
+LUT_WHOLEBG:
+	DC.L	0			; gg_NextGadget
+	DC.W	0			; gg_LeftEdge
+	DC.W	0			; gg_TopEdge
+	DC.W	DISPLAYWIDTH		; gg_Width
+	DC.W	DISPLAYHEIGHT		; gg_Height
+	DC.W	GADGHNONE		; gg_Flags
+	DC.W	GADGIMMEDIATE		; gg_Activation
+	DC.W	BOOLGADGET		; gg_GadgetType
+	DC.L	0			; gg_GadgetRender
+	DC.L	0			; gg_SelectRender
+	DC.L	0			; gg_GadgetText
+	DC.L	0			; gg_MutualExclude
+	DC.L	0			; gg_SpecialInfo
+	DC.W	0			; gg_GadgetID
+	DC.L	0			; gg_UserData
+*
+*	Dummy Crouton Fast Gadget.
+*
+	XDEF	LUT_DummyCrouton
+LUT_DummyCrouton:
+	DC.L	0			; gg_NextGadget
+	DC.W	0			; gg_LeftEdge
+	DC.W	0			; gg_TopEdge
+	DC.W	0			; gg_Width
+	DC.W	0			; gg_Height
+	DCB.B	gg_SIZEOF-gg_Flags,0	; clear rest of Gadget structure
+	DC.W	0			; FG_ModeType
+	DC.W	0			; FG_WWidth
+	DC.W	0			; FG_Height
+	DC.W	0			; FG_Modulus
+	DC.L	0			; FG_Offset
+	DC.L	0			; FG_Data
+	DC.W	0			; FG_EntrySize
+	DC.W	0			; FG_PTRIndex
+	DC.L	0			; FG_PTRTable
+	DC.L	LUT_DummyCode		; FG_Function
+	DC.B	0			; FG_LoadFlag
+	DC.B	-1			; FG_DispFlag
+	DC.B	-1			; FG_MouseFlag
+	DC.B	0			; FG_HiLiteVal
+	DC.W	0			; FG_IndexID
+	DC.W	0			; FG_HiLiteMask
+	DC.W	0			; FG_BorderCon
+	DC.W	0			; FG_TopSize
+	DC.W	0			; FG_BotSize
+	DC.W	0			; FG_LeftWSize
+	DC.W	0			; FG_RightWSize
+	DC.W	0			; FG_LeftMask
+	DC.W	0			; FG_RightMask
+	DC.W	0			; FG_Extra1
+*
+	DC.L	0			; FGS_LibStrArray
+	DC.L	0			; FGS_LibBaseArray
+	DC.W	0			; FGS_FGMajor
+	DC.W	0			; FGS_FGMinor
+	DC.W	0			; FGS_DiskMajor
+	DC.W	0			; FGS_DiskMinor
+	DC.W	0			; FGS_ClipA
+	DC.W	0			; FGS_ClipB
+	DC.W	0			; FGS_FCountMode
+	DC.W	75			; FGS_SlowFCount
+	DC.W	45			; FGS_MedFCount
+	DC.W	20			; FGS_FastFCount
+	DC.W	0			; FGS_Overlay
+	DC.W	0			; FGS_Main
+	DC.W	0			; FGS_Preview
+	DC.W	0			; FGS_Freeze
+	DCB.B	16,0			; FGS_Comment
+	DCB.B	32,0			; FGS_FileName
+	DC.L	-1			; FGS_AddOnSize
+	DC.L	0			; FGS_AddOnOffset
+	END

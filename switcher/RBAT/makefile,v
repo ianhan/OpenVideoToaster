@@ -1,0 +1,2895 @@
+head	2.128;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+2.128
+date	95.10.04.17.08.20;	author Holt;	state Exp;
+branches;
+next	2.127;
+
+2.127
+date	95.08.31.17.36.38;	author Flick;	state Exp;
+branches;
+next	2.126;
+
+2.126
+date	95.07.12.17.54.45;	author Holt;	state Exp;
+branches;
+next	2.125;
+
+2.125
+date	95.06.20.18.15.32;	author Flick;	state Exp;
+branches;
+next	2.124;
+
+2.124
+date	95.06.20.18.13.40;	author pfrench;	state Exp;
+branches;
+next	2.123;
+
+2.123
+date	95.04.28.07.50.35;	author Flick;	state Exp;
+branches;
+next	2.122;
+
+2.122
+date	95.04.27.08.32.14;	author Flick;	state Exp;
+branches;
+next	2.121;
+
+2.121
+date	95.04.26.15.15.13;	author Flick;	state Exp;
+branches;
+next	2.120;
+
+2.120
+date	95.04.26.15.02.48;	author Holt;	state Exp;
+branches;
+next	2.119;
+
+2.119
+date	95.03.02.12.35.39;	author pfrench;	state Exp;
+branches;
+next	2.118;
+
+2.118
+date	95.02.15.16.59.13;	author pfrench;	state Exp;
+branches;
+next	2.117;
+
+2.117
+date	95.02.14.16.17.00;	author pfrench;	state Exp;
+branches;
+next	2.116;
+
+2.116
+date	95.02.12.05.18.27;	author Kell;	state Exp;
+branches;
+next	2.115;
+
+2.115
+date	95.02.03.14.16.08;	author pfrench;	state Exp;
+branches;
+next	2.114;
+
+2.114
+date	95.02.01.18.54.54;	author Kell;	state Exp;
+branches;
+next	2.113;
+
+2.113
+date	95.02.01.12.35.08;	author Kell;	state Exp;
+branches;
+next	2.112;
+
+2.112
+date	95.01.31.17.03.08;	author Kell;	state Exp;
+branches;
+next	2.111;
+
+2.111
+date	95.01.24.12.25.21;	author Kell;	state Exp;
+branches;
+next	2.110;
+
+2.110
+date	95.01.24.12.16.39;	author Kell;	state Exp;
+branches;
+next	2.109;
+
+2.109
+date	95.01.12.22.55.34;	author Kell;	state Exp;
+branches;
+next	2.108;
+
+2.108
+date	94.12.30.20.45.41;	author Kell;	state Exp;
+branches;
+next	2.107;
+
+2.107
+date	94.10.25.13.48.55;	author Kell;	state Exp;
+branches;
+next	2.106;
+
+2.106
+date	94.10.21.14.13.45;	author Kell;	state Exp;
+branches;
+next	2.105;
+
+2.105
+date	94.10.21.13.55.50;	author Kell;	state Exp;
+branches;
+next	2.104;
+
+2.104
+date	94.10.21.13.53.00;	author Kell;	state Exp;
+branches;
+next	2.103;
+
+2.103
+date	94.10.21.13.49.33;	author Kell;	state Exp;
+branches;
+next	2.102;
+
+2.102
+date	94.10.21.13.28.59;	author Kell;	state Exp;
+branches;
+next	2.101;
+
+2.101
+date	94.10.12.00.35.56;	author Kell;	state Exp;
+branches;
+next	2.100;
+
+2.100
+date	94.09.15.19.02.45;	author pfrench;	state Exp;
+branches;
+next	2.99;
+
+2.99
+date	94.09.13.05.57.59;	author Kell;	state Exp;
+branches;
+next	2.98;
+
+2.98
+date	94.09.08.19.38.59;	author Kell;	state Exp;
+branches;
+next	2.97;
+
+2.97
+date	94.09.02.08.41.14;	author Kell;	state Exp;
+branches;
+next	2.96;
+
+2.96
+date	94.09.01.03.38.40;	author Kell;	state Exp;
+branches;
+next	2.95;
+
+2.95
+date	94.07.27.20.48.51;	author Kell;	state Exp;
+branches;
+next	2.94;
+
+2.94
+date	94.07.22.19.31.26;	author Kell;	state Exp;
+branches;
+next	2.93;
+
+2.93
+date	94.07.01.17.32.53;	author Kell;	state Exp;
+branches;
+next	2.92;
+
+2.92
+date	94.07.01.13.15.54;	author Kell;	state Exp;
+branches;
+next	2.91;
+
+2.91
+date	94.04.30.17.04.56;	author Holt;	state Exp;
+branches;
+next	2.90;
+
+2.90
+date	94.03.31.13.09.31;	author Kell;	state Exp;
+branches;
+next	2.89;
+
+2.89
+date	94.03.18.09.22.50;	author Kell;	state Exp;
+branches;
+next	2.88;
+
+2.88
+date	94.03.11.11.20.12;	author Kell;	state Exp;
+branches;
+next	2.87;
+
+2.87
+date	94.03.11.07.29.51;	author Kell;	state Exp;
+branches;
+next	2.86;
+
+2.86
+date	94.03.11.07.25.57;	author Kell;	state Exp;
+branches;
+next	2.85;
+
+2.85
+date	94.03.11.07.24.31;	author Kell;	state Exp;
+branches;
+next	2.84;
+
+2.84
+date	94.03.10.16.28.50;	author Kell;	state Exp;
+branches;
+next	2.83;
+
+2.83
+date	94.03.10.13.01.21;	author Kell;	state Exp;
+branches;
+next	2.82;
+
+2.82
+date	94.03.10.12.49.33;	author Kell;	state Exp;
+branches;
+next	2.81;
+
+2.81
+date	94.03.10.12.45.45;	author Kell;	state Exp;
+branches;
+next	2.80;
+
+2.80
+date	94.03.09.21.15.52;	author Kell;	state Exp;
+branches;
+next	2.79;
+
+2.79
+date	94.03.09.21.09.53;	author Kell;	state Exp;
+branches;
+next	2.78;
+
+2.78
+date	94.03.09.17.13.07;	author Kell;	state Exp;
+branches;
+next	2.77;
+
+2.77
+date	94.03.07.11.58.42;	author Kell;	state Exp;
+branches;
+next	2.76;
+
+2.76
+date	94.03.06.17.13.11;	author Kell;	state Exp;
+branches;
+next	2.75;
+
+2.75
+date	94.03.06.16.29.30;	author Kell;	state Exp;
+branches;
+next	2.74;
+
+2.74
+date	94.02.19.05.47.18;	author Kell;	state Exp;
+branches;
+next	2.73;
+
+2.73
+date	94.02.17.15.30.11;	author Kell;	state Exp;
+branches;
+next	2.72;
+
+2.72
+date	94.02.17.12.35.40;	author Kell;	state Exp;
+branches;
+next	2.71;
+
+2.71
+date	94.02.07.15.56.06;	author Kell;	state Exp;
+branches;
+next	2.70;
+
+2.70
+date	94.01.08.01.47.42;	author Kell;	state Exp;
+branches;
+next	2.69;
+
+2.69
+date	93.11.16.01.58.35;	author Kell;	state Exp;
+branches;
+next	2.68;
+
+2.68
+date	93.11.06.04.23.09;	author Kell;	state Exp;
+branches;
+next	2.67;
+
+2.67
+date	93.11.05.18.53.11;	author Turcotte;	state Exp;
+branches;
+next	2.66;
+
+2.66
+date	93.11.05.18.49.00;	author Turcotte;	state Exp;
+branches;
+next	2.65;
+
+2.65
+date	93.10.29.03.24.35;	author Kell;	state Exp;
+branches;
+next	2.64;
+
+2.64
+date	93.10.25.21.08.57;	author Kell;	state Exp;
+branches;
+next	2.63;
+
+2.63
+date	93.10.25.20.38.10;	author Kell;	state Exp;
+branches;
+next	2.62;
+
+2.62
+date	93.10.23.05.52.17;	author Kell;	state Exp;
+branches;
+next	2.61;
+
+2.61
+date	93.10.05.17.06.23;	author Hartford;	state Exp;
+branches;
+next	2.60;
+
+2.60
+date	93.09.30.16.15.25;	author Turcotte;	state Exp;
+branches;
+next	2.59;
+
+2.59
+date	93.09.30.15.56.31;	author Turcotte;	state Exp;
+branches;
+next	2.58;
+
+2.58
+date	93.09.30.15.45.31;	author Turcotte;	state Exp;
+branches;
+next	2.57;
+
+2.57
+date	93.09.05.00.34.37;	author Kell;	state Exp;
+branches;
+next	2.56;
+
+2.56
+date	93.09.02.20.23.24;	author Kell;	state Exp;
+branches;
+next	2.55;
+
+2.55
+date	93.08.25.01.04.03;	author Kell;	state Exp;
+branches;
+next	2.54;
+
+2.54
+date	93.08.25.00.34.20;	author Kell;	state Exp;
+branches;
+next	2.53;
+
+2.53
+date	93.06.21.21.49.35;	author Turcotte;	state Exp;
+branches;
+next	2.52;
+
+2.52
+date	93.06.21.16.27.13;	author Turcotte;	state Exp;
+branches;
+next	2.51;
+
+2.51
+date	93.06.19.10.44.10;	author Kell;	state Exp;
+branches;
+next	2.50;
+
+2.50
+date	93.06.07.19.02.42;	author Turcotte;	state Exp;
+branches;
+next	2.49;
+
+2.49
+date	93.06.04.17.07.55;	author Kell;	state Exp;
+branches;
+next	2.48;
+
+2.48
+date	93.06.03.21.30.10;	author Turcotte;	state Exp;
+branches;
+next	2.47;
+
+2.47
+date	93.06.01.22.08.29;	author Turcotte;	state Exp;
+branches;
+next	2.46;
+
+2.46
+date	93.05.30.13.06.13;	author Kell;	state Exp;
+branches;
+next	2.45;
+
+2.45
+date	93.05.25.23.17.11;	author Turcotte;	state Exp;
+branches;
+next	2.44;
+
+2.44
+date	93.05.22.11.09.00;	author Kell;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	93.05.22.11.06.44;	author Kell;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	93.05.21.01.41.27;	author Kell;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	93.05.20.18.01.48;	author Turcotte;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	93.05.14.18.01.24;	author Kell;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	93.05.13.20.21.56;	author Kell;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	93.05.08.19.16.48;	author Kell;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	93.05.08.19.03.36;	author Kell;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	93.04.30.15.43.25;	author Finch;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	93.04.30.15.42.58;	author Finch2;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	93.04.27.21.56.24;	author Kell;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	93.04.27.21.40.06;	author Kell;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	93.04.27.21.09.18;	author Turcotte;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	93.04.27.02.48.02;	author Kell;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	93.04.18.07.13.32;	author Kell;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	93.04.17.09.49.29;	author Turcotte;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	93.04.17.08.52.43;	author Turcotte;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	93.04.17.06.51.45;	author Hartford2;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	93.04.16.04.39.51;	author Turcotte;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	93.04.16.04.26.30;	author Turcotte;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	93.04.14.12.11.27;	author Finch;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	93.04.12.17.50.19;	author Finch;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	93.04.12.14.56.27;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	93.04.06.03.33.23;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	93.04.06.03.26.55;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	93.04.03.11.12.57;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	93.04.02.00.06.37;	author Turcotte;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	93.03.18.21.07.40;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	93.03.11.17.52.30;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	93.03.04.19.43.04;	author Finch;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	93.03.03.17.54.15;	author Finch;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	93.03.02.17.28.16;	author Turcotte;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	93.02.28.02.56.25;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	93.02.13.22.27.30;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	93.02.13.14.36.29;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	92.12.17.17.55.23;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	92.10.07.16.44.24;	author Finch;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	92.09.23.16.52.33;	author Finch;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	92.09.17.03.35.44;	author Turcotte;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	92.09.12.04.29.09;	author Turcotte;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	92.09.12.02.12.27;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	92.09.10.15.46.03;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	92.05.28.13.37.34;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	92.05.28.13.10.41;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.19.16.56.52;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.128
+log
+@added art.a
+@
+text
+@#********************************************************************
+#* $RCSfile: makefile,v $
+#*
+#* Copyright (c)1992 NewTek, Inc.
+#* Confidental and Proprietary. All rights reserved.
+#*
+#* $Id: makefile,v 2.127 1995/08/31 17:36:38 Flick Exp Holt $
+#*
+#*********************************************************************
+
+REV = 4.06
+
+# -L = linkable code (else its executable), -D = debug
+#HIFLAGS	= -Isw:sinc/ -L -O
+#HIDBNOL	= -Isw:sinc/ -D -O
+#HIDEBUG = -Isw:sinc/ -L -D -O
+
+DOL =	$$
+
+HIDEBUG = -Isw:sinc/ -L -D LINE -O
+
+DEST = VT:exe/Toaster/
+
+#***********************************************************
+# Compiling rules. optimized object, runs only with switcher
+
+SAS_OPT = >ram:Make.errors RESETOPTIONS DEBUG=L OPTIMIZE ERRORREXX \
+	 UNSCHAR STRMERGE IDIR=include.h: IDIR=scinc: IDIR=sw:inc/
+
+SAS_ASM = DATA=faronly NOSTACKCHECK
+.c.o:
+	sc $(SAS_OPT) OBJNAME=ram:temp $(SAS_ASM) DEFINE=RELEASE DEFINE=FINAL_CODE $*.c
+# 	@@NextTime $*.c ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***********************************************************
+# Include striping rules
+.i.i:
+	strip $*.i ram:temp
+#	@@NextTime $*.i ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***********************************************************
+# Assembly rules for non-AA (default) modules
+.a.o:
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e ECSCHIPS=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***********************************************************
+# Assembly rules for AA modules
+.a.AA_o:
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e AACHIPS=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***********************************************************
+# Assembly rules for non-AA old Toasters (3.0)
+.a.OLD_o:
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e OLDTOASTER=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***********************************************************
+
+SWINCS = sw:sinc/vtdebug.i sw:sinc/serialdebug.i sw:sinc/instinct.i sw:sinc/eflib.i
+
+Switcher: $(SWINCS)\
+	ECS AA 3.0 $(DEST)VideoToaster $(DEST)VideoToaster.AA\
+	sw:doc/CommonRGB.doc sw:doc/ARexx.doc $(DEST)Switcher_Support/HS.Default $(DEST)Switcher_Support/HS\
+	sw:obj/ToasterLib.o sw:obj/ToastGlue.o
+
+# $(DEST)auxlibs/mtslicerequester.library
+# $(DEST)VTD $(DEST)VTI $(DEST)VTA removed from above
+
+ram:NeverExists: ECS AA 3.0 $(DEST)VideoToaster $(DEST)VideoToaster.AA\
+	$(DEST)Switcher_Support/HS.Default $(DEST)Switcher_Support/HS
+  quit 20
+
+sw:bat/LastUpdateDate:
+	date >sw:bat/LastUpdateDate
+
+#*******************************************************************
+
+# $(DEST)VTD $(DEST)VTI $(DEST)VTA removed from above
+
+AA: $(DEST)Switcher.main.AA
+
+ECS: $(DEST)Switcher.main
+
+3.0: $(DEST)Switcher.main.3.0
+
+TestStation: $(SWINCS)\
+	$(DEST)Switcher.main.Master $(DEST)Switcher.main.Slave
+
+SWOBJS =\
+	sw:obj/LowMem.o sw:obj/MBDispatch.o \
+	sw:obj/SoftSprite.o sw:obj/Lib.o sw:obj/Misc.o \
+	sw:obj/ables.o sw:obj/LumKeyFGs.o sw:obj/MainFGs.o\
+	sw:obj/NumPadFGs.o sw:obj/FrameFGs.o sw:obj/TransFGs.o\
+	sw:obj/FMCountFGs.o sw:obj/ClipFGs.o sw:obj/TBarFGs.o sw:obj/Main.o\
+	sw:obj/Preview.o sw:obj/LumKey.o sw:obj/GridSel.o sw:obj/Auto.o sw:obj/Take.o\
+	sw:obj/TBar.o sw:obj/NumPad.o sw:obj/FMCount.o sw:obj/Clip.o\
+	sw:obj/eflib.o sw:obj/ntm.o sw:obj/sine.o sw:obj/CGSliceCode.o\
+	sw:obj/pixelize.o sw:obj/grabber.o sw:obj/grab.o sw:obj/frame.o sw:obj/DLData.o\
+	sw:obj/FrameRead.o sw:obj/FrameWrite.o sw:obj/InitEFX.o\
+	sw:obj/Freeze.o sw:obj/Horizontal.o sw:obj/TBEFXCode.o\
+	sw:obj/MTSliceCode.o sw:obj/MTSliceData.o\
+	sw:obj/ClipKeyMode.o sw:obj/Buttons.o\
+	sw:obj/Requesters.o sw:obj/KeyLogic.o sw:obj/bgcolor.o\
+	sw:obj/PaintSlice.o sw:obj/DeMotion.o sw:obj/Encrypt.o\
+	sw:obj/NewText.o sw:obj/FastBlitter.o sw:obj/ARexxHandler.o\
+	sw:obj/LightWaveSlice.o\
+	sw:obj/SwitcherGPI.o sw:obj/HardSets.o sw:obj/HardSetsData.o sw:obj/LineZero.o\
+	sw:obj/RGB2YIQ.o sw:obj/YIQ2COMP.o sw:obj/SmartSend.o\
+	sw:obj/OutputGPI.o sw:obj/LUTSlice.o sw:obj/KbdState.o\
+	sw:obj/CommonRGB.o sw:obj/FastSeg.o sw:obj/DosBuffer.o\
+	sw:obj/AnimLibrary.o sw:obj/IFFuncompress.o sw:obj/AnimRam.o sw:obj/HAMPreviewhandler.o\
+	sw:obj/Memory.o sw:obj/FileCopy.o sw:obj/sequence.o sw:obj/PlayAnim.o \
+	sw:obj/AnimUnpack.o sw:obj/HamAnim.o sw:obj/AnimProcess.o sw:obj/AnimWrite.o \
+	sw:obj/AnimCompress.o sw:obj/Palette.o \
+	sw:obj/Anim7BV.o sw:obj/Anim7LH.o sw:obj/Anim7LV.o sw:obj/Anim7WH.o \
+	sw:obj/Anim7WV.o sw:obj/Anim7BH.o sw:obj/Anim8.o sw:obj/ASLfileReq.o\
+	sw:obj/AnimatedEffects.o \
+	sw:obj/popup.o sw:obj/oras.o sw:obj/ckpt.o sw:obj/stdmem.o sw:obj/panic.o sw:obj/afail.o\
+	sw:obj/AudioFX.o sw:obj/AudioPlay.o sw:obj/CStubs.o sw:obj/AnimFXHandler.o\
+	sw:obj/denise.o sw:obj/PEComm.o sw:obj/AlgoFX.o sw:obj/CroutonLoad.o sw:obj/Flyer.o\
+	sw:obj/FSIcon.o sw:obj/CroutonHandler.o sw:obj/CRFXHandler.o \
+	sw:obj/Crawl.o sw:obj/ScrollRender.o sw:obj/Scroll.o sw:obj/NewCrawl.o \
+	sw:obj/SerialDebug.o sw:obj/art.o
+
+$(DEST)Switcher.main: sw:obj/Switcher.o sw:bat/LastUpdateDate $(SWINCS) $(SWOBJS)\
+	sw:obj/XProgram.o sw:obj/CopChip.o sw:obj/cop.o sw:obj/vthand.o\
+	sw:obj/AutoCal.o sw:obj/AnimWipe.o sw:obj/AnimFileIO.o\
+	sw:obj/dynam.o sw:obj/bars.o sw:obj/FastGadgets.o sw:obj/Greet.o\
+	sw:obj/Adjust.o sw:obj/AdjustData.o sw:obj/KLUDGE.o sw:obj/SliceFGs.o\
+	sw:obj/GridSelFGs.o sw:obj/PreviewFGs.o sw:obj/FrameSlice.o sw:obj/CGSupport.o
+
+	GenAm >ram:Make.errors sw:src/Version.a $(HIDEBUG)ram:temp
+	@@copy ram:temp sw:obj/Version.o quiet clone
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT4000/A2000) $(REV) " noline
+	@@date >>ram:vtemp
+	@@getenv >>ram:vtemp USERNAME
+	@@insertfile 40 ram:vtemp sw:obj/Version.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink WITH sw:bat/WithFile
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)Switcher.main.3.0: sw:obj/Switcher.OLD_o sw:bat/LastUpdateDate $(SWINCS) $(SWOBJS)\
+	sw:obj/XProgram.o sw:obj/CopChip.o sw:obj/cop.o sw:obj/vthand.o\
+	sw:obj/AutoCal.o sw:obj/AnimWipe.o sw:obj/AnimFileIO.o\
+	sw:obj/dynam.o sw:obj/bars.o sw:obj/FastGadgets.o sw:obj/Greet.OLD_o\
+	sw:obj/KLUDGE.OLD_o sw:obj/SliceFGs.o\
+	sw:obj/GridSelFGs.o sw:obj/PreviewFGs.OLD_o sw:obj/FrameSlice.o sw:obj/CGSupport.o
+
+	GenAm >ram:Make.errors sw:src/Version.a $(HIDEBUG)ram:temp
+	@@copy ram:temp sw:obj/Version.o quiet clone
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT2000/A2000) $(REV) " noline
+	@@date >>ram:vtemp
+	@@getenv >>ram:vtemp USERNAME
+	@@insertfile 40 ram:vtemp sw:obj/Version.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink WITH sw:bat/WithFile.3.0
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+SWAA = $(SWINCS)  $(SWOBJS)\
+	sw:obj/XProgram.AA_o sw:obj/CopChip.AA_o sw:obj/cop.AA_o sw:obj/vthand.AA_o\
+	sw:obj/AutoCal.AA_o sw:obj/AnimWipe.AA_o sw:obj/AnimFileIO.AA_o\
+	sw:obj/dynam.AA_o sw:obj/bars.AA_o sw:obj/FastGadgets.AA_o sw:obj/Greet.AA_o\
+	sw:obj/Adjust.AA_o sw:obj/AdjustData.o sw:obj/KLUDGE.o sw:obj/SliceFGs.AA_o\
+	sw:obj/GridSelFGs.AA_o sw:obj/PreviewFGs.AA_o sw:obj/FrameSlice.AA_o sw:obj/CGSupport.AA_o
+
+$(DEST)Switcher.main.AA:  sw:obj/Switcher.AA_o $(SWAA) sw:bat/LastUpdateDate
+	GenAm >ram:Make.errors sw:src/Version.a $(HIDEBUG)ram:temp
+	@@copy ram:temp sw:obj/Version.o quiet clone
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT4000/A4000) $(REV) " noline
+	@@date >>ram:vtemp
+	@@getenv >>ram:vtemp USERNAME
+	@@insertfile 40 ram:vtemp sw:obj/Version.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink WITH sw:bat/WithFile.AA
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)Switcher.main.Master: sw:obj/Switcher_Master.o sw:bat/LastUpdateDate $(SWAA)
+	GenAm >ram:Make.errors sw:src/Version.a $(HIDEBUG)ram:temp
+	@@copy ram:temp sw:obj/Version.o quiet clone
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 $(REV) Master " noline
+	@@date >>ram:vtemp
+	@@getenv >>ram:vtemp USERNAME
+	@@insertfile 40 ram:vtemp sw:obj/Version.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink WITH sw:bat/WithFile.Master
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)Switcher.main.Slave: sw:obj/AutoCal_Slave.o sw:bat/LastUpdateDate $(SWAA) sw:obj/Switcher_Slave.o
+	GenAm >ram:Make.errors sw:src/Version.a $(HIDEBUG)ram:temp
+	@@copy ram:temp sw:obj/Version.o quiet clone
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 $(REV) Slave " noline
+	@@date >>ram:vtemp
+	@@getenv >>ram:vtemp USERNAME
+	@@insertfile 40 ram:vtemp sw:obj/Version.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink WITH sw:bat/WithFile.Slave
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)VideoToaster:  sw:obj/Launch.o sw:bat/LastUpdateDate sw:obj/FastSeg.o sw:obj/DosBuffer.o sw:obj/Memory.o sw:obj/denise.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink sw:obj/Launch.o sw:obj/FastSeg.o sw:obj/DosBuffer.o sw:obj/Memory.o sw:obj/denise.o to ram:temp nodebug noicons
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)VideoToaster.AA:  sw:obj/Launch.AA_o sw:bat/LastUpdateDate sw:obj/FastSeg.o sw:obj/DosBuffer.o sw:obj/Memory.o sw:obj/denise.o
+	@@echo >ram:Make.errors "SLINK Failed!"
+	slink sw:obj/Launch.AA_o sw:obj/FastSeg.o sw:obj/DosBuffer.o sw:obj/Memory.o sw:obj/denise.o to ram:temp nodebug noicons
+	@@echo >ram:Make.errors
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+$(DEST)Switcher_Support/HS.Default: sw:src/HSdefault.a  sw:src/HSdata.a sw:sinc/hardsets.i
+	casm -a sw:src/HSdefault.a -o ram:HS.Default
+	copy ram:HS.Default $(DEST)Switcher_Support/HS.Default
+	delete ram:HS.default
+#	@@NextTime sw:src/HSdefault.a $(DEST)Switcher_Support/HS.Default
+
+$(DEST)Switcher_Support/HS: $(DEST)Switcher_Support/HS.Default
+	copy $(DEST)Switcher_Support/HS.Default $(DEST)Switcher_Support/HS quiet clone
+
+#$(DEST)VTD: sw:src/syncdata.a
+#	casm -a sw:src/SyncData.a -o $(DEST)VTD
+
+#$(DEST)VTI:	sw:pat/mom sw:pat/gvg
+#	pacmom	sw:bat/VTIScript
+
+#$(DEST)VTA:	sw:pat/momah sw:pat/gvgah
+#	pacmom	sw:bat/VTAScript
+
+
+#***************************************************************
+
+sw:obj/Switcher_Master.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/cop.i
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e AACHIPS=1,MASTER_VERSION=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+sw:obj/Switcher_Slave.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/cop.i
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e AACHIPS=1,SLAVE_VERSION=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+sw:obj/AutoCal_Slave.o: sw:src/AutoCal.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i\
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i sw:sinc/cop.i
+
+	echo "Creating $@@"
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e AACHIPS=1,SLAVE_VERSION=1
+#	@@NextTime $*.a ram:temp
+	@@copy ram:temp $@@ quiet clone
+	@@delete ram:temp quiet
+
+#***************************************************************
+# AACHIPS=1
+
+sw:obj/Switcher.AA_o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/instinct.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i\
+	sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i sw:sinc/cop.i
+
+sw:obj/FastGadgets.AA_o: sw:src/FastGadgets.a sw:sinc/InstinctUpdate sw:sinc/FrameIO.i sw:sinc/assembler.i sw:sinc/custom.i
+
+sw:obj/SliceFGs.AA_o: sw:dat/SliceFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/PreviewFGs.AA_o: sw:dat/PreviewFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Adjust.AA_o: sw:src/Adjust.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/hardsets.i sw:sinc/tags.i
+
+sw:obj/AutoCal.AA_o: sw:src/AutoCal.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i\
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i sw:sinc/cop.i
+
+sw:obj/FrameSlice.AA_o: sw:src/FrameSlice.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/FrameIO.i  sw:sinc/smallmacros.i sw:sinc/custom.i sw:sinc/CommonRGBPrivate.i sw:sinc/rgb2yiq.i sw:sinc/yiq2comp.i sw:sinc/FrameLoad.i sw:sinc/tags.i
+
+sw:obj/Greet.AA_o: sw:src/Greet.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Launch.AA_o: sw:src/Launch.a sw:sinc/InstinctUpdate
+
+sw:obj/vthand.AA_o: sw:src/vthand.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/rect.i\
+	      sw:sinc/InstinctUpdate sw:sinc/vthand.i sw:sinc/elh.i sw:sinc/cop.i
+
+sw:obj/cop.AA_o: sw:src/cop.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/copper.i sw:sinc/rect.i\
+	   sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/vthand.i sw:sinc/cop.i
+
+sw:obj/GridSelFGs.AA_o: sw:dat/GridSelFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/CopChip.AA_o: sw:src/CopChip.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/cop.i\
+	       sw:sinc/copper.i sw:sinc/vthand.i sw:sinc/assembler.i sw:sinc/InstinctUpdate
+
+sw:obj/dynam.AA_o: sw:src/dynam.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/EfLibUpdate
+
+sw:obj/XProgram.AA_o: sw:src/XProgram.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/patchfile.i sw:sinc/XProgram.i
+
+sw:obj/bars.AA_o: sw:src/Bars.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/AnimWipe.AA_o: sw:src/AnimWipe.a sw:sinc/Include.i sw:sinc/AnimWipeEqu.i sw:sinc/AnimWipeMacros.i sw:sinc/IFFuncompress.i sw:sinc/vthand.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimFileIO.AA_o: sw:src/AnimFileIO.a sw:sinc/vthand.i sw:sinc/Include.i sw:sinc/NewTek.i sw:sinc/AnimWipeEqu.i sw:sinc/AnimWipeMacros.i sw:sinc/InstinctUpdate
+
+sw:obj/CGSupport.AA_o: sw:src/CGSupport.a sw:sinc/InstinctUpdate sw:sinc/commonrgb.i sw:sinc/frameload.i sw:sinc/cop.i sw:sinc/tags.i sw:sinc/movepage.i
+
+#***************************************************************
+# OLDTOASTER=1
+
+sw:obj/Switcher.OLD_o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i\
+	sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i sw:sinc/cop.i
+
+sw:obj/PreviewFGs.OLD_o: sw:dat/PreviewFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/KLUDGE.OLD_o: sw:src/KLUDGE.a
+
+sw:obj/Greet.OLD_o: sw:src/Greet.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+#*********************************************************************
+# ECSCHIPS=1
+
+sw:obj/Switcher.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i\
+	 sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i sw:sinc/cop.i
+
+sw:obj/LowMem.o: sw:src/LowMem.a sw:sinc/macros.i sw:sinc/InstinctUpdate
+
+sw:obj/FastGadgets.o: sw:src/FastGadgets.a sw:sinc/InstinctUpdate sw:sinc/FrameIO.i sw:sinc/assembler.i sw:sinc/custom.i
+
+sw:obj/PreviewFGs.o: sw:dat/PreviewFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Greet.o: sw:src/Greet.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/vthand.o: sw:src/vthand.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/rect.i\
+	      sw:sinc/InstinctUpdate sw:sinc/vthand.i sw:sinc/elh.i sw:sinc/cop.i
+
+sw:obj/cop.o: sw:src/cop.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/copper.i sw:sinc/rect.i\
+	   sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/vthand.i sw:sinc/cop.i
+
+sw:obj/CopChip.o: sw:src/CopChip.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/cop.i\
+	       sw:sinc/copper.i sw:sinc/vthand.i sw:sinc/assembler.i sw:sinc/InstinctUpdate
+
+sw:obj/SliceFGs.o: sw:dat/SliceFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/GridSelFGs.o: sw:dat/GridSelFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/dynam.o: sw:src/dynam.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/EfLibUpdate
+
+sw:obj/XProgram.o: sw:src/XProgram.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/patchfile.i sw:sinc/XProgram.i
+
+sw:obj/bars.o: sw:src/Bars.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/AnimWipe.o: sw:src/AnimWipe.a sw:sinc/Include.i sw:sinc/AnimWipeEqu.i sw:sinc/AnimWipeMacros.i sw:sinc/IFFuncompress.i sw:sinc/vthand.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimFileIO.o: sw:src/AnimFileIO.a sw:sinc/vthand.i sw:sinc/Include.i sw:sinc/NewTek.i sw:sinc/AnimWipeEqu.i sw:sinc/AnimWipeMacros.i sw:sinc/InstinctUpdate
+
+sw:obj/FrameSlice.o: sw:src/FrameSlice.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/FrameIO.i  sw:sinc/smallmacros.i sw:sinc/custom.i sw:sinc/CommonRGBPrivate.i sw:sinc/rgb2yiq.i sw:sinc/yiq2comp.i\
+	 sw:sinc/FrameLoad.i sw:sinc/tags.i sw:sinc/AnimFXTable.i
+
+sw:obj/CGSupport.o: sw:src/CGSupport.a sw:sinc/InstinctUpdate sw:sinc/commonrgb.i sw:sinc/frameload.i sw:sinc/cop.i sw:sinc/tags.i sw:sinc/movepage.i
+
+#***************************************************************
+# General modules that are linked to all versions of switchers (AA/ECS/OLD)
+
+sw:obj/MBDispatch.o: sw:src/MBDispatch.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/editswit.i
+
+sw:obj/SoftSprite.o: sw:src/SoftSprite.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Lib.o: sw:src/Lib.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Misc.o: sw:src/Misc.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/ables.o: sw:src/ables.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/InstinctUpdate
+
+sw:obj/LumKeyFGs.o: sw:dat/LumKeyFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/MainFGs.o: sw:dat/MainFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/NumPadFGs.o: sw:dat/NumPadFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/FrameFGs.o: sw:dat/FrameFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/TransFGs.o: sw:dat/TransFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/FMCountFGs.o: sw:dat/FMCountFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/ClipFGs.o: sw:dat/ClipFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/TBarFGs.o: sw:dat/TBarFGs.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Main.o: sw:src/Main.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Preview.o: sw:src/Preview.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/LumKey.o: sw:src/LumKey.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/GridSel.o: sw:src/GridSel.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Auto.o: sw:src/Auto.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Take.o: sw:src/Take.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/TBar.o: sw:src/TBar.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/NumPad.o: sw:src/NumPad.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/FMCount.o: sw:src/FMCount.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Clip.o: sw:src/Clip.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/KLUDGE.o: sw:src/KLUDGE.a
+
+sw:obj/CStubs.o: sw:src/CStubs.a
+
+sw:obj/FSIcon.o: sw:src/FSIcon.a sw:sinc/InstinctUpdate sw:inc/cop.i sw:sinc/tags.i
+
+sw:obj/CGSliceCode.o: sw:src/CGSliceCode.a sw:sinc/InstinctUpdate sw:sinc/smallmacros.i sw:sinc/cgmessage.i sw:sinc/cgerror.i\
+	sw:sinc/EfLibUpdate
+
+sw:obj/eflib.o: sw:src/eflib.a sw:sinc/macros.i sw:sinc/InstinctUpdate sw:sinc/EfLibUpdate
+
+sw:obj/ntm.o: sw:src/ntm.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i sw:sinc/EfLibUpdate sw:sinc/croutons.i sw:sinc/InstinctUpdate
+
+sw:obj/sine.o: sw:src/sine.a sw:sinc/macros.i sw:sinc/InstinctUpdate
+
+sw:obj/grabber.o: sw:src/grabber.a sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/macros.i sw:sinc/custom.i
+
+sw:obj/grab.o: sw:src/grab.a sw:sinc/macros.i sw:sinc/custom.i sw:sinc/InstinctUpdate
+
+sw:obj/frame.o: sw:src/frame.a sw:sinc/vthand.i sw:sinc/macros.i sw:sinc/custom.i sw:sinc/InstinctUpdate
+
+sw:obj/DLData.o: sw:src/DLData.a
+
+sw:obj/pixelize.o: sw:src/pixelize.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/InstinctUpdate
+
+sw:obj/Horizontal.o: sw:src/Horizontal.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/InstinctUpdate
+
+sw:obj/FrameWrite.o: sw:src/FrameWrite.a sw:sinc/FrameIO.i sw:sinc/smallmacros.i sw:sinc/InstinctUpdate
+
+sw:obj/FrameRead.o: sw:src/FrameRead.a sw:sinc/FrameIO.i sw:sinc/smallmacros.i sw:sinc/InstinctUpdate
+
+sw:obj/Freeze.o: sw:src/Freeze.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/InitEFX.o: sw:src/InitEFX.a sw:sinc/InstinctUpdate sw:sinc/vthand.i
+
+sw:obj/TBEFXCode.o: sw:src/TBEFXCode.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/MTSliceCode.o: sw:src/MTSliceCode.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/hardsets.i
+
+sw:obj/MTSliceData.o: sw:dat/MTSliceData.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Adjust.o: sw:src/Adjust.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/hardsets.i sw:sinc/tags.i
+
+sw:obj/AdjustData.o: sw:dat/AdjustData.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/ClipKeyMode.o: sw:src/ClipKeyMode.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Buttons.o: sw:src/Buttons.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/EfLibUpdate
+
+sw:obj/Requesters.o: sw:src/Requesters.a sw:sinc/assembler.i sw:sinc/InstinctUpdate sw:sinc/smallmacros.i sw:sinc/vtdebug.i
+
+sw:obj/KeyLogic.o: sw:src/KeyLogic.a sw:sinc/assembler.i sw:sinc/InstinctUpdate sw:sinc/macros.i sw:sinc/keylogic.i sw:sinc/rect.i sw:sinc/EfLibUpdate
+
+sw:obj/bgcolor.o: sw:src/bgcolor.a sw:sinc/assembler.i sw:sinc/InstinctUpdate sw:sinc/macros.i
+
+sw:obj/PaintSlice.o: sw:src/PaintSlice.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/DeMotion.o: sw:src/DeMotion.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/NewText.o: sw:src/NewText.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/text.i sw:sinc/fastblitter.i sw:sinc/newtext.i
+
+sw:obj/FastBlitter.o: sw:src/FastBlitter.a sw:sinc/fastblitter.i sw:sinc/assembler.i sw:sinc/InstinctUpdate
+
+sw:obj/ARexxHandler.o: sw:src/ARexxHandler.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/editswit.i sw:sinc/AnimFXTable.i
+
+sw:obj/ToastGlue.o: sw:src/ToastGlue.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/Encrypt.o: sw:src/Encrypt.a sw:sinc/InstinctUpdate
+
+sw:obj/LightWaveSlice.o: sw:src/LightWaveSlice.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/vtdebug.i sw:sinc/lightwaveslice.i
+
+sw:obj/AutoCal.o: sw:src/AutoCal.a sw:sinc/macros.i sw:sinc/rect.i sw:sinc/vthand.i\
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i sw:sinc/cop.i
+
+sw:obj/SwitcherGPI.o: sw:src/SwitcherGPI.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/HardSets.o: sw:src/HardSets.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/hardsets.i
+
+sw:obj/HardSetsData.o: sw:src/HardSetsData.a sw:src/HSdata.a sw:sinc/assembler.i sw:sinc/flyer.i sw:sinc/hardsets.i sw:sinc/InstinctUpdate
+
+sw:obj/LineZero.o: sw:src/LineZero.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/RGB2YIQ.o: sw:src/RGB2YIQ.a sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/rgb2yiq.i sw:sinc/yiq2comp.i sw:sinc/InstinctUpdate
+
+sw:obj/YIQ2COMP.o: sw:src/YIQ2COMP.a sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/yiq2comp.i sw:sinc/InstinctUpdate
+
+sw:obj/SmartSend.o: sw:src/SmartSend.a sw:sinc/assembler.i sw:sinc/smallmacros.i sw:sinc/smartsend.i sw:sinc/color.i sw:sinc/InstinctUpdate
+
+sw:obj/OutputGPI.o: sw:src/OutputGPI.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/LUTSlice.o: sw:src/LUTSlice.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/KbdState.o: sw:src/KbdState.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+
+sw:obj/CommonRGB.o: sw:src/CommonRGB.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/FrameIO.i sw:sinc/smartsend.i sw:sinc/CommonRGB.i sw:sinc/CommonRGBPrivate.i sw:sinc/rgb2yiq.i
+
+sw:obj/FastSeg.o: sw:src/FastSeg.a sw:sinc/assembler.i sw:sinc/InstinctUpdate sw:sinc/tags.i
+
+sw:obj/Launch.o: sw:src/Launch.a sw:sinc/InstinctUpdate
+
+sw:obj/DosBuffer.o: sw:src/DosBuffer.a sw:sinc/assembler.i sw:sinc/DosBuffer.i sw:sinc/modular.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimLibrary.o: sw:src/AnimLibrary.a sw:sinc/vthand.i sw:sinc/Include.i sw:sinc/AnimWipeEqu.i sw:sinc/AnimWipeMacros.i sw:sinc/AnimWipe.i sw:sinc/AnimFileIO.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimatedEffects.o: sw:src/AnimatedEffects.a sw:sinc/Include.i sw:sinc/AnimatedEffectsEqu.i  sw:sinc/AnimEQU.i sw:sinc/AnimWipeMacros.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimFXHandler.o: sw:src/AnimFXHandler.a sw:sinc/AnimatedEffectsEqu.i sw:sinc/AnimEQU.i sw:sinc/AnimFXTable.i sw:sinc/vthand.i sw:sinc/rect.i sw:sinc/keylogic.i sw:sinc/InstinctUpdate
+
+sw:obj/AlgoFX.o: sw:src/AlgoFX.a sw:sinc/InstinctUpdate
+
+sw:obj/CroutonLoad.o: sw:src/CroutonLoad.a sw:sinc/InstinctUpdate sw:sinc/DelayErr.i
+
+sw:obj/CroutonHandler.o: sw:src/CroutonHandler.a sw:sinc/Flyer.i sw:sinc/InstinctUpdate
+
+sw:obj/IFFuncompress.o: sw:src/IFFuncompress.a sw:sinc/vthand.i sw:sinc/InstinctUpdate
+
+sw:obj/AnimRam.o: sw:src/AnimRam.a sw:sinc/AnimWipeEqu.i sw:sinc/vthand.i sw:sinc/InstinctUpdate
+
+sw:obj/Memory.o: sw:src/Memory.a sw:sinc/InstinctUpdate
+
+sw:obj/FileCopy.o: sw:src/FileCopy.a sw:sinc/InstinctUpdate
+
+sw:obj/sequence.o: sw:src/sequence.a sw:sinc/InstinctUpdate
+
+sw:obj/PlayAnim.o: sw:src/PlayAnim.a sw:sinc/InstinctUpdate
+
+sw:obj/HAMPreviewhandler.o: sw:src/HAMPreviewhandler.a 
+
+sw:obj/AnimUnpack.o: sw:src/AnimUnpack.a sw:sinc/InstinctUpdate
+
+sw:obj/HamAnim.o: sw:src/HamAnim.a sw:sinc/InstinctUpdate
+
+sw:obj/AnimProcess.o: sw:src/AnimProcess.a sw:sinc/InstinctUpdate
+
+sw:obj/AnimWrite.o: sw:src/AnimWrite.a sw:sinc/InstinctUpdate
+
+sw:obj/AnimCompress.o: sw:src/AnimCompress.a sw:sinc/InstinctUpdate
+
+sw:obj/Palette.o: sw:src/Palette.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7BV.o: sw:src/Anim7BV.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7LH.o: sw:src/Anim7LH.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7LV.o: sw:src/Anim7LV.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7WH.o: sw:src/Anim7WH.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7WV.o: sw:src/Anim7WV.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim7BH.o: sw:src/Anim7BH.a sw:sinc/InstinctUpdate
+
+sw:obj/Anim8.o: sw:src/Anim8.a sw:sinc/InstinctUpdate
+
+sw:obj/ASLfileReq.o: sw:src/ASLfileReq.a sw:sinc/InstinctUpdate
+
+sw:obj/denise.o: sw:src/denise.a sw:sinc/InstinctUpdate
+
+sw:obj/PEComm.o: sw:src/PEComm.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/EditSwit.i sw:sinc/tags.i sw:sinc/Flyer.i
+
+sw:obj/AudioPlay.o: sw:src/AudioPlay.a sw:sinc/InstinctUpdate
+
+sw:obj/ToasterLib.o: sw:src/ToasterLib.a sw:sinc/InstinctUpdate
+
+sw:obj/Flyer.o: sw:src/Flyer.a sw:sinc/Flyer.i sw:sinc/FlyerLib.i sw:sinc/editswit.i sw:sinc/InstinctUpdate
+
+sw:obj/CRFXHandler.o: sw:src/CRFXHandler.a sw:sinc/InstinctUpdate
+
+sw:obj/Crawl.o: sw:src/Crawl.a sw:sinc/MovePage.i sw:sinc/NewRender.i sw:sinc/InstinctUpdate
+
+sw:obj/ScrollRender.o: sw:src/ScrollRender.a sw:sinc/MovePage.i sw:sinc/NewRender.i sw:sinc/cgmessage.i sw:sinc/modular.i sw:sinc/color.i sw:sinc/fastblitter.i sw:sinc/InstinctUpdate
+
+sw:obj/art.o: sw:src/art.a 
+
+sw:obj/SerialDebug.o: sw:src/SerialDebug.a sw:sinc/serialdebug.i sw:sinc/InstinctUpdate
+
+#***************************************************************
+# Convert include files to HiSoft format
+
+sw:sinc/InstinctUpdate: sw:inc/InstinctUpdate
+	@@echo >sw:sinc/InstinctUpdate "Instinct is up to date"
+
+sw:sinc/EfLibUpdate: sw:inc/EfLibUpdate
+	@@echo >sw:sinc/EfLibUpdate "EfLib is up to date"
+
+#***************************************************************
+
+sw:sinc/instinct.i: sw:inc/instinct.i sw:sinc/vthand.i sw:sinc/elh.i sw:sinc/tags.i sw:sinc/InstinctUpdate sw:inc/EfLibUpdate
+
+sw:sinc/assembler.i: sw:inc/assembler.i
+
+sw:sinc/vthand.i: sw:inc/vthand.i
+
+sw:sinc/macros.i: sw:inc/macros.i
+
+sw:sinc/smallmacros.i: sw:inc/smallmacros.i
+
+sw:sinc/custom.i: sw:inc/custom.i
+
+sw:sinc/rect.i: sw:inc/rect.i
+
+sw:sinc/copper.i: sw:inc/copper.i
+
+sw:sinc/elh.i: sw:inc/elh.i
+
+sw:sinc/eflib.i: sw:inc/eflib.i sw:sinc/rect.i sw:sinc/keylogic.i
+
+sw:sinc/keylogic.i: sw:inc/keylogic.i
+
+sw:sinc/FrameIO.i: sw:inc/frameio.i
+
+sw:sinc/FrameLoad.i: sw:inc/frameLoad.i
+
+sw:sinc/smallmacros.i: sw:inc/smallmacros.i
+
+sw:sinc/vtdebug.i: sw:inc/vtdebug.i
+
+sw:sinc/serialdebug.i: sw:inc/serialdebug.i
+
+sw:sinc/cgmessage.i: sw:inc/cgmessage.i
+
+sw:sinc/cgerror.i: sw:inc/cgerror.i
+
+sw:sinc/newtext.i: sw:inc/newtext.i
+
+sw:sinc/fastblitter.i: sw:inc/fastblitter.i
+
+sw:sinc/text.i: sw:inc/text.i
+
+sw:sinc/XProgram.i: sw:inc/XProgram.i
+
+sw:sinc/cop.i: sw:inc/cop.i
+
+sw:sinc/patchfile.i: sw:inc/patchfile.i
+
+sw:sinc/lightwaveslice.i: sw:inc/lightwaveslice.i
+
+sw:sinc/croutons.i: sw:inc/croutons.i
+
+sw:sinc/hardsets.i: sw:inc/hardsets.i sw:inc/flyer.i
+
+sw:sinc/rgb2yiq.i: sw:inc/rgb2yiq.i
+
+sw:sinc/yiq2comp.i: sw:inc/yiq2comp.i
+
+sw:sinc/smartsend.i: sw:inc/smartsend.i
+
+sw:sinc/CommonRGB.i: sw:inc/CommonRGB.i sw:sinc/FrameIO.i
+
+sw:sinc/CommonRGBPrivate.i: sw:inc/CommonRGBPrivate.i sw:sinc/CommonRGB.i
+
+sw:sinc/DosBuffer.i: sw:inc/DosBuffer.i
+
+sw:sinc/color.i: sw:inc/color.i
+
+sw:sinc/modular.i: sw:inc/modular.i
+
+sw:sinc/AnimatedEffectsEqu.i: sw:inc/AnimatedEffectsEqu.i
+
+sw:sinc/AnimEQU.i: sw:inc/AnimEQU.i
+
+sw:sinc/AnimFXTable.i: sw:inc/AnimFXTable.i sw:sinc/tags.i
+
+sw:sinc/tags.i: sw:inc/tags.i
+
+sw:sinc/AnimWipeEqu.i: sw:inc/AnimWipeEqu.i
+
+sw:sinc/AnimWipeMacros.i: sw:inc/AnimWipeMacros.i
+
+sw:sinc/AnimWipe.i: sw:inc/AnimWipe.i
+
+sw:sinc/AnimRam.i: sw:inc/AnimRam.i
+
+sw:sinc/IFFuncompress.i: sw:inc/IFFuncompress.i
+
+sw:sinc/AnimWipeRAM.i: sw:inc/AnimWipeRAM.i
+
+sw:sinc/AnimFileIO.i: sw:inc/AnimFileIO.i
+
+sw:sinc/AnimCrouton.i: sw:inc/AnimCrouton.i
+
+sw:sinc/Include.i: sw:inc/include.i
+
+sw:sinc/NewTek.i: sw:inc/NewTek.i
+
+sw:sinc/EditSwit.i: sw:inc/EditSwit.i
+
+sw:sinc/Flyer.i: sw:inc/Flyer.i
+
+sw:sinc/FlyerLib.i: sw:inc/FlyerLib.i
+
+sw:sinc/DelayErr.i: sw:inc/DelayErr.i
+
+sw:sinc/MovePage.i: sw:inc/MovePage.i
+sw:sinc/NewRender.i: sw:inc/NewRender.i
+
+#***************************************************************
+#	Generate autodocs
+sw:doc/CommonRGB.doc: sw:src/CommonRGB.a
+	autodoc >sw:doc/CommonRGB.doc -a -I sw:src/CommonRGB.a
+
+sw:doc/ARexx.doc: sw:src/ARexxHandler.a
+	autodoc >sw:doc/ARexx.doc -a -I sw:src/ARexxHandler.a
+
+#***************************************************************
+
+POPUP_DEP = sw:popup/popup.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/popup.o: $(POPUP_DEP)
+
+
+ORAS_DEP = sw:popup/oras.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/oras.o: $(ORAS_DEP)
+
+
+CKPT_DEP = sw:popup/ckpt.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/ckpt.o: $(CKPT_DEP)
+
+
+STDMEM_DEP = sw:popup/stdmem.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/stdmem.o: $(STDMEM_DEP)
+
+
+PANIC_DEP = sw:popup/panic.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/panic.o: $(PANIC_DEP)
+
+
+AFAIL_DEP = sw:popup/afail.c \
+	sw:popup/functions.h \
+	sw:popup/ckpt.h
+sw:obj/afail.o: $(AFAIL_DEP)
+
+sw:obj/AudioFX.o: sw:src/AudioFX.c
+
+sw:obj/NewCrawl.o: sw:src/NewCrawl.c sw:inc/MovePage.h sw:proto/NewCrawl.p sw:proto/Scroll.p
+sw:obj/Scroll.o: sw:src/Scroll.c sw:inc/MovePage.h sw:proto/NewCrawl.p sw:proto/Scroll.p
+
+#******************************************************************
+.ONERROR:
+   @@echo >ram:temp2  "echo ERROR ERROR ERROR ERROR ERROR ERROR ERROR"
+   @@echo >>ram:temp2 "echo vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+   @@list >>ram:temp2 ram:make.errors\#? lformat "type ram:%s"
+   @@echo >>ram:temp2 "echo ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+   @@echo >>ram:temp2 "echo ERROR ERROR ERROR ERROR ERROR ERROR ERROR"
+   @@rx "say d2c(7)"
+   @@execute ram:temp2
+   @@delete ram:temp2 quiet
+
+# end of makefile
+@
+
+
+2.127
+log
+@Bumped rev to 4.06
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.126 1995/07/12 17:54:45 Holt Exp Flick $
+d138 1
+a138 1
+	sw:obj/SerialDebug.o
+d600 1
+d602 2
+@
+
+
+2.126
+log
+@added hampreviewhandler.a/o to makefile
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.125 1995/06/20 18:15:32 Flick Exp Holt $
+d11 1
+a11 1
+REV = 4.05
+@
+
+
+2.125
+log
+@Bumped rev to 4.05
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.124 1995/06/20 18:13:40 pfrench Exp Flick $
+d126 1
+a126 1
+	sw:obj/AnimLibrary.o sw:obj/IFFuncompress.o sw:obj/AnimRam.o \
+d556 2
+@
+
+
+2.124
+log
+@Added line debugging info for .c files
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.123 1995/04/28 07:50:35 Flick Exp pfrench $
+d11 1
+a11 1
+REV = 4.04
+@
+
+
+2.123
+log
+@bumped revision to 4.04, we've shipped 4.03
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.122 1995/04/27 08:32:14 Flick Exp Flick $
+d27 1
+a27 1
+SAS_OPT = >ram:Make.errors RESETOPTIONS NODEBUG OPTIMIZE ERRORREXX \
+@
+
+
+2.122
+log
+@cgsupport missing movepage.i dependency
+@
+text
+@@
+
+
+2.121
+log
+@Gathered all revision numbers together into one macro
+@
+text
+@@
+
+
+2.120
+log
+@changed ver$ to 4.03
+@
+text
+@@
+
+
+2.119
+log
+@Added switcher un-used rawkey handling code
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.118 1995/02/15 16:59:13 pfrench Exp pfrench $
+d147 1
+a147 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT4000/A2000) 3.90 " noline
+d166 1
+a166 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT2000/A2000) 3.90 " noline
+d186 1
+a186 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (VT4000/A4000) 3.90 " noline
+d199 1
+a199 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 3.90 Master " noline
+d212 1
+a212 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 3.90 Slave " noline
+@
+
+
+2.118
+log
+@Added background color popup
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.117 1995/02/14 16:17:00 pfrench Exp pfrench $
+d383 1
+a383 1
+sw:obj/MBDispatch.o: sw:src/MBDispatch.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+@
+
+
+2.117
+log
+@Added FrameFGs.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.116 1995/02/12 05:18:27 Kell Exp pfrench $
+d116 1
+a116 1
+	sw:obj/Requesters.o sw:obj/KeyLogic.o\
+d481 2
+@
+
+
+2.116
+log
+@*** empty log message ***
+@
+text
+@d5 1
+a5 1
+#* Confidental and Proprietary. All rights reserved. 
+d7 1
+a7 1
+#* $Id: makefile,v 2.115 1995/02/03 14:16:08 pfrench Exp Kell $
+d47 1
+a47 1
+	GenAm >ram:Make.errors $*.a $(HIDEBUG)ram:temp -e ECSCHIPS=1 
+d106 1
+a106 1
+	sw:obj/NumPadFGs.o sw:obj/TransFGs.o\
+d183 1
+a183 1
+$(DEST)Switcher.main.AA:  sw:obj/Switcher.AA_o $(SWAA) sw:bat/LastUpdateDate 
+d196 1
+a196 1
+$(DEST)Switcher.main.Master: sw:obj/Switcher_Master.o sw:bat/LastUpdateDate $(SWAA) 
+d331 1
+a331 1
+	
+d398 2
+@
+
+
+2.115
+log
+@Added chromafxhander to dependency
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.114 1995/02/01 18:54:54 Kell Exp pfrench $
+d257 1
+a257 1
+sw:obj/Switcher_Master.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i
+d264 1
+a264 1
+sw:obj/Switcher_Slave.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i
+d272 1
+a272 1
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i
+d284 1
+a284 1
+	sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i
+d295 1
+a295 1
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i
+d330 1
+a330 1
+	sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i
+d342 1
+a342 1
+	 sw:sinc/CommonRGB.i sw:sinc/tags.i sw:sinc/DelayErr.i
+d497 1
+a497 1
+	sw:sinc/InstinctUpdate sw:sinc/elh.i sw:sinc/hardsets.i
+d587 1
+a587 1
+sw:obj/Flyer.o: sw:src/Flyer.a sw:sinc/Flyer.i sw:sinc/FlyerLib.i sw:sinc/InstinctUpdate
+@
+
+
+2.114
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.113 1995/02/01 12:35:08 Kell Exp Kell $
+d134 3
+a136 2
+	sw:obj/FSIcon.o sw:obj/CroutonHandler.o sw:obj/SerialDebug.o\
+	sw:obj/Crawl.o sw:obj/ScrollRender.o sw:obj/Scroll.o sw:obj/NewCrawl.o
+d588 2
+@
+
+
+2.113
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.112 1995/01/31 17:03:08 Kell Exp Kell $
+d134 1
+a134 1
+	sw:obj/FSIcon.o sw:obj/CroutonHandler.o\
+d590 2
+@
+
+
+2.112
+log
+@Support for CG scrawls
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.111 1995/01/24 12:25:21 Kell Exp Kell $
+d589 1
+a589 1
+sw:obj/ScrollRender.o: sw:src/ScrollRender.a sw:sinc/MovePage.i sw:sinc/NewRender.i sw:sinc/cgmessage.i sw:sinc/color.i sw:sinc/fastblitter.i sw:sinc/InstinctUpdate
+@
+
+
+2.111
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.110 1995/01/24 12:16:39 Kell Exp Kell $
+d134 2
+a135 1
+	sw:obj/FSIcon.o sw:obj/CroutonHandler.o
+a136 1
+
+d588 3
+d708 3
+d758 3
+a772 1
+ 
+@
+
+
+2.110
+log
+@Now handles new CGSupport.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.109 1995/01/12 22:55:34 Kell Exp Kell $
+d502 1
+a502 1
+sw:obj/HardSetsData.o: sw:src/HardSetsData.a sw:src/HSdata.a sw:sinc/assembler.i sw:sinc/hardsets.i sw:sinc/InstinctUpdate
+@
+
+
+2.109
+log
+@New CGsupport.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.108 1994/12/30 20:45:41 Kell Exp Kell $
+d110 1
+a110 2
+	sw:obj/eflib.o sw:obj/ntm.o sw:obj/sine.o\
+	sw:obj/CGSliceCode.o sw:obj/CGSupport.o\
+d142 1
+a142 1
+	sw:obj/GridSelFGs.o sw:obj/PreviewFGs.o sw:obj/FrameSlice.o
+d161 1
+a161 1
+	sw:obj/GridSelFGs.o sw:obj/PreviewFGs.OLD_o sw:obj/FrameSlice.o
+d180 1
+a180 1
+	sw:obj/GridSelFGs.AA_o sw:obj/PreviewFGs.AA_o sw:obj/FrameSlice.AA_o
+d323 2
+d374 5
+a434 2
+sw:obj/CGSupport.o: sw:src/CGSupport.a sw:sinc/InstinctUpdate sw:sinc/EfLibUpdate
+
+a452 3
+sw:obj/FrameSlice.o: sw:src/FrameSlice.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/FrameIO.i  sw:sinc/smallmacros.i sw:sinc/custom.i sw:sinc/CommonRGBPrivate.i sw:sinc/rgb2yiq.i sw:sinc/yiq2comp.i\
+	 sw:sinc/FrameLoad.i sw:sinc/tags.i sw:sinc/AnimFXTable.i
+
+d651 1
+a651 1
+sw:sinc/hardsets.i: sw:inc/hardsets.i
+@
+
+
+2.108
+log
+@New VER strings
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.107 1994/10/25 13:48:55 Kell Exp Kell $
+d111 1
+a111 1
+	sw:obj/CGSliceCode.o\
+d428 2
+@
+
+
+2.107
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.106 1994/10/21 14:13:45 Kell Exp Kell $
+d147 1
+a147 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (new/ECS) 3.01 " noline
+d166 1
+a166 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (old/ECS) 3.01 " noline
+d186 1
+a186 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster (new/AA) 3.01 " noline
+d199 1
+a199 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 3.01 Master " noline
+d212 1
+a212 1
+	@@Echo >ram:vtemp "$(DOL)VER: Video Toaster 4000 3.01 Slave " noline
+@
+
+
+2.106
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.105 1994/10/21 13:55:50 Kell Exp Kell $
+d424 1
+a424 1
+sw:obj/FSIcon.o: sw:src/FSIcon.a sw:sinc/InstinctUpdate sw:sinc/tags.i
+@
+
+
+2.105
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.103 1994/10/21 13:49:33 Kell Exp Kell $
+a236 4
+	echo $(DEST)Switcher_Support
+	list $(DEST)Switcher_Support/HS.Default	
+	dir $(DEST)Switcher_Support	
+	echo "doing 1"
+d238 2
+a239 5
+	echo "doing 2"
+	casm -a sw:src/HSdefault.a -o $(DEST)HS.Default
+	echo "doing 3"
+
+	casm -a sw:src/HSdefault.a -o $(DEST)Switcher_Support/HS.Default
+@
+
+
+2.104
+log
+@*** empty log message ***
+@
+text
+@d240 5
+@
+
+
+2.103
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.102 1994/10/21 13:28:59 Kell Exp Kell $
+d237 4
+@
+
+
+2.102
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.101 1994/10/12 00:35:56 Kell Exp Kell $
+d76 1
+a76 1
+	sw:doc/CommonRGB.doc sw:doc/ARexx.doc $(DEST)Switcher_Support/HS.Default $(DEST)HS\
+@
+
+
+2.101
+log
+@HS / HS.default files can now be in the Switcher_Support drawer.
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.100 1994/09/15 19:02:45 pfrench Exp Kell $
+d76 1
+a76 1
+	sw:doc/CommonRGB.doc sw:doc/ARexx.doc $(DEST)HS.Default $(DEST)HS\
+@
+
+
+2.100
+log
+@Added LowMem.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.99 1994/09/13 05:57:59 Kell Exp pfrench $
+d83 1
+a83 1
+	$(DEST)HS.Default $(DEST)HS
+d236 3
+a238 3
+$(DEST)HS.Default: sw:src/HSdefault.a  sw:src/HSdata.a sw:sinc/hardsets.i
+	casm -a sw:src/HSdefault.a -o $(DEST)HS.Default
+#	@@NextTime sw:src/HSdefault.a $(DEST)HS.Default
+d240 2
+a241 2
+$(DEST)HS: $(DEST)HS.Default
+	copy $(DEST)HS.Default $(DEST)HS quiet clone
+@
+
+
+2.99
+log
+@Pecomm.a now depends on Flyer.i
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.98 1994/09/08 19:38:59 Kell Exp Kell $
+d103 1
+a103 1
+	sw:obj/MBDispatch.o \
+d339 2
+@
+
+
+2.98
+log
+@Removed TestStation from the standard make dependencies.  To speed up make.
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.97 1994/09/02 08:41:14 Kell Exp Kell $
+d573 1
+a573 1
+sw:obj/PEComm.o: sw:src/PEComm.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/EditSwit.i sw:sinc/tags.i
+@
+
+
+2.97
+log
+@New dependencies on some files we all mess with (common includes).
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.96 1994/09/01 03:38:40 Kell Exp Kell $
+d75 1
+a75 1
+	ECS AA 3.0 TestStation $(DEST)VideoToaster $(DEST)VideoToaster.AA\
+d82 1
+a82 1
+ram:NeverExists: ECS AA 3.0 TestStation $(DEST)VideoToaster $(DEST)VideoToaster.AA\
+@
+
+
+2.96
+log
+@Fixed croutonhandler.a dependence on flyer.i
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.95 1994/07/27 20:48:51 Kell Exp Kell $
+d281 2
+a282 1
+sw:obj/Switcher.AA_o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/instinct.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i
+d325 2
+a326 1
+sw:obj/Switcher.OLD_o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i
+d337 2
+a338 1
+sw:obj/Switcher.o: sw:src/Switcher.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/macros.i sw:sinc/EfLibUpdate sw:sinc/hardsets.i sw:sinc/croutons.i sw:sinc/CommonRGB.i sw:sinc/tags.i
+d420 1
+a420 1
+sw:obj/FSIcon.o: sw:src/FSIcon.a sw:sinc/InstinctUpdate
+d443 2
+a444 1
+sw:obj/FrameSlice.o: sw:src/FrameSlice.a sw:sinc/vthand.i sw:sinc/InstinctUpdate sw:sinc/FrameIO.i  sw:sinc/smallmacros.i sw:sinc/custom.i sw:sinc/CommonRGBPrivate.i sw:sinc/rgb2yiq.i sw:sinc/yiq2comp.i sw:sinc/FrameLoad.i sw:sinc/tags.i
+d480 1
+a480 1
+sw:obj/ARexxHandler.o: sw:src/ARexxHandler.a sw:sinc/InstinctUpdate sw:sinc/assembler.i
+d527 1
+a527 1
+sw:obj/CroutonLoad.o: sw:src/CroutonLoad.a sw:sinc/InstinctUpdate
+d573 1
+a573 1
+sw:obj/PEComm.o: sw:src/PEComm.a sw:sinc/InstinctUpdate sw:sinc/assembler.i sw:sinc/EditSwit.i
+d695 2
+@
+
+
+2.95
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.94 1994/07/22 19:31:26 Kell Exp Kell $
+d525 1
+a525 1
+sw:obj/CroutonHandler.o: sw:src/CroutonHandler.a sw:sinc/InstinctUpdate
+@
+
+
+2.94
+log
+@Added croutonhandler.a
+@
+text
+@d7 1
+a7 1
+#* $Id: makefile,v 2.93 94/07/01 17:32:53 Kell Exp Locker: Kell $
+d751 1
+@
+
+
+2.93
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70ace50 differ
+@
+
+
+2.92
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70bdb90 differ
+@
+
+
+2.91
+log
+@added entrys for FSIcon
+@
+text
+@Binary files makefile and t:,RCSt1A70bd868 differ
+@
+
+
+2.90
+log
+@Switcher now dependent on DHDlink.o
+@
+text
+@Binary files makefile and t:,RCSt1A708c2e0 differ
+@
+
+
+2.89
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c32a0 differ
+@
+
+
+2.88
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c3278 differ
+@
+
+
+2.87
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70a64d0 differ
+@
+
+
+2.86
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70b8ef8 differ
+@
+
+
+2.85
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70b8ef8 differ
+@
+
+
+2.84
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70b8ef8 differ
+@
+
+
+2.83
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70a60c0 differ
+@
+
+
+2.82
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.81
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.80
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.79
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.78
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.77
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.76
+log
+@Took of ">" file direction on slink.
+@
+text
+@Binary files makefile and t:,RCSt1A70c3650 differ
+@
+
+
+2.75
+log
+@Fixes to prevent unsuccessful assems/links from creating bogus files
+with a current data.
+@
+text
+@Binary files makefile and t:,RCSt1A70c0238 differ
+@
+
+
+2.74
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c3308 differ
+@
+
+
+2.73
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c3108 differ
+@
+
+
+2.72
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c3710 differ
+@
+
+
+2.71
+log
+@Various changes to support the new 4.0 croutons & projects.
+@
+text
+@Binary files makefile and t:,RCSt1A70c2fc0 differ
+@
+
+
+2.70
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c35c0 differ
+@
+
+
+2.69
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70c3b08 differ
+@
+
+
+2.68
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b3df8 differ
+@
+
+
+2.67
+log
+@*** empty log message ***
+@
+text
+@Binary files MakeFile and t:,RCSt1A78b9e60 differ
+@
+
+
+2.66
+log
+@*** empty log message ***
+@
+text
+@Binary files Makefile and t:,RCSt1A70a2178 differ
+@
+
+
+2.65
+log
+@Fixed HS.Default's dependencies.
+@
+text
+@Binary files makefile and t:,RCSt1A70a2178 differ
+@
+
+
+2.64
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b9080 differ
+@
+
+
+2.63
+log
+@Now makes HS & HS.Default
+@
+text
+@Binary files makefile and t:,RCSt1A78afc78 differ
+@
+
+
+2.62
+log
+@New dependencies on HardSets.i
+@
+text
+@Binary files makefile and t:,RCSt1A78afc78 differ
+@
+
+
+2.61
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78af528 differ
+@
+
+
+2.60
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A7042ab8 differ
+@
+
+
+2.59
+log
+@Changed makefile so dos version works on switcher.
+@
+text
+@Binary files Makefile and t:,RCSt1A70ad8c8 differ
+@
+
+
+2.58
+log
+@*** empty log message ***
+@
+text
+@Binary files MakeFile and t:,RCSt1A70ad8c8 differ
+@
+
+
+2.57
+log
+@*** empty log message ***
+@
+text
+@Binary files MakeFile and t:,RCSt1A70a1e60 differ
+@
+
+
+2.56
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78afc50 differ
+@
+
+
+2.55
+log
+@Now makes TestStation switcher
+@
+text
+@Binary files makefile and t:,RCSt1A78b04a8 differ
+@
+
+
+2.54
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b0308 differ
+@
+
+
+2.53
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b0308 differ
+@
+
+
+2.52
+log
+@*** empty log message ***
+@
+text
+@Binary files MakeFile and t:,RCSt1A70a1ff0 differ
+@
+
+
+2.51
+log
+@Now can make Slave & master switchers via "Make TestStation"
+@
+text
+@Binary files Makefile and t:,RCSt1A70a1bf0 differ
+@
+
+
+2.50
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b0b18 differ
+@
+
+
+2.49
+log
+@*** empty log message ***
+@
+text
+@Binary files MakeFile and t:,RCSt1A70a7f80 differ
+@
+
+
+2.48
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78aef60 differ
+@
+
+
+2.47
+log
+@*** empty log message ***
+@
+text
+@Binary files Makefile and t:,RCSt1A70a2078 differ
+@
+
+
+2.46
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A70a26a8 differ
+@
+
+
+2.45
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78b0280 differ
+@
+
+
+2.44
+log
+@*** empty log message ***
+@
+text
+@Binary files Makefile and t:,RCSt1A70b1b68 differ
+@
+
+
+2.43
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78ac078 differ
+@
+
+
+2.42
+log
+@Conditionally assembles VideoToaster for AA or non-AA machines.
+@
+text
+@Binary files makefile and t:,RCSt1A78ac078 differ
+@
+
+
+2.41
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a3b18 differ
+@
+
+
+2.40
+log
+@*** empty log message ***
+@
+text
+@Binary files Makefile and t:,RCSt1A70b19c0 differ
+@
+
+
+2.39
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a39a0 differ
+@
+
+
+2.38
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a3c08 differ
+@
+
+
+2.37
+log
+@Now have AA version of Bars.a
+@
+text
+@Binary files makefile and t:,RCSt1A78a3d80 differ
+@
+
+
+2.36
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a3d80 differ
+@
+
+
+2.35
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A0299840 differ
+@
+
+
+2.34
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A786ea70 differ
+@
+
+
+2.33
+log
+@Added AnimFXHandler.a module for playing 3.0 & VT4000 effects croutons.
+@
+text
+@Binary files makefile and t:,RCSt1A78a3a50 differ
+@
+
+
+2.32
+log
+@Removed VTD
+@
+text
+@Binary files makefile and t:,RCSt1A78a3a50 differ
+@
+
+
+2.31
+log
+@Now makes Switcher.main.3.0
+@
+text
+@Binary files makefile and t:,RCSt1A74bae28 differ
+@
+
+
+2.30
+log
+@New CStubs.a module for assembly entry points of c-routines.
+@
+text
+@Binary files makefile and t:,RCSt1A78a3c00 differ
+@
+
+
+2.29
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a3c68 differ
+@
+
+
+2.28
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A74f7780 differ
+@
+
+
+2.27
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A74f7780 differ
+@
+
+
+2.26
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78971c8 differ
+@
+
+
+2.25
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A74ba4a0 differ
+@
+
+
+2.24
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A74c8260 differ
+@
+
+
+2.23
+log
+@Added Sound Effects
+@
+text
+@Binary files makefile and t:,RCSt1A0299a08 differ
+@
+
+
+2.22
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A0299840 differ
+@
+
+
+2.21
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a4158 differ
+@
+
+
+2.20
+log
+@Added ASLfileReq.a
+@
+text
+@Binary files makefile and t:,RCSt1A78a46c0 differ
+@
+
+
+2.19
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a46c0 differ
+@
+
+
+2.18
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78af308 differ
+@
+
+
+2.17
+log
+@Added separate AA & ECS makes.œ
+@
+text
+@Binary files makefile and t:,RCSt1A74bb358 differ
+@
+
+
+2.16
+log
+@Made Instinct.i dependent on InstinctUpdate & EflibUpdate
+@
+text
+@Binary files makefile and t:,RCSt1A78a4448 differ
+@
+
+
+2.15
+log
+@Added New Anim Vectors
+@
+text
+@Binary files makefile and t:,RCSt1A78e0968 differ
+@
+
+
+2.14
+log
+@Added AnimatedEffects.a and AnimatedEffectsEqu.i
+@
+text
+@Binary files makefile and t:,RCSt1A0299870 differ
+@
+
+
+2.13
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A02997f0 differ
+@
+
+
+2.12
+log
+@Dynam.a now is conditional on AACHIPS.
+@
+text
+@Binary files makefile and t:,RCSt1A74baa28 differ
+@
+
+
+2.11
+log
+@Added AnimWipe.AA & AnimFileIO.AA conditional assembly
+@
+text
+@Binary files makefile and t:,RCSt1A78a4560 differ
+@
+
+
+2.10
+log
+@Support AACHIPS flag to create both Switcher.main & Switcher.main.aa
+@
+text
+@Binary files makefile and t:,RCSt1A78a4158 differ
+@
+
+
+2.9
+log
+@Made more things dependent on vthand.i
+@
+text
+@Binary files makefile and t:,RCSt1A78a3ab8 differ
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A78a3588 differ
+@
+
+
+2.7
+log
+@Added AnimWipeMacros.i
+@
+text
+@Binary files MakeFile and t:,RCSt1A029bf70 differ
+@
+
+
+2.6
+log
+@added mtslicerequester
+@
+text
+@Binary files MakeFile and t:,RCSt1A02996e0 differ
+@
+
+
+2.5
+log
+@added sequence.a
+@
+text
+@Binary files makefile and t:,RCSt1A02a0530 differ
+@
+
+
+2.4
+log
+@Changed order of dependencies for Switcher:
+@
+text
+@Binary files makefile and t:,RCSt1A02a0728 differ
+@
+
+
+2.3
+log
+@Took out Instinct.i & EfLib.i dependancies.
+Use InstinctUpdate & EfLibUpdate instead.
+
+,
+@
+text
+@Binary files makefile and t:,RCSt1A031c9b8 differ
+@
+
+
+2.2
+log
+@fixed NeverExists dependencies
+@
+text
+@Binary files makefile and t:,RCSt1A031c9b8 differ
+@
+
+
+2.1
+log
+@now works with VT:exe
+@
+text
+@Binary files makefile and t:,RCSt1A03170d0 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files makefile and t:,RCSt1A03170d0 differ
+@

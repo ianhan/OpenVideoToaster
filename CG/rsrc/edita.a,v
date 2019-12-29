@@ -1,0 +1,1099 @@
+head	2.0;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.0
+date	95.08.31.15.10.21;	author Holt;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@********************************************************************
+* edita.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: edita.a,v  Exp $
+*
+* $Log: edita.a,v $
+*
+*
+**********************************************************************
+********************************************************************
+* edita.a 
+*
+* Copyright 1993 NewTek, Inc.
+* written by Stephen Hartford for NewTek, Inc.
+*
+* 9-29-89	Steve H.	Created this file
+* 5-15-90	Steve H.	Major revision - check for corrupt memory bugs
+* 9-26-91	Steve H.	Wrote UpdatePreview()
+* 9-27-91	Steve H.	Modified RenderRealPage() for render to disk
+* 10-7-91	Steve H.	Added DOS error handling for render to disk
+* 11-29-91	Steve H.	Added NewCurrentPage()
+* 12-13-91	Steve H.	No longer allows transparent shadows on scroll/crawl
+* 12-31-91	Steve H.	Fixed bug in EraseUserLine()
+* 2-3-92	Steve H.	InsertLine() fixed XOffset for gs on SCROLL
+* 12-19-92	Steve H.	Fixed bug in InsertLine() where freed fonts in Default
+*						line could get into new line
+* 2-24-93	Steve H.	New temp/text arrays
+* 6-6-93	Steve H.	Last update
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include "exec/exec.i"
+	include "intuition/intuition.i"
+	include "hardware/custom.i"
+	include "hardware/dmabits.i"
+	include "hardware/intbits.i"
+	include "hardware/blit.i"
+
+	include "lib/exec_lib.i"
+	include "lib/graphics_lib.i"
+	include "crlib:libinc/crouton_lib.i"
+
+	include "modular.i"
+	include "data.xref"
+
+	include	"book.i"
+	include "buffer.i"
+	include "cgmessage.i"
+	include "crawl.i"
+	include "fastblitter.i"
+	include "instinct.i"
+	include "renderline.i"
+	include "rounding.i"
+	include "rawkey.i"
+	include "seperator.i"
+	include "user.i"
+	include "misc.i"
+	include "serialdebug.i"
+	include "vtdebug.i"
+	include "graphichelp.i"
+
+CRAWL_MAX_H	equ	300
+
+* SERDEBUG equ 1
+
+CF equ 1
+
+	xref	LinesPerPageMessage
+	xref _CroutonBase
+
+
+CURSOR_YOFFSET	equ	2
+
+CALLCR	MACRO
+	move.l	a6,-(sp)
+	move.l	_CroutonBase,a6
+	jsr	_LVO\1(a6)
+	move.l	(sp)+,a6
+	ENDM
+
+	section	,code
+*******************************************************************
+* RedoEditPage()
+*	uses gb_OldPageType to erase buffers,
+*	uses gb_PageNumber to render a new edit page
+*	preserves gb_CurrentLine
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ CLABEL RedoEditPage
+	XJSR	_EraseEditPage
+	move.b	#TRUE,gb_UpdatePageProp(a4)
+	bsr		DoNewEditPage
+	rts
+
+*******************************************************************
+* NewCurrentPage()
+*	Call whenever you want to directly modify gb_CurrentPage
+*	(DO NOT write directly to this long, other stuff will get
+*	messed up)
+*
+* Upon Exit:
+*	all preserved
+********************************************************************`
+ CLABEL NewCurrentPage
+	movem.l	d0-d1/a0-a1,-(sp)
+
+	move.w	gb_PageNumber(a4),d0
+	mulu.w	#page_SizeOf,d0
+	move.l	gb_CurrentBook(a4),a1
+	lea.l	book_PageArray(a1),a1
+	add.l	d0,a1
+	move.l	a1,gb_CurrentPage(a4)
+
+	move.l	page_LineList+MLH_HEAD(a1),a0
+	tst.l	MLN_SUCC(a0)
+	bne.s	.GotLine
+	sub.l	a0,a0	; no lines on page
+.GotLine
+	XJSR	_NewCurrentLine
+
+* Nobody else should call IsPageBuffered(), call NewCurrentPage() instead
+	clr.b	gb_PageBuffered(a4)
+	clr.b	gb_DeleteBuffer(a4)
+	XJSR	IsPageBuffered
+	tst.w	d0
+	beq.s	.NoBuff
+	move.b	#1,gb_PageBuffered(a4) ; set buffered bit
+.NoBuff
+
+	bsr		VerifyPageID	; make sure default ID is valid for new page
+
+	move.b	#TRUE,gb_SetupPageProp(a4)
+	movem.l	(sp)+,d0-d1/a0-a1
+	rts
+
+*******************************************************************
+* NewEditPage()
+*	uses gb_OldPageType to erase buffers,
+*	uses gb_PageNumber to render a new edit page,
+*	sets gb_CurrentLine to first line on page
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL NewEditPage
+	bsr		NewCurrentPage
+
+	moveq.l	#0,d0
+	move.w	d0,gb_OldCursorY(a4)
+	move.w	d0,gb_ScrollYOffset(a4)
+	move.w	d0,gb_CursorPosition(a4)
+
+* forget about any keys/framestores which were ready to take
+	and.w	#~(MASK_READY!MASK_DIB_READY),gb_State(a4)
+
+	DUMPMSG <NewEditPage: Entry>
+
+
+	XJSR	_EraseToasterPage
+	DUMPMSG <EraseToasterPage: Done>
+	bsr	UpdatePreview
+	DUMPMSG <UpdatePreview: Done>
+
+	move.l	a5,-(sp)
+	move.l	gb_ToasterBase(a4),a5
+ IFND FINAL_CODE
+	cmp.l	#0,a5
+	beq.s	.NoToast
+ ENDC
+	CALLTL	SendELH2Toaster
+.NoToast
+	move.l	(sp)+,a5
+
+	move.b	#TRUE,gb_UpdateInterface(a4)
+	XJSR	_EraseTotalInterface
+	DUMPMSG <EraseTotalInterface: Done>
+	bsr		DoNewEditPage
+	DUMPMSG <DoNewEditPage: Done>
+	rts
+
+*******************************************************************
+* UpdatePreview()
+* 	figure out what to show on preview
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL UpdatePreview
+	move.l	a5,-(sp)
+	move.l	gb_ToasterBase(a4),a5
+
+ IFND FINAL_CODE
+	cmp.l	#0,a5
+	beq.s	.NoToast
+ ENDC
+
+	move.l	gb_CurrentPage(a4),a0
+	moveq.l	#0,d0
+	move.b	page_Type(a0),d0
+	add.w	d0,d0
+	add.w	d0,d0
+	lea.l	TB_VTSetUp(a5),a0
+	jmp		1$(pc,d0.w)
+1$
+	bra.w	.Empty
+	bra.w	.Key
+	bra.w	.Frame
+	bra.w	.Scroll
+*	bra.w	.Crawl
+
+.Key
+.Scroll
+	tst.w	TB_UserOn(a5)
+	bne.s	.ShowVideo	; if 2 monitor, show BG video
+	bra.s	.ShowDAC	; if 3 monitor, show render DAC
+
+*****************
+.ShowVideo
+	XJSR	GetBackground
+	CALLTL	Mask2PV
+	ELHPUT_PV_R	a0,d0
+	bra.s	.SendIt
+
+.Empty
+.Frame
+.ShowDAC
+	bsr.s	ShowPreviewRender
+
+*****************
+.SendIt
+*	CALLTL	SendELH2Toaster	; not done here anymore
+.NoToast
+	move.l	(sp)+,a5
+	rts
+
+********************************************************************
+ XLABEL ShowPreviewRender
+	move.l	a5,-(sp)
+	move.l	gb_ToasterBase(a4),a5
+
+	move.w	gb_State(a4),d0
+	lea.l	TB_VTSetUp(a5),a0
+	btst.l	#BIT_RENDER_BANK,d0
+	bne.s	.Show1
+	ELHPUT_PV_I	a0,VTI_PV_DAC0
+	ELHCLEAR_OBR a0
+	bra.s	.Exit
+.Show1
+	ELHPUT_PV_I	a0,VTI_PV_DAC1
+	ELHSET_OBR a0
+.Exit
+	move.l	(sp)+,a5
+	rts
+
+********************************************************************`
+* watch for bad types
+ CLABEL VerifyPageID
+	movem.l	d2/a6,-(sp)
+
+	lea.l	gb_DefaultAttr(a4),a6	; template line
+	move.w	attr_ID(a6),d0
+	XJSR	_PageIDOK
+	tst.w	d0
+	bne.s	.IDOK
+	clr.w	attr_ID(a6)
+	move.b	#TRUE,gb_UpdateInterface(a4)
+.IDOK
+
+	move.w	gb_LastDefaultFont(a4),d0
+	XJSR	_PageIDOK
+	tst.w	d0
+	bne.s	.FOK
+	clr.w	gb_LastDefaultFont(a4)
+.FOK
+
+* also make opaque on scroll/crawl
+	move.l	gb_CurrentPage(a4),a0
+	cmp.b	#PAGE_SCROLL,page_Type(a0)
+	beq.s	.Y
+	cmp.b	#PAGE_CRAWL,page_Type(a0)
+	bne.s	.N
+.Y
+	move.b	#ALPHA_OPAQUE,attr_FaceColor+tc_Alpha(a6)
+	move.b	#ALPHA_OPAQUE,attr_ShadowColor+tc_Alpha(a6)
+	move.b	#ALPHA_OPAQUE,attr_OutlineColor+tc_Alpha(a6)
+	move.b	#ALPHA_OPAQUE,attr_GradColor+tc_Alpha(a6)
+.N
+
+	movem.l	(sp)+,d2/a6
+	rts
+
+********************************************************************
+DoNewEditPage
+	DUMPMSG <DoNewEditPage: Entry>
+	bsr		RenderEditPage
+	DUMPMSG <RenderEditPage: Done>
+	move.b	#TRUE,gb_UpdateCursor(a4)
+	move.l	gb_CurrentPage(a4),a0
+	move.b	page_Type(a0),gb_OldPageType(a4)
+	rts
+
+*******************************************************************
+* AppendLineToPage()
+*
+* Upon Entry:
+*	a0 (struct Page *)
+*
+* Upon Exit:
+*	d0 (struct Line *) NewLine
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL InsertLineGivenXY
+	movem.l	d2-d5/a2-a3/a5-a6,-(sp)
+	move.w	d0,d4
+	move.w	d1,d5
+	bra.s	InsertEntry	; a0 is line
+
+ CLABEL AppendLineToPage
+	move.l	page_LineList+MLH_TAILPRED(a0),a0	; last line on page
+
+*******************************************************************
+* InsertLine()
+*	inserts a line immediately following this line
+*	doesn't allow chromafonts on a scroll/crawl page
+*
+* Upon Entry:
+*	a0 (struct Line *) ExistingLine
+*
+* Upon Exit:
+*	d0 (struct Line *) NewLine, or NULL if out of memory/MAX_LINES_PER_PAGE
+*	Updates gb_StatusMessage on error.
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL InsertLine
+	movem.l	d2-d5/a2-a3/a5-a6,-(sp)
+	moveq.l	#-1,d4
+
+InsertEntry
+	lea.l	gb_DefaultLine(a4),a6	; template line
+
+	sub.l	a2,a2	; ptr to string for error (gb_StatusMessage)
+	move.l	a0,d1
+	beq		99$		; no existing line
+	move.l	a0,a5
+
+	move.l	gb_CurrentPage(a4),a0
+*	lea.l	page_LineList(a0),a0	; not needed - zero offset
+	lea.l	LinesPerPageMessage,a2
+	XJSR	NodesThisList
+	cmp.l	#MAX_LINES_PER_PAGE,d0
+	bhs		99$
+
+	move.l	#line_SizeOf,d0
+	move.l	#MEMF_CLEAR,d1
+	CALLCR	SafeAllocMem
+	tst.l	d0
+	beq		.RealExit
+	move.l	d0,a3	; line ptr (node ptr)
+
+	move.l	gb_CurrentPage(a4),a0 ; on CRAWL, only first line gets attr
+	cmp.b	#PAGE_CRAWL,page_Type(a0)
+	bne.s	.NC
+*	lea.l	page_LineList(a0),a0
+	TSTLIST	a0
+	bne.s	.OK	; not an empty list
+.NC
+
+	lea.l	gb_DefaultAttr(a4),a0
+	XJSR	_AllocAttrib
+	move.l	d0,line_Text+text_Attr(a3)
+	bne.s	.OK
+	move.l	a3,a0
+	move.l	gb_CurrentPage(a4),a1
+	XJSR	_FreeLine
+	bra		99$
+.OK
+
+* insert this new line so that nodes are: a5 -> a3 -> a0
+	move.l	line_Node+MLN_SUCC(a5),a0
+	move.l	a0,line_Node+MLN_SUCC(a3)
+	move.l	a3,line_Node+MLN_SUCC(a5)
+	move.l	a5,line_Node+MLN_PRED(a3)
+	move.l	a3,line_Node+MLN_PRED(a0)
+
+*****************************************
+* watch for bad types
+	bsr		VerifyPageID
+
+	move.w	#DEFAULT_STATIC_XOFFSET,line_XOffset(a3) ; if no justification
+	cmp.b	#PAGE_SCROLL,d2
+	beq.s	.Shad
+	cmp.b	#PAGE_CRAWL,d2
+	bne.s	.ShadDone
+.Shad
+	clr.w	line_XOffset(a3) ; for gs on scroll pages
+.ShadDone
+
+* copy current global values (globals always kept valid)
+	move.b	line_Type(a6),line_Type(a3)
+	move.b	line_JustifyMode(a6),line_JustifyMode(a3)
+
+	move.l	a3,a0
+	XJSR	_SetupNewLine	; sets up box,brush, calls UpdateLineHeight()
+
+*****************************************
+* YOffset
+	move.l	gb_CurrentPage(a4),a0
+	cmp.b	#PAGE_CRAWL,page_Type(a0)
+	beq.s	.Crawl
+
+* if YOffset given, use it
+	cmp.l	#-1,d4
+	beq.s	.NotY
+	move.w	d4,d1
+	bra.s	.SaveY
+.NotY
+
+* else check for higher line to calc from
+	move.l	line_Node+MLN_PRED(a3),a0	; can't use GetNextHigherLine() yet
+	tst.l	line_Node+MLN_PRED(a0)
+	bne.s	.GotAbove
+
+* if nothing, just center
+	move.w	#INTERFACE_HEIGHT/2,d1
+	move.w	line_TotalHeight(a3),d0
+	lsr.w	#1,d0
+	sub.w	d0,d1
+	bgt.s	.YOK
+	moveq.l	#0,d1
+.YOK	
+	bra.s	.SaveY
+
+* if line above us, put right below it
+.GotAbove
+	move.w	line_YOffset(a0),d1
+	add.w	line_TotalHeight(a0),d1
+	bra.s	.SaveY
+
+* CRAWL YOffset - if first, at bottom, else, from 1st line
+.Crawl
+	move.l	line_Node+MLN_PRED(a3),a0
+	tst.l	line_Node+MLN_PRED(a0)
+	beq.s	.PreC
+	move.l	page_LineList+MLH_HEAD(a1),a0
+	move.w	line_YOffset(a0),d1
+	bra.s	.SaveY
+
+* first crawl line
+.PreC
+	move.w	#INTERFACE_HEIGHT-CF,d1	; -1 for chromafonts
+	sub.w	line_TotalHeight(a3),d1
+.SaveY
+	move.w	d1,line_YOffset(a3)
+
+********************
+* calc XOffset
+	move.l	a3,a0
+	XJSR	_JustifyThisLine
+
+* if given X, and justify mode allows, use it
+	cmp.l	#-1,d4
+	beq.s	.NotX
+	cmp.b	#JUSTIFY_NONE,line_JustifyMode(a3)
+	beq.s	.DoX2
+	cmp.b	#JUSTIFY_LEFT,line_JustifyMode(a3)
+	bne.s	.XDone
+.DoX2
+	move.w	d5,line_XOffset(a3)
+	bra.s	.XDone
+.NotX
+
+* if higher line, use its XOffset
+	move.l	gb_CurrentPage(a4),a0
+	cmp.b	#PAGE_CRAWL,page_Type(a0)
+	beq.s	.XDone
+	move.l	a3,a1
+	XJSR	_GetNextHigherLine
+	tst.l	d0
+	beq.s	.XDone
+	move.l	d0,a0
+
+	cmp.b	#JUSTIFY_NONE,line_JustifyMode(a3)
+	beq.s	.DoX
+	cmp.b	#JUSTIFY_LEFT,line_JustifyMode(a3)
+	bne.s	.XDone
+.DoX
+	move.w	line_XOffset(a0),line_XOffset(a3)
+.XDone
+
+	move.l	a3,d0
+	sub.l	a2,a2
+99$
+	move.l	a2,d1
+	beq.s	.RealExit	; don't destroy any existing message for nothing
+	move.l	a2,a0
+	XJSR	_CGRequest
+	move.b	#TRUE,gb_UpdateInterface(a4)
+	moveq.l	#0,d0		; no line to return
+.RealExit
+
+	movem.l	(sp)+,d2-d5/a2-a3/a5-a6
+	rts
+
+*******************************************************************
+* RenderEditPage() - renders page for editing purposes,
+*	preserves gb_CurrentLine
+*
+* Upon Exit:
+*	d0 UWORD returns FALSE if user abort, else TRUE
+*	d1/a0-a1 trashed
+********************************************************************`
+ CLABEL AllRenderEditPage
+RenderEditPage
+	DUMPMSG <RenderEditPage: Entry>
+	movem.l	d2/d7/a2-a3/a5,-(sp)
+
+	clr.w	gb_OldCursorY(a4)
+	moveq.l	#FALSE,d7	; is this a new page? If not, keep currentline
+	move.l	gb_CurrentPage(a4),a3
+	cmp.l	gb_LastEditPage(a4),a3
+	bne.s	.GotStatus
+	move.l	gb_CurrentLine(a4),d0	; currentline valid?
+	beq.s	.GotStatus
+	moveq.l	#TRUE,d7	; yes, same page as last time
+.GotStatus
+	move.l	a3,gb_LastEditPage(a4)	; save for next time
+
+	move.l	gb_CurrentLine(a4),a5	; save for later
+	move.l	page_LineList+MLH_HEAD(a3),a0
+	tst.l	MLN_SUCC(a0)			; first line a real line?
+	beq		95$
+	move.l	a0,gb_CurrentLine(a4) 	; start with first line always
+
+	moveq.l	#0,d0
+	move.b	page_Type(a3),d0
+	add.w	d0,d0
+	add.w	d0,d0
+	DUMPMSG <RenderEditPage: About to Jump>
+	jmp		1$(pc,d0.w)
+1$
+	bra.w	90$		; empty
+	bra.w	20$		; static
+	bra.w	20$		; buffer
+	bra.w	9$		; scroll
+*	bra.w	8$		; crawl	 (not needed)
+
+*************************************
+* PAGE_CRAWL
+8$
+	DUMPMSG <Crawl>
+	XJSR	RenderUserCrawlLine
+	move.l	gb_CurrentPage(a4),a0
+	XJSR	_DisplayCrawlUserLine
+	bra		90$
+
+*************************************
+* PAGE_STATIC or PAGE_BUFFER: render all lines
+20$
+	DUMPMSG <StaticPage: >
+	move.l	gb_CurrentPage(a4),a0
+	XJSR	_RenderEditPage
+	DUMPMSG <C RenderEditPage: Done>
+	bra		90$
+
+*************************************
+* PAGE_SCROLL:
+* render all lines which are completely onscreen with current ScrollYOffset
+* also draw end-of-scroll indicator if visible
+9$
+* if gb_CurrentLine isn't visible, make it so
+	DUMPMSG <Scroll>
+	move.l	a5,a0
+	XJSR	_LineOnScreen
+	tst.w	d0
+	bne.s	.RenderVisible	; already visible
+	moveq.l	#FALSE,d7		; can't keep currentline
+
+	move.l	a5,gb_CurrentLine(a4)
+	move.b	#TRUE,gb_UpdateLine(a4)
+
+	move.l	gb_CurrentPage(a4),a0
+	move.l	gb_CurrentLine(a4),a1
+	move.l	gb_FullAlpha(a4),a2
+	moveq.l	#TRUE,d0
+	XJSR	_RenderScrollLine
+
+	moveq.l	#TRUE,d0	; movescreen if needed
+	move.l	gb_CurrentLine(a4),a0
+	XJSR	_DisplayScrollUserLine
+
+* render visible screen
+.RenderVisible
+	move.l	gb_CurrentPage(a4),a3
+	move.l	page_LineList+MLH_HEAD(a3),a3 ; first line in list
+
+.NextLine
+	tst.l	line_Node+MLN_SUCC(a3)	; is this line real?
+	beq.s	80$
+
+	move.l	a3,a0
+	XJSR	_LineOnScreen
+	tst.w	d0
+	beq.s	.ReadyNext	; if not gb_CurrentLine & not onscreen, don't
+
+	move.l	a3,gb_CurrentLine(a4)
+	move.b	#TRUE,gb_UpdateLine(a4)
+
+	move.l	gb_CurrentPage(a4),a0
+	move.l	gb_CurrentLine(a4),a1
+	move.l	gb_FullAlpha(a4),a2
+	moveq.l	#TRUE,d0
+	XJSR	_RenderScrollLine
+
+	moveq.l	#FALSE,d0	; don't movescreen
+	move.l	gb_CurrentLine(a4),a0
+	XJSR	_DisplayScrollUserLine
+
+.ReadyNext
+	move.l	line_Node+MLN_SUCC(a3),a3
+	bra.s	.NextLine
+80$
+
+*************************************
+90$
+95$
+	DUMPMSG <Empty>
+	move.l	a5,gb_CurrentLine(a4)
+	move.b	#TRUE,gb_UpdateInterface(a4)
+	move.b	#TRUE,gb_UpdateCursor(a4)
+	move.b	#TRUE,gb_UpdateLine(a4)
+	tst.l	d7
+	bne.s	.Exit
+	clr.w	gb_CursorPosition(a4)
+.Exit
+	movem.l	(sp)+,d2/d7/a2-a3/a5
+	rts
+
+*******************************************************************
+* RenderEditLine(Line)
+*	renders an edit line (but doesn't display it)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ CLABEL RenderEditLine
+	movem.l	a2-a3,-(sp)
+	move.l	a0,a3	; line
+
+	move.l	gb_CurrentPage(a4),a0
+	move.b	page_Type(a0),d0
+	beq.s	.Exit
+	move.l	a3,d1
+	beq.s	.Exit
+	cmp.b	#PAGE_CRAWL,d0
+	bne.s	.NotCrawl
+	XJSR	RenderUserCrawlLine
+	move.b	#TRUE,gb_UpdatePageProp(a4)
+	bra.s	.Exit
+.NotCrawl
+	cmp.b	#PAGE_SCROLL,d0
+	bne.s	.NotS
+	move.l	gb_CurrentPage(a4),a0
+	move.l	a3,a1
+	move.l	gb_FullAlpha(a4),a2
+	moveq.l	#TRUE,d0
+	XJSR	_RenderScrollLine
+	move.b	#TRUE,gb_UpdatePageProp(a4)
+	bra.s	.Exit
+.NotS
+	move.l	gb_CurrentPage(a4),a0
+	move.l	a3,a1
+	XJSR	_RenderEditLineArea
+.Exit
+	movem.l	(sp)+,a2-a3
+	rts
+
+*******************************************************************
+* DisplayEditLine(Line)
+*	displays an edit line
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ CLABEL DisplayEditLine
+	move.l	a2,-(sp)
+	move.l	a0,a2
+
+	move.l	a2,d0
+	beq.s	.Exit
+	move.l	gb_CurrentPage(a4),a0
+	moveq.l	#0,d0
+	move.b	page_Type(a0),d0
+	add.w	d0,d0
+	jmp		1$(pc,d0.w)
+1$
+	bra.b	90$		; empty
+	bra.b	10$		; static
+	bra.b	10$		; buffer
+	bra.b	20$		; scroll
+*	bra.b	30$		; crawl
+
+* PAGE_CRAWL
+	move.l	gb_CurrentPage(a4),a0
+	XJSR	_DisplayCrawlUserLine
+	bra.s	90$
+
+* PAGE_SCROLL
+20$
+	moveq.l	#TRUE,d0	; move screen if necessary
+	move.l	a2,a0
+	XJSR	_DisplayScrollUserLine
+	bra.s	90$
+
+* PAGE_STATIC or PAGE_BUFFER
+10$
+	move.l	gb_CurrentPage(a4),a0
+	move.l	a2,a1
+	XJSR	_DisplayEditLineArea
+
+* PAGE_EMPTY
+90$
+.Exit
+	move.l	(sp)+,a2
+	rts
+
+*******************************************************************
+* DoAsmCG() - done after every Case() routine returns
+*
+* During Routine:
+*	d2 - rendered line to display?
+*	d3 - scrolling display?
+*	d4 - under template?
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ CLABEL DoAsmCG
+	movem.l	a2-a3/d2-d5,-(sp)
+	move.l	gb_CurrentLine(a4),a2	; may be null, be careful
+	move.l	gb_CurrentPage(a4),a3	; always valid
+
+	XJSR	RemoveEmptyLines
+
+***********************************
+* check if need to redraw whole page
+	tst.b	gb_UpdatePage(a4)
+	beq.s	.PageDone
+	cmp.b	#UPDATE_PAGE_NEW,gb_UpdatePage(a4)
+	beq.s	.NewPage
+	bsr		RedoEditPage
+	bra.s	.And
+.NewPage
+	bsr		NewEditPage
+.And
+	moveq.l	#0,d0
+	move.b	d0,gb_UpdatePage(a4)	; since re-did whole page,
+	move.b	d0,gb_UpdateLine(a4)	; no further updates needed
+	move.w	d0,gb_OldCursorY(a4)
+
+* line and page may be different now
+	move.l	gb_CurrentLine(a4),a2	; may be null, be careful
+	move.l	gb_CurrentPage(a4),a3	; always valid
+.PageDone
+
+***********************************
+* take care of rendering internal line buffer
+	moveq.l	#FALSE,d2			; rendered line to display?
+	tst.b	gb_UpdateLine(a4)
+	beq.s	.RLineDone
+	move.l	gb_CurrentLine(a4),a0
+	bsr		RenderEditLine
+	moveq.l	#TRUE,d2
+	move.b	d2,gb_UpdateCursor(a4)
+	clr.b	gb_UpdateLine(a4)
+.RLineDone
+
+***********************************
+* erase cursor
+	tst.b	gb_UpdateCursor(a4)
+	beq.s	.NoEraseCursor
+	XJSR	_EraseCursor	; erase regardless (error protection built-in)
+.NoEraseCursor
+
+***********************************
+* display edit line
+	tst.b	d2			; line rendered?
+	beq.s	.NoLine
+	move.l	gb_CurrentLine(a4),a0
+	bsr		DisplayEditLine 
+.NoLine
+
+***********************************
+* render cursor
+	tst.b	gb_UpdateCursor(a4)
+	beq.s	.CursorDone
+	XJSR	_RenderCursor
+.CursorDone
+
+***********************************
+* render template if necessary
+	tst.l	gb_MenuBarWindow(a4)
+	beq.s	.PPCheck
+
+	tst.b	gb_UpdateInterface(a4)
+	beq.s	.UpdateDone
+	moveq.l	#0,d0
+	move.b	gb_NewBarMode(a4),d0
+
+* only SetupPageProp if new bar mode (like COLOR)
+	cmp.b	gb_BarMode(a4),d0
+	beq.s	.S2
+	move.b	#TRUE,gb_SetupPageProp(a4)
+.S2
+	move.b	#TRUE,gb_UpdatePageProp(a4)
+
+	XJSR	_RenderBar
+	clr.b	gb_UpdateInterface(a4)
+	clr.b	gb_UpdateBottomBar(a4)
+	bra.s	.BottomDone
+.UpdateDone
+
+	tst.b	gb_UpdateBottomBar(a4)
+	beq.s	.BottomDone
+	moveq.l	#0,d0
+	move.b	gb_BarMode(a4),d0
+	XJSR	_RenderBottomBar
+	clr.b	gb_UpdateBottomBar(a4)
+.BottomDone
+
+.PPCheck
+	tst.b	gb_SetupPageProp(a4)
+	beq.s	.SDone
+	move.l	gb_CurrentPage(a4),a0
+	XJSR	_SetupPageProp
+	move.b	#TRUE,gb_WholePropUpdate(a4)
+	move.b	#TRUE,gb_UpdatePageProp(a4)
+	clr.b	gb_SetupPageProp(a4)
+.SDone
+	tst.b	gb_UpdatePageProp(a4)
+	beq.s	.PPDone
+	moveq.l	#0,d0
+	move.b	gb_WholePropUpdate(a4),d0
+	XJSR	_UpdatePageBody
+	clr.b	gb_WholePropUpdate(a4)
+	clr.b	gb_UpdatePageProp(a4)
+.PPDone
+
+.AllDone
+	clr.b	gb_UpdateCursor(a4)
+	movem.l	(sp)+,a2-a3/d2-d5
+	rts
+
+*******************************************************************`
+* WORD TextInfoLength(struct TextInfo *)
+*
+* Summary:
+*	returns the length of the null-terminated (interleaved) string
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************
+ XLABEL _TextInfoLength
+ XLABEL TextInfoLength
+	moveq.l	#0,d0
+10$
+	tst.w	text_Ascii(a0)
+	beq.s	90$
+	addq.w	#1,d0
+	add.w	#text_SizeOf,a0
+	bra		10$
+90$
+	rts
+
+*******************************************************************
+ciaa_pra	SET	$BFE001		; CIA-A port A register
+lmb0_bit	SET	6		; port bit for port 0 LMB
+lmb1_bit	SET	7		; port bit for port 1 LMB
+Abspotgo		SET	$DFF034		; potentiometer control register
+Abspotgor		SET	$DFF016		; read address of potgo register
+rmb0_bit	SET	10		; potgorAbs bit for port 0 RMB
+rmb1_bit	SET	14		; potgorAbs bit for port 1 RMB
+
+*******************************************************************
+* InitMouseButtons()
+*	sets up so can detect both mouse buttons on both ports 0 and 1
+*
+* Upon Exit:
+*	all preserved
+********************************************************************`
+ XLABEL	InitMouseButtons
+ IFND FINAL_CODE
+	tst.l	gb_ToasterBase(a4)
+	bne.s	.OK
+	move.w	#$ff00,Abspotgo
+.OK
+ ENDC
+	rts
+
+ IFD ASDFG
+*******************************************************************
+* TestMouseButtons()
+*	returns non-zero if either button pressed,
+*	bit zero is left button,
+*	bit one is right button
+*
+* Upon Exit:
+*	d0 ULONG as above
+*	other registers preserved
+********************************************************************`
+ XLABEL TestMouseButtons
+	moveq.l	#0,d0
+	btst.b	#lmb0_bit,ciaa_pra	; get current state of button
+	bne.s	10$					; if button up - jump
+	moveq.l	#1,d0				; mark left as down
+10$
+	btst.b	#rmb0_bit-8,Abspotgor	; get current state of button
+	bne.s	20$					; if button up - jump
+	or.w	#2,d0
+20$
+	rts
+ ENDC
+
+*******************************************************************
+* TestRightButton
+*	returns non-zero if right button pressed
+*
+* Upon Exit:
+*	d0 ULONG as above
+*	other registers preserved
+********************************************************************`
+ CLABEL TestRightButton
+	movem.l	d2-d3/a5,-(sp)
+	moveq.l	#0,d3	; return
+
+ IFND FINAL_CODE
+	move.l	gb_ToasterBase(a4),d0
+	bne.s	.TB
+	btst.b	#rmb0_bit-8,Abspotgor	; get current state of button
+	bne.s	.Exit
+	moveq.l	#1,d3
+	bra.s	.Exit
+.TB
+	move.l	d0,a5
+ ENDC
+
+ IFD FINAL_CODE
+	move.l	gb_ToasterBase(a4),a5
+ ENDC
+
+	move.w	TB_ButtonFlag(a5),d2
+	move.w	#1,TB_ButtonFlag(a5) ; so checks for RMB
+	CALLTL	SelectButtonState
+	seq		d3
+	move.w	d2,TB_ButtonFlag(a5) ; restore state
+
+.Exit
+	move.l	d3,d0
+	movem.l	(sp)+,d2-d3/a5
+	rts
+
+*******************************************************************
+* TestAbort()
+*	returns TRUE if right mouse button down, or ESC pressed
+*	(Won't work during a Forbid())
+*
+* Upon Exit:
+*	d0 ULONG boolean
+*	other registers preserved
+********************************************************************`
+ CLABEL TestAbort
+	movem.l	d1/d3-d7/a0-a1/a3/a6,-(sp)
+
+* check RMB
+	bsr.s	TestRightButton
+	tst.w	d0
+	bne.s	.AbortExit
+
+* check for ESC key (swallow other keys)
+	move.w	gb_State(a4),d0
+	btst.l	#BIT_INTERFACE_ON,d0
+	beq.s	.SwitcherOn
+	move.l	gb_InterfaceWindow(a4),a3
+	bra.s	.GetPort
+.SwitcherOn
+	move.l	gb_ToasterBase(a4),a3
+	move.l	TB_Window(a3),a3
+.GetPort
+	move.l	wd_UserPort(a3),a3
+	move.l	gb_ExecLibrary(a4),a6
+
+.WaitLoop
+*	move.l	a3,a0
+*	XSYS	WaitPort	; wait for user input
+
+.GetMsgLoop
+	move.l	a3,a0
+	XSYS	GetMsg
+	tst.l	d0
+	beq.s	.NoAbortExit ; no messages at port
+
+	move.l	d0,a1
+	move.l	im_Class(a1),d3
+	move.w	im_Code(a1),d4
+	move.w	im_Qualifier(a1),d5
+	XSYS	ReplyMsg
+
+	cmp.l	#RAWKEY,d3
+	bne.s	.GetMsgLoop
+	cmp.w	#RAW_ESCAPE,d4
+	bne.s	.GetMsgLoop	; if not ESC, ignore and look for more
+
+.AbortExit
+	moveq.l	#TRUE,d0	; user abort requested
+	bra.s	.Exit
+.NoAbortExit
+	moveq.l	#FALSE,d0
+.Exit
+	movem.l	(sp)+,d1/d3-d7/a0-a1/a3/a6
+	rts
+
+*********************************
+ IFD SERDEBUG
+ RDUMP
+* MDUMP
+
+Dump1
+	DUMPREG	<InsertLine1>
+	WAIT4LMB
+	rts
+Dump2
+	DUMPREG	<InsertLine2>
+	WAIT4LMB
+	rts
+Dump3
+	DUMPREG	<InsertLine3>
+	WAIT4LMB
+	rts
+Dump4
+	DUMPREG	<InsertLine4>
+	WAIT4LMB
+	rts
+Dump5
+	DUMPREG	<InsertLine5>
+	WAIT4LMB
+	rts
+Dump6
+	DUMPREG	<InsertLine6>
+	WAIT4LMB
+	rts
+Dump7
+	DUMPREG	<InsertLine7>
+	WAIT4LMB
+	rts
+Dump8
+	DUMPREG	<InsertLine8>
+	WAIT4LMB
+	rts
+Dump9
+	DUMPREG	<InsertLine9>
+	WAIT4LMB
+	rts
+Dump10
+	DUMPREG	<InsertLine10>
+	WAIT4LMB
+	rts
+
+ ENDC
+
+	end
+* end of edita.a
+@

@@ -1,0 +1,132 @@
+head	2.3;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.3
+date	96.07.15.18.24.33;	author Holt;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	93.05.04.12.44.45;	author Finch2;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.02.23.18.15.36;	author Finch;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.19.00.00.21;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.3
+log
+@made many changes to make luts work in sequenceing.
+@
+text
+@********************************************************************
+* LUTRam.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lutram.a,v 2.2 1993/05/04 12:44:45 Finch2 Exp Holt $
+*
+* $Log: lutram.a,v $
+*Revision 2.2  1993/05/04  12:44:45  Finch2
+**** empty log message ***
+*
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUTRam"
+	section	LUT_bss,bss
+	include	"Assembler.i"
+	include	"Include.i"
+	include	"LUTEqu.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT Ram:							*
+*									*
+*	Contains all the Ram For LUT Mode.				*
+*									*
+*	07-Feb-1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_Base
+LUT_Base:
+	DS.B	LTE_Sizeof	; LUT Base Structure.
+*
+	XDEF	LUT_CycleLine
+LUT_CycleLine:
+	DS.B	4		; Current Position.
+*
+	XDEF	LUT_CycleSpeed
+LUT_CycleSpeed:
+	DS.B	4		; Current Speed.
+*
+	XDEF	LUT_EffectLUTBase
+LUT_EffectLUTBase:
+	DS.B	4		; Switcher TBar Routine, LUT Pointer.
+*
+	XDEF	LUT_EffectEfxBase
+LUT_EffectEfxBase:
+	DS.B	4		; Switcher TBar Routine, Effect Pointer.
+	
+	XDEF	LUT_mainorprev
+LUT_mainorprev:	
+	DS.B	1		; Put lut on up on main or preview.
+
+	XDEF	LUT_BUSS
+LUT_BUSS:
+	DS.B	4		; LUTBUSS
+	END
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: LUTRam.a,v 2.1 93/02/23 18:15:36 Finch Exp Locker: Finch2 $
+d9 3
+a11 1
+* $Log:	LUTRam.a,v $
+d13 1
+d52 8
+@
+
+
+2.1
+log
+@Started Work On RGB Interface
+@
+text
+@Binary files LUTRam.a and t:,RCSt1A786eaa8 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files lutram.a and t:,RCSt1A02997f0 differ
+@

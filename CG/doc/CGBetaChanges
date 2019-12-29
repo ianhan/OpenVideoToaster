@@ -1,0 +1,497 @@
+---------------------
+CG 3.0 Beta17 6-7-93
+---------------------
+
+Changes since Beta16
+--------------------
+
+- CG prevents user from dragging lines off left edge of screen. In
+certain instances, characters may go off the right edge of screen in which
+case they are not shown during a scroll. Right-justfiying these lines
+will show the right hand side of the line. 
+
+- Dragging large fonts which go off the bottom of the screen, you were
+able to drag over the top of the previous line. This is fixed.
+
+Changes since Beta15
+--------------------
+
+- Right mouse button abort of render page is now more responsive.
+
+- The very bottom scanline (262) after a scroll froze on the last page was
+sometimes garbage. No longer.
+
+- A bug which caused scroll pages to have some characters turn invisible
+when scrolled is fixed.
+
+- Dragging items on a page now deletes any buffered version of the page.
+
+- Scrolls with one character lines which go over the far right hand
+side caused crashes. This will no longer cause crashes, and furthermore
+dragging will no longer allow you to put characters off the right hand
+side of the screen.
+
+- Justify button no longer shows up on crawl pages
+
+- Entering the CG on a scroll/crawl page resulted in the prop knob
+not being drawn. This is now fixed.
+
+Changes since Beta14
+--------------------
+
+- If it is unable to load a font (when loading a book), it prefixes
+the font path with "OldFonts/" and tries again. This handles 2.0 books,
+which did not have paths.
+
+- Brush disk sizes now show up in font info requester.
+
+- minor bug fixes
+
+Changes since Beta13
+--------------------
+
+- Changing a page with multi-colored text on a line into a scroll
+page resulted sometimes in a weird scroll. Now, when you change
+a page into a scroll, all attributes except font on a line are made
+the same as the first character in the line.
+
+- Previously, any time you moved the cursor (including changing pages
+and loading a new book), the default attributes (the ones that appear
+in the menu bar) were updated. Now, they are only updated when you
+click on something. (People complained about loading System4000 book
+and then going to a blank page and having weird grey, transparent text.
+This is why that was happening.)
+
+- During book loading, if font load fails because memory is low, the
+requester will read "Out of memory loading (fontname)". If the font
+load fails for some other reason, it will read "Unable to load (fontname)."
+
+- The default box width is kept to less than 640, and the height to 400. 
+This prevents the full-screen-size box from becoming the default and
+preventing further box sizings.
+
+- minor bug fixes
+
+Changes since Beta12
+--------------------
+
+- On scroll pages, moving the cursor off the screen causes the screen
+to scroll again.
+
+- Scroll pages no longer have a shadow priority button (it never
+did anything anyways, since the shadow color always = border color)
+
+- Bug causing garbage lines to be rendered out to Toaster buffer fixed.
+
+
+Changes since Beta11
+--------------------
+
+- A bug where the CG would use the wrong key when rendering pages from
+the switcher is fixed.
+
+- Fonts with names beginning with "Symbol" are ignored when creating
+the line for the switcher popup list of pages.
+
+- The topmost line is the one which now shows up in the popup menu,
+unless it is a box, brush or "Symbol" font.
+
+- Enforcer hits caused by deleting a font, and then selecting a brush
+are fixed.
+
+- Pre-rendering of book now has a "cancel" button. If you click this,
+the book is still loaded, but not pre-rendered. Thusly, moving through
+pages in the edit mode will be slow. Also, when you scroll or crawl, 
+there might be a noticeable delay before it starts.
+
+- Pages which have valid buffered versions in the framestore dir are 
+no longer pre-rendered. This speeds up loading, but when you edit these
+pages, there will be a delay before the text appears the first time.
+
+- Using shift-arrow or alt-arrow on a scroll line you were able to move
+lines too far to the right, and junk showed up on the left hand side during
+the scroll. Now, you can still move stuff off the displayed area, but there
+should no longer be junk (those characters will just not appear in the scroll)
+Right-justification will always put the line as far as possible to the right.
+
+- Problems with attributes disappearing when other attributes were 
+changes are fixed.
+
+- The help screen now displays shift-click for selecting a page.
+
+- Any directory anywhere named "_Bullet_Outlines" is now not shown
+in the file requester. No subdirectories in "fonts:" are shown.
+
+- The shadow/border priority button (this is the name of the button) now
+goes away if there is no shadow nor border for the selected items. If there
+is a just a shadow, or just a border, it does appear (and is useful).
+
+Changes since Beta10
+--------------------
+
+- Various low memory problems were fixed. The CG will stop allocating
+memory and declare to be out of memory if there is less than 120K
+of contiguous chip, or 240K total free memory.
+
+- When books are loaded, the CG puts up a panel showing which page is being
+pre-rendered.
+
+
+Changes since Beta9
+-------------------
+
+- In low memory situations, the postscript renderer might returns garbage
+for characters. This is fixed - the message "Memory is low" should now
+appear in the menu bar and just blank space will be rendered.
+
+- Right justification was outside the safe area.
+
+- "Rendering error" requesters now do not show up if a character is not
+in a font. They only show up if some other error occurs (out of memory,
+PostScript error). They also now show the offending font and character,
+as well as any PostScript error message. These requesters also only now
+show up when the entire page is rendered (either for the user interface
+or a buffer), not when just a line is rendered.
+
+- Upon entering CG from switcher, if page was scroll/crawl, prop
+didn't show up.
+
+- Problems rendering empty right-justified lines on scroll pages fixed.
+
+- The CG sets key repeat to a nice rate. (The switcher turns key repeat
+off)
+
+- Scroll & crawl prop gadgets reappear now after the help screen,
+and after toggling the menu bar on/off.
+
+Changes since Beta8
+-------------------
+
+- Low memory handling is better. When chip memory goes below 160K continuous,
+the CG will refuse to allocate any more for things like new PostScript fonts,
+characters, and lines. Requesters (like Help) will still function, however. 
+If memory goes low while rendering (common with PostScript fonts), there's
+no requester, just a notice in the menu bar "Memory is low!" (less obtrusive).
+When its really low, requesters start appearing. Now is a good time to save
+your book. CG should be more robust now in low memory situations (still
+needs more beta testing though)
+
+- Scrolls will no longer render partial characters at the right edge
+of the scroll. If a character is not able to be completely rendered,
+it is skipped during the scroll (although it will show up in the interface).
+
+- The Help requester shows the amount of graphics and other memory free.
+
+- Scroll & crawl prop gadgets stay oncsreen when in page&book menu.
+
+- If the font's rendering engine cannot render a character, the user is
+now alerted with a requester. If the PostScript engine has a error string,
+it is displayed as well. Previous to this version, the renderer just
+gave up with no explanation.
+
+- Requestor comes up after book successfully saved.
+
+- Erasing a page sometimes left a box or brush on the page. This is fixed.
+
+- Erasing a page now deletes that buffered page.
+
+- Erasing a book now also deletes all buffered pages for that book.
+
+- Fixed bugs in changing parts of a line,deleting characters,and
+having attributes inadvertantly change.
+
+- Transparent text over opaque shadow/outline works on key pages. Note
+that you lose your anti-aliasing when you do this (unavoidable).
+
+- Changing from a scroll to a crawl with empty lines now translates
+the lines after the empty lines correctly.
+
+- Erase line when on box/brush now works (if no text has been typed at cursor).
+
+- Depth sorting of box/brush fixed. (Broke in Beta7).
+
+- Clicking on text below the baseline now selects text
+
+- Postscript renderer changes to wait pointer if it needs to render
+characters (as opposed to having them buffered already).
+
+
+Changes since Beta7
+-------------------
+- You can no longer click "through" blank areas on the palette menu
+to select text underneath.
+
+- TAB now goes over to the next 128 pixel column on non-Japanese fonts.
+It creates a new line as well.
+
+- Scroll page dragging and font changing logic has been cleaned up.
+
+- Boxes now default to the same size as the last box sized.
+
+- Clicking on a box or brush now inserts a text line as well,
+so that you can easily type text over box/brush without moving stuff around.
+
+- The CommonRGB buffer stays loaded when you go back to the switcher.
+Only unloading the CG will cause it to be flushed. (Unless paint or
+someone else is keeping it open)
+
+- Function key commands now work from book/page and palette menus.
+
+- If a brush or a box is the last thing on a page, erase line
+now removes it.
+
+- Misc. bug fixes and interface changes.
+
+
+Changes since NAB Beta6.9
+-------------------------
+
+- Postscript rendering changes. Fonts should remap ' to something
+which prints (B&P Graphics fonts had problems before this release)
+
+
+Changes since Beta6
+-------------------
+
+- Leaving the CG with the palette requester up no longer causes
+things to be confused when you re-enter the CG.
+
+- F8 & F9 now function on scroll and crawl pages.
+
+- Lines off the screen are justified correctly.
+
+- When loading a book, replacing an unfound font with a PS or Outline
+font did not ask you for a height. Now it does.
+
+- When loading a book, replacing fonts did not update the line
+heights (resulting in cut-off lines or garbage), and incorrect 
+justification. Fixed.
+
+- "Scroll and stop on last page" displayed garbage when it froze
+sometimes. Also, moving the mouse and clicking someimtes messed up
+the frozen page. This is all fixed.
+
+- Fading a key in and out from the switcher works on AA machines now.
+On all machines, it no longer flashes the key for a field after
+fading it out.
+
+- Large crawls had bugs. The CG now tries to pre-render all crawl characters
+before asked to crawl. This should only fail if you run out of memory.
+There is "safety" code in the crawl routine which should detect if
+thinks are messing up, and end the crawl with an error requester.
+
+- Changing the shadow/outline params on more than one line at a time
+on a scroll page was broken. You may change more than one line now.
+Keep in mind that on scroll pages, shadow/outline changes are only allowed
+on a line by line basis.
+
+- You can now only drag one line at a time on a scroll page. Dragging
+more than one line never worked, and caused bugs.
+
+- If you did a scroll or crawl from the switcher without ever going
+into the book, it might have crashed. This is fixed.
+
+- Misc. bug fixes and interface changes.
+
+Changes since Beta5
+-------------------
+
+- Clicking EraseLine on the last line on a page now removes all text
+from that line. Boxes and brushes are unaffected.
+
+- The file requester reads the whole directory before displayed it.
+
+- Files ending in ".font" without corresponding ".otag" files are
+not shown. Any ".otag" files are never shown. Neither are files ending in 
+".info",".AFM". Subdirectories in "fonts:" are not shown.
+
+- Scroll pages can now have shadow type, direction, length, outline
+type , and shadow priority changed on a line-by-line basis.
+(Still one color per scroll, and fonts can change character-by-character).
+
+- Changing from one brush to another brush did not update the internal
+brush sizes, and caused garbage to be rendered to the screen. Fixed.
+
+- You can no longer change from a box or brush to a text line. You can
+now only change text to a box or a brush if the text line is empty. This
+was to help ease user confusion.
+
+- The popup menu should no longer get stuck on.
+
+Changes since Beta4
+-------------------
+
+- IMPORTANT! The ToasterFonts directory is re-organized. It also includes
+some of the PostScript fonts we will be shipping in 3.0 (more to come). Please
+move all of your Toaster 2.0 fonts into the ToasterFonts/OldFonts subdirectory.
+(The install program will do this automatically). Almost all of the old
+fonts will not be distributed with 3.0. Only the ones present in OldFonts
+will be included in 3.0.
+
+- Pre-Beta4 books did not load in Beta4. These books will now load in Beta5
+as long as the OldFonts directory exists (see above).
+
+- When replacing multiple fonts and/or brushes when loading a book,
+any pathname entered is preserved.
+
+- The box resize grab area is larger.
+
+- Looping crawl pages sometimes displayed garbage on the far right
+hand side of the screen before the second and subsequent iterations.
+This is now fixed.
+
+- If you loaded a book, and replaced a font with another font,
+and that font was used on an empty line, the empty line would still
+use the old font. (Could have caused enforcer hits and/or crashes)
+
+- Misc. bug fixes and interface changes.
+
+Changes since Beta3
+-------------------
+
+- Brushes can now be up to 752 pixels wide by 400 lines tall. Note that
+a bug in Paint rounds up brush widths to the next 32 pixel boundary, so
+anything over 736 pixels wide will be rounded to 768, which is too wide
+for the CG. If the CG is asked to load a brush which is too large,
+it will display the actual size of the brush in its error requester.
+
+- In the color requester, you can load background images directly into
+the paint buffer. (In the past, you had to go into Paint to load them).
+The file requester here defaults to your current framestore device.
+
+- Creating a font that was too large to fit on a scroll page (like by
+change a line's font to a much larger one) caused memory corruption
+when the line was dragged. This is fixed.
+
+- The brush character now displays properly on the menu bar.
+
+- A problem which occured when the CG file requester came up on the switcher,
+and another CG requester opened on top of the file requester is fixed.
+
+- Palette requester sometimes showed incorrect color on non-AA machines.
+
+- A blank book now only includes 3 fonts and boxes.
+
+- The numeric keypad's "5","0", and "." keys now do not map into
+characters, since nothing else on the keypad did.
+
+- The left Amiga key now takes you from the main menu to the page/book menu
+and back again. (Will require a new switcher to work properly - use
+right Amiga for now.)
+
+- Fixed bug where right after you loaded a brush or font, it would let you use
+it even if it was not allowed on the current page type.
+
+- The Save Book button is now enabled. It saves your book to the current
+project.
+
+- The Help screen is now accessible from the page/book menu.
+
+- Misc. bug fixes and interface changes.
+
+Changes since Beta2
+-------------------
+
+- user interface is now 3 bitplanes on AA machines, 2 bitplanes on others
+
+- If unable to load PostScript font, PostScript error string printed
+in "Unable to load font" requester.
+
+- Bug which caused crashes after loading old books and editing blank pages
+fixed.
+
+- The old "colortoast" program had a bug in it which caused the chromafont's
+baseline to be incorrect in some cases. (It used DPaint's brush handle for
+the baseline) There's a new colortoast program which allows the user to
+enter the baseline on the command line. For older Toaster ColorFonts, the CG forces
+the baseline to be the same as the font height. (This is what previous CGs
+did anyways) The baseline is used for the cursor, and also to line up
+more than one font on a line. 
+
+- Crawl pages now prevent fonts over 300 lines high from being used.
+
+- Gaps in crawls (when characters had negative kerning values) are gone.
+
+- Various problems with editing crawl pages have been fixed.
+
+- The font info panel now prints information about PostScript kerning
+pairs ("AFM" files). It also displays any copyright notices in the
+"AFM" or font files.
+
+- Large boxes on scroll pages behave correctly during editing.
+
+- On key pages, marks beneath the alpha slider show the four valid ranges
+for keying over live video (since the CG only uses a 2-bit alpha channel
+over live video, and all 8-bits on color pages)
+
+- Bug with more than 2 PostScript fonts at same size (hung on book load) fixed.
+
+- Postscript fonts render at 400 lines.
+
+- Fixed bug when replacing font with another during book load. Bug caused
+crash if any other fonts where on the same line.
+
+- Toaster ColorFonts showing up in two colors (one wrong) bug fixed.
+
+- Misc. bug fixes and interface changes.
+
+Changes since Beta1
+-------------------
+
+- Loading a brush now works.
+
+- CG now works under Workbench 2.1 correctly. (Fixed crashing during startup)
+
+- Changed Amiga outline font renderer to use bullet.library instead of
+diskfont.library. Compugraphic fonts now use kerning pairs (try "Yo") and 
+load and render faster.
+
+- PostScript renderer now reads ".AFM" (Adobe Font Metric) files - they
+should be placed in the same directory as the font itself. If present,
+the font will load faster. Some AFM files also having kerning pair information
+which the CG uses if available.
+
+- Can just click and select "Box" to create box. (No longer need to 
+select a character first)
+
+- After loading a font or a brush, it becomes the default popup item.
+
+- File requester when looking at "fonts:" will only show outline
+fonts (not just compugraphic - it will show any Amiga outline font).
+Note that Amiga outline fonts must be installed correctly in "fonts:" 
+for the Amiga to be able to render them (they must have correct .font
+and .otag files). Postscipt fonts, which currently use the post.library
+renderer, do not have this requirement.
+
+- Garbage which appeared at the end of a scroll while in the CG interface gone
+
+- Garbage which appeared on blank lines during scrolls gone
+
+- Clicking on scroll page no longer creates new lines because it
+messed up line spacing all too often. Insert a line on a scroll page by
+pressing <return>, delete a line by pressing <delete> or <backspace> on
+a blank line.
+
+- Blank lines are no longer automatically removed from scroll pages,
+again for ease of editing.
+
+- Sizing and moving boxes on scroll pages now works correctly.
+
+- Popup menus now go away when you click down and quickly release
+without choosing anything.
+
+- Horiz center and horiz lower now make sure all lines stay at least
+partially on the page.
+
+- Lines may be dragged partially off the bottom of the screen. If
+key page, any data off the key is lost. This is to solve the problem of
+positioning large (like 400 line) fonts. Since font height is based on the 
+maximum size character, previously you couldn't move a 400 line font
+up or down at all. Now, if you are not using the maximum size characters, you
+can move the font and still have all characters appear in the key. Of 
+course, if you move characters off the key, they will not appear on program.
+
+- Fixed bug when doing a "render line" on a line at the bottom of the screen.
+No longer overwrites sync.
+
+- Misc. bug fixes and interface changes.

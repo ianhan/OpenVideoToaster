@@ -1,0 +1,3955 @@
+head	2.44;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.44
+date	95.10.09.15.55.29;	author Flick;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	95.09.21.12.59.31;	author Flick;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	95.07.05.15.04.05;	author Flick;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	95.06.16.11.34.51;	author pfrench;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	95.02.16.20.29.03;	author Kell;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	94.12.06.07.11.08;	author Kell;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	94.11.15.15.45.09;	author Kell;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	94.11.14.15.35.06;	author Holt;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	94.11.04.03.33.15;	author Kell;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	94.11.02.08.02.40;	author Kell;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	94.10.12.00.16.29;	author Kell;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	94.10.05.05.45.38;	author Kell;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	94.10.01.12.52.57;	author Kell;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	94.09.13.16.50.03;	author Holt;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.09.02.08.30.00;	author Kell;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.08.27.06.51.30;	author Kell;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.08.10.01.06.28;	author Kell;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.08.09.03.54.15;	author Kell;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.08.08.23.36.02;	author Kell;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.08.04.01.11.13;	author Kell;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.08.03.06.34.23;	author Kell;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.07.27.19.27.30;	author Kell;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.06.23.08.48.31;	author CACHELIN4000;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.06.22.17.35.43;	author Kell;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.05.24.21.37.48;	author Kell;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.03.15.16.16.32;	author Kell;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.03.15.14.23.44;	author Kell;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.03.13.08.13.27;	author Kell;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.03.12.17.13.40;	author Kell;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.03.12.16.19.27;	author Kell;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.03.11.20.54.30;	author Kell;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.03.11.15.57.43;	author Kell;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.03.11.15.00.46;	author Kell;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.03.11.07.17.02;	author Kell;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.03.10.13.18.44;	author Kell;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.03.09.17.12.48;	author Kell;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.03.08.07.37.05;	author Kell;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.03.08.06.22.40;	author Kell;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.03.07.22.29.44;	author Kell;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.03.07.17.54.46;	author Kell;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.03.07.11.58.08;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.03.07.11.19.56;	author Kell;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.03.07.08.19.01;	author Kell;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.03.06.17.15.16;	author Kell;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.03.06.16.37.52;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.44
+log
+@ReadProjEntry now makes a CT_ERROR crouton for project croutons that can't be loaded (w/info
+from project + tags)
+Also combined first crouton load error req with "continue load anyway" req
+@
+text
+@********************************************************************
+* CroutonLoad.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: CroutonLoad.a,v 2.43 1995/09/21 12:59:31 Flick Exp Flick $
+*
+* $Log: CroutonLoad.a,v $
+*Revision 2.43  1995/09/21  12:59:31  Flick
+*No longer attempts to LoadSeg fastgadgets (none have code in them anymore!)
+*Changed buffer size on LoadFastGadget operations from 2K to 5K to contain entire .i file
+*
+*Revision 2.42  1995/07/05  15:04:05  Flick
+*Added call to FGC_InterpTagsCommand to turn tags into symbol flags
+*
+*Revision 2.41  1995/06/16  11:34:51  pfrench
+*Fixed executable load crouton bug
+*
+*Revision 2.40  1995/02/16  20:29:03  Kell
+*Debugs for OPEN and SEEK
+*
+*Revision 2.39  1994/12/06  07:11:08  Kell
+**** empty log message ***
+*
+*Revision 2.38  94/11/15  15:45:09  Kell
+*New GetFirstDefaultPath function
+*
+*Revision 2.37  1994/11/14  15:35:06  Holt
+*Fixed bug where FindTheDefaultPath called it own offset in corouton lib going to bogus address.
+*
+*Revision 2.36  1994/11/04  03:33:15  Kell
+*Added Stubs for FindFile and GetDefaultPath (called FindTheFile & GetTheDefaultPath).
+*
+*Revision 2.35  1994/11/02  08:02:40  Kell
+*Changed CroutonLoad to work with the new FGC_LoadCommand.
+*
+*Revision 2.34  1994/10/12  00:16:29  Kell
+*DefaultPaths file can now be in the Switcher_Support drawer.
+*
+*Revision 2.33  1994/10/05  05:45:38  Kell
+*Renamed MakeTagListsOld to MakeTagListsSaved
+*
+*Revision 2.32  1994/10/01  12:52:57  Kell
+*Mixed Mungwall hit when deallocating taglist chunks.
+*
+*Revision 2.31  1994/09/13  16:50:03  Holt
+*,
+*
+*Revision 2.30  94/09/02  08:30:00  Kell
+*New PostError functions for putting up error messages w/o requesters.
+*
+*Revision 2.29  1994/08/27  06:51:30  Kell
+*Remarks, and debug messages.  Also, now allows 2 plane icons.
+*
+*Revision 2.28  1994/08/10  01:06:28  Kell
+*Fixed bug that caused Enforcer hits during LoadProject.
+*
+*Revision 2.27  1994/08/09  03:54:15  Kell
+*Fixed requester code for missing files during project load.
+*
+*
+*Now tries to find a file based on Default Paths for a given object type.
+*
+*Revision 2.25  1994/08/04  01:11:13  Kell
+*Changed FORM PUSS to PUS.
+*
+*Revision 2.24  1994/08/03  06:34:23  Kell
+*Now works with the new FORM PUS instead of the old CHUNK HEAD.
+*Supports multi-icons within the ".i" file.
+*Now works with newer version of project file (type/version included).
+*
+*Revision 2.23  1994/07/27  19:27:30  Kell
+**** empty log message ***
+*
+*Revision 2.22  1994/06/23  08:48:31  CACHELIN4000
+*..
+*
+*Revision 2.21  94/06/22  17:35:43  Kell
+*Changed default settings for Diskchanges during requesters.
+*
+*Revision 2.20  94/05/24  21:37:48  Kell
+*ReadProjEntry() function removed. FGC calls changed to FGC_....Command()
+*
+*Revision 2.19  94/03/15  16:16:32  Kell
+**** empty log message ***
+*
+*Revision 2.18  94/03/15  14:23:44  Kell
+*Moved some crouton loading/saving/freeing stuff here from Fastgadgets.a
+*
+*Revision 2.17  94/03/13  08:13:27  Kell
+*Added debug statements.
+*
+*Revision 2.16  94/03/12  17:13:40  Kell
+**** empty log message ***
+*
+*Revision 2.15  94/03/12  16:19:27  Kell
+*Fixed misaligned freemem bug on loaded taglists.
+*
+*Revision 2.14  94/03/11  20:54:30  Kell
+**** empty log message ***
+*
+*Revision 2.13  94/03/11  15:57:43  Kell
+**** empty log message ***
+*
+*Revision 2.12  94/03/11  15:00:46  Kell
+**** empty log message ***
+*
+*Revision 2.11  94/03/11  07:17:02  Kell
+**** empty log message ***
+*
+*Revision 2.10  94/03/10  13:18:44  Kell
+**** empty log message ***
+*
+*Revision 2.9  94/03/09  17:12:48  Kell
+*ci makefile
+*
+*Revision 2.8  94/03/08  07:37:05  Kell
+**** empty log message ***
+*
+*Revision 2.7  94/03/08  06:22:40  Kell
+**** empty log message ***
+*
+*
+*Revision 2.0  94/03/06  16:37:52  Kell
+*FirstCheckIn
+*
+*
+*********************************************************************
+	INCLUDE	'assembler.i'
+
+	INCLUDE "exec/types.i"
+;;	include	'datatypes/pictureclass.i'  ;messes up seraildebug.i ALLDUMPS !!!!!!
+	include 'exec/memory.i'
+	include 'dos/dosextens.i'
+
+	INCLUDE	"lib/exec_lib.i"
+	INCLUDE	"lib/dos_lib.i"
+
+	INCLUDE	'instinct.i'
+	INCLUDE 'macros.i'
+	INCLUDE 'crouton_lib.i'
+	INCLUDE 'vtdebug.i'
+	INCLUDE 'serialdebug.i'
+	INCLUDE 'DelayErr.i'
+
+;SERDEBUG	set	1
+;	ALLDUMPS
+
+
+;;DBLLC		SET	1	;Debug Little Lost Crouton
+;;DBECIF	SET	1	;Debug ExamineCroutonIconFile
+;;DBECI		SET	1	;Debug ExamineCroutonIcon SLOW!!!!
+
+*--------
+;;DBS2CrUD 	SET	1	;Debug Seek2CrUDchunk
+;;DBECC		SET	1	;Debug ExamineCroutonCrUD
+
+;;DBLFG		SET	1	;Debug LoadFastGadget
+
+;;DBRPE		SET	1	;Debug ReadProjectEntry
+
+;;DBCDEF	SET	1	;Debug ExamineCroutonDefaults
+
+;;DBFMEM	SET	1	;Debug FreeMem
+;;DBAMEM	SET	1	;Debug AllocMem
+
+;;DBECDF	SET	1	;Debug  ExamineCroutonDataFile
+
+;;DBLCF SET	1	;debug LoadCroutonFile
+
+
+;;DBSEEK	set	1	;debug all seeks
+;;DBOPEN	set	1	;debug all opens
+
+* a0->LockBuffer
+* returns Z flag if OK
+GetLong	MACRO
+	CALLTL	ReadBufferedLong
+	bne.w	\1
+	endm
+
+* a0->LockBuffer
+* returns Z flag if OK
+GetWord	MACRO
+	CALLTL	ReadBufferedWord
+	bne.w	\1
+	endm
+
+***********************************************************************
+* For some unknown reason whenever I enclude 'datatypes/pictureclass.i'
+* it cause ALLDUMPS to not assemble!!!
+
+cmpNone			equ	0
+
+; Bitmap header (BMHD) structure
+    STRUCTURE BitMapHeader,0
+	UWORD	 bmh_Width		; Width in pixels
+	UWORD	 bmh_Height		; Height in pixels
+	WORD	 bmh_Left		; Left position
+	WORD	 bmh_Top		; Top position
+	UBYTE	 bmh_Depth		; Number of planes
+	UBYTE	 bmh_Masking		; Masking type
+	UBYTE	 bmh_Compression	; Compression type
+	UBYTE	 bmh_Pad
+	UWORD	 bmh_Transparent	; Transparent color
+	UBYTE	 bmh_XAspect
+	UBYTE	 bmh_YAspect
+	WORD	 bmh_PageWidth
+	WORD	 bmh_PageHeight
+    LABEL BitMapHeader_SIZEOF
+
+
+*********************************************************************
+* char *FindTheFile(->currentFileName, ->OriginalFileName, FileType)
+*                        a0                     a1            d0
+	XDEF	FindTheFile
+FindTheFile:
+	movem.l	d1/a0-a1/a6,-(sp)
+	GET.l	TB_CroutonBase,a6
+	CALLROM	FindFile
+ 	movem.l	(sp)+,d1/a0-a1/a6
+	rts
+
+*********************************************************************
+* char *GetFirstDefaultPath(FileType)
+*                             d0
+	XDEF	GetFirstDefaultPath
+GetFirstDefaultPath:
+	movem.l	d1/a0-a1/a6,-(sp)
+	GET.l	TB_CroutonBase,a6
+	CALLROM	GetFirstResolvedPath
+ 	movem.l	(sp)+,d1/a0-a1/a6
+	rts
+
+*********************************************************************
+* char *GetTheDefaultPath(FileType, index)
+*                             d0     d1
+	XDEF	GetTheDefaultPath
+GetTheDefaultPath:
+	movem.l	d1/a0-a1/a6,-(sp)
+	GET.l	TB_CroutonBase,a6
+	CALLROM	GetDefaultPath
+ 	movem.l	(sp)+,d1/a0-a1/a6
+	rts
+
+*********************************************************************
+* Error = ReadProjectEntry(->FGlist, ->TB)
+*
+* Returns d0=1 if OK.  =0 if end of project file
+* -1 if crouton load error. -2 if file not found, -3 if project error.
+* Project loading may continue if its a crouton error, or file not found,
+* but loading must be aborted it is a project file error.
+
+	XDEF	ReadProjectEntry
+ReadProjectEntry:
+	movem.l	d1/a0-a4/a6,-(sp)
+
+	DEBUGMSG	DBRPE,<ReadProjectEntry:>
+
+	movea.l	a0,a3			; stash ->FGList
+	GET.l	TB_FileBuff,a4		; cache pointer to file buffer
+
+* read in TBPE_EntrySize
+	movea.l	a4,a0
+	lea	ProjReadErr(pc),a1
+	suba.l	a2,a2
+	moveq	#4,d0
+	bsr	ReadBlock
+	beq	666$
+
+	moveq	#0,d0			;assume no more entries
+	move.l	TBPE_EntrySize(a4),d1
+	beq	555$
+	move.l	d1,d0
+
+	DEBUGMSG	DBRPE,<Before read TBPE_Project entry>
+
+* read in entire TBPE Project Entry
+	lea	TBPE_EntryData(a4),a0	;destination
+	bsr	ReadBlock
+	beq	666$
+
+	lea	TBPE_FileName(a4),a0
+	adda.w	TBPE_FileNameSize(a4),a0 ;->TagList
+	move.l	#TAGID_OriginalLocation,d0
+	moveq	#0,d1		;any size string
+
+	DEBUGMSG	DBRPE,<Before Search4TagGetID>
+	CALLTL	Search4TagGetID
+	beq.s	20$		;jump if can't find TAGID_OriginalLocation
+	addq.l	#8,d0		;Skip to actual data
+20$	movea.l	d0,a1		;->Original file location (e.g. CDROM:....)
+
+	lea	TBPE_FileName(a4),a0	;last loaded path/file name
+	movea.l	a0,a2			;stash last loaded name
+	move.l	TBPE_ObjectType(a4),d0
+	GET.l	TB_CroutonBase,a6
+
+;;	DUMPMSG	<----------------------------------->
+;;	DUMPTXT	<OLDNAME=>
+;;	DUMPSTR	(a1)
+;;	DUMPMSG	< >
+;;	DUMPTXT	<NEWNAME=>
+;;	DUMPSTR	(a0)
+;;	DUMPMSG	< >
+
+	DEBUGMSG	DBRPE,<Before FindFile>
+	CALLROM	FindFile
+	tst.l	d0
+	bne	30$			;jump if data file was found
+
+*  File not found (put up locator grazer, or continue/skip requester)
+* NOTE: a1 before the above CALLROM = the original path, a0=current path
+;	movea.l	a2,a0			;name of lasted loaded file
+;	lea	notFoundErr(pc),a1
+;	bsr	ContinueMessage
+;	moveq	#-2,d0		;file not found
+;	bra	555$
+
+	movea.l	a2,a0			;name of lasted loaded file
+	bsr	MissingMessage	;Ask user whether to load anyway?
+	ble.s	.goaheadload
+	PUT.l	#1,TB_RequesterResult	; Always "Cancel" on error requeste
+	moveq	#-2,d0		;file not found
+	bra	555$
+.goaheadload
+	PUT.l	#-1,TB_RequesterResult	;Always "Okay" on error requeste
+
+	DEBUGMSG	DBLLC,<Ready to make LLC>
+
+	bsr	MakeLostCrouton		;Insert "missing little crouton" here w/info
+
+	DEBUGMSG	DBLLC,<Joining already in progress>
+
+	bra	40$			;Join back in below...
+
+30$
+	DEBUGMSG	DBRPE,<Before LoadCroutonFile>
+	movea.l	d0,a0
+	bsr	LoadCroutonFile
+	bne.s	40$
+	moveq.l	#-1,d0
+	bra	555$		;crouton load error
+
+40$
+	DEBUGMSG	DBRPE,<Before LoadTagsCommand>
+
+	lea	TBPE_FileName(a4),a0
+	adda.w	TBPE_FileNameSize(a4),a0 ;->TagList
+	PUT.l	a0,TB_Tags
+	movea.l	d0,a0			;->FG
+	CALLTL	FGC_LoadTagsCommand		;No error checking!!!
+
+	DEBUGMSG	DBRPE,<Before GetLongValue>
+
+	move.l	#TAGID_IndexID,d0
+	CALLTL	GetLongValue
+	move.w	d0,FG_IndexID(a0)	; Defaults to Zero if unknown
+
+	DEBUGMSG	DBRPE,<Before added to FastGList>
+
+* Add the FG to our linked list
+* a0->FG
+	moveq	#1,d0
+	moveq	#-1,d1
+	movea.l	a3,a1			;->Linked list
+	CALLTL	AddFastGList
+
+* a0->FG
+	CALLTL	PutNewLocTB	; update the new FG to reflect its new home
+
+	CALLTL	FGC_InterpTagsCommand	;Interpret tags, update FG flags (for symbols)
+
+	moveq	#1,d0		;success
+555$	DEBUGSDEC.l	DBRPE,<result ReadProjectEntry=>,d0,<\>
+
+	tst.l	d0
+	movem.l	(sp)+,d1/a0-a4/a6
+	rts
+
+666$	moveq	#-3,d0		;project error
+	bra	555$
+
+ProjReadErr	DC.b	'Project load failed.  Unable to read file.',0
+	CNOP	0,2
+
+*--------------------
+* ->FG MakeLostCrouton(a4->ProjEntry)
+* Makes a phantom FG with just bare essential info (to be replaced later)
+* Returns ptr to new FG in d0 (or NULL if failed)
+*--------------------
+MakeLostCrouton:
+	movem.l	d1-d2/a0-a3/a6,-(sp)
+
+	DEBUGMSG	DBLLC,<AllocBlankFG>
+
+	bsr	AllocBlankFG		; Make a new FG
+	tst.l	d0
+	beq	.exit
+	move.l	d0,a3
+
+	DEBUGHEXI.l	DBLLC,< at >,d0,<\>
+
+	move.l	TBPE_ObjectType(a4),d0
+	move.l	d0,FGS_LocalData(a3)		;Previous type
+
+	move.l	#CrUD_Error,FGS_ObjectType(a3)	;New type = CR_ERROR ("ERR!")
+
+	lea	TBPE_FileName(a4),a2	; Ptr to source filename
+
+	DEBUGMSG	DBLLC,<Clone name -- STRlen>
+
+;******* Now clone this name and tie into FGS_FileName ptr
+	movea.l	a2,a0
+	CALLTL	STRlen
+
+	addq.l	#2,d0	;add for null terminator & round up
+	andi.l	#~%1,d0 ;round up string to WORD length (including NULL)
+	move.l	d0,d2	;stash string length including NULL(s)
+	addq.l	#2,d0	;BSTR UWORD length length
+
+	DEBUGMSG	DBLLC,<AllocMem>
+
+	move.l	#MEMF_CLEAR,d1
+	move.l	(4).w,a6
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	.nocloneit
+
+	movea.l	d0,a0
+	move.w	d2,(a0)+
+	move.l	a0,FGS_FileName(a3)	;Stash ptr to my clone of filename
+
+	DEBUGMSG	DBLLC,<CopyIt>
+
+	movea.l	a0,a1
+	movea.l	a2,a0
+	CALLTL	STRcopy		;Now actually clone name
+.nocloneit
+;*******
+
+	lea.l	.NullString,a0
+	lea.l	CroutonInfo,a1
+	move.l	#CrUD_Error,CINFO_CroutonType(a1)	;CrUD_Error = "Lost"
+	clr.l	CINFO_CroutonIconBM(a1)			;Must clear to get new one
+	clr.l	CINFO_CroutonLibName(a1)		;Must clear to get name
+	clr.l	CINFO_CroutonLibEntry(a1)		;Must clear to get value
+	bsr	ExamineCroutonDefaults
+	move.l	CINFO_CroutonIconBM(a1),FG_Data(a3)	;Get "Lost" bitmap
+	move.l	CINFO_CroutonVersion(a1),FGS_ObjectVersion(a3)
+	move.l	CINFO_CroutonLibEntry(a1),FGS_EntryRoutine(a3)
+
+;*******
+; Open default crouton handler library, compute LVO address & plugin to FG_Function
+
+	movea.l	CINFO_CroutonLibName(a1),a0
+
+	DEBUGTXT	DBLLC,<LibName=>
+	DEBUGSTR	DBLLC,0(a0)
+	DEBUGMSG	DBLLC,<>
+
+	CALLTL	OpenAuxLib
+	move.l	d0,FGS_EntryLibrary(a3)
+
+	DEBUGHEXI.l	DBLLC,<LibBase=>,d0,<\>
+
+	tst.l	d0
+	beq.s	.libfail
+
+	add.l	FGS_EntryRoutine(a3),d0		;LibBase + LVO
+	move.l	d0,FG_Function(a3)
+.libfail
+;*******
+	move.l	a3,d0		;Return FG
+
+.exit	movem.l	(sp)+,d1-d2/a0-a3/a6
+	rts
+
+.NullString	dc.b	0
+	CNOP	0,2
+
+*--------------------
+* BOOL ReadBlock(a0->buffer, a1->ErrorMsg1, a2->ErrorMsg2, d0=length)
+* Puts up a "Retry" requester if read error.
+* returns d0=1if success, 0 if DOS error or EOF
+ReadBlock
+	movem.l	d1-d2/a0,-(sp)
+	move.l	d0,d1
+	beq.s	555$
+
+10$	CALLTL	BuffGetChar
+	bmi.s	100$		;some error
+
+	move.b	d0,(a0)+
+
+	subq.l	#1,d1
+	bne.s	10$		;jump if done with read
+
+555$	moveq	#1,d0		;success
+666$	movem.l	(sp)+,d1-d2/a0
+	rts
+
+*-------------
+100$	move.l	d0,d2
+	moveq	#0,d0		;assume EOF failure
+	cmpi.l	#-1,d2		;was it a DOS error?
+	bne.s	666$		;assume = -2 = EOF
+
+	movem.l	a0-a1,-(sp)
+	movea.l	a1,a0
+	movea.l	a2,a1
+	bsr	RetryOrCancel
+	movem.l	(sp)+,a0-a1
+
+	bne.s	10$		; Retry on users request
+	bra.s	666$		; User gives up = Failure
+
+********************************************************************
+* a0->message1, a1->message2, ->TB
+* returns d0=TRUE for Retry, else FALSE
+	XDEF	RetryOrCancel
+RetryOrCancel:
+	movem.l	a0-a2,-(sp)
+	lea	ErrReq(pc),a2	; put up a requester for USER benefit
+	move.l	a0,(a2)
+	move.l	a1,4(a2)
+	move.l	a2,a0
+	moveq	#1,d0			; Diskchanges cause Retry
+	CALLTL	SwitcherAutoRequest	; result returned to caller
+	bgt.s	100$
+	moveq	#0,d0		;Fail due to can't render or FALSE
+100$	movem.l	(sp)+,a0-a2
+	rts
+
+ErrReq:
+	DC.l	0		;filled in with error message
+	DC.l	0
+	DC.l	RetrySTR
+	DC.l	CancelSTR
+
+RetrySTR:
+	DC.b	'RETRY',0
+CancelSTR:
+	DC.b	'CANCEL',0
+
+	CNOP	0,2
+
+********************************************************************
+* a0->message, a5->TB
+* TB_ErrFlag contains an error number
+
+	XDEF	PostErrorNow
+PostErrorNow
+	moveq	#0,d0
+;;	bra.s	PostErrorLater
+*** FALLS THRU TO BELOW!!!
+
+********************************************************************
+* a0->message, d0w.w=delay, a5->TB
+*
+* Lower word of d0=sec, upper word = millisecs
+* TB_ErrFlag contains an error number
+
+	XDEF	PostErrorLater
+PostErrorLater
+	movem.l	d0/a1,-(sp)
+	clr.l	TB_LastError(a5)
+	GET.l	TB_OurDelayError,a1	;->DelayedError structure
+
+	clr.w	de_timeval+TV_SECS(a1)
+	move.w	d0,de_timeval+TV_SECS+2(a1)
+	swap	d0
+	beq.s	10$	;jump to save time
+	mulu	#1000,d0
+	move.l	d0,de_timeval+TV_MICRO(a1)
+
+10$	move.l	a0,de_errstr(a1)
+	move.l	#0,de_smallerrstr(a1)
+	clr.w	de_errnum(a1)
+	move.w	TB_ErrFlag(a5),de_errnum+2(a1)
+	move.l	#0,de_TaskID(a1)
+	PUT.l	a1,TB_LastError
+	movem.l	(sp)+,d0/a1
+	rts
+
+
+********************************************************************
+* a0->message1, a1->message2, ->TB
+* returns VOID
+
+****!!!!!**** THIS WAS HANGING WHEN IT CAME TIME TO RENDER THE REQUESTER
+* OVER THE TOP OF THE GRAZER/PROJEDITOR!!!!!!!!!
+
+	XDEF	ContinueMessage
+ContinueMessage:
+	movem.l	d0/a0-a2,-(sp)
+	lea	ErrReq2(pc),a2	; put up a requester for USER benefit
+	move.l	a0,(a2)
+	move.l	a1,4(a2)
+	move.l	a2,a0
+	moveq.l	#0,d0
+	CALLTL	SwitcherAutoRequest
+	movem.l	(sp)+,d0/a0-a2
+	rts
+
+
+********************************************************************
+* a0:name   ->TB
+* returns TRUE/FALSE
+	XDEF	MissingMessage
+MissingMessage:
+	movem.l	a0/a2,-(sp)
+	lea	MissingErrReq(pc),a2	; put up a requester for USER benefit
+	move.l	a0,(a2)
+	move.l	a2,a0
+	moveq.l	#0,d0
+	CALLTL	SwitcherAutoRequest
+	movem.l	(sp)+,a0/a2
+	rts
+
+
+ErrReq2:
+	DC.l	0		;filled in with error message
+	DC.l	0
+	DC.l	0
+	DC.l	ContinueSTR
+
+MissingErrReq:
+	DC.l	0
+	DC.l	RestOf
+	DC.l	NoGo
+	DC.l	YesGo
+
+ContinueSTR:
+	DC.b	'CONTINUE',0
+
+RestOf:	DC.b	'Cannot find crouton.  Continue loading project anyway?',0
+YesGo:	DC.b	'YES',0
+NoGo:	DC.b	'NO',0
+
+	CNOP	0,2
+
+*********************************************************************
+* Call this only after TB_BootLock & TB_CroutonBase have been defined!
+* This tells the Crouton.library to get a list of default paths.
+* This info is used by FindFile().
+
+	XDEF	LoadDefaultPaths
+LoadDefaultPaths
+	movem.l	d0-d2/a0-a1/a6,-(sp)
+
+	GET.l	TB_DOSBase,a6		; get to Toaster ROOT
+	GET.l	TB_BootLock,d1
+	CALLROM	CurrentDir
+	move.l	d0,d2			; save old directory
+
+	GET.l	TB_CroutonBase,a6	; croutons open ? NO CHECKING!
+	lea	defaultpathsfile(pc),a0
+	CALLROM	ReadDefaultPaths	; Don't care if it failed!
+
+	GET.l	TB_DOSBase,a6		; get to Toaster ROOT
+	move.l	d2,d1			; restore previous directory
+	CALLROM	CurrentDir
+
+	movem.l	(sp)+,d0-d2/a0-a1/a6
+	rts
+
+defaultpathsfile:
+	dc.b	'Switcher_Support/DefaultPaths',0
+	CNOP	0,4
+
+*********************************************************************
+* ->FG LoadCroutonFile(->name)
+*  D0                    A0
+*
+* 0=Crouton load error (LoadFastGadget or FGC_LoadCommand failed or LowMemory)
+*    Specific Error has already been reported.
+*    so, later put up continue/abort project load requester.
+*
+*
+	XDEF	LoadCroutonFile
+LoadCroutonFile:
+	movem.l	d1-d2/a0-a3/a6,-(sp)
+
+	DEBUGMSG	DBLCF,<LoadCroutonFile:>
+
+	movea.l	a0,a3	;stash ->FG name
+
+;;	moveq	#0,d3	;init EffectsLock
+
+	GET.l	TB_SYSBase,a6
+
+	moveq	#0,d1			; first check for enough memory
+	CALLROM	AvailMem
+	cmp.l	#64*1024,d0
+	bcc	100$			; if enough memory - skip on
+
+	DEBUGMSG	DBLCF,<Not enough memory 1>
+
+	movea.l	a3,a0			;name
+	lea	LowMemoryErr(pc),a1
+	bsr	ContinueMessage
+	moveq.l	#0,d0
+	bra	555$
+
+*---------------------------------
+100$	DEBUGTXT	DBLCF,<FileName=>
+	DEBUGSTR	DBLCF,0(a3)
+	DEBUGMSG	DBLCF,<>
+
+	GET.l	TB_SYSBase,a6		; no one else plays with memory
+	CALLROM	Forbid
+
+* Don't really care if there's an effects drawer !!!
+;;	CLEAR	d0
+;;	CALLTL	LockEffects	; change to the effects directory
+;;	move.l	d0,d3		; stash Effects Lock
+;;	bne.s	200$		; if successful - skip on
+;;	movea.l	a3,a0			;name
+;;	lea	NoEffectsErr(pc),a1
+;;	bsr	ContinueMessage
+;;	moveq.l	#0,d2
+;;	bra.s	520$
+;;NoEffectsErr	DC.b	'Crouton load failed.  Unable to find Effects.',0
+;;	CNOP	0,2
+
+*---------------------------------
+200$	movea.l	a3,a0
+
+	DEBUGMSG	DBLCF,<before LoadFastGadget>
+	bsr	LoadFastGadget		; Will put up error messages!
+	DEBUGMSG	DBLCF,<after LoadFastGadget>
+
+* At this point we have added the Crouton.libraries default tags
+* Then added any tags that were in any CrUD chunk, near the end of file.
+
+	move.l	d0,d2
+	beq	500$			;jump if failure
+
+* ->Filename, ->Icon, ->Code, and TagLists are correct after LoadFastG
+*---------------------------------
+250$	move.l	d0,d2			;->FG
+	move.l	d0,a0
+
+* If a crouton needs special tags added at Load time, this is a hook
+* that allows this. These tags can eventually be over ridden by the
+* Project values.  We use FGC_Load on croutons that don't have file
+* specific tags in a CrUD chunk.
+* Example: ANIMs determine their duration.  CLIPs get their duration,
+* recorded Audio settings (volume, mono/stereo), etc.
+
+	DEBUGMSG	DBLCF,<before FGC_LoadCommand>
+	CALLTL	FGC_LoadCommand		;FGC_LOAD
+
+	tst.w	TB_ErrFlag(a5)		; did the FGC_LOAD take?
+	beq	260$			;jump if FGC_LOAD OK
+
+	DEBUGMSG	DBLCF,<FGC_LoadCommand error>
+
+	lea	FGC_LOADErr(pc),a1
+	bra	600$
+
+*---------------------------------
+260$	CALLTL	FGC_SaveTagsCommand		;see if FG has any tags & where
+	GET.l	TB_Tags,a0
+	CALLTL	MakeTagListsSaved
+
+	DEBUGMSG	DBLCF,<After FGC_SaveTagsCommand, MakeTagListsSaved>
+
+*---------------------------------
+
+	GET.l	TB_SYSBase,a6
+	moveq	#0,d1			; first check for enough memory
+	CALLROM	AvailMem
+	cmp.l	#64*1024,d0
+	bcc	500$			; if enough memory - skip on
+
+	DEBUGMSG	DBLCF,<low memory 2>
+
+	lea	LowMemoryErr(pc),a1
+600$	movea.l	a3,a0			;name
+	bsr	ContinueMessage
+
+666$	movea.l	d2,a0			; since the FGC_LOAD code was run -
+	CALLTL	RemoveTBFG		; allow the FGC_UNLOAD code to run
+	moveq.l	#0,d2
+
+500$
+
+;;	GET.l	TB_DOSBase,a6		; get DOS base
+;;	move.l	d3,d1
+;;	beq.s	520$
+;;	CALLROM	UnLock
+;;520$
+
+	DEBUGMSG	DBLCF,<before permit>
+
+	GET.l	TB_SYSBase,a6
+	CALLROM	Permit
+
+	move.l	d2,d0			;->FG or error
+555$	movem.l	(sp)+,d1-d2/a0-a3/a6
+	rts
+
+LowMemoryErr	DC.b	'Crouton load failed. Not enough memory.',0
+FGC_LOADErr	DC.b	'Crouton load failed. Cannot create environment.',0
+	CNOP	0,2
+
+*----------------------------------------------------------------
+LoadedLibBSTR	EQU -8	;to be freed up later
+	dc.l	0
+LoadedTags	EQU -4	;to be freed up later
+	dc.l	0
+
+CroutonInfo:
+
+CINFO_CroutonType	 EQU *-CroutonInfo
+		dc.l	0 ;type
+
+CINFO_CroutonVersion	 EQU *-CroutonInfo
+		dc.l	0 ;version
+
+CINFO_CroutonLibName	 EQU *-CroutonInfo
+		dc.l	0 ;->libname
+
+CINFO_CroutonLibEntry	 EQU *-CroutonInfo
+		dc.l	0 ;entry
+
+CINFO_CroutonDefTags	 EQU *-CroutonInfo
+		dc.l	0 ;->tags
+
+CINFO_CroutonIconBM	 EQU *-CroutonInfo
+		dc.l	0 ;->bm
+
+CINFO_SIZEOF	EQU	*-CroutonInfo
+
+* LoadFastGadget Error Messages
+readErr		dc.b	'Crouton load failed. File is unreadable.',0
+LowMemErr	dc.b	'Crouton load failed. Insufficient memory.',0
+badObjErr	dc.b	'Crouton load failed. Unknown file format.',0
+loadsegErr	dc.b	'Crouton load failed. Object file format error.',0
+badversionErr	dc.b	'Crouton load failed. Unknown file version.',0
+notFGErr	dc.b	'Crouton load failed. File format error.',0
+openAuxErr	dc.b	'Crouton load failed. Unable to open AuxLibrary',0
+badcroutonErr	dc.b	'Crouton load failed. Bad or missing file.',0
+
+* LoadFastGadget() uses badcroutonErr, LoadCroutonFile uses this
+notFoundErr	dc.b	'Crouton load failed. Cannot find the file.',0
+
+	CNOP	0,2
+
+*************************************************************************
+*									*
+*	Default Crouton Fast Gadget Structure.				*
+*									*
+*************************************************************************
+*
+*   STRUCTURE	FastGadget,gg_SIZEOF	; superset of a Gadget structure
+*					; (align to longword for enhanced
+*					;  68020/30/40 performance)
+fgwidth     SET	80
+fgheight    SET	48
+fgselectw   SET	80
+fgselecth   SET	50
+HILITECOLOR SET $FF
+*
+*	Gadget Structure.
+*
+
+DefFastGadgetSeg:
+	dc.l	(DefFastGadgetSegEnd+3-DefFastGadgetSeg)&$fffffffc ;round up to long size
+
+* Seglist BCPL pointers point here
+	dc.l	0		; Only one segment
+
+DefFastGadget:
+* Gadget Structure
+	DC.L	0		; Next gadget
+	DC.W	0		; hit box left edge
+	DC.W	0		; hit box top edge
+	DC.W	fgselectw	; hit box width
+	DC.W	fgselecth	; hit box height
+	DC.W	0		; flags, complement image ????? Compliment
+	DC.W	0		; activation
+	DC.W	0		; gadget type
+	DC.L	0		; gadgetrender
+	DC.L	0		; selectrender  ?????? Compliment
+	DC.L	0		; text for gadget
+	DC.L	0 		; mutualexclude
+	DC.L	0		; specialinfo
+	DC.W	0   		; GadgetID
+	DC.L	0		; UserData
+
+* FastGadget Structure
+	DC.W	DISPLAYMODE6	; FG_ModeType	; FastGadget type for display render
+	DC.W	(fgwidth/16)-1	; FG_WWidth	; word width-1 counter
+	DC.W	fgheight-1	; FG_Height	; height-1 counter
+	DC.W	(DISPLAYWIDTH-fgwidth)/8	; FG_Modulus	; byte modulus from line to line
+	DC.L	0		; FG_Offset	; byte offset within container
+
+* Global Icon!
+****** FILL THIS IN with ->icon BM
+	DC.L	0		; FG_Data	; ptr to current source image data
+
+	DC.W	1		; FG_EntrySize	; # of source image ptrs in PTRTable
+	DC.W	0		; FG_PTRIndex	; index into PTRTable for Data ptr
+	DC.L	0		; FG_PTRTable	; ptr to source image ptr array
+
+* Global Code!
+******* FILL THIS IN with ->Crouton Handler
+
+	DC.L	0 		; FG_Function	; routine to run on FastGadget select
+	DC.B	1		; FG_LoadFlag	; non-0 if loaded from external src (or needs to be UnLoadSeged)
+	DC.B	0		; FG_DispFlag	; non-0 if not to be displayed
+	DC.B	0		; FG_MouseFlag	; non-0 if not to listen to mouse
+	DC.B	HILITECOLOR	; FG_HiLiteVal	; for internal use (but not used)
+	DC.W	0		; FG_IndexID
+	DC.W	0		; FG_HiLiteMask
+	DC.W	-1		; FG_BorderCon
+	DC.W	0		; FG_TopSize
+	DC.W	0		; FG_BotSize
+	DC.W	0		; FG_LeftWSize
+	DC.W	0		; FG_RightWSize
+	DC.W	$7FFF		; FG_LeftMask
+	DC.W	$FFFE		; FG_RightMask
+	DC.W	0		; FG_Extra1
+
+	dcb.b	DefFastGadget+FG_SIZ-*,0
+
+* StandardToolFGExt structure
+******* FILL THIS IN with ->filename
+	dc.l	0		;FGS_FileName
+
+******* FILL THIS IN with object type
+	dc.l	0		;FGS_ObjectType
+
+******* FILL THIS IN with object version
+	dc.l	0		;FGS_ObjectVersion
+
+******* FILL THIS IN with ->entry library
+	DC.l	0		;FGS_EntryLibrary
+
+******* FILL THIS IN with entry offset
+	DC.l	0		;FGS_EntryRoutine
+
+	dc.l	CroutonTagLists-DefFastGadget ;FGS_TagLists
+	DC.l	0		;FGS_LocalData
+
+	dcb.b	DefFastGadget+FGS_SIZ-*,0
+
+CroutonTagLists:
+	ENDOFLIST
+	dc.l	DefFastGadgetSegEnd-CroutonTagLists
+	dcb.b	TLN_SIZEOF+CroutonTagLists-*,0
+
+****!!!!**** On loading we need to have an Index supplied
+;;	TAG_IndexID	0
+
+	dc.l	0	;end of tag list marker
+
+DefFastGadgetSegEnd:
+
+***********************************************************************
+* ->FG LoadFastGadget(->name, ->TB)
+*  d0                   a0      a5
+*
+* = NULL if any type of error
+LoadFastGadget:
+	movem.l	d1-d2/a0-a4/a6,-(sp)
+
+	DEBUGMSG	DBLFG,<LoadFastGadget:>
+
+	movea.l	a0,a2			;save ->name
+
+*---------------------------------
+* initialize data
+	lea	CroutonInfo(pc),a3	;->Local data
+	suba.l	a4,a4			;->FG
+
+	clr.l	LoadedLibBSTR(a3)
+	clr.l	LoadedTags(a3)
+
+* All CINFO fields are cleared
+	movea.l	a3,a0
+	move.l	#(CINFO_SIZEOF/2)-1,d0
+5$	clr.w	(a0)+
+	dbra	d0,5$
+
+*---------------------------------
+
+	DEBUGMSG	DBLFG,<Before NLoadSegment>
+
+	GET.l	TB_DOSBase,a6		; get DOSBase
+10$	move.l	a2,d1			; ->name string
+	move.l	#3000,d0		; buffer size
+;	CALLTL	NLoadSegment		; attempt to load the FastGadget
+;
+;	DEBUGSDEC.l	DBLFG,<NLoadSegment return=>,d0,<\>
+
+* d0->seglist d1=error
+*  ERROR_OBJECT_NOT_FOUND	;bad open
+*  ERROR_OBJECT_WRONG_TYPE	;unknown seg type
+*  ERROR_NO_FREE_STORE		;no mem
+*  ERROR_BAD_HUNK		;read error or EOF
+*  ERROR_FILE_NOT_OBJECT	;not load module
+;	tst.l	d0
+;	bne	1000$
+;
+;	DEBUGMSG	DBLFG,<not loadseged>
+;
+;	cmpi.l	#ERROR_FILE_NOT_OBJECT,d1
+;	beq	2000$
+	bra	2000$
+
+;-------------------
+	cmpi.l	#ERROR_BAD_HUNK,d1
+	bne	100$
+
+	DEBUGMSG	DBLFG,<ERROR_BAD_HUNK>
+
+	movea.l	a2,a0			;name
+	lea	readErr(pc),a1
+	bsr	RetryOrCancel
+	bne	10$
+	bra	555$			;d0=0, read error or EOF
+
+;-------------------
+100$	cmpi.l	#ERROR_OBJECT_NOT_FOUND,d1
+	beq	2500$
+
+;-------------------
+150$	cmpi.l	#ERROR_NO_FREE_STORE,d1
+	bne.s	200$
+
+166$
+	DEBUGMSG	DBLFG,<ERROR_NO_FREE_STORE>
+
+	movea.l	a2,a0			;name
+	lea	LowMemErr(pc),a1
+	bra	666$
+
+;-------------------
+200$	cmpi.l	#ERROR_OBJECT_WRONG_TYPE,d1
+	bne	300$
+
+	DEBUGMSG	DBLFG,<ERROR_OBJECT_WRONG_TYPE>
+
+	movea.l	a2,a0			;name
+	lea	badObjErr(pc),a1
+	bra	666$
+
+300$
+	DEBUGMSG	DBLFG,<Loadsegable module has LoadSeg Error>
+
+	movea.l	a2,a0			;name
+	lea	loadsegErr(pc),a1
+	bra	666$
+
+*--------------------------------------------------------------
+* LoadSeged d0=BCPL
+1000$
+	DEBUGMSG	DBLFG,<Crouton was LoadSeged>
+
+* check to see if it's really a FG and not just some loadable code
+	add.l	d0,d0
+	add.l	d0,d0
+	addq.l	#4,d0			;->FG
+	move.l	d0,a4			;stash
+
+	cmpi.w	#fgselectw,gg_Width(a4)
+	bne.s	1666$
+	cmpi.w	#fgselecth,gg_Height(a4)
+	bne.s	1666$
+	cmpi.w	#(fgwidth/16)-1,FG_WWidth(a4)
+	bne.s	1666$
+	cmpi.w	#fgheight-1,FG_Height(a4)
+	bne.s	1666$
+	cmpi.w	#(DISPLAYWIDTH-fgwidth)/8,FG_Modulus(a4)
+	bne.s	1666$
+	cmpi.b	#HILITECOLOR,FG_HiLiteVal(a4)
+ 	bne.s	1666$
+
+	cmpi.w	#DISPLAYMODE6,FG_ModeType(a4)
+	bne.s	1555$
+
+* The loadseged module could techinically supply a Type, but it will be
+* difficault for the Grazer to locate it!  So we won't do it.
+* If no FORMCrud is found, we'll use a default Type.
+;;	move.l	FGS_ObjectType(a4),CINFO_CroutonType(a3)
+;;	move.l	FGS_ObjectVersion(a4),CINFO_CroutonVersion(a3)
+
+* The loadseged module can never supply ->LibName or LibEntry.
+* If no FORMCrUD is found, we'll open the "effects.library" as a default.
+* If a FG_Function is given, it will be honored over the library entry point.
+
+* The loadseged module could technically supply an icon, but it will be
+* difficault for the Grazer to locate it! So we won't do it.
+* If no FORMILBM icon is found, we'll use a default.
+;;	move.l	FG_Data(a4),CINFO_CroutonIconBM(a3)
+
+* The loadseged module normally will (though not necessarily) contain an
+* empty TagList, this will be overridden by our internal "default" tag list.
+* This "overwrite" makes loadseged lists fairly useless.
+* So there are typically 3 tag lists, in the following order:
+* (0. worthless loadseged list)
+* 1. Internal Default list
+* 2. FORMCrUD list
+* 3. Project list
+* We'll keep CroutonDefTags null so we can always get the defaults.
+	bra	3000$
+
+1555$	movea.l	a2,a0			;name
+	lea	badversionErr(pc),a1
+	bra	666$
+
+1666$	movea.l	a2,a0			;name
+
+	move.l	a4,d1			;
+	subq	#4,d1			; subtract 4
+	lsr.l	#2,d1			; convert to BPTR
+	CALLTL	UnLoadSegment		; unload it
+	suba.l	a4,a4			;->FG == NULL
+
+	lea	notFGErr(pc),a1
+	bra	666$
+
+*--------------------------------------------------------------
+* Data file does not exist.  Check for icon.  All fields must come from there.
+2500$	DEBUGMSG	DBLFG,<Data file does not exist>
+
+	bsr	AllocBlankFG
+	movea.l	d0,a4
+	beq	166$
+
+	movea.l	a2,a0			;->icon name
+	movea.l	a3,a1
+	bsr	ExamineCroutonIconFile
+
+	suba.l	a0,a0	;->data name	;name not available
+	bra	4000$
+
+*--------------------------------------------------------------
+* Not LoadSegable but does exist
+2000$	DEBUGMSG	DBLFG,<Not LoadSegable but does exist>
+
+	bsr	AllocBlankFG
+	movea.l	d0,a4
+	beq	166$
+
+*--------------------------------------------------------------
+* Have FG.  Data file exists.
+* May or maynot have type, ->icon, ->code, ->tags, ->libs
+
+3000$	DEBUGMSG	DBLFG,<Before ExamineCroutonIconFile>
+
+	movea.l	a2,a0			;->icon name
+	movea.l	a3,a1
+	bsr	ExamineCroutonIconFile
+	move.l	CINFO_CroutonIconBM(a3),FG_Data(a4)
+
+* if non-null this BSTR will require freeing soon
+	move.l	CINFO_CroutonLibName(a3),LoadedLibBSTR(a3)
+* if non-null these will override the default tags and will require freeing soon.
+	move.l	CINFO_CroutonDefTags(a3),LoadedTags(a3)
+
+	DEBUGMSG	DBLFG,<Before ExamineCroutonDataFile>
+
+;;	movea.l	a2,a0	;->data name
+	bsr	ExamineCroutonDataFile
+
+4000$	DEBUGMSG	DBLFG,<Before ExamineCroutonDefaults>
+
+	move.l	CINFO_CroutonIconBM(a3),FG_Data(a4)
+
+* if non-null this BSTR will require freeing soon
+	move.l	CINFO_CroutonLibName(a3),LoadedLibBSTR(a3)
+* if non-null these will override the default tags and will require freeing soon.
+	move.l	CINFO_CroutonDefTags(a3),LoadedTags(a3)
+
+	clr.l	CINFO_CroutonDefTags(a3)  ;always null so can get defaults
+	bsr	ExamineCroutonDefaults
+
+* make use of results (some of these may already be in the FG)
+	move.l	CINFO_CroutonType(a3),FGS_ObjectType(a4)
+	bne	4100$
+
+	DEBUGMSG	DBLFG,<No type even after ExamineCroutonDefaults>
+
+	movea.l	a2,a0		;crouton name
+	lea	badcroutonErr(pc),a1
+	bra	666$
+
+4100$	DEBUGMSG	DBLFG,<Before OpenAuxLib>
+
+	move.l	CINFO_CroutonVersion(a3),FGS_ObjectVersion(a4)
+	move.l	CINFO_CroutonLibEntry(a3),FGS_EntryRoutine(a4)
+	move.l	CINFO_CroutonIconBM(a3),FG_Data(a4)
+
+*-------------
+* At least a default lib name will ALWAYS be supplied!!!!
+	movea.l	CINFO_CroutonLibName(a3),a0
+	CALLTL	OpenAuxLib
+	move.l	d0,FGS_EntryLibrary(a4)
+	bne.s	4300$
+
+	movea.l	CINFO_CroutonLibName(a3),a0
+	lea	openAuxErr(pc),a1
+	bra	666$
+
+* Hack in Function pointer
+4300$	DEBUGMSG	DBLFG,<Hack in function ptr>
+
+	tst.l	FG_Function(a4)
+	bne.s	4500$
+	add.l	FGS_EntryRoutine(a4),d0
+	move.l	d0,FG_Function(a4)
+
+*-------------
+* Create allocated name string
+* a2->name, a3->CroutonInfo
+4500$	DEBUGMSG	DBLFG,<Before clone of file name>
+
+	movea.l	a2,a0
+	CALLTL	STRlen
+
+	addq.l	#2,d0	;add for null terminator & round up
+	andi.l	#~%1,d0 ;round up string to WORD length (including NULL)
+	move.l	d0,d2	;stash string length including NULL(s)
+	addq.l	#2,d0	;BSTR UWORD length length
+
+	move.l	#MEMF_CLEAR,d1
+	move.l	(4).w,a6
+
+	DEBUGUDEC.l	DBAMEM,<AllocMem filename>,d0,<bytes >
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	166$	;LowMemErr
+	DEBUGHEXI.l	DBAMEM,<at >,d0,<\>
+
+	movea.l	d0,a0
+	move.w	d2,(a0)+
+	move.l	a0,FGS_FileName(a4)
+
+	movea.l	a0,a1
+	movea.l	a2,a0
+	CALLTL	STRcopy
+
+*---------------------------------------------------------
+* At this point the FG is totally done.  All that is still required
+* is applying some taglists to the FG.
+
+;; This code is done later, so I don't have to worry about FGC_UNLOADs here.
+;;	movea.l	a4,a0
+;;	CALLTL	FGC_LoadCrouton
+;;	bne.s	5000$
+;;	movea.l	a2,a0
+;;	lea	fgcLoadErr(pc),a1
+;;	bra.s	666$
+;;fgcLoadErr	dc.b	'Crouton load failed. Load command failed.',0
+;;	CNOP	0,2
+
+5000$	DEBUGMSG	DBLFG,<Before Default Tags LoadTagsCommand>
+
+	PUT.l	CINFO_CroutonDefTags(a3),TB_Tags
+	beq.s	5100$
+	movea.l	a4,a0		;->FG
+	CALLTL	FGC_LoadTagsCommand	;process that the Crouton.library gives as defaults
+
+5100$	DEBUGMSG	DBLFG,<Before Loaded Tags LoadTagsCommand>
+
+	PUT.l	LoadedTags(a3),TB_Tags
+	beq.s	555$
+	movea.l	a4,a0		;->FG
+	CALLTL	FGC_LoadTagsCommand	;process the tags that came from near the end of file
+
+555$	DEBUGMSG	DBLFG,<Before FreeMem on lib name>
+
+	move.l	(4).w,a6
+	move.l	LoadedLibBSTR(a3),d0
+	beq	580$
+	subq.l	#2,d0		;->Length WORD
+	movea.l	d0,a1		;->Free block
+	moveq	#0,d0
+	move.w	(a1),d0
+	addq.w	#2,d0		;include length WORD
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem Libname >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem	;libname size including length UWORD
+
+580$	DEBUGMSG	DBLFG,<Before FreeMem on loaded Tags>
+
+	move.l	LoadedTags(a3),d0
+	beq	590$
+	movea.l	d0,a1
+	move.l	-(a1),d0	;tag list size not including node
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem LoadedTags >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+
+590$	DEBUGHEXI.l	DBLFG,<Exit of LoadFastGadget d0=>,a4,<\>
+
+	move.l	a4,d0			;->FG
+	movem.l	(sp)+,d1-d2/a0-a4/a6
+	rts
+
+666$	DEBUGMSG	DBLFG,<Before ContinueMessage>
+
+	bsr	ContinueMessage
+
+	move.l	a4,d0
+	beq	555$
+
+	DEBUGMSG	DBLFG,<Before UnLoadFastG>
+
+	movea.l	a4,a0
+
+	CALLTL	UnLoadFastG	;will unload taglists, bm if necessary
+				;will close entry lib, will free name string
+	suba.l	a4,a4
+	bra	555$
+
+**********************************************************************
+* ->FG = AllocBlankFG()
+*   d0
+*
+* Note: This FG is part of one segment of a seglist, so it looks like
+* it was loadseged.
+*
+AllocBlankFG:
+	movem.l	d1/a0-a2/a6,-(sp)
+
+	move.l	(4).w,a6
+	lea	DefFastGadgetSeg(pc),a2 ;source
+	move.l	(a2),d0			;# of bytes
+	move.l	#MEMF_PUBLIC,d1
+
+	DEBUGUDEC.l	DBAMEM,<AllocMem BlankFG>,d0,<bytes >
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	666$
+	DEBUGHEXI.l	DBAMEM,<at >,d0,<\>
+
+	movea.l	d0,a0		;->Segment
+	addq.l	#8,d0		;->FG
+
+	move.l	(a2),d1		;byte size
+	lsr.l	#2,d1		;/4 = long size
+.nxtdef	move.l	(a2)+,(a0)+
+	subq.l	#1,d1
+	bne.s	.nxtdef
+
+	tst.l	d0
+666$	movem.l	(sp)+,d1/a0-a2/a6
+	rts
+
+**********************************************************************
+* ->BM = AllocIconBM(pixelwidth,height,depth)
+*   d0
+* This creates a BM stucture with its bit planes APPENDED!
+
+d1ptr	set	0
+d2ptr	set	4
+
+	XDEF	AllocIconBM
+AllocIconBM:
+	movem.l	d1-d3/a0-a1/a6,-(sp)
+
+	add.w	#15,d0
+	lsr.w	#4,d0			;UWORD width rounded up
+	add.w	d0,d0			;UBYTE width
+	move.w	d0,d3			;bytes per row
+
+	mulu.w	d1,d0			;rows
+	mulu.w	d0,d2			;# of bytes
+	exg	d0,d2			;d2=bytes/plane
+	add.l	#bm_SIZEOF,d0
+
+	DEBUGUDEC.l	DBECI,<AllocIconBM size=>,d0,<\>
+
+	move.l	(4).w,a6
+	move.l	#MEMF_CLEAR,d1
+
+	DEBUGUDEC.l	DBAMEM,<AllocMem IconBM>,d0,<bytes >
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	666$
+	DEBUGHEXI.l	DBAMEM,<at >,d0,<\>
+
+	movea.l	d0,a0		;->bm
+
+	move.w	d3,bm_BytesPerRow(a0)
+	move.w	d1ptr+2(sp),bm_Rows(a0)
+	move.l	d2ptr(sp),d1
+	move.b	d1,bm_Depth(a0)
+	move.w	#1,bm_Pad(a0)		;mark as allocated (not loadseged)
+
+	lea	bm_Planes(a0),a1
+	move.l	d0,d3
+	addi.l	#bm_SIZEOF,d3
+	bra.s	20$
+10$	move.l	d3,(a1)+
+	add.l	d2,d3
+20$	dbra	d1,10$
+
+	tst.l	d0
+666$	movem.l	(sp)+,d1-d3/a0-a1/a6
+	rts
+
+**********************************************************************
+* FreeIconBM(a0->BM)
+	XDEF FreeIconBM
+FreeIconBM:
+	movem.l	d0-d1/a0-a1/a6,-(sp)
+	cmpi.w	#1,bm_Pad(a0)	;one of our special AllocBMs?
+	bne	100$
+
+	move.w	bm_BytesPerRow(a0),d0
+	mulu.w	bm_Rows(a0),d0
+	moveq	#0,d1
+	move.b	bm_Depth(a0),d1
+	mulu.w	d1,d0
+	addi.w	#bm_SIZEOF,d0
+	movea.l	a0,a1
+	move.l	(4).w,a6
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem IconBM >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+
+100$	movem.l	(sp)+,d0-d1/a0-a1/a6
+	rts
+
+***********************************************************
+* a0->CroutonFileName, a5->TB
+* Returns d0->LockBuffer
+*
+	XDEF	OpenCroutonFile
+
+OpenCroutonFile
+	IFD	DBOPEN
+	 DUMPTXT	<OpenCroutonFile=>
+	 DUMPSTR	0(a0)
+	 DUMPMSG	<>
+	ENDC
+
+	movem.l	d1-d2/a0/a6,-(sp)
+	move.l	a0,d1	;->name
+	move.l	#MODE_OLDFILE,D2	;ACCESS MODE
+	move.l	#5000,d0		;BufferSize
+	sub.l	a0,a0			;buffer
+	GET.l	TB_DOSBase,a6
+	CALLTL	BufferedOpen
+	movem.l	(sp)+,d1-d2/a0/a6
+	rts
+
+***********************************************************
+* a0->LockBuffer (via BufferedOpen), a5->TB
+* Returns BOOL
+	XDEF	CloseCroutonFile
+
+CloseCroutonFile
+	CALLTL	BufferedClose
+	rts
+
+***********************************************************
+* Seek2CrUDchunk(d0=Desired chunk name, a0->LockBuffer (via BufferedOpen), a5->TB)
+*
+* returns BOOL
+* If TRUE, file positioned at length LONG of desired chunk
+* If FALSE, file positioning is unknown!
+*
+	XDEF	Seek2CrUDchunk
+
+Seek2CrUDchunk
+	movem.l	d2-d4,-(sp)
+
+	DEBUGHEXI.l	DBS2CrUD,<Seek2CrUDchunk: search for >,d0,<\>
+
+	move.l	d0,d4		;stash chunk name
+
+	moveq.l	#0,d2
+	moveq.l	#OFFSET_END,d3
+
+	DEBUGMSG	DBSEEK,<BS seek Seek2CrUDchunk 1>
+
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error
+
+	DEBUGMSG	DBS2CrUD,<after seek to end>
+
+	move.l	#'CrUD',d0
+
+	DEBUGMSG	DBSEEK,<seek Seek2CrUDchunk 2>
+
+	bsr	SeekUp2FORM
+	beq	777$
+
+	DEBUGMSG	DBS2CrUD,<after seek to FORM CrUD>
+
+* Assumes only one CrUD FORM per file.
+	moveq.l	#3*4,d2			;seek to first chunk of FORM CrUD
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek  Seek2CrUDchunk 3>
+
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error
+
+	DEBUGMSG	DBS2CrUD,<after seek to first Chunk in CrUD>
+
+100$	GetLong	666$
+
+	DEBUGMSG	DBS2CrUD,<got long>
+
+	cmpi.l	#'FORM',d0	;Stop at FORM PUS
+	beq	666$
+
+	DEBUGHEXI.l	DBS2CrUD,<chunk=>,d0,<\>
+
+	cmp.l	d4,d0
+	beq	555$		;jump if found the chunk
+
+	GetLong	666$		;get length of this chunk
+
+	move.l	d0,d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek  Seek2CrUDchunk 4>
+
+	CALLTL	BufferedSeek
+	bne	100$		;look at next chunk
+	bra	777$		;error
+
+555$	moveq.l	#TRUE,d0
+777$	movem.l (sp)+,d2-d4
+	rts
+
+666$	moveq.l	#FALSE,d0
+	bra.s	777$
+
+**********************************************************************
+* LONG errorcode = ExamineCroutonIconFile(->DataFileName,->CroutonInfoStruct)
+* 1=can't open
+*
+* If not yet known, get Type, Version and libEntry.
+* Fill in ptrs to libname & tags (to be freed soon)
+* Fill in ptr to bm (will be freed on FGC_REMOVE because bm_Pad bit is set)
+
+	XDEF ExamineCroutonIconFile
+ExamineCroutonIconFile:
+	movem.l	d1-d3/a0-a3,-(sp)
+
+	DEBUGTXT	DBECIF,<ExamineCroutonIconFile: >
+	DEBUGSTR	DBECIF,0(a0)
+	DEBUGMSG	DBECIF,<>
+
+	movea.l	a1,a2	;save ->CroutonInfoStruct
+
+	tst.l	CINFO_CroutonType(a2)
+	beq.s	10$
+	tst.l	CINFO_CroutonLibName(a2)
+	beq.s	10$
+	tst.l	CINFO_CroutonIconBM(a2)
+	beq.s	10$
+	tst.l	CINFO_CroutonDefTags(a2)
+	beq.s	10$
+
+	moveq	#0,d0
+	bra	555$
+
+* stash icon name on stack
+*a0->dataname
+10$	DEBUGMSG	DBECIF,<before STRlen>
+	CALLTL	STRlen
+
+	addq.l	#4+4,d0	;add for null terminator & ".I" & round up to nearest WORD + original SP
+	andi.l	#~%1,d0
+	movea.l	sp,a3	;stash sp
+	suba.l	d0,sp	;change stack by word amount
+
+;a0->dataname
+	lea	4(sp),a1
+
+	DEBUGMSG	DBECIF,<before STRcopy>
+	CALLTL	STRcopy
+	move.b	#'.',(a1)+
+	move.b	#'I',(a1)+
+	move.b	#0,(a1)
+
+* 4(sp)->icon name
+	move.l	a3,(sp)	;stack restore value
+
+*-------------
+	DEBUGMSG	DBECIF,<Before OpenCroutonFile>
+
+	lea	4(sp),a0	;->icon file name
+	lea	-(BitMapHeader_SIZEOF+5*4)(sp),sp
+
+	bsr	OpenCroutonFile
+	beq	650$
+	move.l	d0,a0		;stash ->LockBuffer
+	movea.l	a2,a1
+
+*a0->lockbuffer, a1->CroutonInfo
+	DEBUGMSG	DBECIF,<Before ExamineCroutonIcon>
+
+*-----------------------------------------------------------------
+* Seek forward to a ILBM FORM that looks like a suitable icon.
+
+* Only support our type of uncompressed, BMHD chunk first ILBMs.
+15$	move.l	sp,d2
+	move.l	#(BitMapHeader_SIZEOF+5*4),d3
+;a0=lockbuffer, d2->buffer, d3=length
+	CALLTL	BufferedRead	;Read tags from bottom of file
+	cmp.l	d0,d3
+	bne	20$		;jump if no ILBM found (beyond file end)
+
+	move.l	d3,d2
+	neg.l	d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek ExamineCroutonIconFile 1>
+
+	CALLTL	BufferedSeek	;seek back to beginning of FORM
+	beq	20$		;forget it if seek error
+
+	cmpi.l	#'FORM',(sp)
+	bne	20$		;can't look anymore if no FORMs
+
+	cmpi.l	#'ILBM',2*4(sp)
+	bne	30$		;skip to next FORM
+
+	cmpi.l	#'BMHD',3*4(sp)
+	bne	30$		;skip to next FORM
+
+	DEBUGUDEC.b	DBECIF,<ILBM depth=>,bmh_Depth+5*4(sp),<\>
+
+	cmpi.l	#BitMapHeader_SIZEOF,4*4(sp)
+	bne	30$		;only understand standard BMHDs
+
+* These icon dimensions should be defined somewhere !!!!!!!
+	cmpi.w	#80,bmh_Width+5*4(sp)
+	bne	30$
+	cmpi.w	#50,bmh_Height+5*4(sp)
+	bne	30$
+	cmpi.b	#cmpNone,bmh_Compression+5*4(sp)
+	bne	30$
+	cmpi.b	#3,bmh_Depth+5*4(sp)
+	beq	40$		;OK for all known machines
+
+	btst.b	#AACHIPS_BIT,TB_Flags2(a5)
+	bne.s	25$	;jump if on AA machine
+
+* Non-AA machine
+	cmpi.b	#2,bmh_Depth+5*4(sp)
+	beq	40$		;OK for non-AA machine
+	bra.s	30$		;try again
+
+* AA machine
+25$	cmpi.b	#6,bmh_Depth+5*4(sp)
+	beq	40$		;OK for AA machine
+
+* Skip to next FORM
+30$	move.l	4(sp),d2	;FORM size
+	addq.l	#8,d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek ExamineCroutonIconFile 2>
+
+	CALLTL	BufferedSeek	;seek back to beginning of FORM
+	beq	20$		;forget it if seek error
+	bra	15$		;Try next form
+*-----------------------------------------------------------------
+
+40$	bsr	ExamineCroutonIcon	;assume seeked correctly
+
+	DEBUGMSG	DBECIF,<Before ExamineCroutonCrUD>
+
+20$	bsr	ExamineCroutonCrUD
+
+300$
+	DEBUGMSG	DBECIF,<Before CloseCroutonFile>
+
+	bsr	CloseCroutonFile
+
+	DEBUGHEXI.l	DBECIF,<CroutonType=>,CINFO_CroutonType(a2),<\>
+	DEBUGHEXI.l	DBECIF,<CroutonVersion=>,CINFO_CroutonVersion(a2),<\>
+
+	DEBUGHEXI.l	DBECIF,<CroutonLibName=>,CINFO_CroutonLibName(a2),< =>
+	IFD	DBECIF
+	movea.l	CINFO_CroutonLibName(a2),a0
+	move.l	a0,d0
+	cmpi.l	#1,d0
+	bls	605$
+	DEBUGSTR	DBECIF,0(a0)
+	DEBUGMSG	DBECIF,<>
+605$
+	ENDC
+
+	DEBUGHEXI.l	DBECIF,<CroutonLibEntry=>,CINFO_CroutonLibEntry(a2),<\>
+
+	DEBUGHEXI.l	DBECIF,<CroutonIconBM=>,CINFO_CroutonIconBM(a2),<\>
+	IFD	DBECIF
+	movea.l	CINFO_CroutonIconBM(a2),a0
+	move.l	a0,d0
+	cmpi.l	#1,d0
+	bls	610$
+	DEBUGMEM	DBECIF,<bm STRUCT=>,0(a0),#bm_SIZEOF
+610$
+	ENDC
+
+	DEBUGHEXI.l	DBECIF,<CroutonDefTags=>,CINFO_CroutonDefTags(a2),<\>
+	IFD	DBECIF
+	movea.l		CINFO_CroutonDefTags(a2),a0
+	move.l	a0,d0
+	cmpi.l	#1,d0
+	bls	620$
+	move.l		-4(a0),d0
+	DEBUGMEM	DBECIF,<Tag block+size=>,0(a0),d0
+620$
+	ENDC
+
+	moveq	#0,d0		;success
+666$	lea	BitMapHeader_SIZEOF+5*4(sp),sp
+	movea.l	(sp),sp		;restore stack pointer
+555$	movem.l	(sp)+,d1-d3/a0-a3
+
+	DEBUGMSG	DBECIF,<return from ExamineCroutonIconFile>
+
+	rts
+
+650$	moveq	#1,d0		;Open Error
+	bra	666$
+
+**********************************************************************
+* LONG errorcode = ExamineCroutonDataFile(->DataFileName,->CroutonInfoStruct)
+* 1=can't open
+*
+* If not yet known, get Type, Version and libEntry.
+* Fill in ptrs to libname & tags (to be freed soon)
+* Fill in ptr to bm (will be freed on FGC_REMOVE because bm_Pad bit is set)
+
+	XDEF ExamineCroutonDataFile
+ExamineCroutonDataFile:
+	DEBUGMSG	DBECDF,<ExamineCroutonDataFile:>
+
+	move.l	a0,-(sp)
+
+	tst.l	CINFO_CroutonType(a1)
+	beq.s	10$
+	tst.l	CINFO_CroutonLibName(a1)
+	beq.s	10$
+	tst.l	CINFO_CroutonIconBM(a1)
+	beq.s	10$
+	tst.l	CINFO_CroutonDefTags(a1)
+	bne	555$
+
+* a0->name
+10$	bsr	OpenCroutonFile
+	beq	650$
+	move.l	d0,a0
+
+*a0->lockbuffer, a1->CroutonInfo
+	bsr	ExamineCroutonCrUD
+
+	DEBUGMSG	DBSEEK,<seek ExamineCroutonDataFile 1>
+
+	bsr	SeekUp2IconsFORM
+	beq.s	300$			;can't locate it
+	bsr	ExamineCroutonIcon
+
+300$	bsr	CloseCroutonFile
+
+	DEBUGMSG	DBECDF,<Successful end of ExamineCroutonDataFile>
+
+555$	moveq	#0,d0		;success
+666$	movea.l	(sp)+,a0
+	rts
+
+650$	moveq	#1,d0		;Open Error
+	bra.s	666$
+
+**********************************************************************
+* ExamineCroutonCrUD(a0=LockBuffer, a1->CroutonInfo)
+ExamineCroutonCrUD:
+	movem.l	d0-d4/a0-a4/a6,-(sp)
+
+	DEBUGMSG	DBECC,<ExamineCroutonCrUD:>
+
+	movea.l	a1,a2	;->croutoninfo
+	movea.l	a0,a3	;=lockbuffer
+	move.l	(4).w,a6
+
+	tst.l	CINFO_CroutonType(a2)
+	bne	100$
+
+	move.l	#'TYPE',d0
+
+	DEBUGMSG	DBSEEK,<seek ExamineCroutonCrUD 1>
+
+	bsr	Seek2CrUDchunk
+	beq.s	100$
+	GetLong	100$	;length of tag chunk
+
+	GetLong	100$	;Type
+	move.l	d0,d1	;stash Type
+
+	GetLong	100$	;Version
+* type and version always go together!
+	move.l	d1,CINFO_CroutonType(a2)
+	move.l	d0,CINFO_CroutonVersion(a2)
+
+*------------------------------------------
+100$	tst.l	CINFO_CroutonLibName(a2)
+	bne	200$
+
+	move.l	#'LIBS',d0
+
+	DEBUGMSG	DBSEEK,<seek ExamineCroutonCrUD 2>
+
+	bsr	Seek2CrUDchunk
+	beq	200$
+	GetLong	200$	;length of libs chunk
+
+	GetLong	200$	;LibEntry
+	move.l	d0,d4	;stash entry
+
+	GetWord	200$	;LibName length
+	ext.l	d0	;long value
+	move.l	d0,d3
+	addq.w	#2,d0	;total length to alloc
+
+	move.l	#MEMF_PUBLIC,d1
+;;	move.l	(4).w,a6
+
+	DEBUGUDEC.l	DBAMEM,<AllocMem libname>,d0,<bytes >
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	200$
+	DEBUGHEXI.l	DBAMEM,<at >,d0,<\>
+
+	movea.l	d0,a4
+	move.w	d3,(a4)+	;stash BSTR length
+
+	movea.l	a3,a0		;->LockBuffer
+	move.l	a4,d2
+;a0=lockbuffer, d2->buffer, d3=length
+	CALLTL	BufferedRead	;Read tags from bottom of file
+	cmp.l	d0,d3
+	beq	150$
+
+	lea	-2(a4),a1	;->block
+	move.l	d3,d0		;string size
+	addq.l	#2,d0		;total size
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem Libname2 >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+	bra.s	200$
+
+150$	move.l	a4,CINFO_CroutonLibName(a2)
+	move.l	d4,CINFO_CroutonLibEntry(a2)
+
+*------------------------------------------
+200$	tst.l	CINFO_CroutonDefTags(a2)
+	bne	300$
+
+	DEBUGMSG	DBECC,<Before Seek2CrUDchunk>
+
+	movea.l	a3,a0		;->Lockbuffer
+	move.l	#'TAGS',d0
+
+	DEBUGMSG	DBSEEK,<seek ExamineCroutonCrUD 3>
+
+	bsr	Seek2CrUDchunk
+	beq	300$
+
+	DEBUGMSG	DBECC,<After Seek2CrUDchunk>
+
+	GetLong	300$	;length of tags chunk
+
+	addq.l	#4,d0	;total length to alloc
+	move.l	d0,d3	;stash
+
+	DEBUGMSG	DBECC,<Before AllocMem>
+
+	move.l	#MEMF_PUBLIC,d1
+;;	move.l	(4).w,a6
+
+	DEBUGUDEC.l	DBAMEM,<AllocMem LoadTags>,d0,<bytes >
+	CALLROM	AllocMem
+	tst.l	d0
+	beq	300$
+	DEBUGHEXI.l	DBAMEM,<at >,d0,<\>
+
+	movea.l	d0,a4
+	move.l	d3,(a4)+ ;stash block length (including node)
+	subq.l	#4,d3	 ;amount to read
+
+	DEBUGMSG	DBECC,<Before BufferedRead>
+
+	movea.l	a3,a0		;->LockBuffer
+	move.l	a4,d2
+;a0=lockbuffer, d2->buffer, d3=length
+	CALLTL	BufferedRead	;Read tags from bottom of file
+	cmp.l	d0,d3
+	beq	250$
+
+	DEBUGMSG	DBECC,<Before FreeMem>
+
+	move.l	-(a4),d0	;total size
+	movea.l	a4,a1
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem LoadedTags2 >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+	bra.s	300$
+
+250$	move.l	a4,CINFO_CroutonDefTags(a2)	;-4() = length
+300$	movem.l	(sp)+,d0-d4/a0-a4/a6
+	rts
+
+**********************************************************************
+* a0->LockBuffer (via BufferedOpen), a5->TB
+*
+* returns BOOL
+* If TRUE, file positioned at form start (at FORMILBM)
+* If FALSE, file positioning is unknown!
+*
+* NOTE! Just because this may be successful doesn't mean we're
+* actually at the start of a FORMILBM.  Its just where one should
+* be located, if one exists.
+*
+SeekUp2IconsFORM
+	movem.l	d2-d3,-(sp)
+
+	lea	-BitMapHeader_SIZEOF(sp),sp
+
+	moveq.l	#0,d2
+	moveq.l	#OFFSET_END,d3
+
+	DEBUGMSG	DBSEEK,<BS seek SeekUp2IconsFORM 1>
+
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error
+
+10$	move.l	#'ILBM',d0
+
+	DEBUGMSG	DBSEEK,<seek SeekUp2IconsFORM 2>
+
+	bsr	SeekUp2FORM
+	beq	777$
+
+* NOTE! Because we were able to seek via FORM PUSs, we can assume this
+* is one of our standard ILBMs, which always has a BMHD as the first chunk!
+
+	moveq.l	#5*4,d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek SeekUp2IconsFORM 3>
+
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error
+
+	move.l	sp,d2
+	move.l	#BitMapHeader_SIZEOF,d3
+;a0=lockbuffer, d2->buffer, d3=length
+	CALLTL	BufferedRead
+	cmp.l	d0,d3
+	bne	666$
+
+	move.l	#-(5*4+BitMapHeader_SIZEOF),d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek SeekUp2IconsFORM 4>
+
+	CALLTL	BufferedSeek	;seek back to start of FORM ILBM
+	beq	777$		;if seek error
+
+* These icon dimensions should be defined somewhere !!!!!!!
+	cmpi.w	#80,bmh_Width(sp)
+	bne	10$
+	cmpi.w	#50,bmh_Height(sp)
+	bne	10$
+	cmpi.b	#cmpNone,bmh_Compression(sp)
+	bne	10$
+	cmpi.b	#3,bmh_Depth(sp)
+	beq.s	888$		;OK for all known machines
+
+	btst.b	#AACHIPS_BIT,TB_Flags2(a5)
+	bne.s	20$	;jump if on AA machine
+
+* Non-AA machine
+	cmpi.b	#2,bmh_Depth(sp)
+	beq.s	888$		;OK for non-AA machine
+	bra	10$		;try again
+
+* AA machine
+20$	cmpi.b	#6,bmh_Depth(sp)
+	bne	10$		;try again
+
+888$	moveq.l	#TRUE,d0
+777$	lea	BitMapHeader_SIZEOF(sp),sp
+	movem.l (sp)+,d2-d3
+	rts
+
+666$	moveq.l	#FALSE,d0
+	bra.s	777$
+
+**********************************************************************
+* SeekUp2FORM(d0=FORM name, a0->LockBuffer (via BufferedOpen), a5->TB)
+*
+* Initially the file must be positioned at the end of some PUS FORM.
+* (e.g. at end of file, or at start of some "normal" FORM)
+*
+* returns BOOL
+* If TRUE, file positioned at FORM start (at FORMxxxx)
+* If FALSE, file positioning is unknown!
+*
+
+SeekUp2FORM
+	movem.l	d1-d4,-(sp)
+	move.l	d0,d4		;save requested FORM name
+
+10$	moveq.l	#-6*4,d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek SeekUp2FORM 1>
+
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error, no FORM PUS
+
+	GetLong	666$
+	cmpi.l	#'FORM',d0
+	bne	666$
+
+	GetLong	666$		;skip FORM length
+
+	GetLong	666$
+	cmpi.l	#' PUS',d0
+	bne	666$
+
+	GetLong	666$
+	move.l	d0,d1		;stash previous form name
+
+	GetLong	666$		;skip chunks length
+
+	GetLong	666$		;get size of previous FORM
+	add.l	#32,d0		;add on our PUS size, etc.
+	neg.l	d0
+
+	move.l	d0,d2
+;;	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek SeekUp2FORM 2>
+
+	CALLTL	BufferedSeek	;seek to previous FORM
+	beq	777$		;if seek error, no previous FORM
+
+	cmp.l	d1,d4
+	bne	10$		;not at correct FORM, try again
+
+	moveq.l	#TRUE,d0
+777$	movem.l (sp)+,d1-d4
+	rts
+
+666$	moveq.l	#FALSE,d0
+	bra.s	777$
+
+**********************************************************************
+* BOOL ExamineCroutonIcon(a0=LockBuffer, a1->CroutonInfo)
+* TRUE of got Icon
+* Assume file pointer is positioned at start of FORMILBM
+ExamineCroutonIcon:
+	movem.l	d1-d7/a0/a2,-(sp)
+
+	DEBUGMSG	DBECI,<ExamineCroutonIcon:>
+
+	lea	-BitMapHeader_SIZEOF(sp),sp
+
+	tst.l	CINFO_CroutonIconBM(a1)
+	bne	700$
+
+	GetLong	666$
+	cmpi.l	#'FORM',d0
+	bne	666$
+
+	GetLong	666$		;skip form length
+
+	GetLong	666$
+	cmpi.l	#'ILBM',d0
+	bne	666$
+
+	GetLong	666$
+	cmpi.l	#'BMHD',d0
+	bne	666$
+
+	GetLong 666$
+	cmpi.l	#BitMapHeader_SIZEOF,d0
+	bne	666$		;only understand standard BMHDs
+
+	DEBUGMSG	DBECI,<Before BufferedRead>
+
+	move.l	sp,d2
+	move.l	d0,d3
+;a0=lockbuffer, d2->buffer, d3=length
+	CALLTL	BufferedRead	;Read tags from bottom of file
+	cmp.l	d0,d3
+	bne	666$
+
+* These icon dimensions should be defined somewhere !!!!!!!
+	cmpi.w	#80,bmh_Width(sp)
+	bne	666$
+	cmpi.w	#50,bmh_Height(sp)
+	bne	666$
+	cmpi.b	#cmpNone,bmh_Compression(sp)
+	bne	666$
+
+	cmpi.b	#2,bmh_Depth(sp)
+	beq.s	50$
+	cmpi.b	#3,bmh_Depth(sp)
+	beq.s	50$
+	cmpi.b	#6,bmh_Depth(sp)
+	bne	666$
+
+****!!!!!****
+* Should we check the CMAP for correct colors?????
+
+* acceptable icon size/compression
+50$	GetLong 666$
+
+	cmpi.l	#'BODY',d0
+	beq	555$		;jump if found the chunk
+
+	GetLong	666$		;get length of this chunk
+
+	DEBUGMSG	DBECI,<Before BufferedSeek>
+
+	move.l	d0,d2
+	moveq.l	#OFFSET_CURRENT,d3
+
+	DEBUGMSG	DBSEEK,<BS seek ExamineCroutonIcon 1>
+
+	CALLTL	BufferedSeek
+	bne	50$		;look at next chunk
+	bra	777$		;error
+
+555$	GetLong	666$		;get BODY length
+
+	DEBUGMSG	DBECI,<Before AllocIconBM>
+
+	move.w	bmh_Width(sp),d0
+	move.w	bmh_Height(sp),d1
+	moveq	#0,d2
+	move.b	bmh_Depth(sp),d2
+	bsr	AllocIconBM
+	beq	777$
+	move.l	d0,a2				;save ->BM
+
+	add.l	#bm_SIZEOF,d0
+	move.l	d0,d4				;row base address
+
+	moveq	#0,d3
+	move.w	bm_BytesPerRow(a2),d3		;base inc per row
+
+	move.w	bm_Rows(a2),d5
+	move.w	d5,d7				;row counter
+
+	mulu	d3,d5				;inc per read
+
+	DEBUGMSG	DBECI,<Before Reading in BODY>
+
+*----------------
+	bra	590$
+
+* Next row
+570$	moveq	#0,d6
+	move.b	bm_Depth(a2),d6			;depth counter
+	move.l	d4,d2
+	bra	585$
+
+* Next plane
+580$
+	DEBUGUDEC.w	DBECI,<rowcnt=>,d7,<  >
+	DEBUGUDEC.w	DBECI,<depthcnt=>,d6,<  >
+	DEBUGHEXI.l	DBECI,<dest=>,d2,<  >
+	DEBUGHEXI.l	DBECI,<bpr=>,d3,<\>
+;;	WAIT4LMB
+
+	CALLTL	BufferedRead	;a0=lockbuffer, d2->buffer, d3=length
+	cmp.l	d0,d3
+	bne.s	600$
+
+	add.l	d5,d2
+585$	dbra	d6,580$		;do next plane
+
+	add.l	d3,d4
+590$	dbra	d7,570$		;do next row
+*----------------
+
+	move.l	a2,CINFO_CroutonIconBM(a1)
+
+700$	moveq.l	#TRUE,d0
+777$	lea	BitMapHeader_SIZEOF(sp),sp
+	movem.l (sp)+,d1-d7/a0/a2
+	rts
+
+* bad read
+600$ 	movea.l	a2,a0
+
+	DEBUGMSG	DBECI,<Before FreeIconBM>
+
+	bsr	FreeIconBM
+
+666$	moveq.l	#FALSE,d0
+	bra	777$
+
+**********************************************************************
+* LONG errorcode = ExamineCroutonDefaults(->DataFileName,->CroutonInfoStruct)
+* 1=can't open
+*
+* If not yet known, get Type, Version and libEntry.
+* Fill in ptrs to libname & tags (never to be freed)
+* Fill in ptr to bm (will be freed on FGC_REMOVE because bm_Pad bit is set)
+
+	XDEF	ExamineCroutonDefaults
+ExamineCroutonDefaults:
+	movem.l	d1/a0-a1/a6,-(sp)
+	GET.l	TB_CroutonBase,a6
+
+	DEBUGMSG    DBCDEF,<ExamineCroutonDefaults:>
+	DEBUGHEXI.l DBCDEF,<JSR GetCroutonInfo - Dataptr=>,a0,< >
+	DEBUGHEXI.l DBCDEF,<CIptr=>,a1,< >
+	DEBUGHEXI.l DBCDEF,<CroLib=>,a6,<\>
+
+	DEBUGMEM	DBCDEF,<Initial  CroutonInfo=>,0(a1),#CINFO_SIZEOF
+
+	move.l	a1,-(sp)
+	CALLROM	GetCroutonInfo
+	movea.l	(sp)+,a1
+
+	DEBUGMEM	DBCDEF,<Returned CroutonInfo=>,0(a1),#CINFO_SIZEOF
+
+	DEBUGMSG	DBCDEF,<After GetCroutonInfo>
+
+	cmpi.l	#1,d0
+	ble.s	10$		;CrI_OK and CrI_UNKNOWN are both OK
+	moveq	#1,d0
+	bra.s	666$
+10$	moveq	#0,d0
+666$	movem.l	(sp)+,d1/a0-a1/a6
+	rts
+
+*+************************************************************************
+*+
+*+ UnLoadFastG
+*+
+*+ This function UnLoadSegs a FastGadget whose pointer was a previously
+*+ returned pointer from LoadFastG().
+*+
+*+ void UnLoadFastG( FastGadget );
+*+                    A0
+*+
+*+ APTR FastGadget:
+*+   This is a pointer to the FastGadget structure previously returned from
+*+   LoadFastG().
+*+
+*+ Notes:
+*+   The pointer to the FastGadget will be converted from the normal 680x0
+*+   pointer back into a BCPL pointer, then the UnLoadSeg function will be
+*+   used to remove the FastGadget system seglist from memory. Read the docs
+*+   of the LoadFastG() for details about the FastGadget pointer and the
+*+   FastGadget system assumed loaded. A quick check is made by this function
+*+   concerning the FG_LoadFlag field in the FastGadget structure. If it is
+*+   zero, then this function is a NOP!, so be sure when designing FastGadget
+*+   systems to be loaded that you don't forget to have this flag non-NULL.
+*+   A5 is assumed to point to the ToasterBase structure on entry into this
+*+   function (for TB_DOSBase). This function is not tied to the interface/
+*+   switcher display. Trashes D0,D1,A0,A1, and the condition codes.
+*+
+*+*******
+
+	XDEF	UnLoadFastG
+UnLoadFastG:	; entry: FastGadget
+*                         A0
+	movem.l d0-d1/a0-a3/a6,-(sp)		; save a work register
+	movea.l	a0,a2		;->fg
+	GET.l	TB_SYSBase,a6
+
+*-------------------------
+	move.l	FGS_TagLists(a2),d0	;offset
+	beq	8$			;no TagLists offset
+	lea	0(a2,d0.l),a3		;search link lists
+
+* 1st node is always "LoadSeged" - Do Not Free this!
+	move.l	(a3),a3			;-> possible node to deallocate
+5$	move.l	a3,d0
+	beq	8$			;jmp if no more allocated TagLists
+
+	move.l	d0,a1		;->block
+	move.l	TLN_Size(a3),d0	;size
+	move.l	(a3),a3			;get next link pointer before FreeMem
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem an FGS TagList >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+	bra	5$
+
+*-------------------------
+* Only Taglist can be added to dynamically to internal croutons
+8$	tst.b	FG_LoadFlag(a2)		; an external FastGadget?
+	beq	.Exit			; if not - NOP
+
+	move.l	FGS_FileName(a2),d0
+	beq	9$
+
+	subq.l	#2,d0		;->Length WORD
+	movea.l	d0,a1		;->Free block
+	moveq	#0,d0
+	move.w	(a1),d0
+	addq.w	#2,d0		;include length WORD
+
+	DEBUGUDEC.l	DBFMEM,<FreeMem FGS_FileName >,d0,<bytes >
+	DEBUGHEXI.l	DBFMEM,<at >,a1,<\>
+	CALLROM	FreeMem
+
+*-------------------------
+9$	move.l	FG_Data(a2),d0	;->IconBM  DISPLAYMODE6 type data!!!
+	beq.s	10$
+
+	movea.l	d0,a0
+	CALLTL	FreeIconBM
+
+*-------------------------
+* This used to be done only in RemoveTBFG
+10$	move.l	FGS_EntryLibrary(a2),d0
+	beq.s	.NoAuxLibs
+	movea.l	d0,a0
+	CALLTL	CloseAuxLib
+	clr.l	FGS_EntryLibrary(a2)	;to be safe
+
+*-------------------------
+.NoAuxLibs
+	GET.l	TB_DOSBase,a6		; get DOSBase
+	move.l	a2,d1			; ->FG
+	subq.l	#4,d1
+	lsr.l	#2,d1			; turn into BCPL
+;	CALLROM	UnLoadSeg		; unload the seglist
+	CALLTL	UnLoadSegment
+.Exit:	movem.l	(sp)+,d0-d1/a0-a3/a6		; restore a work register
+	rts				; return to caller
+
+*+*******
+*+
+*+ RemoveTBFG
+*+
+*+ This function removes the specified ToolBox FastGadget from the Toaster
+*+ system.
+*+
+*+ void RemoveTBFG( TBFG );
+*+                   A0
+*+
+*+ APTR TBFG:
+*+   Pointer to a ToolBox FastGadget that is to be removed.
+*+
+*+ Notes:
+*+   Returns nothing. Requires
+*+   a pointer to ToasterBase in A5, but is not otherwise tied to the
+*+   Switcher display. Function handles both the internal and external
+*+   FastGadget types. Also clears the TB_EfxFG ToasterBase field if the
+*+   ToolBox FastGadget being removed was the currently active crouton. This
+*+   function will also take care of closing down any auxillary libraries
+*+   open as noted in the FGS_LibBaseArray of external ToolBox FastGadgets.
+*+   Does no actual rendering into the display.
+*+   Important NOTE: This function will clear TB_EfxFG if the crouton
+*+   being removed was the active one in the TB_EfxFG field.
+*+
+*+ Addendum 2/15/90:
+*+ Addendum 9/5/90:
+*+   Now when removing the active controlling ToolBox FG, this routine will
+*+   force a TAKE to be done if the TBar is not at its top position.
+*+
+*+*******
+
+	XDEF	RemoveTBFG
+RemoveTBFG:	; entry: TBFG
+*			  A0
+	SAVE	d0-d1/a0-a2		; save work registers
+
+	cmp.l	TB_EfxFG(a5),a0		; is the TBFG being removed currently
+	bne.s	.NotIt			; if not - skip on
+	CALLTL	DoTake
+
+	CLEAR	d0			; clear out ToasterBase field
+	PUT.l	d0,TB_EfxFG
+	CALLTL	FGC_RemoveCommand	; was RemoveQCommand pre 4.0
+
+.NotIt:
+	CALLTL	FGC_UnloadCommand
+
+.NoAuxLibs:
+	bsr	UnLoadFastG		; It won't actually unload an internal FG
+					; UnLoadSeg() the external TBFG
+	REST	d0-d1/a0-a2		; restore work registers
+	rts				; and return to caller
+
+
+
+
+
+
+
+;*******!!!!!!**********
+;*************************************************************
+;*;	IFD	CRAP
+;*;
+;*;	XDEF	CroutonLoadJunk
+;*;CroutonLoadJunk:
+;*;	movem.l	d0-d7/a0-a6,-(sp)
+;*;
+;*;	lea	namejunk(pc),a0
+;*;	bsr	LoadCroutonFile
+;*;
+;*;	DUMPHEXI.l	<LoadCroutonFile=>,d0,<\>
+;*;
+;*;	movem.l	(sp)+,d0-d7/a0-a6
+;*;	rts
+;*;
+;*;namejunk	dc.b	'hd2:work/toaster/exe/toaster/effects/test1',0
+;*;	CNOP	0,2
+;*;
+;*;	ENDC	;CRAP
+*********************************************************************
+	END
+@
+
+
+2.43
+log
+@No longer attempts to LoadSeg fastgadgets (none have code in them anymore!)
+Changed buffer size on LoadFastGadget operations from 2K to 5K to contain entire .i file
+@
+text
+@d7 1
+a7 1
+* $Id: CroutonLoad.a,v 2.42 1995/07/05 15:04:05 Flick Exp Flick $
+d10 4
+d148 1
+a148 1
+	ALLDUMPS
+d151 2
+a152 1
+;;DBECIF		SET	1	;Debug ExamineCroutonIconFile
+d161 1
+a161 1
+;DBRPE	SET	1	;Debug ReadProjectEntry
+d311 1
+a311 1
+	bne.s	30$			;jump if data file was found
+d315 6
+d322 3
+a324 2
+	lea	notFoundErr(pc),a1
+	bsr	ContinueMessage
+d327 10
+d389 95
+d607 16
+d629 6
+d637 4
+@
+
+
+2.42
+log
+@Added call to FGC_InterpTagsCommand to turn tags into symbol flags
+@
+text
+@d7 1
+a7 1
+* $Id: CroutonLoad.a,v 2.41 1995/06/16 11:34:51 pfrench Exp Flick $
+d10 3
+d143 1
+a143 1
+;;SERDEBUG	set	1
+d664 1
+a664 1
+FGC_LOADErr	DC.b	'Crouton load failed. Can not create environment.',0
+d706 1
+a706 1
+notFoundErr	dc.b	'Crouton load failed. Can not find the file.',0
+d854 3
+a856 3
+	CALLTL	NLoadSegment		; attempt to load the FastGadget
+
+	DEBUGSDEC.l	DBLFG,<NLoadSegment return=>,d0,<\>
+d864 8
+a871 7
+	tst.l	d0
+	bne	1000$
+
+	DEBUGMSG	DBLFG,<not loadseged>
+
+	cmpi.l	#ERROR_FILE_NOT_OBJECT,d1
+	beq	2000$
+d1309 1
+a1309 1
+	move.l	#2000,d0		;BufferSize
+@
+
+
+2.41
+log
+@Fixed executable load crouton bug
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.40 1995/02/16 20:29:03 Kell Exp pfrench $
+d9 4
+a12 1
+* $Log: croutonload.a,v $
+d347 2
+@
+
+
+2.40
+log
+@Debugs for OPEN and SEEK
+@
+text
+@d5 1
+a5 1
+* Confidental and Proprietary. All rights reserved. 
+d7 1
+a7 1
+* $Id: croutonload.a,v 2.39 1994/12/06 07:11:08 Kell Exp Kell $
+d10 3
+d240 1
+a240 1
+* -1 if crouton load error. -2 if file not found, -3 if project error. 
+d315 1
+a315 1
+	moveq.l	#-1,d0		
+d347 1
+a347 1
+	
+d369 1
+a369 1
+	
+d371 1
+a371 1
+	
+d374 1
+a374 1
+	
+d384 1
+a384 1
+	
+d436 1
+a436 1
+*  
+d529 1
+a529 1
+* 
+d539 1
+a539 1
+;;	moveq	#0,d3	;init EffectsLock	
+d567 1
+a567 1
+;;	move.l	d0,d3		; stash Effects Lock	
+d633 1
+a633 1
+	
+d657 2
+a658 2
+	CNOP	0,2                         
+	
+d707 1
+a707 1
+*	
+d716 1
+a716 1
+*	
+d760 1
+a760 1
+******* FILL THIS IN with ->Crouton Handler 
+d807 1
+a807 1
+;;	TAG_IndexID	0	   	
+d867 1
+a867 1
+	
+d910 1
+a910 1
+1000$	
+d938 1
+a938 1
+;;	move.l	FGS_ObjectType(a4),CINFO_CroutonType(a3)    
+d948 1
+a948 1
+;;	move.l	FG_Data(a4),CINFO_CroutonIconBM(a3)    
+d964 1
+a964 1
+	
+d966 7
+d1009 1
+a1009 1
+	
+d1031 1
+a1031 1
+	
+d1054 1
+a1054 1
+	
+d1066 1
+a1066 1
+	
+d1074 1
+a1074 1
+	
+d1078 2
+a1079 2
+	addq.l	#2,d0	;BSTR UWORD length length 	
+	
+d1092 1
+a1092 1
+	
+d1134 1
+a1134 1
+	addq.w	#2,d0		;include length WORD	
+d1175 1
+a1175 1
+*   d0 			  
+d1196 1
+a1196 1
+	
+d1209 2
+a1210 2
+*   d0 			  
+* This creates a BM stucture with its bit planes APPENDED! 
+d1226 2
+a1227 2
+	exg	d0,d2			;d2=bytes/plane 
+	add.l	#bm_SIZEOF,d0		
+d1255 1
+a1255 1
+	
+d1342 1
+a1342 1
+	move.l	#'CrUD',d0	
+d1346 1
+a1346 1
+	bsr	SeekUp2FORM	
+d1362 1
+a1362 1
+100$	GetLong	666$		
+d1368 1
+a1368 1
+	
+d1411 5
+a1415 5
+	beq.s	10$	
+	tst.l	CINFO_CroutonLibName(a2)	
+	beq.s	10$	
+	tst.l	CINFO_CroutonIconBM(a2)	
+	beq.s	10$	
+d1417 1
+a1417 1
+	beq.s	10$	
+d1431 1
+a1431 1
+	
+d1449 1
+a1449 1
+	
+d1470 1
+a1470 1
+	neg.l	d2		
+d1490 2
+a1491 2
+	bne	30$		;only understand standard BMHDs	
+	
+d1513 1
+a1513 1
+	
+d1572 1
+a1572 1
+	ENDC	
+d1601 6
+a1606 6
+	beq.s	10$	
+	tst.l	CINFO_CroutonLibName(a1)	
+	beq.s	10$	
+	tst.l	CINFO_CroutonIconBM(a1)	
+	beq.s	10$	
+	tst.l	CINFO_CroutonDefTags(a1)	
+d1646 1
+a1646 1
+	bne	100$	
+d1648 1
+a1648 1
+	move.l	#'TYPE',d0	
+d1655 1
+a1655 1
+	
+d1666 1
+a1666 1
+	bne	200$	
+d1668 1
+a1668 1
+	move.l	#'LIBS',d0	
+d1678 1
+a1678 1
+	
+d1683 1
+a1683 1
+	
+d1711 1
+a1711 1
+	
+d1717 1
+a1717 1
+	bne	300$	
+d1722 1
+a1722 1
+	move.l	#'TAGS',d0	
+d1728 1
+a1728 1
+	
+d1735 1
+a1735 1
+	
+d1764 1
+a1764 1
+	
+d1769 1
+a1769 1
+	
+d1781 1
+a1781 1
+* NOTE! Just because this may be successful doesn't mean we're 
+d1798 1
+a1798 1
+10$	move.l	#'ILBM',d0	
+d1802 1
+a1802 1
+	bsr	SeekUp2FORM	
+d1806 1
+a1806 1
+* is one of our standard ILBMs, which always has a BMHD as the first chunk! 
+d1815 1
+a1815 1
+	
+d1910 1
+a1910 1
+		
+d1931 1
+a1931 1
+	
+d1935 1
+a1935 1
+	GetLong	666$		
+d1941 1
+a1941 1
+	GetLong	666$		
+d1945 1
+a1945 1
+	GetLong	666$		
+d1948 1
+a1948 1
+	
+d1951 1
+a1951 1
+	bne	666$		;only understand standard BMHDs	
+d1999 1
+a1999 1
+555$	GetLong	666$		;get BODY length 
+d2009 1
+a2009 1
+	move.l	d0,a2				;save ->BM	
+d2016 1
+a2016 1
+	
+d2034 1
+a2034 1
+580$	
+d2092 1
+a2092 1
+	
+d2148 1
+a2148 1
+5$	move.l	a3,d0			
+d2157 3
+a2159 3
+	CALLROM	FreeMem	
+	bra	5$	
+	
+d2172 1
+a2172 1
+	addq.w	#2,d0		;include length WORD	
+d2176 1
+a2176 1
+	CALLROM	FreeMem	
+d2181 1
+a2181 1
+	
+d2267 1
+a2267 1
+;*;	
+@
+
+
+2.39
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.38 94/11/15 15:45:09 Kell Exp $
+d9 4
+a12 1
+* $Log:	croutonload.a,v $
+d134 1
+a134 1
+;SERDEBUG	set	1
+d137 3
+a139 4
+;DBS2CrUD 	SET	1	;Debug Seek2CrUDchunk
+;DBECIF		SET	1	;Debug ExamineCroutonIconFile
+;DBECI		SET	1	;Debug ExamineCroutonIcon SLOW!!!!
+;DBECC		SET	1	;Debug ExamineCroutonCrUD
+d141 3
+a143 1
+;DBLFG		SET	1	;Debug LoadFastGadget
+d145 2
+d149 4
+a152 1
+;DBCDEF	SET	1	;Debug ExamineCroutonDefaults
+d154 1
+a154 2
+;DBFMEM	SET	1	;Debug FreeMem
+;DBAMEM	SET	1	;Debug AllocMem
+d156 1
+a156 1
+;DBECDF	SET	1	;Debug  ExamineCroutonDataFile
+a157 1
+;DBLCF SET	1	;debug LoadCroutonFile
+d159 2
+d1281 6
+d1324 3
+d1333 3
+d1344 3
+d1368 3
+d1462 3
+d1490 1
+a1490 1
+	beq.s	40$		;OK for all known machines
+d1497 1
+a1497 1
+	beq.s	40$		;OK for non-AA machine
+d1502 1
+a1502 1
+	beq.s	40$		;OK for AA machine
+d1508 3
+d1606 3
+d1636 1
+a1636 1
+	bne.s	100$	
+d1639 3
+d1659 3
+d1713 3
+d1782 3
+d1789 3
+d1800 3
+d1815 3
+d1837 1
+a1837 1
+	bra.s	10$		;try again
+d1868 3
+d1876 1
+a1876 1
+	bne.s	666$
+d1882 1
+a1882 1
+	bne.s	666$
+d1895 3
+d1902 1
+a1902 1
+	bne.s	10$		;not at correct FORM, try again
+d1982 3
+@
+
+
+2.38
+log
+@New GetFirstDefaultPath function
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.37 1994/11/14 15:35:06 Holt Exp Kell $
+d9 4
+a12 1
+* $Log: croutonload.a,v $
+@
+
+
+2.37
+log
+@Fixed bug where FindTheDefaultPath called it own offset in corouton lib going to bogus address.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.36 1994/11/04 03:33:15 Kell Exp Holt $
+d10 3
+d196 11
+@
+
+
+2.36
+log
+@Added Stubs for FindFile and GetDefaultPath (called FindTheFile & GetTheDefaultPath).
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.35 1994/11/02 08:02:40 Kell Exp Kell $
+d10 3
+d203 1
+a203 1
+	CALLROM	GetTheDefaultPath
+@
+
+
+2.35
+log
+@Changed CroutonLoad to work with the new FGC_LoadCommand.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.34 1994/10/12 00:16:29 Kell Exp Kell $
+d10 3
+d181 22
+@
+
+
+2.34
+log
+@DefaultPaths file can now be in the Switcher_Support drawer.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.33 1994/10/05 05:45:38 Kell Exp Kell $
+d10 3
+d547 4
+a550 1
+	bne.s	260$			;jump if FGC_LOAD OK
+@
+
+
+2.33
+log
+@Renamed MakeTagListsOld to MakeTagListsSaved
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.32 1994/10/01 12:52:57 Kell Exp Kell $
+d10 3
+d459 1
+a459 1
+	dc.b	'DefaultPaths',0
+@
+
+
+2.32
+log
+@Mixed Mungwall hit when deallocating taglist chunks.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.31 1994/09/13 16:50:03 Holt Exp Kell $
+d10 3
+d550 1
+a550 1
+	CALLTL	MakeTagListsOld
+d552 1
+a552 1
+	DEBUGMSG	DBLCF,<After FGC_SaveTagsCommand, MakeTagListsOld>
+@
+
+
+2.31
+log
+@,
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.30 94/09/02 08:30:00 Kell Exp Locker: Holt $
+d9 4
+a12 1
+* $Log:	croutonload.a,v $
+d110 1
+a110 1
+;;SERDEBUG	set	1
+d1651 2
+a1652 1
+
+d2016 1
+a2016 1
+	beq.s	8$			;jmp if no more allocated TagLists
+d2021 3
+d2025 1
+a2025 1
+	bra.s	5$	
+d2030 1
+a2030 1
+	beq.s	.Exit			; if not - NOP
+d2033 1
+a2033 1
+	beq.s	9$
+d2040 3
+@
+
+
+2.30
+log
+@New PostError functions for putting up error messages w/o requesters.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.29 1994/08/27 06:51:30 Kell Exp Kell $
+d9 4
+a12 1
+* $Log: croutonload.a,v $
+@
+
+
+2.29
+log
+@Remarks, and debug messages.  Also, now allows 2 plane icons.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.28 1994/08/10 01:06:28 Kell Exp Kell $
+d10 3
+d102 1
+d351 38
+@
+
+
+2.28
+log
+@Fixed bug that caused Enforcer hits during LoadProject.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.27 1994/08/09 03:54:15 Kell Exp Kell $
+d10 3
+d100 1
+a100 1
+SERDEBUG	set	1
+d119 3
+d421 2
+d432 3
+a434 1
+	bcc.s	100$			; if enough memory - skip on
+d440 1
+a440 1
+	bra.s	555$
+d443 5
+a447 1
+100$	GET.l	TB_SYSBase,a6		; no one else plays with memory
+d465 2
+d468 5
+d474 1
+a474 1
+	beq.s	500$			;jump if failure
+d480 9
+d491 1
+d494 1
+a494 1
+	bra.s	600$
+d500 3
+d509 1
+a509 1
+	bcc.s	500$			; if enough memory - skip on
+d511 2
+d529 2
+d731 2
+d992 1
+a992 1
+	CALLTL	FGC_LoadTagsCommand	;process that tags from near the end of file
+d999 1
+a999 1
+	CALLTL	FGC_LoadTagsCommand	;process that tags from near the end of file
+d1262 3
+a1264 1
+	DEBUGMSG	DBECIF,<ExamineCroutonIconFile:>
+d1342 2
+d1621 1
+a1621 1
+* actually at the start of a FORMILBM.  It just where one should
+d1790 3
+@
+
+
+2.27
+log
+@Fixed requester code for missing files during project load.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.25 1994/08/04 01:11:13 Kell Exp Kell $
+d10 2
+d13 1
+d234 1
+a234 1
+	bra.s	555$		;crouton load error
+d239 1
+@
+
+
+2.26
+log
+@Now tries to find a file based on Default Paths for a given object type.
+@
+text
+@d10 3
+d94 1
+a94 1
+;;SERDEBUG	set	1
+d97 2
+a98 2
+DBS2CrUD 	SET	1	;Debug Seek2CrUDchunk
+DBECIF		SET	1	;Debug ExamineCroutonIconFile
+d100 1
+a100 1
+DBECC		SET	1	;Debug ExamineCroutonCrUD
+d111 1
+a111 1
+DBECDF	SET	1	;Debug  ExamineCroutonDataFile
+d200 1
+a200 1
+	move.l	a0,d2			;stash ->last loaded name
+d204 8
+d215 9
+a223 2
+	beq	444$		;jump if file not found
+	move.l	d0,a0		;may be a new file path
+d225 1
+d227 1
+d229 3
+a231 3
+	beq	444$		;jump if file not found
+	cmpi.l	#-1,d0
+	beq	555$		;crouton load error
+d233 1
+a265 3
+444$	moveq	#-2,d0		;file not found
+	bra	555$
+
+d402 4
+a405 2
+*  0=File not found (put up locator grazer, or continue/skip requester)
+* -1=Crouton load error (put up continue/abort project load requester)
+d409 1
+a409 1
+	movem.l	d1-d3/a0-a3/a6,-(sp)
+a411 1
+	moveq	#0,d3	;init EffectsLock	
+d413 2
+d425 1
+a425 1
+	move.l	#-1,d0
+d432 4
+a435 5
+	CLEAR	d0
+	CALLTL	LockEffects	; change to the effects directory
+	move.l	d0,d3		; stash Effects Lock	
+
+* Don't really care if there's an effects drawer
+d440 1
+a440 1
+;;	move.l	#-1,d2
+d447 3
+a449 4
+	bsr	LoadFastGadget
+	bne.s	250$			; if successful - skip on
+	move.l	#-1,d2
+	bra	500$
+d456 4
+a459 1
+	beq.s	666$
+d462 1
+a462 2
+;;	move.l	d0,a0
+	CALLTL	FGC_SaveTagsCommand		;see if FG has any tags & where
+a472 1
+	movea.l	a3,a0			;name
+d474 1
+d479 1
+a479 1
+	move.l	#-1,d2
+d481 1
+a481 4
+500$	GET.l	TB_DOSBase,a6		; get DOS base
+	move.l	d3,d1
+	beq.s	520$
+	CALLROM	UnLock
+d483 7
+a489 1
+520$	GET.l	TB_SYSBase,a6
+d493 1
+a493 1
+555$	movem.l	(sp)+,d1-d3/a0-a3/a6
+d496 3
+a498 2
+LowMemoryErr	DC.b	'Crouton load failed.  Not enough memory.',0
+	CNOP	0,2
+d528 1
+a531 1
+notFoundErr	dc.b	'Crouton load failed. Can not find the file.',0
+d538 3
+d657 2
+@
+
+
+2.25
+log
+@Changed FORM PUSS to PUS.
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.24 1994/08/03 06:34:23 Kell Exp Kell $
+d10 3
+d158 1
+a158 1
+	movem.l	d1/a0-a4,-(sp)
+d185 15
+a199 1
+	DEBUGMSG	DBRPE,<Before LoadCroutonFile>
+d201 5
+a205 3
+***!!!!*** WE NEED TO SEARCH DEFAULT PATHS HERE!!!!!!!!!!!
+***!!!!*** TO COME UP WITH A REAL PATH/FILENAME
+***!!!!*** THIS WILL BE BASED ON OBJECT TYPE, LAST LOADED PATH, ORIGINAL PATH
+d207 1
+a207 1
+	lea	TBPE_FileName(a4),a0
+d209 1
+a209 1
+	beq	444$
+d242 1
+a242 1
+	movem.l	(sp)+,d1/a0-a4
+d350 29
+@
+
+
+2.24
+log
+@Now works with the new FORM PUS instead of the old CHUNK HEAD.
+Supports multi-icons within the ".i" file.
+Now works with newer version of project file (type/version included).
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.23 1994/07/27 19:27:30 Kell Exp Kell $
+d10 5
+d1105 1
+a1105 1
+	cmpi.l	#'FORM',d0	;Stop at FORM PUSS
+d1512 1
+a1512 1
+* NOTE! Because we were able to seek via FORM PUSSs, we can assume this
+d1565 1
+a1565 1
+* Initially the file must be positioned at the end of some PUSS FORM.
+d1580 1
+a1580 1
+	beq	777$		;if seek error, no FORM PUSS
+d1589 1
+a1589 1
+	cmpi.l	#'PUSS',d0
+d1598 1
+a1598 1
+	add.l	#32,d0		;add on our PUSS size, etc.
+@
+
+
+2.23
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.22 1994/06/23 08:48:31 CACHELIN4000 Exp Kell $
+d10 3
+d87 2
+a88 2
+DBECIF	SET	1	;Debug ExamineCroutonIconFile
+;;DBECI		SET	1	;Debug ExamineCroutonIcon SLOW!!!!
+d91 1
+a91 1
+DBLFG		SET	1	;Debug LoadFastGadget
+d93 1
+a93 1
+DBRPE	SET	1	;Debug ReadProjectEntry
+d95 1
+a95 1
+DBCDEF	SET	1	;Debug ExamineCroutonDefaults
+d97 2
+a98 2
+DBFMEM	SET	1	;Debug FreeMem
+DBAMEM	SET	1	;Debug AllocMem
+d173 1
+a173 1
+	lea	TBPE_FileNameSize(a4),a0
+d179 4
+d329 2
+d1075 1
+a1075 1
+	moveq.l	#-4,d2
+d1078 1
+a1078 1
+	beq	777$		;if seek error, no Taglists
+d1080 1
+a1080 5
+	GetLong	666$
+	move.l	d0,d2		;->HEAD Chunk (save d2 until later)
+	moveq.l	#OFFSET_END,d3
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error, no Taglists
+d1082 3
+a1084 3
+	GetLong	666$		
+	cmpi.l	#'HEAD',d0
+	bne	666$
+d1086 1
+a1086 1
+	DEBUGMSG	DBS2CrUD,<Found HEAD>
+d1088 3
+a1090 17
+	GetLong	666$
+	
+	DEBUGMSG	DBS2CrUD,<Got HEAD length>
+
+	neg.l	d2
+	subq.l	#8,d2		
+	cmp.l	d2,d0	;see if Chunk size corresponds to revers head pointer
+	bne	666$
+
+	DEBUGMSG	DBS2CrUD,<Before offset to FORM>
+
+	GetLong	666$		
+
+	DEBUGMSG	DBS2CrUD,<Got offset to FORM>
+
+	move.l	d0,d2
+	moveq.l	#OFFSET_END,d3
+d1092 1
+a1092 1
+	beq	777$		
+d1094 1
+a1094 1
+	DEBUGMSG	DBS2CrUD,<seeked to FORM>
+d1096 1
+a1096 10
+	GetLong	666$
+
+	DEBUGMSG	DBS2CrUD,<got FORM?>
+		
+	cmpi.l	#'FORM',d0
+	bne	666$
+
+	DEBUGMSG	DBS2CrUD,<Found FORM>
+
+	GetLong	666$		;skip form length	
+d1098 1
+a1098 3
+	GetLong	666$		
+	cmpi.l	#'CrUD',d0
+	bne	666$
+d1100 1
+a1100 4
+	DEBUGMSG	DBS2CrUD,<Found CrUD>
+
+100$	GetLong	666$		
+	cmpi.l	#'HEAD',d0
+d1133 1
+a1133 1
+	movem.l	d1/a0-a3,-(sp)
+d1176 3
+a1178 1
+	lea	4(sp),a0	;->icon file name	
+d1187 61
+a1247 1
+	bsr	ExamineCroutonIcon	;assume seeked correctly
+d1251 1
+a1251 1
+	bsr	ExamineCroutonCrUD
+d1296 3
+a1298 2
+666$	movea.l	(sp),sp		;restore stack pointer
+555$	movem.l	(sp)+,d1/a0-a3
+d1300 1
+a1300 1
+	DUMPMSG	<return from ExamineCroutonIconFile>
+d1305 1
+a1305 1
+	bra.s	666$
+d1337 1
+a1337 1
+	bsr	Seek2IconsFORM
+d1493 1
+a1493 1
+Seek2IconsFORM
+d1496 3
+a1498 1
+	moveq.l	#-4,d2
+d1501 1
+a1501 1
+	beq	777$		;if seek error, no CrUD
+d1503 3
+a1505 5
+	GetLong	666$
+	move.l	d0,d2		;->HEAD Chunk (save d2 until later)
+	moveq.l	#OFFSET_END,d3
+	CALLTL	BufferedSeek
+	beq	777$		;if seek error, no CrUD
+d1507 2
+a1508 3
+	GetLong	666$		
+	cmpi.l	#'HEAD',d0
+	bne	666$
+d1510 4
+a1513 1
+	GetLong	666$	;length of Head chunk
+d1515 5
+a1519 3
+	neg.l	d2
+	subq.l	#8,d2		
+	cmp.l	d2,d0	;see if Chunk size corresponds to reverse head pointer
+d1522 49
+a1570 4
+	GetLong	666$	;reverse crud pointer	
+	move.l	d0,d2
+	GetLong 666$	;size of FORMILBM
+	sub.l	d0,d2
+d1572 2
+a1573 1
+	moveq.l	#OFFSET_END,d3
+d1575 16
+a1590 1
+	beq	777$		
+d1592 12
+d1605 1
+a1605 1
+777$	movem.l (sp)+,d2-d3
+d1944 18
+a1961 19
+	IFD	CRAP
+	
+	XDEF	CroutonLoadJunk
+CroutonLoadJunk:
+	movem.l	d0-d7/a0-a6,-(sp)
+
+	lea	namejunk(pc),a0
+	bsr	LoadCroutonFile
+
+	DUMPHEXI.l	<LoadCroutonFile=>,d0,<\>
+
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+namejunk	dc.b	'hd2:work/toaster/exe/toaster/effects/test1',0
+	CNOP	0,2
+
+	ENDC	;CRAP
+
+@
+
+
+2.22
+log
+@..
+@
+text
+@d7 1
+a7 1
+* $Id: croutonload.a,v 2.21 94/06/22 17:35:43 Kell Exp Locker: CACHELIN4000 $
+d9 4
+a12 1
+* $Log:	croutonload.a,v $
+@
+
+
+2.21
+log
+@Changed default settings for Diskchanges during requesters.
+@
+text
+@Binary files croutonload.a and t:,RCSt1A71191b0 differ
+@
+
+
+2.20
+log
+@ReadProjEntry() function removed. FGC calls changed to FGC_....Command()
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70bd888 differ
+@
+
+
+2.19
+log
+@*** empty log message ***
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70c3c00 differ
+@
+
+
+2.18
+log
+@Moved some crouton loading/saving/freeing stuff here from Fastgadgets.a
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c30a0 differ
+@
+
+
+2.17
+log
+@Added debug statements.
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3308 differ
+@
+
+
+2.16
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3330 differ
+@
+
+
+2.15
+log
+@Fixed misaligned freemem bug on loaded taglists.
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70b8c08 differ
+@
+
+
+2.14
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3820 differ
+@
+
+
+2.13
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3218 differ
+@
+
+
+2.12
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3150 differ
+@
+
+
+2.11
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3218 differ
+@
+
+
+2.10
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70b8ef8 differ
+@
+
+
+2.9
+log
+@ci makefile
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.8
+log
+@*** empty log message ***
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70e3cb0 differ
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c30a0 differ
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c01d8 differ
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70b7da8 differ
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70c33c0 differ
+@
+
+
+2.3
+log
+@Swaped *bm and *tag in the CroutonInfo structure
+@
+text
+@Binary files croutonload.a and t:,RCSt1A70c3650 differ
+@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70c3650 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70c0238 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files CroutonLoad.a and t:,RCSt1A70c0238 differ
+@

@@ -1,0 +1,95 @@
+head	2.2;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.2
+date	96.07.15.18.24.58;	author Holt;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	93.02.23.15.12.40;	author Finch;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	92.05.19.00.03.33;	author Hartford;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+2.2
+log
+@made many changes to make luts work in sequenceing.
+@
+text
+@********************************************************************
+* LUTRam.i
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LUTRAM.I,v 2.1 1993/02/23 15:12:40 Finch Exp Holt $
+*
+* $Log: LUTRAM.I,v $
+*Revision 2.1  1993/02/23  15:12:40  Finch
+**** empty log message ***
+*
+*Revision 2.0  92/05/19  00:03:33  Hartford
+**** empty log message ***
+*
+*
+*********************************************************************
+
+	PAGE
+*************************************************************************
+*									*
+*	LUT Ram:							*
+*									*
+*	Contains all the Global Ram For LUT Mode.			*
+*									*
+*	07.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XREF	LUT_Base		; LUT Base Structure.
+	XREF	LUT_Capture		; Capture Structure.
+	XREF	LUT_CycleLine		; Current Position.
+	XREF	LUT_CycleSpeed		; Current Speed.
+	XREF	LUT_EffectLUTBase	; Switcher TBar Routine, LUT Pointer.
+	XREF	LUT_EffectEfxBase	; Switcher TBar Routine, Effect Pointer.
+	XREF	LUT_mainorprev		; Buss for effect to comeup on.
+	XREF	LUT_BUSS		; Buss for effect to comeup on.
+	
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@d7 1
+a7 1
+* $Id: LUTRam.i,v 2.0 92/05/19 00:03:33 Hartford Exp Locker: Finch $
+d9 4
+a12 1
+* $Log:	LUTRam.i,v $
+d36 3
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files LutRam.i and t:,RCSt1A02997f0 differ
+@

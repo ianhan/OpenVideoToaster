@@ -1,0 +1,1912 @@
+********************************************************************
+* LUT8.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lut8.a,v 2.7 1994/10/07 00:18:24 pfrench Exp Holt $
+*
+* $Log: lut8.a,v $
+*Revision 2.7  1994/10/07  00:18:24  pfrench
+*Added working Load code to lut8
+*
+*Revision 2.6  1994/10/06  16:22:33  pfrench
+*Added LoadCrouton function, although it's not completely working.
+*
+*Revision 2.5  1994/10/06  13:12:14  pfrench
+*Removed debugging enforcer hit.
+*
+*Revision 2.4  1994/10/05  13:58:24  pfrench
+*Now calling ASL requester to save CRFX
+*
+*Revision 2.3  1994/10/04  20:27:07  pfrench
+*Added hack to save LUTs as ChromaFX croutons
+*
+*Revision 2.2  1994/10/03  12:06:41  pfrench
+*IFD'd out DoGridNumber
+*
+*Revision 2.1  1993/05/11  12:09:22  Finch2
+**** empty log message ***
+*
+*Revision 2.0  92/05/18  23:59:20  Hartford
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT8"
+	section	LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUTRam.i"
+	Include	"LUT0.i"
+	Include	"LUT1.i"
+	Include	"LUT2.i"
+	Include	"LUT3.i"
+	Include	"LUT4.i"
+	Include	"LUT5.i"
+	Include	"LUT6.i"
+	Include	"LUT7.i"
+	Include	"LUT9.i"
+	Include	"LUTA.i"
+	Include	"LUTB.i"
+	Include	"LUTC.i"
+	Include	"LUTLib.i"
+	Include	"LUTBits.i"
+	Include	"serialdebug.i"
+
+;SERDEBUG EQU 1
+	ALLDUMPS	
+
+
+
+
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	DoRedHue:							*
+*									*
+*	Performes the Red or Hue Slider Functions.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Red or Hue Gadgets Are Slid On the Screen.			*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoRedHue
+LUT_DoRedHue:
+	MOVEM.L	D0-D1/A1,-(A7)		; Save Calling State.
+*
+*	Just Call the Slider Routine.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVE.L	LTE_EditRGB(A4),D1	; Save Starting RGB Value.
+	LEA.L	LUT_SlideRedHue(PC),A1	; Address of Alt Subroutine.
+	BSR	LUT_DoSlideBar		; Move Slider On the Screen.
+	BSR	LUT_UpDateEditColor	; Update Edit Bar On Screen.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+*
+*	See If We Need To Rewrite Lower Left Edit Colors.
+*
+	CMP.L	LTE_EditRGB(A4),D1	; Value Changed?
+	BEQ.S	DORED1			; Skip If No Change.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LTE_EditColor(A4),D0	; Get Current Edit Colors.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BNE.S	DORED1			; Jump If Not 2nd Position.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+*
+*	Exit Subroutine.
+*
+DORED1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SlideRedHue:							*
+*									*
+*	Performer The Slide Red or Hue Function.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Current Slider Position.			*
+*	A0.L	= Address of Gadget That Was Picked.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Red / Hue Slider Is Updated By The Value.			*
+*									*
+*	09.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SlideRedHue
+LUT_SlideRedHue:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Changing Red Or Hue?
+*
+	CMPI.L	#LUT_RGBTEXT_BT,LUT_RGBHSITextFG+FG_Data ; In RGB Mode?
+	BEQ.S	SLDRH1			; Jump If Changing RGB.
+	LSL.W	#8,D0			; Hue is 16 Bits.
+	SWAP.W	D0			; Put In High Position.
+	CLR.W	D0			; D0.L = Hue In New Position.
+	ANDI.L	#$0000FFFF,LTE_EditHSI(A4) ; Remove Old Hue.
+	OR.L	D0,LTE_EditHSI(A4)	; Add In New Hue Data.
+	MOVE.L	LTE_EditHSI(A4),D0	; D0.L = HHSI Value.
+	BSR	HSIRGB			; D0.L = 0RGB Value.
+	MOVE.L	D0,LTE_EditRGB(A4)	; Save New 0RGB Value.
+	BRA.S	SLDRH2			; Skip Else Part.
+SLDRH1	ANDI.L	#$000000FF,D0		; Leave Only Red Value.
+	SWAP.W	D0			; D0.L = Red In New Position.
+	ANDI.L	#$0000FFFF,LTE_EditRGB(A4) ; Remove Old Red.
+	OR.L	D0,LTE_EditRGB(A4)	; Add In New Red Data.
+	MOVE.L	LTE_EditRGB(A4),D0	; D0.L = 0RGB Value.
+SLDRH2	BSR	LUT_MakeColorSquare	; Put On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoGreenSaturation:						*
+*									*
+*	Performes the Green or Saturation Slider Functions.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Green or Saturation Gadgets Are Slid On the Screen.		*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoGreenSaturation
+LUT_DoGreenSaturation:
+	MOVEM.L	D0-D1/A1,-(A7)		; Save Calling State.
+*
+*	Just Call the Slider Routine.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVE.L	LTE_EditRGB(A4),D1	; Save Starting RGB Value.
+	LEA.L	LUT_SlideGreenSaturation(PC),A1	; Address of Alt Subroutine.
+	BSR	LUT_DoSlideBar		; Move Slider On the Screen.
+	BSR	LUT_UpDateEditColor	; Update Edit Bar On Screen.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+*
+*	See If We Need To Rewrite Lower Left Edit Colors.
+*
+	CMP.L	LTE_EditRGB(A4),D1	; Value Changed?
+	BEQ.S	DOGRN1			; Skip If No Change.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LTE_EditColor(A4),D0	; Get Current Edit Colors.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BNE.S	DOGRN1			; Jump If Not 2nd Position.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+*
+*	Exit Subroutine.
+*
+DOGRN1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SlideGreenSaturation:						*
+*									*
+*	Performer The Slide Green or Saturation Function.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Current Slider Position.			*
+*	A0.L	= Address of Gadget That Was Picked.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Green / Saturation Slider Is Updated By The Value.		*
+*									*
+*	09.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SlideGreenSaturation
+LUT_SlideGreenSaturation:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Changing Green Or Saturation?
+*
+	MOVE.L	#$0000FF00,D1		; AND Mask.
+	LSL.W	#8,D0			; Move Into Position.
+	AND.L	D1,D0			; Remove Extra Bits.
+	NOT.L	D1			; Make Go The Other Way Around.
+	CMPI.L	#LUT_RGBTEXT_BT,LUT_RGBHSITextFG+FG_Data ; In RGB Mode?
+	BEQ.S	SLDGS1			; Jump If Changing RGB.
+	AND.L	D1,LTE_EditHSI(A4)	; Remove Old Saturation.
+	OR.L	D0,LTE_EditHSI(A4)	; Add In New Saturation Data.
+	MOVE.L	LTE_EditHSI(A4),D0	; D0.L = HHSI Value.
+	BSR	HSIRGB			; D0.L = 0RGB Value.
+	MOVE.L	D0,LTE_EditRGB(A4)	; Save New 0RGB Value.
+	BRA.S	SLDGS2			; Skip Else Part.
+SLDGS1	AND.L	D1,LTE_EditRGB(A4)	; Remove Old Green.
+	OR.L	D0,LTE_EditRGB(A4)	; Add In New Green Data.
+	MOVE.L	LTE_EditRGB(A4),D0	; D0.L = 0RGB Value.
+SLDGS2	BSR	LUT_MakeColorSquare	; Put On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoBlueIntensity:						*
+*									*
+*	Performes the Blue or Intensity Slider Functions.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Blue or Intensity Gadgets Are Slid On the Screen.		*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoBlueIntensity
+LUT_DoBlueIntensity:
+	MOVEM.L	D0-D1/A1,-(A7)		; Save Calling State.
+*
+*	Just Call the Slider Routine.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVE.L	LTE_EditRGB(A4),D1	; Save Starting RGB Value.
+	LEA.L	LUT_SlideBlueIntensity(PC),A1 ; Address of Alt Subroutine.
+	BSR	LUT_DoSlideBar		; Move Slider On the Screen.
+	BSR	LUT_UpDateEditColor	; Update Edit Bar On Screen.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+*
+*	See If We Need To Rewrite Lower Left Edit Colors.
+*
+	CMP.L	LTE_EditRGB(A4),D1	; Value Changed?
+	BEQ.S	DOBLU1			; Skip If No Change.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LTE_EditColor(A4),D0	; Get Current Edit Colors.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BNE.S	DOBLU1			; Jump If Not 2nd Position.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+*
+*	Exit Subroutine.
+*
+DOBLU1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SlideBlueIntensity:						*
+*									*
+*	Performer The Slide Blue or Intensity Function.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Current Slider Position.			*
+*	A0.L	= Address of Gadget That Was Picked.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Blue / Intensity Slider Is Updated By The Value.		*
+*									*
+*	09.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SlideBlueIntensity
+LUT_SlideBlueIntensity:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Changing Blue Or Intensity?
+*
+	MOVE.L	#$000000FF,D1		; AND Mask.
+	AND.L	D1,D0			; Remove Extra Bits.
+	NOT.L	D1			; Make Go The Other Way Around.
+	CMPI.L	#LUT_RGBTEXT_BT,LUT_RGBHSITextFG+FG_Data ; In RGB Mode?
+	BEQ.S	SLDBI1			; Jump If Changing RGB.
+	AND.L	D1,LTE_EditHSI(A4)	; Remove Old Intensity.
+	OR.L	D0,LTE_EditHSI(A4)	; Add In New Intensity Data.
+	MOVE.L	LTE_EditHSI(A4),D0	; D0.L = HHSI Value.
+	BSR	HSIRGB			; D0.L = 0RGB Value.
+	MOVE.L	D0,LTE_EditRGB(A4)	; Save New 0RGB Value.
+	BRA.S	SLDBI2			; Skip Else Part.
+SLDBI1	AND.L	D1,LTE_EditRGB(A4)	; Remove Old Blue.
+	OR.L	D0,LTE_EditRGB(A4)	; Add In New Blue Data.
+	MOVE.L	LTE_EditRGB(A4),D0	; D0.L = 0RGB Value.
+SLDBI2	BSR	LUT_MakeColorSquare	; Put On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoPosterization:						*
+*									*
+*	Performes the Posterization Slider Functions.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Posterization Gadgets Are Slid On the Screen.			*
+*									*
+*	08.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoPosterization
+LUT_DoPosterization:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Just Call the Slider Routine.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	LEA.L	LUT_PosterSlider(PC),A1	; Address of Alt Subroutine.
+	BSR	LUT_DoSlideBar		; Move Slider On the Screen.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Arrow.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PosterSlider:							*
+*									*
+*	Slides The Indicator in Posterization Mode.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of Slider.				*
+*	A0.L	= Address of Poster Gadget.				*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Poster Slider Is Updated On The Screen.			*
+*									*
+*	01.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PosterSlider
+LUT_PosterSlider:
+*
+*	Save Current Position.
+*
+	MOVE.B	D0,LUT_PosterPos(A4)	; Save Position.
+	BSR	LUT_DoQuantize		; Quantize The Data.
+	BTST.B	#LUTF_FULLPOSTER,LUT_DisplayMode(A4) ;InFull Posterization Mode?
+	BEQ.S	POSLI1			; Jump If Not Full Posterization Mode.
+	BSR	LUT_AverageQuantize	; Average The Quantize Buffer.
+*
+*	Fix Up Edit Colors To Current Settings.
+*
+POSLI1	BSR	LUT_ReWriteEditColor	; Rewrite Colors On The Screen.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+*
+*	Exit Subroutine.
+*
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	QuadAverageQuantize:						*
+*									*
+*	Averages The Quantized Data In The Current Quantize Buffer.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Quads in Buffer.				*
+*	A0.L	= Address of Quantize Buffer.				*
+*									*
+*	Output:								*
+*									*
+*	Data Is Averaged In Current Buffer.				*
+*									*
+*	17.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_QuadAverageQuantize
+LUT_QuadAverageQuantize:
+	MOVEM.L	D0-D3/A0-A1,-(A7)	; Save Calling State.
+*
+*	Make Internal Buffer and Copy Data Into It.
+*
+	TST.L	D0			; Zero Length Buffer?
+	BEQ.S	QUAVQ6			; Exit On Zero Length Buffer.
+	MOVE.L	D0,D3			; Make Buffer Length.
+	LSL.L	#2,D3			; D3.L = Length of Buffer.
+	SUBA.L	D3,A7			; Make Internal Buffer.
+	MOVEA.L	A7,A1			; Address of Temporary Buffer.
+	BSR	MoveLong		; Copy Over The Data.
+*
+*	Average Start Of Line.
+*
+	MOVEQ.L	#0,D1			; Clear High Value.
+	MOVEQ.L	#4-1,D2			; Loop Counter.
+QUAVQ1	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	3(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	LSR.W	#1,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+	DBF	D2,QUAVQ1		; Loop Until Done.
+*
+*	Loop And Average The Data.
+*
+	MOVE.L	D3,D2			; Get Loop Counter.
+	SUBQ.L	#2*4,D2			; Less Starting And Ending Value.
+	BMI.S	QUAVQ5			; Exit If Only One Value.
+	BRA.S	QUAVQ3			; Start Looping.
+QUAVQ2	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	3(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	MOVE.B	-5(A1),D1		; Get Third Value.
+	ADD.W	D1,D0			; Make Average Value.
+	DIVU.W	#3,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+QUAVQ3	DBF	D2,QUAVQ2		; Loop Until Done.
+*
+*	Average End Of Line.
+*
+	MOVEQ.L	#4-1,D2			; Loop Counter.
+QUAVQ4	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	-5(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	LSR.W	#1,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+	DBF	D2,QUAVQ4		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+QUAVQ5	ADDA.L	D3,A7			; Return Internal Buffer.
+QUAVQ6	MOVEM.L	(A7)+,D0-D3/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoQuadQuantize:							*
+*									*
+*	Creates The Quantized Data From The Temporary Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of Slider.				*
+*	D1.L	= Number  of Quads In Buffer.				*
+*	D2.L	= Number  of Items In Quantize Table.			*
+*	A0.L	= Address of Source Buffer.				*
+*	A1.L	= Address of Destination Buffer.			*
+*	A2.L	= Address of Quantize Table.				*
+*									*
+*	Output:								*
+*									*
+*	The Quantized Data Is Created In Destination Buffer.		*
+*									*
+*	16.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoQuadQuantize
+LUT_DoQuadQuantize:
+	MOVEM.L	D0-D5/A0-A1,-(A7)	; Save Calling State.
+*
+*	Use Table To Pick Quantize Value.
+*
+	MOVE.L	D1,D3			; D3.L = Size of Buffer.
+	MULU.W	D2,D0			; Make Current Position.
+	LSR.W	#8,D0			; D0.W = Current Position.
+	MOVE.B	0(A2,D0.W),D0		; D0.W = Size Of Quantize Value.
+	EXT.L	D0			; D0.L = Size Of Quantize Value.
+	DIVU.W	D0,D1			; D1.W = Number Of Times To Repeat.
+	EXT.L	D1			; D1.L = Number Of Times To Repeat.
+*
+*	If Remaining Values, Quantize Start and Ending Values.
+*
+	MOVE.L	D0,D2			; Build Total Value.
+	MULU.W	D1,D2			; D2.L = Total # of Units.
+	NEG.L	D2			; Maximum - Total #.
+	ADD.L	D3,D2			; D2.W = Difference From Total.
+	MOVE.L	D2,D3			; Make Starting Difference.
+	ASR.L	#1,D2			; D2.L = Starting Delta.
+	SUB.L	D2,D3			; D3.L = Ending   Delta.
+*
+*	Quantize the Starting Value.
+*
+	MOVE.L	D2,D4			; Get Number of Units.
+	ASR.L	#1,D4			; Make 1/2 Value.
+	ASL.L	#2,D4			; Go Times 4.
+	MOVE.L	D2,D5			; Loop Counter.
+	BRA.S	QUDQU2			; Start Looping.
+QUDQU1	MOVE.L	0(A0,D4.L),(A1)+	; Copy Quad.
+QUDQU2	DBF	D5,QUDQU1		; Loop Intil Done.
+*
+*	Move Past Start, Make Center Value.
+*
+	MOVE.L	D2,D5			; Make Index.
+	ASL.L	#2,D5			; D5.L = Long Word Index.
+	ADDA.L	D5,A0			; Add To Source.
+	MOVE.L	D0,D4			; Pick Center Value to Repeat.
+	ASR.L	#1,D4			; D4.L = 1/2 Index.
+	ASL.L	#2,D4			; D4.L = Long Word Index.
+*
+*	Loop And Copy Data.
+*
+	BRA.S	QUDQU7			; Start Looping.
+QUDQU4	MOVE.L	D0,D2			; Repeate Count.
+	MOVE.L	0(A0,D4.L),D5		; Copy Quad.
+	BRA.S	QUDQU6			; Start Looping.
+QUDQU5	MOVE.L	D5,(A1)+		; Save Quad.
+	ADDQ.L	#4,A0			; Move To Next Position.
+QUDQU6	DBF	D2,QUDQU5		; Repeate Same Pixel.
+QUDQU7	DBF	D1,QUDQU4		; Repeate For Quants.
+*
+*	Quantize the Ending Value.
+*
+	MOVE.L	D3,D4			; Make 1/2 Value.
+	ASR.L	#1,D4			; 1/2 Center Value.
+	ASL.L	#2,D4			; Go Times 4.
+	BRA.S	QUDQU9			; Start Looping.
+QUDQU8	MOVE.L	0(A0,D4.L),(A1)+	; Copy Quad.
+QUDQU9	DBF	D3,QUDQU8		; Loop Intil Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D5/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoQuantize:							*
+*									*
+*	Creates The Quantized Data From The Temporary Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of Slider.				*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	The Quantized Data Is Created In Working Buffer.		*
+*									*
+*	01.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+*	Third Quantize Table.
+*
+	XDEF	LUT_THIRDQUANTIZE
+LUT_THIRDQUANTIZE:
+*	       Size    Number Remainder
+	DC.B	01	; 32, 0
+	DC.B	02	; 16, 0
+	DC.B	03	; 10, 2
+	DC.B	04	; 08, 0
+	DC.B	05	; 06, 2
+	DC.B	08	; 04, 0
+	DC.B	16	; 02, 0
+	XDEF	LUT_THIRDQUANTIZELN
+LUT_THIRDQUANTIZELN	EQU	*-LUT_THIRDQUANTIZE
+*
+*	Step Quantize Table.
+*
+	XDEF	LUT_STEPQUANTIZE
+LUT_STEPQUANTIZE:
+*	       Size    Number Remainder
+	DC.B	01	; 96, 0
+	DC.B	02	; 48, 0
+	DC.B	03	; 32, 0
+	DC.B	04	; 24, 0
+	DC.B	05	; 19, 1
+	DC.B	06	; 16, 0
+	DC.B	07	; 13, 5
+	DC.B	08	; 12, 0
+	DC.B	09	; 10, 6
+	DC.B	10	; 09, 6
+	DC.B	12	; 08, 0
+	DC.B	16	; 06, 0
+	DC.B	24	; 04, 0
+	DC.B	48	; 02, 0
+	XDEF	LUT_STEPQUANTIZELN
+LUT_STEPQUANTIZELN	EQU	*-LUT_STEPQUANTIZE
+*
+*	Quantize Table.
+*
+	XDEF	LUT_QUANTIZE
+LUT_QUANTIZE:
+*	       Size    Number Remainder
+	DC.B	01	; 96, 0
+	DC.B	02	; 48, 0
+	DC.B	03	; 32, 0
+	DC.B	04	; 24, 0
+	DC.B	05	; 19, 1
+	DC.B	06	; 16, 0
+	DC.B	07	; 13, 5
+	DC.B	08	; 12, 0
+	DC.B	09	; 10, 6
+	DC.B	10	; 09, 6
+	DC.B	12	; 08, 0
+	DC.B	13	; 07, 5
+	DC.B	16	; 06, 0
+	DC.B	19	; 05, 1
+	DC.B	24	; 04, 0
+	DC.B	32	; 03, 0
+	DC.B	48	; 02, 0
+	XDEF	LUT_QUANTIZELN
+LUT_QUANTIZELN	EQU	*-LUT_QUANTIZE
+*
+	XDEF	LUT_DoQuantize
+LUT_DoQuantize:
+	MOVEM.L	D0-D6/A0-A1,-(A7)	; Save Calling State.
+*
+*	Which Buffer Are We Using.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	QUANT1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+QUANT1	LEA.L	LUT_EditBufPost(A4),A1	; Address of Source Buffer.
+*
+*	Use Table To Pick Quantize Value.
+*
+	MULU.W	#LUT_QUANTIZELN,D0	; Make Current Position.
+	LSR.W	#8,D0			; D0.W = Current Position.
+	MOVE.B	LUT_QUANTIZE(PC,D0.W),D0 ;D0.L = Size Of Quantize Value.
+	MOVEQ.L	#LUT_EditBufSz,D1	; Make The Repeate Number.
+	DIVU.W	D0,D1			; D1.W = Number Of Times To Repeat.
+	EXT.L	D1			; D1.L = Number Of Times To Repeat.
+*
+*	If Remaining Values, Quantize Start and Ending Values.
+*
+	MOVE.L	D0,D2			; Build Total Value.
+	MULU.W	D1,D2			; D2.L = Total # of Units.
+	NEG.W	D2			; Maximum - Total #.
+	ADDI.W	#LUT_EditBufSz,D2	; D2.W = Difference From Total.
+	MOVE.L	D2,D3			; Make Starting Difference.
+	ASR.W	#1,D2			; D2.L = Starting Delta.
+	SUB.W	D2,D3			; D3.L = Ending   Delta.
+*
+*	Quantize the Starting Value.
+*
+	MOVE.L	D2,D4			; Get Number of Units.
+	ASR.W	#1,D4			; Make 1/2 Value.
+	MOVE.L	D4,D5			; Go Times 3.
+	ADD.W	D4,D4			; Times 2.
+	ADD.W	D5,D4			; Times 3.
+	MOVE.L	D2,D5			; Loop Counter.
+	BRA.S	QUANT3			; Start Looping.
+QUANT2	MOVE.B	0(A1,D4.W),(A0)+	; Copy Red.
+	MOVE.B	1(A1,D4.W),(A0)+	; Copy Green.
+	MOVE.B	2(A1,D4.W),(A0)+	; Copy Blue.
+QUANT3	DBF	D5,QUANT2		; Loop Intil Done.
+	ADDA.W	D2,A1			; Add To Source.
+	ADDA.W	D2,A1			; Times 2.
+	ADDA.W	D2,A1			; Times 3.
+*
+*	Use Center Value.
+*
+	MOVE.L	D0,D5			; Pick Center Value to Repeat.
+	ASR.W	#1,D5			; D5.L = 1/2 Index.
+	ADDA.W	D5,A1			; Add To Source.
+	ADDA.W	D5,A1			; Times 2.
+	ADDA.W	D5,A1			; Times 3.
+*
+*	Loop And Copy Data.
+*
+	BRA.S	QUANT7			; Start Looping.
+QUANT4	MOVE.L	D0,D2			; Repeate Count.
+	MOVE.B	(A1),D4			; Copy Red.
+	MOVE.B	1(A1),D5		; Copy Green.
+	MOVE.B	2(A1),D6		; Copy Blue.
+	BRA.S	QUANT6			; Start Looping.
+QUANT5	MOVE.B	D4,(A0)+		; Save Red 0.
+	MOVE.B	D5,(A0)+		; Save Red 1.
+	MOVE.B	D6,(A0)+		; Save Red 2.
+	ADDQ.L	#3,A1			; Move To Next Position.
+QUANT6	DBF	D2,QUANT5		; Repeate Same Pixel.
+QUANT7	DBF	D1,QUANT4		; Repeate For Quants.
+*
+*	Quantize the Ending Value.
+*
+	MOVE.L	D3,D4			; Make 1/2 Value.
+	ASR.W	#1,D4			; 1/2 Center Value.
+	MOVE.L	D0,D5			; Uncenter The Start.
+	ASR.W	#1,D5			; 1/2 Center Value.
+	SUB.L	D5,D4			; D4.L = Centering Offset.
+	MOVE.L	D4,D5			; Go Times 3.
+	ADD.W	D4,D4			; Times 2.
+	ADD.W	D5,D4			; Times 3.
+	BRA.S	QUANT9			; Start Looping.
+QUANT8	MOVE.B	0(A1,D4.W),(A0)+	; Copy Red.
+	MOVE.B	1(A1,D4.W),(A0)+	; Copy Green.
+	MOVE.B	2(A1,D4.W),(A0)+	; Copy Blue.
+QUANT9	DBF	D3,QUANT8		; Loop Intil Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D6/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AverageQuantize:						*
+*									*
+*	Averages The Quantized Data In The Current Edit Buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	Data Is Averaged In Current Buffer.				*
+*									*
+*	01.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_AverageQuantize
+LUT_AverageQuantize:
+	MOVEM.L	D0-D2/A0-A1,-(A7)	; Save Calling State.
+	SUBA.W	#LUT_EditBufLn,A7	; Make Internal Buffer.
+	MOVEA.L	A7,A1			; Address of Temporary Buffer.
+*
+*	Get Current Edit Buffer.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	AVRQU1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+AVRQU1	MOVEQ.L	#LUT_EditBufLn>>2,D0	; D0.L = Number of Bytes To Copy.
+	BSR	MoveLong		; Copy Over The Data.
+*
+*	Average Start Of Line.
+*
+	MOVEQ.L	#0,D1			; Clear High Value.
+	MOVEQ.L	#3-1,D2			; Loop Counter.
+AVRQU2	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	2(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	LSR.W	#1,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+	DBF	D2,AVRQU2		; Loop Until Done.
+*
+*	Loop And Average The Data.
+*
+	MOVE.W	#3*(LUT_EditBufSz-2)-1,D2 ; Loop Counter.
+AVRQU3	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	2(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	MOVE.B	-4(A1),D1		; Get Third Value.
+	ADD.W	D1,D0			; Make Average Value.
+	DIVU.W	#3,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+	DBF	D2,AVRQU3		; Loop Until Done.
+*
+*	Average End Of Line.
+*
+	MOVEQ.L	#3-1,D2			; Loop Counter.
+AVRQU4	MOVEQ.L	#0,D0			; Average The Start.
+	MOVE.B	(A1)+,D0		; Get First Value.
+	MOVE.B	-4(A1),D1		; Get Second Value.
+	ADD.W	D1,D0			; Make Average Value.
+	LSR.W	#1,D0			; D0.L = Average Value.
+	MOVE.B	D0,(A0)+		; Save Result.
+	DBF	D2,AVRQU4		; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+	ADDA.W	#LUT_EditBufLn,A7	; Return Internal Buffer.
+	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CheckPoster:							*
+*									*
+*	Checks To See If The Posterize Position Is At Zero, If Not,	*
+*	Sets The Posterize Position To Zero.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	If Posterize Position Is Not Zero, The It Is Set To Zero, and	*
+*	Rewritten On The Screen.					*
+*									*
+*	07.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+*	Check The Posterization Position For Zero.
+*
+	XDEF	LUT_CheckPoster
+LUT_CheckPoster:
+	TST.B	LUT_PosterPos(A4)	; Position Set To Zero?
+	BEQ.S	CHKPO1			; Exit If Already At Zero.
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Redraw At Zero Position.
+*
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Forbid All Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Pointer.
+	CLR.B	LUT_PosterPos(A4)	; Set To Zero.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LUT_PosterPos(A4),D0	; D0.L = Poster Position.
+	BSR	LUT_BarImage		; A0.L = Address of Image.
+	LEA.L	LUT_PosterizationFG,A1	; Address of Slider Image.
+	MOVE.L	A0,FG_Data(A1)		; Save New Image.
+*
+*	Redraw On The Screen.
+*
+	MOVEA.L	A1,A0			; A0.L = Address of Gadget To Draw.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number  of Gadgets To Draw.
+	MOVEQ.L	#0,D1			; D1.L = Offset  to Image.
+	CALLTL	DrawFastGList		; Draw Gadget On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Pointer.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks To Run.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+CHKPO1	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SavePosterBuffer:						*
+*									*
+*	Save The Currently Selected Edit Buffer Into The Poster Buffer.	*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	The Current Edit Buffer is Copied Into the Poster Buffer.	*
+*									*
+*	07.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SavePosterBuffer
+LUT_SavePosterBuffer:
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+*
+*	Save UnModified Data.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Assume Top Buffer.
+	TST.W	LUT_UpperRangeArrowFG+FG_HiLiteMask
+	BNE.S	SAPOB1			; Jump If Top Buffer.
+	LEA.L	LUT_EditBufBot(A4),A0	; Else Bottom Buffer.
+SAPOB1	LEA.L	LUT_EditBufPost(A4),A1	; Destination Address.
+	MOVEQ.L	#LUT_EditBufLn>>2,D0	; Number of Long Words.
+	BSR	MoveLong		; Save The Data.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	InitEBuf:							*
+*									*
+*	Initilizes the Edit Buffer.					*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	Edit Buffer Is Initilized.					*
+*									*
+*	20.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_InitEBuf
+LUT_InitEBuf:
+	MOVE.L	A0,-(A7)		; Save Calling State.
+*
+*	Place The ID At Start of Buffer.
+*
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A4) ; Is This Already Init?
+	BEQ.S	INITE1				 ; Jump If Already Init.
+	MOVE.L	#LUT_CheckConst,LUT_CheckVal(A4) ; Save LUT1 ID.
+	MOVE.B	#1,LUT_DisplayMode(A4)		 ; Set To Middle Position.
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Value.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4)	 ; Data Has Changed.
+*
+*	Loop and Fill The Buffer.
+*
+	LEA.L	LUT_EditBufTop(A4),A0	; Address of Edit Top Buffer.
+	BSR	LUT_GenerateNormal	; Generate Top Color Map.
+	LEA.L	LUT_EditBufBot(A4),A0	; Address of Edit Bot Buffer.
+	BSR	LUT_GenerateNormal	; Generate Bottom Color Map.
+	LEA.L	LUT_EditBufPost(A4),A0	; Address of Edit Posterize Buffer.
+	BSR	LUT_GenerateNormal	; Generate Bottom Color Map.
+*
+*	Exit Subroutine.
+*
+*	MOVE.B	#$95,LUT_DisplayMode(A4) ;a test.71796
+	
+INITE1	MOVEA.L	(A7)+,A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoEditColors:							*
+*									*
+*	When The Edit Colors Box Is Picked, Transfers Over the Colors.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Edit Colors Are Transfered Over.				*
+*									*
+*	22.Mar 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoEditColors
+LUT_DoEditColors:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Make Mouse Position, and Do The Rainbow.
+*
+	LEA.L	TB_SoftSprite(A5),A0	; Address of Structure.
+	MOVEQ.L	#-1,D0			; High Bits = -1, One Indicator.
+	MOVE.W	VBI_MouseX(A0),D0	; Get Mouse X Position.
+	MOVE.L	D0,-(A7)		; Save X Position.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+	MOVE.L	(A7)+,D0		; Return X Position.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOEDC1			; Jump If >= 0.
+	CLR.W	D0			; Else Set To Zero.
+	BRA.S	DOEDC2			; Skip Else Part.
+DOEDC1	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOEDC2			; Jump If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz-1)<<2,D0 ;Else Set To Maximum.
+DOEDC2	LSR.W	#2,D0			; Scale The Input.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New Color.
+*
+*	Loop Showing Color In Edit Area Until Another Message Shows Up.
+*
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEON		; Turn On Mouse Message.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+DOEDC3	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_MOVMSG		; D0.L = Mouse xy Position.
+	BNE.S	DOEDC6			; Exit If No Message.
+	MOVE.W	#-1,D0			; Mark Upper Position Not To Draw.
+	SWAP.W	D0			; Put In Proper Range.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOEDC4			; Exit If >= Left Edge.
+	MOVEQ.L	#0,D0			; Else < Left Edge.
+	BRA.S	DOEDC5			; Skip Else Part.
+DOEDC4	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOEDC5			; Exit If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz-1)<<2,D0 ;Else Set To Maximum.
+DOEDC5	LSR.W	#2,D0			; Scale The Input.
+	CMP.B	LTE_EditColor(A4),D0	; Did The Color Change?
+	BEQ.S	DOEDC3			; Jump If Color Did Not Change.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New Edit Color.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	BRA.S	DOEDC3			; Show New Color.
+*
+*	All Done, Restore Pointer.
+*
+DOEDC6	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEOFF		; Turn Off Mouse Messages.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Arrow.
+*
+*	Exit Subroutine.
+*
+	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendMap:							*
+*									*
+*	Sends Out DVE0 Map To Toaster.					*
+*									*
+*	Input:								*
+*									*
+*	D0.L	    = 0, Don't Send File to Disk.			*
+*		      1 -> 4, Which LUT Crouton to Send Data To.	*
+*	A4.L	    = Address of LUT Base.				*
+*	A5.L	    = Address of Toaster Base.				*
+*	LUT_Flags.B = LUTF_SendDVE0 -> If Set, Write Map to DVE0.	*
+*									*
+*	Output:								*
+*									*
+*	Selected Subroutine Is Exectued.				*
+*									*
+*	12.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SendMap
+LUT_SendMap:
+	MOVEM.L	D0-D3/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Open The File To Send Data To.
+*
+	MOVE.L	D0,D3			; Send Anything to LUT Crouton?
+	BEQ.S	SENDM1			; Jump If Send Nothing.
+	BSR	LUT_OpenFrameSave	; Try To Open The File.
+	MOVE.L	A0,LTR_FramePtr(A4)	; Save Pointer to Frame File.
+*
+*	Get Address of Routine From Mode, And Execute It.
+*
+SENDM1	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write Map Out to Toaster?
+	BEQ.S	SENDM2			; Jump If Don't Send Map.
+	JSR	_LVOForbid(A6)		; Don't Let Other Tasks Run.
+SENDM2	MOVEQ.L	#0,D0			; Get Index To Function.
+	MOVE.B	LUT_InterPos(A4),D0	; D0.L = Index to Image.
+	CMPI.W	#SENDMA,D0		; Over End of Table?
+	BCS.S	SENDM3			; Jump If Ok.
+	MOVEQ.L	#0,D0			; Else Fource to First.
+SENDM3	LSL.W	#2,D0			; Go Times Four.
+	MOVEA.L	SENDM9(PC,D0.W),A0	; Address to go to.
+	JSR	(A0)			; Execute Subroutine.
+*
+*	Set File Error Return Code.
+*
+	BEQ.S	SENDM4			; Jump If No Error.
+	MOVEQ.L	#LUT_WriteCroutonError,D2    ; D0.L = Error Code.
+	BRA.S	SENDM5			; Skip Else Part.
+SENDM4	MOVEQ.L	#0,D2			; D0.L = No Error.
+SENDM5	BTST.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Write Map Out to Toaster?
+	BEQ.S	SENDM6			; Jump If Don't Send Map.
+	JSR	_LVOPermit(A6)		; Let the Other Tasks Run.
+*
+*	Close The File We Sent Data To.
+*
+SENDM6	MOVEA.L	LTR_FramePtr(A4),A0	; Return Pointer to Frame File.
+	BSR	LUT_CloseFrameSave	; Try To Close The File.
+	CLR.L	LTR_FramePtr(A4)	; Make Sure The Pointer Is NULL.
+	TST.L	D0			; Was An Error Made?
+	BEQ.S	SENDM7			; Jump If No Error Made.
+	MOVEQ.L	#LUT_WriteCroutonError,D2    ; D0.L = Error Code.
+*
+*	If File Error, Put Up Error Message.
+*
+SENDM7	TST.L	D2			; Was Their an Error Made?
+	BEQ.S	SENDM8			; Jump If No Error.
+	MOVE.L	D2,-(A7)
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  The Arrow.
+	MOVE.L	(A7)+,D0		; D0.L = Error Code.
+	BSR	LUT_FileErrorMessage	; Put Message On the Screen.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+*
+*	The Crouton File Now Contains Trash, Purge the Trash.
+*
+	MOVE.L	D3,D0			; Send Anything to LUT Crouton?
+
+ IFND TOASTER_3
+	SUBQ	#5,D3			; Subtract largerst crouton number
+	BGE.S	SENDM8			; Don't fix crouton if D3 is STRPTR
+ ENDC ;!TOASTER_3
+
+	BSR	LUT_FixDeadCrouton	; Try to Fix Dead File.
+*
+*	Exit Subroutine.
+*
+SENDM8	MOVEM.L	(A7)+,D0-D3/A0-A1/A6	; Return Calling State.
+	RTS
+*
+*	Pick Execution Table.
+*
+SENDM9	DC.L	LUT_SendDVEMap		; Send Out Spread.
+	DC.L	LUT_SendSpectrumDVE	; Send Out Spectrum.
+	DC.L	DORROT			; Send Out Rotate Right.
+	DC.L	DOLROT			; Send Out Rotate Left.
+	DC.L	DORNUK			; Send Out Nuke Right.
+	DC.L	DOLNUK			; Send Out Nuke Left.
+	DC.L	LUT_SendPosterDVE	; Send Out Quantise.
+SENDMA	EQU	(*-SENDM9)/4		; Length Of Table.
+*
+*	Set Flag For Rotate Right.
+*
+DORROT:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#0,D0			; Rotate Right Flag.
+	BSR	LUT_SendMapRotate	; Send Out The Map.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Rotate Left.
+*
+DOLROT:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#-1,D0			; Rotate Left Flag.
+	BSR	LUT_SendMapRotate	; Send Out The Map.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Nuke Right.
+*
+DORNUK:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#0,D0			; Nuke Right Flag.
+	BSR	LUT_SendMapNuke		; Send Out The Map.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Nuke Left.
+*
+DOLNUK:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#-1,D0			; Nuke Left Flag.
+	BSR	LUT_SendMapNuke		; Send Out The Map.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SendEdit:							*
+*									*
+*	Sends Out Edit Map To Toaster.					*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	Selected Subroutine Is Exectued.				*
+*									*
+*	12.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SendEdit
+LUT_SendEdit:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+	MOVEQ.L	#0,D0			; Get Index To Function.
+	MOVE.B	LUT_InterPos(A4),D0	; D0.L = Index to Image.
+	CMPI.W	#SENDE3,D0		; Over End of Table?
+	BCS.S	SENDE1			; Jump If Ok.
+	MOVEQ.L	#0,D0			; Else Fource to First.
+SENDE1	LSL.W	#2,D0			; Go Times Four.
+	MOVEA.L	SENDE2(PC,D0.W),A0	; Address to go to.
+	JSR	(A0)			; Execute Subroutine.
+	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+*
+*	Pick Execution Table.
+*
+SENDE2	DC.L	LUT_SendEditMap		; Send Out Spread.
+	DC.L	LUT_SendSpectrumMap	; Send Out Spectrum.
+	DC.L	DERROT			; Send Out Rotate Right.
+	DC.L	DELROT			; Send Out Rotate Left.
+	DC.L	DERNUK			; Send Out Nuke Right.
+	DC.L	DELNUK			; Send Out Nuke Left.
+	DC.L	LUT_SendPosterMap	; Send Out Quantise.
+SENDE3	EQU	(*-SENDE2)/4		; Length Of Table.
+*
+*	Set Flag For Rotate Right.
+*
+DERROT:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#0,D0			; Rotate Right Flag.
+	BSR	LUT_SendEditRotate	; Send Out The Edit.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Rotate Left.
+*
+DELROT:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#-1,D0			; Rotate Left Flag.
+	BSR	LUT_SendEditRotate	; Send Out The Edit.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Nuke Right.
+*
+DERNUK:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#0,D0			; Nuke Right Flag.
+	BSR	LUT_SendEditNuke	; Send Out The Edit.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+*
+*	Set Flag For Nuke Left.
+*
+DELNUK:	MOVE.L	D0,-(A7)		; Save Calling State.
+	MOVEQ.L	#-1,D0			; Nuke Left Flag.
+	BSR	LUT_SendEditNuke	; Send Out The Edit.
+	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoEditCopy:							*
+*									*
+*	Performer The Edit Copy Function.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget.				*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	Edit Copy Function Is Performed.				*
+*									*
+*	17.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoEditCopy
+LUT_DoEditCopy:
+	MOVEM.L	D0-D2/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	High Light The Image, and Wait For Ending Pick.
+*
+	BSR	LUT_HighLightGadget	; High Light The Image.
+	BEQ	DOECO9			; Exit If Canceled.
+	MOVE.L	A0,-(A7)		; Save Pointer To Gadget.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+*
+*	Wait For The User To Pick Ending Range.
+*
+	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_ReadMessage		; A0.L = Address of Gadget.
+	CMPI.L	#GADGETDOWN,D1		; Did They Press Down?
+	BNE	DOECO8			; Exit If Not.
+	CMPA.L	#LUT_EditColorsFG,A0	; Did They Pick Edit Color?
+	BNE	DOECO8			; Exit If Not Picked.
+*
+*	Make Mouse Position, and Do The Copy.
+*
+	BSR	LUT_FromEditBuf		; D0.L = Starting 0RGB.
+	MOVE.L	D0,D2			; D2.L = Starting 0RGB.
+	LEA.L	TB_SoftSprite(A5),A0	; Address of Structure.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	VBI_MouseX(A0),D0	; Get Mouse X Position.
+	MOVE.L	D0,-(A7)		; Save X Position.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+	MOVE.L	(A7)+,D0		; Return X Position.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOECO1			; Jump If >= 0.
+	MOVEQ.L	#0,D0			; Else Set To Zero.
+	BRA.S	DOECO2			; Skip Else Part.
+DOECO1	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOECO2			; Jump If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz-1)<<2,D0 ;Else Set To Maximum.
+DOECO2	LSR.W	#2,D0			; Scale The Input.
+	MOVEQ.L	#0,D1			; Make Stating Position.
+	MOVE.B	LTE_EditColor(A4),D1	; D1.L = Starting Position.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New as Old.
+*
+*	Loop Showing Color In Edit Area Until Another Message Shows Up.
+*
+	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEON		; Turn On Mouse Message.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+DOECO3	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_MOVMSG		; D0.L = Mouse xy Position.
+	BNE.S	DOECO6			; Exit If No Message.
+	SWAP.W	D0			; Put In Proper Range.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOECO4			; Exit If >= Left Edge.
+	MOVEQ.L	#0,D0			; Else < Left Edge.
+	BRA.S	DOECO5			; Skip Else Part.
+DOECO4	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOECO5			; Exit If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz<<2)-1,D0 ;Else Set To Maximum.
+DOECO5	LSR.W	#2,D0			; Scale The Input.
+	CMP.B	LTE_EditColor(A4),D0	; Did The Color Change?
+	BEQ.S	DOECO3			; Jump If Color Did Not Change.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New Edit Color.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	BRA.S	DOECO3			; Show New Color.
+DOECO6	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEOFF		; Turn Off Mouse Messages.
+*
+*	Now Do The Copy.
+*
+	MOVEQ.L	#0,D0			; Need To Get To The Color
+	MOVE.B	LTE_EditColor(A4),D0	; That We Are On.
+	CMP.W	D0,D1			; Does New == Old?
+	BEQ.S	DOECO7			; Jump If New and Old Same Value.
+	EXG.L	D0,D2			; Copy Edit Color.
+	BSR	LUT_ToEditBuf		; Store Copy RGB Value.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	EXG.L	D0,D2			; D0.L = New Color We Are On.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BNE.S	DOECO7			; Jump If Not 2nd Position.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+DOECO7	MOVEQ.L	#-1,D0			; Send Only One Indicator.
+	CLR.W	D0			; Make The One Position.
+	MOVE.B	LTE_EditColor(A4),D0	; D0.L = Indicator Position.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Arrow.
+DOECO8	MOVEA.L	(A7)+,A0		; Return Pointer To Gadget.
+	BSR	LUT_HighLightOff	; Turn Off The High Lighting.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+DOECO9	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D2/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoEditExchange:							*
+*									*
+*	Performer The Edit Exchange Function.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget.				*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	Edit Exchange Function Is Performed.				*
+*									*
+*	17.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoEditExchange
+LUT_DoEditExchange:
+	MOVEM.L	D0-D3/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	High Light The Image, and Wait For Ending Pick.
+*
+	BSR	LUT_HighLightGadget	; High Light The Image.
+	BEQ	DOEXGA			; Exit If Canceled.
+	MOVE.L	A0,-(A7)		; Save Pointer To Gadget.
+	BSR	LUT_ModeOffEditor	; Turn LUT Mode Off.
+*
+*	Wait For The User To Pick Ending Range.
+*
+	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_ReadMessage		; A0.L = Address of Gadget.
+	CMPI.L	#GADGETDOWN,D1		; Did They Press Down?
+	BNE	DOEXG9			; Exit If Not.
+	CMPA.L	#LUT_EditColorsFG,A0	; Did They Pick Edit Color?
+	BNE	DOEXG9			; Exit If Not Picked.
+*
+*	Make Mouse Position, and Do The Copy.
+*
+	BSR	LUT_FromEditBuf		; D0.L = Starting 0RGB.
+	MOVE.L	D0,D2			; D2.L = Starting 0RGB.
+	LEA.L	TB_SoftSprite(A5),A0	; Address of Structure.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	VBI_MouseX(A0),D0	; Get Mouse X Position.
+	MOVE.L	D0,-(A7)		; Save X Position.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Arrow.
+	MOVE.L	(A7)+,D0		; Return X Position.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOEXG1			; Jump If >= 0.
+	MOVEQ.L	#0,D0			; Else Set To Zero.
+	BRA.S	DOEXG2			; Skip Else Part.
+DOEXG1	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOEXG2			; Jump If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz-1)<<2,D0 ;Else Set To Maximum.
+DOEXG2	LSR.W	#2,D0			; Scale The Input.
+	MOVEQ.L	#0,D1			; Make Stating Position.
+	MOVE.B	LTE_EditColor(A4),D1	; D1.L = Starting Position.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New as Old.
+*
+*	Loop Showing Color In Edit Area Until Another Message Shows Up.
+*
+	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEON		; Turn On Mouse Message.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+DOEXG3	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_MOVMSG		; D0.L = Mouse xy Position.
+	BNE.S	DOEXG6			; Exit If No Message.
+	SWAP.W	D0			; Put In Proper Range.
+	SUBI.W	#TBFG_LEFTEDGE+LUT_PickLeft,D0 ; D0.W = Index to Color
+	BPL.S	DOEXG4			; Exit If >= Left Edge.
+	MOVEQ.L	#0,D0			; Else < Left Edge.
+	BRA.S	DOEXG5			; Skip Else Part.
+DOEXG4	CMPI.W	#LUT_EditBufSz<<2,D0	; Within Range?
+	BCS.S	DOEXG5			; Exit If < Right Edge.
+	MOVE.W	#(LUT_EditBufSz<<2)-1,D0 ;Else Set To Maximum.
+DOEXG5	LSR.W	#2,D0			; Scale The Input.
+	CMP.B	LTE_EditColor(A4),D0	; Did The Color Change?
+	BEQ.S	DOEXG3			; Jump If Color Did Not Change.
+	MOVE.B	D0,LTE_EditColor(A4)	; Save New Edit Color.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	SWAP.W	D0			; Get High Position.
+	MOVE.W	D1,D0			; Put Starting Position There.
+	SWAP.W	D0			; Get High in High.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	BRA.S	DOEXG3			; Show New Color.
+DOEXG6	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEOFF		; Turn Off Mouse Messages.
+*
+*	Now Do The Exchange.
+*
+	MOVEQ.L	#0,D3			; Need To Get To The Color
+	MOVE.B	LTE_EditColor(A4),D3	; That We Are On.
+	CMP.W	D3,D1			; Does New == Old?
+	BEQ.S	DOEXG8			; Jump If New and Old Same Value.
+	BSR	LUT_FromEditBuf		; D0.L = New RGB Value.
+	EXG.L	D0,D2			; D0.L = Old RGB Value, D2.L = New RGB.
+	BSR	LUT_ToEditBuf		; Store Old In New.
+	MOVE.B	D1,LTE_EditColor(A4)	; Select Old Edit Color.
+	EXG.L	D0,D2			; D0.L = New RGB Value, D2.L = Old RGB.
+	BSR	LUT_ToEditBuf		; Store New In Old.
+	MOVE.B	D3,LTE_EditColor(A4)	; Select New Edit Color.
+	BSR	LUT_ReWriteEditColor	; Write Color Requestor Area.
+	BSR	LUT_UpDateEditColor	; Redo Colors On Top of Screen.
+	MOVE.L	D3,D0			; D0.L = New Color We Are On.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BEQ.S	DOEXG7			; Jump If Visable.
+	MOVE.L	D1,D0			; D0.L = Old Color Position.
+	BSR	LUT_TstSendEdit		; In Visable Position?
+	BNE.S	DOEXG8			; Jump If Not 2nd Position.
+DOEXG7	BSR	LUT_SendEdit		; Write Edit Colors.
+DOEXG8	MOVEQ.L	#-1,D0			; Send Only One Indicator.
+	CLR.W	D0			; Make The One Position.
+	MOVE.B	LTE_EditColor(A4),D0	; D0.L = Indicator Position.
+	BSR	LUT_MakeEditMark	; Make The New Edit Mark.
+	BSR	LUT_DrawEditMark	; Draw On The Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Arrow.
+DOEXG9	MOVEA.L	(A7)+,A0		; Return Pointer To Gadget.
+	BSR	LUT_HighLightOff	; Turn Off The High Lighting.
+	BSR	LUT_CheckPoster		; Turn Off Poster Gadget.
+	BSR	LUT_SavePosterBuffer	; Save Setting Of Poster Buffer.
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Data Has Changed.
+*
+*	Exit Subroutine.
+*
+DOEXGA	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D3/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoMoveTBar:							*
+*									*
+*	Performes the Move TBar Slider Functions.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Mouse xy Position.					*
+*	A0.L	= Address of Selected Fast Gadget.			*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	TBar Gadgets Are Slid On the Screen.				*
+*									*
+*	19.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+TBARSIZE	EQU	17		; Length of Pick Area of Bar.
+*
+	XDEF	LUT_DoMoveTBar
+LUT_DoMoveTBar:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Set Up Variables for Slider Code.
+*
+	SUB.W	gg_TopEdge(A0),D0	; Make Relative Offset.
+	EXT.L	D0			; Make Long Word.
+	MOVE.L	D0,D1			; D1.L = Starting x Mouse Position.
+	BSR	LUT_TBarPosition	; D0.L = Current Bar Position.
+	CMP.L	D0,D1			; Check Top Most Position.
+	BCS.S	DOMOV1			; Jump If Not On Bar Top.
+	ADDI.L	#TBARSIZE,D0		; Old Bottom Mouse Position.
+	CMP.L	D0,D1			; Check Bottom Most Position.
+	BCC.S	DOMOV1			; Jump If Not On Bar Bottom.
+*
+*	Do The TBar Effect.
+*
+	CALLTL	SoftSpriteOff		; Turn The Sprite Off.
+	BSR	LUT_DoTBarTake		; Move Slider On the Screen.
+*
+*	Move The Soft Sprite Over The TBar Handler.
+*
+	MOVE.W	gg_LeftEdge(A0),D0	; D0.W = Make x Position.
+	ADDI.W	#40,d0			; D0.W = x Position.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D1	; D1.L = Make y Position.
+	DIVU.W	#3*2,D1			; Scale The Input.
+	ADD.W	gg_TopEdge(A0),D1	; Adjust to Current Position.
+	ADDQ.W	#8,D1			; D1.L = y Position.
+	CALLTL	MoveSoftSpriteABS	; Move To That Position.
+	CALLTL	SoftSpriteOn		; Turn The Sprite Back On.
+*
+*	Exit Subroutine.
+*
+DOMOV1	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoButtonTBar:							*
+*									*
+*	Performes the Move TBar Slider Functions.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	TBar Gadgets Are Slid On the Screen.				*
+*									*
+*	18.Jul 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoButtonTBar
+LUT_DoButtonTBar:
+	MOVEM.L	D0-D1/A0,-(A7)		; Save Calling State.
+*
+*	Do The TBar Effect.
+*
+	MOVE.W	TB_ButtonFlag(A5),-(A7)	; Old Setting of Flags.
+	PUT.W	#-1,TB_ButtonFlag	; Means Use Right Mouse Button.
+	CALLTL	SoftSpriteOff		; Turn Off The Soft Sprite.
+	MOVEA.L	TB_Window(A5),A0	; Save Current Mouse Coordinates.
+	MOVE.W	wd_MouseX(A0),D0	; D0.W = Save Current x Position.
+	MOVE.W	wd_MouseY(A0),D1	; D1.W = Save Current y Position.
+	BSR	LUT_DoTBarTake		; Move Slider On the Screen.
+	CALLTL	MoveSoftSpriteABS	; Now Restore Original Mouse Coords.
+	CALLTL	SoftSpriteOn		; Turn On The Soft Sprite.
+	PUT.W	(A7)+,TB_ButtonFlag	; Restore Old Value.
+*
+*	Exit Subroutine.
+*
+	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetPosterImage:							*
+*									*
+*	Set The Current Images In Posterize Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	The Posterization Images are Make To Current Settings.		*
+*									*
+*	04.May 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetPosterImage
+LUT_SetPosterImage:
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+*
+*	Turn Image On.
+*
+	LEA.L	LUT_PosterizationFG,A1	; Address of Slider Image.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	LUT_PosterPos(A4),D0	; D0.L = Poster Position.
+	BSR	LUT_BarImage		; A0.L = Address of Image.
+	MOVE.L	A0,FG_Data(A1)		; Save New Image.
+	MOVEA.L	gg_NextGadget(A1),A1	; A1.L = Address If Full Image.
+	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not Hi-Lighted.
+	MOVEA.L	A1,A0			; Save Address For Hi-Lite Mask.
+	MOVEA.L	gg_NextGadget(A1),A1	; A1.L = Address If  No  Image.
+	CLR.W	FG_HiLiteMask(A1)	; Make Sure Not Hi-Lighted.
+	BTST.B	#LUTF_FULLPOSTER,LUT_DisplayMode(A4) ; Full Poster Gadget?
+	BNE.S	SPOSTI1			; Jump If Poster Picked.
+	MOVEA.L	A1,A0			; Else Pick No Poster Gadget.
+SPOSTI1	BSR	LUT_SetHiLite		; Turn On HiLiteing.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+
+*************************************************************************
+*									*
+*	DoGridNumber:							*
+*									*
+*	Assigns the Current Crouton to the Grid Crouton.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Gadget.					*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Value of the Current Crouton is Assigned to the Crouton.	*
+*									*
+*	15.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+ IFD TOASTER_3
+	XDEF	LUT_DoGridNumber
+LUT_DoGridNumber:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Did We Stay Selected?
+*
+	BSR	LUT_DoHighLiteOnOff	; High light the Gadget.
+	BEQ.S	DOGDN3			; Exit If Not Selected.
+*
+*	Find Out Which One We Are One.
+*
+	MOVEQ.L	#0,D0			; D0.L = Counter.
+	LEA.L	LUT_Crouton1FG,A1	; A1.L = Address of Fast Gadget.
+	BRA.S	DOGDN2			; Start Looping.
+DOGDN1	ADDQ.W	#1,D0			; Go To Next Position.
+	CMPI.W	#4,D0			; All Done?
+	BCC.S	DOGDN3			; Exit If Nothing Found.
+	MOVEA.L	gg_NextGadget(A1),A1	; Move To Next Gadget.
+DOGDN2	CMPA.L	A0,A1			; Are We On This Gadget?
+	BNE.S	DOGDN1			; Jump If Not Found.
+*
+*	Move Over The String.
+*
+	MOVE.L	D0,D1			; D1.L = Make Index.
+	LSL.W	#2,D1			; D1.L = Long Word Index.
+	LEA.L	LUT_GridNStrTb,A1	; A1.L = Address of Table.
+	MOVEA.L	0(A1,D1.W),A1		; A1.L = Address of Destination Text.
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Source.
+	MOVE.B	(A0)+,(A1)+		; Move High Byte.
+	MOVE.B	(A0)+,(A1)+		; Move Low  Byte.
+*
+*	Print String On The String.
+*
+	MOVE.L	D0,-(A7)		; Save Index To What We Are On.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Soft Sprite.
+	MOVE.L	(A7)+,D0		; Return Index To What We Are On.
+	BSR	LUT_PrintGridNumber	; Write Number on Screen.
+	MOVE.L	D0,-(A7)		; Save Index To What We Are On.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Soft Sprite.
+	MOVE.L	(A7)+,D0		; Return Index To What We Are On.
+*
+*	Save The Number Back Into The Grid Crouton.
+*
+	LEA.L	LTE_GridCrouton(A4),A1	; A1.L = Address In Grid Array.
+	ADDA.W	D0,A1			; A1.L = Address In Grid Array[ n ].
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Source.
+	BSR	ASCINT			; D0.L = Binary Number.
+	MOVE.B	D0,(A1)			; Store Result.
+*
+*	Ok, This One Has Just Been Assigned.
+*
+	BSET.B	#LUTF_GridAssign,LUT_Flags(A4) ; It Was Just Assigned.
+	BSET.B	#LTEF_EditChange,LTE_Flags(A4) ; We Have An Edit Change.
+*
+*	Exit Subroutine.
+*
+DOGDN3	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+ ENDC ;TOASTER_3
+ IFND TOASTER_3
+*************************************************************************
+*									*
+*	DoSaveCrouton:							*
+*									*
+*	Save the Current Crouton to a file.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Gadget.					*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Current Crouton is saved to a file.				*
+*									*
+*	5.Oct 1994 Pat Brouillette					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoSaveCrouton
+LUT_DoSaveCrouton:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+	BSR	LUT_DoHighLiteOnOff	; High light the Gadget.
+	BEQ.S	DOSC3			; Exit If Not Selected.
+*
+*	Bring up File Requester
+*
+	CALLTL	GetFileSaveName		; Bring up ASL Requester
+	TST.W	D0			; Some result?
+	BEQ.S	DOSC3			; Leave
+*
+*	Save Crouton
+*
+	MOVEA.L	D0,A0			; A0.L = FileName to Save
+	CALLTL	DisplayWaitSprite	; Bring up zzz
+	BSR	LUT_SaveLUTAsCrouton	; Do it.
+	CALLTL	DisplayNormalSprite	; Wake up
+
+DOSC3	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+
+ ENDC ;!TOASTER_3
+ IFND TOASTER_3
+*************************************************************************
+*									*
+*	DoLoadCrouton:							*
+*									*
+*	Load the Current Crouton from a file.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Gadget.					*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Current LUT is loaded from a crouton file.			*
+*									*
+*	5.Oct 1994 Pat Brouillette					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoLoadCrouton
+LUT_DoLoadCrouton:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+	BSR	LUT_DoHighLiteOnOff	; High light the Gadget.
+	BEQ.S	DOLC3			; Exit If Not Selected.
+*
+*	Bring up File Requester
+*
+	CALLTL	GetFileLoadName		; Bring up ASL Requester
+	TST.W	D0			; Some result?
+	BEQ.S	DOLC3			; Leave
+*
+*	Save Crouton
+*
+	MOVE.L	LTE_PresentLUT(A4),A2	; Save Pointer to Present Data.
+
+	MOVEA.L	D0,A0			; A0.L = FileName to Save
+	CALLTL	DisplayWaitSprite	; Bring up zzz
+	EXG	A2,A4			; A2.L = LTE_PresentLUT
+	BSR	LUT_LoadLUTFromCrouton	; Do it.
+	EXG	A2,A4			; A2.L = LTE
+	CALLTL	DisplayNormalSprite	; Wake up
+*
+*	Get The Data From Source LUT and Update The Screen.
+*
+DLCR1	MOVEA.L	A2,A0			; A0.L = Address of Source Buffer.
+	MOVEA.L	A4,A1			; Address of Destination Buffer.
+	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A4) ; Clear The Pure Data Flag.
+	MOVE.W	#LUT_Sizeof/2-1,D0	; Loop Counter.
+DLCR2	MOVE.W	(A0)+,(A1)+		; Move The Data.
+	DBF	D0,DLCR2		; Loop Until Done.
+*
+*	Make This The Current LUT.
+*
+	MOVE.L	A2,LTE_PresentLUT(A4)	; Save Pointer to Present Data.
+	BSR	LUT_DrawAfterChanging	; Redraw The Screen.
+
+	MOVEQ	#0,D0			; Clear error
+DOLC3	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+
+ ENDC ;!TOASTER_3
+
+	END

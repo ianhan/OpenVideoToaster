@@ -1,0 +1,238 @@
+********************************************************************
+* framewrite.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: framewrite.a,v 2.1 94/05/05 17:47:07 Holt Exp $
+*
+* $Log:	framewrite.a,v $
+*Revision 2.1  94/05/05  17:47:07  Holt
+**** empty log message ***
+*
+*Revision 2.0  92/05/18  21:07:44  Hartford
+**** empty log message ***
+*
+*********************************************************************
+********************************************************************
+* FrameWrite.a - StartFrameWrite, WriteNextField, EndFrameWrite
+*				 CreateFrameName
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* 11-16-89	Junior		Created this file
+* 3-6-90	Junior		Fixed bugs in error handling
+* 3-7-90	Junior		Last update
+*********************************************************************
+	include "assembler.i"
+	include "exec/types.i"
+	include	"exec/memory.i"
+	include "graphics/gfx.i"
+	include "graphics/text.i"
+	include "libraries/dos.i"
+
+	include "lib/dos_lib.i"
+	include "lib/exec_lib.i"
+
+	include "smallmacros.i"
+	include	"frameio.i"
+
+	section	,code
+*******************************************************************
+* BPTR StartFrameWrite(char *FileName, DOSBase);
+*  d0                          a0        a6
+*
+* Summary:
+*	returns filehandle (a BPTR), or NULL if unable to open file
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL StartFrameWrite
+	movem.l	d2-d4/a2-a5,-(sp)
+	move.l	a0,a3
+
+	move.l	a3,d1				; d1 = filename
+	move.l	#MODE_NEWFILE,d2
+	XSYS	Open
+	move.l	d0,d4				; save filehandler in d4
+	beq.s	.Exit
+
+* write form header
+	move.l	d4,d1		; handle
+	lea.l	IFFPart1,a0
+	move.l	a0,d2
+	move.l	#toef_Body,d3
+	XSYS	Write
+	cmp.l	d0,d3
+	beq.s	.Exit
+
+* error on write
+	move.l	d4,d1
+	XSYS	Close
+	move.l	a3,d1
+	XSYS	DeleteFile
+	moveq.l	#FALSE,d4
+
+.Exit
+	move.l	d4,d0
+	movem.l	(sp)+,d2-d4/a2-a5
+	rts
+
+*******************************************************************
+* BOOL WriteNextField(BPTR FileHandle, struct Bitmap *, char *FileName,
+*        d0                   a0               a1            a2
+*
+*					DOSBase);
+*                       a6
+* Summary:
+*	returns FALSE if write error occured (file closed and deleted)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL WriteNextField
+	movem.l	d2-d5/a2-a5,-(sp)
+	move.l	a2,a5	; filename
+
+	move.w	bm_BytesPerRow(a1),d4
+	mulu.w	bm_Rows(a1),d4	; plane size
+	lea.l	bm_Planes+(BUFFER_FIELD_DEPTH*4)(a1),a2
+	move.l	a0,a3			; filehandle
+	moveq.l	#BUFFER_FIELD_DEPTH-1,d5
+
+.NextPlane
+	move.l	a3,d1		; filehandle
+	move.l	-(a2),d2	; plane pointer
+	move.l	d4,d3		; plane size
+	XSYS	Write
+	cmp.l	d0,d3
+	bne.s	.ErrorDelete
+	dbra	d5,.NextPlane
+	moveq.l	#TRUE,d0	; success
+	bra.s	.Exit
+
+* error on write, close & delete file
+.ErrorDelete
+	move.l	a3,d1
+	XSYS	Close
+	move.l	a5,d1
+	XSYS	DeleteFile	; if fails, oh well, what can we do?
+	moveq.l	#FALSE,d0
+
+.Exit
+	movem.l	(sp)+,d2-d5/a2-a5
+	rts
+
+*******************************************************************
+* VOID EndFrameWrite(BPTR FileHandle, DOSBase);
+*                           a0          a6
+*
+* Summary:
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL EndFrameWrite
+	move.l	a0,d1
+	beq.s	.Exit
+	XSYS	Close
+.Exit
+	rts
+
+*******************************************************************
+* CreateFrameName(char *, ULONG);
+*                   a0      d0
+*
+* Summary:
+*	converts int to 3-char ascii (range:0-999)
+*
+* Upon Exit:
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL CreateFrameName
+	moveq.l	#'0',d1
+	divu	#100,d0
+	add.b	d1,d0
+	move.b	d0,(a0)+
+	move.w	#0,d0		; clear upper word
+	swap	d0			; get remainder
+	divu	#10,d0
+	add.b	d1,d0
+	move.b	d0,(a0)+
+	swap	d0			; get remainder
+	add.b	d1,d0
+	move.b	d0,(a0)
+	rts
+
+********************************************************************`
+	section	,data
+
+* THIS IS OLD STUFF IT IS ONLY USED BY THE OLD FRAMESTORE READING CODE.
+* THIS IS OLD STUFF IT IS ONLY USED BY THE OLD FRAMESTORE READING CODE.
+
+ XLABEL IFFPart1
+	dc.b	'FORM'
+	dc.l	FORM_SIZE
+
+	dc.b	'ACBM'
+	dc.b	'BMHD'
+	dc.l	bmh_SizeOf				; chunk size
+	dc.w	BUFFER_WIDTH_OLD,BUFFER_HEIGHT_OLD ; bmh_Width,bmh_Height
+	dc.w	0,0 ; bmh_X,bmh_Y
+	dc.b	(BUFFER_FIELD_DEPTH*BUFFER_NUMBER_FIELDS),0 ; bmh_NumberPlanes,bmh_Masking
+	dc.b	0,0 ; bmh_Compression,bmh_Pad1
+	dc.w	0	; bmh_TransparentColor
+	dc.b	5,11 ; bmh_XAspect,bmh_YAspect ???
+	dc.w	BUFFER_WIDTH_OLD,BUFFER_TOTAL_HEIGHT_OLD ; bmh_PageWidth,bmh_PageHeight
+
+	dc.b	'PLTP' 							; plane types
+	dc.l	BUFFER_FIELD_DEPTH*BUFFER_NUMBER_FIELDS*pt_SizeOf
+	dc.b	PLANE_TOASTER0_I,7
+	dc.b	PLANE_TOASTER0_I,6
+	dc.b	PLANE_TOASTER0_I,5
+	dc.b	PLANE_TOASTER0_I,4
+	dc.b	PLANE_TOASTER0_I,3
+	dc.b	PLANE_TOASTER0_I,2
+	dc.b	PLANE_TOASTER0_I,1
+	dc.b	PLANE_TOASTER0_I,0
+
+	dc.b	PLANE_TOASTER0_II,7
+	dc.b	PLANE_TOASTER0_II,6
+	dc.b	PLANE_TOASTER0_II,5
+	dc.b	PLANE_TOASTER0_II,4
+	dc.b	PLANE_TOASTER0_II,3
+	dc.b	PLANE_TOASTER0_II,2
+	dc.b	PLANE_TOASTER0_II,1
+	dc.b	PLANE_TOASTER0_II,0
+
+	dc.b	PLANE_TOASTER0_III,7
+	dc.b	PLANE_TOASTER0_III,6
+	dc.b	PLANE_TOASTER0_III,5
+	dc.b	PLANE_TOASTER0_III,4
+	dc.b	PLANE_TOASTER0_III,3
+	dc.b	PLANE_TOASTER0_III,2
+	dc.b	PLANE_TOASTER0_III,1
+	dc.b	PLANE_TOASTER0_III,0
+
+	dc.b	PLANE_TOASTER0_IV,7
+	dc.b	PLANE_TOASTER0_IV,6
+	dc.b	PLANE_TOASTER0_IV,5
+	dc.b	PLANE_TOASTER0_IV,4
+	dc.b	PLANE_TOASTER0_IV,3
+	dc.b	PLANE_TOASTER0_IV,2
+	dc.b	PLANE_TOASTER0_IV,1
+	dc.b	PLANE_TOASTER0_IV,0
+
+* file comment is part of the filename - it is also copied here,
+* but the field is not used by the loading software (it uses the filename)
+	dc.b	'TEXT'	; file comment
+	dc.l	MAX_COMMENT_STRING
+ XLABEL IFFComment
+	dcb.b	MAX_COMMENT_STRING,0
+
+	dc.b	'ABIT'	; ACBM equivalent of 'BODY'
+	dc.l	ABIT_SIZE
+
+	end
+* end of FrameWrite.a

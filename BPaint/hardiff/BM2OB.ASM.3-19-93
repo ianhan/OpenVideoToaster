@@ -1,0 +1,488 @@
+BM2OB	section	"IFFILBM",code
+*****************************************
+*           IFF ILBM LOADER    1.1      *
+*           DAVID HOLT 12-29-88         *
+*	 ReAdaped for BM2OB		*
+*****************************************
+	include "include.d"
+	include	"exec/types.i"
+	include	"exec/memory.i"
+	include	"graphics/gfx.i"
+	include	"intuition/intuition.i"
+	include	"iff.i"
+	include	"macros.i"
+
+	xref	_DOSBase,_stdout
+
+BP	equr	A5
+
+	STRUCTURE	BasePage,0		
+	LONG		PlaceHolder
+	LONG		Right
+	LONG		Left
+	STRUCT		Br_BitMap,bm_SIZEOF
+	LABEL		BP_SIZE		
+
+;****i* BM2OB/_main *********************************
+;
+;   NAME
+;	_main
+;
+;   SYNOPSIS
+;	
+;   FUNCTION
+;
+;   INPUTS
+;
+;   RESULT
+;
+;   EXAMPLE
+;
+;   NOTES
+;
+;   BUGS
+;
+;   SEE ALSO
+;
+;****************************************************
+_main:
+	XDEF	_main 
+	MOVEM.L	d0-d5/a0-a6,-(sp)
+	MOVE.L	8(A5),SampleFName
+	MOVE.L	12(A5),outfile
+AlocateBP:         
+	MOVE.L	execbase,a6
+	MOVE.L	#BP_SIZE,d0	
+	MOVE.L	#MEMF_PUBLIC!MEMF_CLEAR,D1
+	XSYS	AllocMem
+	TST.L	d0
+	BEQ	No_BP_Mem
+	MOVE.L	d0,BP
+OpenLibs:
+	MOVE.L	execbase,a6		* open intuition library
+	LEA	IntName,a1
+	MOVEQ.L	#0,d0
+	XSYS	OpenLibrary
+	MOVE.L	d0,IntBase
+	BEQ	ende
+*	
+	LEA	GFXName,a1		* open gfx library
+	MOVEQ	#0,d0
+	XSYS	OpenLibrary
+	MOVE.L	d0,GFXBase
+	BEQ	ende
+*
+	LEA	IFFName,a1		* open IFF library
+	MOVEQ	#0,d0
+	XSYS	OpenLibrary
+	MOVE.L	d0,IFFBase
+	BEQ	ende
+*
+	MOVE.L	IFFBase,A6		
+*	LEA	TstName,A0
+	MOVE.L	SampleFName,D0
+	BEQ	ende
+	MOVE.L	D0,A0
+	MOVE.L	#IFFL_MODE_READ,D0
+	XSYS	IFFL_OpenIFF
+	TST.L	D0
+	BEQ	ende
+	MOVE.L	d0,IFF_HD	
+*
+	MOVE.L	IFF_HD,A1
+	MOVE.L	IFFBase,A6	
+	XSYS	IFFL_GetBMHD
+	TST.L	D0
+	BEQ	15$
+	MOVE.L	D0,A0
+	MOVEQ	#0,D0
+	MOVE.W	bmh_Width(A0),D0
+*	ASL.W	#3,D0
+	MOVE.W	D0,width
+
+	MOVE.W	bmh_Height(A0),height
+	MOVEQ	#0,D0
+	MOVE.B	bmh_nPlanes(A0),D0
+	MOVE.W	D0,depth
+*
+15$
+	MOVE.L	IFF_HD,A1
+	MOVE.L	IFFBase,A6	
+	XSYS	IFFL_GetViewModes
+	TST.W	D0
+	BEQ	17$
+	MOVE.W	D0,view_modes
+17$	
+*
+	MOVE.L	IntBase,a6
+	LEA	screen_defs,a0
+	XSYS	OpenScreen
+	MOVE.L	d0,screenhd1	
+	MOVE.L	screenhd1,a0
+	LEA	sc_BitMap(a0),a1
+	MOVE.L	a1,Bitmapadd
+*
+	MOVE.L	IFFBase,A6	
+	LEA	colormap,A0
+	MOVE.L	IFF_HD,A1
+	XSYS	IFFL_GetColorTab
+	TST.L	D0
+	BEQ	NO_CMAP
+	MOVE.L	screenhd1,A0
+	LEA	sc_ViewPort(A0),A0
+	LEA	colormap,a1
+*	MOVE.L	#32,D0
+	MOVE.L	GFXBase,a6
+	XSYS	LoadRGB4
+NO_CMAP:
+	MOVE.L	IFFBase,A6	
+	MOVE.L	Bitmapadd,A0
+	MOVE.L	IFF_HD,A1	
+	XSYS	IFFL_DecodePic
+*
+	MOVE.L	IFFBase,A6	
+	MOVE.L	IFF_HD,A1
+	XSYS	IFFL_CloseIFF
+*
+	MOVE.L	#0,Right(BP)
+	MOVE.L	#80,Left(BP)
+	MOVE.L	Bitmapadd,A0
+	JSR	Find_Sides
+*
+	MOVE.L	IFFBase,A6		;use iff library
+	MOVE.L	Bitmapadd,A1		;Bitmap address
+*	LEA	outfile,A0		;File to write to
+	MOVE.L	outfile,A0
+	tst.l	outfile
+	beq	wait
+	MOVE.L	screenhd1,A2		;Get screen for CM
+	MOVE.L	sc_ViewPort+vp_ColorMap(A2),A2	;	
+	MOVE.L	cm_ColorTable(A2),a2	;Color table address
+	MOVEQ	#1,d0			;Compressed
+	MOVE.L	Left(BP),D1		;Xoffset
+	MOVE.L	#0,D2			;Yoffset
+testing:
+*	MOVE.W	width,D3		;Width
+*	ASR.W	#3,D3			;Convert to BPR!	
+*	SUB.L	Left,D3			;Sub Left offset
+	
+	XSYS	AllocBitMap
+
+	
+	move.l	Left(BP),d3
+	bsr	Write_stdout	
+	
+
+	MOVE.L	Right(BP),D3
+	bsr	Write_stdout
+
+	SUB.L	Left(BP),D3
+	ADD.L	#2,D3			;Always 1 short	
+*	MOVE.L	#$13,D3			;Testinggggg!
+	BSR	Write_stdout	
+
+	MOVE.W	height,D4		;Height
+
+	XSYS	IFFL_SaveClip		;Just Do it!
+*	
+wait:	
+*	btst	#6,ciaapra
+*	bne	wait
+*
+	MOVE.L	screenhd1,D0
+	BSR	closescr
+ende
+	MOVE.L	execbase,a6	;close IFF library
+	TST.L	IFFBase
+	BEQ	IFFNotOpen
+	MOVE.L	IFFBase,a1
+	XSYS	CloseLibrary
+IFFNotOpen:
+	MOVE.L	execbase,a6	;close gfx library
+	TST.L	GFXBase
+	BEQ	GFXNotOpen
+	MOVE.L	GFXBase,a1
+	XSYS	CloseLibrary
+GFXNotOpen:
+	TST.L	IntBase		;close intuition library
+	BEQ	IntNotOpen
+	MOVE.L	IntBase,a1
+	XSYS	CloseLibrary
+IntNotOpen:         
+	MOVE.L	execbase,a6  
+	MOVE.L	BP,a1		;free base page memory
+	MOVE.L	#BP_SIZE,d0
+	XSYS	FreeMem
+No_BP_Mem:
+	MOVEM.L	(SP)+,d0-d5/a0-a6
+	RTS
+
+*********************************************
+*
+* Sub for closing screens. 
+*
+*********************************************
+closescr:
+	TST.L	D0
+	BEQ	skpclose
+	MOVE.L	IntBase,a6
+	MOVE.L	D0,A0
+	XSYS	CloseScreen
+	MOVE.L	#0,D0
+skpclose:
+	RTS
+
+
+
+;****** BM2OB/Find_Sides *********************************
+;
+;   NAME
+;	Find_Sides - 
+;
+;   SYNOPSIS
+;	 Find_Sides( Map, BitMap)
+;	             D1	  A0	  	  
+;	
+;   FUNCTION
+;		
+;
+;   INPUTS
+;	BitMap, Pointer to BitMap structure.
+;
+;   RESULT
+;	Returned in Map Struct
+;	
+;	STRUCT	Map,0
+;	WORD	MP_Left
+;	WORD	MP_Width
+;
+;
+;   EXAMPLE
+;
+;   NOTES
+;
+;   BUGS
+;
+;   SEE ALSO
+;
+;*******************************************************
+;A0			D0 Scratch
+;A1			D1
+;A2 BitPlane		D2 Row Count
+;A3			D3 Line Count
+;A4			D4
+;A5			D5
+;A6			D6
+;A7			D7
+;*
+Find_Sides:
+	XDEF	Find_Sides
+	MOVEM.L	D0-D5/A0-A6,-(SP)
+	MOVE.W	depth,D2	;GET NUM OF PLANES
+	LEA	bm_Planes(a0),a2 ;Get address of planes array
+	bra	20$		;DBF FOR -1
+10$	
+	MOVEQ	#0,D4		;Needs BPR	
+	MOVE.W	bm_BytesPerRow(a0),D4
+	MOVEQ	#0,D3		;Needs # of rows
+	MOVE.W	bm_Rows(a0),D3	
+	MOVE.L	(A2)+,A1	;Address of start of BP
+	BSR	Find_Left	
+	AND.L	#$0000FFFF,D1
+	cmp.l	Left(BP),d1
+	bge	12$
+	move.l	d1,Left(BP)
+12$
+	BSR	Find_Right
+	AND.L	#$0000FFFF,D1	
+	cmp.l	Right(BP),d1
+	ble	15$
+	move.l	d1,Right(BP)
+15$
+20$	
+	DBF	d2,10$	
+*
+	MOVEM.L (SP)+,D0-D5/A0-A6
+	RTS	
+
+
+* NEED:
+* D4 - BYTESPERROW
+* D3 - HEIGHT
+* A1 - PLANE_PTR 
+* RETURNED:
+* D0 - 1ST NON-ZERO BYTE
+* D1 - COL#
+* Uses:
+* D0 current pixel
+* D1 Col offset
+* D3 HEIGHT 	
+* D4 WIDTH BYTES/MOD	
+* D5 BYTE WIDTH COUNT
+* A0 		
+Find_Left:	
+	MOVEM.L	d2-d5/a0-a6,-(sp)
+	MOVE.L	D4,D5		;COPY WIDTH TO COUNTER
+	BRA	14$		;DB KLUGE
+	
+8$	MOVEQ	#0,D2
+	MOVE.W	D3,D2		;ROW COUNT
+	MOVE.L	A1,A0		;GET COL # TO WORK ON.
+	BRA	11$		;DBF KLUGE
+10$	MOVE.B	(A0),D0		;GET BYTE FOR TEST
+	ADD.L	D4,A0		;ADD MOD
+	TST.B	D0		;CHECK FOR SET BITS
+	BNE	20$		;FOUND ONE!
+11$	DBF	D2,10$		;LOOP UNTIL END OF COL
+	LEA	1(A1),A1	;NEXT COL
+14$	DBF	D5,8$		;LOOP UNTIL END OF PLANE
+20$	MOVE.L	D4,D1		;COL'S TO PROCESS
+	SUB.L	D5,D1		;RETURN COL#
+	SUB.L	#1,D1		;COL'S LEFT TO PRO ONE SHORT(DBNE)
+	MOVEM.L (sp)+,d2-d5/a0-a6
+	RTS	
+
+
+Find_Right:	
+	MOVEM.L	d2-d5/a0-a6,-(sp)
+	MOVE.L	D4,D5		;COPY WIDTH TO COUNTER
+	ADD.L	D4,A1		;START AT RIGHT
+	LEA	-1(A1),A1	;TESTING!	
+	SUB.L	#1,D5		;TESTING!
+	BRA	14$		;DB KLUGE
+8$	MOVE.W	D3,D2		;ROW COUNT
+	MOVE.L	A1,A0		;GET COL # TO WORK ON.
+	BRA	11$		;DBF KLUGE
+10$	MOVE.B	(A0),D0		;GET BYTE FOR TEST
+	ADD.L	D4,A0		;ADD MOD
+	TST.B	D0		;CHECK FOR SET BITS
+	BNE	20$		;FOUND ONE!
+11$	DBF	D2,10$		;LOOP UNTIL END OF COL
+	LEA	-1(A1),A1	;NEXT COL
+14$	DBF	D5,8$		;LOOP UNTIL END OF PLANE
+20$	
+	MOVE.L	D5,D1		;RETURN COL#
+	ADD.L	#1,D1		;COL'S LEFT TO PRO ONE SHORT(DBNE)
+	MOVEM.L (sp)+,d2-d5/a0-a6
+	RTS	
+
+ ******************************************************
+Write_stdout:
+*USES BYTE IN D3
+
+	MOVEM.L	D0-D6/A0-A6,-(A7) 
+	MOVE.L	_DOSBase,a6
+	LEA	LineOut,A0
+*
+	LEA	con_table,A1
+	MOVE.B	D3,D2
+	ASR.B	#4,D3
+	AND.W	#$000F,D2
+	AND.W	#$000F,D3
+	MOVE.B	#'$',(A0)+
+	MOVE.B	0(A1,D3.W),(A0)+	
+	MOVE.B	0(A1,D2.W),(A0)+
+*
+	MOVE.B	#$0D,(A0)+
+	MOVE.B	#$0A,(A0)+
+	MOVEQ	#5,D3
+	MOVE.L	#LineOut,D2
+	MOVE.L	_stdout,D1
+	XSYS	Write
+	MOVEM.L	(a7)+,d0-d6/a0-a6
+	RTS
+******************************************************
+
+Sdatell	section "intcras",data
+Bitmapadd:	dc.l	0
+Bitmapadd2:	dc.l	0
+con_table:	dc.b	'0123456789ABCDEF'
+line_count:	dc.b	0
+
+Sdat	section "intscras",data
+screen_defs:
+x_pos:	 	dc.w	0	*-55	*-56
+y_pos:		dc.w	0	*-40
+width:		dc.w	752
+height:		dc.w	480
+depth:		dc.w	1
+detail_pen:	dc.b	1
+block_pen:	dc.b	0
+view_modes:	dc.w	$8004
+screen_type:	dc.w	$F
+font:		dc.l	0
+title:		dc.l	0
+gadgets:	dc.l	0
+bitmap:		dc.l	0
+screenhd1	dc.l	0
+screenhd2	dc.l	0
+
+
+
+*** bitmap header ***
+bmname		dc.l	'BMHD'
+bmsize		dc.l	20	* size of bm header is 20 bytes
+bmwidth		ds.w	1
+bmheight	ds.w	1
+bmxoff		ds.w	1
+bmyoff		ds.w	1
+bmplanes	ds.b	1
+bmmasking	ds.b	1
+bmcompr		ds.b	1
+bmpad		ds.b	1
+bmtranscolor	ds.w	1
+bmxas		ds.b	1
+bmyas		ds.b	1
+bmpw		ds.w	1
+bmph		ds.w	1
+
+*** color map chunk ***
+cmname		dc.l	'CMAP'
+cmsize		ds.l	1	*color map max 96 bytes 3*32
+red		ds.b	1
+green		ds.b	1
+blue		ds.b	1
+
+*** form and size ***
+form		dc.l	'FORM'
+fsize		ds.l	1
+ftype		dc.l	'ILBM'
+
+*** camg chunk ***
+caname	 	dc.l	'CAMG'
+casize	 	dc.l	4
+camode	 	dc.l	$00000000
+*Left		dc.l	80
+*Right		dc.l	0
+
+IntName:	dc.b	'intuition.library',0
+GFXName:	dc.b	'graphics.library',0
+IFFName:	dc.b	'iff.library',0
+TstName:	dc.b	'br:Blocks2',0
+outfile		dc.b	'ram:BL2.IFF',0
+LineOut:	dc.b	'                                ',0
+
+bstuff	 section	"iffdata",bss
+bodybuffsize	ds.l	1
+bodylen		ds.l	1
+bodyadd		ds.l	1
+usedbody	ds.l	1
+
+*** 4 bit color map ***
+colormap	ds.w	32
+numofcolors	ds.b	1
+*** temp memory pointer and size ***
+tempmem		ds.l	1
+tempmemsize	ds.l	1
+
+*** bases and handels ***
+SampleFName	ds.l	0
+IFF_HD		ds.l	1
+IFFBase		ds.l	1
+GFXBase		ds.l	1
+IntBase		ds.l	1
+filehd:		ds.l	1
+picmem:		ds.l	1
+bytesperrow:	ds.w	1
+rowoffset:	ds.l	1
+	end

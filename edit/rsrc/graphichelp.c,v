@@ -1,0 +1,4852 @@
+head	2.68;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.68
+date	95.12.01.12.41.21;	author pfrench;	state Exp;
+branches;
+next	2.67;
+
+2.67
+date	95.11.08.15.31.47;	author Flick;	state Exp;
+branches;
+next	2.66;
+
+2.66
+date	95.10.12.16.34.32;	author Flick;	state Exp;
+branches;
+next	2.65;
+
+2.65
+date	95.10.10.17.21.09;	author Flick;	state Exp;
+branches;
+next	2.64;
+
+2.64
+date	95.10.09.16.40.47;	author Flick;	state Exp;
+branches;
+next	2.63;
+
+2.63
+date	95.10.05.18.37.03;	author Flick;	state Exp;
+branches;
+next	2.62;
+
+2.62
+date	95.10.03.18.06.30;	author Flick;	state Exp;
+branches;
+next	2.61;
+
+2.61
+date	95.10.02.15.15.53;	author Flick;	state Exp;
+branches;
+next	2.60;
+
+2.60
+date	95.09.28.10.08.35;	author Flick;	state Exp;
+branches;
+next	2.59;
+
+2.59
+date	95.09.13.12.16.38;	author Flick;	state Exp;
+branches;
+next	2.58;
+
+2.58
+date	95.03.05.17.03.04;	author CACHELIN4000;	state Exp;
+branches;
+next	2.57;
+
+2.57
+date	95.02.27.15.36.15;	author pfrench;	state Exp;
+branches;
+next	2.56;
+
+2.56
+date	95.02.25.16.00.08;	author CACHELIN4000;	state Exp;
+branches;
+next	2.55;
+
+2.55
+date	95.02.24.12.06.18;	author pfrench;	state Exp;
+branches;
+next	2.54;
+
+2.54
+date	95.01.25.19.36.25;	author pfrench;	state Exp;
+branches;
+next	2.53;
+
+2.53
+date	95.01.13.13.00.05;	author CACHELIN4000;	state Exp;
+branches;
+next	2.52;
+
+2.52
+date	94.12.31.08.14.02;	author pfrench;	state Exp;
+branches;
+next	2.51;
+
+2.51
+date	94.12.29.16.17.05;	author CACHELIN4000;	state Exp;
+branches;
+next	2.50;
+
+2.50
+date	94.12.23.18.26.39;	author pfrench;	state Exp;
+branches;
+next	2.49;
+
+2.49
+date	94.12.23.13.37.32;	author pfrench;	state Exp;
+branches;
+next	2.48;
+
+2.48
+date	94.12.22.23.13.35;	author pfrench;	state Exp;
+branches;
+next	2.47;
+
+2.47
+date	94.12.22.23.07.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.46;
+
+2.46
+date	94.12.22.21.58.26;	author CACHELIN4000;	state Exp;
+branches;
+next	2.45;
+
+2.45
+date	94.12.16.21.01.49;	author CACHELIN4000;	state Exp;
+branches;
+next	2.44;
+
+2.44
+date	94.12.07.21.50.37;	author pfrench;	state Exp;
+branches;
+next	2.43;
+
+2.43
+date	94.12.07.15.53.20;	author pfrench;	state Exp;
+branches;
+next	2.42;
+
+2.42
+date	94.12.05.14.02.43;	author pfrench;	state Exp;
+branches;
+next	2.41;
+
+2.41
+date	94.11.09.20.10.35;	author Kell;	state Exp;
+branches;
+next	2.40;
+
+2.40
+date	94.11.09.14.34.13;	author Kell;	state Exp;
+branches;
+next	2.39;
+
+2.39
+date	94.11.07.19.47.22;	author pfrench;	state Exp;
+branches;
+next	2.38;
+
+2.38
+date	94.11.07.16.42.10;	author pfrench;	state Exp;
+branches;
+next	2.37;
+
+2.37
+date	94.11.04.00.17.55;	author CACHELIN4000;	state Exp;
+branches;
+next	2.36;
+
+2.36
+date	94.11.03.23.02.07;	author CACHELIN4000;	state Exp;
+branches;
+next	2.35;
+
+2.35
+date	94.10.21.14.54.53;	author CACHELIN4000;	state Exp;
+branches;
+next	2.34;
+
+2.34
+date	94.10.12.19.44.42;	author CACHELIN4000;	state Exp;
+branches;
+next	2.33;
+
+2.33
+date	94.09.29.15.58.48;	author CACHELIN4000;	state Exp;
+branches;
+next	2.32;
+
+2.32
+date	94.09.27.23.08.05;	author pfrench;	state Exp;
+branches;
+next	2.31;
+
+2.31
+date	94.09.27.16.27.05;	author pfrench;	state Exp;
+branches;
+next	2.30;
+
+2.30
+date	94.09.23.10.10.34;	author CACHELIN4000;	state Exp;
+branches;
+next	2.29;
+
+2.29
+date	94.09.23.10.05.37;	author CACHELIN4000;	state Exp;
+branches;
+next	2.28;
+
+2.28
+date	94.09.21.21.31.57;	author pfrench;	state Exp;
+branches;
+next	2.27;
+
+2.27
+date	94.09.13.18.37.41;	author pfrench;	state Exp;
+branches;
+next	2.26;
+
+2.26
+date	94.09.08.16.18.20;	author pfrench;	state Exp;
+branches;
+next	2.25;
+
+2.25
+date	94.09.06.22.26.19;	author CACHELIN4000;	state Exp;
+branches;
+next	2.24;
+
+2.24
+date	94.08.30.22.23.19;	author pfrench;	state Exp;
+branches;
+next	2.23;
+
+2.23
+date	94.08.30.15.35.16;	author CACHELIN4000;	state Exp;
+branches;
+next	2.22;
+
+2.22
+date	94.08.30.10.38.33;	author Kell;	state Exp;
+branches;
+next	2.21;
+
+2.21
+date	94.08.29.20.39.59;	author CACHELIN4000;	state Exp;
+branches;
+next	2.20;
+
+2.20
+date	94.08.29.18.56.11;	author pfrench;	state Exp;
+branches;
+next	2.19;
+
+2.19
+date	94.08.27.00.27.53;	author CACHELIN4000;	state Exp;
+branches;
+next	2.18;
+
+2.18
+date	94.08.26.16.23.32;	author CACHELIN4000;	state Exp;
+branches;
+next	2.17;
+
+2.17
+date	94.08.26.15.53.51;	author CACHELIN4000;	state Exp;
+branches;
+next	2.16;
+
+2.16
+date	94.08.22.13.49.59;	author pfrench;	state Exp;
+branches;
+next	2.15;
+
+2.15
+date	94.08.11.16.55.46;	author pfrench;	state Exp;
+branches;
+next	2.14;
+
+2.14
+date	94.08.01.16.42.46;	author pfrench;	state Exp;
+branches;
+next	2.13;
+
+2.13
+date	94.07.31.14.42.20;	author pfrench;	state Exp;
+branches;
+next	2.12;
+
+2.12
+date	94.07.28.18.19.46;	author pfrench;	state Exp;
+branches;
+next	2.11;
+
+2.11
+date	94.07.28.11.36.58;	author pfrench;	state Exp;
+branches;
+next	2.10;
+
+2.10
+date	94.07.27.16.48.30;	author pfrench;	state Exp;
+branches;
+next	2.9;
+
+2.9
+date	94.07.21.18.54.37;	author pfrench;	state Exp;
+branches;
+next	2.8;
+
+2.8
+date	94.07.21.12.29.30;	author pfrench;	state Exp;
+branches;
+next	2.7;
+
+2.7
+date	94.07.14.12.00.31;	author pfrench;	state Exp;
+branches;
+next	2.6;
+
+2.6
+date	94.07.08.10.10.05;	author CACHELIN4000;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	94.07.07.11.27.04;	author pfrench;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	94.06.04.02.25.32;	author Kell;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	94.04.22.14.54.49;	author CACHELIN4000;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.04.22.14.30.46;	author CACHELIN4000;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.04.20.17.34.04;	author CACHELIN4000;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.02.17.16.24.18;	author Kell;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.68
+log
+@Fixed Arexx Requester redraw bug
+@
+text
+@/********************************************************************
+* $GraphicHelp.c$
+* $Id: GraphicHelp.c,v 2.67 1995/11/08 15:31:47 Flick Exp pfrench $
+* $Log: GraphicHelp.c,v $
+*Revision 2.67  1995/11/08  15:31:47  Flick
+*Moved defines for Tools/Programs popups into Edit.h for others to safely see
+*Upped limit for Tools popup to 32 (20 user tools).
+*
+*Revision 2.66  1995/10/12  16:34:32  Flick
+*Reordered Tools & Views popups, now use VIEW_xxx defines everywhere!
+*
+*Revision 2.65  1995/10/10  17:21:09  Flick
+*Made Views,Programs,Tools popups all left-justify
+*
+*Revision 2.64  1995/10/09  16:40:47  Flick
+*Finds popup.h in new home
+*
+*Revision 2.63  1995/10/05  18:37:03  Flick
+*Auto split ---> Auto Insert
+*
+*Revision 2.62  1995/10/03  18:06:30  Flick
+*Tools popup now supports user-installable tools (from ARexx)
+*Added divider line to tools popup and at bottom of Programs & Tools if custom things present
+*
+*Revision 2.61  1995/10/02  15:15:53  Flick
+*Support for new POPUP_TOOLS gadget + dispatch to all items
+*
+*Revision 2.60  1995/09/28  10:08:35  Flick
+*Now uses RawKeyCodes.h, changed "QUIT" to "SHUTDOWN", Project-Project msg now reads "Hit 'OK' "
+*
+*Revision 2.59  1995/09/13  12:16:38  Flick
+*ENTER key appeased requesters but returned FALSE (fixed this)
+*
+*Revision 2.58  1995/03/05  17:03:04  CACHELIN4000
+*Add GrazerGetFile(), fix ASync String width
+*
+*Revision 2.57  1995/02/27  15:36:15  pfrench
+*Now using new backup button on requester.
+*
+*Revision 2.56  1995/02/25  16:00:08  CACHELIN4000
+*Make Programs popup extensible through static global array kludge for ARexx
+*
+*Revision 2.55  1995/02/24  12:06:18  pfrench
+*Not sure if change I made does anything.
+*
+*Revision 2.54  1995/01/25  19:36:25  pfrench
+*Added support for backup button in the async requester
+*
+*Revision 2.53  1995/01/13  13:00:05  CACHELIN4000
+*Set ViewMode initial value to 2, match initial Proj/Switcher mode.
+*
+*Revision 2.52  1994/12/31  08:14:02  pfrench
+*No longer shuts out dump-lightwave menu item
+*
+*Revision 2.51  1994/12/29  16:17:05  CACHELIN4000
+*Create SetView() out of guts of HandleView()
+*
+*Revision 2.50  1994/12/23  18:26:39  pfrench
+*Disabled un-loading of lightwave, as it can cause crashes
+*
+*Revision 2.49  1994/12/23  13:37:32  pfrench
+*Fixed "continue" bug on save project requester.
+*
+*Revision 2.48  1994/12/22  23:13:35  pfrench
+*Added SwitcherSwitch(TRUE) when going to a slice
+*
+*Revision 2.47  1994/12/22  23:07:55  CACHELIN4000
+*Return early out of QUIT in HandleView()
+*
+*Revision 2.46  1994/12/22  21:58:26  CACHELIN4000
+*Attempt to fix crashy quit, check in so I can updateme
+*
+*Revision 2.45  1994/12/16  21:01:49  CACHELIN4000
+*Add verification requester to HandleView() QUIT option
+*
+*Revision 2.44  1994/12/07  21:50:37  pfrench
+*Reversed left/right of buttons
+*
+*Revision 2.43  1994/12/07  15:53:20  pfrench
+*GrazerRequest code now handles finangling the paths before
+*the layout of the interface changes
+*
+*Revision 2.42  1994/12/05  14:02:43  pfrench
+*Added support for moving to project save directory
+*
+*Revision 2.41  1994/11/09  20:10:35  Kell
+*New ErrorMessageBoolRequest function.
+*
+*Revision 2.40  1994/11/09  14:34:13  Kell
+*New ErrorMessageRequest function.
+*
+*Revision 2.39  1994/11/07  19:47:22  pfrench
+*Added loadedslices command before popup
+*
+*Revision 2.38  1994/11/07  16:42:10  pfrench
+*Added getloadedslices
+*
+*Revision 2.37  1994/11/04  00:17:55  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.36  94/11/03  23:02:07  CACHELIN4000
+*Close windows on QUIT
+*
+*Revision 2.35  94/10/21  14:54:53  CACHELIN4000
+*Add nascent LostCrouton panel code, fix prototypes for PROTO_PASS compile
+*
+*Revision 2.34  94/10/12  19:44:42  CACHELIN4000
+*Remove prototypes
+*
+*Revision 2.33  94/09/29  15:58:48  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.32  94/09/27  23:08:05  pfrench
+*Whoops, GadgetID mixup
+*
+*Revision 2.31  1994/09/27  16:27:05  pfrench
+*Many changes to rendering/popup code
+*
+*Revision 2.30  1994/09/23  10:10:34  CACHELIN4000
+*change DisplayRunningTime(), add SetRunningTime, global TotalFields
+*
+*Revision 2.28  94/09/21  21:31:57  pfrench
+*Using new FlushWindowPort call
+*
+*Revision 2.27  1994/09/13  18:37:41  pfrench
+*Smarter support for variable-height fittext.
+*
+*Revision 2.26  1994/09/08  16:18:20  pfrench
+*Now redraws window at correct times
+*
+*Revision 2.25  1994/09/06  22:26:19  CACHELIN4000
+*enable ES_QUIT message
+*
+*Revision 2.24  94/08/30  22:23:19  pfrench
+*BeginGrazerRequest clears VALIDFILENAME bit before
+*continueing.
+*
+*Revision 2.23  1994/08/30  15:35:16  CACHELIN4000
+*Make displays match artwork (for now)
+*
+*Revision 2.22  94/08/30  10:38:33  Kell
+*Changed SendSwitcherReply calls to work with new ESParams structures.
+*
+*Revision 2.21  1994/08/29  20:39:59  CACHELIN4000
+*DisplayMessage, Time tweaks.
+*
+*Revision 2.20  94/08/29  18:56:11  pfrench
+*borders on filename/time matches artwork (for now)
+*
+*Revision 2.19  1994/08/27  00:27:53  CACHELIN4000
+*Change DisplayRunningTime() to take fields, add DisplayMessage()
+*
+*Revision 2.18  94/08/26  16:23:32  CACHELIN4000
+*duoooh!
+*
+*Revision 2.17  94/08/26  15:53:51  CACHELIN4000
+*Cosmetic help for DisplayCroutonName(), created cousin f'n DisplayRunningTime()
+*
+*Revision 2.16  94/08/22  13:49:59  pfrench
+*Fixed enforcer hit in filename gadget.
+*
+*Revision 2.15  1994/08/11  16:55:46  pfrench
+*Added string gadget in async requester for specifying
+*a file name when saving.
+*
+*Revision 2.14  1994/08/01  16:42:46  pfrench
+*Added code that flushes MOUSEMOVES out of the window's
+*IDCMP port. As somehow they were sneaking in to the
+*eventloop() and causing the editor to crash.
+*
+*Revision 2.13  1994/07/31  14:42:20  pfrench
+*Slightly smarter grazerreq code.
+*
+*Revision 2.12  1994/07/28  18:19:46  pfrench
+*Added filename display in upper corner of screen.
+*
+*Revision 2.11  1994/07/28  11:36:58  pfrench
+*Found correct gadget IDs for async continue/cancel buttons
+*
+*Revision 2.10  1994/07/27  16:48:30  pfrench
+*Added response code to "New Project" button in bottom project.
+*
+*Revision 2.9  1994/07/21  18:54:37  pfrench
+*Yet even more stuff for proj/proj edit.  Filtering of file types.
+*
+*Revision 2.8  1994/07/21  12:29:30  pfrench
+*Added async file requester stuff
+*
+*Revision 2.7  1994/07/14  12:00:31  pfrench
+*Initial code for requesting file types.
+*
+*Revision 2.6  94/07/08  10:10:05  CACHELIN4000
+*replace SendSwitcher() calls with SendSwitcherReply()
+*
+*Revision 2.5  94/07/07  11:27:04  pfrench
+*Added initial support for project/project editing
+*
+*Revision 2.4  94/06/04  02:25:32  Kell
+*Changed order of events when going in/out of switcher mode, to reduce
+*annoying interface redraws.
+*
+*Revision 2.3  94/04/22  14:54:49  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.2  94/04/22  14:30:46  CACHELIN4000
+*Send ES_GUImode messages with HandleView()
+*
+*Revision 2.1  94/04/20  17:34:04  CACHELIN4000
+**** empty log message ***
+*
+*Revision 2.0  94/02/17  16:24:18  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  15:57:24  Kell
+*FirstCheckIn
+*
+*Revision 2.0  94/02/17  14:44:37  Kell
+*FirstCheckIn
+*
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* 11-4-92	Steve H		Created
+* 10-12-93	Steve H		Last Update
+*********************************************************************/
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <intuition/sghooks.h>
+#include <graphics/gfxmacros.h>
+#include <graphics/gfxbase.h>
+#include <graphics/text.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <crouton_all.h>
+#include <popup.h>
+
+#include <proto/exec.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+
+#include <request.h>
+#include <gadgets.h>
+
+#include <edit.h>
+#include <editwindow.h>
+#include <editswit.h>
+#include <panel.h>
+#include <grazer.h>
+#include <filelist.h>
+#include <grazerrequest.h>
+#include <RawKeyCodes.h>
+
+LONG EndFileRequest( struct GrazerRequest *, LONG);
+#ifndef PROTO_PASS
+#include <proto.h>
+#else
+struct Gadget *FindGadget(struct Gadget *G,WORD);
+LONG EndLostCroutonRequest( struct GrazerRequest *, LONG);
+LONG EndProjProjRequest( struct GrazerRequest *, LONG);
+struct EditWindow *AsyncReqCancelHandler(struct EditWindow *,struct IntuiMessage *);
+struct EditWindow *AsyncReqContinueHandler(struct EditWindow *,struct IntuiMessage *);
+struct EditWindow *AsyncReqBackupHandler(struct EditWindow *Edit,struct IntuiMessage *im );
+struct EditWindow *AsyncReqHandlePath(struct EditWindow *,struct IntuiMessage *);
+BOOL AsyncReqResize(struct EditWindow *, UWORD );
+VOID AsyncReqClose(struct EditWindow *);
+VOID AsyncReqFree(struct EditWindow *);
+BOOL AsyncReqOpen(struct EditWindow *);
+#endif
+
+/*********************************************/
+//#define SERDEBUG	1
+#include <serialdebug.h>
+/*****8***************************************/
+
+#define MAX_FILE 256
+#define HELP_LINES 12
+#define MAX_WIDTH 640
+#define MIN_WIDTH 320
+
+static char *ProjProjReqText[] = {
+	"Project-to-Project Editing",
+	"Locate the source project below using the file requester.",
+	"Select \"OK\" to display its contents.",
+	"To edit from project to project, drag croutons to the upper project.",
+};
+#define PROJ_PROJ_REQTEXT_NUMLINES	4
+
+static char ProjProjReqFileTypes[] = {
+	CR_PROJECT,
+};
+#define PROJ_PROJ_NUM_FILETYPES	1
+
+struct GrazerRequest ProjProjGrazRequest = {
+
+	ProjProjReqText,
+	PROJ_PROJ_REQTEXT_NUMLINES,
+
+	ProjProjReqFileTypes,
+	PROJ_PROJ_NUM_FILETYPES,
+
+	EW_PROJECT,
+	TOP_SMALL,
+	EW_PROJECT,
+
+	NULL,
+
+	EndProjProjRequest,
+};
+
+static char *LostCroutonReqText[] = {
+	"Locate Missing Crouton",
+	"Locate the source project below using the file requester.",
+	"Select \"OK\" to display its contents.",
+	"To edit from project to project, drag croutons to the upper project.",
+};
+#define LOSTCROUTON_REQTEXT_NUMLINES	4
+
+static char LostCroutonReqFileTypes[] = {0};
+#define LOSTCROUTON_NUM_FILETYPES		0
+struct GrazerRequest LostCroutonGrazRequest = {
+	LostCroutonReqText,
+	LOSTCROUTON_REQTEXT_NUMLINES,
+	NULL, //LostCroutonReqFileTypes,
+	LOSTCROUTON_NUM_FILETYPES,
+	0,0,0,
+	NULL,
+	EndLostCroutonRequest,
+};
+
+#define FILE_REQ_TIT_LEN 64
+static char FileReqLabel[FILE_REQ_TIT_LEN+1] = "Select A File";
+static char *FileReqText[] = { FileReqLabel };
+#define FILE_REQTEXT_NUMLINES 1
+
+static char FileReqFileTypes[] = {0};
+#define FILE_NUM_FILETYPES		0
+int FileReqLen=0;
+struct GrazerRequest FileGrazRequest = {
+
+	FileReqText,
+	FILE_REQTEXT_NUMLINES,
+
+	NULL, //FileReqFileTypes,
+	FILE_NUM_FILETYPES,
+
+	0,
+	0,
+	0,
+
+	GRAZREQ_ALLOWCREATE|GRAZREQ_RESTOREVIEW,
+
+	EndFileRequest,
+};
+
+
+extern struct SmartString *TopPath,*BottomPath;
+extern struct Window *access_win;
+extern struct TextFont *EditFont,*DarkFont,*TCFont;
+extern struct Gadget Gadget1;
+extern struct EditWindow *EditTop,*EditBottom;
+extern struct FastGadget **PtrProject,**XtrProject;
+extern struct MsgPort *EditPort,*SwitPort;
+extern struct AccessWindow *global_aw;
+
+extern struct ESParams1 ESparams1;
+extern struct ESParams2 ESparams2;
+
+static struct Window *NoticeWind = NULL,*RetWindow = NULL;
+static struct Gadget *NCancel = NULL;
+static WORD MaxLen,GlobalSp;
+
+struct GrazerRequest	*global_gr;
+struct st_PopupRender PopUp;
+struct TextExtent LastExtent;
+WORD ViewMode = VIEW_PROJ_SWIT,PrevViewMode=VIEW_PROJ_FILES;
+VOID __asm DumpRP(register __a0 struct Layer *);
+
+//*******************************************************************
+VOID __asm SafeColorText(
+	register __a1 struct RastPort *RP,
+	register __a0 STRPTR String,
+	register __d0 WORD Length)
+{
+	WORD Save;
+
+	Save = RP->Mask;
+	SafeSetWriteMask(RP,FONT_MASK);
+	SetDrMd(RP,JAM2);
+	SetAPen(RP,3);
+	Text(RP,String,Length);
+	SafeSetWriteMask(RP,Save);
+}
+
+//*********************************************************************
+UWORD __asm SafeFitText(
+	register __a1 struct RastPort *RP,
+	register __a0 STRPTR String,
+	register __d0 WORD Length,
+	register __d1 WORD WidthAvail,
+	register __d2 BOOL RenderIt)
+{
+	UWORD Chars;
+
+// if prop font, this was a bug in V37
+	if (((struct Library *)GfxBase)->lib_Version < 39) WidthAvail++;
+	if (Chars = TextFit(RP,String,Length,&LastExtent,NULL,1,WidthAvail,
+		RP->Font->tf_YSize)) {
+		if (RenderIt) SafeColorText(RP,String,Chars);
+	}
+	return(Chars);
+}
+
+/****** GraphicHelp/HelpAllocRastPort ***********************************
+*
+*   NAME
+*	HelpAllocRastPort
+*
+*   SYNOPSIS
+*	struct RastPort *HelpAllocRastPort(UWORD Width,UWORD Height,UWORD Depth,
+*		ULONG PlaneMemoryType)
+*
+*   FUNCTION
+*	Allocates rastport, bitmap structure and planes
+*
+*********************************************************************
+*/
+struct RastPort *HelpAllocRastPort(UWORD Width,UWORD Height,UWORD Depth,
+	ULONG PlaneMemoryType)
+{
+	struct RastPort *RP;
+
+	if (RP = (struct RastPort *)SafeAllocMem(sizeof(struct RastPort),
+		MEMF_CLEAR)) {
+		InitRastPort(RP);
+		if (!(RP->BitMap = HelpAllocBitMap(Width,Height,Depth,PlaneMemoryType))) {
+			HelpFreeRastPort(RP);
+			RP = NULL;
+		}
+	}
+	return(RP);
+}
+
+/****** GraphicHelp/HelpFreeRastPort ************************************
+*
+*   NAME
+*	HelpFreeRastPort
+*
+*   SYNOPSIS
+*	VOID HelpFreeRastPort(struct RastPort *RP)
+*
+*   FUNCTION
+*	Frees rastport, bitmap structure and planes
+*
+*********************************************************************
+*/
+VOID HelpFreeRastPort(struct RastPort *RP)
+{
+	if (RP) {
+		if (RP->BitMap) HelpFreeBitMap(RP->BitMap);
+		FreeMem(RP,sizeof(struct RastPort));
+	}
+}
+
+/****** GraphicHelp/HelpAllocBitMap *************************************
+*
+*   NAME
+*	HelpAllocBitMap
+*
+*   SYNOPSIS
+*	struct BitMap *HelpAllocBitMap(UWORD Width,UWORD Height,UWORD Depth,
+*		ULONG PlaneMemoryType)
+*
+*   FUNCTION
+*	Allocates bitmap structure and planes
+*
+*********************************************************************
+*/
+struct BitMap *HelpAllocBitMap(UWORD Width,UWORD Height,UWORD Depth,
+	ULONG PlaneMemoryType)
+{
+	struct BitMap *BM;
+
+	if (BM = (struct BitMap *)SafeAllocMem(sizeof(struct BitMap),
+		MEMF_CLEAR)) {
+		BM->BytesPerRow = (Width+7)>>3;
+		BM->Rows = Height;
+		BM->Depth = Depth;
+		if (!HelpAllocBitMapPlanes(BM,PlaneMemoryType)) {
+			HelpFreeBitMap(BM);
+			BM = NULL;
+		}
+	}
+	return(BM);
+}
+
+/****** GraphicHelp/HelpFreeBitMap **************************************
+*
+*   NAME
+*	HelpFreeBitMap
+*
+*   SYNOPSIS
+*	VOID HelpFreeBitMap(struct BitMap *BM)
+*
+*   FUNCTION
+*	Frees any planes and the BitMap structure
+*
+*********************************************************************
+*/
+VOID HelpFreeBitMap(struct BitMap *BM)
+{
+	if (BM) {
+		HelpFreeBitMapPlanes(BM);
+		FreeMem(BM,sizeof(struct BitMap));
+	}
+}
+
+/****** GraphicHelp/HelpAllocBitMapPlanes *******************************
+*
+*   NAME
+*	HelpAllocBitMapPlanes
+*
+*   SYNOPSIS
+*	BOOL HelpAllocBitMapPlanes(struct BitMap *BitMap,ULONG MemReq)
+*
+*   FUNCTION
+*	Just allocates bit map planes - assumes rest of BitMap
+*	struct is correct, Plane array better be cleared!
+*
+*********************************************************************
+*/
+BOOL HelpAllocBitMapPlanes(struct BitMap *BitMap,ULONG MemReq)
+{
+	UWORD a;
+	PLANEPTR *Plane;
+	ULONG PlaneSize;
+	BOOL Success = FALSE;
+
+	if (BitMap && BitMap->Depth && (PlaneSize=BitMap->BytesPerRow*
+		BitMap->Rows)) {
+		Plane = &BitMap->Planes[0];
+		for (a=0; a<BitMap->Depth; a++) {
+			if (!(*Plane = SafeAllocMem(PlaneSize,MemReq))) {
+				HelpFreeBitMapPlanes(BitMap);
+				return(FALSE);
+			}
+			Plane++;
+		}
+		Success = TRUE;
+	}
+	return(Success);
+}
+
+/****** GraphicHelp/HelpFreeBitMapPlanes ********************************
+*
+*   NAME
+*	HelpFreeBitMapPlanes
+*
+*   SYNOPSIS
+*	VOID HelpFreeBitMapPlanes(struct BitMap *BitMap)
+*
+*   FUNCTION
+*	Just frees planes
+*
+*********************************************************************
+*/
+VOID HelpFreeBitMapPlanes(struct BitMap *BitMap)
+{
+	UWORD a;
+	PLANEPTR *Plane;
+	ULONG PlaneSize;
+
+	if (BitMap && BitMap->Depth && (PlaneSize=BitMap->BytesPerRow*
+		BitMap->Rows)) {
+		Plane = &BitMap->Planes[0];
+		for (a=0; a<BitMap->Depth; a++) {
+			if (*Plane) {
+				FreeMem(*Plane,PlaneSize);
+				*Plane = NULL;
+			}
+			Plane++;
+		}
+	}
+}
+
+//*******************************************************************
+//*******************************************************************
+VOID __asm DrawBorderBoxRP(
+	register __d0 UWORD MinX,
+	register __d1 UWORD MinY,
+	register __d2 UWORD Width,
+	register __d3 UWORD Height,
+	register __a0 struct RastPort *RP,
+	register __a1 BYTE *Palette,
+	register __d4 BOOL BlackBorderFlag);
+
+BYTE Box1[] = { 2,3,1 }, // BOX_STANDARD
+	 Box2[] = { 2,4,3,1 }, // BOX_STD_BORDER (requesters,croutons,gadgets)
+	 Box3[] = { 1,5,2 }, // BOX_REV (grid border)
+	 Box4[] = { 2,4,1,3 }, // BOX_REV_BORDER (string gadgets)
+	 Box5[] = { 1,4,2,5 }; // BOX_CP_BORDER (control panels)
+BYTE *BoxTypes[] = { Box1,Box2,Box3,Box4,Box5 };
+WORD BorderOn[] = { FALSE,TRUE,FALSE,TRUE,TRUE };
+
+static UBYTE Corner[12];
+static BOOL CornerSaved = FALSE;
+//*******************************************************************
+VOID __regargs SaveBorder(
+	struct RastPort *RP,
+	WORD MinX,
+	WORD MinY,
+	WORD MaxX,
+	WORD MaxY)
+{
+	UBYTE *A;
+
+	A = Corner;
+	*A++ = ReadPixel(RP,MinX,MinY+1); // clockwise order
+	*A++ = ReadPixel(RP,MinX,MinY);
+	*A++ = ReadPixel(RP,MinX+1,MinY);
+
+	*A++ = ReadPixel(RP,MaxX-1,MinY);
+	*A++ = ReadPixel(RP,MaxX,MinY);
+	*A++ = ReadPixel(RP,MaxX,MinY+1);
+
+	*A++ = ReadPixel(RP,MaxX,MaxY-1);
+	*A++ = ReadPixel(RP,MaxX,MaxY);
+	*A++ = ReadPixel(RP,MaxX-1,MaxY);
+
+	*A++ = ReadPixel(RP,MinX+1,MaxY);
+	*A++ = ReadPixel(RP,MinX,MaxY);
+	*A = ReadPixel(RP,MinX,MaxY-1);
+	CornerSaved = TRUE;
+}
+
+//*******************************************************************
+VOID __regargs NewBorderBox(
+	struct RastPort *RP,
+	WORD MinX,
+	WORD MinY,
+	WORD MaxX,
+	WORD MaxY,
+	WORD Type)
+{
+	UBYTE *A;
+
+	DrawBorderBoxRP(MinX,MinY,MaxX-MinX+1,MaxY-MinY+1,RP,
+		BoxTypes[Type],BorderOn[Type]);
+	if (CornerSaved) {
+		SetDrMd(RP,JAM2);
+		A = Corner;
+		SetAPen(RP,*A++);
+		WritePixel(RP,MinX,MinY+1); // clockwise order
+		SetAPen(RP,*A++);
+		WritePixel(RP,MinX,MinY);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MinX+1,MinY);
+
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX-1,MinY);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX,MinY);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX,MinY+1);
+
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX,MaxY-1);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX,MaxY);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MaxX-1,MaxY);
+
+		SetAPen(RP,*A++);
+		WritePixel(RP,MinX+1,MaxY);
+		SetAPen(RP,*A++);
+		WritePixel(RP,MinX,MaxY);
+		SetAPen(RP,*A);
+		WritePixel(RP,MinX,MaxY-1);
+		CornerSaved = FALSE;
+	}
+}
+
+//*******************************************************************
+#define REQ_MESS_H 26
+#define REQ_GADG_H 20
+
+#define TEXT_BASE 9
+#define CONT_MINY (10+8+1)
+#define LINE_HEIGHT (TEXT_HEIGHT+4)
+#define OK_HEIGHT 18
+#define MAX_REQ_LINES 14
+
+#define STRING_ID 1002
+
+struct StringExtend StrExt = {
+	NULL,
+	0,2,
+	0,2,
+	NULL,
+	NULL,
+	NULL,
+	0,0,0,0
+};
+
+char strbuf[MAX_FILE],strubuf[MAX_FILE];
+struct StringInfo StrInf = {
+	strbuf,strubuf,0,MAX_FILE,0,0,0,0,0,0,&StrExt,0,NULL };
+
+struct Gadget StringGadg = {
+	NULL,
+	0,0,
+	76,TEXT_HEIGHT,
+	GFLG_GADGHCOMP,
+	GACT_RELVERIFY|GACT_STRINGEXTEND|GACT_STRINGCENTER,
+	GTYP_STRGADGET,
+	NULL,	/* gadget border or image to be rendered */
+	NULL,	/* alternate imagery for selection */
+	NULL,	/* first IntuiText structure */
+	NULL,	/* gadget mutual-exclude long word */
+	&StrInf,
+	STRING_ID,
+	NULL
+};
+
+extern struct TagItem nw_ti[2];
+struct ExtNewWindow ReqNW = {
+	0,0,	/* window XY origin relative to TopLeft of screen */
+	656,400,	/* window width and height */
+	1,0,	/* detail and block pens */
+	IDCMP_GADGETUP|IDCMP_RAWKEY,	/* IDCMP flags */
+	SMART_REFRESH|BORDERLESS|ACTIVATE|RMBTRAP|NOCAREREFRESH|WFLG_NW_EXTENDED,	/* other window flags */
+	NULL,	/* first gadget in gadget list */
+	NULL,	/* custom CHECKMARK imagery */
+	NULL,	/* window title */
+	NULL,	/* custom screen pointer */
+	NULL,	/* custom bitmap */
+	5,5,	/* minimum width and height */
+	656,400,	/* maximum width and height */
+	CUSTOMSCREEN,	/* destination screen type */
+	&nw_ti[0]
+};
+
+static struct Screen *Screen;
+static WORD MaxLen;
+#define SLACK 12
+#define MIN_STR 160
+
+//*******************************************************************
+BOOL __regargs SimpleRequest(
+	struct Window *DestWindow,
+	char *Message[],
+	UWORD Lines,
+	UWORD Flags,
+	APTR String)	// ptr to LONG or (char *)
+{
+	struct Window *Window;
+	BOOL Going = TRUE,Result = FALSE;
+	struct IntuiMessage *IntuiMsg;
+	struct RastPort *RP;
+	WORD A,B,C,Sp;
+	UWORD Len[MAX_REQ_LINES],BitW[MAX_REQ_LINES],StrWid,ID,StrBitW;
+	struct Gadget *OK=NULL,*Cancel=NULL,*First,*Gadget;
+	struct Screen *Screen;
+	LONG L;
+
+	Screen = DestWindow->WScreen;
+	ReqNW.Screen = Screen;
+
+	// find widest lines, make window that wide
+	C = MIN_WIDTH;
+	for (A = 0; A < Lines; A++) {
+// assume our RPort is same
+		Len[A] = SafeFitText(DestWindow->RPort,Message[A],
+			strlen(Message[A]),MAX_WIDTH-SLACK,FALSE);
+		BitW[A] = LastExtent.te_Width;
+		if (LastExtent.te_Width > C) C = LastExtent.te_Width;
+	}
+	ReqNW.Width = C + SLACK;
+	if (ReqNW.Width >  MAX_WIDTH)
+		ReqNW.Width = MAX_WIDTH;
+
+	if (Lines > 2) Sp = 4;
+	else Sp = 20;
+	ReqNW.Height = 2+Sp+(Lines * LINE_HEIGHT)+Sp+OK_HEIGHT+4+2;
+	if (Flags & (REQ_LONG|REQ_STRING)) {
+		ReqNW.Height += TEXT_HEIGHT + 22;
+	}
+	if (ReqNW.Height > Screen->Height)
+		ReqNW.Height = Screen->Height;
+
+	if (Flags & REQ_H_CENTER) {
+		ReqNW.TopEdge = (Screen->Height - ReqNW.Height)/2;
+	} else {
+		ReqNW.TopEdge = 4; // BAR_0_MAXY+3;
+	}
+	ReqNW.LeftEdge = DestWindow->LeftEdge +
+		((DestWindow->Width - ReqNW.Width)>>1);
+
+// (string),(OK/Cancel)|(Continue)
+	First = NULL;
+	if (Flags & (REQ_LONG|REQ_STRING)) {
+		First = &StringGadg;
+		StringGadg.TopEdge = 2+Sp+(Lines*LINE_HEIGHT)+Sp;
+		StrExt.Font = EditFont;
+		strbuf[0] = 0;
+		strubuf[0] = 0;
+		StrInf.BufferPos = 0;
+		StrInf.DispPos = 0;
+		StrWid = 6;
+		StrBitW = 20*8;
+		if (Flags & REQ_LONG) {
+			L = *(LONG *)String;
+			strbuf[0] = ' ';
+			stcl_d(&strbuf[1],L);
+		} else {
+			if (String) {
+				strcpy(strbuf,String);
+				StrWid = SafeFitText(DestWindow->RPort,String,strlen(String),
+					MAX_WIDTH-SLACK,FALSE);
+				StrBitW = LastExtent.te_Width;
+				if (StrBitW < 20*8) StrBitW = 20*8;
+				if (StrBitW > C) StrBitW = C;
+			}
+		}
+		StringGadg.Width = StrBitW;
+		StringGadg.LeftEdge = ((ReqNW.Width - StringGadg.Width)>>1);
+	}
+
+	if (Flags & REQ_OK_CANCEL) {
+		Gadget = FindGadget(&Gadget1,ID_REQ_CANCEL);
+		if (!(Cancel = AllocOneGadget(Gadget))) goto ErrExit;
+		Cancel->TopEdge = (ReqNW.Height-Cancel->Height-6);
+		Cancel->LeftEdge = (ReqNW.Width-Cancel->Width-6);
+		Cancel->NextGadget = NULL;
+
+		Gadget = FindGadget(&Gadget1,ID_REQ_OK);
+		if (!(OK = AllocOneGadget(Gadget))) goto ErrExit;
+		if (First) First->NextGadget = OK;
+		else First = OK;
+		OK->NextGadget = Cancel;
+		OK->LeftEdge = Cancel->LeftEdge-4-OK->Width;
+		OK->TopEdge = Cancel->TopEdge;
+
+	} else if (Flags & REQ_RETURN_OPEN) {
+		if (!(Flags & REQ_NO_CANCEL)) {
+		Gadget = FindGadget(&Gadget1,ID_REQ_CANCEL);
+		if (!(Cancel = AllocOneGadget(Gadget))) goto ErrExit;
+		Cancel->TopEdge = (ReqNW.Height-Cancel->Height-6);
+		Cancel->LeftEdge = (ReqNW.Width-Cancel->Width-6);
+		Cancel->NextGadget = NULL;
+		if (First) First->NextGadget = Cancel;
+		else First = Cancel;
+		}
+	} else {
+		Gadget = FindGadget(&Gadget1,ID_REQ_CONTINUE);
+		if (!(OK = AllocOneGadget(Gadget))) goto ErrExit;
+		if (First) First->NextGadget = OK;
+		else First = OK;
+		OK->LeftEdge = (ReqNW.Width-OK->Width-6);
+		OK->TopEdge = (ReqNW.Height-OK->Height-6);
+		OK->NextGadget = NULL;
+
+		if (Flags & REQ_CONT_CANCEL) {
+			Gadget = FindGadget(&Gadget1,ID_REQ_CANCEL);
+			if (!(Cancel = AllocOneGadget(Gadget))) goto ErrExit;
+			Cancel->TopEdge = OK->TopEdge;
+			Cancel->LeftEdge = (ReqNW.Width-Cancel->Width-6);
+			OK->NextGadget = Cancel;
+			Cancel->NextGadget = NULL;
+			OK->LeftEdge = Cancel->LeftEdge-4-OK->Width;
+		}
+	}
+	ReqNW.FirstGadget = NULL; // mask prob
+
+	SaveBorder(&Screen->RastPort,ReqNW.LeftEdge,ReqNW.TopEdge,
+		ReqNW.LeftEdge+ReqNW.Width-1,ReqNW.TopEdge+ReqNW.Height-1);
+	if (Window = OpenWindow((struct NewWindow *)&ReqNW)) {
+		RP = Window->RPort;
+		SetDrMd(RP,JAM2);
+		SetFont(RP,EditFont);
+		if (First) AddGList(Window,First,0,-1,NULL);
+		NewBorderBox(RP,0,0,Window->Width-1,Window->Height-1,BOX_STD_BORDER);
+
+		if (Flags & (REQ_LONG|REQ_STRING))
+		NewBorderBox(RP,StringGadg.LeftEdge-4,StringGadg.TopEdge-6,
+			StringGadg.LeftEdge+StringGadg.Width+4-1,
+			StringGadg.TopEdge+StringGadg.Height+5-1,
+			BOX_REV_BORDER);
+		if (First) RefreshGList(First,Window,NULL,-1);
+
+	// DumpRP(RP->Layer);
+
+		B = 2+Sp+2+TEXT_BASE;
+		for (A = 0; A < Lines; A++) {
+			if (Flags & REQ_CENTER)
+				Move(RP,(ReqNW.Width - BitW[A])>>1,B);
+			else {
+				Move(RP,4,B);
+			}
+			SafeColorText(RP,Message[A],Len[A]);
+			B += LINE_HEIGHT;
+		}
+
+		if (Flags & (REQ_LONG|REQ_STRING))
+			ActivateGadget(&StringGadg,Window,NULL);
+
+		if (Flags & REQ_RETURN_OPEN) {
+			NCancel = Cancel;
+			RetWindow = Window;
+			GlobalSp = Sp;
+			return(TRUE);
+		}
+
+		goto GetEm;
+		while (Going) {
+				WaitPort(Window->UserPort);
+			GetEm:
+			while (IntuiMsg = (struct IntuiMessage *)GetMsg(Window->UserPort)) {
+				switch(IntuiMsg->Class) {
+				case IDCMP_GADGETUP:
+					ID = ((struct Gadget *)IntuiMsg->IAddress)->GadgetID;
+					if ((ID == ID_REQ_OK) ||
+						(ID == STRING_ID)) Result = TRUE;
+					if ((ID == ID_REQ_CONTINUE) && (Flags & REQ_CONT_CANCEL))
+						Result = TRUE;
+					Going = FALSE;
+					break;
+
+				case IDCMP_RAWKEY:
+					A = IntuiMsg->Code;
+					if ( (A == RAWKEY_PAD_ENTER)
+						||(A == RAWKEY_RETURN)
+						||(A == RAWKEY_ESC)
+						||(A == RAWKEY_HELP))
+					{
+						if (Flags & REQ_OK_CANCEL)
+						{
+							if ((A == RAWKEY_RETURN) || (A == RAWKEY_PAD_ENTER))
+								Result = TRUE;
+						}
+						Going = FALSE;
+					}
+				}
+				ReplyMsg((struct Message *)IntuiMsg);
+				}
+		}
+		CloseWindow(Window);
+		WaitBlit();
+	}
+
+	if (Result) {
+		if (Flags & REQ_LONG) {
+			if (strbuf[0] == ' ') strbuf[0] = '0';
+			stcd_l(strbuf,String);
+		} else if (Flags & REQ_STRING)
+			strcpy(String,strbuf);
+	}
+ErrExit:
+	if (OK) {
+		OK->NextGadget = NULL;
+		FreeGadgets(OK);
+	}
+	if (Cancel) {
+		Cancel->NextGadget = NULL;
+		FreeGadgets(Cancel);
+	}
+	return(Result);
+}
+
+//*******************************************************************v
+void	ErrorMessageRequest(struct Window *DestWindow, char *Text[])
+{
+	UWORD	lines=0;
+	char	**string;	// null terminated table of string pointers
+
+	string = Text;
+	while(*string++) lines++;
+
+	SimpleRequest(DestWindow,Text,lines,REQ_H_CENTER,NULL);
+}
+
+//*******************************************************************v
+// Returns TRUE if OK is clicked, FALSE if Cancel was clicked.
+BOOL	ErrorMessageBoolRequest(struct Window *DestWindow, char *Text[])
+{
+	UWORD	lines=0;
+	char	**string;	// null terminated table of string pointers
+
+	string = Text;
+	while(*string++) lines++;
+
+	return((BOOL)SimpleRequest(DestWindow,Text,lines,REQ_OK_CANCEL | REQ_H_CENTER,NULL));
+}
+
+//*******************************************************************
+BOOL __asm ContinueRequest(
+	register __a0 struct Window *DestWindow,
+	register __a1 char *Message)
+{
+	char *MPtr[1];
+
+	MPtr[0] = Message;
+	return(SimpleRequest(DestWindow,MPtr,1,REQ_CENTER | REQ_H_CENTER,NULL));
+}
+
+//*******************************************************************
+BOOL __asm BoolRequest(
+	register __a0 struct Window *DestWindow,
+	register __a1 char *Message)
+{
+	char *MPtr[1];
+
+	MPtr[0] = Message;
+	return(SimpleRequest(DestWindow,MPtr,1,REQ_OK_CANCEL | REQ_CENTER | REQ_H_CENTER,NULL));
+}
+
+//*******************************************************************
+//*******************************************************************
+VOID CloseNoticeWindow(VOID)
+{
+	if (NoticeWind) {
+		CloseWindow(NoticeWind);
+		WaitBlit();
+		NoticeWind = NULL;
+	}
+	if (NCancel) {
+		NCancel->NextGadget = NULL;
+		FreeGadgets(NCancel);
+		NCancel = NULL;
+	}
+}
+
+//*******************************************************************
+BOOL CheckNoticeCancel(VOID)
+{
+	BOOL Cancelled = FALSE;
+	struct IntuiMessage *IntuiMsg;
+	UWORD ID;
+	struct Window *Window = NoticeWind;
+
+	if (Window) {
+	while (IntuiMsg = (struct IntuiMessage *)GetMsg(Window->UserPort)) {
+		if (IntuiMsg->Class == IDCMP_GADGETUP) {
+			ID = ((struct Gadget *)IntuiMsg->IAddress)->GadgetID;
+			if (ID == ID_REQ_CANCEL)
+				Cancelled = TRUE;
+		}
+		ReplyMsg((struct Message *)IntuiMsg);
+	}
+	}
+	return(Cancelled);
+}
+
+//*******************************************************************
+BOOL __regargs UpdateNotice(
+	char Message[],
+	UWORD LineNumber)
+{
+	UWORD Len;
+	WORD B;
+	struct Window *Window = NoticeWind;
+
+	if (Window && Message) {
+		B = 2+GlobalSp+2+TEXT_BASE+(LINE_HEIGHT*LineNumber);
+		Len = SafeFitText(Window->RPort,Message,strlen(Message),
+			Window->Width-SLACK,FALSE);
+		SetDrMd(Window->RPort,JAM2);
+		SetAPen(Window->RPort,SOLID_PEN);
+		RectFill(Window->RPort,3,B-TEXT_BASE,Window->Width-6,B+2);
+		Move(Window->RPort,(Window->Width - LastExtent.te_Width)>>1,B);
+		SafeColorText(Window->RPort,Message,Len);
+	}
+	return(TRUE);
+}
+
+//*******************************************************************
+BOOL __regargs OpenNoticeWindow(
+	struct Window *SrcWindow,
+	char *Message[],
+	UWORD Lines,
+	BOOL Option)
+{
+	UWORD Flags;
+
+	if (Option) Flags = REQ_RETURN_OPEN|REQ_CENTER|REQ_H_CENTER;
+	else Flags = REQ_NO_CANCEL|REQ_RETURN_OPEN|REQ_CENTER|REQ_H_CENTER;
+
+	SimpleRequest(SrcWindow,Message,Lines,Flags,NULL);
+	if (NoticeWind = RetWindow) return(TRUE);
+	return(FALSE);
+}
+
+//*******************************************************************
+// changes to stuart's code:
+//	comment out LockLayer/UnLockLayer
+//	change hilite to 2bp
+//	cuntsetjmp/cuntlongjmp
+//	IntuiText->DrawMode = JAM2
+//
+
+#define NUM_VIEW 7
+
+/*** THESE MUST MATCH VIEW_xxx DEFINES IN EDITWINDOW.H!!! ***/
+char
+		View1[] = "Files/Files",
+		View2[] = "Project",
+		View3[] = "Project/Files",
+		View4[] = "Project/Project",
+		View5[] = "Project/Switcher",
+		View6[] = "\x81\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x83",
+		View7[] = "SHUTDOWN";
+char *ViewNames[] = { View1,View2,View3,View4,View5,View6,View7 };
+
+// AAR -- *FRZL
+char *NameFcn(void *frzl, int Entries)
+{
+	if (Entries < 0) Entries = 0;
+	else if (Entries > (NUM_VIEW-1)) Entries = NUM_VIEW-1;
+	return(ViewNames[Entries]);
+}
+
+//*******************************************************************
+void DrawBG(
+	struct st_PopupRender *Pop,
+	struct RastPort *RP,
+	long Width,
+	long Height,
+	int TopArrow,
+	int BtmArrow)
+{
+	struct Image *Image;
+	WORD X;
+
+	NewBorderBox(RP,0,0,Width-1,Height-1,BOX_STD_BORDER);
+	Image = FindGadget(&Gadget1,ID_POPUP_UP)->GadgetRender;
+	X = (Width-Image->Width)/2;
+	if (TopArrow) DrawImage(RP,Image,X,4);
+	if (BtmArrow) {
+		Image = FindGadget(&Gadget1,ID_POPUP_DOWN)->GadgetRender;
+		DrawImage(RP,Image,X,Height - 4 - Image->Height);
+	}
+}
+
+//*******************************************************************
+VOID __regargs AnyPopupText(
+	struct Gadget *Gadget,
+	char *Text,
+	struct Window *Window,
+	WORD RightSave)
+{
+	UWORD A,Len;
+	struct RastPort *RP;
+
+	RP = Window->RPort;
+	SetDrMd(RP,JAM2);
+	// SetFont(RP,EditFont);
+	RefreshGList(Gadget,Window,NULL,1);
+	Len = SafeFitText(RP,Text,strlen(Text),Gadget->Width-RightSave,FALSE);
+	A = Gadget->Width - RightSave - LastExtent.te_Width;
+	A = (A >> 1);
+	if (RightSave) A += 4;
+	Move(RP,Gadget->LeftEdge+A,Gadget->TopEdge+13);
+	SafeColorText(RP,Text,strlen(Text));
+}
+
+//*******************************************************************
+static void DrawPopupUnselected( struct Gadget *gad, STRPTR txt, struct RastPort *rp );
+VOID RedrawPopupText(struct EditWindow *Edit)
+{
+	struct Gadget *Gadget;
+
+	if (Gadget = FindGadget(Edit->Gadgets,ID_POPUP_PROGRAMS))
+	{
+		// AnyPopupText(Gadget,"Programs",Edit->Window,20);
+		DrawPopupUnselected(Gadget,"Programs", Edit->Window->RPort );
+	}
+
+	if (Gadget = FindGadget(Edit->Gadgets,ID_POPUP_VIEWS))
+	{
+		// AnyPopupText(Gadget,"Views",Edit->Window,20);
+		DrawPopupUnselected(Gadget,"Views", Edit->Window->RPort );
+	}
+
+	if (Gadget = FindGadget(Edit->Gadgets,ID_POPUP_TOOLS))
+	{
+		// AnyPopupText(Gadget,"Tools",Edit->Window,20);
+		DrawPopupUnselected(Gadget,"Tools", Edit->Window->RPort );
+	}
+}
+
+static void DrawPopupUnselected( struct Gadget *gad, STRPTR txt, struct RastPort *rp )
+{
+	WORD					 A,Len;
+	struct Image		*Image;
+
+	NewBorderBox(rp,	gad->LeftEdge,gad->TopEdge,
+							gad->LeftEdge + gad->Width,
+							gad->TopEdge + gad->Height,
+							BOX_STD_BORDER);
+
+	Len = SafeFitText(rp,txt,strlen(txt),gad->Width-20,FALSE);
+	A = (gad->Width - 20) - LastExtent.te_Width;	/* how much space left? */
+	A = (A >> 1) + 4;
+	Move(rp, gad->LeftEdge + A, gad->TopEdge + rp->TxBaseline + 5 );
+	SafeColorText(rp,txt,Len);
+
+	Image = FindGadget(&Gadget1,ID_POPUP_UP)->GadgetRender;
+	A = gad->LeftEdge + gad->Width - (Image->Width + 4);
+	DrawImage(rp,Image,A,gad->TopEdge + (gad->Height >> 1) - Image->Height );
+	Image = FindGadget(&Gadget1,ID_POPUP_DOWN)->GadgetRender;
+	DrawImage(rp,Image,A,gad->TopEdge + (gad->Height >> 1) + 2 );
+}
+
+/****** GraphicHelp/HandleView ************************************
+*
+*   NAME
+*	HandleView
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleView(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+struct EditWindow *HandleView(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	PopUpID ID;
+	struct Gadget *Gadget;
+	WORD A,X,Y,OldMode=ViewMode;
+
+	PUCDefaultRender(&PopUp);
+	PopUp.textPosition = 0;		// Left-justify
+	PopUp.drawBG = (DrawBGFunc *)DrawBG;
+	Gadget = FindGadget(Edit->Gadgets,ID_POPUP_VIEWS);
+	X = Gadget->LeftEdge /* + (Gadget->Width >> 1) */;
+	Y = Gadget->TopEdge + (Gadget->Height >> 1);
+	ID = PUCCreate((NameFunc *)NameFcn,NULL,&PopUp);
+	PUCSetNumItems(ID,NUM_VIEW);
+	PUCSetCurItem(ID,ViewMode);
+
+	Edit->Window->Flags |= WFLG_REPORTMOUSE;
+	A = PUCActivate(ID,Edit->Window,X,Y,IntuiMsg->MouseX,IntuiMsg->MouseY);
+	Edit->Window->Flags &= ~WFLG_REPORTMOUSE;
+
+	// Remove all MouseMoves as they were causing the editor to crash
+	FlushWindowPort(Edit->Window,IDCMP_MOUSEMOVE);
+
+	PUCDestroy(ID);
+
+	if (A >= 0)
+	{
+		if (A != ViewMode)
+		{
+			ViewMode = A;
+			RedrawPopupText(Edit);
+			switch(A)
+			{
+			case VIEW_PROJ_FILES:
+			case VIEW_FILES_FILES:
+			case VIEW_PROJ_SWIT:
+			case VIEW_PROJ:
+			case VIEW_PROJ_PROJ:
+				SetView(A);
+				break;
+
+			case 5:
+				// Do nada for the '----' bar
+				break;
+			case 6:	 // QUIT
+				if(EditTop && BoolRequest(EditTop->Window,"Are you really sure you want to quit?"))
+				{
+					MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+					ESparams1.Data1=NULL;
+					SendSwitcherReply(ES_QUIT,&ESparams1);
+					return(NULL);
+				}
+				else ViewMode=OldMode;
+				RedrawPopupText(Edit);
+				break;
+			}
+			Edit = EditTop; // old one gone
+		} else RedrawPopupText(Edit);
+	}
+	if(OldMode!=ViewMode) PrevViewMode=OldMode;
+	return(Edit);
+}
+
+
+/****** GraphicHelp/SetView ************************************
+*
+*   NAME
+*	SetView
+*
+*   SYNOPSIS
+*	void SetView(UWORD View)
+*
+*   FUNCTION
+*	Set editor display mode, valid value 0-4
+*
+*********************************************************************
+*/
+void SetView(UWORD View)
+{
+	DUMPHEXIW(" SetView( ",View,") ");
+	switch(View)
+	{
+		case VIEW_PROJ_FILES:
+			ESparams1.Data1=GUI_T_PROJ|GUI_B_GRAZ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_PROJECT,TOP_SMALL,EW_GRAZER);
+			break;
+		case VIEW_FILES_FILES:
+			ESparams1.Data1=GUI_T_GRAZ|GUI_B_GRAZ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_GRAZER,TOP_SMALL,EW_GRAZER);
+			break;
+		case VIEW_PROJ_SWIT:
+			MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY);
+			ESparams1.Data1=GUI_T_PROJ|GUI_B_SWIT;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(TRUE);
+			aw_Redraw(global_aw);
+			break;
+		case VIEW_PROJ:
+			ESparams1.Data1=GUI_T_NONE|GUI_B_PROJ;
+			SendSwitcherReply(ES_GUImode,&ESparams1);
+			SwitcherSwitch(FALSE);
+			MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+			break;
+		case VIEW_PROJ_PROJ:
+			if ( XtrProject )
+			{
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_PROJ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+			}
+			else
+			{
+				BeginGrazerRequest( &ProjProjGrazRequest );
+			}
+			break;
+		default:
+			break;
+	}
+	DUMPMSG("	...Exited ");
+}
+
+
+/****** GraphicHelp/HandlePrograms **********************************
+*
+*   NAME
+*	HandlePrograms
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleView(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+LONG global_LoadSliceCommand = 0;
+
+#define NUM_APPNAMES 6
+
+/*
+char *AppNames[] =
+{
+	" ",
+	"  LightWave  ",
+	"  ToasterPaint  ",
+	"  ToasterCG  ",
+	"  ChromaFX  ",
+};
+*/
+
+far char	AppNames[MAX_APPNAMES][MAX_APPNAME_LEN+1] =
+{
+	" ",
+	"  LightWave  ",
+	"  ToasterPaint  ",
+	"  ToasterCG  ",
+	"  ChromaFX  ",
+	"\x81\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x83",
+};
+
+ULONG NumSysApps = NUM_APPNAMES;			// This one never changes
+ULONG TotalAppNum	= NUM_APPNAMES;		// This one is the current total for the popup
+UBYTE	AppFlags[MAX_APPNAMES] = "";
+far char	AppCommand[MAX_APPNAMES+1][MAX_APPCMD_LEN+1] = {
+	"", // First 6 are internal apps
+	"",
+	"",
+	"",
+	"",
+	"",
+} ;
+
+
+
+#define SLICE_LIGHTWAVE	1
+#define SLICE_PAINT		2
+#define SLICE_CG			3
+#define SLICE_CHROMAFX	4
+
+static struct st_PopupRender	 AppPopUp;
+
+static char *AppNameFcn( void *huh, int Entries );
+
+static char *AppNameFcn( void *huh, int Entries )
+{
+	if (Entries < 0) Entries = 0;
+	else if (Entries >= TotalAppNum) Entries = (TotalAppNum - 1);
+	return(AppNames[Entries]);
+}
+
+struct EditWindow *HandlePrograms(struct EditWindow *Edit,struct IntuiMessage *im )
+{
+	PopUpID			 ID;
+	WORD				 AppNum,X,Y;
+	ULONG				 es_command = 0;
+	ULONG				 last_qual;
+	struct Gadget	*gad = im->IAddress;
+	struct Window	*win = Edit->Window;
+	ULONG	numitems;
+
+	GetLoadedSlices();
+
+	PUCDefaultRender(&AppPopUp);
+	AppPopUp.textPosition = 0;		// Left-justify
+	AppPopUp.drawBG = (DrawBGFunc *)DrawBG;
+	X = gad->LeftEdge + (gad->Width >> 1);
+	Y = gad->TopEdge + (gad->Height >> 1);
+	ID = PUCCreate((NameFunc *)AppNameFcn,NULL,&AppPopUp);
+
+	numitems = TotalAppNum;
+	if (numitems == NUM_APPNAMES)		// Trim off bottom divider line if no custom progs
+		numitems--;
+	PUCSetNumItems(ID,numitems);
+
+	PUCSetCurItem(ID,0);
+
+	win->Flags |= WFLG_REPORTMOUSE;
+	AppNum = PUCActivate(ID,win,X,Y,im->MouseX,im->MouseY);
+	win->Flags &= ~WFLG_REPORTMOUSE;
+
+	// Remove all remaining MouseMoves as they
+	// were causing the editor to crash
+	FlushWindowPort(win,IDCMP_MOUSEMOVE);
+
+	last_qual = PUCDestroy(ID);
+
+	if(AppNum<NUM_APPNAMES)
+	{
+		switch ( AppNum )
+		{
+			case SLICE_LIGHTWAVE:
+				es_command = ES_LightWave;
+			break;
+			case SLICE_PAINT:
+				es_command = ES_ToasterPaint;
+			break;
+			case SLICE_CG:
+				es_command = ES_ToasterCG;
+			break;
+			case SLICE_CHROMAFX:
+				es_command = ES_ChromaFX;
+			break;
+		}
+
+		// A program was chosen, so there
+		if ( es_command )
+		{
+			if ( last_qual & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+			{
+				// Unload the application
+				ESparams1.Data1=FGC_UNLOAD;
+
+				if(!SendSwitcherReply(es_command,&ESparams1))
+				{
+					// Success
+					AppNames[AppNum][0] = ' ';
+				}
+			}
+			else
+			{
+				// Tell eventloop to load and run a slice
+				global_LoadSliceCommand = es_command;
+				AppNames[AppNum][0] = '*';
+			}
+		}
+	}
+	else // User added app
+	{
+#ifdef SERDEBUG
+		DUMPUDECL(" User App #name ",(LONG)AppNum,AppNames[AppNum]);
+		if(AppFlags[AppNum]&APPF_AREXX)
+			DUMPMSG("  is an Arexx Macro");
+		else
+			DUMPMSG("  is a DOS Call");
+#endif
+		if(AppFlags[AppNum]&APPF_AREXX)
+			ARexxMacro(AppCommand[AppNum]);
+		else
+			Execute(AppCommand[AppNum],NULL,NULL);
+	}
+
+	return(Edit);
+}
+
+/*	COPIED FROM SWITCHER/INC/TAGS.I
+* LoadedSlices Bits
+SLICE_SETUP			EQU	0	;=Switcher Prefs, ignored because its always loaded
+SLICE_CHROMAFX		EQU	1
+SLICE_PAINT			EQU	2
+SLICE_CG				EQU	3
+SLICE_LIGHTWAVE	EQU	4
+SLICE_HARDWARE		EQU	5	;ignored because its always loaded
+*/
+
+ULONG GetLoadedSlices()
+{
+	ULONG			retval;
+
+	retval = SendSwitcherReply(ES_LoadedSlices,&ESparams1);
+
+	if ( retval & (1 << 1) )	/* ChromaFX */
+		AppNames[SLICE_CHROMAFX][0] = '*';
+	else
+		AppNames[SLICE_CHROMAFX][0] = ' ';
+
+	if ( retval & (1 << 2) )	/* Paint */
+		AppNames[SLICE_PAINT][0] = '*';
+	else
+		AppNames[SLICE_PAINT][0] = ' ';
+
+	if ( retval & (1 << 3) )	/* CG */
+		AppNames[SLICE_CG][0] = '*';
+	else
+		AppNames[SLICE_CG][0] = ' ';
+
+	if ( retval & (1 << 4) )	/* Lightwave */
+		AppNames[SLICE_LIGHTWAVE][0] = '*';
+	else
+		AppNames[SLICE_LIGHTWAVE][0] = ' ';
+
+	return(retval);
+}
+
+LONG LoadSlice( LONG slicecommand )
+{
+	LONG			retval;
+
+	// Load the application
+	ESparams1.Data1=FGC_LOAD;
+
+	if(!(retval = SendSwitcherReply(slicecommand,&ESparams1)) )
+	{
+		MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+		SwitcherSwitch(TRUE);
+		CloseAccessWindow();
+		access_win = NULL;
+
+		ESparams1.Data1=FGC_SELECT;
+		retval = (LONG) PutSwitcher(slicecommand,(LONG *)&ESparams1);
+	}
+
+	return(retval);
+}
+
+
+/****** GraphicHelp/HandleTools ************************************
+*
+*   NAME
+*	HandleTools
+*
+*   SYNOPSIS
+*	struct EditWindow *HandleTools(struct EditWindow *Edit,
+*		struct IntuiMessage *IntuiMsg)
+*
+*   FUNCTION
+*
+*
+*********************************************************************
+*/
+
+#define NUM_TOOLS		12
+
+static struct st_PopupRender	 ToolPopUp;
+
+ULONG NumSysTools = NUM_TOOLS;				// This one never changes
+ULONG TotalToolsNum	= NUM_TOOLS;
+UBYTE	ToolFlags[MAX_TOOLNAMES];
+far char	ToolNames[MAX_TOOLNAMES][MAX_TOOLNAME_LEN+1] =
+{
+	"Audio on/off (Alt A)",
+	"Auto insert  (Alt I)",
+	"Cut clip (Alt C)",
+	"Edit to all audio",
+	"Edit to crouton",
+	"Lock/Unlock (Alt L)",
+	"Process clip (Alt P)",
+	"Quick Adjust (Ctrl)",
+	"\x81\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x83",
+	"Hardware setup",
+	"Options",
+	"\x81\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x82\x83",
+};
+far char	ToolCommand[MAX_TOOLNAMES+1][MAX_TOOLCMD_LEN+1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+};
+
+char *ToolsNameFcn(void *foo, int Entries)
+{
+	if (Entries < 0)
+		Entries = 0;
+	else if (Entries >= TotalToolsNum)
+		Entries = TotalToolsNum-1;
+	return(ToolNames[Entries]);
+}
+
+struct EditWindow *HandleTools(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	static WORD	LastTool=7;		// First default is "quick adjust"
+	PopUpID ID;
+	struct Gadget *gad;
+	WORD tool,X,Y;
+	struct IntuiMessage	fakemsg;
+	struct Window	*win = Edit->Window;
+	ULONG	numitems;
+
+	PUCDefaultRender(&ToolPopUp);
+	ToolPopUp.textPosition = 0;		// Left-justify
+	ToolPopUp.drawBG = (DrawBGFunc *)DrawBG;
+//	gad = FindGadget(Edit->Gadgets,ID_POPUP_TOOLS);
+	gad = IntuiMsg->IAddress;
+	X = gad->LeftEdge + (gad->Width >> 1);
+	Y = gad->TopEdge + (gad->Height >> 1);
+	ID = PUCCreate((NameFunc *)ToolsNameFcn,NULL,&ToolPopUp);
+
+	numitems = TotalToolsNum;
+	if (numitems == NUM_TOOLS)				// Trim off bottom divider line if no custom tools
+		numitems--;
+	PUCSetNumItems(ID,numitems);
+
+	if (LastTool>=TotalToolsNum)			// Don't try to come up on a removed tool
+		LastTool = 0;
+	PUCSetCurItem(ID,LastTool);
+
+	win->Flags |= WFLG_REPORTMOUSE;
+	tool = PUCActivate(ID,win,X,Y,IntuiMsg->MouseX,IntuiMsg->MouseY);
+	win->Flags &= ~WFLG_REPORTMOUSE;
+
+	// Remove all MouseMoves as they were causing the editor to crash
+	FlushWindowPort(win,IDCMP_MOUSEMOVE);
+
+	PUCDestroy(ID);
+
+	if (tool >= 0)
+	{
+		LastTool = tool;
+
+//		RedrawPopupText(Edit);
+
+		switch(tool)
+		{
+			case 0:
+				HandleAudioOnOff(EditTop);
+				break;
+			case 1:
+				HandleAudioUnder(EditTop);
+				break;
+			case 2:
+				ProcessCrouton(Edit,TRUE);			// Destructively cut clip
+				break;
+			case 3:
+				// Fake Play handler into thinking it was invoked as ALT play
+				fakemsg.Qualifier = IEQUALIFIER_LALT;
+				fakemsg.Class = IDCMP_RAWKEY;
+				fakemsg.Code = 0;		//(dont care) RAWKEY_TAB;
+				HandlePlay(EditTop,&fakemsg);
+				break;
+			case 4:
+				// Fake Play handler into thinking it was invoked as ALT play-from
+				fakemsg.Qualifier = IEQUALIFIER_LSHIFT | IEQUALIFIER_LALT;
+				fakemsg.Class = IDCMP_RAWKEY;
+				fakemsg.Code = 0;		//(dont care) RAWKEY_TAB;
+				HandlePlay(EditTop,&fakemsg);
+				break;
+			case 5:
+				HandleLockDown(EditTop);
+				break;
+			case 6:
+				ProcessCrouton(Edit,FALSE);		// Process clip
+				break;
+			case 7:
+				QuickVIDEOPanel(EditTop,NULL);
+				break;
+			case 8:		// Divider line
+				break;
+			case 9:
+				DoSetupPanel(Edit,NULL);
+				break;
+			case 10:
+				DoOptionsPanel(Edit,NULL);
+				break;
+			case 11:		// Divider line
+				break;
+			default:		// Must be a user tool
+				if(ToolFlags[tool]&APPF_AREXX)
+				{
+					DUMPMSG("Arexx");
+					ARexxMacro(ToolCommand[tool]);
+				}
+				else
+				{
+					DUMPMSG("DOS");
+					Execute(ToolCommand[tool],NULL,NULL);
+				}
+				break;
+		}
+	}
+
+	return(Edit);
+}
+
+// end of graphichelp.c
+//*******************************************************************
+//*******************************************************************
+//*******************************************************************
+
+LONG BeginGrazerRequest( struct GrazerRequest *gr )
+{
+	LONG		result = TRUE;
+
+	gr->gr_Flags &= ~(GRAZREQ_VALIDFILENAME);
+
+	if ( EditTop )
+	{
+		gr->gr_CancelTopType = EditTop->Node.Type;
+		gr->gr_CancelTopHeight = EditTop->Height;
+	}
+	else
+	{
+		gr->gr_CancelTopType = EW_EMPTY;
+		gr->gr_CancelTopHeight = 0;
+	}
+
+		/* Swap the paths so the grazer comes up in the inital directory */
+	if ( gr->gr_InitialPath )
+	{
+		if ( EditBottom && EditBottom->Node.Type == EW_GRAZER )
+		{
+			/* This window is going to remain open, so modify the path */
+			struct SmartString	*s;
+
+			s = ((struct Grazer *)EditBottom->Special)->Path;
+			((struct Grazer *)EditBottom->Special)->Path = gr->gr_InitialPath;
+			gr->gr_InitialPath = s;
+		}
+		else
+		{
+			struct SmartString	*s;
+
+			/* The grazer window will open with this path */
+			s = BottomPath;
+			BottomPath = gr->gr_InitialPath;
+			gr->gr_InitialPath = s;
+		}
+	}
+
+	if (EditBottom)
+	{
+		if ( EditBottom->Node.Type == EW_GRAZER )
+		{
+			DoAllNewDir(EditBottom);
+		}
+		gr->gr_CancelBottomType = EditBottom->Node.Type;
+	}
+	else
+	{
+		gr->gr_CancelBottomType = EW_EMPTY;
+	}
+
+	global_gr = gr;
+
+	/* SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0); */
+	SwitcherSwitch(FALSE);
+	MakeLayout(EW_ASYNCREQ,TOP_SMALL,EW_GRAZER);
+
+	return(result);
+}
+
+LONG EndGrazerRequest( LONG mode )
+{
+	struct GrazerRequest	*gr = global_gr;
+	LONG						 retval = 0;
+
+	global_gr = NULL;
+
+	if ( gr->gr_InitialPath )
+	{
+		struct SmartString	*s;
+
+		/* Swap path of grazer back to where we were before (potentially) closing */
+		s = ((struct Grazer *)EditBottom->Special)->Path;
+		((struct Grazer *)EditBottom->Special)->Path = gr->gr_InitialPath;
+		gr->gr_InitialPath = s;
+
+		/* Just free it */
+		FreeSmartString(s);
+		gr->gr_InitialPath = NULL;
+
+		DoAllNewDir(EditBottom);
+	}
+
+	if ( gr->gr_EndRequest )
+	{
+		// The user may free the GrazerRequest structure
+		// during this call, so "gr" should be considered
+		// invalid after this call.
+		retval = gr->gr_EndRequest(gr,mode);
+	}
+
+	return(retval);
+}
+
+LONG req_DoLayout( WORD TopType, WORD TopHeight, WORD BottomType )
+{
+	LONG		 retval = 0;
+	ULONG		 guimode = 0;
+
+	switch (TopType)
+	{
+		case EW_PROJECT:
+		guimode |= GUI_T_PROJ;
+		break;
+
+		case EW_GRAZER:
+		guimode |= GUI_T_GRAZ;
+		break;
+	}
+
+	switch (BottomType)
+	{
+		case EW_PROJECT:
+		guimode |= GUI_B_PROJ;
+		break;
+
+		case EW_GRAZER:
+		guimode |= GUI_B_GRAZ;
+		break;
+
+		case EW_EMPTY:
+		if (TopHeight != TOP_LARGE)
+		{
+			guimode |= GUI_B_SWIT;
+		}
+		break;
+	}
+
+	ESparams1.Data1=guimode;
+
+	if ( (BottomType == EW_EMPTY) && (TopHeight != TOP_LARGE) )
+	{
+		MakeLayout(	TopType, TopHeight, BottomType);
+		SendSwitcherReply(ES_GUImode,&ESparams1);
+		SwitcherSwitch(TRUE);
+		aw_Redraw(global_aw);
+	}
+	else
+	{
+		SendSwitcherReply(ES_GUImode,&ESparams1);
+		SwitcherSwitch(FALSE);
+		MakeLayout(	TopType, TopHeight, BottomType);
+	}
+
+	return(retval);
+}
+
+LONG EndProjProjRequest( struct GrazerRequest *gr, LONG mode )
+{
+	LONG						 retval = 0;
+
+	/*	Success can be determined by either double-clicking on a
+		file of the correct type or by selecting the file and
+		hitting "continue" in the async requester, or by typing
+		in a file name in the grazer string and hitting return.
+	 */
+
+	// For now, mode will be NULL if the request failed, in which
+	// case, we want to restore the screen to the mode it was in
+	// before the requesters came up.
+	if ( mode && (gr->gr_Flags & GRAZREQ_VALIDFILENAME) )
+	{
+		ESparams2.Data1=1;
+		ESparams2.Data2=(LONG)GetCString(gr->gr_FilePath);
+		if ( !SendSwitcherReply(ES_LoadProject,&ESparams2) )
+		{
+			XtrProject = &PtrProject[1];
+
+			req_DoLayout(	gr->gr_ContinueTopType,
+								gr->gr_ContinueTopHeight,
+								gr->gr_ContinueBottomType);
+		}
+	}
+	else
+	{
+		req_DoLayout(	gr->gr_CancelTopType,
+							gr->gr_CancelTopHeight,
+							gr->gr_CancelBottomType);
+
+	}
+
+	if (gr->gr_FilePath)
+	{
+		FreeSmartString(gr->gr_FilePath);
+		gr->gr_FilePath = NULL;
+	}
+
+	return(retval);
+}
+
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+
+LONG EndLostCroutonRequest( struct GrazerRequest *gr, LONG mode )
+{
+	LONG						 retval = 0;
+
+	if ( mode && (gr->gr_Flags & GRAZREQ_VALIDFILENAME) )
+	{
+		struct FastGadget		*fg;
+
+		/* Ask the switcher to load the data */
+		if ( fg = AllocProj(GetCString(gr->gr_FilePath)) )
+		{
+			// struct FastGadget		*old_fg = (struct FastGadget *)gr->gr_UserData;
+
+			/* Replace old Crouton with new one just loaded */
+
+			// RemoveProjNode(Edit,old_fg);
+
+			// SomehowCopyTaglists(old_fg,fg);
+
+			// FreeProjectNode(old_fg);
+
+			FreeProjectNode(fg);
+		}
+	}
+
+	if ( gr->gr_FilePath )
+	{
+		FreeSmartString(gr->gr_FilePath);
+		gr->gr_FilePath = NULL;
+	}
+
+	req_DoLayout(	gr->gr_CancelTopType,
+						gr->gr_CancelTopHeight,
+						gr->gr_CancelBottomType);
+
+	return(retval);
+}
+
+
+LONG EndFileRequest( struct GrazerRequest *gr, LONG mode )
+{
+	LONG						 retval = 0;
+
+	if ( mode && (gr->gr_Flags & GRAZREQ_VALIDFILENAME) )
+	{
+		strncpy((char *)gr->gr_UserData,GetCString(gr->gr_FilePath),FileReqLen);
+	}
+	else *((char *)gr->gr_UserData)=1;
+	if ( gr->gr_FilePath )
+	{
+		FreeSmartString(gr->gr_FilePath);
+		gr->gr_FilePath = NULL;
+	}
+
+	req_DoLayout(	gr->gr_CancelTopType,
+						gr->gr_CancelTopHeight,
+						gr->gr_CancelBottomType);
+
+	return(retval);
+}
+
+
+
+BOOL GrazerGetFile(char *Tit, char *Path, char *File, char *buf, int buflen)
+{
+	FileGrazRequest.gr_UserData = (LONG)buf;
+	FileReqLen=buflen;
+	if(*Path) FileGrazRequest.gr_InitialPath = AllocSmartString(Path,NULL);
+	if(*File) strncpy(FileGrazRequest.gr_InitialFileName,File,39);
+	if(*Tit) strncpy(FileGrazRequest.gr_reqtext[0],Tit,FILE_REQ_TIT_LEN);
+	else strcpy(FileGrazRequest.gr_reqtext[0],"Select A File");
+	BeginGrazerRequest(&FileGrazRequest);
+
+	if ( EditBottom && (EditBottom->Node.Type == EW_GRAZER) )
+	{
+		EditBottom->RedrawSelect = TRUE;
+		EditBottom->DisplayGrid = TRUE;
+		EditBottom->ew_OptRender = FALSE;
+		UpdateDisplay(EditBottom);
+	}
+
+	return(TRUE);
+}
+
+// ----------------------------------------------------------
+// ----------------------------------------------------------
+
+struct EditWindow *AllocInitAsyncReq(struct NewEditWindow *NewEdit )
+{
+	struct EditWindow *Edit;
+	BOOL Success = FALSE;
+
+	if (	(Edit = (struct EditWindow *)AllocSmartNode(NULL,sizeof(struct EditWindow),MEMF_CLEAR)) &&
+			(Edit->Special = (struct EditSpecial *)AllocSmartNode(NULL,sizeof(struct EditSpecial),MEMF_CLEAR)) )
+	{
+		Edit->Node.Type = EW_ASYNCREQ;
+
+		Edit->Resize = AsyncReqResize;
+		Edit->Open = AsyncReqOpen;
+		Edit->Close = AsyncReqClose;
+		Edit->Free = AsyncReqFree;
+
+		if ( InitEditWindow(Edit,NewEdit) )
+		{
+			Edit->DisplayGrid = FALSE;
+			Edit->AllowDrag = FALSE;
+			Success = TRUE;
+		}
+
+		if (!Success && Edit )
+		{
+			(*Edit->Free)(Edit);
+			Edit = NULL;
+		}
+	} // if AllocMem() EditWindow & Grazer
+	return(Edit);
+}
+
+BOOL AsyncReqOpen(struct EditWindow *Edit )
+{
+	struct GrazerRequest	*gr = global_gr;
+	struct NewWindow		*NW;
+	struct Gadget			*Gadget,*OK,*Cancel,*FileName,*Backup;
+	BOOL						 Success = FALSE;
+	WORD						 i,max_txt_width;
+	UWORD						 Len[MAX_REQ_LINES],
+								 BitW[MAX_REQ_LINES];
+	struct RastPort		 srp;
+
+	NW = (struct NewWindow *)&ReqNW;	// uses NewWindow from powerwindows output
+	NW->FirstGadget = NULL; 			// don't add until after open
+	NW->DetailPen = SCREEN_PEN;
+	NW->Screen = Edit->Screen;
+	NW->LeftEdge = Edit->LeftEdge;
+	NW->TopEdge = Edit->TopEdge;
+
+#ifndef SWIT_ONLY
+	if (SwitPort) {
+#endif
+	NW->LeftEdge += 32;
+	NW->TopEdge += 44;
+#ifndef SWIT_ONLY
+	}
+#endif
+
+	NW->Width = Edit->Width;
+	/* NW->Height = Edit->Height - SLACK; */
+	NW->Height = ((gr->gr_num_reqlines+1) * LINE_HEIGHT)
+						+ SLACK + ((8 + PNL_DIV) << 1);
+
+	InitRastPort(&srp);
+	SetFont(&srp,DarkFont);
+
+	max_txt_width = MIN_WIDTH;
+
+	for ( i = 0; i < gr->gr_num_reqlines; i++ )
+	{
+		Len[i] = SafeFitText(&srp,gr->gr_reqtext[i],
+			strlen(gr->gr_reqtext[i]),MAX_WIDTH-SLACK,FALSE);
+
+		BitW[i] = LastExtent.te_Width;
+		if (LastExtent.te_Width > max_txt_width)
+			max_txt_width = LastExtent.te_Width;
+	}
+	NW->Width = max_txt_width + (SLACK << 1);
+	if (NW->Width >  MAX_WIDTH)
+		NW->Width = MAX_WIDTH;
+
+	NW->LeftEdge += (MAX_WIDTH - NW->Width) >> 1;
+	if ( gr->gr_Flags & GRAZREQ_ALLOWCREATE )
+	{
+		NW->Height += LINE_HEIGHT + (LINE_HEIGHT >> 1);
+	}
+
+	Gadget = FindGadget(&Gadget1,ID_REQ_DARK_CANCEL);
+	if (!(Cancel = AllocOneGadget(Gadget))) goto ErrExit;
+	NW->Height += Cancel->Height;
+	Cancel->UserData = (APTR) AsyncReqCancelHandler;
+	Cancel->TopEdge = (NW->Height - Cancel->Height - 6);
+	Cancel->LeftEdge = NW->Width - Cancel->Width - 6;
+	Cancel->NextGadget = NULL;
+
+	Gadget = FindGadget(&Gadget1,ID_DARK_CONTINUE);
+	if (!(OK = AllocOneGadget(Gadget))) goto ErrExit;
+	OK->UserData = (APTR) AsyncReqContinueHandler;
+	OK->TopEdge = NW->Height - OK->Height - 6;
+	OK->LeftEdge = 6;
+
+	Edit->Gadgets = Cancel;
+	Cancel->NextGadget = OK;
+
+	if ( gr->gr_Flags & GRAZREQ_ALLOWCREATE )
+	{
+		Gadget = FindGadget(&Gadget1,ID_PATH);
+		if (!(FileName = AllocOneGadget(Gadget))) goto ErrExit;
+		FileName->UserData = (APTR) AsyncReqHandlePath;
+		OK->NextGadget = FileName;
+		FileName->Width = NW->Width-32;
+		FileName->TopEdge = OK->TopEdge - (FileName->Height + 18);
+		FileName->LeftEdge = (NW->Width - FileName->Width)>> 1;
+		FileName->Height = TEXT_HEIGHT;
+	}
+	else FileName = NULL;
+
+	if ( gr->gr_Flags & GRAZREQ_BACKUP )
+	{
+		Gadget = FindGadget(&Gadget1,ID_BU_BACKUP);
+		if (!(Backup = AllocOneGadget(Gadget))) goto ErrExit;
+		Backup->UserData = (APTR) AsyncReqBackupHandler;
+		Backup->TopEdge = NW->Height - Backup->Height - 6;
+		Backup->LeftEdge = (NW->Width - Backup->Width) >> 1;
+
+		if ( FileName )
+			FileName->NextGadget = Backup;
+		else
+			OK->NextGadget = Backup;
+	}
+
+	NW->Flags |= WFLG_SIMPLE_REFRESH;
+
+// then make SMART_REFRESH (to get around clear to color 0 problem)
+	if ( Edit->Window = OpenWindow(NW) )
+	{
+		struct RastPort	*rp = Edit->Window->RPort;
+		WORD						 y_offset;
+
+		MakeSimpleSmart(Edit->Window);
+		SetDrMd(rp,JAM2);
+		SetFont(rp,DarkFont);
+		NewBorderBox(rp,0,0,Edit->Window->Width-1,Edit->Window->Height-1,BOX_CP_BORDER);
+
+		if ( FileName )
+		{
+			NewBorderBox(rp,FileName->LeftEdge-4,FileName->TopEdge-2-3,
+				FileName->LeftEdge+FileName->Width+3,
+				FileName->TopEdge+FileName->Height+4-1,BOX_REV_BORDER);
+
+			if ( gr->gr_InitialPath )
+			{
+				UpdateStringGadgetText(Edit->Window,FileName,gr->gr_InitialFileName);
+			}
+		}
+
+		y_offset = 8+TEXT_BASE;
+		for ( i = 0; i < gr->gr_num_reqlines; i++ )
+		{
+			Move(rp,(Edit->Window->Width - BitW[i])>>1, y_offset );
+			SafeColorText(rp,gr->gr_reqtext[i],Len[i]);
+			y_offset += LINE_HEIGHT;
+
+			if ( i==0 )
+			{
+				NewBorderBox(rp,PNL_X1,y_offset-8,Edit->Window->Width-PNL_X1,y_offset-8+PNL_DIV,BOX_REV);
+				y_offset += 8 + PNL_DIV;
+			}
+		}
+
+		NewBorderBox(rp,PNL_X1,OK->TopEdge-12,Edit->Window->Width-PNL_X1,OK->TopEdge-12+PNL_DIV,BOX_REV);
+		AddGList(Edit->Window,Edit->Gadgets,0,-1,NULL);
+		RefreshGList(Edit->Gadgets,Edit->Window,NULL,-1);
+
+		BuildWaitMask();
+		Success = TRUE;
+	}
+
+	NW->Flags &= ~WFLG_SIMPLE_REFRESH;
+
+	ErrExit:
+	return(Success);
+}
+
+// Put ptr to this func in the gad->UserData function
+struct EditWindow *AsyncReqCancelHandler(struct EditWindow *Edit,struct IntuiMessage *im)
+{
+	if (im->Class == IDCMP_GADGETUP)
+	{
+		EndGrazerRequest(FALSE);
+		Edit = NULL;
+	}
+
+	return(Edit);
+}
+
+// Put ptr to this func in the gad->UserData function
+struct EditWindow *AsyncReqContinueHandler(struct EditWindow *Edit,struct IntuiMessage *im )
+{
+	if (im->Class == IDCMP_GADGETUP)
+	{
+		/* This requester has a filename string gadget */
+		if ( FindGadget(Edit->Gadgets,ID_PATH) )
+		{
+			Edit = AsyncReqHandlePath(Edit,im);
+		}
+		else
+		{
+			EndGrazerRequest(TRUE);
+			Edit = NULL;
+		}
+	}
+
+	return(Edit);
+}
+
+struct EditWindow *AsyncReqBackupHandler(struct EditWindow *Edit,struct IntuiMessage *im )
+{
+	if (im->Class == IDCMP_GADGETUP)
+	{
+		/* One more sneaky hack, set userdata to one to tell project
+		 * requester end code that the backup button was hit
+		 */
+		global_gr->gr_UserData = 0x01;
+
+		/* This requester has a filename string gadget */
+		if ( FindGadget(Edit->Gadgets,ID_PATH) )
+		{
+			Edit = AsyncReqHandlePath(Edit,im);
+		}
+		else
+		{
+			EndGrazerRequest(TRUE);
+			Edit = NULL;
+		}
+	}
+
+	return(Edit);
+}
+
+struct EditWindow *AsyncReqHandlePath(struct EditWindow *Edit,struct IntuiMessage *IntuiMsg)
+{
+	struct GrazerRequest	*gr = global_gr;
+	struct Grazer			*Grazer;
+
+	// No valid pathname set as of yet.
+	gr->gr_Flags &= ~(GRAZREQ_VALIDFILENAME);
+
+	if ( Grazer = (struct Grazer *)EditBottom->Special )
+	{
+		if ( gr->gr_FilePath ) FreeSmartString(gr->gr_FilePath);
+
+		if ( gr->gr_FilePath = DuplicateSmartString(Grazer->Path) )
+		{
+			struct Gadget	*Gadget;
+			char				 ch;
+
+			ch = SmartStringRight(gr->gr_FilePath);
+			if ( (ch != ':') && (ch != '/') )
+				AppendCSmartString("/",gr->gr_FilePath);
+
+			Gadget = FindGadget(Edit->Gadgets,ID_PATH);
+
+			if ( AppendCSmartString(((struct StringInfo *)Gadget->SpecialInfo)->Buffer,gr->gr_FilePath) )
+			{
+				gr->gr_Flags |= GRAZREQ_VALIDFILENAME;
+
+				EndGrazerRequest(TRUE);
+				Edit = NULL;
+			}
+		}
+	}
+
+	return(Edit);
+}
+
+BOOL AsyncReqResize(struct EditWindow *Edit, UWORD NewHeight)
+{
+	return(0);
+}
+
+VOID AsyncReqClose(struct EditWindow *Edit )
+{
+	if (Edit)	CloseEditWindow(Edit);
+}
+
+VOID AsyncReqFree(struct EditWindow *Edit )
+{
+	if (Edit)
+	{
+		FreeEditWindow(Edit);
+
+		if (Edit->Special)
+			FreeMem(Edit->Special,sizeof(struct EditSpecial));
+
+		FreeSmartNode(&Edit->Node);
+	}
+}
+
+LONG IsRequestedFileType( struct EditNode *Node )
+{
+	struct GrazerRequest	*gr;
+	LONG						 use_it = TRUE;
+
+	if ( gr = global_gr )
+	{
+		if ( ((struct GrazerNode *)Node)->DOSClass == EN_FILE )
+		{
+			LONG			 i = gr->gr_num_filetypes;
+			BYTE			*ch = gr->gr_filetypes;
+
+			if ( ch )
+			{
+				use_it = FALSE;
+
+				while (i--)
+				{
+					if ( ((struct GrazerNode *)Node)->Type == *ch++ )
+					{
+						use_it = TRUE;
+						break;
+					}
+				}
+			}
+		}
+	}
+	return(use_it);
+}
+
+struct EditWindow *BotProjNewProject(
+		struct EditWindow *Edit,
+		struct IntuiMessage *im )
+{
+	if ( im->Class == IDCMP_GADGETUP )
+	{
+		BeginGrazerRequest( &ProjProjGrazRequest );
+		Edit = EditTop;
+	}
+
+	return(Edit);
+}
+@
+
+
+2.67
+log
+@Moved defines for Tools/Programs popups into Edit.h for others to safely see
+Upped limit for Tools popup to 32 (20 user tools).
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.66 1995/10/12 16:34:32 Flick Exp Flick $
+d5 4
+d2020 9
+@
+
+
+2.66
+log
+@Reordered Tools & Views popups, now use VIEW_xxx defines everywhere!
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.65 1995/10/10 17:21:09 Flick Exp Flick $
+d5 3
+d244 1
+d1370 1
+a1370 4
+#define MAX_APPNAMES 25
+#define MAX_APPNAME_LEN 28
+#define MAX_APPCMD_LEN  127
+#define APPF_AREXX		1<<0  // Mask: bit0 clear ==> Dos Execute, set ==> Arexx
+d1392 2
+a1393 1
+ULONG TotalAppNum	= NUM_APPNAMES;
+a1592 3
+#define MAX_TOOLNAMES 25
+#define MAX_TOOLNAME_LEN 28
+#define MAX_TOOLCMD_LEN  127
+d1596 1
+@
+
+
+2.65
+log
+@Made Views,Programs,Tools popups all left-justify
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.64 1995/10/09 16:40:47 Flick Exp Flick $
+d5 3
+d371 1
+a371 1
+WORD ViewMode = 2,PrevViewMode=0;
+d1095 13
+a1107 8
+#define NUM_VIEW 6
+char	View1[] = "Project/Files",
+		View2[] = "Files/Files",
+		View3[] = "Project/Switcher",
+		View4[] = "Project",
+		View5[] = "Project/Project",
+		View6[] = "SHUTDOWN";
+char *ViewNames[] = { View1,View2,View3,View4,View5,View6 };
+d1255 5
+a1259 2
+			case 0:	case 1:
+			case 2:	case 3:	case 4:
+d1263 4
+a1266 1
+			case 5:	 // QUIT
+d1304 1
+a1304 1
+		case 0:   // Project/Files
+d1310 1
+a1310 1
+		case 1:	 // Files/Files
+d1316 1
+a1316 1
+		case 2:	 // Project/Switcher
+d1323 1
+a1323 1
+		case 3:	 // Big Project
+d1327 3
+a1329 3
+				MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+		break;
+		case 4:	 // Project/Project
+a1600 2
+	"Quick Adjust (Ctrl)",
+	"Lock/Unlock (Alt L)",
+d1603 2
+d1606 1
+a1606 1
+	"Edit to all audio",
+d1608 1
+a1608 1
+	"Cut clip (Alt C)",
+d1610 1
+a1610 1
+	"Setup",
+d1641 1
+a1641 1
+	static WORD	LastTool = 0;
+d1685 1
+a1685 1
+				QuickVIDEOPanel(EditTop,NULL);
+d1688 1
+a1688 1
+				HandleLockDown(EditTop);
+d1691 1
+a1691 1
+				HandleAudioOnOff(EditTop);
+d1694 5
+a1698 1
+				HandleAudioUnder(EditTop);
+d1708 1
+a1708 5
+				// Fake Play handler into thinking it was invoked as ALT play
+				fakemsg.Qualifier = IEQUALIFIER_LALT;
+				fakemsg.Class = IDCMP_RAWKEY;
+				fakemsg.Code = 0;		//(dont care) RAWKEY_TAB;
+				HandlePlay(EditTop,&fakemsg);
+d1714 1
+a1714 1
+				ProcessCrouton(Edit,TRUE);			// Destructively cut clip
+@
+
+
+2.64
+log
+@Finds popup.h in new home
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.63 1995/10/05 18:37:03 Flick Exp Flick $
+d5 3
+d1221 1
+d1419 1
+d1636 1
+@
+
+
+2.63
+log
+@Auto split ---> Auto Insert
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.62 1995/10/03 18:06:30 Flick Exp Flick $
+d5 3
+d226 1
+a226 1
+#include <edit:popup/popup.h>
+@
+
+
+2.62
+log
+@Tools popup now supports user-installable tools (from ARexx)
+Added divider line to tools popup and at bottom of Programs & Tools if custom things present
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.61 1995/10/02 15:15:53 Flick Exp Flick $
+d5 4
+d1582 1
+a1582 1
+	"Auto split  (Alt S)",
+@
+
+
+2.61
+log
+@Support for new POPUP_TOOLS gadget + dispatch to all items
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.60 1995/09/28 10:08:35 Flick Exp Flick $
+d5 3
+d1340 1
+a1340 1
+#define NUM_APPNAMES 5
+d1363 1
+d1369 2
+a1370 1
+	"", // First 5 are internal apps
+d1403 1
+d1412 6
+a1417 1
+	PUCSetNumItems(ID,TotalAppNum);
+d1564 11
+a1574 3
+#define NUM_TOOLS		9
+
+char	*ToolNames[] = {
+d1581 21
+a1601 3
+	"Process clip",
+	"Cut clip",
+	"Options"
+d1604 1
+a1604 1
+char *NameFcnTools(void *zzzz, int Entries)
+d1608 2
+a1609 2
+	else if (Entries > (NUM_TOOLS-1))
+		Entries = NUM_TOOLS-1;
+d1617 2
+a1618 2
+	struct Gadget *Gadget;
+	WORD A,X,Y;
+d1620 10
+d1631 7
+a1637 7
+	PUCDefaultRender(&PopUp);
+	PopUp.drawBG = (DrawBGFunc *)DrawBG;
+	Gadget = FindGadget(Edit->Gadgets,ID_POPUP_TOOLS);
+	X = Gadget->LeftEdge /* + (Gadget->Width >> 1) */;
+	Y = Gadget->TopEdge + (Gadget->Height >> 1);
+	ID = PUCCreate((NameFunc *)NameFcnTools,NULL,&PopUp);
+	PUCSetNumItems(ID,NUM_TOOLS);
+d1640 3
+a1642 3
+	Edit->Window->Flags |= WFLG_REPORTMOUSE;
+	A = PUCActivate(ID,Edit->Window,X,Y,IntuiMsg->MouseX,IntuiMsg->MouseY);
+	Edit->Window->Flags &= ~WFLG_REPORTMOUSE;
+d1645 1
+a1645 1
+	FlushWindowPort(Edit->Window,IDCMP_MOUSEMOVE);
+d1649 1
+a1649 1
+	if (A >= 0)
+d1651 1
+a1651 3
+//		if (A != LastTool)
+//		{
+			LastTool = A;
+d1653 1
+a1653 1
+			RedrawPopupText(Edit);
+d1655 57
+a1711 39
+			switch(A)
+			{
+				case 0:
+					QuickVIDEOPanel(EditTop,NULL);
+					break;
+				case 1:
+					HandleLockDown(EditTop);
+					break;
+				case 2:
+					HandleAudioOnOff(EditTop);
+					break;
+				case 3:
+					HandleAudioUnder(EditTop);
+					break;
+				case 4:
+					// Fake Play handler into thinking it was invoked as ALT play-from
+					fakemsg.Qualifier = IEQUALIFIER_LSHIFT | IEQUALIFIER_LALT;
+					fakemsg.Class = IDCMP_RAWKEY;
+					fakemsg.Code = 0;		//(dont care) RAWKEY_TAB;
+					HandlePlay(EditTop,&fakemsg);
+					break;
+				case 5:
+					// Fake Play handler into thinking it was invoked as ALT play
+					fakemsg.Qualifier = IEQUALIFIER_LALT;
+					fakemsg.Class = IDCMP_RAWKEY;
+					fakemsg.Code = 0;		//(dont care) RAWKEY_TAB;
+					HandlePlay(EditTop,&fakemsg);
+					break;
+				case 6:
+					ProcessCrouton(Edit,FALSE);		// Process clip
+					break;
+				case 7:
+					ProcessCrouton(Edit,TRUE);			// Destructively cut clip
+					break;
+				case 8:
+					DoOptionsPanel(Edit,NULL);
+					break;
+			}
+//		} else RedrawPopupText(Edit);
+@
+
+
+2.60
+log
+@Now uses RawKeyCodes.h, changed "QUIT" to "SHUTDOWN", Project-Project msg now reads "Hit 'OK' "
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.59 1995/09/13 12:16:38 Flick Exp Flick $
+d5 3
+d1156 6
+d1535 117
+@
+
+
+2.59
+log
+@ENTER key appeased requesters but returned FALSE (fixed this)
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.58 1995/03/05 17:03:04 CACHELIN4000 Exp Flick $
+d5 3
+d228 1
+d260 1
+a260 1
+	"Select \"Continue\" to display its contents.",
+d290 1
+a290 1
+	"Select \"Continue\" to display its contents.",
+a659 5
+#define RAW_ENTER	0x43
+#define RAW_RETURN	0x44
+#define RAW_ESCAPE	0x45
+#define RAW_HELP 	0x5f
+
+d907 4
+a910 4
+					if ( (A == RAW_ENTER)
+						||(A == RAW_RETURN)
+						||(A == RAW_ESCAPE)
+						||(A == RAW_HELP))
+d914 1
+a914 1
+							if ((A == RAW_RETURN) || (A == RAW_ENTER))
+d1082 1
+a1082 1
+		View6[] = " QUIT ";
+@
+
+
+2.58
+log
+@Add GrazerGetFile(), fix ASync String width
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.57 1995/02/27 15:36:15 pfrench Exp CACHELIN4000 $
+d5 3
+d908 9
+a916 4
+					if ((A == RAW_ENTER)||(A == RAW_RETURN)||
+						(A == RAW_ESCAPE)||(A == RAW_HELP)) {
+						if (Flags & REQ_OK_CANCEL) {
+							if (A == RAW_RETURN) Result = TRUE;
+d1078 6
+a1083 3
+char View1[] = "Project/Files",View2[] = "Files/Files",
+	View3[] = "Project/Switcher",View4[] = "Project",
+	View5[] = "Project/Project",View6[] = " QUIT ";
+@
+
+
+2.57
+log
+@Now using new backup button on requester.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.56 1995/02/25 16:00:08 CACHELIN4000 Exp pfrench $
+d5 3
+d223 1
+a289 1
+
+a290 1
+
+a292 1
+
+d295 20
+d320 1
+a320 1
+	NULL,
+d322 1
+a322 1
+	EndLostCroutonRequest,
+d325 1
+d1756 37
+d1906 1
+@
+
+
+2.56
+log
+@Make Programs popup extensible through static global array kludge for ARexx
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.55 1995/02/24 12:06:18 pfrench Exp CACHELIN4000 $
+d5 3
+d1855 1
+a1855 1
+		Gadget = FindGadget(&Gadget1,ID_DARK_CONTINUE);
+@
+
+
+2.55
+log
+@Not sure if change I made does anything.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.54 1995/01/25 19:36:25 pfrench Exp pfrench $
+d5 3
+d1293 6
+d1307 22
+a1328 1
+#define NUM_APPNAMES 5
+d1342 1
+a1342 1
+	else if (Entries >= NUM_APPNAMES) Entries = (NUM_APPNAMES - 1);
+d1362 1
+a1362 1
+	PUCSetNumItems(ID,NUM_APPNAMES);
+d1375 1
+a1375 1
+	switch ( AppNum )
+d1377 15
+a1391 13
+		case SLICE_LIGHTWAVE:
+			es_command = ES_LightWave;
+		break;
+		case SLICE_PAINT:
+			es_command = ES_ToasterPaint;
+		break;
+		case SLICE_CG:
+			es_command = ES_ToasterCG;
+		break;
+		case SLICE_CHROMAFX:
+			es_command = ES_ChromaFX;
+		break;
+	}
+d1393 2
+a1394 4
+	// A program was chosen, so there
+	if ( es_command )
+	{
+		if ( last_qual & (IEQUALIFIER_LSHIFT | IEQUALIFIER_RSHIFT) )
+d1396 4
+a1399 2
+			// Unload the application
+			ESparams1.Data1=FGC_UNLOAD;
+d1401 7
+a1407 1
+			if(!SendSwitcherReply(es_command,&ESparams1))
+d1409 3
+a1411 2
+				// Success
+				AppNames[AppNum][0] = ' ';
+d1414 7
+d1422 6
+a1427 5
+		{
+			// Tell eventloop to load and run a slice
+			global_LoadSliceCommand = es_command;
+			AppNames[AppNum][0] = '*';
+		}
+@
+
+
+2.54
+log
+@Added support for backup button in the async requester
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.53 1995/01/13 13:00:05 CACHELIN4000 Exp pfrench $
+d5 3
+d1121 1
+a1121 1
+	
+d1773 1
+a1773 1
+	
+d1946 1
+a1946 1
+			
+d2022 1
+a2022 1
+		Edit = NULL;
+@
+
+
+2.53
+log
+@Set ViewMode initial value to 2, match initial Proj/Switcher mode.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.52 1994/12/31 08:14:02 pfrench Exp CACHELIN4000 $
+d5 3
+d219 1
+d1719 1
+a1719 1
+	struct Gadget			*Gadget,*OK,*Cancel,*FileName;
+d1800 14
+d1884 24
+@
+
+
+2.52
+log
+@No longer shuts out dump-lightwave menu item
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.51 1994/12/29 16:17:05 CACHELIN4000 Exp pfrench $
+d5 3
+d310 1
+a310 1
+WORD ViewMode = 0,PrevViewMode=0;
+@
+
+
+2.51
+log
+@Create SetView() out of guts of HandleView()
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.50 1994/12/23 18:26:39 pfrench Exp CACHELIN4000 $
+d5 3
+d1356 4
+a1359 7
+			/* HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK */
+			/*   HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK    */
+			/* HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK */
+
+			/* Dis-allow unloading of lightwave, as the code we sent */
+			/* allen has some serious problems */
+			if ( es_command != ES_LightWave )
+d1361 2
+a1362 8
+				// Unload the application
+				ESparams1.Data1=FGC_UNLOAD;
+
+				if(!SendSwitcherReply(es_command,&ESparams1))
+				{
+					// Success
+					AppNames[AppNum][0] = ' ';
+				}
+@
+
+
+2.50
+log
+@Disabled un-loading of lightwave, as it can cause crashes
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.49 1994/12/23 13:37:32 pfrench Exp pfrench $
+d5 3
+d217 5
+d304 1
+a304 1
+WORD ViewMode = 0;
+d1165 4
+a1168 2
+	if (A >= 0) {
+		if (A != ViewMode) {
+d1171 5
+a1175 6
+			switch(A) {
+			case 0:   // Project/Files
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_GRAZ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_GRAZER);
+d1177 1
+a1177 32
+			case 1:	 // Files/Files
+				ESparams1.Data1=GUI_T_GRAZ|GUI_B_GRAZ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_GRAZER,TOP_SMALL,EW_GRAZER);
+				break;
+			case 2:	 // Project/Switcher
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_EMPTY);
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_SWIT;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(TRUE);
+				aw_Redraw(global_aw);
+				break;
+			case 3:	 // Big Project
+				ESparams1.Data1=GUI_T_NONE|GUI_B_PROJ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+					MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+			break;
+			case 4:	 // Project/Project
+				if ( XtrProject )
+				{
+					ESparams1.Data1=GUI_T_PROJ|GUI_B_PROJ;
+					SendSwitcherReply(ES_GUImode,&ESparams1);
+					SwitcherSwitch(FALSE);
+					MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+				}
+				else
+				{
+					BeginGrazerRequest( &ProjProjGrazRequest );
+				}
+				break;
+a1180 2
+					CloseAccessWindow();
+					access_win = NULL;
+d1193 1
+d1196 64
+@
+
+
+2.49
+log
+@Fixed "continue" bug on save project requester.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.48 1994/12/22 23:13:35 pfrench Exp pfrench $
+d5 3
+d1312 10
+a1321 2
+			// Unload the application
+			ESparams1.Data1=FGC_UNLOAD;
+d1323 5
+a1327 4
+			if(!SendSwitcherReply(es_command,&ESparams1))
+			{
+				// Success
+				AppNames[AppNum][0] = ' ';
+@
+
+
+2.48
+log
+@Added SwitcherSwitch(TRUE) when going to a slice
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.47 1994/12/22 23:07:55 CACHELIN4000 Exp pfrench $
+d5 3
+d1816 10
+a1825 2
+		EndGrazerRequest(TRUE);
+		Edit = NULL;
+@
+
+
+2.47
+log
+@Return early out of QUIT in HandleView()
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.46 1994/12/22 21:58:26 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+d1375 1
+@
+
+
+2.46
+log
+@Attempt to fix crashy quit, check in so I can updateme
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.45 1994/12/16 21:01:49 CACHELIN4000 Exp CACHELIN4000 $
+d5 3
+@
+
+
+2.45
+log
+@Add verification requester to HandleView() QUIT option
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.44 1994/12/07 21:50:37 pfrench Exp CACHELIN4000 $
+d5 3
+d1196 1
+@
+
+
+2.44
+log
+@Reversed left/right of buttons
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.43 1994/12/07 15:53:20 pfrench Exp pfrench $
+d5 3
+d1122 1
+a1122 1
+	WORD A,X,Y;
+d1152 1
+a1152 1
+			break;
+d1158 1
+a1158 1
+			break;
+d1165 1
+a1165 1
+			break;
+d1170 1
+a1170 1
+				MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+d1184 1
+a1184 1
+			break;
+d1186 11
+a1196 6
+				CloseAccessWindow();
+				access_win = NULL;
+				MakeLayout(EW_EMPTY,TOP_SMALL,EW_EMPTY);
+				ESparams1.Data1=NULL;
+				SendSwitcherReply(ES_QUIT,&ESparams1);
+			break;
+@
+
+
+2.43
+log
+@GrazerRequest code now handles finangling the paths before
+the layout of the interface changes
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.42 1994/12/05 14:02:43 pfrench Exp pfrench $
+d5 4
+d232 1
+a232 1
+	"Project-to-Project Editing",
+d250 3
+a252 3
+	EW_PROJECT,
+	TOP_SMALL,
+	EW_PROJECT,
+d1573 4
+a1576 2
+		ESparams1.Data1=(LONG)GetCString(gr->gr_FilePath);
+		if ( !SendSwitcherReply(ES_LoadCrouton,&ESparams1) )
+d1578 11
+a1588 3
+			req_DoLayout(	gr->gr_ContinueTopType,
+								gr->gr_ContinueTopHeight,
+								gr->gr_ContinueBottomType);
+a1590 7
+	else
+	{
+		req_DoLayout(	gr->gr_CancelTopType,
+							gr->gr_CancelTopHeight,
+							gr->gr_CancelBottomType);
+
+	}
+d1592 1
+a1592 1
+	if (gr->gr_FilePath)
+d1598 4
+d1700 2
+a1701 1
+	Cancel->LeftEdge = 6;	Cancel->NextGadget = NULL;
+d1707 1
+a1707 1
+	OK->LeftEdge = NW->Width - OK->Width - 6;
+@
+
+
+2.42
+log
+@Added support for moving to project save directory
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.41 1994/11/09 20:10:35 Kell Exp pfrench $
+d5 3
+d1385 23
+d1410 4
+d1435 2
+d1441 4
+a1444 2
+		s = BottomPath;
+		BottomPath = gr->gr_InitialPath;	/* This is the prev directory */
+d1446 1
+a1446 5
+		if ( ((struct Grazer *)EditBottom->Special)->Path )
+			FreeSmartString(((struct Grazer *)EditBottom->Special)->Path);
+
+		((struct Grazer *)EditBottom->Special)->Path = DuplicateSmartString(s);
+
+d1449 2
+a1460 2
+	global_gr = NULL;
+
+d1731 1
+a1731 1
+			if ( global_gr->gr_InitialPath )
+d1733 1
+a1733 2
+				UpdateStringGadgetText(Edit->Window,FileName,
+					FilePart(GetCString(global_gr->gr_InitialPath)) );
+@
+
+
+2.41
+log
+@New ErrorMessageBoolRequest function.
+@
+text
+@d3 5
+a7 2
+* $Id: graphichelp.c,v 2.40 1994/11/09 14:34:13 Kell Exp Kell $
+* $Log: graphichelp.c,v $
+d252 1
+d1405 16
+d1698 8
+a1705 2
+			FileName->LeftEdge+FileName->Width+3,
+			FileName->TopEdge+FileName->Height+4-1,BOX_REV_BORDER);
+@
+
+
+2.40
+log
+@New ErrorMessageRequest function.
+@
+text
+@d3 1
+a3 1
+* $Id: graphichelp.c,v 2.39 1994/11/07 19:47:22 pfrench Exp Kell $
+d5 3
+d865 1
+a865 1
+	char	**string;
+d871 13
+@
+
+
+2.39
+log
+@Added loadedslices command before popup
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.38 1994/11/07 16:42:10 pfrench Exp pfrench $
+* $Log: GraphicHelp.c,v $
+d856 12
+@
+
+
+2.38
+log
+@Added getloadedslices
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.37 1994/11/04 00:17:55 CACHELIN4000 Exp pfrench $
+d5 3
+d1204 2
+@
+
+
+2.37
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.36 94/11/03 23:02:07 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d1259 39
+@
+
+
+2.36
+log
+@Close windows on QUIT
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.35 94/10/21 14:54:53 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+@
+
+
+2.35
+log
+@Add nascent LostCrouton panel code, fix prototypes for PROTO_PASS compile
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.34 94/10/12 19:44:42 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d1132 3
+@
+
+
+2.34
+log
+@Remove prototypes
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.33 94/09/29 15:58:48 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d155 1
+a155 2
+#endif
+#ifdef PROTO_PASS
+d157 9
+d203 28
+d1401 34
+@
+
+
+2.33
+log
+@*** empty log message ***
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.32 94/09/27 23:08:05 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+a161 4
+ULONG BuildWaitMask(void);
+
+LONG EndProjProjRequest( struct GrazerRequest *gr, LONG mode );
+
+a190 16
+
+LONG req_DoLayout( WORD TopType, WORD TopHeight, WORD BottomType );
+struct EditWindow *AllocInitAsyncReq(struct NewEditWindow *NewEdit );
+struct EditWindow *AsyncReqCancelHandler(struct EditWindow *,struct IntuiMessage *);
+struct EditWindow *AsyncReqContinueHandler(struct EditWindow *,struct IntuiMessage *);
+struct EditWindow *AsyncReqHandlePath(struct EditWindow *,struct IntuiMessage *);
+BOOL AsyncReqResize(struct EditWindow *,UWORD NewHeight);
+BOOL AsyncReqOpen(struct EditWindow *);
+VOID AsyncReqClose(struct EditWindow *);
+VOID AsyncReqFree(struct EditWindow *);
+LONG IsRequestedFileType( struct EditNode *Node );
+struct EditWindow *BotProjNewProject(struct EditWindow *,struct IntuiMessage *);
+LONG DisplayCroutonName( STRPTR filename, struct Screen *scr );
+
+VOID KPutStr(char *String);
+VOID KPutChar(char C);
+@
+
+
+2.32
+log
+@Whoops, GadgetID mixup
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.31 1994/09/27 16:27:05 pfrench Exp pfrench $
+* $Log: GraphicHelp.c,v $
+@
+
+
+2.31
+log
+@Many changes to rendering/popup code
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.30 1994/09/23 10:10:34 CACHELIN4000 Exp pfrench $
+d5 3
+d992 1
+a992 1
+	if (Gadget = FindGadget(Edit->Gadgets,ID_POPUP_DISP))
+d1044 1
+a1044 1
+	Gadget = FindGadget(Edit->Gadgets,ID_POPUP_DISP);
+@
+
+
+2.30
+log
+@change DisplayRunningTime(), add SetRunningTime, global TotalFields
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.28 94/09/21 21:31:57 pfrench Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d203 1
+d221 1
+a221 3
+WORD ViewMode = 0,MessUp=0;
+char	time[12]="00:00:00:00";
+ULONG TotalFields=0;
+d978 1
+a980 1
+	char *C;
+d983 10
+a992 3
+	if (Gadget = FindGadget(Edit->Gadgets,ID_POPUP_DISP)) {
+		C = NameFcn(NULL,ViewMode);
+		AnyPopupText(Gadget,C,Edit->Window,20);
+d996 23
+d1042 1
+a1042 1
+	X = Gadget->LeftEdge + (Gadget->Width >> 1);
+d1111 130
+a1685 122
+
+UBYTE NameBuf[302];
+
+struct StringExtend NameExt = {
+	NULL,0,2,0,2, // need font ptr
+	SGM_REPLACE|SGM_FIXEDFIELD|SGM_NOFILTER,   // Initial Modes
+	NULL,NULL,0,0,0,0
+};
+
+struct StringInfo NameSI = {NameBuf,NULL,0,300,0,0,0,0,0,0,&NameExt,0,NULL};
+
+struct Gadget NameGad = { NULL,0,0,20,20,GFLG_STRINGEXTEND,GACT_STRINGLEFT,GTYP_STRGADGET,NULL,NULL,NULL,NULL,&NameSI,69,NULL};
+
+LONG DisplayCroutonName( STRPTR filename, struct Screen *scr )
+{
+	LONG						 x,y,xl;
+	struct RastPort		 srp;
+
+#ifndef SWIT_ONLY
+	if (SwitPort) {
+#endif
+	x = GRID_LEFT + 30;
+	y = 40 - LINE_HEIGHT;
+#ifndef SWIT_ONLY
+	} else { x = 0; y = 0; }
+#endif
+
+	if(MessUp) DisplayMessage(NULL,scr);
+	// Copy Screen's RastPort so we don't fudge the font, etc.
+	srp = scr->RastPort;
+	xl=x;
+	x+=100;
+	SetAPen(&srp,1);
+	RectFill(&srp,x+2,y+2,x+(240-3),y+(LINE_HEIGHT-3));
+	NewBorderBox(&srp,x,y,x+240,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+	if ( filename )
+	{
+		SetFont(&srp,DarkFont);
+		Move(&srp,xl+4,y+DarkFont->tf_Baseline + 4);
+		SafeColorText(&srp,"Current Item",12);
+		Move(&srp,x+4,y+DarkFont->tf_Baseline + 4);
+		SafeColorText(&srp,filename,strlen(filename));
+	}
+	return(0);
+}
+
+void __asm SetRunningTime(register __d0 ULONG Fields)
+{
+	TotalFields=Fields;
+}
+
+#define TCLEN	96
+LONG DisplayRunningTime( struct Screen *scr )
+{
+	LONG						 x,y,xl;
+	ULONG fields=0;
+	struct RastPort		 srp;
+
+#ifndef SWIT_ONLY
+	if (SwitPort) {
+#endif
+	x = GRID_LEFT + 30;
+	y = 40 - LINE_HEIGHT;
+#ifndef SWIT_ONLY
+	} else { x = 0; y = 0; }
+#endif
+
+	// Copy Screen's RastPort so we don't fudge the font, etc.
+	srp = scr->RastPort;
+	x+=GRID_WIDTH - TCLEN -8;
+	xl=x-100;
+	fields = TotalFields>>1;  // convert to frames
+	if(MessUp) DisplayMessage(NULL,scr);
+	if(TotalFields != -1) LongToTime(&fields,time);
+	else strcpy(time,"??:??:??:??");
+	SetAPen(&srp,1);
+	RectFill(&srp,x+2,y+2,x+TCLEN+6,y+(LINE_HEIGHT-3));
+	NewBorderBox(&srp,x,y,x+TCLEN+11,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+	if ( time )
+	{
+		SetFont(&srp,DarkFont);
+		Move(&srp,xl,y+DarkFont->tf_Baseline + 4);
+		SafeColorText(&srp,"Program Time",12);
+		Move(&srp,x+4,y+DarkFont->tf_Baseline + 4);
+		SafeColorText(&srp,time,11);
+	}
+	return(0);
+}
+
+// Put message atop screen, or clear message if mes=NULL
+LONG DisplayMessage( STRPTR	mes, struct Screen *scr )
+{
+	LONG						 x,y;
+	struct RastPort		 srp;
+
+#ifndef SWIT_ONLY
+	if (SwitPort) {
+#endif
+	x = GRID_LEFT + 30;
+	y = 40 - LINE_HEIGHT;
+#ifndef SWIT_ONLY
+	} else { x = 0; y = 0; }
+#endif
+	srp = scr->RastPort;
+	if ( mes )
+	{
+		MessUp = 1;
+		SetAPen(&srp,2);
+		RectFill(&srp,x+2,y+2,x+GRID_WIDTH-2,y+(LINE_HEIGHT-3));
+		NewBorderBox(&srp,x,y,x+GRID_WIDTH+3,y+LINE_HEIGHT+2,BOX_STD_BORDER);
+		SetFont(&srp,EditFont);
+		Move(&srp,x+4,y+EditFont->tf_Baseline + 4);
+		SafeColorText(&srp,mes,strlen(mes));
+	}
+	else
+	{
+		MessUp = 0;
+		SetAPen(&srp,1);
+		RectFill(&srp,x,y,x+GRID_WIDTH,y+(LINE_HEIGHT+2));
+	}
+	return(0);
+}@
+
+
+2.29
+log
+@change DisplayRunningTime(), add SetRunningTime, global TotalFields
+@
+text
+@d1579 1
+d1595 1
+a1595 1
+	fields >>= 1;  // convert to frames
+d1597 1
+a1597 1
+	if(TotalFields != -1) LongToTime(&TotalFields,time);
+d1617 1
+a1617 1
+findhit /exe/	struct RastPort		 srp;
+@
+
+
+2.28
+log
+@Using new FlushWindowPort call
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.27 1994/09/13 18:37:41 pfrench Exp pfrench $
+* $Log: GraphicHelp.c,v $
+d219 1
+a219 1
+
+d1570 5
+d1576 1
+a1576 1
+LONG DisplayRunningTime( ULONG fields, struct Screen *scr )
+d1596 1
+a1596 1
+	if(fields != -1) LongToTime(&fields,time);
+d1616 1
+a1616 1
+	struct RastPort		 srp;
+@
+
+
+2.27
+log
+@Smarter support for variable-height fittext.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.26 1994/09/08 16:18:20 pfrench Exp pfrench $
+d5 3
+d1018 1
+a1018 15
+	Forbid();
+	{
+		struct IntuiMessage *NextMsg;
+		for ( IntuiMsg = (struct IntuiMessage *)Edit->Window->UserPort->mp_MsgList.lh_Head;
+				NextMsg = (struct IntuiMessage *)IntuiMsg->ExecMessage.mn_Node.ln_Succ;
+				IntuiMsg = NextMsg )
+		{
+			if ( IntuiMsg->Class & IDCMP_MOUSEMOVE )
+			{
+				Remove( (struct Node *)IntuiMsg );
+				ReplyMsg( (struct Message *)IntuiMsg );
+			}
+		}
+	}
+	Permit();
+@
+
+
+2.26
+log
+@Now redraws window at correct times
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.25 1994/09/06 22:26:19 CACHELIN4000 Exp pfrench $
+d5 3
+d245 1
+a245 1
+		TEXT_HEIGHT)) {
+@
+
+
+2.25
+log
+@enable ES_QUIT message
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.24 94/08/30 22:23:19 pfrench Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d196 1
+d1052 1
+a1176 3
+	SendSwitcherReply(ES_GUImode,&ESparams1);
+
+	MakeLayout(	TopType, TopHeight, BottomType);
+d1179 3
+d1183 2
+d1186 2
+d1189 2
+@
+
+
+2.24
+log
+@BeginGrazerRequest clears VALIDFILENAME bit before
+continueing.
+@
+text
+@d3 6
+a8 2
+* $Id: GraphicHelp.c,v 2.23 1994/08/30 15:35:16 CACHELIN4000 Exp pfrench $
+* $Log: GraphicHelp.c,v $
+d1056 11
+a1066 11
+			if ( XtrProject )
+			{
+				ESparams1.Data1=GUI_T_PROJ|GUI_B_PROJ;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+				SwitcherSwitch(FALSE);
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+			}
+			else
+			{
+				BeginGrazerRequest( &ProjProjGrazRequest );
+			}
+d1069 2
+a1070 2
+				ESparams1.Data1=GUI_T_NONE|GUI_B_SWIT;
+				SendSwitcherReply(ES_GUImode,&ESparams1);
+d1518 12
+@
+
+
+2.23
+log
+@Make displays match artwork (for now)
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.22 94/08/30 10:38:33 Kell Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d1084 2
+d1393 1
+a1393 1
+		{
+d1396 1
+a1396 1
+		}
+d1405 1
+a1405 1
+		{
+d1408 1
+a1408 1
+		}
+@
+
+
+2.22
+log
+@Changed SendSwitcherReply calls to work with new ESParams structures.
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.21 1994/08/29 20:39:59 CACHELIN4000 Exp Kell $
+* $Log: GraphicHelp.c,v $
+d1531 1
+a1531 1
+	NewBorderBox(&srp,x,y,x+240,y+LINE_HEIGHT+2,BOX_REV);
+d1568 1
+a1568 1
+	NewBorderBox(&srp,x,y,x+TCLEN+11,y+LINE_HEIGHT+2,BOX_REV);
+@
+
+
+2.21
+log
+@DisplayMessage, Time tweaks.
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.20 94/08/29 18:56:11 pfrench Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d184 3
+d1022 2
+a1023 1
+				SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0);
+d1028 2
+a1029 1
+				SendSwitcherReply(ES_GUImode,GUI_T_GRAZ|GUI_B_GRAZ,0,0);
+d1035 2
+a1036 1
+				SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_SWIT,0,0);
+d1040 2
+a1041 1
+				SendSwitcherReply(ES_GUImode,GUI_T_NONE|GUI_B_PROJ,0,0);
+d1048 2
+a1049 1
+				SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_PROJ,0,0);
+d1059 2
+a1060 1
+				SendSwitcherReply(ES_GUImode,GUI_T_NONE|GUI_B_SWIT,0,0);
+d1159 2
+a1160 1
+	SendSwitcherReply(ES_GUImode,guimode,0,0);
+d1187 3
+a1189 1
+		if ( !SendSwitcherReply(ES_LoadProject,1,(LONG)GetCString(gr->gr_FilePath),NULL) )
+@
+
+
+2.20
+log
+@borders on filename/time matches artwork (for now)
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.19 1994/08/27 00:27:53 CACHELIN4000 Exp pfrench $
+* $Log: GraphicHelp.c,v $
+d188 1
+a188 1
+WORD ViewMode = 0;
+d1506 1
+d1545 3
+a1547 1
+	LongToTime(&fields,time);
+d1579 1
+d1589 1
+@
+
+
+2.19
+log
+@Change DisplayRunningTime() to take fields, add DisplayMessage()
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.18 94/08/26 16:23:32 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+d1509 1
+a1509 1
+	NewBorderBox(&srp,x,y,x+240,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+d1544 1
+a1544 1
+	NewBorderBox(&srp,x,y,x+TCLEN+11,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+@
+
+
+2.18
+log
+@duoooh!
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.17 94/08/26 15:53:51 CACHELIN4000 Exp Locker: CACHELIN4000 $
+d5 3
+d183 1
+a1517 1
+
+d1519 1
+a1519 1
+LONG DisplayRunningTime( STRPTR	time, struct Screen *scr )
+d1537 2
+a1538 1
+
+d1541 1
+a1541 1
+	NewBorderBox(&srp,x,y,x+TCLEN+8,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+d1547 1
+a1547 1
+		Move(&srp,x+4,y+TCFont->tf_Baseline + 4);
+d1550 2
+d1553 29
+@
+
+
+2.17
+log
+@Cosmetic help for DisplayCroutonName(), created cousin f'n DisplayRunningTime()
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.16 94/08/22 13:49:59 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d1536 2
+a1537 2
+	RectFill(&srp,x+2,y+2,x+(240-3),y+(LINE_HEIGHT-3));
+	NewBorderBox(&srp,x,y,x+240,y+LINE_HEIGHT+2,BOX_CP_BORDER);
+a1542 1
+		SetFont(&srp,TCFont);
+@
+
+
+2.16
+log
+@Fixed enforcer hit in filename gadget.
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.15 1994/08/11 16:55:46 pfrench Exp pfrench $
+* $Log: GraphicHelp.c,v $
+d102 1
+a102 4
+#include <GraphicHelp.p>
+#include <GadgetHelp.p>
+#include <HandleCommon.p>
+#include <EditWindow.p>
+d163 1
+a163 1
+extern struct TextFont *EditFont,*DarkFont;
+d1481 1
+a1481 1
+	LONG						 x,y;
+d1487 1
+a1487 1
+	x = 32 + 30;
+d1495 2
+a1496 7
+
+	SetAPen(&srp,0);
+	Move(&srp,x,y);
+	Draw(&srp,x+240,y);
+	Draw(&srp,x+240,y+LINE_HEIGHT);
+	Draw(&srp,x,y+LINE_HEIGHT);
+	Draw(&srp,x,y);
+d1498 2
+a1499 2
+	RectFill(&srp,x+1,y+1,x+(240-1),y+(LINE_HEIGHT-1));
+
+d1503 3
+a1505 1
+		Move(&srp,x+2,y+DarkFont->tf_Baseline + 4);
+d1507 36
+@
+
+
+2.15
+log
+@Added string gadget in async requester for specifying
+a file name when saving.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.14 1994/08/01 16:42:46 pfrench Exp pfrench $
+d5 4
+d1303 1
+@
+
+
+2.14
+log
+@Added code that flushes MOUSEMOVES out of the window's
+IDCMP port. As somehow they were sneaking in to the
+eventloop() and causing the editor to crash.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.13 1994/07/31 14:42:20 pfrench Exp pfrench $
+d5 5
+d147 1
+d1221 1
+a1221 1
+	struct Gadget			*Gadget,*OK,*Cancel;
+d1248 1
+d1253 1
+d1268 5
+a1272 1
+
+d1286 1
+d1288 11
+a1298 1
+	Edit->Gadgets = Cancel;
+d1308 1
+a1308 1
+		/* MakeSimpleSmart(Edit->Window); */
+d1313 7
+d1368 36
+@
+
+
+2.13
+log
+@Slightly smarter grazerreq code.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.12 1994/07/28 18:19:46 pfrench Exp pfrench $
+d5 3
+d967 18
+@
+
+
+2.12
+log
+@Added filename display in upper corner of screen.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.11 1994/07/28 11:36:58 pfrench Exp pfrench $
+d5 3
+d84 1
+d101 1
+a101 1
+
+d103 1
+a103 10
+#define GUI_B_NONE	0x00
+#define GUI_B_SWIT	0x01
+#define GUI_B_PROJ	0x02
+#define GUI_B_GRAZ	0x04
+#define GUI_T_NONE  GUI_B_NONE<<8
+#define GUI_T_SWIT  GUI_B_SWIT<<8
+#define GUI_T_PROJ  GUI_B_PROJ<<8
+#define GUI_T_GRAZ  GUI_B_GRAZ<<8
+
+ULONG BuildWaitMask(void);
+d105 1
+a105 1
+char *ProjProjReqText[] = {
+d113 1
+a113 1
+char ProjProjReqFileTypes[] = {
+d118 13
+a130 2
+LONG BeginRequestFile(	BYTE *filetypes,	WORD num_filetypes,
+												UBYTE **reqtext,	WORD num_reqlines );
+d132 2
+a133 1
+LONG EndRequestFile(	LONG mode );
+d135 1
+d160 1
+d1000 1
+a1000 8
+				// Where to go on a successful file select
+				ReqContinueTopType = EW_PROJECT;
+				ReqContinueTopHeight = TOP_SMALL;
+				ReqContinueBottomType = EW_PROJECT;
+
+				BeginRequestFile(
+							ProjProjReqFileTypes, PROJ_PROJ_NUM_FILETYPES,
+							ProjProjReqText, PROJ_PROJ_REQTEXT_NUMLINES);
+a1016 9
+struct SmartString *FileRequestPath;
+WORD FileRequestMode = 0;
+WORD ReqContinueTopType, ReqContinueTopHeight, ReqContinueBottomType;	/* if continue */
+WORD ReqRestoreTopType, ReqRestoreTopHeight, ReqRestoreBottomType;		/* if cancel */
+
+static BYTE *asyncreq_filetypes;
+static WORD asyncreq_num_filetypes;
+static UBYTE **asyncreq_reqtext;
+static WORD asyncreq_num_reqlines;
+d1018 1
+a1018 2
+LONG BeginRequestFile(	BYTE *filetypes,	WORD num_filetypes,
+												UBYTE **reqtext,	WORD num_reqlines )
+a1021 6
+	// assign even more globals
+	asyncreq_filetypes = filetypes;
+	asyncreq_num_filetypes = num_filetypes;
+	asyncreq_reqtext = reqtext;
+	asyncreq_num_reqlines = num_reqlines;
+
+d1024 2
+a1025 2
+		ReqRestoreTopType = EditTop->Node.Type;
+		ReqRestoreTopHeight = EditTop->Height;
+d1029 2
+a1030 2
+		ReqRestoreTopType = EW_EMPTY;
+		ReqRestoreTopHeight = 0;
+d1035 1
+a1035 1
+		ReqRestoreBottomType = EditBottom->Node.Type;
+d1039 1
+a1039 1
+		ReqRestoreBottomType = EW_EMPTY;
+d1042 1
+a1042 1
+	FileRequestMode = 1;
+d1051 65
+a1115 1
+LONG EndRequestFile( LONG mode )
+d1117 1
+a1117 1
+	LONG			retval = 0;
+d1120 3
+a1122 3
+			file of the correct type or by selecting the file and
+			hitting "continue" in the async requester, or by typing
+			in a file name in the grazer string and hitting return.
+d1128 1
+a1128 1
+	if ( mode && (FileRequestMode == 2) )
+d1130 1
+a1130 3
+		FileRequestMode = 0;
+
+		if ( !SendSwitcherReply(ES_LoadProject,1,(LONG)GetCString(FileRequestPath),NULL) )
+d1134 3
+a1136 11
+			if ( ReqContinueBottomType == EW_EMPTY )
+				SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_SWIT,0,0);
+			else
+				SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_PROJ,0,0);
+
+			MakeLayout(ReqContinueTopType,ReqContinueTopHeight,ReqContinueBottomType);
+
+			if ( ReqContinueBottomType == EW_EMPTY )
+				SwitcherSwitch(TRUE);
+			else
+				SwitcherSwitch(FALSE);
+d1141 3
+a1143 1
+		FileRequestMode = 0;
+a1144 12
+		MakeLayout(ReqRestoreTopType,ReqRestoreTopHeight,ReqRestoreBottomType);
+
+		if ( ReqRestoreBottomType == EW_EMPTY )
+		{
+			SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_SWIT,0,0);
+			SwitcherSwitch(TRUE);
+		}
+		else
+		{
+			SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0);
+			SwitcherSwitch(FALSE);
+		}
+d1147 1
+a1147 1
+	if (FileRequestPath)
+d1149 2
+a1150 2
+		FreeSmartString(FileRequestPath);
+		FileRequestPath = NULL;
+d1165 1
+a1165 1
+				(Edit->Special = (struct EditSpecial *)AllocSmartNode(NULL,sizeof(struct EditSpecial),MEMF_CLEAR)) )
+d1183 2
+a1184 2
+				(*Edit->Free)(Edit);
+				Edit = NULL;
+d1192 2
+a1193 1
+	struct NewWindow	*NW;
+d1195 4
+a1198 4
+	BOOL							 Success = FALSE;
+	WORD							 i,max_txt_width;
+	UWORD							 Len[MAX_REQ_LINES],
+										 BitW[MAX_REQ_LINES];
+d1202 1
+a1202 1
+	NW->FirstGadget = NULL; 					// don't add until after open
+d1219 2
+a1220 2
+	NW->Height = ((asyncreq_num_reqlines+1) * LINE_HEIGHT)
+								+ SLACK + ((8 + PNL_DIV) << 1);
+d1225 1
+a1225 1
+	for ( i = 0; i < asyncreq_num_reqlines; i++ )
+d1227 2
+a1228 2
+		Len[i] = SafeFitText(&srp,asyncreq_reqtext[i],
+			strlen(asyncreq_reqtext[i]),MAX_WIDTH-SLACK,FALSE);
+d1270 1
+a1270 1
+		for ( i = 0; i < asyncreq_num_reqlines; i++ )
+d1273 1
+a1273 1
+			SafeColorText(rp,asyncreq_reqtext[i],Len[i]);
+d1302 1
+a1302 1
+		EndRequestFile(FALSE);
+d1314 1
+a1314 1
+		EndRequestFile(TRUE);
+d1328 1
+a1328 2
+	if (Edit)
+		CloseEditWindow(Edit);
+d1346 2
+a1347 1
+	LONG	use_it = TRUE;
+d1349 1
+a1349 1
+	if ( FileRequestMode )
+d1353 2
+a1354 2
+			LONG			 i = asyncreq_num_filetypes;
+			BYTE			*ch = asyncreq_filetypes;
+d1356 3
+a1358 1
+			use_it = FALSE;
+d1360 9
+a1368 8
+			while (i--)
+		  {
+			  if ( ((struct GrazerNode *)Node)->Type == *ch++ )
+			  {
+				  use_it = TRUE;
+				  break;
+			  }
+		  }
+d1380 1
+a1380 9
+		// Where to go on a successful file select
+		ReqContinueTopType = EW_PROJECT;
+		ReqContinueTopHeight = TOP_SMALL;
+		ReqContinueBottomType = EW_PROJECT;
+
+		BeginRequestFile(
+					ProjProjReqFileTypes, PROJ_PROJ_NUM_FILETYPES,
+					ProjProjReqText, PROJ_PROJ_REQTEXT_NUMLINES);
+
+d1389 1
+a1390 1
+	LONG						 x,y;
+a1391 3
+	// Copy RastPort struct
+	srp = scr->RastPort;
+
+d1398 1
+a1398 6
+	}
+	else
+	{
+	x = 0;
+	y = 0;
+	}
+d1400 3
+@
+
+
+2.11
+log
+@Found correct gadget IDs for async continue/cancel buttons
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.10 1994/07/27 16:48:30 pfrench Exp pfrench $
+d5 3
+d137 1
+d1359 41
+@
+
+
+2.10
+log
+@Added response code to "New Project" button in bottom project.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.9 1994/07/21 18:54:37 pfrench Exp $
+d5 3
+d1205 1
+a1205 1
+	Gadget = FindGadget(&Gadget1,ID_REQ_CANCEL);
+d1212 1
+a1212 1
+	Gadget = FindGadget(&Gadget1,ID_REQ_CONTINUE);
+@
+
+
+2.9
+log
+@Yet even more stuff for proj/proj edit.  Filtering of file types.
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.8 1994/07/21 12:29:30 pfrench Exp pfrench $
+d5 3
+d130 1
+d1079 5
+a1083 1
+			/* SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_PROJ,0,0); */
+d1085 5
+a1089 1
+			SwitcherSwitch(FALSE);
+d1100 1
+a1100 1
+		/* SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_SWIT,0,0); */
+d1105 1
+a1105 1
+		/* SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0); */
+a1264 1
+		/* AsyncReqFree(Edit); */
+a1276 1
+		/* AsyncReqFree(Edit); */
+d1331 21
+@
+
+
+2.8
+log
+@Added async file requester stuff
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.7 1994/07/14 12:00:31 pfrench Exp pfrench $
+d5 3
+d70 2
+d104 1
+a104 1
+	"Select Open Project to display its contents.",
+d109 7
+a115 2
+LONG BeginRequestFile(	UBYTE *filetypes, LONG num_filetypes,
+												UBYTE **reqtext,	LONG num_reqlines );
+d126 1
+d985 2
+a986 1
+				BeginRequestFile(NULL,0,
+d1007 1
+d1009 4
+a1012 5
+WORD ReqRestoreTopType, ReqRestoreTopHeight, ReqRestoreBottomType;		/* if cancel */
+BYTE *asyncreq_filetypes;
+LONG asyncreq_num_filetypes;
+UBYTE **asyncreq_reqtext;
+LONG asyncreq_num_reqlines;
+d1014 2
+a1015 2
+LONG BeginRequestFile(	UBYTE *filetypes, LONG num_filetypes,
+												UBYTE **reqtext,	LONG num_reqlines )
+d1155 1
+a1155 1
+	NW->LeftEdge = 0;// Edit->LeftEdge;
+d1161 1
+a1161 1
+	NW->LeftEdge = 32;
+d1214 1
+a1214 1
+		MakeSimpleSmart(Edit->Window);
+a1246 2
+extern LONG EndRequestFile( LONG mode );
+
+d1295 26
+@
+
+
+2.7
+log
+@Initial code for requesting file types.
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.6 94/07/08 10:10:05 CACHELIN4000 Exp Locker: pfrench $
+* $Log:	GraphicHelp.c,v $
+d38 1
+a38 1
+* Confidental and Proprietary. All rights reserved. 
+d66 1
+d94 12
+d107 10
+d123 2
+d173 1
+a173 1
+*   NAME   
+d203 1
+a203 1
+*   NAME 
+d224 1
+a224 1
+*   NAME   
+d256 1
+a256 1
+*   NAME   
+d277 1
+a277 1
+*   NAME   
+d313 1
+a313 1
+*   NAME   
+d492 2
+a493 2
+	IDCMP_GADGETUP+IDCMP_RAWKEY,	/* IDCMP flags */
+	SMART_REFRESH+BORDERLESS+ACTIVATE+RMBTRAP+NOCAREREFRESH+WFLG_NW_EXTENDED,	/* other window flags */
+d558 1
+a558 1
+	ReqNW.LeftEdge = DestWindow->LeftEdge + 
+d613 1
+a613 1
+		if (First) First->NextGadget = Cancel;	
+d628 1
+a628 1
+			Cancel->TopEdge = OK->TopEdge;		
+d631 1
+a631 1
+			Cancel->NextGadget = NULL;	
+d961 2
+d965 12
+a976 1
+		    MakeLayout(EW_PROJECT,TOP_SMALL,EW_PROJECT);
+d992 20
+a1011 10
+WORD ReqRestoreTopType, ReqRestoreTopHeight, ReqRestoreBottomType;
+WORD FileRequestMode;
+
+struct SmartString *RequestFileTypes( UBYTE *filetypes, LONG num_filetypes,
+																			UBYTE **reqtext,	LONG num_reqlines );
+
+struct SmartString *RequestFileTypes( UBYTE *filetypes, LONG num_filetypes,
+																			UBYTE **reqtext,	LONG num_reqlines )
+{
+	struct SmartString	*file_path = NULL;
+d1024 1
+a1024 1
+	if (EditBottom) 
+d1033 3
+a1035 1
+	SendSwitcherReply(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0);
+d1039 246
+a1284 1
+	return(file_path);
+@
+
+
+2.6
+log
+@replace SendSwitcher() calls with SendSwitcherReply()
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.5 94/07/07 11:27:04 pfrench Exp Locker: CACHELIN4000 $
+d5 3
+d948 40
+@
+
+
+2.5
+log
+@Added initial support for project/project editing
+@
+text
+@d3 1
+a3 1
+* $Id: GraphicHelp.c,v 2.4 94/06/04 02:25:32 Kell Exp Locker: pfrench $
+d5 3
+d910 1
+a910 1
+				SendSwitcher(ES_GUImode,GUI_T_PROJ|GUI_B_GRAZ,0,0);
+d915 1
+a915 1
+				SendSwitcher(ES_GUImode,GUI_T_GRAZ|GUI_B_GRAZ,0,0);
+d921 1
+a921 1
+				SendSwitcher(ES_GUImode,GUI_T_PROJ|GUI_B_SWIT,0,0);
+d925 1
+a925 1
+				SendSwitcher(ES_GUImode,GUI_T_NONE|GUI_B_PROJ,0,0);
+d930 1
+a930 1
+				SendSwitcher(ES_GUImode,GUI_T_PROJ|GUI_B_PROJ,0,0);
+d935 1
+a935 1
+				SendSwitcher(ES_GUImode,GUI_T_NONE|GUI_B_SWIT,0,0);
+@
+
+
+2.4
+log
+@Changed order of events when going in/out of switcher mode, to reduce
+annoying interface redraws.
+@
+text
+@d3 6
+a8 2
+* $Id: graphichelp.c,v 2.3 94/04/22 14:54:49 CACHELIN4000 Exp Locker: Kell $
+* $Log:	graphichelp.c,v $
+d798 1
+a798 1
+#define NUM_VIEW 5
+d802 1
+a802 1
+char *ViewNames[] = { View1,View2,View3,View4,View6 };
+d926 6
+a931 1
+			case 4:	 // QUIT
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@d3 5
+a7 2
+* $Id: GraphicHelp.c,v 2.2 94/04/22 14:30:46 CACHELIN4000 Exp Locker: CACHELIN4000 $
+* $Log:	GraphicHelp.c,v $
+a902 1
+				MakeLayout(EW_PROJECT,TOP_SMALL,EW_GRAZER);
+d905 1
+a907 1
+				MakeLayout(EW_GRAZER,TOP_SMALL,EW_GRAZER);
+d910 1
+a917 1
+				MakeLayout(EW_PROJECT,TOP_LARGE,EW_EMPTY);
+d920 1
+@
+
+
+2.2
+log
+@Send ES_GUImode messages with HandleView()
+@
+text
+@Binary files GraphicHelp.c and t:,RCSt1A70ed1c8 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files GraphicHelp.c and t:,RCSt1A70ed1c8 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files GraphicHelp.c and t:,RCSt1A70d7888 differ
+@

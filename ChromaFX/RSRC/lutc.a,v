@@ -1,0 +1,659 @@
+head	2.6;
+access;
+symbols;
+locks; strict;
+comment	@*@;
+
+
+2.6
+date	95.02.13.12.37.14;	author pfrench;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	95.02.13.12.18.41;	author pfrench;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	95.02.13.12.02.49;	author pfrench;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	95.02.03.15.42.34;	author pfrench;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	94.10.07.00.18.42;	author pfrench;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	94.10.05.18.23.05;	author pfrench;	state Exp;
+branches;
+next	2.0;
+
+2.0
+date	94.10.04.20.25.10;	author pfrench;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.6
+log
+@Now correctly saving tbar position (was assuming byte, not word)
+@
+text
+@********************************************************************
+* LUTC.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+* $Id: lutc.a,v 2.5 1995/02/13 12:18:41 pfrench Exp pfrench $
+*
+* $Log: lutc.a,v $
+*Revision 2.5  1995/02/13  12:18:41  pfrench
+*speed mode tag now matches switcher spec
+*
+*Revision 2.4  1995/02/13  12:02:49  pfrench
+*Now saving tags in chromafx croutons.
+*
+*Revision 2.3  1995/02/03  15:42:34  pfrench
+*Switched libname from chromafx to effects.library
+*
+*Revision 2.2  1994/10/07  00:18:42  pfrench
+*Added working Load code to lut8
+*
+*Revision 2.1  1994/10/05  18:23:05  pfrench
+*Now Creates a .i file with chromafx croutons.
+*
+*Revision 2.0  1994/10/04  20:25:10  pfrench
+*FirstCheckIn
+*
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUTC"
+	section LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUT0.i"
+	Include	"LUT2.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTB.i"
+	STARTLIST
+
+	PAGE
+*************************************************************************
+*									*
+*	LUT_LoadLUTFromCrouton:						*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Filename (with path?).				*
+*	A4.L	= Address of LUT Base (to save).			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Occurred				*
+*									*
+*	3.Oct 1994 Pat Brouillette.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_LoadLUTFromCrouton
+LUT_LoadLUTFromCrouton:
+	MOVEM.L	D0-D7/A0-A1/A6,-(A7)	; Save Calling State.
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+
+	MOVE.L	A0,D6			; D6.L = Address of FileName
+	CALLTL	OpenCroutonFile		; Open the file
+	BNE.S	LCR1			; continue if OK
+
+	MOVE.L	#LUT_OpenError,D7	; D7.L = File error
+	BRA.S	LCREX			; Exit
+
+LCR1	* File Opened!
+
+	MOVE.L	D0,D5			; D5.L = FileHandle now
+
+	MOVE.L	D5,A0			; A0.L = FileHandle
+	MOVE.L	#' LUT',D0		; D0.L = LUT chunk to seek for
+	CALLTL	Seek2CrUDchunk		; Call the seek
+	BNE.S	LCR2			; continue of OK
+
+	MOVE.L	#LUT_ReadError,D7	; D7.L = Read error
+	BRA.S	LCRCL			; Exit (with close file)
+
+LCR2	CALLTL	ReadBufferedLong	; Call the read of next long
+
+	* We've seeked to ' LUT' in CrUD, read it into LUT Base
+
+	MOVE.L	D5,A0			; A0.L = FileHandle
+	MOVE.L	A4,D2			; D2.L = Location to read into
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Amount to read
+	CALLTL	BufferedRead		; Do the Read
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4)
+	BCLR.B	#LUTF_GridAssign,LUT_Flags(A4) ; Been Assigned to grid (NOT!)
+	BSET.B	#LUTF_MapChange,LUT_Flags(A4) ; Did This One Change (YUP)
+	CMP.L	D0,D3			; Write Successful?
+	BEQ.S	LCR3			; continue if OK
+
+	MOVE.L	#LUT_ReadError,D7	; D7.L = Read error
+	BSR	LUT_InitEBuf		; Restore the default
+*	BRA.S	LCRCL			; Exit (with close file)
+
+LCR3	* We've successfully read the ' LUT' into LUT Base
+
+
+LCRCL	MOVE.L	D5,A0			; A0.L = FileHandle
+	CALLTL	CloseCroutonFile	; Close it
+
+LCREX	MOVE.L	D7,D0			; Get Error, if any
+	MOVEM.L	(A7)+,D0-D7/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_SaveLUTAsCrouton:						*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Filename (with path?).				*
+*	A4.L	= Address of LUT Base (to save).			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Occurred				*
+*									*
+*	3.Oct 1994 Pat Brouillette.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SaveLUTAsCrouton
+LUT_SaveLUTAsCrouton:
+	MOVEM.L	D0-D7/A0-A1/A6,-(A7)	; Save Calling State.
+	MOVE.L	A0,D6			; D6.L = Address of FileName
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+
+	BSR.B	LUT_PutLUTTags		; Write data to global LUT save tags
+*
+*	Save Framestore ILBM
+*
+	MOVE.L	D6,D0			; D0.L = Address of FileName
+	BCLR.B	#LUTF_SendDVE0,LUT_Flags(A4) ; Don't Send Map to Toaster.
+	BSR	LUT_SendMap		; Send Out to File.
+
+*********************************
+*
+*	Append the CRUD/PUS to ILBM
+*
+	MOVEA.L	TB_DOSBase(A5),A6	; A6.L = Address of DOS Base.
+
+	MOVE.L	D6,D1			; D1.L = Address of File Name.
+	MOVE.L	#MODE_OLDFILE,D2	; D2.L = Value of File Mode.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	MOVE.L	D0,D5			; D5.L = Address of Lock.
+	BNE.S	SLCR1			; Jump If We Opened The File.
+
+	MOVEQ.L	#LUT_OpenError,D7	; D7.L = Cannot Open File For Output.
+	BRA.S	SLCREX			; Exit Subroutine.
+
+SLCR1
+*	D5 = FileHandle now
+*	Seek() to end
+*
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVEQ	#0,D2			; D2.L = Position (from end)
+	MOVEQ	#OFFSET_END,D3		; D3.L = Seek to end
+	JSR	_LVOSeek(A6)		; Seek to end of file
+
+	BSR	LUT_WriteCRUDPUS	; Write the CRUD/PUS (at end of file)
+	BEQ.S	SLCR2			; No Error goes to close file/Exit
+	MOVEQ.L	#LUT_WriteError,D7	; D7.L = Cannot Write Data.
+*
+*	Close The File.
+*
+SLCR2	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Check for error after appending to file
+*
+	TST.L	D7			; Do we have an error yet?
+	BNE.S	SLCREX			; Leave if so
+*
+*********************************
+*
+*	Append ".I" to the filename
+*
+	MOVE.L	D6,A0			; A0.L = Address of File Name
+	CALLTL	STRlen			; Get STRLen
+	ADD.L	D0,A0			; A0 points to end of string
+	MOVE.B	#'.',(A0)+		; Add period
+	MOVE.B	#'I',(A0)+		; Add 'I'
+	MOVE.B	#0,(A0)+		; Add null terminator
+*
+*	Create the file
+*
+	MOVE.L	D6,D1			; D1.L = Address of File Name.
+	MOVE.L	#MODE_NEWFILE,D2	; D2.L = Value of File Mode.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	MOVE.L	D0,D5			; D5.L = Address of Lock.
+	BNE.S	SLCR3			; Jump If We Opened The File.
+
+	MOVEQ.L	#LUT_OpenError,D7	; D7.L = Cannot Open File For Output.
+	BRA.S	SLCREX			; Exit Subroutine.
+SLCR3
+*	D5 = FileHandle now
+*
+	BSR	LUT_WriteCRUDPUS	; Write the CRUD/PUS (at end of file)
+	BEQ.S	SLCR4			; No Error goes to close file/Exit
+	MOVEQ.L	#LUT_WriteError,D7	; D7.L = Cannot Write Data.
+*
+*	Close The ".I" File.
+*
+SLCR4	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Exit Subroutine.
+*
+SLCREX	MOVE.L	D7,D0			; Set Condition Code.
+	MOVEM.L	(A7)+,D0-D7/A0-A1/A6	; Return Calling State.
+	RTS
+
+*************************************************************************
+*									*
+*	LUT_PutLUTTags:							*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base (to save).			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	13.Feb 1995 Pat Brouillette.					*
+*									*
+*************************************************************************
+*
+LUT_PutLUTTags:
+	MOVEM.L	D0/A0,-(A7)
+
+	; Write TBar position to tags
+
+	MOVE.W	LUT_LocalTBar(A4),D0
+	MOVE.W	D0,MY_TBARPOS_TAG+4+2
+
+	; Write Color Mode to tags
+
+	MOVE.B	#0,MY_COLORMODE_TAG+4+3
+	BTST.B  #LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BEQ.S	plt1					; Jump If color.
+	MOVE.B	#1,MY_COLORMODE_TAG+4+3
+plt1
+
+	; Write Cycle Mode to tags
+
+	MOVEQ	#LUTM_CYCLE,D0				; get mask
+	AND.B	LUT_DisplayMode(A4),D0			; get cycle flags
+	LSR.B	#2,D0					; shift down
+	MOVE.B	D0,MY_CYCLEMODE_TAG+4+3
+
+
+	; Write Data Mode to tags
+
+	MOVE.B	#0,MY_DATAMODE_TAG+4+3
+	BTST.B  #LUTF_TRANSITION,LUT_DisplayMode(A4)
+	BEQ.S	plt2					; Jump If Filter.
+	MOVE.B	#1,MY_DATAMODE_TAG+4+3
+plt2
+
+	; Write SMF Mode to tags
+	MOVE.B	#0,MY_SPEEDMODE_TAG+4+3			; Initialize to medium
+
+	MOVEQ	#LUTM_SMF,D0				; get mask
+	AND.B	LUT_DisplayMode(A4),D0			; get speed flags
+	BNE.B	plt3
+
+	; LUT speed == 0 -> SMF == 0x03
+	MOVE.B	#3,MY_SPEEDMODE_TAG+4+3
+	BRA.B	pltx
+
+plt3	CMP.B	#2,D0					; is speed fast?
+	BNE.B	pltx
+
+	; LUT speed == 2 -> SMF == 0x01
+	MOVE.B	#1,MY_SPEEDMODE_TAG+4+3
+
+pltx
+	MOVEM.L	(A7)+,D0/A0
+	RTS
+
+*************************************************************************
+*									*
+*	LUT_WriteCRUDPUS:						*
+*									*
+*	Input:								*
+*									*
+*	D5.L	= File Handle						*
+*	A4.L	= Address of LUT Base (to save).			*
+*	A5.L	= Address of Toaster Base.				*
+*	A6.L	= Address of DOSBase.					*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> Error Occurred				*
+*									*
+*	5.Oct 1994 Pat Brouillette.					*
+*									*
+*************************************************************************
+*
+LUT_WriteCRUDPUS:
+	MOVEM.L	D0-D3/A0-A1,-(A7)
+*
+*	Append FORM CrUD Chunks to end of file
+*
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	LEA	SLCR_DAT,A0		; A0.L = Address of File Data.
+	MOVE.L	A0,D2			; D2.L = Address of File Data.
+	MOVEQ	#SLCR_DATLEN,D3		; D3.L = Number of Bytes
+	JSR	_LVOWrite(A6)		; Write Data To Disk.
+	CMP.L	D0,D3			; Write Successful?
+	BNE.S	WCPRERR			; Exit On Write Error.
+*
+*	Write the ' LUT' data (we're still inside the 'CrUD' chunk context)
+*
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	MOVE.L	A4,D2			; D2.L = Address of File Data.
+	MOVE.L	#LUT_Sizeof,D3		; D3.L = Number of Bytes.
+	JSR	_LVOWrite(A6)		; Write Data To Disk.
+	CMP.L	D0,D3			; Write Successful?
+	BNE.S	WCPRERR			; Exit On Write Error.
+*
+*	Append ' PUS' Chunk to end of file
+*
+	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	LEA	SLCR_PUSSTART,A0	; A0.L = Address of File Data.
+	MOVE.L	A0,D2			; D2.L = Address of File Data.
+	MOVEQ	#SLCR_PUSLEN,D3		; D3.L = Number of Bytes
+	JSR	_LVOWrite(A6)		; Write Data To Disk.
+	CMP.L	D0,D3			; Write Successful?
+	BNE.S	WCPRERR			; Exit On Write Error.
+*
+*	Clear Write Error.
+*
+	MOVEQ.L	#LUT_NoError,D0		; D0.L = No errors
+	BRA.S	WCPREX			; go to the exit
+
+WCPRERR	MOVEQ.L	#LUT_WriteError,D0	; D0.L = Cannot Write Data.
+
+WCPREX	MOVEM.L	(A7)+,D0-D3/A0-A1
+	RTS
+
+*******************************************************************
+;	section	LUT_data,data
+
+SLCR_DAT:
+	DC.B	'FORM'
+	DC.L	SLCR_CRUDEND-SLCR_CRUDSTART+LUT_Sizeof	; Length of CrUD chunk
+
+SLCR_CRUDSTART:
+	DC.B	'CrUD'
+
+*	TYPE Chunk	*****************************
+		DC.B	'TYPE'			; TYPE Chunk
+		DC.L	TYPECHUNK_END-TYPECHUNK_START
+TYPECHUNK_START:
+		DC.B	'CRFX'			; Type of crouton
+		DC.L	0			; Other (unused) info
+TYPECHUNK_END:
+
+*	LIBS Chunk	*****************************
+		DC.B	'LIBS'			; LIBS Chunk
+		DC.L	LIBCHUNK_END-LIBCHUNK_START
+LIBCHUNK_START:
+		DC.L	_LVOStdCroutonHandler		; Library offset
+		DC.W	LIBCHUNK_NEND-LIBCHUNK_NAME	; string length
+LIBCHUNK_NAME:
+********	DC.B	'ChromaFX',0
+		DC.B	'effects.library',0
+		CNOP	0,2			; word boundary
+LIBCHUNK_NEND:
+		DC.W	0			; end of library list
+LIBCHUNK_END:
+
+*	TAGS Chunk	*****************************
+		DC.B	'TAGS'			; TAGS Chunk
+		DC.L	TAGCHUNK_END-TAGCHUNK_START
+TAGCHUNK_START:
+
+MY_TBARPOS_TAG:
+	TAG_TBarPosition	0
+
+MY_COLORMODE_TAG:
+	TAG_ColorMode		0
+
+MY_CYCLEMODE_TAG:
+	TAG_CycleMode		0
+
+MY_DATAMODE_TAG:
+	TAG_DataMode		0
+
+MY_SPEEDMODE_TAG:
+	TAG_FCountMode		0
+
+		DC.L	0	; TAG_END
+TAGCHUNK_END:
+
+*	 LUT Chunk	*****************************
+		DC.B	' LUT'			; LUT Info Chunk
+		DC.L	LUT_Sizeof		; Size of the Chunk
+*
+*	NOTE that there is a portion of the ' LUT' chunk here that
+*	is written directly from "LUTBase", there is no space reserved
+*	for it here, so the TRUE CrUD chunk size is an additional
+*	LUT_Sizeof Bytes
+*
+SLCR_CRUDEND:
+SLCR_DATLEN EQU *-SLCR_DAT
+*
+SLCR_PUSSTART:
+	DC.B	'FORM'			; Trailing FORM PUS after framestore
+	DC.L	$10			; Length of PUS chunk
+	DC.B	' PUS'
+	DC.B	'CrUD'
+	DC.L	4
+	DC.L	SLCR_CRUDEND-SLCR_CRUDSTART+LUT_Sizeof
+
+SLCR_PUSLEN EQU	*-SLCR_PUSSTART
+
+	DC.L	0
+
+	END
+@
+
+
+2.5
+log
+@speed mode tag now matches switcher spec
+@
+text
+@d7 1
+a7 1
+* $Id: lutc.a,v 2.4 1995/02/13 12:02:49 pfrench Exp pfrench $
+d10 3
+d247 2
+a248 2
+	MOVE.B	LUT_LocalTBar(A4),D0
+	MOVE.B	D0,MY_TBARPOS_TAG+4+3
+@
+
+
+2.4
+log
+@Now saving tags in chromafx croutons.
+@
+text
+@d7 1
+a7 1
+* $Id: lutc.a,v 2.3 1995/02/03 15:42:34 pfrench Exp pfrench $
+d10 3
+d211 1
+a211 1
+	BSR.S	LUT_WriteCRUDPUS	; Write the CRUD/PUS (at end of file)
+d272 1
+d276 11
+a286 1
+	MOVE.B	D0,MY_SPEEDMODE_TAG+4+3
+d288 1
+@
+
+
+2.3
+log
+@Switched libname from chromafx to effects.library
+@
+text
+@d5 1
+a5 1
+* Confidental and Proprietary. All rights reserved. 
+d7 1
+a7 1
+* $Id: lutc.a,v 2.2 1994/10/07 00:18:42 pfrench Exp pfrench $
+d10 3
+d104 1
+a104 1
+	
+d137 2
+d170 1
+a170 1
+	BSR.S	LUT_WriteCRUDPUS	; Write the CRUD/PUS (at end of file)
+d225 54
+d305 1
+a305 1
+	MOVEQ	#SLCR_DATLEN,D3		; D3.L = Number of Bytes 
+d324 1
+a324 1
+	MOVEQ	#SLCR_PUSLEN,D3		; D3.L = Number of Bytes 
+a342 7
+;	DC.B	'FORM'			; Trailing FORM PUS after framestore
+;	DC.L	$10			; Length of PUS chunk
+;	DC.B	' PUS'
+;	DC.B	'ILBM'
+;	DC.L	4
+;	DC.L	0
+
+d375 17
+a391 1
+		DC.L	0
+@
+
+
+2.2
+log
+@Added working Load code to lut8
+@
+text
+@d7 1
+a7 1
+* $Id: lutc.a,v 2.1 1994/10/05 18:23:05 pfrench Exp pfrench $
+d10 3
+d309 1
+a309 1
+		DC.L	-6				; Library offset
+d312 2
+a313 1
+		DC.B	'ChromaFX',0
+@
+
+
+2.1
+log
+@Now Creates a .i file with chromafx croutons.
+@
+text
+@d7 1
+a7 1
+* $Id: lutc.a,v 2.0 1994/10/04 20:25:10 pfrench Exp pfrench $
+d10 3
+d38 71
+d128 1
+a128 1
+	MOVEM.L	D0-D7/A0-A6,-(A7)	; Save Calling State.
+d212 1
+a212 1
+	MOVEM.L	(A7)+,D0-D7/A0-A6	; Return Calling State.
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@d7 1
+a7 1
+* $Id: LUT5.a,v 2.1 1993/04/06 14:19:05 Finch2 Exp $
+d9 3
+a11 1
+* $Log: LUT5.a,v $
+d13 1
+d63 2
+d66 1
+a66 1
+*	Append the PUS/CRUD/PUS
+d74 2
+a75 1
+	BNE.S	SLCR2			; Jump If We Opened The File.
+d77 3
+a79 3
+	BRA.S	SLCR8			; Exit Subroutine.
+SLCR2
+*
+d87 18
+d106 6
+a111 1
+*	Initialize a Write Error.
+d113 15
+d130 34
+d172 1
+a172 1
+	BNE.S	SLCR7			; Exit On Write Error.
+d181 1
+a181 1
+	BNE.S	SLCR7			; Exit On Write Error.
+d191 1
+a191 1
+	BNE.S	SLCR7			; Exit On Write Error.
+d195 6
+a200 11
+	MOVEQ.L	#LUT_NoError,D7		; D7.L = Value Of Return Code.
+*
+*	Close The File.
+*
+SLCR7	MOVE.L	D5,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+*
+*	Exit Subroutine.
+*
+SLCR8	MOVE.L	D7,D0			; Set Condition Code.
+	MOVEM.L	(A7)+,D0-D7/A0-A6	; Return Calling State.
+d202 1
+@

@@ -1,0 +1,2537 @@
+	NOLIST
+	idnt	Animated
+	section	text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include "ELH.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"Rect.i"
+	Include "KeyLogic.i"
+	Include	"EfLib.i"
+	Include	"Custom.i"
+	Include "VTDebug.i"
+	Include	"AnimEqu.i"
+	Include "AnimatedEffectsEqu.i"
+	Include	"AnimWipeMacros.i"
+	Include	"IffUncompress.i"
+
+	Include "SerialDebug.i"
+
+;;SERDEBUG	Set	1
+	ALLDUMPS
+
+;;DEBUGMEMORY	set	1
+
+
+*------------------------------------
+MEMORYHEXI	MACRO
+	IFD	DEBUGMEMORY
+	DUMPHEXI.L	<\1>,<\2>,<\3>
+	ENDC
+	ENDM
+
+
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	AnimLoad:							*
+*									*
+*	Loads the Anim data into FastMem and allocates it's needed	*
+*	resources.							*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of anl Structure.				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Error Code.						*
+*	A0.L	= Address of aec_Base.					*
+*									*
+*	CC	>= Zero -> Execution Without Error.			*
+*	CC	<  Zero -> Failed To Allocate Memory.			*
+*									*
+*	3.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimLoad
+
+AnimLoad:
+	MOVEM.L	D1-D5/A1-A6,-(A7)	; Save Calling State.
+	SUBQ.L	#8,A7			; Make Read Buffer On Stack.
+	MOVEA.L	A0,A2			; A2.L = anl Structure.
+	move.l	a0,d5			; stash -> anl
+*
+*	Try To Allocate aec Structure.
+*
+	MOVEQ.L	#aec_Sizeof,D0		; D0.L = Number of Bytes.
+	MOVE.L	#MEMF_PUBLIC!MEMF_CLEAR,D1 ; D1.L = Type of Memory.
+	MOVEA.L	anl_SYSBase(A2),A6	; A6.L = Address of Sys Base.
+
+	MEMORYHEXI <ALLOC aec >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; D0.L = Address of Memory.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	MOVEA.L	D0,A4			; A4.L = Address of aec Base.
+	TST.L	D0			; Did We Allocate The Memory?
+	BEQ	ANMLDC			; Exit If Failed.
+*
+*	Allocated aec Memory.
+*
+	MOVE.L	anl_Flags(A2),aec_Flags(A4)	; Opening Flags.
+	MOVE.L	anl_DOSBase(A2),aec_DOSBase(A4)	; DOS Base.
+	MOVE.L	anl_SYSBase(A2),aec_SYSBase(A4)	; SYS Base.
+	MOVE.L	anl_GFXBase(A2),aec_GFXBase(A4)	; GFX Base.
+	MOVE.L	anl_TSTBase(A2),aec_TSTBase(A4)	; TST Base.
+	MOVEA.L	anl_AvailableMemory(A2),A3	; A3.L = Addr Available Memory.
+*
+*	Now Try To Open The File.
+*
+	MOVE.L	anl_FileName(A2),D1	; D1.L = Address of File Name.
+	MOVE.L	#MODE_OLDFILE,D2	; D2.L = Address of File Mode.
+	MOVEA.L	aec_DOSBase(A4),A6	; A6.L = Address of Dos Base.
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	TST.L	D0			; Did We Open The File?
+	BNE.S	ANMLD1			; Jump If All Ok.
+	MOVEQ.L	#AEE_OpenFile,D0	; D0.L = Open Error.
+	BRA	ANMLDB			; Exit Subroutine.
+ANMLD1	MOVEA.L	D0,A2			; A2.L = Address of File Lock.
+*
+*	Are We In An Overlay Hunk?
+*
+	MOVE.L	aec_Flags(A4),D4	; D4.L = aec_Flags.
+	BTST.L	#aecb_AnimInOverlay,D4	; In an Overlay?
+	BEQ.S	ANMLD4			; Jump If Not In an Overlay.
+*
+*	Find The Overlay.
+*
+	MOVEA.L	A2,A0			; A0.L = Address of File Lock.
+	MOVE.L	#$3F5,D0		; D0.L = Look For Overlay Hunk.
+	MOVEA.L	aec_TSTBase(A4),A5	; A5.L = Toast Base.
+	CALLTL	FindDebugHunk		; Search For The Overlay Hunk.
+	TST.L	D0			; Did We Find The Overlay Hunk?
+	BEQ.S	ANMLD3			; Exit If Failed.
+	ADDQ.L	#4,D0			; D0.L = Extra Amount To Advance.
+	MOVE.L	A2,D1			; D1.L = Value of File Lock.
+	MOVE.L	D0,D2			; D2.L = Amount To Skip.
+	MOVEQ.L	#OFFSET_CURRENT,D3	; D3.L = Seek Mode.
+	JSR	_LVOSeek(A6)		; Go To This Position.
+	ADDQ.L	#1,D0			; Did We Have An Error?
+	BEQ.S	ANMLD3			; Jump If SEEK Error.
+*
+*	Find The Code Section We Need.
+*
+	ANDI.W	#aecm_HunkNumber,D4	; D4.W = Code Hunk Number.
+ANMLD2	MOVEA.L	A2,A0			; A0.L = Address of File Lock.
+	MOVE.L	#$3E9,D0		; D0.L = Look For Code Hunk.
+	CALLTL	FindDebugHunk		; Search For The Hunk.
+	TST.L	D0			; Did We Get Anything?
+	BEQ.S	ANMLD3			; Exit On Error.
+	TST.W	D4			; At The HUNK We Need?
+	BEQ.S	ANMLD4			; Jump If At Proper Hunk.
+	MOVE.L	A2,D1			; D1.L = Value of File Lock.
+	MOVE.L	D0,D2			; D2.L = Amount To Skip.
+	MOVEQ.L	#OFFSET_CURRENT,D3	; D3.L = Seek Mode.
+	JSR	_LVOSeek(A6)		; Go To This Position.
+	ADDQ.L	#1,D0			; Did We Have An Error?
+	BEQ.S	ANMLD3			; Jump If SEEK Error.
+	DBF	D4,ANMLD2		; Loop Until Done.
+*
+*	Looked Thru Crouton and Could Not Find An Anim.
+*
+ANMLD3	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVEQ.L	#AEE_CannotFindOverlay,D0 ; Cannot Find Anim In Overlay.
+	BRA	ANMLDB			; Exit Subroutine.
+*
+*	Read First 8 Bytes.
+*
+ANMLD4	MOVE.L	A2,D1			; D1.L = Address of File Pointer.
+	MOVE.L	A7,D2			; D2.L = Address of Memory Area.
+	MOVEQ.L	#8,D3			; D3.L = Number  of Bytes.
+	JSR	_LVORead(A6)		; Read Data Off Disk.
+	CMP.L	D0,D3			; Read Error?
+	BEQ.S	ANMLD5			; Jump If No Error.
+	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVEQ.L	#AEE_FileReadError,D0	; D0.L = File Read Error.
+	BRA	ANMLDB			; Exit Subroutine.
+*
+*	Check For Legal Data.
+*
+ANMLD5	CMPI.L	#'FORM',(A7)		; Did We Get A Form Hunk?
+	BEQ.S	ANMLD6			; Not an Iff FORM.
+	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVEQ.L	#AEE_WrongFileType,D0	; D0.L = Wrong File Type Error.
+	BRA	ANMLDB			; Exit Subroutine.
+*
+*	Get The Memory To Read Into.
+*
+ANMLD6	MOVE.L	4(A7),D0		; D0.L = Number of Bytes in Hunk.
+	ADDQ.L	#(2-1),D0		; Make Even Number.
+	ANDI.W	#~(2-1),D0		; Rounded To Even Number.
+	MOVE.L	D0,aec_LoadLength(A4)	; Save Size of Data.
+	MOVE.L	#MEMF_PUBLIC,D1		; D1.L = Type of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+	MOVEA.L	aec_TSTBase(A4),A5	; A5.L = Toast Base.
+	CALLTL	AllocateBufferMem	; D0.L = Address of Memory Block.
+	MOVEA.L	aec_DOSBase(A4),A6	; A6.L = Address of Dos Base.
+	MOVE.L	D0,aec_LoadBase(A4)	; Save Pointer To Loaded Data.
+	BNE.S	ANMLD7			; Jump If Ok.
+	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVEQ.L	#AEE_NotEnoughFreeMemory,D0 ; D0.L = Not Enough Memory.
+	BRA	ANMLDB			; Exit Subroutine.
+*
+*	Read The Data Out Of The File.
+*
+ANMLD7	MOVE.L	A2,D1			; D1.L = Address of File Pointer.
+	MOVE.L	aec_LoadBase(A4),D2	; D2.L = Address of Memory Area.
+	MOVE.L	aec_LoadLength(A4),D3	; D3.L = Number  of Bytes.
+	JSR	_LVORead(A6)		; Read Data Off Disk.
+	CMP.L	D0,D3			; Read Error?
+	BEQ.S	ANMLD8			; Jump If No Error.
+	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVEQ.L	#AEE_FileReadError,D0	; D0.L = File Read Error.
+	BRA	ANMLDB			; Exit Subroutine.
+*
+*	Close File, Move From Chip To Fast Memory.
+*
+ANMLD8	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	MOVE.L	aec_LoadLength(A4),D0	; D0.L = Number of Bytes Loaded Data.
+	MOVEA.L	aec_LoadBase(A4),A0	; A0.L = Address of Current Loaded Data.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of Exec Base.
+	BSR	MoveChipToFastMemory	; If Loaded Into Chip, Move To Fast.
+	MOVE.L	A0,aec_LoadBase(A4)	; A0.L = Save Address of Loaded Data.
+*
+*	Check For ILBM.
+*
+	CMPI.L	#'ILBM',(A0)		; Needs To Be ILBM.
+	BEQ.S	ANMLDA			; Jump If Ok.
+*
+*	Check For ANIM, FORM.
+*
+	CMPI.L	#'ANIM',(A0)+		; Needs To Be ANIM.
+	BNE.S	ANMLD9			; Jump If Not An Anim.
+	CMPI.L	#'FORM',(A0)+		; Needs To Be FORM
+	BNE.S	ANMLD9			; Jump If Not An Anim.
+	ADDQ.L	#4,A0			; Point Past Size.
+	CMPI.L	#'ILBM',(A0)		; Needs To Be ILBM.
+	BEQ.S	ANMLDA			; Jump If Ok.
+ANMLD9	MOVEQ.L	#AEE_WrongFileType,D0	; D0.L = Wrong File Type Error.
+	BRA.S	ANMLDB			; Exit Subroutine.
+*
+*	Build The Structures.
+*
+ANMLDA	BSR	FindFramePositions	; D0.L = Error Code.
+	TST.L	D0			; Check For Error.
+	BMI.S	ANMLDB			; Exit On Error.
+	BSR	Build_aec_Defaults	; D0.L = Error Code.
+	TST.L	D0			; Check For Error.
+	BMI.S	ANMLDB			; Exit On Error.
+	MOVEA.L	A3,A0			; A0.L = Address of Available Memory.
+	BSR	AllocCircularBuffers	; D0.L = Error Code.
+	BMI.S	ANMLDB			; Exit If Error.
+
+*------------
+* Prevent using up every drop of CHIP or PUBLIC memory
+	move.l	d0,-(sp)		; save "good" error code
+	movea.l	d5,a2			; restore -> anl
+
+	MOVE.L	anl_CHIPlimit(a2),D0	; D0.L = Number of Bytes.
+	MOVE.L	#MEMF_CHIP,D1 		; D1.L = Type of Memory.
+	MOVEA.L	anl_SYSBase(A2),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOAllocMem(A6)	; D0.L = Address of Memory.
+	MOVE.L	D0,-(sp)
+	beq.s	10$			; jump if not enough chip
+
+	MOVE.L	anl_PUBLIClimit(a2),D0	; D0.L = Number of Bytes.
+	MOVE.L	#MEMF_PUBLIC,D1 	; D1.L = Type of Memory.
+	JSR	_LVOAllocMem(A6)	; D0.L = Address of Memory.
+	tst.l	D0
+	beq.s	20$			; jump if not enough public
+
+	movea.l	d0,a1
+	MOVE.L	anl_PUBLIClimit(a2),D0
+	JSR	_LVOFreeMem(a6)
+	
+	movea.l	(sp)+,a1
+	MOVE.L	anl_CHIPlimit(a2),D0
+	JSR	_LVOFreeMem(a6)
+
+	move.l	(sp)+,d0		; Restore original "good" error code
+	bra.s	ANMLDD
+
+* not enough fast
+20$ 	movea.l	(sp)+,a1
+	MOVE.L	anl_CHIPlimit(a2),D0
+	JSR	_LVOFreeMem(a6)
+	addq.w	#4,sp
+	bra.s	30$
+
+* not enough chip
+10$	addq.w	#8,sp
+30$	MOVEQ.L	#AEE_NotEnoughFreeMemory,D0 ; D0.L = Error Code.
+;;	bra.s	ANMLDB
+
+*------------
+
+*
+*	Failed To Build Structures.
+*
+ANMLDB	BSR	AnimUnload		; Remove Anim From Memory.
+	SUBA.L	A4,A4			; A4.L = No aec Structure.
+	BRA.S	ANMLDD			; Exit Subroutine.
+*
+*	Failed To Allocate Memory for aec Structure.
+*
+ANMLDC	MOVEQ.L	#AEE_NotEnoughFreeMemory,D0 ; D0.L = Error Code.
+*
+*	Exit Subroutine.
+*
+ANMLDD	MOVEA.L	A4,A0			; A0.L = Address of aec Structure.
+	ADDQ.L	#8,A7			; Return Read Buffer On Stack.
+	MOVEM.L	(A7)+,D1-D5/A1-A6	; Return Calling State.
+	TST.L	D0			; Set Return Code.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FindFramePositions:						*
+*									*
+*	Assign The Pointers To Frame Positions.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	Current Frame Positions Are Created.				*
+*									*
+*	5.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FindFramePositions
+FindFramePositions:
+	MOVEM.L	D1-D4/A0-A2,-(A7)	; Save Calling State.
+*
+*	Make The First Frame.
+*
+	CLR.W	aec_TotalFrames(A4)	; Count The Loaded Frames.
+	BSR	AllocPackedListStruct	; A0.L = Address of Packed Header.
+	BEQ	FNFRPH			; Exit Memory Error.
+	MOVE.L	A0,aec_PackedList(A4)	; Save Pointer.
+	BEQ	FNFRPH			; Exit Memory Error.
+	MOVEA.L	A0,A1			; A1.L = Address of Element In List.
+	MOVE.W	aec_TotalFrames(A4),pkl_FrameNumber(A1) ; Current Frame Number.
+	ADDQ.W	#1,aec_TotalFrames(A4)	; Increase Frame Count.
+	MOVEA.L	aec_LoadBase(A4),A2	; A2.L = Address of IFF Data.
+	MOVE.L	aec_LoadLength(A4),D4	; D4.L = Number of Bytes.
+*
+*	Check For ILBM or ANIM.
+*
+	CMPI.L	#'ANIM',(A2)		; Is It An Anim?
+	BNE.S	FNFRP1			; Jump If Not Anim.
+*
+*	An Anim Loaded.
+*
+	SUBI.L	#12,D4			; Less Size of Header.
+	BCS	FNFRPG			; Exit If Too Small.
+	ADDQ.L	#8,A2			; Move To ILBM Size.
+	MOVE.L	(A2)+,D3		; Get ILBM Size.
+	BRA.S	FNFRP2			; Slip Else Part.
+*
+*	An ILBM Loaded.
+*
+FNFRP1	MOVE.L	D4,D3			; D3.L = ILBM Size.
+*
+*	Remove That Much Data.
+*
+FNFRP2	ADDQ.L	#(2-1),D3		; Make Even Number.
+	ANDI.W	#~(2-1),D3		; Rounded To Even Number.
+	SUB.L	D3,D4			; D4.L = Less Total Size.
+	BCS	FNFRPG			; Exit If Too Small.
+	ADDQ.L	#4,A2			; A2.L = Move Past ILBM.
+	SUBQ.L	#4,D3			; Less What We Read.
+	BCS	FNFRPG			; Exit If Too Small.
+*
+*	Loop And Parse The First Frame.
+*
+FNFRP3	SUBQ.L	#8,D3			; D3.L = Less Header Size.
+	BCS	FNFRPG			; Exit If Too Small.
+	MOVE.L	(A2)+,D0		; D0.L = Iff Type.
+	MOVE.L	(A2)+,D1		; D1.L = Record Size.
+	MOVE.L	D1,D2			; D2.L = Record Size Not Modified.
+	ADDQ.L	#(2-1),D1		; Make Even Number.
+	ANDI.W	#~(2-1),D1		; Rounded To Even Number.
+	SUB.L	D1,D3			; That Much Data There?
+	BCS	FNFRPG			; Exit If Too Small.
+*
+*	Check For BMHD
+*
+	CMPI.L	#'BMHD',D0		; Is It A Bit Map Header?
+	BNE.S	FNFRP4			; Jump If Not Bit Map Header.
+	ORI.L	#(1<<pklb_FirstFrame)!(1<<pklb_BMHD)!(1<<pklb_StartFrame),pkl_Flags(A1)
+	MOVE.L	A2,pkl_Header(A1)	; Save Pointer to Header.
+	BRA.S	FNFRP7			; Skip Else Part.
+*
+*	Check For BODY
+*
+FNFRP4	CMPI.L	#'BODY',D0		; Is It A Body Hunk?
+	BNE.S	FNFRP5			; Jump If Not Body Hunk.
+	BSETA.L	pklb_BODY,pkl_Flags(A1)	; We Have A Body Hunk.
+	MOVE.L	D2,pkl_DataSize(A1)	; Save Size of Data.
+	MOVE.L	A2,pkl_Data(A1)		; Save Pointer to Data.
+	BRA.S	FNFRP7			; Skip Else Part.
+*
+*	Check For CAMG
+*
+FNFRP5	CMPI.L	#'CAMG',D0		; Is It A CAMG Hunk?
+	BNE.S	FNFRP6			; Jump If Not CAMG Hunk.
+	MOVE.L	(A2),pkl_ViewMode(A1)	; Get The View Modes.
+	BRA.S	FNFRP7			; Skip Else Part.
+*
+*	Check For CMAP
+*
+FNFRP6	CMPI.L	#'CMAP',D0		; Is It A CMAP Hunk?
+	BNE.S	FNFRP7			; Jump If Not CMAP Hunk.
+	MOVE.L	D2,pkl_ColorTableSize(A1) ; Color Table Size.
+	MOVE.L	A2,pkl_ColorTable(A1)	; Pointer to Color Table.
+*
+*	Advance Thru Record.
+*
+FNFRP7	ADDA.L	D1,A2			; Move Thru Record.
+	TST.L	D3			; Any More Left?
+	BNE.S	FNFRP3			; Jump Back If More Left.
+*
+*	Now Read The DLTA Records.
+*
+	BRA	FNFRPE			; Check For All Done.
+FNFRP8	MOVEA.L	A1,A0			; A0.L = Address of pkl Structure.
+	BSR	BuildColorTable		; Make The Color Table.
+	BEQ	FNFRPH			; Exit On Memory Error.
+	BSR	AllocPackedListStruct	; A0.L = Address of Packed Header.
+	BEQ	FNFRPH			; Exit If Failed.
+	MOVE.L	A0,pkl_AllocLink(A1)	; Link To Next Allocation.
+	MOVE.L	A0,pkl_ForwardLink(A1)	; Link To Next Forward Position.
+	MOVE.L	A1,pkl_BackwardLink(A0)	; Link To Next Backward Position.
+	MOVE.L	pkl_ColorTableSize(A1),pkl_ColorTableSize(A0)
+	MOVE.L	pkl_ColorTable(A1),pkl_ColorTable(A0)
+	MOVE.L	pkl_ViewMode(A1),pkl_ViewMode(A0)
+	MOVEA.L	A0,A1			; A1.L = Address of Current Element.
+	MOVE.W	aec_TotalFrames(A4),pkl_FrameNumber(A1) ; Current Frame Number.
+	ADDQ.W	#1,aec_TotalFrames(A4)	; Increase Frame Count.
+*
+*	Read Thru the FORM size ILBM.
+*
+	SUBQ.L	#8,D4			; D4.L = Less Size of FORM and size.
+	BCS	FNFRPG			; Exit If Too Small.
+	CMPI.L	#'FORM',(A2)+		; Need To Word Form.
+	BNE	FNFRPF			; Exit If Wrong File Type.
+	MOVE.L	(A2)+,D3		; Get Size of Record.
+	ADDQ.L	#(2-1),D3		; Make Even Number.
+	ANDI.W	#~(2-1),D3		; Rounded To Even Number.
+	SUB.L	D3,D4			; D4.L = Less Total Size.
+	BCS	FNFRPG			; Exit If Too Small.
+	CMPI.L	#'ILBM',(A2)+		; Do We Have An ILBM?
+	BNE	FNFRPF			; Exit If Wrong File Type.
+	SUBQ.L	#4,D3			; Less What We Read.
+	BCS	FNFRPG			; Exit If Too Small.
+*
+*	Loop And Parse The Delta Frames.
+*
+FNFRP9	SUBQ.L	#8,D3			; D3.L = Less Header Size.
+	BCS	FNFRPG			; Exit If Too Small.
+	MOVE.L	(A2)+,D0		; D0.L = Iff Type.
+	MOVE.L	(A2)+,D1		; D1.L = Record Size.
+	MOVE.L	D1,D2			; D2.L = Record Size Not Modified.
+	ADDQ.L	#(2-1),D1		; Make Even Number.
+	ANDI.W	#~(2-1),D1		; Rounded To Even Number.
+	SUB.L	D1,D3			; That Much Data There?
+	BCS.S	FNFRPG			; Exit If Too Small.
+*
+*	Check For ANHD
+*
+	CMPI.L	#'ANHD',D0		; Is It A Anim Header?
+	BNE.S	FNFRPA			; Jump If Not Anim Header.
+	BSETA.L	pklb_ANHD,pkl_Flags(A1)	; We Have An Anim Header.
+	MOVE.L	A2,pkl_Header(A1)	; Save Pointer to Header.
+	BRA.S	FNFRPD			; Skip Else Part.
+*
+*	Check For CAMG
+*
+FNFRPA	CMPI.L	#'CAMG',D0		; Is It A CAMG Hunk?
+	BNE.S	FNFRPB			; Jump If Not CAMG Hunk.
+	MOVE.L	(A2),pkl_ViewMode(A1)	; Get The View Modes.
+	BRA.S	FNFRPD			; Skip Else Part.
+*
+*	Check For CMAP
+*
+FNFRPB	CMPI.L	#'CMAP',D0		; Is It A CMAP Hunk?
+	BNE.S	FNFRPC			; Jump If Not CMAP Hunk.
+	MOVE.L	D2,pkl_ColorTableSize(A1) ; Color Table Size.
+	MOVE.L	A2,pkl_ColorTable(A1)	; Pointer to Color Table.
+	BRA.S	FNFRPD			; Skip Else Part.
+*
+*	Check For DLTA
+*
+FNFRPC	CMPI.L	#'DLTA',D0		; Is It A Dlta Hunk?
+	BNE.S	FNFRPD			; Jump If Not Dlta Hunk.
+	BSETA.L	pklb_DLTA,pkl_Flags(A1)	; We Have A Dlta Hunk.
+	MOVE.L	D2,pkl_DataSize(A1)	; Save Size of Data.
+	MOVE.L	A2,pkl_Data(A1)		; Save Pointer to Data.
+*
+*	Advance Thru Record.
+*
+FNFRPD	ADDA.L	D1,A2			; Move Thru Record.
+	TST.L	D3			; Any More Left?
+	BNE	FNFRP9			; Jump Back If More Left.
+*
+*	All Done With Anim?
+*
+FNFRPE	TST.L	D4			; Any Data Left?
+	BNE	FNFRP8			; Jump If More Data Left.
+	MOVEA.L	A1,A0			; A0.L = Address of pkl Structure.
+	BSR	BuildColorTable		; Make The Color Table.
+	BEQ.S	FNFRPH			; Exit On Memory Error.
+*
+*	Exit No Error.
+*
+	MOVEQ.L	#AEE_NoError,D0		; D0.L = No Error.
+	BRA.S	FNFRPI			; Exit Subroutine.
+*
+*	Wrong File Type.
+*
+FNFRPF	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Head Of List.
+	CLR.L	aec_PackedList(A4)	; NULL Pointer To List.
+	BSR	FreePackedList		; Give The Memory In The List Back.
+	MOVEQ.L	#AEE_WrongFileType,D0	; D0.L = Return Code.
+	BRA.S	FNFRPI			; Exit Subroutine.
+*
+*	Data Too Small.
+*
+FNFRPG	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Head Of List.
+	CLR.L	aec_PackedList(A4)	; NULL Pointer To List.
+	BSR	FreePackedList		; Give The Memory In The List Back.
+	MOVEQ.L	#AEE_ChunkSizeTooSmall,D0 ; D0.L = Return Code.
+	BRA.S	FNFRPI			; Exit Subroutine.
+*
+*	Memory Error.
+*
+FNFRPH	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Head Of List.
+	CLR.L	aec_PackedList(A4)	; NULL Pointer To List.
+	BSR	FreePackedList		; Give The Memory In The List Back.
+	MOVEQ.L	#AEE_NotEnoughFreeMemory,D0 ; D0.L = Return Code.
+*
+*	Exit Subroutine.
+*
+FNFRPI	MOVEM.L	(A7)+,D1-D4/A0-A2	; Return Calling State.
+	TST.L	D0			; Set Flags.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	Build_aec_Defaults:						*
+*									*
+*	Makes The Default Constants for the Loaded Data.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	The aec Structure has it's defaults Set.			*
+*									*
+*	15.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	Build_aec_Defaults
+Build_aec_Defaults:
+	MOVEM.L	D1-D2/A0-A2,-(A7)	; Save Calling State.
+*
+*	Get Pointer To Bit Map Structure.
+*
+	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Address of Packed List Header.
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ	BLDEFG			; Jump If Nothing Loaded.
+	MOVEA.L	pkl_AllocLink(A0),A1	; A1.L = Address of 2nd In Packed List.
+	BTSTA.L	pklb_BMHD,pkl_Flags(A0)	; Did We Get A Bit Map Header?
+	BEQ	BLDEFG			; Jump If No Loaded.
+*
+*	Set Up Some Defaults.
+*
+	MOVE.W	aec_TotalFrames(A4),aec_FrameCount(A4) ; Number of Frames.
+	MOVE.L	pkl_ColorTableSize(A0),D0 ; D0.L = Total Size Of Color Table.
+	ADDQ.L	#3-1,D0			; Make Number of Colors.
+	DIVU.W	#3,D0			; D0.W = Number of Colors.
+	ANDI.L	#$FFFF,D0		; Remove Remainder.
+	MOVE.W	D0,aec_NumberOfColors(A4) ; Save Number of Colors.
+*
+*	Make The First Frame Sizes.
+*
+	MOVEA.L	pkl_Header(A0),A0	; A0.L = Address of Bit Map Header.
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ	BLDEFG			; Jump If Nothing Loaded.
+	MOVE.L	aec_ViewModes(A4),pkl_ViewMode(A0) ; Default View Modes.
+	MOVE.W	bmh_w(A0),D0		; Make Width Of Screen.
+	ADDI.W	#(1<<3)-1,D0		; Go Mod Max Size.
+	LSR.W	#3,D0			; D0.W = Number of Bytes Width.
+	MOVE.W	D0,aec_Width(A4)	; Save Width In Bytes.
+	MOVE.W	bmh_h(A0),D1		; D1.W = Height In Lines.
+	MOVE.W	D1,aec_Height(A4)	; Save Height In Lines.
+	MULU.W	D1,D0			; D0.L = Number of Bytes in Plane.
+	ADDQ.L	#6,D0			; Round Up To Double Word Alligned.
+	MOVE.L	D0,aec_PlaneSize(A4)	; Save Plane Size.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	bmh_nPlanes(A0),D0	; Number of Bit Planes.
+	MOVE.W	D0,aec_Depth(A4)	; Save Number of Bit Planes.
+*
+*	Check For Only One Frame.
+*
+	MOVE.W	#1,aec_NumberOfBuffers(A4) ; Assume 1 Buffer.
+	MOVE.L	A1,D0			; Check For NULL Pointer.
+	BNE.S	BLDEF1			; More Than One Loaded.
+*
+*	Only One Frame Loaded.
+*
+	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Address of Packed List Header.
+	BSETA.L	pklb_LastNormal,pkl_Flags(A0) ; Flag Last Normal Flag.
+	MOVE.L	A0,pkl_ForwardLink(A0)	; Forward  Link.
+	MOVE.L	A0,pkl_BackwardLink(A0)	; Backward Link.
+	BRA	BLDEFD			; Exit Subroutine.
+*
+*	Check For Number of Buffers.
+*
+BLDEF1	BTSTA.L	pklb_ANHD,pkl_Flags(A1)	; Did We Get An Anim Header?
+	BEQ	BLDEFF			; Jump If No Loaded.
+	MOVEA.L	pkl_Header(A1),A0	; A0.L = Address of Anim Header.
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ	BLDEFF			; Jump If Nothing Loaded.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	anh_interleave(A0),D0	; D0.L = Number of Buffers.
+	BNE.S	BLDEF2			; Jump If Ok.
+	MOVEQ.L	#2,D0			; Else Set To 2 Buffers.
+BLDEF2	MOVE.W	D0,aec_NumberOfBuffers(A4) ; Save Number Of Buffers.
+*
+*	Mark, Starting At Second Buffer to Nth Buffer, The Copy Flag.
+*
+	SUBQ.L	#1,D0			; One Less Buffer.
+	BRA.S	BLDEF4			; Start Looping.
+BLDEF3	ORI.L	#(1<<pklb_MakeFromPrev)!(1<<pklb_StartFrame),pkl_Flags(A1)
+	MOVEA.L	pkl_AllocLink(A1),A1	; A1.L = Address of Next In Packed List.
+	MOVE.L	A1,D1			; Check For NULL Pointer.
+BLDEF4	DBEQ	D0,BLDEF3		; Loop For Number of Buffers - 1.
+*
+*	We Need To Mark Last Normal and Last Loop.
+*
+	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Address of Packed List Header.
+	MOVEQ.L	#0,D0			; Load Number of Buffers.
+	MOVE.W	aec_NumberOfBuffers(A4),D0  ; D0.L = Number of Buffers.
+	BTSTA.L	aecb_LoopAnim,aec_Flags(A4) ; Loop Mode Anim?
+	BNE.S	BLDEF7			; Jump If Loop Anim.
+*
+*	Set Non-Loop Mode Pointers.
+*
+	ORI.L	#(1<<pklb_FirstNormal)!(1<<pklb_NormalFrame),pkl_Flags(A1)
+	BRA.S	BLDEF6			; Look For End Of List.
+BLDEF5	MOVEA.L	D2,A1			; A1.L = Next Position In List.
+	BSETA.L	pklb_NormalFrame,pkl_Flags(A1) ; Mark As Normal.
+BLDEF6	MOVE.L	pkl_AllocLink(A1),D2	; D2.L = Address of Next In Packed List.
+	BNE.S	BLDEF5			; Loop Back.
+	BSETA.L	pklb_LastNormal,pkl_Flags(A1) ; Flag Last Normal Flag.
+	MOVE.L	A0,pkl_ForwardLink(A1)	; Forward  Link.
+	MOVE.L	A1,pkl_BackwardLink(A0)	; Backward Link.
+	BRA.S	BLDEFD			; Exit Subroutine.
+*
+*	Set Loop Mode Pointers.
+*
+BLDEF7	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	aec_TotalFrames(A4),D1	; D1.L = Total Number of Frame.
+	SUB.L	D0,D1			; D1.L = Frame Count.
+	MOVE.W	D1,aec_FrameCount(A4)	; Save Number of Normal Frames.
+	SUB.L	D0,D1			; D1.L = Frames From Nth frame to Last Norma.
+	SUBQ.L	#1,D1			; D1.L = Less One.
+*
+*	Go To Last Normal.
+*
+	MOVEA.L	A1,A2			; A2.L = Address of Nth Frame.
+	BSETA.L	pklb_FirstNormal,pkl_Flags(A2) ; Flag First Normal Flag.
+	BRA.S	BLDEF9			; Loop For N Frames.
+BLDEF8	BSETA.L	pklb_NormalFrame,pkl_Flags(A1) ; We Have A Normal Frame.
+	MOVEA.L	pkl_AllocLink(A1),A1	; A1.L = Address of Next In Packed List.
+	MOVE.L	A1,D2			; Check For NULL Pointer.
+	BEQ.S	BLDEFE			; Exit If Not Enough Frames.
+BLDEF9	DBF	D1,BLDEF8		; Go To Nth Buffer.
+	ORI.L	#(1<<pklb_NormalFrame)!(1<<pklb_LastNormal),pkl_Flags(A1) ; Normal & Last
+	MOVE.L	A1,pkl_BackwardLink(A0)	; Should Never Happen!!!!!
+*
+*	Go To Last Loop.
+*
+	MOVE.L	pkl_AllocLink(A1),D2	; Go To First Loop Frame.
+	BEQ.S	BLDEFC			; Jump If All Done.
+	MOVEA.L	D2,A1			; A1.L = Next Position In List.
+	ORI.L	#(1<<pklb_FirstLoop)!(1<<pklb_LoopFrame),pkl_Flags(A1) ; First & Loop.
+	BRA.S	BLDEFB			; Look For End Of List.
+BLDEFA	MOVEA.L	D2,A1			; A1.L = Next Position In List.
+	BSETA.L	pklb_LoopFrame,pkl_Flags(A1) ; This Is a Loop Frame.
+BLDEFB	MOVE.L	pkl_AllocLink(A1),D2	; D2.L = Address of Next In Packed List.
+	BNE.S	BLDEFA			; Loop Back.
+BLDEFC	BSETA.L	pklb_LastLoop,pkl_Flags(A1)  ; Flag Last Normal Flag.
+	MOVE.L	A1,pkl_BackwardLink(A2)	; Point To Last Loop.
+	MOVE.L	A2,pkl_ForwardLink(A1)	; Reset Loop Position.
+*
+*	Exit No Error.
+*
+BLDEFD	MOVEQ.L	#AEE_NoError,D0		; D0.L = No Error.
+	BRA.S	BLDEFH			; Exit Subroutine.
+*
+*	Not Enough Frames For Loop Mode.
+*
+BLDEFE	MOVEQ.L	#AEE_ToFewFrames,D0	; D0.L = Too Few Frames.
+	BRA.S	BLDEFH			; Exit Subroutine.
+*
+*	Only One Frame.
+*
+BLDEFF	MOVEQ.L	#AEE_OnlyOneFrameLoaded,D0 ; Only One Frame Loaded.
+	BRA.S	BLDEFH			; Exit Subroutine.
+*
+*	Error Not Loaded.
+*
+BLDEFG	MOVEQ.L	#AEE_BMHeaderNotLoaded,D0 ; Bit Map Header Not Loaded.
+*
+*	Exit Subroutine.
+*
+BLDEFH	MOVEM.L	(A7)+,D1-D2/A0-A2	; Return Calling State.
+	TST.L	D0
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BuildColorTable:						*
+*									*
+*	Makes the IFF Style Color Table Into A Toaster Color Table.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of pkl structure to Make Color Table Into.	*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Failed To Make Color Table.			*
+*	CC	!= Zero -> Color  Table Was Made.			*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	BuildColorTable
+BuildColorTable:
+	MOVEM.L	D0-D2/A0-A2/A6,-(A7)	; Save Calling State.
+	MOVEA.L	A0,A2			; A2.L = Address of pkl.
+*
+*	Is There A Color Table Already There?
+*
+	CLR.W	pkl_NumberOfColors(A2)	; Initial Number Of Colors.
+	TST.L	pkl_LoadableColors(A2)	; Color Table There?
+	BNE	BUCOT7			; Jump If Color Table There.
+	MOVE.L	pkl_ColorTableSize(A2),D0 ; Is There One To Make?
+	BEQ	BUCOT6			; Jump If Nothing To Do.
+	ADDQ.L	#2,D0			; Round Up.
+	DIVU.W	#3,D0			; D0.L = Number of Colors.
+	ANDI.L	#$FFFF,D0		; Remove Remainder.
+	MOVE.L	D0,D2			; D2.L = Number of Colors.
+	MOVE.W	D0,pkl_NumberOfColors(A2) ; Save Number of Colors.
+	ADD.L	D0,D0			; D0.L = Word Sized Table
+	BTSTA.L	aecb_8BitColors,aec_Flags(A4) ; Do We Have An AA Chip Set?
+	BEQ.S	BUCOT1			; Jump If Not AA Chips.
+	ADD.L	D0,D0			; D0.L = Long Sized Table.
+BUCOT1	MOVE.L	D0,pkl_LoadableCLength(A2) ; Save Size of Data.
+	MOVE.L	#MEMF_PUBLIC,D1		; D1.L = Type of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+
+
+	MEMORYHEXI <ALLOC colortable >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; Try To Get Memory.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	MOVE.L	D0,pkl_LoadableColors(A2) ; Save Pointer To Allocated Memory.
+	BEQ.S	BUCOT7			; Exit If Failed.
+*
+*	Loop And Make Color Table.
+*
+	MOVEA.L	pkl_ColorTable(A2),A0	; A0.L = Address of Source.
+	MOVEA.L	D0,A1			; A1.L = Address of Destination.
+	BTSTA.L	aecb_8BitColors,aec_Flags(A4) ; Do We Have An AA Chip Set?
+	BNE.S	BUCTO5			; Jump If AA Chip Set.
+*
+*	Pre AA Chip Set.
+*
+	BRA.S	BUCTO3			; Start Looping.
+BUCOT2	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Red.
+	LSL.W	#4,D0			; Move Up.
+	MOVE.B	(A0)+,D0		; Get Green.
+	ANDI.B	#$F0,D0			; Leave Only Green.
+	MOVE.B	(A0)+,D1		; Get Blue.
+	LSR.B	#4,D1			; Move Down.
+	OR.B	D1,D0			; D0.W = 0RGB.
+	MOVE.W	D0,(A1)+		; Save Result.
+BUCTO3	DBF	D2,BUCOT2		; Loop Until Done.
+	BRA.S	BUCOT6			; Exit Subroutine.
+*
+*	AA Chip Set.
+*
+BUCOT4	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.B	(A0)+,D0		; Get Red.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.B	(A0)+,D0		; Get Green.
+	LSL.W	#8,D0			; Put In High Posiition.
+	MOVE.B	(A0)+,D0		; Get Blue.
+	BSR	SoftToHardColor		; Convert To New Format.
+	MOVE.L	D0,(A1)+		; Save Result.
+BUCTO5	DBF	D2,BUCOT4		; Loop Until Done.
+*
+*	Exit Without Error.
+*
+BUCOT6	MOVEQ.L	#-1,D0			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+BUCOT7	MOVEM.L	(A7)+,D0-D2/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreeColorTable:							*
+*									*
+*	Frees the Toaster Color Table.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of pkl Structure to Free Color Table.		*
+*									*
+*	Output:								*
+*									*
+*	Color Table Is Freed.						*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FreeColorTable
+FreeColorTable:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	If Color Table There, Deallocate It.
+*
+	MOVE.L	pkl_LoadableColors(A0),D1 ; Color Table There?
+	BEQ	FRCOT1			; Jump If Color Table Not There.
+	MOVE.L	pkl_LoadableCLength(A0),D0 ; Get Size of Data.
+	BEQ	FRCOT1			; Jump If Color Table Not There.
+	MOVEA.L	D1,A1			; A1.L = Address of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; Address of Exec Base.
+
+
+	MEMORYHEXI <FREE colortable >,d0,< >
+	MEMORYHEXI <             at >,a1,<\>
+
+
+	JSR	_LVOFreeMem(A6)		; Give Back the Memory.
+*
+*	Exit Subroutine.
+*
+FRCOT1	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SoftToHardColor:						*
+*									*
+*	Converts From The Software Format 8 Bit Color to the Hardware	*
+*	Format 4 Bit Colors.						*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= LlRrGgBb Software Color Value.			*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= LRGBlrgb Hardware Color Value.			*
+*									*
+*	11.Feb.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	SoftToHardColor
+SoftToHardColor:
+	MOVEM.L	D1-D3,-(A7)	; Save Calling State.
+*
+*	Make Blue.
+*
+	MOVE.W	D0,D1		; D1.W = Result Low.
+	ANDI.W	#$000F,D1	; D1.W = 000b.
+	LSR.L	#4,D0		; D0.L = 0LlRrGbB.
+	MOVE.W	D0,D2		; D2.W = Result High.
+	ANDI.W	#$000F,D2	; D2.W = 000B.
+*
+*	Make Green.
+*
+	MOVE.W	D0,D3		; D3.W = rGgB.
+	ANDI.W	#$00F0,D3	; D3.W = 00g0.
+	OR.W	D3,D1		; D1.W = 00gb.
+	LSR.L	#4,D0		; D0.L = 00LlRrGg.
+	MOVE.W	D0,D3		; D3.W = RrGg.
+	ANDI.W	#$00F0,D3	; D3.W = 00G0.
+	OR.W	D3,D2		; D2.W = 00GB.
+*
+*	Make Red.
+*
+	MOVE.W	D0,D3		; D3.W = RrGg.
+	ANDI.W	#$0F00,D3	; D3.W = 0r00.
+	OR.W	D3,D1		; D1.W = 0rgb.
+	LSR.L	#4,D0		; D0.L = 000LlRrG.
+	MOVE.W	D0,D3		; D3.W = lRrG.
+	ANDI.W	#$0F00,D3	; D3.W = 0R00.
+	OR.W	D3,D2		; D2.W = 0RGB.
+*
+*	Make Genlock.
+*
+	ANDI.W	#$F000,D0	; D0.L = 000Ll000.
+	OR.W	D0,D1		; D1.W = lrgb.
+	CLR.W	D0		; D0.L = 000L0000.
+	LSR.L	#4,D0		; D0.L = 0000L000.
+	OR.W	D2,D0		; D0.L = 0000LRGB.
+*
+*	Combine Result.
+*
+	SWAP.W	D0		; D0.L = LRGB0000.
+	MOVE.W	D1,D0		; D0.L = LRGBlrgb.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1-D3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AnimUnload:							*
+*									*
+*	Frees any allocated Fast & Chip memory and all other resources	*
+*	which were allocated by AnimLoad.  This is caled when an Anim	*
+*	effect is de-selected.						*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Anim Data Is Unloaded.						*
+*									*
+*	3.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimUnload
+AnimUnload:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	See If Data Was Loaded?
+*
+	MOVE.L	A4,D0			; Anything To Free?
+	BEQ	ANMUL9			; Exit If NULL.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of Exec Base.
+*
+*	Free The List Of Circular Buffers.
+*
+	MOVE.L	aec_CircularList(A4),A0	; A0.L = Pointer To First Element.
+	CLR.L	aec_CircularList(A4)	; NULL Pointer To List.
+	MOVE.L	A0,D0			; Anything to Free?
+	BEQ.S	ANMUL1			; Jump If Nothing To Free.
+
+	BSR	FreesCircularBuffers	; Free The List.
+*
+*	Free The List Of Headers.
+*
+ANMUL1	MOVEA.L	aec_PackedList(A4),A0	; A0.L = Head Of List.
+	CLR.L	aec_PackedList(A4)	; NULL Pointer To List.
+	MOVE.L	A0,D0			; Anything to Free?
+	BEQ.S	ANMUL2			; Jump If Nothing To Free.
+
+	BSR	FreePackedList		; Give The Memory In The List Back.
+*
+*	Free The Large Memory Area.
+*
+ANMUL2	MOVEA.L	aec_LoadBase(A4),A1	; A1.L = Address of Memory.
+	MOVE.L	A1,D0			; Anything to Free?
+	BEQ	ANMUL7			; Jump If Nothing To Free.
+	MOVE.L	aec_LoadLength(A4),D0	; D0.L = Amount  of Memory.
+	BEQ	ANMUL7			; Jump If No Data To Free.
+
+	MEMORYHEXI <FREE LoadBase >,d0,< >
+	MEMORYHEXI <           at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back the Memory.
+ANMUL7	CLR.L	aec_LoadLength(A4)	; Clear Length.
+	CLR.L	aec_LoadBase(A4)	; Clear Base Address.
+*
+*	Give Back aec Structure.
+*
+ANMUL8	MOVEQ.L	#aec_Sizeof,D0		; D0.L = Amount  of Memory.
+	MOVEA.L	A4,A1			; A1.L = Address of Memory.
+
+
+	MEMORYHEXI <FREE aec >,d0,< >
+	MEMORYHEXI <      at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back The Memory.
+*
+*	Exit Subroutine.
+*
+ANMUL9	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AllocPackedListStruct:						*
+*									*
+*	Allocates a Packed List Struct.					*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of Packed List Header.			*
+*									*
+*	CC	== Zero -> Failed To Allocate Memory.			*
+*	CC	!= Zero -> Execution Without Error.			*
+*									*
+*	11.March.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AllocPackedListStruct
+AllocPackedListStruct:
+	MOVEM.L	D0-D1/A1/A6,-(A7)	; Save Calling State.
+*
+*	Try To Allocate Memory.
+*
+	MOVEQ.L	#pkl_Sizeof,D0		; D0.L = Number of Bytes to Allocate.
+	MOVE.L	#MEMF_PUBLIC!MEMF_CLEAR,D1 ; D1.L = Type of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+
+
+	MEMORYHEXI <ALLOC pkl >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; D0.L = Address of Memory.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	MOVEA.L	D0,A0			; A0.L = Address of Memory.
+	TST.L	D0			; D0.L = Value of Return Code.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreePackedListStruct:						*
+*									*
+*	Frees a Packed List Struct.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Packed List Header to be Freed.		*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Packed List Struct Header is Freed.				*
+*									*
+*	11.March.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FreePackedListStruct
+FreePackedListStruct:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	If It Exists, Give It Back.
+*
+	MOVE.L	A0,D0			; NULL Pointer?
+	BEQ	FRPLS1			; Exit If NULL Pointer.
+	BSR	FreeColorTable		; Give Back The Color Table.
+	MOVEQ.L	#pkl_Sizeof,D0		; D0.L = Number  of Bytes to Free.
+	MOVEA.L	A0,A1			; A1.L = Address of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; Address of Exec Base.
+
+	MEMORYHEXI <FREE pkl >,d0,< >
+	MEMORYHEXI <      at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back the Memory.
+*
+*	Exit Subroutine.
+*
+FRPLS1	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreePackedList:							*
+*									*
+*	Frees a Packed List.						*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Packed List to be Freed.			*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Packed List is Freed.						*
+*									*
+*	11.March.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FreePackedList
+FreePackedList:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	If It Exists, Give It Back.
+*
+	MOVE.L	A0,D0			; NULL Pointer?
+	BEQ.S	FRPLI2			; Exit If NULL Pointer.
+FRPLI1	MOVEA.L	D0,A0			; A0.L = Value Of This Element.
+	MOVE.L	pkl_AllocLink(A0),D0	; D0.L = Next Element In List.
+	BSR	FreePackedListStruct	; Give It Back.
+	TST.L	D0			; Anything Else In List?
+	BNE.S	FRPLI1			; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+FRPLI2	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AllocCircularBuffers:						*
+*									*
+*	Allocate The Circular Buffer List For The Display.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Available Memory.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AllocCircularBuffers
+AllocCircularBuffers:
+	MOVEM.L	D1-D6/A0-A2,-(A7)	; Save Calling State.
+	MOVEA.L	A0,A2			; A2.L = Available Memory List.
+*
+*	First Allocate The List of Headers.
+*
+	TST.L	aec_CircularList(A4)	; Already Allocated?
+	BNE	ALCIB9			; Jump If List Already Allocated.
+	MOVEQ.L	#0,D2			; Make Number of Buffers.
+	MOVE.W	aec_NumberOfBuffers(A4),D2 ; D2.L = Number of Buffers.
+	BNE.S	ALCIB1			; Jump If Not Zero.
+	MOVEQ.L	#2,D2			; D2.L = Number of Buffers.
+*
+*	Make The Head Of The List.
+*
+ALCIB1
+	DUMPUDEC.l	<aec_NumberOfBuffers>,d2,<\>
+
+	MOVEA.L	A2,A0			; A0.L = Available Memory.
+	BSR.S	AllocateCirBuffer	; A0.L = Address of Structure.
+	BEQ.S	ALCIB8			; Not Enough Memory.
+	MOVE.L	A0,aec_CircularList(A4)	; Pointer To First Element.
+	SUBQ.L	#1,D2			; One Less Buffer.
+*
+*	Make The Nth In List.
+*
+	BRA.S	ALCIB3			; Start Looping.
+ALCIB2	MOVEA.L	A2,A0			; A0.L = Available Memory.
+	BSR.S	AllocateCirBuffer	; A0.L = Address of Structure.
+	BEQ.S	ALCIB8			; Not Enough Memory.
+	MOVE.L	A0,acl_AllocationLink(A1) ; Save Pointer To Next Line List.
+	MOVE.L	A0,acl_ForwardLink(A1)	; Save Point To Forward  Position.
+	MOVE.L	A1,acl_BackwardLink(A0)	; Save Point To Backward Position.
+ALCIB3	MOVEA.L	A0,A1			; A1.L = Address of End of List.
+	DBF	D2,ALCIB2		; Loop Until Done.
+	MOVEA.L	aec_CircularList(A4),A0	; A0.L = Address Start Of List.
+	MOVE.L	A0,acl_ForwardLink(A1)	; End Of List Points At Start.
+	MOVE.L	A1,acl_BackwardLink(A0)	; Start Of List Points At End.
+*
+*	Execution Without Error.
+*
+	MOVEQ.L	#AEE_NoError,D0		; D0.L = No Error Occured.
+	BRA.S	ALCIBA			; Exit Subroutine.
+*
+*	Not Enough Memory.
+*
+ALCIB8	MOVEQ.L	#AEE_NotEnoughFreeMemory,D0 ; D0.L = Not Enough Memory.
+	BRA.S	ALCIBA			; Exit Subroutine.
+*
+*	List Already Allocated.
+*
+ALCIB9	MOVEQ.L	#AEE_CircularListAlreadyAlloc,D0 ; D0.L = Error Code.
+*
+*	Exit Subroutine.
+*
+ALCIBA	TST.L	D0			; Set Return Code.
+	MOVEM.L	(A7)+,D1-D6/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AllocateCirBuffer:						*
+*									*
+*	Allocate A Single Buffer In Circular Buffer List.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Available Memory.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of acl Header.				*
+*									*
+*	CC	== Zero -> Failed To Allocate Memory.			*
+*	CC	!= Zero -> Execution Without Error.			*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AllocateCirBuffer
+AllocateCirBuffer:
+	MOVEM.L	D0-D3/A1-A3/A5-A6,-(A7)	; Save Calling State.
+	MOVE.L	A0,D3			; D3.L = Address of Available Memory.
+*
+*	Make The Header.
+*
+	MOVE.L	#acl_Sizeof,D0		; D0.L = Size of The Structure.
+	MOVE.L	#MEMF_PUBLIC!MEMF_CLEAR,D1 ; D1.L = Type of Memory.
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+	MOVE.L	A1,-(A7)		; Save Available Memory.
+
+	MEMORYHEXI <ALLOC acl >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; Try To Get Memory.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	MOVEA.L	(A7)+,A1		; Return Available Memory.
+	MOVEA.L	D0,A0			; A0.L = Address of Header.
+	TST.L	D0			; Set Return Code.
+	BEQ	ALCRBB			; Exit On Error.
+	MOVEA.L	A0,A2			; A2.L = Address of acl Header.
+*
+*	Fill Out Structure.
+*
+	MOVE.W	aec_NumberOfColors(A4),acl_NumberOfColors(A2)
+	MOVE.W	aec_Width(A4),acl_Width(A2)	; Save Width.
+	MOVE.W	aec_Height(A4),acl_Height(A2)	; Save Height.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	aec_Depth(A4),D2	; D2.L = Number of Planes.
+	MOVE.B	D2,acl_Depth(A2)	; Save Depth.
+*
+*	Allocate The Bit Planes, Using avcm_PriFree.
+*
+	LEA.L	acl_Planes(A2),A3	; A3.L = Address of Plane Table.
+	MOVEA.L	D3,A1			; A1.L = Address of Available Memory.
+	BRA.S	ALCRB2			; Start Looping.
+ALCRB1	MOVEQ.L	#avmc_PriFree,D0	; D0.L = Memory Priority.
+	BSR	AllocateToasterMemory	; A0.L = Address of Memory.
+	BEQ.S	ALCRB3			; Exit If Failed.
+	MOVE.L	A0,D0			; D0.L = Memory Address.
+	BSR	RoundToDoubleLongWord	; D0.L = Double Word Alligned.
+	MOVE.L	D0,(A3)+		; Save Plane Pointer.
+ALCRB2	DBF	D2,ALCRB1		; Loop Until Done.
+	BRA	ALCRB9			; Exit Subroutine.
+*
+*	Allocate The Bit Planes, Using AllocMem.
+*
+ALCRB3	LEA.L	acl_AllocatedPlanes(A2),A5 ; A5.L = Address of Allocations.
+ALCRB4	MOVE.L	aec_PlaneSize(A4),D0	; D0.L = Amount of Memory.
+
+	MOVE.L	#MEMF_CHIP,D1		; D1.L = Type of Memory.
+	BTSTA.L	aecb_CirBuffsInFAST,aec_Flags(A4) ; Are we forcing the Circular buffers into FAST?
+	beq.s	ALCRB4b
+	MOVE.l	#MEMF_FAST,D1		; D1.L = Type of Memory.
+
+ALCRB4b	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+	MOVE.L	A1,-(A7)		; Save Available Memory.
+
+	MEMORYHEXI <ALLOC CHIP or Fast Circular Buffer plane >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; Try To Get Memory.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	MOVEA.L	(A7)+,A1		; Return Available Memory.
+	MOVE.L	D0,(A5)+		; Save Allocation Plane Pointer.
+	BEQ.S	ALCRB5			; Exit If Failed, NULL Pointer.
+	BSR.S	RoundToDoubleLongWord	; D0.L = Double Word Alligned.
+	MOVE.L	D0,(A3)+		; Save Plane Pointer.
+	DBF	D2,ALCRB4		; Loop Until Done.
+	BRA.S	ALCRB9			; Exit Subroutine.
+*
+*	Allocate The Bit Planes, Using avcm_PriPublic.
+*
+ALCRB5	MOVEA.L	D3,A1			; A1.L = Address of Available Memory.
+ALCRB6	MOVEQ.L	#avmc_PriPublic,D0	; D0.L = Memory Priority.
+	BSR.S	AllocateToasterMemory	; A0.L = Address of Memory.
+	BEQ.S	ALCRB7			; Exit If Failed.
+	MOVE.L	A0,D0			; D0.L = Memory Address.
+	BSR.S	RoundToDoubleLongWord	; D0.L = Double Word Alligned.
+	MOVE.L	D0,(A3)+		; Save Plane Pointer.
+	DBF	D2,ALCRB6		; Loop Until Done.
+	BRA.S	ALCRB9			; Exit Subroutine.
+*
+*	Allocate The Bit Planes, Using avcm_PriPrivate.
+*
+ALCRB7	MOVEA.L	D3,A1			; A1.L = Address of Available Memory.
+ALCRB8	MOVEQ.L	#avmc_PriPrivate,D0	; D0.L = Memory Priority.
+	BSR.S	AllocateToasterMemory	; A0.L = Address of Memory.
+	BEQ.S	ALCRBA			; Exit If Failed.
+	MOVE.L	A0,D0			; D0.L = Memory Address.
+	BSR.S	RoundToDoubleLongWord	; D0.L = Double Word Alligned.
+	MOVE.L	D0,(A3)+		; Save Plane Pointer.
+	DBF	D2,ALCRB8		; Loop Until Done.
+*
+*	Return No Error.
+*
+ALCRB9	MOVEQ.L	#-1,D0			; Set CC != Zero.
+	MOVEA.L	A2,A0			; A0.L = Address of acl Header.
+	BRA.S	ALCRBB			; Exit Subroutine.
+*
+*	Not Enough Memory.
+*
+ALCRBA	BSR	FreeCirBuffer		; Get Back Single Buffer.
+	MOVEQ.L	#0,D0			; Set CC == Zero.
+	MOVEA.L	D0,A0			; Set It To NULL.
+*
+*	Exit Subroutine.
+*
+ALCRBB	MOVEM.L	(A7)+,D0-D3/A1-A3/A5-A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RoundToDoubleLongWord:						*
+*									*
+*	Rounds a Pointer To Double Word Alligned Value.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value To Double Word Allign.				*
+*									*
+*	Output:								*
+*									*
+*	D0.L =	Double Word Alligned Value.				*
+*									*
+*	20.April 1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	RoundToDoubleLongWord
+RoundToDoubleLongWord:
+*
+*	Round To Nearest Double Word.
+*
+	ADDQ.L	#((1<<3)-1),D0		; Increment Past Starting.
+	ANDI.W	#~((1<<3)-1),D0		; Remove Extra Bits.
+*
+*	Exit Subroutine.
+*
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AllocateToasterMemory:						*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Memory Priority.					*
+*	A1.L	= Address of Available Memory.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of Bit Plane.					*
+*	A1.L	= Address of Updated Available Memory.			*
+*									*
+*	CC	== Zero -> Failed To Allocate Memory.			*
+*	CC	!= Zero -> Execution Without Error.			*
+*									*
+*	17.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AllocateToasterMemory
+AllocateToasterMemory:
+	MOVE.L	D1,-(A7)		; Save Calling State.
+*
+*	Move To Next Link In List.
+*
+	SUBA.L	A0,A0			; A0.L = Initilize To NULL.
+	BRA.S	ALTOM2			; Check Node For NULL.
+ALTOM1	MOVEA.L	avm_NextNode(A1),A1	; A1.L = Go To Next In List.
+*
+*	Check To See If We Can Fit Here.
+*
+ALTOM2	MOVE.L	A1,D1			; At End Of List?
+	BEQ	ALTOM3			; Jump If Allocate From Free Mem.
+	MOVE.L	avm_Size(A1),D1		; Make Amount To Use.
+	SUB.L	avm_NumberOfBytesUsed(A1),D1  ; D1.L = Amount Left.
+	CMP.L	aec_PlaneSize(A4),D1	; Enough For Us?
+	BCS.S	ALTOM1			; Jump If Not Enough There.
+	CMP.W	avm_MemoryPri(A1),D0	; Can I Use This Memory?
+	BNE.S	ALTOM1			; Jump If We Cannout Use It.
+	MOVE.W	avm_MemoryType(A1),D1	; Check For correct Memory type.
+
+	BTSTA.L	aecb_CirBuffsInFAST,aec_Flags(A4) ; Are we forcing the Circular buffers into FAST?
+	beq.s	ALTOM2b			; Jump if not forcing FAST
+	ANDI.W	#MEMF_FAST,D1		; Is It Fast Memory?
+	BEQ.S	ALTOM1			; Jump If Not Fast Memory.
+	BRA.S	ALTOM2c
+
+ALTOM2b	ANDI.W	#MEMF_CHIP,D1		; Is It Chip Memory?
+	BEQ.S	ALTOM1			; Jump If Not Chip Memory.
+*
+*	We Can Use This Memory.
+*
+	
+ALTOM2c	MOVEA.L	avm_Memory(A1),A0	; Make Address of Current Page.
+	ADDA.L	avm_NumberOfBytesUsed(A1),A0 ; A0.L = Address of Memory.
+	MOVE.L	aec_PlaneSize(A4),D1	; D1.L = Amount of Memory.
+
+	MEMORYHEXI <ALLOC ToasterMem >,d1,< >
+	MEMORYHEXI <             at >,a0,<\>
+
+	ADD.L	D1,avm_NumberOfBytesUsed(A1) ; Amount We Used Up.
+	MOVEQ.L	#-1,D1			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+ALTOM3	MOVEM.L	(A7)+,D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreesCircularBuffers:						*
+*									*
+*	Frees The Circular Buffer List For The Display.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Circular List Is Freed.						*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FreesCircularBuffers
+FreesCircularBuffers:
+	MOVEM.L	D0/A0,-(A7)		; Save Calling State.
+*
+*	If It Exists, Give It Back.
+*
+	MOVE.L	A0,D0			; NULL Pointer?
+	BEQ.S	FRCLI2			; Exit If NULL Pointer.
+FRCLI1	MOVEA.L	D0,A0			; A0.L = Value Of This Element.
+	MOVE.L	acl_AllocationLink(A0),D0 ; D0.L = Next Element In List.
+
+	BSR.S	FreeCirBuffer		; Give It Back.
+	TST.L	D0			; Anything Else In List?
+	BNE.S	FRCLI1			; Loop Until Done.
+*
+*	Exit Subroutine.
+*
+FRCLI2	MOVEM.L	(A7)+,D0/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FreeCirBuffer:							*
+*									*
+*	Frees The Circular Buffer List For The Display.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of acl Structure.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	A Single Circular Buffer Item Is Freed.				*
+*									*
+*	16.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	FreeCirBuffer
+FreeCirBuffer:
+	MOVEM.L	D0-D2/A0-A3/A6,-(A7)	; Save Calling State.
+	MOVEA.L	aec_SYSBase(A4),A6	; Address of Exec Base.
+*
+*	If It Exists, Give It Back.
+*
+	MOVE.L	A0,D0			; NULL Pointer?
+	BEQ	FRCIB2			; Exit If NULL Pointer.
+	MOVEA.L	A0,A2			; A2.L = Address of acl Structure.
+	LEA.L	acl_AllocatedPlanes(A2),A3  ; A3.L = Address of Bit Plane Table.
+	MOVEQ.L	#MaximumNumberOfPlanes-1,D2 ; D2.L = Number of Planes.
+*
+*	If Any Of The Bit Planes Were Allocated, Free Them.
+*
+FRCIB1	MOVE.L	(A3)+,D0		; NULL Pointer?
+	BEQ	FRCIB1b			; Jump If NULL.
+	MOVEA.L	D0,A1			; A1.L = Address of Memory.
+	MOVE.L	aec_PlaneSize(A4),D0	; D0.L = Number of Bytes.
+
+	MEMORYHEXI <FREE CirBuff >,d0,< >
+	MEMORYHEXI <          at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back The Memory.
+	DBF	D2,FRCIB1		; Loop For Number of Planes.
+*
+*	Free The Header Structure.
+*
+FRCIB1b	MOVE.L	#acl_Sizeof,D0		; D0.L = Number  of Bytes to Free.
+	MOVEA.L	A2,A1			; A1.L = Address of Memory.
+
+
+	MEMORYHEXI <FREE acl >,d0,< >
+	MEMORYHEXI <      at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back the Memory.
+*
+*	Exit Subroutine.
+*
+FRCIB2	MOVEM.L	(A7)+,D0-D2/A0-A3/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CreateNextFrame:						*
+*									*
+*	Creates the Nth Frame In The List.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*	A6.L	= Address of GFX Base.					*
+*									*
+*	Output:								*
+*									*
+*	Anim Data is Unpacked Into Circular List.			*
+*									*
+*	25.March 1993 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	CreateNextFrame
+CreateNextFrame:
+	MOVEM.L	D0-D6/A0-A2,-(A7)	; Save Calling State.
+*
+*	On a BODY or DLTA.
+*
+	MOVEA.L	aec_UnPackedList(A4),A2	; A2.L = Address of pkl Position.
+	MOVE.L	pkl_Flags(A2),D6	; D6.L = Value of Flags.
+	BTST.L	#pklb_BODY,D6		; On A BODY Or DLTA?
+	BEQ.S	CRNXF1			; Jump If Not BODY.
+*
+*	Do a BODY Frame.
+*
+	MOVEA.L	pkl_Data(A2),A0		; A0.L = Address of The Start of Body.
+	MOVE.L	pkl_DataSize(A2),D0	; D0.L = Number of Bytes in Frame.
+	MOVEA.L	pkl_Header(A2),A1	; A1.L = Address of Bit Map Header.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.W	aec_Width(A4),D1	; D1.L = Width in Bytes.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	aec_Height(A4),D2	; D2.L = Height of data in scan lines
+	MOVEQ.L	#0,D3			; Clear High Bits.
+	MOVE.W	aec_Depth(A4),D3	; D3.L = Number of BitPlanes.
+	MOVEQ.L	#0,D4			; Clear High Bits.
+	MOVE.B	bmh_compression(A1),D4	; D4.L = Compression method
+	MOVEQ.L	#0,D5			; Clear High Bits.
+	MOVE.B	bmh_masking(A1),D5	; D5.L = Masking.
+	MOVEA.L	aec_CurrentFrame(A4),A1	; A1.L = Address of Current In List.
+	ADDA.W	#acl_Planes,A1		; A1.L = Address of Bit Planes.
+	BSR	REPACK			; Copy First Frame to Active Display.
+	BRA.S	CRNXF3			; Skip Else Part.
+*
+*	On a DLTA?
+*
+CRNXF1	BTST.L	#pklb_DLTA,D6		; On A DLTA?
+	BEQ.S	CRNXF3			; Jump If Not DLTA.
+	BTST.L	#pklb_MakeFromPrev,D6	; Make From Previous?
+	BEQ.S	CRNXF2			; Jump If Not Make From Previous.
+*
+*	Copy Previous Plane Data.
+*
+	MOVEA.L	aec_CurrentFrame(A4),A1	; A1.L = Make Address of Destination.
+	MOVEA.L	acl_BackwardLink(A1),A0	; A0.L = Make Address of Source.
+	ADDA.W	#acl_Planes,A1		; A1.L = Address of Destin Planes.
+	ADDA.W	#acl_Planes,A0		; A0.L = Address of Source Planes.
+	MOVEQ.L	#0,D0			; Make Number of Planes.
+	MOVE.W	aec_Depth(A4),D0	; D0.L = Number of Planes.
+	MOVE.L	aec_PlaneSize(A4),D1	; D1.L = Number of Bytes In Bit Plane.
+	SUBQ.L	#6,D1			; Less Double Long Word Size Adjustment.
+	BSR	CopyBitPlanesChipMemory	; Copy The Bits Planes.
+*
+*	Decompress The Anim Deltas.
+*
+CRNXF2	MOVEA.L	pkl_Header(A2),A1	; A1.L = Address of Anim Header.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	aec_Depth(A4),D0	; D0.L = Number of Bit Planes.
+	MOVEQ.L	#0,D1			; Clear High Bits.
+	MOVE.B	anh_operation(A1),D1	; D1.L = Compression Method.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	aec_Width(A4),D2	; D2.L = Width of Anim in Bytes.
+	MOVE.L	anh_bits(A1),D3		; D3.L = Value of Anim Bits.
+	MOVEA.L	pkl_Data(A2),A0		; A0.L = Address of Deltas.
+	MOVEA.L	aec_CurrentFrame(A4),A1	; A1.L = Address of Current In List.
+	ADDA.W	#acl_Planes,A1		; A1.L = Address of Bit Planes.
+	BSR	UpDatePic		; Copy The Deltas.
+*
+*	Attach The Rest Of The Data.
+*
+CRNXF3	MOVEA.L	aec_CurrentFrame(A4),A1	; A1.L = Address of Current In List.
+	MOVE.L	pkl_LoadableColors(A2),acl_ColorTable(A1)	; Color Table.
+	MOVE.W	pkl_NumberOfColors(A2),acl_NumberOfColors(A1)	; # of Colors.
+	MOVE.L	pkl_ViewMode(A2),acl_ViewModes(A1)		; ViewModes.
+	MOVE.W	pkl_FrameNumber(A2),acl_FrameNumber(A1)		; Frame #.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D6/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AnimSetupForward:						*
+*									*
+*	Generates the data for the N-buffers, starting at the first	*
+*	frame.								*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	The N-buffered data is created.					*
+*									*
+*	3.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimSetupForward
+AnimSetupForward:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+	MOVE.L	A4,D0			; NULL Pointer?
+	BEQ.S	ANSTF3			; Exit If NULL.
+	CLR.B	AnimAbortFlag		; Set Flag To No Abort.
+*
+*	Intiliize Ourselfs To First Frame.
+*
+	MOVE.L	aec_PackedList(A4),aec_UnPackedList(A4) ; Source Packed Data.
+	BEQ.S	ANSTF3			; Exit If NULL Pointer.
+	MOVE.L	aec_CircularList(A4),D0	; Circular List Pointer.
+	BEQ.S	ANSTF3			; Exit If NULL Pointer.
+	MOVE.L	D0,aec_CurrentFrame(A4) ; Frame To Play Into.
+	MOVEA.L	D0,A0			; Initilizes the Current/Next Logic.
+	MOVE.L	acl_BackwardLink(A0),aec_DisplayFrame(A4) ; Frame To Look At.
+*
+*	Initilize The Anim Player.
+*
+	MOVEA.L	aec_GFXBase(A4),A6	; A6.L = Address of Graphics Base.
+	BSR	OpenChipMemoryMove	; Open The Memory Move Routine.
+	MOVEQ.L	#0,D1			; Make Width Of Anim.
+	MOVE.W	aec_Width(A4),D1	; D1.L = Width Of Anim.
+	BSR	InitAnim		; Initilize The Animation Mode.
+*
+*	Loop For Number of Buffer and Create Initial Frames.
+*
+	MOVE.W	aec_NumberOfBuffers(A4),D1 ; D1.W = Loop Counter.
+	BRA.S	ANSTF2			; Start Looping.
+ANSTF1	BSR	CreateNextFrame		; Build Next Frame.
+*
+*	Move Thru The Buffered Frames.
+*
+	MOVEA.L	aec_CurrentFrame(A4),A0	; A0.L = acl Present Link.
+	MOVE.L	acl_ForwardLink(A0),aec_CurrentFrame(A4) ; New Head Of List.
+	MOVEA.L	aec_UnPackedList(A4),A0	; A0.L = pkl Present Link.
+	MOVE.L	pkl_ForwardLink(A0),aec_UnPackedList(A4) ; New Head Of List.
+ANSTF2	DBF	D1,ANSTF1		; Loop Until Done.
+*
+*	Close Initilization Process.
+*
+	BSETA.L	aecb_BufferFull,aec_Flags(A4) ; The Buffer Is Full.
+	BSR	CloseChipMemoryMove	; Close Memory Move Routine.
+*
+*	Exit Subroutine.
+*
+ANSTF3	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AnimatedInterruptOn:						*
+*									*
+*	Turns On The Animated Interrupt.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Animated Interrupt is Enabled.					*
+*									*
+*	26.March 1993 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimatedInterruptOn
+AnimatedInterruptOn:
+	MOVEM.L	A0-A2/A6/D0-D1,-(A7)	; Save Calling State.
+*
+*	Is The Interrupt Already On?
+*
+	BTSTA.L	aecb_CopperOn,aec_Flags(A4) ; Is The Interrupt Already On?
+	BNE	ANMIO2			    ; Exit If Already On.
+	ORI.L	#(1<<aecb_CopperOn)!(1<<aecb_DisableInt),aec_Flags(A4) ; On, but Stoped.
+*
+*	Initilize Old Structure.
+*
+	MOVEQ.L	#(IS_SIZE)/2-1,D0	; D0.L = Loop Counter.
+	MOVEQ.L	#0,D1			; D1.L = Value To Clear With.
+	LEA.L	aec_CopperInter(A4),A1	; A1.L = Address of Structure.
+	MOVEA.L	A1,A0			; A0.L = Address of Structure.
+ANMIO1	MOVE.W	D1,(A0)+		; Clear Value.
+	DBF	D0,ANMIO1		; Loop Until Done.
+*
+*	Put in Constant Values.
+*
+	MOVE.B	#NT_INTERRUPT,LN_TYPE(A1) ; Type.
+	CLR.B	LN_PRI(A1)		; Priority.
+	LEA.L	AnimServerName(PC),A0	; A0.L = Name Of Node.
+	MOVE.L	A0,LN_NAME(A1)		; Save Pointer To Name.
+	MOVE.L	A4,IS_DATA(A1)		; Save Pointer To Data.
+	LEA.L	AnimatedHandler(PC),A0	; A0.L = Address of Handler.
+	MOVE.L	A0,IS_CODE(A1)		; Save Pointer To Handler.
+*
+*	Add Interrupt To System.
+*
+	CALLTL	DisableInterrupts
+
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+
+* Stash what Exec is using for a Software interrupt handler.
+* SetIntVector can return 0, even if there is a handler, because
+* it doesn't need a IS_ structure (no node!), just a code pointer.
+	lea	StashOldSoftInt(pc),a0
+	lea	IVSOFTINT(a6),a2
+	move.w	#IV_SIZE-1,d0
+10$	move.b	(a2)+,(a0)+
+	dbra	d0,10$
+
+	MOVEQ.L	#INTB_SOFTINT,D0		; D0.L = Int Number.
+	JSR	_LVOSetIntVector(A6)	; Establish The Interrupt.
+	PUT.L	d0,TB_SoftIntHandler	;stash old SoftInt handler
+
+* At this point, I'm assuming normal AVE or AVEI is up!!!!!!
+* If color versions of AVEC were installed, we're in trouble!!!
+	PUT.w	#INTF_SETCLR!INTF_SOFTINT,TB_CopListIntreq
+	btst.b	#AVEI_BIT,TB_Flags(a5)
+	beq.s	20$	
+	CALLTL	InstallAVEI		;install SOFTINT version of AVEI
+	bra.s	30$
+
+20$	btst.b	#AVE_BIT,TB_Flags3(a5)
+	beq.s	30$	
+	CALLTL	InstallAVE		;install SOFTINT version of AVE
+
+30$	move.w	#INTF_SETCLR!INTF_SOFTINT,_custom+intena ;enable soft interrupts
+
+	CALLTL	EnableInterrupts
+
+*
+*	Exit Subroutine.
+*
+ANMIO2	MOVEM.L	(A7)+,A0-A2/A6/D0-D1	; Return Calling State.
+	RTS
+
+StashOldSoftInt	dcb.b	IV_SIZE,0
+
+*
+*	Name of Our Server.
+*
+AnimServerName:
+	DC.B	'AnimatedEffectSoftInterrupt',0
+	CNOP	0,4
+
+	PAGE
+*************************************************************************
+*									*
+*	AnimatedInterruptOff:						*
+*									*
+*	Turns Off The Animated Interrupt.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Animated Interrupt is Disabled.					*
+*									*
+*	26.March 1993 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimatedInterruptOff
+AnimatedInterruptOff:
+	MOVEM.L	A0-A2/A6/D0-D1,-(A7)	; Save Calling State.
+*
+*	Is The Interrupt Already Off?
+*
+	BTSTA.L	aecb_CopperOn,aec_Flags(A4) ; Is The Interrupt Already Off?
+	BEQ	ANMIF1			    ; Exit If Already Off.
+	BCLRA.L	aecb_CopperOn,aec_Flags(A4) ; We Are Going To Turn It Off Now.
+*
+*	Remove Interrupt To System.
+*
+	MOVEQ.L	#(IS_SIZE)/2-1,D0	; D0.L = Loop Counter.
+	MOVEQ.L	#0,D1			; D1.L = Value To Clear With.
+	LEA.L	aec_CopperInter(A4),A1	; A1.L = Address of Structure.
+	MOVEA.L	A1,A0			; A0.L = Address of Structure.
+ANMIO1b	MOVE.W	D1,(A0)+		; Clear Value.
+	DBF	D0,ANMIO1b		; Loop Until Done.
+*
+*	Put in Constant Values.
+*
+**+	MOVE.B	#NT_INTERRUPT,LN_TYPE(A1) ; Type.
+**+	CLR.B	LN_PRI(A1)		; Priority.
+**+	LEA.L	AnimNullServerName(PC),A0	; A0.L = Name Of Node.
+**+	MOVE.L	A0,LN_NAME(A1)		; Save Pointer To Name.
+**+	MOVE.L	A4,IS_DATA(A1)		; Save Pointer To Data.
+**+	GET.L	TB_NullSoftIntHandler,A0	; A0.L = Address of Handler.
+**+	MOVE.L	A0,IS_CODE(A1)			; Save Pointer To Handler.
+*
+*	Add Interrupt To System.
+*
+	CALLTL	DisableInterrupts
+
+	MOVEA.L	aec_SYSBase(A4),A6	; A6.L = Address of System Base.
+	GET.L	TB_SoftIntHandler,d0
+	bne.s	5$
+
+* If there wasn't a full blown handler (with a node), then restore
+* exec to it's previous state, which may contain a code pointer only.
+	lea	StashOldSoftInt(pc),a0
+	lea	IVSOFTINT(a6),a2
+	move.w	#IV_SIZE-1,d0
+10$	move.b	(a0)+,(a2)+
+	dbra	d0,10$
+	bra.s	40$
+
+5$	movea.l	d0,a1
+	MOVEQ.L	#INTB_SOFTINT,D0	; D0.L = Int Number.
+	JSR	_LVOSetIntVector(A6)	; Establish The Interrupt.
+
+40$	move.w	#INTF_SOFTINT,_custom+intena ;disable soft interrupts
+
+* Software interrupts will be re-anabled in ServeAVE_AVEI.
+* Also, they will install a proper normal INTF_COPER AVE or AVEI first.
+
+	CALLTL	EnableInterrupts
+
+*
+*	Exit Subrutine.
+*
+ANMIF1	MOVEM.L	(A7)+,A0-A2/A6/D0-D1	; Return Calling State.
+	RTS
+
+**+ AnimNullServerName:
+**+ 	DC.B	'NullSoftwareInterrupt',0
+**+ 	CNOP	0,4
+
+	PAGE
+*************************************************************************
+*									*
+*	AnimatedHandler:						*
+*									*
+*	Handles the Interrupt to Advance The Anim.			*
+*									*
+*	Input:								*
+*									*
+*	A1.L	    = Address of Anim Base.				*
+*	D0-D1/A1/A5 = Scratch.						*
+*									*
+*	Output:								*
+*									*
+*	The Interrupt is Handled.					*
+*									*
+*	CC	== Zero -> Interrupt Not Processed.			*
+*	CC	!= Zero -> Interrupt Processed.				*
+*									*
+*	D0-D1/A0-A1/A5	= Scratch.					*
+*									*
+*	27.April 1992 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimatedHandler
+AnimatedHandler:
+	move.l	a0,-(sp)
+
+	MOVEA.L	A1,A0			; A0.L = aec Base Address.
+*
+*	Are We Allowed To Take This One?
+*
+	BTSTA.L	aecb_DisableInt,aec_Flags(A0) ; Is the Interrupt Disabled?
+	BNE.S	AINHN6			; Exit If Disabled.
+	BSETA.L	aecb_InteruptOccured,aec_Flags(A0) ; Interrupt Occured.
+*
+*	Can We Show Another Frame?
+*
+AINHN1	MOVE.L	aec_CurrentFrame(A0),D1	; D1.L = acl Address of Present Decompress.
+	BEQ.S	AINHN3			; Exit If Null List.
+	MOVE.L	aec_DisplayFrame(A0),D0	; D0.L = acl Address of Present Displayed.
+	BEQ.S	AINHN3			; Exit If Null List.
+	MOVEA.L	D0,A1			; A1.L = acl Address of Display Frame.
+	MOVEA.L	acl_ForwardLink(A1),A1	; Pointer to Next Display Position.
+	BTSTA.L	aecb_BufferFull,aec_Flags(A0) ; Is The Buffer Full?
+	BNE.S	AINHN2			; Jump If Buffer Is Full.
+	CMPA.L	D1,A1			; Is It The Current One?
+	BEQ.S	AINHN3			; Exit If Current Is Head of List.
+*
+*	Send Ready Command.
+*
+AINHN2	MOVEQ.L	#fxhc_Ready,D0		; D0.L = Ready Command.
+	MOVEA.L	aec_FXHandler(A0),A1	; A1.L = Address of FX Handler.
+	JSR	(A1)			; Execute The Command.
+	MOVE.L	D0,D1			; Check For Ready Command.
+	ANDI.L	#fxhc_Ready,D1		; Did It Display The Buffer?
+	BEQ.S	AINHN4			; Jump If Not Displayed.
+*
+*	Move To Next Position In List.
+*
+	MOVEA.L	aec_DisplayFrame(A0),A1	; A1.L = acl Present Link.
+	MOVE.L	acl_ForwardLink(A1),aec_DisplayFrame(A0) ; New Head Of List.
+	BCLRA.L	aecb_BufferFull,aec_Flags(A0) ; The Buffer Is NOT Full.
+*
+*	Was The Stop Command Issued?
+*
+	ANDI.L	#fxhc_Stop!fxhc_Abort,D0 ; Stop or Abort Command?
+	BEQ.S	AINHN1			; Jump If Not Stop Command.
+	BRA.S	AINHN5			; Got Stop Command, Exit.
+*
+*	Send Not Ready Command.
+*
+AINHN3	MOVEQ.L	#fxhc_NotReady,D0	; D0.L = Not Ready Command.
+	MOVEA.L	aec_FXHandler(A0),A1	; A1.L = Address of FX Handler.
+	JSR	(A1)			; Execute The Command.
+*
+*	Was The Stop or Abort Command Issued?
+*
+AINHN4	ANDI.L	#fxhc_Stop!fxhc_Abort,D0 ; Stop or Abort Command?
+	BEQ.S	AINHN6			 ; Jump If Not Stop Command.
+
+* Stop or abort
+AINHN5	BSETA.L	aecb_GotStopCommand,aec_Flags(A0) ; Send Stop Command.
+	MOVE.B	#1,AnimAbortFlag	; Assume Stop
+	ANDI.L	#fxhc_Abort,D0
+	beq.s	AINHN6
+	MOVE.B	#-1,AnimAbortFlag	; Set Flag To Abort.
+*
+*	Exit Subroutine.
+*
+AINHN6	move.l	(sp)+,a0
+
+	move.w	#INTF_SOFTINT,intreq(a0)
+	RTS
+
+	PAGE
+*************************************************************************
+*									*
+*	TimeToAdvance:							*
+*									*
+*	Checks To See If It Is Ok To Advance The Decompressor.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	Waits Till Display It Is Ok To Write In Next Buffer.		*
+*									*
+*	CC	== Zero -> Stop Command Received.			*
+*	CC	!= Zero -> Time To Advance.				*
+*									*
+*	29.March 1993 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	TimeToAdvance
+TimeToAdvance:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Check To See If We Are Overrunning List.
+*
+TMTAD1	BTSTA.L	aecb_BufferFull,aec_Flags(A4) ; Is The Buffer Already Full?
+	BNE.S	TMTAD2			; Jump If Buffer Full.
+	MOVE.L	aec_CurrentFrame(A4),D0	; D0.L = acl List To Unpack Into.
+	CMP.L	aec_DisplayFrame(A4),D0	; Unpack Into == On is Display?
+	BNE	TMTAD4			; Jump If Unpack Into != On Display.
+	BSETA.L	aecb_BufferFull,aec_Flags(A4) ; Flag The Buffer Is Full.
+*
+*	Wait For An Interrupt to Occure.
+*
+TMTAD2	BCLRA.L	aecb_InteruptOccured,aec_Flags(A4) ; Interrupt Occured Flag.
+TMTAD3	BTSTA.L	aecb_InteruptOccured,aec_Flags(A4) ; Interrupt Occured?
+	BEQ	TMTAD3			; Burn Off a Frame.
+	BTSTA.L	aecb_GotStopCommand,aec_Flags(A4)  ; Got Stop Command?
+	BEQ	TMTAD1			; Jump If Stop Command Not Received.
+*
+*	We Received A Stop Command.
+*
+	MOVEQ.L	#0,D0			; D0.L = Stop Command Received.
+	BRA.S	TMTAD5			; Exit, We Got Stop Command.
+*
+*	Execution Without Error.
+*
+TMTAD4	MOVEQ.L	#-1,D0			; D0.L = Time To Advance.
+*
+*	Exit Subroutine.
+*
+TMTAD5	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AnimPlayForward:						*
+*									*
+*	This enables the Copper Interrupt handler.  As the Interrupt	*
+*	handler installs copperlists, the player code will be running,	*
+*	decompressing future frames.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of FX handler.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	The N-buffered Anim Data Is Played Forward.			*
+*									*
+*	3.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimPlayForward
+AnimPlayForward:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Check Calling Parameters For NULL.
+*
+	MOVE.L	A4,D0			; Check For NULL Pointer.
+	BEQ.S	ANPLF4			; Exit If NULL
+	MOVE.L	A0,D0			; Check For NULL Pointer.
+	BEQ.S	ANPLF4			; Exit If NULL
+	MOVE.L	A0,aec_FXHandler(A4)	; Save FX Base Address.
+*
+*	Make Sure Loaded And Ready To Go.
+*
+	TST.L	aec_UnPackedList(A4)	; Source Packed Data.
+	BEQ.S	ANPLF4			; Exit If NULL Pointer.
+	TST.L	aec_DisplayFrame(A4)	; Frame To Look At.
+	BEQ.S	ANPLF4			; Exit If NULL Pointer.
+	TST.L	aec_CurrentFrame(A4)	; Frame To Play Into.
+	BEQ.S	ANPLF4			; Exit If NULL Pointer.
+*
+*	Enable the Interrupts.
+*
+	MOVEA.L	aec_GFXBase(A4),A6	; A6.L = Address of Graphics Base.
+	BSR	OpenChipMemoryMove	; Open The Memory Move Routine.
+	BCLRA.L	aecb_GotStopCommand,aec_Flags(A4) ; Clear Stop Command.
+	BSR	AnimatedInterruptOn	; Enable The Interrupt.
+	BCLRA.L	aecb_DisableInt,aec_Flags(A4) ; Allow Anim To Run.
+*
+*	Ok To Advance Now?
+*
+	BRA.S	ANPLF2			; Start Looping.
+ANPLF1	BSR	TimeToAdvance		; Wait Till Advance Time.
+	BEQ.S	ANPLF3			; Exit If Stop Command.
+	BSR	CreateNextFrame		; Build Next Frame.
+*
+*	Move Thru The Buffered Frames.
+*
+	MOVEA.L	aec_CurrentFrame(A4),A0	; A0.L = acl Present Link.
+	MOVE.L	acl_ForwardLink(A0),aec_CurrentFrame(A4) ; New Head Of List.
+	MOVEA.L	aec_UnPackedList(A4),A0	; A0.L = pkl Present Link.
+	MOVE.L	pkl_ForwardLink(A0),aec_UnPackedList(A4) ; New Head Of List.
+	MOVE.W	#INTF_SETCLR!INTF_SOFTINT,(_custom+intreq) ; Generate Copper Int.
+*
+*	Play Till End Of Anim.
+*
+ANPLF2	BCLRA.L	aecb_GotStopCommand,aec_Flags(A4) ; Check Stop Command.
+	BEQ.S	ANPLF1			; Keep Going It Not Stop.
+*
+*	Disable Interupts.
+*
+ANPLF3	BSETA.L	aecb_DisableInt,aec_Flags(A4) ; Stop Anim From Running.
+	BSR	AnimatedInterruptOff	; Disable The Interrupt.
+	BSR	CloseChipMemoryMove	; Close Memory Move Routine.
+	CLR.B	AnimAbortFlag		; No Abort, Software Compatability.
+*
+*	Exit Subroutine.
+*
+ANPLF4	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AnimPlayReverse:						*
+*									*
+*	This enables the Copper Interrupt handler.  As the Interrupt	*
+*	handler installs copperlists, the player code will be running,	*
+*	decompressing future frames.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of FX handler.				*
+*	A4.L	= Address of aec Base.					*
+*									*
+*	Output:								*
+*									*
+*	The N-buffered Anim Data Is Played in Reverse.			*
+*									*
+*	3.Mar.1993 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	AnimPlayReverse
+AnimPlayReverse:
+	MOVEM.L	D0-D7/A0-A6,-(A7)	; Save Calling State.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D7/A0-A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MoveChipToFastMemory:						*
+*									*
+*	Tries to move Animation Data From Chip Memory to Fast Memory.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Bytes In Memory Block.			*
+*	A0.L	= Address of Current  Memory Block.			*
+*	A6.L	= Address of Exec Base.					*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of New Memory Block.				*
+*									*
+*	If Possable, Animation Data is Moved From Chip to Fast Memory.	*
+*									*
+*	29.Jan.1992, Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	MoveChipToFastMemory
+MoveChipToFastMemory:
+	MOVEM.L	D0-D2/A1-A3,-(A7)	; Save Calling State.
+	MOVEA.L	A0,A2			; A2.L = Address of Memory Block.
+	MOVE.L	D0,D2			; D2.L = Size of Memory Block.
+*
+*	If Something is Loaded, and In Chip Memory,
+*	Try to put it into Fast Memory.
+*
+	MOVE.L	A0,D0			; D0.L = Address of Pic Base.
+	BEQ	MVTFM3			; Exit If Nothing Loaded.
+	BSR	IsItChipMemory		; Is This Address in Chip Memory?
+	BNE	MVTFM3			; Exit If Not Chip Memory.
+*
+*	Try to Allocate The Memory in Fast Memory.
+*
+	MOVE.L	D2,D0			; D0.L = Number of Bytes to Allocate.
+	MOVEQ.L	#MEMF_FAST,D1		; D1.L = Type of Memory.
+
+	MEMORYHEXI <ALLOC LoadBase >,d0,< >
+
+	JSR	_LVOAllocMem(A6)	; D0.L = Address of Memory Block.
+
+	MEMORYHEXI <             at >,d0,<\>
+
+	TST.L	D0			; Did We Get The Memory?
+	BEQ	MVTFM3			; Exit If Allocation Failed.
+*
+*	Copy The Memory Area.
+*
+	MOVEA.L	A2,A3			; A3.L = Memory To Be Freed.
+	MOVEA.L	A3,A0			; A3.L = Source Memory.
+	MOVEA.L	D0,A2			; A2.L = Now We Point to New Data.
+	MOVEA.L	D0,A1			; A1.L = Pointer to New Data Area.
+	MOVE.L	D2,D0			; D0.L = Number of Bytes.
+	MOVE.L	D0,D1			; D1.L = Number of Bytes.
+	LSR.L	#2,D0			; D0.L = Number of Long Words.
+	BSR	MoveLongs		; Move Over The Data.
+	ANDI.W	#$3,D1			; D1.W = Number of Bytes To Move.
+	LSL.L	#2,D0			; D0.L = Address Offset for Sources.
+	ADDA.L	D0,A0			; Increment Source.
+	ADDA.L	D0,A1			; Increment Destination.
+	BRA.S	MVTFM2			; Copy The Bytes.
+MVTFM1	MOVE.B	(A0)+,(A1)+		; Move The Byte.
+MVTFM2	DBF	D1,MVTFM1		; Loop Until Done.
+*
+*	Free the Old Memory.
+*
+	MOVEA.L	A3,A1			; A1.L = Address of Memory Block.
+	MOVE.L	D2,D0			; D0.L = Number  of Bytes.
+
+;;	MEMORYHEXI <FREE tempchip >,d0,< >
+;;	MEMORYHEXI <           at >,a1,<\>
+
+	JSR	_LVOFreeMem(A6)		; Give Back The Memory.
+*
+*	Exit Subroutine.
+*
+MVTFM3	MOVEA.L	A2,A0			; A0.L = Block Of Memory.
+	MOVEM.L	(A7)+,D0-D2/A1-A3	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MoveLongs:							*
+*									*
+*	Moves a Memory Area Using Long Word Move Instructions.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Long Words To Move.			*
+*	A0.L	= Address of Source      Memory Area To Move From.	*
+*	A1.L	= Address of Destination Memory Area To Move To.	*
+*									*
+*	Output:								*
+*									*
+*	Memory Area Is Moved in Decending Order.			*
+*									*
+*	19.Mar.1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	MoveLongs
+MoveLongs:
+	MOVEM.L D0-D2/A0-A1,-(A7)	; Save Calling State.
+*
+*	Loop and Move the Memory Area.
+*
+	MOVE.W	D0,D2			; Lets Send Out 32 At A Time.
+	LSR.L	#5,D0			; D0.L = Adjusted Outer Loop Counter.
+	MOVE.L	D0,D1			; D1.L = Make 2 Meg Loop Counter.
+	SWAP.W	D1			; D1.L = 2 Meg Loop Counter.
+	ANDI.W	#(1<<5)-1,D2		; D2.L = Jump Index.
+	ADD.W	D2,D2			; Times 2 For Size of Opcode.
+	NEG.W	D2			; Go Into Reverse.
+	JMP	MOVEL2(PC,D2.W)		; Start Looping.
+MOVEL1	MOVE.L	(A0)+,(A1)+		; Store The Values.
+	MOVE.L	(A0)+,(A1)+		;  1
+	MOVE.L	(A0)+,(A1)+		;  2
+	MOVE.L	(A0)+,(A1)+		;  3
+	MOVE.L	(A0)+,(A1)+		;  4
+	MOVE.L	(A0)+,(A1)+		;  5
+	MOVE.L	(A0)+,(A1)+		;  6
+	MOVE.L	(A0)+,(A1)+		;  7
+	MOVE.L	(A0)+,(A1)+		;  8
+	MOVE.L	(A0)+,(A1)+		;  9
+	MOVE.L	(A0)+,(A1)+		; 10
+	MOVE.L	(A0)+,(A1)+		; 11
+	MOVE.L	(A0)+,(A1)+		; 12
+	MOVE.L	(A0)+,(A1)+		; 13
+	MOVE.L	(A0)+,(A1)+		; 14
+	MOVE.L	(A0)+,(A1)+		; 15
+	MOVE.L	(A0)+,(A1)+		; 16
+	MOVE.L	(A0)+,(A1)+		; 17
+	MOVE.L	(A0)+,(A1)+		; 18
+	MOVE.L	(A0)+,(A1)+		; 19
+	MOVE.L	(A0)+,(A1)+		; 20
+	MOVE.L	(A0)+,(A1)+		; 21
+	MOVE.L	(A0)+,(A1)+		; 22
+	MOVE.L	(A0)+,(A1)+		; 23
+	MOVE.L	(A0)+,(A1)+		; 24
+	MOVE.L	(A0)+,(A1)+		; 25
+	MOVE.L	(A0)+,(A1)+		; 26
+	MOVE.L	(A0)+,(A1)+		; 27
+	MOVE.L	(A0)+,(A1)+		; 28
+	MOVE.L	(A0)+,(A1)+		; 29
+	MOVE.L	(A0)+,(A1)+		; 30
+	MOVE.L	(A0)+,(A1)+		; 31
+MOVEL2	DBF	D0,MOVEL1		; Loop Until Done.
+	DBF	D1,MOVEL1		; 2 Meg Loop.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	IsItChipMemory:							*
+*									*
+*	Checks To See If A Memory Address Is In Chip Memory.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Check.					*
+*	A6.L	= Address of Exec Base.					*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> A0.L Address Is In Chip Memory.		*
+*	CC	!= Zero -> A0.L Address Is Not In Chip Memory.		*
+*									*
+*	30.Jan.1992 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	IsItChipMemory
+IsItChipMemory:
+	MOVEM.L	D0-D2/A0-A1,-(A7)	; Save Calling State.
+*
+*	See If Address Is In Chip Memory List.
+*
+	MOVE.L	A0,D2			; D2.L = Save Address to Check.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+*
+*	Loop And Check Upper and Lower Ranges.
+*
+	LEA.L	MemList(A6),A0		; A0.L = Memory Header.
+	MOVEA.L	A0,A1			; A1.L = Head of List.
+	ADDQ.L	#4,A1			; A1.L = Make Ending Position.
+ISCHM1	MOVEA.L	(A0),A0			; Are Ther Any More Nodex.
+	CMPA.L	A0,A1			; At End Of List?
+	BEQ.S	ISCHM2			; Jump If Not Found.
+	MOVE.W	MH_ATTRIBUTES(A0),D0	; Get Flags.
+	ANDI.W	#MEMF_CHIP,D0		; Is It Chip Memory?
+	BEQ.S	ISCHM1			; Jump If No Chip Memory.
+	CMP.L	MH_LOWER(A0),D2		; Within Lower Range?
+	BCS.S	ISCHM1			; Jump If We Are Less Than It.
+	CMP.L	MH_UPPER(A0),D2		; Within Upper Range.
+	BCC.S	ISCHM1			; Jump If We Are Greater That It.
+*
+*	Found Within Range.
+*
+	JSR	_LVOPermit(A6)		; Allow Other Tasks To Run.
+	MOVEQ.L	#0,D0			; Flag Found.
+	BRA.S	ISCHM3			; Exit Subroutine.
+*
+*	Found Not Within Range.
+*
+ISCHM2	JSR	_LVOPermit(A6)		; Allow Other Tasks To Run.
+	MOVEQ.L	#-1,D0			; Flag Not Found.
+*
+*	Exit Subroutine.
+*
+ISCHM3	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+
+*************************************************************************
+*									*
+*	LoadAnimHeader:							*
+*									*
+*	Loads the first Anim header into the supplied buffer.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of anh Structure (see AnimEQU.i)				*
+*	A1.L	= Pointer to file name					*
+*	A5.L	= ToastBase						*
+*	D0.L	= Hunk# (0=not in overlay)				*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Error Code.						*
+*									*
+*	7.Jan.1994 SKell						*
+*									*
+*************************************************************************
+*
+	XDEF	LoadAnimHeader
+
+tempbuff  set	(5*4)
+a0ptr	  set	(4*4+tempbuff)		;SEE BELOW
+
+LoadAnimHeader:
+	movem.l	d1-d4/a0-a2/a6,-(sp)	;SEE ABOVE
+	lea	-tempbuff(sp),sp
+
+	move.l	d0,d4			; stash hunk#
+
+	GET.l	TB_DOSBase,a6	
+	MOVE.L	a1,D1			; D1.L = Address of File Name.
+	MOVE.L	#MODE_OLDFILE,D2
+	JSR	_LVOOpen(A6)		; Try To Open The File.
+	TST.L	D0			; Did We Open The File?
+	BNE.S	10$			; Jump If All Ok.
+	MOVEQ.L	#AEE_OpenFile,D0	; D0.L = Open Error.
+	BRA	666$			; Exit Subroutine.
+10$	MOVEA.L	D0,A2			; A2.L = Address of File Lock.
+
+	tst.w	d4			; Are We In An Overlay Hunk?
+	BEQ.S	100$			; Jump If Not In an Overlay.
+
+* Find The Overlay.
+	MOVEA.L	A2,A0			; A0.L = Address of File Lock.
+	MOVE.L	#$3F5,D0		; D0.L = Look For Overlay Hunk.
+	CALLTL	FindDebugHunk		; Search For The Overlay Hunk.
+	TST.L	D0			; Did We Find The Overlay Hunk?
+	BEQ.S	777$			; Exit If Failed.
+	ADDQ.L	#4,D0			; D0.L = Extra Amount To Advance.
+	MOVE.L	A2,D1			; D1.L = Value of File Lock.
+	MOVE.L	D0,D2			; D2.L = Amount To Skip.
+	MOVEQ.L	#OFFSET_CURRENT,D3	; D3.L = Seek Mode.
+	JSR	_LVOSeek(A6)		; Go To This Position.
+	ADDQ.L	#1,D0			; Did We Have An Error?
+	BEQ.S	777$			; Jump If SEEK Error.
+
+* Find The Code Section We Need.
+	subq.w	#1,d4
+20$	MOVEA.L	A2,A0			; A0.L = Address of File Lock.
+	MOVE.L	#$3E9,D0		; D0.L = Look For Code Hunk.
+	CALLTL	FindDebugHunk		; Search For The Hunk.
+	TST.L	D0			; Did We Get Anything?
+	BEQ.S	777$			; Exit On Error.
+
+	TST.W	D4			; At The HUNK We Need?
+	BEQ.S	100$			; Jump If At Proper Hunk
+
+	MOVE.L	A2,D1			; D1.L = Value of File Lock.
+	MOVE.L	D0,D2			; D2.L = Amount To Skip.
+	MOVEQ.L	#OFFSET_CURRENT,D3	; D3.L = Seek Mode.
+	JSR	_LVOSeek(A6)		; Go To This Position.
+	ADDQ.L	#1,D0			; Did We Have An Error?
+	BEQ.S	777$			; Jump If SEEK Error.
+	DBF	D4,20$			; Loop Until Done.
+
+* Fall thru for overlay error
+
+* Looked Thru Crouton and Could Not Find An Anim.
+777$	MOVEQ.L	#AEE_CannotFindOverlay,D2 ; Cannot Find Anim In Overlay.
+	BRA	555$			; Exit Subroutine.
+
+888$	MOVEQ.L	#AEE_FileReadError,D2	; D0.L = File Read Error.
+	BRA	555$			; Exit Subroutine.
+
+999$	MOVEQ.L	#AEE_WrongFileType,D2	; D0.L = Wrong File Type Error.
+	BRA	555$			; Exit Subroutine.
+
+*------------------------
+* At correct file position to look at first FORM ILBM
+100$ ;Read First 8 Bytes.
+	MOVE.L	A2,D1			; D1.L = Address of File Pointer.
+	MOVE.L	sp,D2			; D2.L = Address of Memory Area.
+	moveq.l	#tempbuff,d3			; # bytes to read
+	JSR	_LVORead(A6)		; Read Data Off Disk.
+	CMP.L	D0,D3			; Read Error?
+	BNE.S	888$			; Jump If No Error.
+
+* Check For Legal Data.
+110$	CMPI.L	#'FORM',(sp)		; Did We Get A Form Hunk?
+	bne	999$			; Not an Iff FORM.
+
+	CMPI.L	#'ANIM',2*4(sp)		; Did We Get A ANIM Hunk?
+	bne	999$			; Not an Iff ANIM.
+
+	CMPI.L	#'FORM',3*4(sp)		; Did We Get A Form Hunk?
+	bne	999$			; Not an Iff FORM.
+
+* Seek to first Delta FORM ILBM
+	MOVE.L	A2,D1			; D1.L = Value of File Lock.
+	MOVE.L	4*4(sp),D2		; D2.L = Amount To Skip.
+	MOVEQ.L	#OFFSET_CURRENT,D3	; D3.L = Seek Mode.
+	JSR	_LVOSeek(A6)		; Go To This Position.
+	ADDQ.L	#1,D0			; Did We Have An Error?
+	BEQ.S	888$			; Jump If SEEK Error.
+	
+	MOVE.L	A2,D1			; D1.L = Address of File Pointer.
+	MOVE.L	sp,D2			; D2.L = Address of Memory Area.
+	moveq.l	#tempbuff,d3			; # bytes to read
+	JSR	_LVORead(A6)		; Read Data Off Disk.
+	CMP.L	D0,D3			; Read Error?
+	BNE.S	888$			; Jump If No Error.
+
+* Check For Legal Data.
+	CMPI.L	#'FORM',(sp)		; Did We Get A Form Hunk?
+	bne	999$			; Not an Iff FORM.
+
+	CMPI.L	#'ILBM',2*4(sp)		; Did We Get A ILBM Hunk?
+	bne	999$			; Not an Iff ILBM.
+
+	CMPI.L	#'ANHD',3*4(sp)		; Did We Get A ANHD Hunk?
+	bne	999$			; Not an Iff ANHD.
+	
+* see AnimEQU.i
+	moveq.l	#anh_SIZEOF,d3		; # bytes to read
+	MOVE.L	A2,D1			; D1.L = Address of File Pointer.
+	MOVE.L	a0ptr(sp),D2		; D2.L = Address of Memory Area.
+	JSR	_LVORead(A6)		; Read Data Off Disk.
+	CMP.L	D0,D3			; Read Error?
+	BNE	888$			; Jump If No Error.
+
+	MOVEQ.L	#0,D2			; No error
+555$	MOVE.L	A2,D1			; D1.L = Address of File Lock.
+	JSR	_LVOClose(A6)		; Close The File.
+	move.l	D2,d0
+
+666$	lea	tempbuff(sp),sp
+	movem.l	(sp)+,d1-d4/a0-a2/a6	;SEE ABOVE
+	rts
+
+
+	END

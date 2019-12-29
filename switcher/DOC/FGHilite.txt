@@ -1,0 +1,57 @@
+How to HiLite a selected area of a FastGadget:
+
+In your FastGadget (FG) structure, set FG_HiLiteVal to $FF
+(I usually have HILITECOLOR defined as $FF)
+
+Set FG_BorderCon to -1
+
+Set FG_TopSize, FG_BotSize, FG_LeftWSize, FG_RightWSize, FG_LeftMask,
+and FG_RightMask to indicate your HiLite region.  The region is with respect
+to your rendered imagery (which may not = your select region).
+
+For example:
+
+You have FG gadget data that renders onto a 80 x 50 pixel area, and you want
+to hilite a region that is 32 x 34, with the hilite starting at pixel 24,8 .
+
+Then FG_TopSize = 8 rows, FG_BotSize = 8 rows also, FG_LeftWSize = 1 word,
+FG_RightWSize = 1 word also, FG_LeftMask = $00FF, FG_RightMask = $FF00.
+
+When you want to render the FG with Hiliting, you
+
+* a4 ->FG, a3->Window, a2->Requester
+	move.b	FG_HiLiteVal(a4),d0	; else get hilite mask and place it
+	move.b	d0,FG_HiLiteMask(a4)
+	move.b	d0,FG_HiLiteMask+1(a4)
+
+.render	CALLROM	Forbid			; disable tasking
+	XCALL	SoftSpriteOff		; turn the SoftSprite off
+	moveq	#1,d0			; render the FastGadget
+	CLEAR	d1
+	move.l	a4,a0
+	move.l	a3,a1
+
+*+ void DrawFastGList( Count, Offset, FastGadget, Window, Requester );
+*+                      D0     D1      A0          A1      A2
+	CALL	DrawFastGList
+	XCALL	SoftSpriteOn		; turn the SoftSprite on
+	CALLROM	Permit			; enable tasking again
+
+
+If you want to render with the hiliting, you
+	
+	clr.w	FG_HiLiteMask(a4)
+	bra.s	.render
+
+****************************************************
+I have not tested the above code, but it was stolen from working SpiderMan
+code.
+
+We do have complete masking on the Hilite and Select areas. We just don't
+have masking on the Render area!  So it is still impossible to have a WORD
+of our display contain parts of two different fastgadgets.  It would be easy
+to add LeftRenderMask, and RightRenderMask to our fastgadget structure.
+It beats me why we have lived with this arcane WORD boundry limitation!
+
+								SKell
+  								10-12-91

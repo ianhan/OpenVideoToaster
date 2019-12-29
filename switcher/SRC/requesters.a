@@ -1,0 +1,1710 @@
+*********************************************************************
+* requesters.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: requesters.a,v 2.16 1995/10/09 15:53:24 Flick Exp $
+*
+* $Log: requesters.a,v $
+*Revision 2.16  1995/10/09  15:53:24  Flick
+*Requesters now used TB_LightFont for test
+*(for text, not test!)
+*
+*Revision 2.15  1994/07/27  19:26:53  Kell
+**** empty log message ***
+*
+*Revision 2.14  1994/06/04  04:03:41  Kell
+*Requester code now supports TB_RequesterResult for forcing a result.
+*
+*Revision 2.13  94/03/13  08:11:53  Kell
+*Switcher requesters now user their own window, so they can come up
+*on top of any other unknown windows.
+*
+*Revision 2.12  94/03/13  04:18:28  Kell
+**** empty log message ***
+*
+*Revision 2.11  94/02/07  15:55:20  Kell
+*Various changes to support the new 4.0 croutons & projects.
+*
+*Revision 2.10  93/11/12  17:04:07  Turcotte
+*Change backfill color on requester
+*
+*Revision 2.9  93/06/06  17:31:36  Turcotte
+**** empty log message ***
+*
+*Revision 2.8  93/05/13  18:01:50  Turcotte
+**** empty log message ***
+*
+*Revision 2.7  93/05/04  03:54:44  Turcotte
+**** empty log message ***
+*
+*Revision 2.6  93/04/29  17:16:10  Finch2
+*Fixed Problem In DrawBorderBox Where A2 Was Trashed.
+*
+*Revision 2.5  93/04/27  21:41:13  Kell
+**** empty log message ***
+*
+*Revision 2.4  93/04/27  20:55:02  Turcotte
+**** empty log message ***
+*
+*Revision 2.3  93/04/19  04:19:32  Turcotte
+**** empty log message ***
+*
+*Revision 2.2  93/04/17  21:10:40  Turcotte
+**** empty log message ***
+*
+*Revision 2.1  93/04/16  04:04:33  Turcotte
+**** empty log message ***
+*
+*Revision 2.0  92/05/18  21:17:21  Hartford
+**** empty log message ***
+*
+*********************************************************************
+********************************************************************
+* Requesters.a - DoSwitcherRequester, DrawBorderBox
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* 3-20-90	Junior		Created this file
+* 4-17-90	Junior		Last Update
+* 4-30-90	Speier		Bolstered DoSwitcherRequester() by
+*				incorporating the ToasterBase floppy disk
+*				management system into it. Also removed the
+*				dependancy on ReDoDisplay() for interface
+*				restoration, speeding up cleanup after
+*				the requester.
+* 6-20-90	Speier		Put back in ReDoDisplay() for restoring the
+*				interface. This allows the interface window
+*				to be a simple refresh window and insures
+*				that interface elements, such as file
+*				comments, are rendered in the most updated
+*				state.
+* 12/14/90	Speier		Put in a fix to insure that the SoftSprite
+*				is on if the Switcher interface is used to
+*				display the requester, and to restore the
+*				SoftSprite state when done.
+* 01/04/91	Speier		Put in a logic flag to insure that the Hot
+*				Key system is disabled while a requester
+*				is up.
+* 02/07/91	Speier		The code for DoSwitcherRequester() has been
+*				enhanced, and renamed NewSwitcherRequster(),
+*				and allows for upto a 4 option requester ONLY
+*				if rendered on the Switcher interface.
+*				If rendered on the WB interface you'll get
+*				the standard OK/Cancel DoSwitcherRequester().
+*				The older DoSwitcherRequester() is still
+*				supported.
+* 02/08/91	Speier		Put in code logic to insure that when a
+*				Switcher interface requester is up, the
+*				normal SoftSprite pointer is active. The
+*				state of the SoftSprite image prior to the
+*				requester is rememebered and restored on
+*				exit.
+*********************************************************************
+	include	"assembler.i"
+	include "graphics/gfx.i"
+
+	include	"lib/exec_lib.i"
+	include	"lib/dos_lib.i"
+	include "lib/graphics_lib.i"
+	include "lib/intuition_lib.i"
+
+	include	"instinct.i"
+	include "smallmacros.i"
+	include "vtdebug.i"
+
+DARK_PEN	equ	0
+DGREY_PEN	equ	1
+LGREY_PEN	equ	2
+LIGHT_PEN	equ	3
+
+BORDER_PEN	equ	4
+
+TEXT_APEN	equ	(3)
+TEXT_BPEN	equ	(0)
+WB_TEXT_APEN	equ	(2)
+WB_TEXT_BPEN	equ	(1)
+
+AUTO_TEXTX	equ	6
+AUTO_TEXTY	equ	3
+AUTO_XPLUS	equ	24
+
+NUMBER_COORDS	equ	9
+
+;TEXT_HEIGHT	equ	12
+TEXT_HEIGHT	equ	14
+TEXT_BASELINE	equ	10
+TEXT_XPAD		equ	8
+
+MIN_REQUESTER_WIDTH	equ	300
+SCREEN_MIDDLE_X		equ	768/2	;736/2
+SCREEN_MIDDLE_Y		equ	480/2
+
+BORDER_WIDTH	equ	3
+BORDER_HEIGHT	equ	3
+YSPACER			equ	4
+XSPACER			equ	8
+
+GADGET_YSPACER	equ	2
+GADGET_HEIGHT	equ	TEXT_HEIGHT+(BORDER_HEIGHT*2)+(GADGET_YSPACER*2)
+GADGET_TOPEDGE	equ	BORDER_HEIGHT+(YSPACER*3)+(TEXT_HEIGHT*2)
+GADGET2_TOPEDGE	equ	GADGET_TOPEDGE+BORDER_HEIGHT+GADGET_HEIGHT+YSPACER
+OK_GADGET_X1	equ	BORDER_WIDTH+XSPACER
+
+REQ_HEIGHT			equ	64+8
+REQ_TOPEDGE			equ	SCREEN_MIDDLE_Y-(REQ_HEIGHT/2)
+
+REQ2_HEIGHT			equ	(REQ_HEIGHT+GADGET_HEIGHT+BORDER_HEIGHT*2+YSPACER*2-4)+10
+REQ2_TOPEDGE		equ	SCREEN_MIDDLE_Y-(REQ2_HEIGHT/2)
+
+TEXT_LINE1_Y	equ	(BORDER_HEIGHT+YSPACER)
+TEXT_LINE2_Y	equ	(BORDER_HEIGHT+(YSPACER*2)+TEXT_HEIGHT)
+TEXT_LINE3_Y	equ	BORDER_HEIGHT+YSPACER
+TEXT_LINE4_Y	equ	BORDER_HEIGHT+YSPACER
+
+TEXT_XOFFSET	equ	BORDER_WIDTH+TEXT_XPAD
+
+OK_ID		equ	1	; must be positive 1
+CANCEL_ID	equ	-1	; must be negative
+OPT1_ID		equ	2	; must be positive 2
+OPT2_ID		equ	3	; must be positive 3
+
+	xref	TheTextAttr2
+
+	SECTION	ReqCode,CODE
+*******************************************************************
+* VOID DrawBorderBox
+*
+* Summary
+*	draws a filled box and puts a border around it
+*
+* Upon Entry
+*	a5 - ToasterBase
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed, all others preserved
+********************************************************************`
+ XLABEL DrawBorderBox
+	movem.l	d4/a0/a1,-(sp)
+
+	moveq.l	#1,d4
+	move.l	TB_RastPort(a5),a0
+	lea	ReqPaletteColors,a1
+	bsr	DrawBorderBoxRP
+
+	movem.l	(sp)+,d4/a0/a1
+	rts
+
+ReqPaletteColors
+	dc.b	LGREY_PEN,BORDER_PEN,LIGHT_PEN,DGREY_PEN
+
+******* DrawBorderBoxRP *****************************************************
+*
+*   NAME   
+*	DrawBorderBoxRP -- draw box with border on rast port.
+*
+*   SYNOPSIS
+*	DrawBorderBoxRP(XPos,YPos,Width,Heigth,RastPort,PaletteArray,
+*	               BlackBorderFlag)
+*	                 d0   d1   d2     d3      a0         a1
+*	                    d4
+*
+*   FUNCTION
+*
+*   INPUTS
+*	XPos            - pixels from left edge
+*	YPos            - pixels from top edge
+*	Width           - Width of box in pixels
+*	Heigth          - Height of box in pixels
+*	RastPort        - RastPort to draw in
+*	PaletteArray    - Byte array of colors to be used.
+*
+*	if borderflag set
+*		background,border,lightcolor,darkcolor
+*	ifborderflag clear
+*		 background,lightcolor,darkcolor
+*
+*	BlackBorderFlag - 1=surround border with single pixel of black
+*	                  0=don't
+*   RESULT
+*
+*   EXAMPLE
+*
+*   NOTES
+*
+*   BUGS
+*
+*   SEE ALSO
+*
+*****************************************************************************
+	xdef	DrawBorderBoxRP
+DrawBorderBoxRP:
+	movem.l	d0-d3/a0-a1/a4/a6,-(sp)
+
+	move.l	a1,d0				;if no palette colors were
+	bne.s	.gavecolors			;given use default
+	lea	ReqPaletteColors,a1
+.gavecolors
+
+	tst	d4
+	beq.s	.borderless
+
+	moveq.l	#0,d0
+	move.b	(a1)+,d0			;pen for background
+
+	lea	AbsBoxDarkBorder,a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set border color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set light color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set dark color
+
+
+	move.l	4*4(SP),a1		;rastport
+	move.l	TB_GFXBase(a5),a6
+	XSYS	SetAPen
+
+	movem.l	(sp),d0-d1
+
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+	add.l	d0,d2	; X2 = X1 + Width
+	add.l	d1,d3	; Y2 = Y1 + Height
+
+	addq.w	#3,d0	;Adjust for new border type
+	addq.w	#3,d1
+	subq.l	#3,d2
+	subq.l	#3,d3
+
+	move.l	4*4(SP),a1		;rastport
+	XSYS	RectFill
+
+	movem.l	(sp),d0-d3
+
+	lea.l	LocalData,a4
+	lea	BoxDarkBorder(a4),a0
+	bsr	FigureNewXYArray
+
+	move.l	4*4(SP),a0		;rastport
+	lea.l	BoxDarkBorder(a4),a1
+	moveq.l	#0,d0
+	move.l	d0,d1
+	move.l	TB_ITUBase(a5),a6
+	XSYS	DrawBorder
+
+	moveq.l	#LIGHT_PEN,d0
+	move.l	4*4(SP),a1		;rastport
+	move.l	TB_GFXBase(a5),a6
+	XSYS	SetAPen
+	bra.s	.exit
+
+
+.borderless
+	moveq.l	#0,d0
+	move.b	(a1)+,d0			;pen for background
+	lea	AbsBoxLightBorder,a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set light color
+	move.l	bd_NextBorder(a0),a0
+	move.b	(a1)+,bd_FrontPen(a0)		;set dark color
+
+	move.l	4*4(SP),a1		;rastport
+	move.l	TB_GFXBase(a5),a6
+	XSYS	SetAPen
+
+	movem.l	(sp),d0-d1
+
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+	add.l	d0,d2	; X2 = X1 + Width
+	add.l	d1,d3	; Y2 = Y1 + Height
+
+	addq.w	#2,d0	;Adjust for new border type
+	addq.w	#2,d1
+	subq.l	#2,d2
+	subq.l	#2,d3
+
+	move.l	4*4(SP),a1		;rastport
+	XSYS	RectFill
+
+	movem.l	(sp),d0-d3
+
+	lea.l	LocalData,a4
+	lea	BoxLightBorder(a4),a0
+	bsr	FigureNewXYArrayBorderLess
+
+	move.l	4*4(SP),a0		;rastport
+	lea.l	BoxLightBorder(a4),a1
+	moveq.l	#0,d0
+	move.l	d0,d1
+	move.l	TB_ITUBase(a5),a6
+	XSYS	DrawBorder
+
+	moveq.l	#LIGHT_PEN,d0
+	move.l	4*4(SP),a1		;rastport
+	move.l	TB_GFXBase(a5),a6
+	XSYS	SetAPen
+
+.exit
+	movem.l	(sp)+,d0-d3/a0-a1/a4/a6
+
+	rts
+
+
+*******************************************************************
+* ULONG FigureNewXYArray
+*
+* Summary
+*	calculates pairs of XY coords for round Border structures
+*
+* Upon Entry
+*	a0 - ptr to linked list of border structures (3)
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Note
+*	This function fills in the data table for three border structures.
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureNewXYArray
+
+	movem.l	d0-d7/a0-a2,-(sp)
+
+	move.l	a0,a2
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+
+	move.l	bd_XY(a2),a0	;first border Structure
+	bsr	FigureBorder
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureLightEdge
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureDarkEdge
+
+	movem.l	(sp)+,d0-d7/a0-a2
+
+	rts
+*******************************************************************
+* ULONG FigureNewXYArrayBorderLess
+*
+* Summary
+*	calculates pairs of XY coords for round Border structures
+*
+* Upon Entry
+*	a0 - ptr to linked list of border structures (2)
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Note
+*	This function fills in the data table for three border structures.
+*	It does not put a dark border arround the outside of the box.
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureNewXYArrayBorderLess
+
+	movem.l	d0-d7/a0-a1,-(sp)
+
+	move.l	a0,a2
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+
+;	move.l	bd_XY(a2),a0	;first border Structure
+;	bsr	FigureBorder
+
+;	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+
+	subq.l	#1,d0
+	subq.l	#1,d1
+	addq.l	#2,d2
+	addq.l	#2,d3
+
+	move.l	bd_XY(a2),a0
+	bsr	FigureLightEdge
+
+	move.l	bd_NextBorder(a2),a2	;skip to next border structure
+	move.l	bd_XY(a2),a0
+	bsr	FigureDarkEdge
+
+	movem.l	(sp)+,d0-d7/a0-a1
+
+	rts
+
+
+FigureBorder
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	move.w	d1,d5
+
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	add.w	d2,d4
+	subq.w	#3+3,d4
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	addq.l	#3,d4
+	addq.l	#3,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	add.w	d3,d5
+	sub.w	#3+3,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	subq.w	#3,d4
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	subq.w	#3,d4
+	subq.w	#3,d5
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	move.w	d1,d5
+	addq.l	#3,d5
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	move.w	d1,d5
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+
+FigureLightEdge
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	move.w	d1,d5
+
+	addq.w	#1,d4
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	add.w	d3,d5
+	subq.w	#3+3,d5
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	addq.w	#1,d4
+	addq.w	#1,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	subq.w	#1,d4
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	move.w	d1,d5
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	move.w	d0,d4
+	add.w	d2,d4
+	subq.w	#3,d4
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x10
+	move.w	d5,(a0)+	;y10
+
+	subq.w	#2,d4
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x11
+	move.w	d5,(a0)+	;y11
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+
+FigureDarkEdge
+	movem.l	d0-d5/a0,-(sp)
+
+	move.w	d0,d4
+	add.w	d2,d4
+	subq.w	#2,d4
+	move.w	d1,d5
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x1
+	move.w	d5,(a0)+	;y1
+
+	addq.w	#1,d4
+	addq.w	#1,d5
+	move.w	d4,(a0)+	;x2
+	move.w	d5,(a0)+	;y2
+
+	add.w	d3,d5
+	subq.w	#3+3,d5
+	move.w	d4,(a0)+	;x3
+	move.w	d5,(a0)+	;y3
+
+	subq.w	#2,d4
+	addq.w	#2,d5
+	move.w	d4,(a0)+	;x4
+	move.w	d5,(a0)+	;y4
+
+	move.w	d0,d4
+	addq.w	#3,d4
+	move.w	d4,(a0)+	;x5
+	move.w	d5,(a0)+	;y5
+
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x6
+	move.w	d5,(a0)+	;y6
+
+	add.w	d2,d4
+	subq.w	#3+3,d4
+	move.w	d4,(a0)+	;x7
+	move.w	d5,(a0)+	;y7
+
+	addq.w	#1,d4
+	subq.w	#1,d5
+	move.w	d4,(a0)+	;x8
+	move.w	d5,(a0)+	;y8
+
+	move.w	d1,d5
+	addq.w	#3,d5
+	move.w	d4,(a0)+	;x9
+	move.w	d5,(a0)+	;y9
+
+	subq.w	#1,d4
+	move.w	d4,(a0)+	;x10
+	move.w	d5,(a0)+	;y10
+
+	movem.l	(sp)+,d0-d5/a0
+	rts
+*******************************************************************
+* ULONG FigureXYArray
+*
+* Summary
+*	calculates pairs of XY coords for Border structures
+*
+* Upon Entry
+*	a0 - ptr to array
+*	d0 - X1
+*	d1 - Y1
+*	d2 - Width
+*	d3 - Height
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureXYArray
+	movem.l	d2-d7,-(sp)
+	subq.w	#1,d2	; so when added to previous coord, turns out right
+	subq.w	#1,d3
+
+* do upper-left borders
+	move.w	d0,(a0)+	; X1
+	move.w	d1,(a0)+	; Y1
+	move.w	d0,(a0)+	; X2
+	move.w	d1,d4
+	add.w	d3,d4
+	move.w	d4,(a0)+	; Y2
+	move.w	d0,d5
+	addq.w	#1,d5
+	move.w	d5,(a0)+	; X3
+	move.w	d4,(a0)+	; Y3
+	move.w	d5,(a0)+	; X4
+	move.w	d1,d6
+	addq.w	#1,d6
+	move.w	d6,(a0)+	; Y4
+	move.w	d0,d7
+	add.w	d2,d7
+	move.w	d7,(a0)+	; X5
+	move.w	d6,(a0)+	; Y5
+	move.w	d7,(a0)+	; X6
+	move.w	d1,(a0)+	; Y6
+	move.w	d0,(a0)+	; X7
+	move.w	d1,(a0)+	; Y7
+
+	move.w	d0,d4
+	addq.w	#2,d4
+	move.w	d4,(a0)+	; X8
+	move.w	d1,(a0)+	; Y8
+	move.w	d4,(a0)+	; X9
+	move.w	d1,d4
+	add.w	d3,d4
+	move.w	d4,(a0)+	; Y9
+
+* do lower-right borders
+	move.w	d0,d4
+	addq.w	#2,d4
+	move.w	d4,(a0)+	; X1
+	move.w	d1,d5
+	add.w	d3,d5
+	subq.w	#1,d5
+	move.w	d5,(a0)+	; Y1
+	subq.w	#1,d4
+	move.w	d4,(a0)+	; X2
+	addq.w	#1,d5
+	move.w	d5,(a0)+	; Y2
+	move.w	d0,d6
+	add.w	d2,d6
+	move.w	d6,(a0)+	; X3
+	move.w	d5,(a0)+	; Y3
+	move.w	d6,(a0)+	; X4
+	move.w	d1,d7
+	addq.w	#1,d7
+	move.w	d7,(a0)+	; Y4
+	subq.w	#1,d6
+	move.w	d6,(a0)+	; X5
+	addq.w	#1,d7
+	move.w	d7,(a0)+	; Y5
+	move.w	d6,(a0)+	; X6
+	move.w	d1,d7
+	add.w	d3,d7
+	subq.w	#1,d7
+	move.w	d7,(a0)+	; Y6
+	addq.w	#1,d4
+	move.w	d4,(a0)+	; X7
+	move.w	d7,(a0)+	; Y7
+
+	subq.w	#1,d6
+	move.w	d6,(a0)+	; X8
+	move.w	d7,(a0)+	; Y8
+	move.w	d6,(a0)+	; X9
+	move.w	d1,d7
+	addq.w	#3,d7
+	move.w	d7,(a0)+	; Y9
+
+	movem.l	(sp)+,d2-d7
+	rts
+
+*******************************************************************
+* ULONG FigureWidth(char string[], struct RastPort *, struct ToasterBase *)
+*                          a0                 a1               a5
+*
+* Summary
+*	returns the width of the rendered string, in pixels
+*
+* Upon Exit
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+FigureWidth
+	movem.l	a2-a3/a6,-(sp)
+	move.l	a0,d0
+	beq.s	.Exit	; if no text, width of zero
+	move.l	TB_GFXBase(a5),a6
+	move.l	a0,a2
+	move.l	a1,a3
+	XJSR	StringLength
+	move.l	a2,a0
+	move.l	a3,a1
+	XSYS	TextLength
+.Exit
+	movem.l	(sp)+,a2-a3/a6
+	rts
+
+*******************************************************************
+* LONG DoSwitcherRequester
+*
+* Summary
+*	renders a OK/Cancel-type requester, centered on the switcher
+*	user interface, or on WorkBench if the switcher interface is
+*	not active (calls ReinstallCurrentCopList() in this case)
+*
+* Upon Entry
+*	d0 - other Positive (OK) IDCMPs which satisfy requester
+*	d1 - other Negative (Cancel) IDCMPs which satisfy requester
+*	a0 - char Message1[], must contain some text
+*	a1 - char Message2[], may be null
+*	a2 - char OKText[], may be null
+*	a3 - char CancelText[], must contain some text
+*	a5 - (struct ToasterBase *)
+*
+* Upon Exit
+*	d0 - 1 TRUE (left button), -1 FALSE (right button),
+*            0 if couldn't open requester
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL DoSwitcherRequester
+	SAVE	d2/d3
+	CLEAR	d2
+	CLEAR	d3
+	CALL.s	NewSwitcherRequester
+	REST	d2/d3
+	rts
+
+*******************************************************************
+* LONG NewSwitcherRequester
+*
+* Summary
+*	renders a up to a 4 option requester, centered on the switcher
+*	user interface, or the older upto 2 option requester on WorkBench if
+*	the switcher interface is not active (calls ReinstallCurrentCopList()
+*	in this case). It is backward compatable with the older original
+*	DoSwitcherRequester. Note that your 3 or 4 option requester will be
+*	cut to 1 or 2 if rendered on WorkBench. Plan for this.
+*
+* Upon Entry
+*	d0 - other Positive (OK) IDCMPs which satisfy requester
+*	d1 - other Negative (Cancel) IDCMPs which satisfy requester
+*	d2 - option responce 1, may be null - ignored for WB requester
+*	d3 - option responce 2, may be null - ignored for WB requester
+*	a0 - char Message1[], must contain some text
+*	a1 - char Message2[], may be null
+*	a2 - char OKText[], may be null
+*	a3 - char CancelText[], must contain some text
+*	a5 - (struct ToasterBase *)
+*
+* Upon Exit
+*	d0 - 1 TRUE (left button), -1 FALSE (right button),
+*            0 if couldn't open requester
+*	2 if optional responce 1, 3 if optional responce 2
+*	d0-d1/a0-a1 trashed
+********************************************************************`
+ XLABEL NewSwitcherRequester
+	tst.l	TB_ARexxResult(a5)
+	beq.s	333$
+	moveq.l	#-1,d0			; this is an arexxx command. Cancel.
+	rts
+
+333$	tst.l	TB_RequesterResult(a5)
+	beq.s	334$
+	GET.l	TB_RequesterResult,d0
+	rts
+
+
+334$	movem.l	d2-d7/a2-a4/a6,-(sp)
+	lea.l	LocalData,a4
+	move.l	d2,Option1TextLine+it_IText(a4)
+	move.l	d3,Option2TextLine+it_IText(a4)
+	clr.l	TempWindow(a4)
+	move.l	d0,d7	; positive flags
+	move.l	d1,d5	; negative flags
+	moveq.l	#0,d4	; initialize return code to error condition
+
+* Addendum 1/4/91: disable hotkey system.
+
+	bset.b	#REQACTI_ONOFF_BIT,TB_Flags(a5)
+
+* see if switcher display is up (during program boot, it isn't)
+	move.w	TB_InterfaceOn(a5),d6
+
+* if it isn't, figure out requester anyways, but only use those
+* parts of it necessary to call AutoRequest()
+	bne.s	.GotSwitcher
+	movem.l	a0-a1,-(sp)
+	move.l	TB_ITUBase(a5),a6
+
+;; Bug 3.0 Crash	XSYS	OpenWorkBench	; workbench must be open to do requester
+;; Bug 3.0 Crash	tst.l	d0
+;; Bug 3.0 Crash	beq		.JustExit
+
+	lea.l	TempNewWindow(a4),a0
+	XSYS	OpenWindow
+	movem.l	(sp)+,a0-a1
+	move.l	d0,TempWindow(a4)
+	beq		.JustExit
+
+****************************************
+* setup IntuiText structures wo/switcher
+	move.l	#(AUTO_TEXTX<<16)!AUTO_TEXTY,OKTextLine+it_LeftEdge(a4)
+	move.l	#(AUTO_TEXTX<<16)!AUTO_TEXTY,CancelTextLine+it_LeftEdge(a4)
+;;	move.l	#(AUTO_TEXTX<<16)!AUTO_TEXTY,Option1TextLine+it_LeftEdge(a4)
+;;	move.l	#(AUTO_TEXTX<<16)!AUTO_TEXTY,Option2TextLine+it_LeftEdge(a4)
+	bra.s	.DoneEdges
+
+* setup IntuiText structures w/switcher
+.GotSwitcher
+*	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE1_Y,TextLine1+it_LeftEdge(a4)
+*	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE2_Y,TextLine2+it_LeftEdge(a4)
+	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE3_Y,OKTextLine+it_LeftEdge(a4)
+	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE4_Y,CancelTextLine+it_LeftEdge(a4)
+	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE4_Y,Option1TextLine+it_LeftEdge(a4)
+	move.l	#(TEXT_XOFFSET<<16)!TEXT_LINE4_Y,Option2TextLine+it_LeftEdge(a4)
+.DoneEdges
+
+* setup font and text
+	moveq.l	#0,d0	; if on WB, just use default font, pens
+	move.w	#(WB_TEXT_APEN<<8)!(WB_TEXT_BPEN),d1
+	tst.w	d6
+	beq.s	.GotFont
+	move.l	TB_LightFont(a5),d0		;This looks better
+;	move.l	TB_Font(a5),d0			;Very ugly here!
+
+	move.l	a5,d0
+	add.l	#TheTextAttr2,d0
+
+	move.w	#(TEXT_APEN<<8)!(TEXT_BPEN),d1
+
+.GotFont
+	move.l	d0,TextLine1+it_ITextFont(a4)
+	move.l	d0,TextLine2+it_ITextFont(a4)
+	move.l	d0,OKTextLine+it_ITextFont(a4)
+	move.l	d0,CancelTextLine+it_ITextFont(a4)
+	move.l	d0,Option1TextLine+it_ITextFont(a4)
+	move.l	d0,Option2TextLine+it_ITextFont(a4)
+
+	move.w	d1,TextLine1+it_FrontPen(a4)
+	move.w	d1,TextLine2+it_FrontPen(a4)
+	move.w	d1,OKTextLine+it_FrontPen(a4)
+	move.w	d1,CancelTextLine+it_FrontPen(a4)
+	move.w	d1,Option1TextLine+it_FrontPen(a4)
+	move.w	d1,Option2TextLine+it_FrontPen(a4)
+
+	move.l	a0,TextLine1+it_IText(a4)
+	beq		.JustExit	; there must be some text to line 1
+
+	clr.l	TextLine1+it_NextText(a4) ; assume there's no line 2
+	move.l	a1,TextLine2+it_IText(a4)
+	beq.s	.Line2Done
+	lea.l	TextLine2(a4),a0
+	move.l	a0,TextLine1+it_NextText(a4) ; if there is, link it in
+.Line2Done
+
+	move.l	a2,OKTextLine+it_IText(a4)	; if null, taken care of by excluding
+										; gadget structure
+
+	move.l	a3,CancelTextLine+it_IText(a4)
+	beq		.JustExit	; there must be a Cancel option
+
+***********************************
+* figure dimensions of requester
+	tst.w	d6
+	bne.s	.SwitcherRastPort
+	move.l	TempWindow(a4),a0
+	move.l	wd_RPort(a0),a3
+	bra.s	.GotRastPort
+
+.SwitcherRastPort
+	move.l	TB_RastPort(a5),a3
+
+.GotRastPort
+	move.w	#MIN_REQUESTER_WIDTH,d2
+	move.l	TextLine1+it_IText(a4),a0
+	move.l	a3,a1
+	bsr		FigureWidth	; figure Line1Width
+	move.w	d0,Line1Width(a4)
+	cmp.w	d2,d0
+	bls.s	.GotWidth
+	move.w	d0,d2
+.GotWidth
+
+	move.l	TextLine2+it_IText(a4),a0 ; if null, FigureWidth() returns zero
+	move.l	a3,a1
+	bsr		FigureWidth
+	move.w	d0,Line2Width(a4)
+	cmp.w	d2,d0
+	bls.s	.GotMaxWidth
+	move.w	d0,d2
+.GotMaxWidth
+	add.w	#(BORDER_WIDTH+TEXT_XPAD)*2,d2	; room for border, etc.
+	move.w	d2,TheRequester+rq_Width(a4)
+
+* figure X1 of requester
+	move.w	#SCREEN_MIDDLE_X,d0
+	lsr.w	#1,d2
+	sub.w	d2,d0	; got X1
+	move.w	d0,TheRequester+rq_LeftEdge(a4)
+
+	move.l	OKTextLine+it_IText(a4),a0 ; if null, FigureWidth() returns zero
+	move.l	a3,a1
+	bsr		FigureWidth
+	move.w	d0,OKLineWidth(a4)
+
+	move.l	CancelTextLine+it_IText(a4),a0
+	move.l	a3,a1
+	bsr		FigureWidth
+	move.w	d0,CancelLineWidth(a4)
+
+	CLEAR	d2
+
+	move.l	Option1TextLine+it_IText(a4),a0
+	move.l	a3,a1
+	bsr		FigureWidth
+	move.w	d0,Option1LineWidth(a4)
+	beq.s	.OtherOptionWidth
+
+	moveq	#-1,d2
+
+.OtherOptionWidth:
+	move.l	Option2TextLine+it_IText(a4),a0
+	move.l	a3,a1
+	bsr		FigureWidth
+	move.w	d0,Option2LineWidth(a4)
+	beq.s	.FillInY
+
+	moveq	#-1,d2
+
+.FillInY:
+	tst.l	d2
+	bne.s	.ExtraLine
+
+	move.w	#REQ_TOPEDGE,TheRequester+rq_TopEdge(a4)
+	move.w	#REQ_HEIGHT,TheRequester+rq_Height(a4)
+	bra.s	.Y_Done
+
+.ExtraLine:
+
+	move.w	#REQ2_TOPEDGE,TheRequester+rq_TopEdge(a4)
+	move.w	#REQ2_HEIGHT,TheRequester+rq_Height(a4)
+
+.Y_Done:
+
+***********************************
+* setup Gadget structures
+	move.w	OKLineWidth(a4),d0
+	add.w	#(BORDER_WIDTH+TEXT_XPAD)*2,d0
+	move.w	d0,OKGadget+gg_Width(a4)
+
+	move.w	CancelLineWidth(a4),d1
+	add.w	#(BORDER_WIDTH+TEXT_XPAD)*2,d1
+	move.w	d1,CancelGadget+gg_Width(a4)
+
+	move.w	TheRequester+rq_Width(a4),d0
+	sub.w	#BORDER_WIDTH+XSPACER,d0
+	sub.w	d1,d0
+	move.w	d0,CancelGadget+gg_LeftEdge(a4)
+
+	move.w	Option1LineWidth(a4),d0
+	add.w	#(BORDER_WIDTH+TEXT_XPAD)*2,d0
+	move.w	d0,Option1Gadget+gg_Width(a4)
+
+	move.w	Option2LineWidth(a4),d1
+	add.w	#(BORDER_WIDTH+TEXT_XPAD)*2,d1
+	move.w	d1,Option2Gadget+gg_Width(a4)
+
+	move.w	TheRequester+rq_Width(a4),d0
+	sub.w	#BORDER_WIDTH+XSPACER,d0
+	sub.w	d1,d0
+	move.w	d0,Option2Gadget+gg_LeftEdge(a4)
+
+* if no OK text, exclude the gadget from being rendered
+	lea	CancelGadget(a4),a0
+	tst.l	OKTextLine+it_IText(a4)
+	beq.s	.OKGadgetDone
+	lea	OKGadget(a4),a1
+	move.l	a1,gg_NextGadget(a0)
+	move.l	a1,a0
+.OKGadgetDone
+	tst.l	Option1TextLine+it_IText(a4)
+	beq.s	.Option1GadgetDone
+	lea	Option1Gadget(a4),a1
+	move.l	a1,gg_NextGadget(a0)
+	move.l	a1,a0
+.Option1GadgetDone
+	tst.l	Option2TextLine+it_IText(a4)
+	beq.s	.Option2GadgetDone
+	lea	Option2Gadget(a4),a1
+	move.l	a1,gg_NextGadget(a0)
+	move.l	a1,a0
+.Option2GadgetDone
+	clr.l	gg_NextGadget(a0)
+
+***********************************
+* setup Border structures
+	lea.l	ReqLightBorder(a4),a0	; first of three borders
+	moveq.l	#0,d0	; X1
+	moveq.l	#0,d1	; Y1
+	move.w	TheRequester+rq_Width(a4),d2	; Width
+	move.w	TheRequester+rq_Height(a4),d3	; Width
+	bsr		FigureNewXYArrayBorderLess
+
+	lea.l	OKLightBorder(a4),a0	; bd_XY array
+	moveq.l	#0,d0	; X1
+	moveq.l	#0,d1	; Y1
+	move.w	OKGadget+gg_Width(a4),d2	; Width
+	move.w	#GADGET_HEIGHT,d3			; Height
+	bsr		FigureNewXYArrayBorderLess
+
+	lea.l	CancelLightBorder(a4),a0	; bd_XY array
+	moveq.l	#0,d0	; X1
+	moveq.l	#0,d1	; Y1
+	move.w	CancelGadget+gg_Width(a4),d2	; Width
+	move.w	#GADGET_HEIGHT,d3				; Height
+	bsr		FigureNewXYArrayBorderLess
+
+	lea.l	Option1LightBorder(a4),a0	; bd_XY array
+	moveq.l	#0,d0	; X1
+	moveq.l	#0,d1	; Y1
+	move.w	Option1Gadget+gg_Width(a4),d2	; Width
+	move.w	#GADGET_HEIGHT,d3				; Height
+	bsr		FigureNewXYArrayBorderLess
+
+	lea.l	Option2LightBorder(a4),a0	; bd_XY array
+	moveq.l	#0,d0	; X1
+	moveq.l	#0,d1	; Y1
+	move.w	Option2Gadget+gg_Width(a4),d2	; Width
+	move.w	#GADGET_HEIGHT,d3				; Height
+	bsr		FigureNewXYArrayBorderLess
+
+***********************************
+* display & handle the requester
+	move.l	TB_ITUBase(a5),a6
+
+***********************************
+* if the switcher display not up, use WB instead
+	tst.w	d6
+	bne	.UseSwitcher
+
+* make room for drag gadget, etc. in AutoRequester
+	add.w	#AUTO_XPLUS,TheRequester+rq_Width(a4)
+
+* make window the size of the requestor
+	move.l	TempWindow(a4),a0	; Window
+	moveq.l	#0,d0
+	move.w	TheRequester+rq_Width(a4),d0	; Width
+	sub.w	TempNewWindow+nw_Width(a4),d0	; always <= rq_Width
+	beq.s	.WindowSized
+	moveq.l	#0,d1
+	XSYS	SizeWindow
+.WindowSized
+
+	CALLTL	SoftSpriteAudioOff	; make sure soft sprite off
+	CALLTL	AutoRequestEnable		; restore autorequest function
+	CALLTL	RestoreCopperList	; restore AMIGA's display
+	XSYS	WBenchToFront		; insure WB brought up to the front
+
+* call AutoRequest()
+.DoAutoRequest:
+	move.l	TempWindow(a4),a0	; Window
+	lea.l	TextLine1(a4),a1	; BodyText
+	sub.l	a2,a2				; assume no positive text
+	tst.l	OKTextLine+it_IText(a4) ; is there positive text?
+	beq.s	.GotPositiveText
+	lea.l	OKTextLine(a4),a2	; PositiveText
+.GotPositiveText
+	lea.l	CancelTextLine(a4),a3
+	move.l	d7,d0	; positive flags
+	move.l	d5,d1	; negative flags
+	tst.w	TB_ToastActive(a5)	; also get DISKINSERTED/DISKREMOVED
+	beq.s	.NoDiskSYS		; IDCMP if Toaster floppy system up
+	or.l	#DISKINSERTED+DISKREMOVED,d0
+.NoDiskSYS
+	moveq.l	#0,d2
+	move.w	TheRequester+rq_Width(a4),d2	; Width
+	move.l	#REQ_HEIGHT,d3					; Height
+	XSYS	AutoRequest
+
+	move.l	d0,d4
+	bgt.s	.GotReturn
+	moveq.l	#-1,d4	; if FALSE, means negative response chosen
+.GotReturn
+	tst.w	TB_ToastActive(a5)	; if Toaster floppy system up -
+	beq.s	.NoChanges		; make sure it's kept up to date
+
+	CALLTL	FloppyDiskQuery		; anything happen with the floppies?
+	beq.s	.NoChanges		; nope....
+
+	CALLTL	FloppyInOut		; else refresh the floppy system
+	CALLTL	UpDateFC		; assure Switcher FC updated
+
+	GET.l	TB_Window,a0		; check for Config Slice and if its
+	move.l	wd_FirstGadget(a0),a0	; up - update its Project FC
+	cmp.w	#'CF',gg_GadgetID(a0)
+	bne.s	.NotMTSlice
+	move.l	a4,d2
+	XREF	MTSliceDataPool
+	lea	MTSliceDataPool,a4
+	moveq	#-1,d0
+	XCALL	UpDatePJFC
+	move.l	d2,a4
+
+.NotMTSlice:
+	move.l	d7,d0			; did USER specify
+	or.l	d5,d0			; DISKINSERTED/DISKREMOVED IDCMP?
+	and.l	#DISKINSERTED+DISKREMOVED,d0
+	beq.s	.DoAutoRequest		; if USER did not specify that
+*					; IDCMP - don't end Request session
+
+.NoChanges:
+	CALLTL	AutoRequestDisable	; re-patch autorequest function
+
+* checks for the case of valid toaster, but no switcher interface up
+	tst.w	TB_ToastActive(a5)	; is toaster active?
+	beq.s	.CopOK				; nope
+	CALLTL	ReinstallCurrentCopList	; yup
+.CopOK
+
+	CALLTL	SoftSpriteAudioOn	; turn on if it was on
+	bra		.JustExit
+
+***********************************
+* use switcher interface to display requester
+* wait for either gadget press, or other IDCMP
+.UseSwitcher
+
+	IFD	CRAP	;***!!!***
+	move.l	TB_Window(a5),a0
+	move.l	wd_IDCMPFlags(a0),OrgIDCMP(a4)	; save original IDCMP
+
+	move.l	d7,d0			; get user's flags
+	or.l	d5,d0
+	or.l	#GADGETDOWN+DISKINSERTED+DISKREMOVED,d0	; other IDCMP flags
+	XSYS	ModifyIDCMP				; we watch for
+	ENDC
+	
+	CALLTL	SoftSpriteAudioOff	; so soft sprite isn't messed up
+
+**************!!!**
+	movem.l	a0-a1,-(sp)
+	lea.l	TempNewWindowSwitcher(a4),a0
+	lea.l TheRequester(a4),a1	
+	move.w	rq_LeftEdge(a1),nw_LeftEdge(a0)
+	move.w	rq_TopEdge(a1),nw_TopEdge(a0)
+	move.w	rq_Width(a1),nw_Width(a0)
+	move.w	rq_Height(a1),nw_Height(a0)
+
+	clr.w		rq_LeftEdge(a1)
+	clr.w		rq_TopEdge(a1)
+
+	move.l	TB_Screen(a5),nw_Screen(a0)
+
+	move.l	TB_ITUBase(a5),a6
+	XSYS	OpenWindow
+	movem.l	(sp)+,a0-a1
+	move.l	d0,TempWindow(a4)
+	beq		.JustExit
+
+	lea.l	TheRequester(a4),a0
+;;	move.l	TB_Window(a5),a1
+	move.l	d0,a1
+**************!!!**
+
+	XSYS	Request
+	move.w	d0,d2
+
+	CALLTL	SoftSpriteAudioOn	; so soft sprite isn't messed up
+
+	CALLTL	GetDisplaySprite
+	move.w	d0,SoftSpriteType(a4)
+	beq.s	.AlreadyNormal
+
+	CALLTL	DisplayNormalSprite
+
+.AlreadyNormal:
+
+ ifeq 1		;This has been removed because it could mess up the
+		;softsprite nest counter.
+	move.w	TB_SoftSprite+VBI_Nest(a5),SoftSpriteNest(a4)
+	bmi.s	.AlreadyOn
+	CALLTL	ForceSoftSpriteOn
+.AlreadyOn:
+ endc
+
+	tst.w	d2
+	beq	.IDCMPExit	; error in opening requestor
+
+****!!!!***
+;;;;	move.l	TB_MsgPort(a5),a2
+	movea.l	TempWindow(a4),a2
+	movea.l	wd_UserPort(a2),a2
+
+	move.l	TB_SYSBase(a5),a6
+	bra.s	.GetMsgLoop
+
+.WaitLoop
+	move.l	a2,a0
+	XSYS	WaitPort
+
+.GetMsgLoop
+	move.l	a2,a0
+	XSYS	GetMsg
+	tst.l	d0
+	beq.s	.WaitLoop
+
+	move.l	d0,a1
+	move.l	im_Class(a1),d6
+	move.l	im_IAddress(a1),a3
+	XSYS	ReplyMsg
+	cmp.l	#GADGETDOWN,d6
+	beq.s	.CheckGadgetID
+
+	cmp.l	#DISKINSERTED,d6	; disk change IDCMP?
+	beq.s	.CheckFlopps		; check the disk system if so
+	cmp.l	#DISKREMOVED,d6
+	bne.s	.CheckUser
+
+.CheckFlopps:
+	CALLTL	FloppyDiskQuery		; anything happen with the floppies?
+	beq.s	.CheckUser		; nope....
+
+	CALLTL	FloppyInOut		; else refresh the floppy system
+	CALLTL	UpDateFC		; assure Switcher FC updated
+
+;;	GET.l	TB_Window,a0		; check for Config Slice and if its
+;;	move.l	wd_FirstGadget(a0),a0	; up - update its Project FC
+;;	cmp.w	#'CF',gg_GadgetID(a0)	; (rendering portion of the code
+;;	bne.s	.CheckUser		;  removed 6/20/90)
+
+	move.l	a4,a3
+	XREF	MTSliceDataPool
+	lea	MTSliceDataPool,a4
+
+;;	CALLROM	Forbid
+;;	CALLTL	SoftSpriteOff
+;;	moveq	#-1,d0
+
+	CLEAR	d0			; update the config slice's Project
+	XCALL	UpDatePJFC		; file comment (no rendering)
+
+;;	CALLTL	SoftSpriteOn
+;;	CALLROM	Permit
+
+	move.l	a3,a4
+
+.CheckUser:
+	move.l	d6,d0
+	and.l	d7,d0	; positive class?
+	bne.s	.GotPositive
+	and.l	d5,d6	; negative class?
+	beq.s	.GetMsgLoop
+
+.GotNegative
+	moveq.l	#-1,d4
+	bra.s	.GotExitClass
+
+.GotPositive
+	moveq.l	#1,d4
+	bra.s	.GotExitClass
+
+.CheckGadgetID
+	move.w	gg_GadgetID(a3),d0
+	beq	.GetMsgLoop
+	ext.l	d0
+	move.l	d0,d4
+
+.GotExitClass
+	CALLTL	SoftSpriteOff
+	move.l	TB_ITUBase(a5),a6
+	lea.l	TheRequester(a4),a0
+***!!!
+	move.l	TempWindow(a4),a1
+;;	move.l	TB_Window(a5),a1
+
+
+	XSYS	EndRequest	; not using ENDGADGET flag, do done manually
+	CALLTL	SoftSpriteOn
+
+.IDCMPExit
+ ifeq 1		; this has been removed because It Could mess up the
+		; SoftSprite.
+	move.w	SoftSpriteNest(a4),d0
+	bmi.s	.LeaveOn
+	CALLTL	SoftSpriteOff
+	move.w	d0,TB_SoftSprite+VBI_Nest(a5)
+.LeaveOn:
+ endc
+	move.w	SoftSpriteType(a4),d0
+	beq.s	.LeaveNormal
+
+	CALLTL	DisplayWaitSprite
+
+.LeaveNormal:
+	move.l	TB_ITUBase(a5),a6
+	move.l	TB_Window(a5),a0
+	move.l	OrgIDCMP(a4),d0
+;;*!	XSYS	ModifyIDCMP
+
+; not needed 01-13-92	CALLTL	ReDoDisplay		; handles redraw, even config screen
+*					; (re-instated - 6/20/90)
+
+.JustExit
+* if temp window used, close it
+	move.l	TempWindow(a4),d0
+	beq.s	.WindowClosed
+	move.l	TB_ITUBase(a5),a6
+	move.l	d0,a0
+	XSYS	CloseWindow
+;; Bug 3.0 Crash	XSYS	CloseWorkBench
+
+.WindowClosed
+
+* Addendum 1/4/91: re-enable hotkey system.
+
+	bclr.b	#REQACTI_ONOFF_BIT,TB_Flags(a5)
+
+	move.w	d4,d0
+	ext.l	d0
+	movem.l	(sp)+,d2-d7/a2-a4/a6
+	rts
+
+*******************************************************`
+	SECTION	ReqData,DATA
+	cnop	0,4
+LocalData
+	DATASYM	TempWindow,LocalData
+	dc.l	0
+	DATASYM	OrgIDCMP,LocalData
+	DC.l	0
+	DATASYM	Line1Width,LocalData
+	dc.w	0
+	DATASYM	Line2Width,LocalData
+	dc.w	0
+	DATASYM	OKLineWidth,LocalData
+	dc.w	0
+	DATASYM	CancelLineWidth,LocalData
+	dc.w	0
+	DATASYM	Option1LineWidth,LocalData
+	dc.w	0
+	DATASYM	Option2LineWidth,LocalData
+	dc.w	0
+	DATASYM	SoftSpriteNest,LocalData
+	dc.w	0
+	DATASYM	SoftSpriteType,LocalData
+	dc.w	0
+
+	DATASYM	TheRequester,LocalData
+	dc.l	0				; rq_OlderRequest
+
+	dc.w	0,0	;REQ_TOPEDGE	; rq_LeftEdge,rq_TopEdge
+	dc.w	0,0	;REQ_HEIGHT	; rq_Width,rq_Height
+
+	dc.w	0,0				; rq_RelLeft,rq_RelTop
+	dc.l	AbsCancelGadget		; rq_ReqGadget
+	dc.l	AbsReqLightBorder	; rq_ReqBorder
+	dc.l	AbsTextLine1		; rq_ReqText
+	dc.w	0		; rq_Flags
+	dc.b	2		; rq_BackFill
+	dc.b	0		; rq_KludgeFill00
+	dc.l	0		; rq_ReqLayer
+	dcb.b	32,0	; rq_ReqPad1
+	dc.l	0		; rq_ImageBMap
+	dc.l	0		; rq_RWindow
+	dcb.b	36,0	; rq_ReqPad2
+
+*****************************************
+* gadget structures
+	DATASYM CancelGadget,LocalData
+AbsCancelGadget
+	dc.l	0			; gg_NextGadget (filled in in routine)
+	dc.w	0,GADGET_TOPEDGE	; gg_LeftEdge,gg_TopEdge
+	dc.w	0,GADGET_HEIGHT		; gg_Width,gg_Height
+	dc.w	GADGHNONE	; gg_Flags
+	dc.w	GADGIMMEDIATE			; gg_Activation
+	dc.w	REQGADGET!BOOLGADGET	; gg_GadgetType
+	dc.l	AbsCancelLightBorder	; gg_GadgetRender
+	dc.l	0			; gg_SelectRender
+	dc.l	AbsCancelTextLine	; gg_GadgetText
+	dc.l	0			; gg_MutualExclude
+	dc.l	0			; gg_SpecialInfo
+	dc.w	CANCEL_ID	; gg_GadgetID
+	dc.l	0			; gg_UserData
+
+	DATASYM OKGadget,LocalData
+AbsOKGadget
+	dc.l	0	; gg_NextGadget
+	dc.w	OK_GADGET_X1,GADGET_TOPEDGE	; gg_LeftEdge,gg_TopEdge
+	dc.w	0,GADGET_HEIGHT		; gg_Width,gg_Height
+	dc.w	GADGHNONE	; gg_Flags GADGHCOMP	
+	dc.w	GADGIMMEDIATE			; gg_Activation
+	dc.w	REQGADGET!BOOLGADGET	; gg_GadgetType
+	dc.l	AbsOKLightBorder	; gg_GadgetRender
+	dc.l	0			; gg_SelectRender
+	dc.l	AbsOKTextLine	; gg_GadgetText
+	dc.l	0			; gg_MutualExclude
+	dc.l	0			; gg_SpecialInfo
+	dc.w	OK_ID		; gg_GadgetID
+	dc.l	0			; gg_UserData
+
+	DATASYM Option1Gadget,LocalData
+AbsOption1Gadget
+	dc.l	0	; gg_NextGadget
+	dc.w	OK_GADGET_X1,GADGET2_TOPEDGE	; gg_LeftEdge,gg_TopEdge
+	dc.w	0,GADGET_HEIGHT		; gg_Width,gg_Height
+	dc.w	GADGHNONE	; gg_Flags GADGHCOMP	
+	dc.w	GADGIMMEDIATE			; gg_Activation
+	dc.w	REQGADGET!BOOLGADGET	; gg_GadgetType
+	dc.l	AbsOption1LightBorder	; gg_GadgetRender
+	dc.l	0			; gg_SelectRender
+	dc.l	AbsOption1TextLine	; gg_GadgetText
+	dc.l	0			; gg_MutualExclude
+	dc.l	0			; gg_SpecialInfo
+	dc.w	OPT1_ID		; gg_GadgetID
+	dc.l	0			; gg_UserData
+
+	DATASYM Option2Gadget,LocalData
+AbsOption2Gadget
+	dc.l	0	; gg_NextGadget
+	dc.w	0,GADGET2_TOPEDGE	; gg_LeftEdge,gg_TopEdge
+	dc.w	0,GADGET_HEIGHT		; gg_Width,gg_Height
+	dc.w	GADGHNONE	; gg_Flags GADGHCOMP	
+	dc.w	GADGIMMEDIATE			; gg_Activation
+	dc.w	REQGADGET!BOOLGADGET	; gg_GadgetType
+	dc.l	AbsOption2LightBorder	; gg_GadgetRender
+	dc.l	0			; gg_SelectRender
+	dc.l	AbsOption2TextLine	; gg_GadgetText
+	dc.l	0			; gg_MutualExclude
+	dc.l	0			; gg_SpecialInfo
+	dc.w	OPT2_ID		; gg_GadgetID
+	dc.l	0			; gg_UserData
+
+*****************************************
+* IntuiText structures
+
+	DATASYM TextLine1,LocalData
+AbsTextLine1
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE1_Y		; it_LeftEdge,it_TopEdge
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText (filled in during routine)
+
+	DATASYM TextLine2,LocalData
+AbsTextLine2
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE2_Y		; it_LeftEdge,it_TopEdge
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText
+
+	DATASYM OKTextLine,LocalData
+AbsOKTextLine
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE3_Y ; it_LeftEdge,it_TopEdge
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText
+
+	DATASYM CancelTextLine,LocalData
+AbsCancelTextLine
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE4_Y
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText
+
+	DATASYM Option1TextLine,LocalData
+AbsOption1TextLine
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE4_Y
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText
+
+	DATASYM Option2TextLine,LocalData
+AbsOption2TextLine
+	dc.b	TEXT_APEN,TEXT_BPEN	; it_FrontPen,it_BackPen
+	dc.b	RP_JAM2,0			; it_DrawMode,it_KludgeFill00
+	dc.w	TEXT_XOFFSET,TEXT_LINE4_Y
+	dc.l	0					; it_ITextFont
+	dc.l	0					; it_IText
+	dc.l	0					; it_NextText
+
+*****************************
+* border structures
+
+	DATASYM ReqLightBorder,LocalData
+AbsReqLightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsReqXY2	; bd_XY
+	dc.l	AbsReqGreyBorder	; bd_NextBorder
+
+AbsReqGreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsReqXY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+	DATASYM OKLightBorder,LocalData
+AbsOKLightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsOKXY2	; bd_XY
+	dc.l	AbsOKGreyBorder		; bd_NextBorder
+
+AbsOKGreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsOKXY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+
+	DATASYM CancelLightBorder,LocalData
+AbsCancelLightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsCancelXY2	; bd_XY
+	dc.l	AbsCancelGreyBorder	; bd_NextBorder
+
+AbsCancelGreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsCancelXY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+
+	DATASYM Option1LightBorder,LocalData
+AbsOption1LightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsOption1XY2	; bd_XY
+	dc.l	AbsOption1GreyBorder	; bd_NextBorder
+
+AbsOption1GreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsOption1XY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+	DATASYM Option2LightBorder,LocalData
+AbsOption2LightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsOption2XY2	; bd_XY
+	dc.l	AbsOption2GreyBorder	; bd_NextBorder
+
+AbsOption2GreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsOption2XY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+
+* used in DrawBorderBox()
+	DATASYM BoxDarkBorder,LocalData
+AbsBoxDarkBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	BORDER_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,9 ; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY1	; bd_XY
+	dc.l	AbsBoxLightBorder	; bd_NextBorder
+
+	DATASYM BoxLightBorder,LocalData
+AbsBoxLightBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	LIGHT_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,11	; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY2	; bd_XY
+	dc.l	AbsBoxGreyBorder	; bd_NextBorder
+
+	DATASYM BoxGreyBorder,LocalData
+AbsBoxGreyBorder
+	dc.w	0,0			; bd_LeftEdge,bd_TopEdge
+	dc.b	DGREY_PEN,0	; bd_FrontPen,bd_BackPen
+	dc.b	RP_JAM1,10	; bd_DrawMode,bd_Count	
+	dc.l	AbsBoxXY3	; bd_XY
+	dc.l	0			; bd_NextBorder
+
+*****************************
+* border XY arrays
+	DATASYM	ReqXY1,LocalData
+AbsReqXY2	dcb.w	11*2,0
+AbsReqXY3	dcb.w	10*2,0
+
+	DATASYM	OKXY1,LocalData
+AbsOKXY2	dcb.w	11*2,0
+AbsOKXY3	dcb.w	10*2,0
+
+	DATASYM	CancelXY1,LocalData
+AbsCancelXY2	dcb.w	11*2,0
+AbsCancelXY3	dcb.w	10*2,0
+
+
+	DATASYM	Option1XY1,LocalData
+AbsOption1XY2	dcb.w	11*2,0
+AbsOption1XY3	dcb.w	10*2,0
+
+	DATASYM	Option2XY1,LocalData
+AbsOption2XY2	dcb.w	11*2,0
+AbsOption2XY3	dcb.w	10*2,0
+
+*****************************************************************************
+*			Border Data used by DrawBorderBox
+	DATASYM	BoxXY1,LocalData
+AbsBoxXY1	dcb.w	9*2,0
+AbsBoxXY2	dcb.w	11*2,0
+AbsBoxXY3	dcb.w	10*2,0
+
+
+* window used if opening on WB
+	DATASYM	TempNewWindow,LocalData
+	dc.w	0,0	; window XY origin relative to TopLeft of screen
+	dc.w	MIN_REQUESTER_WIDTH+AUTO_XPLUS,REQ_HEIGHT	; window width and height
+	dc.b	WB_TEXT_APEN,WB_TEXT_BPEN
+	dc.l	0	; IDCMP flags
+	dc.l	SIMPLE_REFRESH+ACTIVATE+RMBTRAP
+	dc.l	0	; first gadget in gadget list
+	dc.l	0	; custom CHECKMARK imagery
+	dc.l	AbsWindowTitle	; window title
+	dc.l	0	; custom screen pointer
+	dc.l	0	; custom bitmap
+	dc.w	MIN_REQUESTER_WIDTH,REQ_HEIGHT,640,200
+	dc.w	WBENCHSCREEN	; destination screen type
+
+* Requester window used on Switcher
+	DATASYM	TempNewWindowSwitcher,LocalData
+
+* FILL IN LATER
+	dc.w	0,0	; window XY origin relative to TopLeft of screen
+	dc.w	0,0	; window width and height
+
+	dc.b	2,1
+	dc.l	GADGETUP+GADGETDOWN+RAWKEY+MOUSEBUTTONS+DISKINSERTED+DISKREMOVED	; IDCMP flags
+	dc.l	NOCAREREFRESH+BORDERLESS+SIMPLE_REFRESH+ACTIVATE+RMBTRAP
+	dc.l	0	; first gadget in gadget list
+	dc.l	0	; custom CHECKMARK imagery
+	dc.l	0	; window title
+	dc.l	0	; custom screen pointer FILL IN LATER
+	dc.l	0	; custom bitmap
+	dc.w	MIN_REQUESTER_WIDTH,REQ_HEIGHT,640,200
+	dc.w	CUSTOMSCREEN	; destination screen type
+
+AbsWindowTitle
+	dc.b	"Video Toaster",0
+
+	end
+* end of requesters.a

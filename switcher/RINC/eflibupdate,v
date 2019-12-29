@@ -1,0 +1,177 @@
+head     2.8;
+branch   ;
+access   ;
+symbols  ;
+locks    ; strict;
+comment  @*@;
+
+
+2.8
+date     93.11.06.08.44.41;  author Kell;  state Exp;
+branches ;
+next     2.7;
+
+2.7
+date     93.03.25.06.34.11;  author Kell;  state Exp;
+branches ;
+next     2.6;
+
+2.6
+date     93.03.11.17.08.16;  author Kell;  state Exp;
+branches ;
+next     2.5;
+
+2.5
+date     93.02.13.15.01.13;  author Kell;  state Exp;
+branches ;
+next     2.4;
+
+2.4
+date     92.12.29.02.23.12;  author Kell;  state Exp;
+branches ;
+next     2.3;
+
+2.3
+date     92.11.16.18.08.47;  author Kell;  state Exp;
+branches ;
+next     2.2;
+
+2.2
+date     92.11.16.16.41.32;  author Kell;  state Exp;
+branches ;
+next     2.1;
+
+2.1
+date     92.09.10.16.04.39;  author Kell;  state Exp;
+branches ;
+next     2.0;
+
+2.0
+date     92.09.10.15.47.47;  author Kell;  state Exp;
+branches ;
+next     ;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.8
+log
+@Messed with the entire structure of EFXbase!!
+@
+text
+@********************************************************************
+* $EfLibUpdate$ - starting point of all new source code modules
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: EfLibUpdate,v 2.7 93/03/25 06:34:11 Kell Exp Locker: Kell $
+*
+* $Log:	EfLibUpdate,v $
+*Revision 2.7  93/03/25  06:34:11  Kell
+**** empty log message ***
+*
+*Revision 2.6  93/03/11  17:08:16  Kell
+**** empty log message ***
+*
+*Revision 2.5  93/02/13  15:01:13  Kell
+**** empty log message ***
+*
+*Revision 2.4  92/12/29  02:23:12  Kell
+**** empty log message ***
+*
+*Revision 2.3  92/11/16  18:08:47  Kell
+*Force update due to ViewModes field added to EffectsBase SetUpSBM structure.
+*
+*Revision 2.2  92/11/16  16:41:32  Kell
+*Force total effects update, due to adding ViewModes field to SetUpSBM structure in EffectsBase.
+*
+*Revision 2.1  92/09/10  16:04:39  Kell
+**** empty log message ***
+*
+*Revision 2.0  92/09/10  15:47:47  Kell
+*FirstCheckIn
+*
+*********************************************************************
+
+* Check this file out & in if you have made major changes to eflib.i.
+* This will force all eflib.i dependent files to be remade.
+* If you are just adding data or functions to the top & bottom of EfBase
+* or if you are editing efbases comments, you will not need to cause
+* an entire remake.
+@
+
+
+2.7
+log
+@*** empty log message ***
+@
+text
+@Binary files eflibupdate and t:,RCSt1A78b8e78 differ
+@
+
+
+2.6
+log
+@*** empty log message ***
+@
+text
+@Binary files eflibupdate and t:,RCSt1A78a41d8 differ
+@
+
+
+2.5
+log
+@*** empty log message ***
+@
+text
+@Binary files eflibupdate and t:,RCSt1A78a38a0 differ
+@
+
+
+2.4
+log
+@*** empty log message ***
+@
+text
+@Binary files eflibupdate and t:,RCSt1A78a4238 differ
+@
+
+
+2.3
+log
+@Force update due to ViewModes field added to EffectsBase SetUpSBM structure.
+@
+text
+@Binary files eflibupdate and t:,RCSt1A78a3668 differ
+@
+
+
+2.2
+log
+@Force total effects update, due to adding ViewModes field to SetUpSBM structure in EffectsBase.
+@
+text
+@Binary files eflibupdate and t:,RCSt1A030d230 differ
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files eflibupdate and t:,RCSt1A030d230 differ
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@Binary files eflibupdate and t:,RCSt1A031c9b8 differ
+@

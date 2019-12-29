@@ -1,0 +1,126 @@
+*****************************************************
+*
+* NEW TOASTER 5.0 CODE FOR CFX SEQUENCING.
+* DEH 071096
+*
+*****************************************************
+DOSELECT:
+	DUMPMSG	<DO CFX SELECT>
+	LEA.L	_LVODoHiLiteSelect(A5),A1	; Select Routine.
+	LEA.L	_LVODoHiLiteRemove(A5),A0	; Remove Routine.
+
+;	MOVEM.L	A0-A1,-(A7)		; Save Calling State.
+
+;	CALLTL	CancelCG		; Turn Off the Character Generator.
+;	CALLTL	CancelNonStdEfx		; Deselect any non-standard effects.
+
+;	MOVEM.L	(A7)+,A0-A1		; Return Calling State.
+
+	CMPA.L	TB_EfxFG(A5),A3		; Selected same as Old Gadget?
+	BEQ	DSELZ			; Exit, we're selected
+
+	CLR.W	EF_TakeFlag(A4)		; prevent previous effect from doing Take on remove
+					; assume previous effect will be TriMarked
+
+	TST.W	EF_OldTBar(A4)		; Added Condition for avoiding TriMarks
+
+
+					; on effects not in transition.
+;	BGE.S	GRDEFE			; Always trimark if old TBar >= 0.
+;	MOVE.W	#-1,EF_TakeFlag(A4) 	; Don't trimark it
+;GRDEFE
+
+
+	MOVE.L	A0,-(A7)		; Save Address of Remove Routine.
+
+	MOVE.L	A2,A0			; A0.L = address of lut base
+
+	MOVEA.L	A3,A0			; A0.L = Address of Fast Gadget.
+	JSR	(A1)			; select new, remove old (mask cleared)
+	MOVEA.L	(A7)+,A1		; A1.L = Address of Remove Routine.
+
+	MOVE.W	#1,EF_TakeFlag(A4)
+
+	TST.W	D0
+	BEQ.S	DSELZ			; jump if relvarify was select
+
+	MOVE.L	EF_TriMarkedLUT(A4),D0
+	BEQ.S	DSELG			; jmp if no LUT currently selected
+
+	CMPA.L	D0,A3
+	BEQ.S	DSELK			; jmp if this LUT is the current LUT
+
+
+*
+*	A new LUT crouton is being selected
+*
+	MOVEA.L	D0,A0			; A0.L = Address of Old Crouton.
+	BCLR.B	#TRIMARK_BIT,FG_Flags1(A0)   ; remove old LUT crouton
+;	JSR	(A1)			; Remove Old Crouton.
+
+
+*
+*	If The Old Effect Not Finished, Finish It.
+*
+DSELG	
+;	BSET.B	#TRIMARK_BIT,FG_Flags1(A3)   	; set self
+;	MOVE.L	A3,EF_TriMarkedLUT(A4)
+
+;	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A2)	; Force Load of New Color Map.
+;	CALLTL	DoTakeNoKey			; Finish Last Effect.
+
+
+
+*
+*	If LUT Mode Is Not On, Then DVE0 Buffer Cannot be pure.
+*
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VT Setup.
+	ELHTEST_LUT	A0		; Is LUT Mode Enabled?
+	BNE.S	DSELI			; Skip If LUT Mode Is On.
+
+	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A2) ; Clear The Pure Flag.
+
+
+
+*
+*	First Time Entering LUT Mode.
+*
+DSELI	
+	BSR	LUT_MakeSureLoaded	; A0.L = Address of LUT Base.
+	BEQ.S	DSELZ			; Exit On Error.
+
+	MOVE.B	LUT_DisplayMode(A0),LTR_DisplayMode(A0) ; Save Initial Mode.
+	EXG.L	A0,A4			; A4.L = LUT Base, A0.L = Effects Base.
+	BSR	LUT_GetTBarPosition	; Get LUT TBar Position.
+	EXG.L	A0,A4			; A0.L = LUT Base, A4.L = Effects Base.
+	EXG.L	A0,A2			; A0.L = LTE Base, A2.L = LUT_Base.
+	BSR	LUT_LUTModeOn		; Turn On LUT Mode.
+	EXG.L	A0,A2			; A2.L = LTE Base, A0.L = LUT_Base.
+	BRA.S	DSELM			; Skip Else Part.
+
+
+
+*
+*	LUT Mode is Currently On.
+*
+DSELK
+	BSR	LUT_MakeSureLoaded	; A0.L = Address of LUT Base.
+	BEQ.S	DSELZ			; Exit On Error.
+
+	EXG.L	A0,A4			; A4.L = LUT Base, A0.L = Effects Base.
+	BSR	LUT_GetTBarPosition	; Get LUT TBar Position.
+	BSR	LUT_CheckResetDisplayMode ; In First Position???
+	EXG.L	A0,A4			; A0.L = LUT Base, A4.L = Effects Base.
+
+
+
+*
+*	Move TBar to "Selected" Position.
+*
+DSELM
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = TBar Position.
+	CALLTL	UpdateTBar		; Draw The TBar in Position.
+	BSR	LUT_MakeSureSelected	; Make Sure Selected.
+DSELZ
+	rts

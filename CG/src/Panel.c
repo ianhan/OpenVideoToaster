@@ -1,0 +1,528 @@
+/********************************************************************
+* panel.c 
+* Copyright (c)1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+* $Id: Panel.c,v 2.0 1995/08/31 15:27:31 Holt Exp $
+* $Log: Panel.c,v $
+ * Revision 2.0  1995/08/31  15:27:31  Holt
+ * FirstCheckIn
+ *
+*********************************************************************/
+/********************************************************************
+* Panel.c
+*
+* Creator: Arnie Cachelin
+* Date: Oct 26 1994
+* Copyright (c)1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+*
+*********************************************************************/
+
+#include <exec/types.h>
+#include <exec/memory.h>
+#include <intuition/intuition.h>
+#include <intuition/sghooks.h>
+#include <graphics/gfxmacros.h>
+#include <graphics/gfxbase.h>
+#include <graphics/text.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <dos.h>
+#include <time.h>
+#include <cg:popup/popup.h>
+#include <panel.h>
+#include <book.h>
+#include <cgerror.h>
+#include <newsupport.h>
+#include <gadgets.h>
+#include <newfunction.h>
+#include <commonrgb.h>
+
+#include <proto/exec.h>
+#include <proto/dos.h>
+#include <proto/graphics.h>
+#include <proto/intuition.h>
+#include <proto/diskfont.h>
+
+#ifndef PROTO_PASS
+#include "protos.h"
+#else
+DrawBGFunc *DrawBG();
+#endif
+
+#define REC_FLAGS		SMART_REFRESH+BORDERLESS+ACTIVATE+RMBTRAP+NOCAREREFRESH+WFLG_NW_EXTENDED
+#define STD_FLAGS		SIMPLE_REFRESH+BORDERLESS+ACTIVATE+NOCAREREFRESH+WFLG_NW_EXTENDED
+
+extern struct RenderData *RD;
+extern struct Gadget *AllGadgets[];
+extern struct st_PopupRender PopUp;
+
+struct TagItem nw_ti[1] = {
+	{ TAG_DONE,TRUE } };
+
+struct ExtNewWindow ClipNW = {
+	0,0,	/* window XY origin relative to TopLeft of screen */
+	324,200,	/* window width and height */
+	2,0,	/* detail and block pens */
+	MOUSEBUTTONS+MOUSEMOVE+IDCMP_GADGETUP+IDCMP_GADGETDOWN+IDCMP_RAWKEY,	/* IDCMP flags */
+	STD_FLAGS,
+	NULL,	/* first gadget in gadget list */
+	NULL,	/* custom CHECKMARK imagery */
+	NULL,	/* window title */
+	NULL,	/* custom screen pointer */
+	NULL,	/* custom bitmap */
+	5,5,	/* minimum width and height */
+	656,400,	/* maximum width and height */
+	CUSTOMSCREEN,	/* destination screen type */
+	&nw_ti[0]
+};
+
+struct PanelLine *CurPLine,*Start,*LastTime,*temp,*ALastTime;
+struct Gadget *FirstG=0,*Down=0,*EZGad=NULL,*In=NULL,*Out=NULL,*Del=NULL,*Len=NULL,*LastString=NULL;
+LONG	InOrOut=0,ft,Adder;
+ULONG	Ticks,WinFlags,GadInd,*LoTime=0,*HiTime=0,*ALoTime=0,*AHiTime=0;
+BOOL	Wide=FALSE,Playing=FALSE;
+
+//*******************************************************************
+//      Panel Specific Popup f'ns .. use global CurPLine
+
+// AAR -- junk
+char *NameFn(void *junk, int Entries)
+{
+	char **PopUpNames=(char **)(CurPLine->Param);
+	if (Entries < 0) Entries = 0;
+	else if (Entries > ((CurPLine->PropEnd)-1)) Entries = (CurPLine->PropEnd)-1;
+	return(PopUpNames[Entries]);
+}
+
+VOID RedrawPopText(struct Window *Window)
+{
+	char *C;
+	struct Gadget *Gadget;
+
+	if (Gadget = CurPLine->G1 ) {
+		C = NameFn(NULL,( (int)CurPLine->PropStart ));
+		AnyPopupText(Gadget,C,Window,20);
+	}
+}
+
+VOID HandlePopUp(struct Window *Window,struct IntuiMessage *IntuiMsg, struct PanelLine *PLine)
+{
+	PopUpID ID;
+	struct Gadget *Gadget;
+	WORD A,X,Y;
+
+	CurPLine=PLine;
+	PUCDefaultRender(&PopUp);
+	PopUp.drawBG = (DrawBGFunc *)DrawBG;
+	Gadget = CurPLine->G1;
+	X = Gadget->LeftEdge + (Gadget->Width >> 1);
+	Y = Gadget->TopEdge + (Gadget->Height >> 1);
+	ID = PUCCreate((NameFunc *)NameFn,NULL,&PopUp);
+	PUCSetNumItems(ID,CurPLine->PropEnd);
+	PUCSetCurItem(ID,CurPLine->PropStart);
+
+	Window->Flags |= WFLG_REPORTMOUSE;
+	A = PUCActivate(ID,Window,X,Y,IntuiMsg->MouseX,IntuiMsg->MouseY);
+	Window->Flags &= ~WFLG_REPORTMOUSE;
+	PUCDestroy(ID);
+	if (A >= 0)
+	{
+		if (A != ( (int)CurPLine->PropStart ))
+		{
+			CurPLine->PropStart = A;
+		}
+		RedrawPopText(Window);
+	}
+}
+
+//*******************************************************************
+VOID AddPanelG(struct Gadget **First,struct Gadget **This,struct Gadget **New)
+{
+	if (!(*First)) *First = *This = *New;
+	else
+	{
+		if(*This) (*This)->NextGadget = *New;
+		*This = *New;
+	}
+}
+
+
+ULONG __inline EZJump(ULONG t)
+{
+	return(t/EZ_DELAY);
+}
+
+struct Gadget *CreateContCancel(UWORD	X1,UWORD	H, struct Gadget **ThisG,BOOL Tune)
+{
+	struct Gadget *NewG,*con=NULL,*can=NULL;
+	if ((NewG = AllocOneGadget(AllGadgets[ID_REQ_CANCEL])))
+	{
+		NewG->LeftEdge = X1 + PNL_WIDTH - NewG->Width - 8;
+		NewG->TopEdge = H + PNL_YADD - 8;
+		NewG->NextGadget = NULL;
+		can=NewG;
+		AddPanelG(&FirstG,ThisG,&NewG);
+	} else return(can);
+	if ((NewG = AllocOneGadget(AllGadgets[ID_REQ_CONTINUE])))
+	{
+		NewG->LeftEdge = 8;
+		NewG->TopEdge = H + PNL_YADD - 8;
+		NewG->NextGadget = NULL;
+		con=NewG;
+		AddPanelG(&FirstG,ThisG,&NewG);
+	} else
+	{
+		FreeGadgets(*ThisG);
+		return((struct Gadget *)NULL);
+	}
+	return( can );
+}
+
+//*******************************************************************
+// goes from *(PLine->Param) to StrGadg
+
+#define ENDFUDGE	12
+VOID UpdatePanStr(struct PanelLine *PLine,struct Window *Window)
+{
+	struct Gadget *ThisG;
+	LONG A;
+
+	if( !(ThisG=PLine->StrGadg) ) return;
+	A = RemoveGadget(Window,ThisG);
+	if(PLine->Type==PNL_EZNUM)
+	{
+		stcl_d( ((struct StringInfo *)ThisG->SpecialInfo)->Buffer,*PLine->Param);
+	}
+	AddGadget(Window,ThisG,A);
+	RefreshGList(ThisG,Window,NULL,1);
+}
+
+//*******************************************************************
+// goes from prop position to *(PLine->Param)
+VOID UpdateParam(struct PanelLine *PLine,struct Window *Window)
+{
+	LONG A;
+
+	A = PLine->PropEnd-PLine->PropStart;
+	A = (((struct PropInfo *)PLine->PropGadg->SpecialInfo)->HorizPot * A)
+		 / MAXPOT;
+	A += PLine->PropStart;
+	*(PLine->Param) = A;
+	UpdatePanStr(PLine,Window);
+}
+
+//*******************************************************************
+// goes from *(PLine->Param) to prop position between PropStart/PropEnd
+VOID UpdatePanProp(struct PanelLine *PLine,struct Window *Window)
+{
+	ULONG A=0;
+
+	if(PLine->Param) A = *(PLine->Param);
+	else return;
+	if(PLine->PropGadg)
+	{
+		struct PropInfo *pi= ((struct PropInfo *)PLine->PropGadg->SpecialInfo);
+		if (A > PLine->PropEnd) A = PLine->PropEnd;
+		else if (A < PLine->PropStart) A = PLine->PropStart;
+		if( (A!=*(PLine->Param)) )  // If bounds exceeded
+		{
+			*(PLine->Param)=A;
+			UpdatePanStr(PLine,Window);
+		}
+		A -= PLine->PropStart;
+		A=(A*MAXPOT)/(PLine->PropEnd - PLine->PropStart);
+		NewModifyProp(PLine->PropGadg,Window,NULL,
+				pi->Flags,A&0xFFFF,pi->VertPot,pi->HorizBody,pi->VertBody,1);
+	}
+}
+
+//*******************************************************************
+// recalculates difference and prints it if changed, returns 0 if props need update
+LONG UpdateDiff(struct RastPort *RP,struct PanelLine *PLine,struct Window *Window)
+{
+	LONG A,X,Y;
+	char ch[32];
+
+	A = *(PLine->Param) - *(PLine->Param2);
+	if (A < 0)
+	{
+		A = 0;
+		*(PLine->Param) = *(PLine->Param2) ;
+	}
+	A += (ULONG)PLine->G5;
+	if (A != PLine->PropEnd) {
+		PLine->PropEnd = A;
+		ch[0] = 0;
+//		LongToTime((ULONG *)&PLine->PropEnd,&ch[strlen(ch)]);
+		SetDrMd(RP,JAM2);
+		SetAPen(RP,SCREEN_PEN);
+		X=PLine->PropStart>>16;
+		Y=PLine->PropStart&0xFFFF;
+		RectFill(RP,X+80,Y,X+120,Y+TEXT_HEIGHT);
+		Move(RP,X,Y+TEXT_BASE-1);
+		SafeColorText(RP,ch,11);
+	}
+	return(A);
+}
+
+//*******************************************************************
+// checks all PNL_DIFF PLines for change
+VOID UpdateAllDiff(struct RastPort *RP,struct PanelLine *PLine,struct Window *Window)
+{
+	LONG FixProp=1;
+	if(PLine==NULL) PLine=Start;
+	while(PLine && PLine->Type) {
+		if (PLine->Type == PNL_DIFF) FixProp*=UpdateDiff(RP,PLine,Window);
+		else if ( (FixProp==0) && (PLine->Type==PNL_TIME) )
+		{
+			UpdatePanProp(PLine,Window);
+			UpdatePanStr(PLine,Window);
+		}
+		PLine++;
+	}
+}
+
+struct Gadget *NextString(struct Gadget *gad)
+{
+	while(gad=gad->NextGadget)
+	{
+		if(gad->GadgetType == GTYP_STRGADGET)
+			return(gad);
+	}
+	return(NULL);
+}
+
+
+UWORD __asm MiniPanel(REG(a0) struct EditWindow *Edit,REG(a1) struct PanelLine *PLine, REG(d0) BOOL XPMode)
+{
+	WORD H = PNL_Y1,ID,A,B,X1=0,Y1=0,Lines=0;
+	struct Gadget *ThisG=0,*ContCan,*nextg;
+	struct Window *Window=0;
+	struct RastPort *RP;
+	BOOL Going = TRUE;
+	UWORD Success = PAN_CANCEL;
+	struct IntuiMessage *IntuiMsg;
+	ULONG Y=0;
+	LONG F;
+
+	FirstG=0; Down=0; EZGad=NULL; In=NULL; Out=NULL; Del=NULL; Len=NULL; LastString=NULL;
+	Wide=FALSE;
+	for(Start = PLine; PLine->Type && !Wide; PLine++ )
+		if(PLine->Width>0) Wide=TRUE;
+	for( PLine=Start; PLine->Type; PLine++ )
+		if(PLine->Type != PNL_SKIP)
+		{
+			if(PLine->Create) Y1=PLine->Create(X1,H,PLine,&ThisG);
+			if(PLine->Width>0)
+			{
+				X1 = PNL_WIDTH;
+				Y = Y1;
+			}
+			else
+			{
+				H += MAX(Y,Y1);
+				X1 = 0;
+				Y = 0;
+			}
+			if(PLine->Flags)
+			{
+				if(PLine->Flags&PL_IN)
+					In=PLine->StrGadg;
+				else if(PLine->Flags&PL_OUT)
+					Out=PLine->StrGadg;
+				else if(PLine->Flags&PL_DEL)
+					Del=PLine->StrGadg;
+				else if(PLine->Flags&PL_LEN)
+					Len=PLine->StrGadg;
+			}
+			Lines++;
+		}
+
+	if(X1>0) H += MAX(Y,Y1);  // last gad...
+	if(Wide) X1=PNL_WIDTH;
+	if(ContCan=CreateContCancel(X1,H,&ThisG,XPMode))
+		H += (UWORD)(PNL_YADD + ContCan->Height);
+	else goto ErrExit;
+	ClipNW.Width = PNL_WIDTH + (Wide ? PNL_WIDTH:0);
+	ClipNW.Height = H;
+	ClipNW.Screen = RD->InterfaceScreen;
+	ClipNW.LeftEdge = TOP_MINX + ((BAR_WIDTH - ClipNW.Width)/2);
+	ClipNW.TopEdge = MIN(PANEL_TOP,(RD->InterfaceScreen->Height - ClipNW.Height)/2) ;
+	ClipNW.FirstGadget = NULL;
+	SaveBorder(&(RD->InterfaceScreen->RastPort),ClipNW.LeftEdge,ClipNW.TopEdge,
+		ClipNW.LeftEdge+ClipNW.Width-1,ClipNW.TopEdge+ClipNW.Height-1);
+	if (Window = OpenWindow((struct NewWindow *)&ClipNW))
+	{
+		RP = Window->RPort;
+		SetDrMd(RP,JAM2);
+		AddGList(Window,FirstG,0,-1,NULL);
+		NewBorderBox(RP,0,0,Window->Width-1,Window->Height-1,BOX_CP_BORDER);
+		RefreshGList(ContCan,Window,NULL,-1);
+		H = PNL_Y1;
+
+		PLine = Start;
+		X1 = 0;
+		Y = 0;
+		while (PLine->Type)
+		{
+			if(PLine->Type != PNL_SKIP)
+			{
+				if(PLine->Draw) Y1=PLine->Draw(X1,H,PLine,Window);
+				if(PLine->Width>0)
+				{
+					X1 = PNL_WIDTH;
+					Y = Y1;
+				}
+				else
+				{
+					H += MAX(Y,Y1);
+					X1 = 0;
+					Y = 0;
+				}
+			}
+			PLine++;
+		}
+		// handle window events
+		goto GetEm;
+		while (Going) {
+				WaitPort(Window->UserPort);
+			GetEm:
+			while (IntuiMsg = (struct IntuiMessage *)GetMsg(Window->UserPort)) {
+				switch(IntuiMsg->Class) {
+				case IDCMP_GADGETDOWN:
+					ThisG = (struct Gadget *)IntuiMsg->IAddress;
+					ID = ThisG->GadgetID;
+					if(LastString)
+					{
+						if(PLine = (struct PanelLine *)LastString->UserData)
+							if(LastString->Activation & GACT_LONGINT)
+							{
+								stcd_l(((struct StringInfo *)LastString->SpecialInfo)->Buffer,(LONG *)PLine->Param);
+								if(*PLine->Param>PLine->PropEnd) *PLine->Param=PLine->PropEnd;
+								if(*PLine->Param<PLine->PropStart) *PLine->Param=PLine->PropStart;
+								UpdatePanStr(PLine,Window);
+							}
+							else
+								strcpy((char *)PLine->Param,((struct StringInfo *)LastString->SpecialInfo)->Buffer);
+						LastString=NULL;
+					}
+					if(!(PLine = (struct PanelLine *)ThisG->UserData)) break;
+					if(ID==STRING_ID)	LastString=ThisG;
+					if(PLine->Handle) PLine->Handle(PLine,IntuiMsg,Window);
+					break;
+
+				case IDCMP_GADGETUP:
+
+					if (Down) Down = NULL;
+					ThisG = (struct Gadget *)IntuiMsg->IAddress;
+					ID = ThisG->GadgetID;
+
+					if(LastString && LastString!=ThisG)
+					{
+						if(PLine = (struct PanelLine *)LastString->UserData)
+							if(LastString->Activation & GACT_LONGINT)
+							{
+								stcd_l(((struct StringInfo *)LastString->SpecialInfo)->Buffer,(LONG *)PLine->Param);
+								if(*PLine->Param>PLine->PropEnd) *PLine->Param=PLine->PropEnd;
+								if(*PLine->Param<PLine->PropStart) *PLine->Param=PLine->PropStart;
+								UpdatePanStr(PLine,Window);
+							}
+							else
+								strncpy((char *)PLine->Param,((struct StringInfo *)LastString->SpecialInfo)->Buffer,(int)PLine->Param2);
+						LastString=NULL;
+					}
+
+					PLine = (struct PanelLine *)ThisG->UserData;
+					if(PLine && PLine->Handle)
+						PLine->Handle(PLine,IntuiMsg,Window);
+					else switch (ID)
+					{
+						case ID_REQ_OK:
+							Success = PAN_CONTINUE;
+						case ID_REQ_CANCEL:
+							Going = FALSE;			//Success was initialized to FALSE
+							break;
+						case ID_REQ_CONTINUE:
+							Going = FALSE;			//Success was initialized to FALSE
+							Success = PAN_EXPERT;
+							break;
+					}
+					if(ThisG->GadgetType == GTYP_STRGADGET)
+						if(nextg=NextString(ThisG))
+							ActivateGadget(nextg,Window,NULL);
+					break;
+
+				case IDCMP_INTUITICKS:
+					if( !EZGad || !(EZGad->Flags&GFLG_SELECTED) )
+					{
+						ModifyIDCMP(Window,WinFlags);
+						EZGad=NULL;
+						break;
+					}
+					if(!EZJump(Ticks++)) break;  // skip ticks
+					if( !(PLine=(struct PanelLine *)EZGad->UserData) ) break;
+
+					if( ((F=*(PLine->Param))>=PLine->PropStart) || (Adder>0))  // negative #s
+						F += Adder*EZJump(Ticks++);
+					else break;
+					if(Adder<0)
+						*(PLine->Param) = (F>=PLine->PropStart ? F:PLine->PropStart);
+					else
+						*(PLine->Param) = (F<=PLine->PropEnd ? F:PLine->PropEnd);
+					UpdatePanProp(PLine,Window);
+					UpdatePanStr(PLine,Window);
+					UpdateAllDiff(RP,Start,Window);
+					break;
+
+				case IDCMP_RAWKEY:
+					A = IntuiMsg->Code;
+					if(A<0x80)
+					{
+						B = IntuiMsg->Qualifier;
+						switch(A)
+						{
+							case	RAW_IN:
+								if(In)	ActivateGadget(In,Window,NULL);
+								break;
+							case	RAW_OUT:
+								if(Out)	ActivateGadget(Out,Window,NULL);
+								break;
+							case	RAW_LEN:
+								if(Len)	ActivateGadget(Len,Window,NULL);
+								break;
+							case	RAW_DEL:
+								if(Del)	ActivateGadget(Del,Window,NULL);
+								break;
+							case	RAW_ENTER:
+							case	RAW_RETURN:
+								Going = FALSE;
+								Success=TRUE;
+								break;
+							case	RAW_HELP:
+								Going = FALSE;
+								if(XPMode) Success = PAN_EXPERT;
+								else Success=TRUE;
+								break;
+							case	RAW_ESCAPE:
+								Going = FALSE;
+								break;
+						}
+					}
+					break;
+				}
+				ReplyMsg((struct Message *)IntuiMsg);
+				}
+		}
+
+		CloseWindow(Window);
+		WaitBlit();
+	}
+ErrExit:
+	for( PLine=Start; PLine->Type; PLine++ )
+		if(PLine && PLine->Destroy && (PLine->Type!=PNL_SKIP) )
+			PLine->Destroy(PLine);
+	if (ContCan) FreeGadgets(ContCan);
+	return(Success);
+}

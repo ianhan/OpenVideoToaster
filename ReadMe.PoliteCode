@@ -1,0 +1,27 @@
+           **********************************************
+            Toaster Flyer Open Source Notes: POLITE CODE
+            -  Modifications to Source Comments & Code -
+            -    Aaron "Aarexx" Ruscetta,  7/1/2000    -
+           **********************************************
+
+   One of NewTek's requirements in releasing the complete source code
+for the Toaster and Flyer was that any rude or potentially offensive
+language in the original text based material be politely modified or
+removed. Doing this task was my primary contribution to the TFOS
+project, and being thorough in the job involved minor alterations to a
+significant number of the original files. Most often the changes only
+meant re-wording of Comment lines or revision notes, but in a few
+instances it was necessary to alter the actual source code with
+replacement variable names and such.
+
+   Great care was taken to ensure that none of these requisite changes
+introduced any bugs or code errors, and test compiles were run on most
+of the modified code prior to release. However, for easy tracking should
+any of the updates become suspect as a source of problems, all of the
+modified files in the final TFOS distribution have been marked with
+the words "Polite Code" in the File Comment field. We ask that you
+please post notice of any confirmed errors in the distributed code to
+the TFOS mailing list:
+
+                 Toaster-OpenSource@egroups.com
+

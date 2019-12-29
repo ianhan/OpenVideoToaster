@@ -1,0 +1,1078 @@
+********************************************************************
+* LUT9.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: lut9.a,v 2.0 1992/05/18 23:59:30 Hartford Exp Holt $
+*
+* $Log: lut9.a,v $
+*Revision 2.0  1992/05/18  23:59:30  Hartford
+**** empty log message ***
+*
+*
+*********************************************************************
+
+	NOLIST
+	idnt	"LUT9"
+	section	LUT_text,code
+
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"Rect.i"
+	Include	"EfLib.i"
+;;	Include	"VTDebug.i"
+;;	Include	"SerialDebug.i"
+	Include	"LUTEqu.i"
+	Include	"LUTBits.i"
+	Include	"LUTRam.i"
+	Include	"LUT0.i"
+	Include	"LUT1.i"
+	Include	"LUT3.i"
+	Include	"LUT7.i"
+	Include	"LUT8.i"
+	Include	"LUTB.i"
+;;	LIST
+	PAGE
+*************************************************************************
+*									*
+*	UpDateTBar:							*
+*									*
+*	Moves The TBar To Current Position.				*
+*									*
+*	Input:								*
+*									*
+*	D0.W	= Current TBar Position ( Units 0 to $FFFF ).		*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	TBar is Moved To Current Position.				*
+*									*
+*	29.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_UpDateTBar
+LUT_UpDateTBar:
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+*
+*	Get The Current Image.
+*
+	MULU.W	#TBARSLIDESIZE,D0	; D0.L = Slide Size.
+	CLR.W	D0			; Get Rid of Low Bits.
+	SWAP.W	D0			; D0.L = Slide Position 0 to SIZE - 1.
+	BSR	LUT_TBarImage		; A0.L = Image Address.
+	LEA.L	LUT_TBarFG,A1		; A1.L = Address of Fast Gadget.
+	CMPA.L	FG_Data(A1),A0		; Has The Image Changed?
+	BEQ.S	UPDAT1			; Exit If Image The Same.
+	MOVE.L	A0,FG_Data(A1)		; Save New Image.
+	MOVEA.L	A1,A0			; A0.L = Address of Fast Gadget.
+	BSR.S	LUT_DrawTBar		; Draw TBar On The Screen.
+*
+*	Exit Subroutine.
+*
+UPDAT1	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DrawTBar:							*
+*									*
+*	Draws the TBar on the Screen.					*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of TBar Fast Gadget.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The TBar is Drawn On The Screen.				*
+*									*
+*	12.Sept 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DrawTBar
+LUT_DrawTBar:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Redraw The Screen.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number  of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset  to Image.
+	CALLTL	DrawFastGList		; Redraw The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetDisplayModeLongIndex:					*
+*									*
+*	Returns the Long Word Index To Current Display Mode.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Long Word Index To Display Mode.			*
+*									*
+*		$00 Filter     / Cycle None				*
+*		$04 Filter     / Cycle Forward				*
+*		$08 Filter     / Cycle Backward				*
+*		$0C Filter     / Cycle Both				*
+*		$10 Transition / Cycle None				*
+*		$14 Transition / Cycle Forward				*
+*		$18 Transition / Cycle Backward				*
+*		$1C Transition / Cycle Both				*
+*									*
+*	03.Sept 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetDisplayModeLongIndexEd
+LUT_SetDisplayModeLongIndexEd:
+	MOVE.B	LUT_DisplayMode(A4),D0	; D0.B = Display Mode Flags.
+	BRA.S	SETDM1			; Skip Other Entry.
+*
+	XDEF	LUT_SetDisplayModeLongIndexSw
+LUT_SetDisplayModeLongIndexSw:
+	MOVE.B	LTR_DisplayMode(A4),D0	; D0.B = Display Mode Flags.
+*
+SETDM1	ANDI.L	#LUTM_CYCLE,D0		; D0.L = Leave Only Color Cycle Mode.
+	BTST.B	#LUTF_TRANSITION,LUT_DisplayMode(A4) ; Filter or Transition?
+	BEQ.S	SETDM2			; Jump If Filter.
+	ADDI.W	#$10,D0			; Else It's a Transition.
+SETDM2	RTS
+	PAGE
+*************************************************************************
+*									*
+*	AutoMode:							*
+*									*
+*	Auto TBar Handler Code for the AB Switcher Logic.		*
+*									*
+*	Input:								*
+*									*
+*	D1.L	= LUT Auto ( == 0 ) / LUT UnAuto Flag ( == -1 ).	*
+*	D2.L	= Frame Count For Effect.				*
+*	A2.L	= Address of TBar Routine To Execute.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Auto TBar Handling Code Is Executed Once.			*
+*									*
+*	11.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_AutoMode
+LUT_AutoMode:
+	MOVEM.L	D0-D3,-(A7)		; Save Calling State.
+*
+*	Make Incremental Time Value.
+*
+	MOVE.L	#$10000,D3		; D3.L = Fixed Point Value of 1.
+	TST.W	D2			; D2.L = FrameCount For Effect.
+	BNE.S	AUTMO1			; Jump If Non-Zero Value.
+	MOVEQ.L	#120,D2			; Else Set to Default Value.
+AUTMO1	DIVU.W	D2,D3			; D3.W = Incremental Time Value.
+	SWAP.W	D3			; Clear Upper Word of D3.
+	CLR.W	D3			; Clear The Value.
+	SWAP.W	D3			; D3.L = Incremental Time Value.
+*
+*	If Auto   then we move thru Greatest Distance,
+*	If UnAuto then we move thru Shortest Distance.
+*
+	TST.L	D1			; Auto or UnAuto.
+	BEQ.S	AUTMO2			; Jump If Auto Mode.
+*
+*	UNAUTO, Moving forward or backward.
+*
+	MOVE.W	TB_TValSec(A5),D0	; Get TBar Position.
+	BEQ.S	AUTOM8			; Exit If In First Position.
+	CMPI.W	#TValMax,D0		; In Last Position?
+	BCC.S	AUTOM8			; Exit If In Last  Position.
+	CMPI.W	#(TValMax+1)/2,D0	; Past 1/2 Way?
+	BCS.S	AUTMO4			; Jump If Not Past 1/2 Way.
+	BRA.S	AUTMO3			; Skip Else Part.
+*
+*	AUTO, Moving forward or backward.
+*
+AUTMO2	MOVE.W	TB_TValSec(A5),D0	; Current Position of TBar.
+	CMPI.W	#(TValMax+1)/2,D0	; Past 1/2 Way?
+	BCC.S	AUTMO4			; Jump If Past 1/2 Way.
+*
+*	Move In Positive Direction.
+*
+AUTMO3	MOVE.W	#TValMax,D0		; D0.W = Maximum TBar Value.
+	SUB.W	TB_TValSec(A5),D0	; D0.W = Maximum - Current Position.
+	MULU.W	D2,D0			; D0.L = Delta * Number of Frames Left.
+	DIVU.W	#TValMax,D0		; D0.W = Rounded Down To # Frames Left.
+	MOVE.W	D3,D1			; D1.W = Incremental Time Value.
+	SUB.W	D0,D2			; D2.L = # of Frames From Start.
+	MULU.W	D2,D1
+	MOVE.W	D0,D2			; D2.W = Rounded Down To # Frames Left.
+	BRA.S	AUTOM5			; Skip Else Part.
+*
+*	Move In Negative Direction.
+*
+AUTMO4	MULU.W	D2,D0			; D0.L = Delta * Number of Frames Left.
+	DIVU.W	#TValMax,D0		; D0.W = Rounded Down To # Frames Left.
+	MOVE.W	D0,D2			; D2.W = Rounded Down To # Frames Left.
+	MOVE.W	D2,D1			; D1.L = Build Starting Position.
+	MULU.W	D3,D1			; D1.L = Starting Position of TBar.
+	NEG.L	D3			; D3.L = Make Negative Increment.
+*
+*	Loop and Performe The Effect.
+*
+AUTOM5	ADD.L	D3,D1			; D1.L = Do Next Frame From Current Time
+	CALLTL	InterruptsOff		; Turn The Interrupts Off.
+	BRA.S	AUTMO7			; Start Looping.
+AUTMO6	MOVE.L	D1,D0			; Make Current Position.
+	LSR.L	#7,D0			; D0.L = Current Position.
+	ANDI.L	#$1FF,D0		; Just For Safty.
+	PUT.W	D0,TB_TValSec		; Save This Position.
+	JSR	(A2)			; Execute The TBar Handler.
+	ADD.L	D3,D1			; Increment To Next Position.
+AUTMO7	DBF	D2,AUTMO6		; Loop Until Done.
+	CALLTL	InterruptsOn		; Turn Interupts Back On.
+*
+*	Exit Subroutine.
+*
+AUTOM8	MOVEM.L	(A7)+,D0-D3		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FilterMode:							*
+*									*
+*	Puts Toaster Into Filter Mode.					*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A0.L	= Address of Temporary Buffer.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Based On Current Position, The Filter Is Placed There.		*
+*									*
+*	09.Jul 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FilterMode
+LUT_FilterMode:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Scale TBar Input to Line Number.
+*
+	LSR.W	#2,D0			; D0.W = Range 0 to 127.
+	SUBI.W	#9,D0			; Make Start the Dead Zone ( 8 Units ).
+	BGE.S	FILMD1			; Jump If 0 to 119.
+	MOVEQ.L	#0,D0			; Else Set To First Position.
+FILMD1	BSR	LUT_BuildFilterSprite	; Make Filter Sprite.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	TransitionMode:							*
+*									*
+*	Puts Toaster Into Transition Mode.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A0.L	= Address of Temporary Buffer.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Based On Current Position, The Transition Is Placed There.	*
+*									*
+*	09.Jul 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_TransitionMode
+LUT_TransitionMode:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Scale TBar Input to Line Number.
+*
+	LSR.W	#2,D0			; D0.W = Range 0 to 127.
+	SUBI.W	#9,D0			; Make Start the Dead Zone ( 8 Units ).
+	BGE.S	BUSPR1			; Jump If 0 to 119.
+	MOVEQ.L	#0,D0			; Else Set To First Position.
+BUSPR1	BSR	LUT_BuildTranSprite	; Make Transition Sprite.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ShowCurrent:							*
+*									*
+*	Shows the Current LUT Sprite.					*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Current Lut Sprite Is Shown On Hardware.			*
+*									*
+*	CC	== Zero -> Failed To Show New Sprite.			*
+*	CC	!= Zero -> Execution Without Error.			*
+*									*
+*	08.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ShowCurrent
+LUT_ShowCurrent:
+	MOVEM.L	D0-D1/A0-A2/A4,-(A7)	; Save Calling State.
+*
+*	Check To See If Map Has Been Sent.
+*
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Has The Data Been Sent?
+	BEQ.S	SHOCU1				; Jump If Not Pure.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Has An Edit Change Been Made?
+	BEQ.S	SHOCU2				; Jump If No Edit Change.
+SHOCU1	MOVEQ.L	#0,D0			; Set CC == Zero.
+	BRA	SHOCU6			; Nothing To Do.
+*
+*	Get Ready To Call the Slider Routine.
+*
+SHOCU2	TST.L	LTE_EfBase(A4)		; Do We Have The Library?
+	BEQ	SHOCU6			; Exit If Not.
+	CALLTL	InstallAVEI		; Make Sure AVEI Copper List.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Soft Sprite.
+*
+*	Scale TBar Input To Match Toaster TBar.
+*
+	LEA.L	LUT_TBarFG,A0		; A0.L = Address of TBar Gadget.
+	BSR	LUT_TBarPosition	; D0.L = Current Bar Position.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.W	#$8000,D0		; 1/2 Value.
+	DIVU.W	#TBARSLIDESIZE,D0	; Scale The Units.
+	ANDI.L	#$0000FFFF,D0		; Remove The Remainder.
+	BSR	LUT_UpDateTBar		; Move TBar On The Screen.
+	ASR.L	#7,D0			; Units of $0 to $1FF.
+	PUT.W	D0,TB_TValSec		; Save Current Position of TBar.
+*
+*	Start The Color Cycleing.
+*
+	MOVE.B	LUT_DisplayMode(A4),LTR_DisplayMode(A4) ; Save Temp Value.
+	BSR	LUT_SetDisplayModeLongIndexEd ; D0.L = Index to Mode.
+	MOVE.L	D0,D1			; D1.L = Index to Mode.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Addr Color Cycling Func
+	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr Color Cycling Func
+	JSR	(A0)			; Execute Color Cycling Routine.
+*
+*	Set Up the LUT Bus.
+*
+	DEA.L	TB_VTSetUp,A0		  ; A0.L = Address of VT SetUp.
+	ELHCLEAR_LINP	A0
+	ELHSET_OBR	A0
+	ELHSET_LUT	A0		  ; Enable LUT Mode.
+	PUT.B	#M_LUTBUS_MAIN,TB_LutBus  ; PRVW or MAIN
+	PUT.B	#LUTMODE_BW,TB_LutMode	  ; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BNE.S	SHOCU3			  ; Jump If B/W Video.
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ; Set Color or B/W Mode.
+SHOCU3	TST.W	TB_TValSec(A5)		; In The First Position?
+	BNE.S	SHOCU4			; Jump If Not First Position.
+	MOVEA.L	LTE_EfBase(A4),A0	; A0.L -> Effects Base.
+	MOVE.W	#-1,EF_OldTBar(A0)
+	MOVE.W	#-1,EF_OldStage(A0)
+*
+*	Get Ready to Execute TBar Handling Code.
+*
+SHOCU4	MOVE.L	D1,-(A7)
+	CALLTL	CookMain
+	CALLTL	InstallAVEIdoELH
+	MOVE.L	(A7)+,D1
+	LEA.L	LUT_ExEditorTBarTb(PC),A0 ; A0.L = Addr of Routine to Exec.
+	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr of Routine to Exec.
+	MOVE.L	A4,-(A7)		; Save Address of LTE Base.
+	MOVEA.L	LTE_EfBase(A4),A4	; A4.L = Address of Effects Lib.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = Current Position of TBar.
+	JSR	(A0)			; Draw The Sprite.
+	JSR	(A0)			; Draw The Sprite.
+	MOVEA.L	(A7)+,A4		; Return Address of LTE Base.
+*
+*	If TBar Was Left In Starting Position, Turn Off LUT.
+*
+	MOVE.W	TB_TValSec(A5),LUT_LocalTBar(A4) ; Save Current Position.
+;;;;	MOVE.W	TB_TValSec(A5),D0	; Check For Starting Position.
+;;;;	CMPI.W	#3,D0			; Units 0 to 2, and Starting.
+;;;;	BCC.S	SHOCU5			; Jump If Not Starting Position.
+;;;;	LEA.L	LUT_StartingOffTb(PC),A0 ;A0.L = Addr Routine Table.
+;;;;	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr Routine to Execute.
+;;;;	JSR	(A0)			; Turn Off The Effect.
+SHOCU5	CALLTL	InstallAVEI
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Soft Sprite.
+	MOVEQ.L	#-1,D0			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+SHOCU6	MOVEM.L	(A7)+,D0-D1/A0-A2/A4	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoTake:								*
+*									*
+*	Performers the LUT Mode Take ( AUTO ) Functions.		*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	The Take Function is Performed.					*
+*									*
+*	21.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoTake
+LUT_DoTake:
+	MOVEM.L	A0-A2/A4/D0-D1,-(A7)	; Save Calling State.
+*
+*	HiLite The Button.
+*
+	BSR	LUT_DoHighLiteOnOff	; HiLite The Button.
+	BEQ	DOTAK7			; Exit If Let Go.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Soft Sprite.
+*
+*	Set Up For The Mode.
+*
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Has The Data Been Sent?
+	BEQ.S	DOTAK1				; Jump If Not Pure.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Has An Edit Change Been Made?
+	BEQ.S	DOTAK2				; Jump If No Edit Change.
+*
+*	We Need To Send The Color Map.
+*
+	BSET.B	#LUTF_GridAssign,LUT_Flags(A4)	; It Needs to be Assigned.
+DOTAK1	BSET.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Set The Pure Data Flag.
+	BCLR.B	#LUTF_MapChange,LUT_Flags(A4)	; No More Changes.
+	MOVEQ.L	#0,D0				; D0.L = Don't Send Map To File.
+	BSET.B	#LUTF_SendDVE0,LUT_Flags(A4)	; Send Map To Toaster.
+	BSR	LUT_SendMap		; Send Out Current Color Map.
+	BSR	LUT_ShowCurrent		; Start Color Cycling.
+	BRA	DOTAK6			; Send Map Out The First Time.
+DOTAK2	CALLTL	InstallAVEI		; Make Sure AVEI Copper List.
+	TST.L	LTE_EfBase(A4)		; Do We Have The Library?
+	BEQ	DOTAK6			; Exit If Not.
+	BSR	LUT_ClearArrowSMF	; Get Rid of Color Cycleing.
+*
+*	Start The Color Cycleing.
+*
+	CLR.L	TB_ColorCycle(A5)	; No More Color Cycleing.
+	ANDI.B	#~LUTM_CYCLE,LTR_DisplayMode(A4) ; Remove Color Cycling.
+	BSR	LUT_SetDisplayModeLongIndexSw ; D0.L = Index To Image.
+	MOVE.L	D0,D1			; D1.L = Index To Image.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Addr of Color Cycl Table.
+	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr of Color Cycl Func
+	JSR	(A0)			; Execute Color Cycling Routine.
+*
+*	Set Up the LUT Bus.
+*
+	DEA.L	TB_VTSetUp,A0		; A0.L = Address of VT SetUp.
+	ELHCLEAR_LINP	A0
+	ELHSET_OBR	A0
+	ELHSET_LUT	A0		  ; Enable LUT Mode.
+	PUT.B	#M_LUTBUS_MAIN,TB_LutBus  ; PRVW or MAIN
+	PUT.B	#LUTMODE_BW,TB_LutMode	  ; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BNE.S	DOTAK3			  ; Jump If B/W Video.
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ; Set Color or B/W Mode.
+DOTAK3	TST.W	TB_TValSec(A5)		; In The First Position?
+	BNE.S	DOTAK4			; Jump If Not First Position.
+	MOVEA.L	LTE_EfBase(A4),A0	; A0.L -> Effects Base.
+	MOVE.W	#-1,EF_OldTBar(A0)
+	MOVE.W	#-1,EF_OldStage(A0)
+*
+*	Execute Auto Handling Code.
+*
+DOTAK4	MOVE.L	D1,-(A7)
+	CALLTL	CookMain
+	CALLTL	InstallAVEIdoELH
+	MOVE.L	(A7)+,D1
+	MOVEA.L	LUT_ExEditorAutoTb(PC,D1.L),A0 ; A0.L = Addr Routine to Execute.
+	MOVE.L	A4,-(A7)		; Save Pointer to LTE Base.
+	MOVEA.L	LTE_EfBase(A4),A4	; A4.L = Address of Effects Lib.
+	JSR	(A0)			; Move TBar In AUTO Mode.
+	MOVEA.L	(A7)+,A4		; Return Pointer to LTE Base.
+*
+*	If TBar Was Left In Starting Position, Turn Off LUT.
+*
+	MOVE.W	TB_TValSec(A5),LUT_LocalTBar(A4) ; Save Current Position.
+;;;;	MOVE.W	TB_TValSec(A5),D0	; Check For Starting Position.
+;;;;	CMPI.W	#3,D0			; Units 0 to 2, and Starting.
+;;;;	BCC.S	DOTAK5			; Jump If Not Starting Position.
+;;;;	MOVEA.L	LUT_StartingOffTb(PC,D1.L),A0 ; A0.L = Addr Routine to Execute.
+;;;;	JSR	(A0)			; Turn Off The Effect.
+DOTAK5	CALLTL	InstallAVEI
+*
+*	Exit Subroutine.
+*
+DOTAK6	CALLTL	SoftSpriteBPLCON0On	; Turn On The Soft Sprite.
+DOTAK7	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,A0-A2/A4/D0-D1	; Return Calling State.
+RETADR	RTS
+*
+*	Function Table For Auto Cycle.
+*
+	XDEF	LUT_CyEditorTb
+LUT_CyEditorTb:
+	DC.L	LUT_CycleModeOffEditor	; Filter     / Cycle None.
+	DC.L	LUT_EditCycleForward	; Filter     / Cycle Forward.
+	DC.L	LUT_EditCycleBackward	; Filter     / Cycle Backward.
+	DC.L	LUT_EditCycleBoth	; Filter     / Cycle Both.
+	DC.L	LUT_CycleModeOffEditor	; Transition / Cycle None.
+	DC.L	LUT_EditCycleForward	; Transition / Cycle Forward.
+	DC.L	LUT_EditCycleBackward	; Transition / Cycle Backward.
+	DC.L	LUT_EditCycleBoth	; Transition / Cycle Both.
+*
+*	Function Table For Auto.
+*
+	XDEF	LUT_ExEditorAutoTb
+LUT_ExEditorAutoTb:
+	DC.L	LUT_ScreenFilterAuto	; Filter     / Cycle None.
+	DC.L	RETADR			; Filter     / Cycle Forward.
+	DC.L	RETADR			; Filter     / Cycle Backward.
+	DC.L	RETADR			; Filter     / Cycle Both.
+	DC.L	LUT_ScreenTransitionAuto ;Transition / Cycle None.
+	DC.L	RETADR			; Transition / Cycle Forward.
+	DC.L	RETADR			; Transition / Cycle Backward.
+	DC.L	RETADR			; Transition / Cycle Both.
+*
+*	Starting Off Position Table.
+*
+;;;;	XDEF	LUT_StartingOffTb
+;;;;LUT_StartingOffTb:
+;;;;	DC.L	LUT_ModeOffEditor	; Filter     / Cycle None.
+;;;;	DC.L	RETADR			; Filter     / Cycle Forward.
+;;;;	DC.L	RETADR			; Filter     / Cycle Backward.
+;;;;	DC.L	RETADR			; Filter     / Cycle Both.
+;;;;	DC.L	LUT_ModeOffEditor	; Transition / Cycle None.
+;;;;	DC.L	RETADR			; Transition / Cycle Forward.
+;;;;	DC.L	RETADR			; Transition / Cycle Backward.
+;;;;	DC.L	RETADR			; Transition / Cycle Both.
+	PAGE
+*************************************************************************
+*									*
+*	DoTBarTake:							*
+*									*
+*	Performers the LUT TBar Take Functions.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The TBar Take Function are Performed.				*
+*									*
+*	11.Jul 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoTBarTake
+LUT_DoTBarTake:
+	MOVEM.L	D0-D1/A0-A2/A4,-(A7)	; Save Calling State.
+*
+*	Check To See If Map Has Been Sent.
+*
+	BTST.B	#LTEF_DVE0Pure,LTE_Flags(A4)	; Has The Data Been Sent?
+	BEQ.S	DOTBT1				; Jump If Not Pure.
+	BTST.B	#LUTF_MapChange,LUT_Flags(A4)	; Has An Edit Change Been Made?
+	BEQ.S	DOTBT2				; Jump If No Edit Change.
+*
+*	We Need To Send The Color Map.
+*
+	BSET.B	#LUTF_GridAssign,LUT_Flags(A4) ; It Needs to be Assigned.
+DOTBT1	BSET.B	#LTEF_DVE0Pure,LTE_Flags(A4)   ; Set The Pure Data Flag.
+	BCLR.B	#LUTF_MapChange,LUT_Flags(A4) ; No More Changes.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Soft Sprite.
+	MOVEQ.L	#0,D0			; D0.L = Don't Send Map To File.
+	BSET.B	#LUTF_SendDVE0,LUT_Flags(A4)   ; Send Map To Toaster.
+	BSR	LUT_SendMap		; Send Out Current Color Map.
+	BSR	LUT_ShowCurrent		; Start Color Cycling.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Soft Sprite.
+	BRA	DOTBT6			; Send Map Out The First Time.
+*
+*	Get Ready To Call the Slider Routine.
+*
+DOTBT2	TST.L	LTE_EfBase(A4)		; Do We Have The Library?
+	BEQ	DOTBT6			; Exit If Not.
+	CALLTL	InstallAVEI		; Make Sure AVEI Copper List.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off The Soft Sprite.
+	BSR	LUT_ClearArrowSMF	; Get Rid of Color Cycleing.
+*
+*	Scale TBar Input To Match Toaster TBar.
+*
+	LEA.L	LUT_TBarFG,A0		; A0.L = Address of TBar Gadget.
+	BSR	LUT_TBarPosition	; D0.L = Current Bar Position.
+	SWAP.W	D0			; Put In High Position.
+	MOVE.W	#$8000,D0		; 1/2 Value.
+	DIVU.W	#TBARSLIDESIZE,D0	; Scale The Units.
+	ANDI.L	#$0000FFFF,D0		; Remove The Remainder.
+	BSR	LUT_UpDateTBar		; Move TBar On The Screen.
+	LSR.L	#7,D0			; Units of $0 to $1FF.
+	PUT.W	D0,TB_TValSec		; Save Current Position of TBar.
+*
+*	Start The Color Cycleing.
+*
+	CLR.L	TB_ColorCycle(A5)	; No More Color Cycleing.
+	ANDI.B	#~LUTM_CYCLE,LTR_DisplayMode(A4) ; Remove Color Cycling.
+	BSR	LUT_SetDisplayModeLongIndexSw ; D0.L = Index to Mode.
+	MOVE.L	D0,D1			; D1.L = Index to Mode.
+	LEA.L	LUT_CyEditorTb(PC),A0	; A0.L = Addr Color Cycling Func
+	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr Color Cycling Func
+	JSR	(A0)			; Execute Color Cycling Routine.
+*
+*	Set Up the LUT Bus.
+*
+	DEA.L	TB_VTSetUp,A0		  ; A0.L = Address of VT SetUp.
+	ELHCLEAR_LINP	A0
+	ELHSET_OBR	A0
+	ELHSET_LUT	A0		  ; Enable LUT Mode.
+	PUT.B	#M_LUTBUS_MAIN,TB_LutBus  ; PRVW or MAIN
+	PUT.B	#LUTMODE_BW,TB_LutMode	  ; Set Color or B/W Mode.
+	BTST.B	#LUTF_BWVIDEO,LUT_DisplayMode(A4)
+	BNE.S	DOTBT3			  ; Jump If B/W Video.
+	PUT.B	#LUTMODE_COLOR,TB_LutMode ; Set Color or B/W Mode.
+DOTBT3	TST.W	TB_TValSec(A5)		; In The First Position?
+	BNE.S	DOTBT4			; Jump If Not First Position.
+	MOVEA.L	LTE_EfBase(A4),A0	; A0.L -> Effects Base.
+	MOVE.W	#-1,EF_OldTBar(A0)
+	MOVE.W	#-1,EF_OldStage(A0)
+*
+*	Get Ready to Execute TBar Handling Code.
+*
+DOTBT4	MOVE.L	D1,-(A7)
+	CALLTL	CookMain
+	CALLTL	InstallAVEIdoELH
+	MOVE.L	(A7)+,D1
+	MOVEA.L	LUT_ExEditorTBarTb(PC,D1.L),A0 ; A0.L = Addr of Routine to Exec.
+	MOVE.L	A4,-(A7)		; Save Address of LTE Base.
+	MOVEA.L	LTE_EfBase(A4),A4	; A4.L = Address of Effects Lib.
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = Current Position of TBar.
+	JSR	(A0)			; Draw The Sprite.
+	JSR	(A0)			; Draw The Sprite.
+	CALLTL	DoTBar			; Execute The TBar.
+	MOVEA.L	(A7)+,A4		; Return Address of LTE Base.
+*
+*	If TBar Was Left In Starting Position, Turn Off LUT.
+*
+	MOVE.W	TB_TValSec(A5),LUT_LocalTBar(A4) ; Save Current Position.
+;;;;	MOVE.W	TB_TValSec(A5),D0	; Check For Starting Position.
+;;;;	CMPI.W	#3,D0			; Units 0 to 2, and Starting.
+;;;;	BCC.S	DOTBT5			; Jump If Not Starting Position.
+;;;;	LEA.L	LUT_StartingOffTb(PC),A0 ;A0.L = Addr Routine Table.
+;;;;	MOVEA.L	0(A0,D1.L),A0		; A0.L = Addr Routine to Execute.
+;;;;	JSR	(A0)			; Turn Off The Effect.
+DOTBT5	CALLTL	InstallAVEI
+	CALLTL	SoftSpriteBPLCON0On	; Turn On The Soft Sprite.
+*
+*	Exit Subroutine.
+*
+DOTBT6	CMP.W	D0,D0			; Set CC == Zero, No Special Check.
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A4	; Return Calling State.
+	RTS
+*
+*	Function Table For TBar.
+*
+	XDEF	LUT_ExEditorTBarTb
+LUT_ExEditorTBarTb:
+	DC.L	LUT_ScreenFilterTBar	; Filter     / Cycle None.
+	DC.L	LUT_EditCycleTBar	; Filter     / Cycle Forward.
+	DC.L	LUT_EditCycleTBar	; Filter     / Cycle Backward.
+	DC.L	LUT_EditCycleTBar	; Filter     / Cycle Both.
+	DC.L	LUT_ScreenTransitionTBar ;Transition / Cycle None.
+	DC.L	LUT_EditCycleTBar	; Transition / Cycle Forward.
+	DC.L	LUT_EditCycleTBar	; Transition / Cycle Backward.
+	DC.L	LUT_EditCycleTBar	; Transition / Cycle Both.
+	PAGE
+*************************************************************************
+*									*
+*	Edit Cycle TBar:						*
+*									*
+*	Moves the TBar During Color Cycling.				*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	TBar is Redrawn on editor screen.				*
+*									*
+*	13.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_EditCycleTBar
+LUT_EditCycleTBar:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Draw TBar At Current Position.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; D0.L = Current TBar Position.
+	LSL.L	#7,D0			; Make Units of $0000 to $FFFF.
+	BSR	LUT_UpDateTBar		; Move TBar On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ScreenFilterTBar:						*
+*									*
+*	LUT Screen Filter TBar Handler Code for the AB Switcher.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A4.L	= Address of Effect Library.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Screen Filter TBar Handling Code Is Executed Once.		*
+*									*
+*	22.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ScreenFilterAuto
+LUT_ScreenFilterAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_ScreenFilterTBar(PC),A2 ; A2.L = Address of Filter TBar.
+	MOVEQ.L	#0,D1			; D1.L = Flag For AUTO Mode.
+	MOVEQ.L	#TBARSLIDESIZE,D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_ScreenFilterTBar
+LUT_ScreenFilterTBar:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Place Toaster In Mode.
+*
+	MOVE.L	TB_EffectsBase+EFB_BuffY(A5),A0
+	BSR	LUT_FilterMode		; Set ELH Parameters.
+	BSR	LUT_SendSpriteToToaster	; not 60 Hz ??????
+*
+*	Draw TBar On The Screen.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; Get Current Position of TBar.
+	LSL.L	#7,D0			; Units of 0 - $FFFF.
+	BSR	LUT_UpDateTBar		; Move TBar On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ScreenTransitionTBar:						*
+*									*
+*	Transition TBar Handler Code for the AB Switcher Logic.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A4.L	= Address of Effect Library.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Transition TBar Handling Code Is Executed Once.			*
+*									*
+*	11.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ScreenTransitionAuto
+LUT_ScreenTransitionAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_ScreenTransitionTBar(PC),A2 ; A2.L = Address of Trans TBar.
+	MOVEQ.L	#0,D1			; D1.L = Flag For AUTO Mode.
+	MOVEQ.L	#TBARSLIDESIZE,D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_ScreenTransitionTBar
+LUT_ScreenTransitionTBar:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Put Toaster In Mode.
+*
+	MOVE.L	TB_EffectsBase+EFB_BuffY(A5),A0
+	BSR	LUT_TransitionMode	; Put Toaster In Transition Mode.
+	BSR	LUT_SendSpriteToToaster	; not 60 Hz ??????
+*
+*	Draw TBar On The Screen.
+*
+	MOVEQ.L	#0,D0			; Clear High Bits.
+	MOVE.W	TB_TValSec(A5),D0	; Get Current Position of TBar.
+	LSL.L	#7,D0			; Units of 0 - $FFFF.
+	BSR	LUT_UpDateTBar		; Move TBar On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FilterTBar:							*
+*									*
+*	Filter TBar Handler Code for the AB Switcher Logic.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Filter TBar Handling Code Is Executed Once.			*
+*									*
+*	11.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FilterUnAuto
+LUT_FilterUnAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_FilterTBar(PC),A2	; A2.L = Filter TBar.
+	MOVEQ.L	#-1,D1			; D1.L = Flag For UNAUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_FilterAuto
+LUT_FilterAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_FilterTBar(PC),A2	; A2.L = Filter TBar.
+	MOVEQ.L	#0,D1			; D1.L = Flag For AUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_FilterTBar
+LUT_FilterTBar:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Place Toaster In Filter Mode.
+*
+	MOVE.L	TB_EffectsBase+EFB_BuffY(A5),A0
+	BSR	LUT_FilterMode		; Set ELH Parameters.
+	BSR	LUT_SendSpriteToToaster	; not 60 Hz ??????
+	CALLTL	UpdateTBar		; Move TBar To This Position.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	TransitionTBar:							*
+*									*
+*	Transition TBar Handler Code for the AB Switcher Logic.		*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Current Position of TBar.				*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Transition TBar Handling Code Is Executed Once.			*
+*									*
+*	11.Jun 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_TransitionUnAuto
+LUT_TransitionUnAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_TransitionTBar(PC),A2 ; A2.L = Trans TBar.
+	MOVEQ.L	#-1,D1			; D1.L = Flag For UNAUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_TransitionAuto
+LUT_TransitionAuto:
+	MOVEM.L	D1-D2/A2,-(A7)		; Save Calling State.
+	LEA.L	LUT_TransitionTBar(PC),A2 ; A2.L = Trans TBar.
+	MOVEQ.L	#0,D1			; D1.L = Flag For AUTO Mode.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	TB_FCountPri(A5),D2	; D2.L = FrameCount For Effect.
+	BSR	LUT_AutoMode		; Do the Auto Mode.
+	MOVEM.L	(A7)+,D1-D2/A2		; Return Calling State.
+	RTS
+*
+	XDEF	LUT_TransitionTBar
+LUT_TransitionTBar:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Put Toaster In Transition Mode.
+*
+	MOVE.L	TB_EffectsBase+EFB_BuffY(A5),A0
+	BSR	LUT_TransitionMode	; Put Toaster In Transition Mode.
+	BSR	LUT_SendSpriteToToaster	; not 60 Hz ??????
+	
+	CALLTL	UpdateTBar
+	xref	hellowaldo
+	jsr	hellowaldo
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_ModeOffSwitcher:						*
+*									*
+*	Forces LUT Mode Off In the Switcher.				*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Mode is turned Off.						*
+*									*
+*	05.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ModeOffSwitcher
+LUT_ModeOffSwitcher:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Execute Toaster Routine to Turn LUT Off.
+*
+	CLR.W	TB_TValSec(A5)		; Clear TBar Position.
+	CLR.L	TB_ColorCycle(A5)	; Clear Cylor Cycling.
+	BSR	LUT_DisableLUT		; Mode Is Off.
+*
+*	Force To Initial Position.
+*
+	LEA.L	LUT_ELHLIBNAME(PC),A0	; A0.L = Address of Effects Library Name
+	CALLTL	OpenAuxLib		; Try To Open The Library.
+	TST.L	D0			; Did We Get It?
+	BEQ.S	MOFFS1			; Exit If Failed.
+	MOVEA.L	D0,A0			; A0.L = Address of Effects Base.
+	MOVE.W	#-1,EF_OldTBar(A0)
+	MOVE.W	#-1,EF_OldStage(A0)
+	CALLTL	CloseAuxLib		; Close The Library.
+*
+*	Show This as Current View.
+*
+MOFFS1	CALLTL	InstallAVEIdoELH	; Send Out the Copper List.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	LUT_ModeOffEditor:						*
+*									*
+*	Forces LUT Mode Off In the Editor.				*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	LUT Mode is turned Off.						*
+*									*
+*	05.Nov 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ModeOffEditor
+LUT_ModeOffEditor:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Execute Toaster Routine to Turn LUT Off.
+*
+	CLR.W	TB_TValSec(A5)		; Clear TBar Position.
+	CALLTL	LUToff			; Turn LUT Mode Off.
+	CLR.L	TB_ColorCycle(A5)	; Turn Off Color Cycling.
+*
+*	Force To Initial Position.
+*
+	LEA.L	LUT_ELHLIBNAME(PC),A0	; A0.L = Address of Effects Library Name
+	CALLTL	OpenAuxLib		; Try To Open The Library.
+	TST.L	D0			; Did We Get It?
+	BEQ.S	MOFFE1			; Exit If Failed.
+	MOVEA.L	D0,A0			; A0.L = Address of Effects Base.
+	MOVE.W	#-1,EF_OldTBar(A0)
+	MOVE.W	#-1,EF_OldStage(A0)
+	CALLTL	CloseAuxLib		; Close The Library.
+*
+*	Show This as Current View.
+*
+MOFFE1	CALLTL	InstallAVEIdoELH	; Send Out the Copper List.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	END

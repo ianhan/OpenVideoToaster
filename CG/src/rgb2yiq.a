@@ -1,0 +1,380 @@
+*********************************************************************
+* rgb2yiq.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: rgb2yiq.a,v 2.3 1995/06/21 09:56:06 Holt Exp $
+*
+* $Log: rgb2yiq.a,v $
+*Revision 2.3  1995/06/21  09:56:06  Holt
+**** empty log message ***
+*
+*Revision 2.2  1995/05/05  13:38:20  Holt
+**** empty log message ***
+*
+*Revision 2.1  1994/07/27  19:30:44  Kell
+**** empty log message ***
+*
+*Revision 2.0  1992/05/18  21:13:34  Hartford
+**** empty log message ***
+*
+*********************************************************************
+********************************************************************
+* RGB2YIQ.a - InitRGB2YIQ, RGB2YIQ
+*
+* HISTORY	NAME		DESCRIPTION
+* -------	-----------	-------------------------------------
+* 2-??-89	Skell		Created this file.
+* 7-7-90	Junior		Changes for LightWave
+* 7-23-90	Junior		Last update.
+*********************************************************************
+	include	"assembler.i"
+;;Tabs set to 8
+         include   "exec/types.i"
+;;         include   "hardware/custom.i"
+;;         include   "intuition/intuitionbase.i"
+        include   "macros.i"
+	include	"rgb2yiq.i"
+	include	"YIQ2Comp.i"
+
+        XCODE    RGB2YIQ
+	XCODE    InitRGB2YIQ
+
+*****************************************************		
+	section	,CODE
+
+DSeeds	dc.l	$01234567,$89abcdef
+
+*****************************************************		
+
+*SaveStackPtr ds.l 1
+SaveStackPtr dc.l 0
+
+*	_RBuff	ds.b	RGB_YSIZE	; placed in local data structure
+*	_GBuff	ds.b	RGB_YSIZE
+*	_BBuff	ds.b	RGB_YSIZE
+
+*YTbl	ds.l	256*4
+*ITbl	ds.l	256*4
+*QTbl	ds.l	256*4
+*yoffset ds.w	1
+
+YTbl	dcb.b	256*4*4,0
+ITbl	dcb.b	256*4*4,0
+QTbl	dcb.b	256*4*4,0
+yoffset dcb.b	1*2,0
+
+************************************************************~
+* InitRGB2YIQ(saturation,brightness)  i.e. 0.7*2<<16, -5
+*                 d0          d1
+* Initialize the tables used by the RGB2YIQ conversion.
+*****************************************************		
+InitRGB2YIQ  movem.l	d0-d7/a0,-(sp)
+	addi.w	#YOFFSET,d1
+	asl.w	#8,d1
+	move.w	d1,yoffset
+	move.w	d0,d7		;required re-registering
+
+	lea	YTbl,a0	
+	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+	move.l	#YR,d3
+	move.l	#YG,d4
+	move.l	#YB,d5
+	move.w	#255,d6
+	bra.s	15$
+10$	add.l	d3,d0
+	add.l	d4,d1
+	add.l	d5,d2
+15$	movem.l	d0-d3,(a0)	;forth long is a garbage spacer
+	lea	16(a0),a0
+	dbra	d6,10$
+
+;a0->ITbl	
+	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.w	#IR,d3
+	mulu	d7,d3
+	addi.l	#$8000,d3	;roundoff
+	clr.w	d3
+	swap	d3
+
+	move.w	#IG,d4
+	mulu	d7,d4
+	addi.l	#$8000,d4	;roundoff
+	clr.w	d4
+	swap	d4
+
+	move.w	#IB,d5
+	mulu	d7,d5
+	addi.l	#$8000,d5	;roundoff
+	clr.w	d5
+	swap	d5
+
+	move.w	#255,d6
+	bra.s	25$
+20$	add.l	d3,d0
+	add.l	d4,d1
+	add.l	d5,d2
+25$	movem.l	d0-d3,(a0)
+	lea	16(a0),a0
+	dbra	d6,20$
+
+;a0->QTbl	
+	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.w	#QR,d3
+	mulu	d7,d3
+	addi.l	#$8000,d3	;roundoff
+	clr.w	d3
+	swap	d3
+
+	move.w	#QG,d4
+	mulu	d7,d4
+	addi.l	#$8000,d4	;roundoff
+	clr.w	d4
+	swap	d4
+
+	move.w	#QB,d5
+	mulu	d7,d5
+	addi.l	#$8000,d5	;roundoff
+	clr.w	d5
+	swap	d5
+
+	move.w	#255,d6
+	bra.s	35$
+30$	add.l	d3,d0
+	add.l	d4,d1
+	add.l	d5,d2
+35$	movem.l	d0-d3,(a0)
+	lea	16(a0),a0
+	dbra	d6,30$
+
+	movem.l	(sp)+,d0-d7/a0
+	rts
+
+******************************************************
+* Convert RGB pixel buffer into YIQ
+* RGB2YIQ(start pixel, numpixels, LocalRGB, LocalYIQ)
+*              d0          d1          a0       a1
+* NOTE: I currently assume start and num are divisible by 4!!!!! 
+******************************************************~
+RGB2YIQ
+	movem.l	d0-d7/a0-a6,-(sp)
+*	lea	_RBuff,a0	; JR: made dynamic
+	adda.w	d0,a0		;->first source pixel
+*	XLEA	_YBuff,a1	; JR: made dynamic
+	lea	RGB_ID(a1),a2
+	lea	RGB_QD(a1),a3
+	add.w	d0,d0
+	adda.w	d0,a1		;->first destination Y pixel
+	adda.w	d0,a2		;->first destination I pixel
+	lsr.w	#2,d0
+	adda.w	d0,a3		;->first destination Q pixel
+
+	lea	YTbl,a4
+	lea	256*4*4(a4),a5	;->ITbl
+	lea	256*4*4(a5),a6	;->QTbl
+	move.l	#$8000,d4
+	moveq	#-4,d7		;%1111 1111 1111 1100
+	move.w	yoffset,d5
+	move.w	d1,d6		;required re-registering
+	lsr.w	#2,d6		;divide by 4
+	bra	50$
+
+*----------------	
+10$	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+	moveq	#0,d3
+
+	move.b	(a0),d0		;red
+	move.b	GD(a0),d1	;green
+	move.b	BD(a0),d2	;blue
+
+	move.b	1(a0),d3
+	add.w	d3,d0
+	move.b	1+GD(a0),d3
+	add.w	d3,d1
+	move.b	1+BD(a0),d3
+	add.w	d3,d2
+
+	move.b	2(a0),d3
+	add.w	d3,d0
+	move.b	2+GD(a0),d3
+	add.w	d3,d1
+	move.b	2+BD(a0),d3
+	add.w	d3,d2
+
+	move.b	3(a0),d3
+	add.w	d3,d0
+	move.b	3+GD(a0),d3
+	add.w	d3,d1
+	move.b	3+BD(a0),d3
+	add.w	d3,d2
+
+	addq.w	#2,d0	;round off	
+	and.w	d7,d0
+	add.w	d0,d0
+	add.w	d0,d0
+
+	addq.w	#2,d1	;round off	
+	and.w	d7,d1
+	add.w	d1,d1
+	add.w	d1,d1
+
+	addq.w	#2,d2	;round off	
+	and.w	d7,d2	
+	add.w	d2,d2
+	add.w	d2,d2
+
+	move.l	0(a6,d0.w),d3	;QR
+	sub.l	4(a6,d1.w),d3	;-QG
+	add.l	8(a6,d2.w),d3	;+QB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	add.w	d3,d3
+	add.w	d3,d3	     ;*4		
+	move.w	d3,(a3)+     ;save Q1
+
+;--------------------
+	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.b	GD(a0),d1	;green
+	move.b	BD(a0),d2	;blue
+	move.b	(a0)+,d0	;red
+	
+	lsl.w	#4,d0
+	lsl.w	#4,d1
+	lsl.w	#4,d2
+
+	move.l	0(a5,d0.w),d3	;IR
+	sub.l	4(a5,d1.w),d3	;-IG
+	sub.l	8(a5,d2.w),d3	;-IB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	move.w	d3,(a2)+  	;save I1
+
+	move.l	0(a4,d0.w),d3	;YR
+	add.l	4(a4,d1.w),d3	;+YG
+	add.l	8(a4,d2.w),d3	;+YB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	add.w	d5,d3		;+YOFFSET
+	move.w	d3,(a1)+	;save Y0
+	
+*----------------	
+20$	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.b	GD(a0),d1	;green
+	move.b	BD(a0),d2	;blue
+	move.b	(a0)+,d0	;red
+
+	lsl.w	#4,d0
+	lsl.w	#4,d1
+	lsl.w	#4,d2
+
+	move.l	0(a5,d0.w),d3	;IR
+	sub.l	4(a5,d1.w),d3	;-IG
+	sub.l	8(a5,d2.w),d3	;-IB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	move.w	d3,(a2)+  	;save I1
+
+	move.l	0(a4,d0),d3	;YR
+	add.l	4(a4,d1),d3	;+YG
+	add.l	8(a4,d2),d3	;+YB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	add.w	d5,d3		;+YOFFSET
+	move.w	d3,(a1)+	;save Y1
+
+*--------------------
+30$	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.b	GD(a0),d1	;green
+	move.b	BD(a0),d2	;blue
+	move.b	(a0)+,d0	;red
+
+	lsl.w	#4,d0
+	lsl.w	#4,d1
+	lsl.w	#4,d2
+
+	move.l	0(a5,d0.w),d3	;IR
+	sub.l	4(a5,d1.w),d3	;-IG
+	sub.l	8(a5,d2.w),d3	;-IB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	move.w	d3,(a2)+  	;save I1
+
+	move.l	0(a4,d0.w),d3	;YR
+	add.l	4(a4,d1.w),d3	;+YG
+	add.l	8(a4,d2.w),d3	;+YB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	add.w	d5,d3		;+YOFFSET
+	move.w	d3,(a1)+	;save Y2
+	
+*----------------	
+40$	moveq	#0,d0
+	moveq	#0,d1
+	moveq	#0,d2
+
+	move.b	GD(a0),d1	;green
+	move.b	BD(a0),d2	;blue
+	move.b	(a0)+,d0	;red
+
+	lsl.w	#4,d0
+	lsl.w	#4,d1
+	lsl.w	#4,d2
+
+	move.l	0(a5,d0.w),d3	;IR
+	sub.l	4(a5,d1.w),d3	;-IG
+	sub.l	8(a5,d2.w),d3	;-IB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	move.w	d3,(a2)+  	;save I1
+
+	move.l	0(a4,d0.w),d3	;YR
+	add.l	4(a4,d1.w),d3	;+YG
+	add.l	8(a4,d2.w),d3	;+YB
+	add.l	d4,d3		;roundoff
+	swap	d3		;whole part
+	add.w	d5,d3		;+YOFFSET
+	move.w	d3,(a1)+	;save Y3
+*---------------
+
+50$	dbra	d6,10$
+
+				;now it is time to clear unused part of YIQ
+				;buffers
+	move.l	#YSIZE,d0
+	sub.l	4(sp),d0
+	beq.s	120$
+	lsr.w	#2,d0		;number of quads
+	moveq.l	#0,d1
+	bra.s	110$
+100$	move.l	d1,(a1)+	;clear y
+	move.l	d1,(a1)+	;clear y
+	move.l	d1,(a2)+	;clear I
+	move.l	d1,(a2)+	;clear I
+	move.w	d1,(a3)+	;clear Q
+110$	dbf	d0,100$
+120$
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts
+
+	END
+* end of rgb2yiq.a

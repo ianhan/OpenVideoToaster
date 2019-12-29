@@ -1,0 +1,1058 @@
+head     2.2;
+branch   ;
+access   ;
+symbols  ;
+locks    ; strict;
+comment  @*@;
+
+
+2.2
+date     93.05.11.12.07.55;  author Finch2;  state Exp;
+branches ;
+next     2.1;
+
+2.1
+date     93.04.30.15.21.35;  author Finch2;  state Exp;
+branches ;
+next     2.0;
+
+2.0
+date     92.05.18.23.58.30;  author Hartford;  state Exp;
+branches ;
+next     ;
+
+
+desc
+@@
+
+
+2.2
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* LUT3.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LUT3.a,v 2.1 93/04/30 15:21:35 Finch2 Exp Locker: Finch2 $
+*
+* $Log:	LUT3.a,v $
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT3"
+	section	LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUTBits.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	GetMessage:							*
+*									*
+*	If A Message Is Ready, It Is Read From Message Port.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Message Port.				*
+*	A5.L	= Address of Toaster Base.				*
+*	A6.L	= Address of Sys Base.					*
+*									*
+*	Output:								*
+*									*
+*	Message is Read From Message Port.				*
+*									*
+*	D0.L	= Mouse xy Position.					*
+*	D1.L	= Message Class.					*
+*	D2.L	= Message Code.						*
+*	A0.L	= Address of Message Gadget.				*
+*									*
+*	CC	== Zero -> No Message Was Read.				*
+*	CC	!= Zero -> Message Was Read From Port.			*
+*									*
+*	20.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_GetMessage
+LUT_GetMessage:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	If A Message Is Ready Read It.
+*
+GETME1	JSR	_LVOGetMsg(A6)		; D0.L = Address of Message.
+	TST.L	D0			; Any Message Here?
+	BEQ.S	GETME4			; Exit If No Message Ready.
+	MOVEA.L	D0,A1			; A1.L = Address of Message.
+*
+*	Check For Disk Inserted or Disk Removed.
+*
+	MOVE.L	im_Class(A1),D1		; D1.L = Message Class.
+	CMPI.L	#DISKINSERTED,D1	; Was It Disk Inserted?
+	BEQ.S	GETME2			; Jump If Disk Inserted.
+	CMPI.L	#DISKREMOVED,D1		; Was It Disk Removed?
+	BNE.S	GETME3			; Exit If Not Disk Removed.
+GETME2	JSR	_LVOReplyMsg(A6)	; Replay to the Message.
+	CALLTL	FloppyInOut		; Tell Toaster To Check Disks.
+	BRA.S	GETME1			; Read Next Message.
+*
+*	Read Message Information From Message.
+*
+GETME3	MOVE.W	im_MouseX(A1),D0	; D0.W = Mouse x.
+	SWAP.W	D0			; Put in High Position.
+	MOVE.W	im_MouseY(A1),D0	; D0.L = Mouse xy.
+	MOVEQ.L	#0,D2			; Get Code.
+	MOVE.W	im_Code(A1),D2		; D2.L = Message Code.
+	MOVEA.L	im_IAddress(A1),A0	; A0.L = Address of Gadget.
+*
+*	Replay to the Message.
+*
+	MOVEM.L	D0-D1/A0,-(A7)		; Save Calling State.
+	JSR	_LVOReplyMsg(A6)	; Replay to the Message.
+	MOVEQ.L	#-1,D0			; Set CC != Zero.
+	MOVEM.L	(A7)+,D0-D1/A0		; Return Calling State.
+*
+*	Exit Subroutine, Message.
+*
+	ADDA.W	#3*4,A7			; Restore Stack Position.
+	MOVEA.L	(A7)+,A1		; Return Calling State.
+	RTS
+*
+*	Exit Subroutine, No Message.
+*
+GETME4	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	WaitPort:							*
+*									*
+*	Waits on an Message Port For a Message to Come In.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Message Port.				*
+*	A6.L	= Address of Sys Base.					*
+*									*
+*	Output:								*
+*									*
+*	Waits on a Message Port Until a Message Arrives.		*
+*									*
+*	20.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_WaitPort
+LUT_WaitPort:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Set Signal Bit for Port.
+*
+	MOVEQ.L	#0,D0			; Wait Signal Bits.
+	MOVE.B	MP_SIGBIT(A0),D1	; Get mp_SigBit.
+	BSET.L	D1,D0			; Add In to Wait Flags.
+	JSR	_LVOWait(A6)		; Wait For Signal.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	ReadMessage:							*
+*									*
+*	Waits on an Message Port For a Message to Come In.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Message Port.				*
+*	A5.L	= Address of Toaster Base.				*
+*	A6.L	= Address of Sys Base.					*
+*									*
+*	Output:								*
+*									*
+*	Message is Read From Message Port.				*
+*									*
+*	D0.L	= Mouse xy Position.					*
+*	D1.L	= Message Class.					*
+*	D2.L	= Message Code.						*
+*	A0.L	= Address of Message Gadget.				*
+*									*
+*	20.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_ReadMessage
+READM1	BSR.S	LUT_WaitPort		; Wait on Message Port.
+LUT_ReadMessage:
+	BSR.S	LUT_GetMessage		; Try to Get Message From Port.
+	BEQ.S	READM1			; Wait If Message Not Read.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MovMsg:								*
+*									*
+*	Get Mouse Move Message From a Window.				*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Message Port.				*
+*	A5.L	= Address of Toaster Base.				*
+*	A6.L	= Address of Sys Base.					*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Mouse xy Position.					*
+*									*
+*	CC	== Zero -> We Can Still Get Mouse Messages.		*
+*	CC	!= Zero -> All Done, No More Messages.			*
+*									*
+*	20.Feb 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MOVMSG
+LUT_MOVMSG:
+	MOVEM.L	D1-D2/A0-A1,-(A7)	; Save Calling State.
+	MOVEA.L	A0,A1			; Save Address Of Message Port.
+*
+*	Try to Get Message From Port.
+*
+MOVMS1	MOVEA.L	A1,A0			; A0.L = Address of Message Port.
+	BSR	LUT_GetMessage		; Try to Get Message From Port.
+	BNE.S	MOVMS2			; Jump If We Can Get a Message.
+*
+*	No Message Ready, Wait on Port.
+*
+	MOVEA.L	A1,A0			; A0.L = Address of Message Port.
+	BSR.S	LUT_WaitPort		; Wait on Message Port.
+	BRA.S	MOVMS1			; Try to Get This Message.
+*
+*	Message Was Read.
+*
+MOVMS2	CMPI.L	#MOUSEMOVE,D1		; Exit If Not Mouse Move Message.
+	BNE.S	MOVMS3			; Not Mouse Move Message.
+	MOVEA.L	A1,A0			; A0.L = Address of Message Port.
+	BSR	LUT_GetMessage		; Try to Get Message From Port.
+	BNE.S	MOVMS2			; Read Extra Mouse Move Messages.
+	CMPI.L	#MOUSEMOVE,D1		; Did the Mouse Move?
+*
+*	Exit Subroutine.
+*
+MOVMS3	MOVEM.L	(A7)+,D1-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MouseOn:							*
+*									*
+*	Turns On the Reporting of Mouse Movements.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Window.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Mouse Movement Messages are Turned On.				*
+*									*
+*	20.Feb 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MOUSEON
+LUT_MOUSEON:
+	MOVEM.L D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Get Mouse Moved Messages, and Mouse Buttons For End.
+*
+	MOVEA.L	TB_ITUBase(A5),A6	; Pointer to Library.
+	MOVE.L	#LUT_IDCMP_FLAGS!MOUSEBUTTONS!MOUSEMOVE,D0 ;D0.L=NewIDCmpFlag
+	JSR	_LVOModifyIDCMP(A6)	; Add in the New Flags.
+*
+*	Tell Intuition To Send Us Mouse Messages.
+*
+	MOVEA.L	8(A7),A0		; Return Pointer to Window.
+	MOVEQ.L	#-1,D0			; Report Mouse Now.
+	JSR	_LVOReportMouse(A6)	; Now Get Messages From Mouse.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MouseOff:							*
+*									*
+*	Turns Off the Reporting of Mouse Movements.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Window.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Mouse Movement Messages are Turned Off.				*
+*									*
+*	20.Feb 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MOUSEOFF
+LUT_MOUSEOFF:
+	MOVEM.L D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Only Get Gadget Messages.
+*
+	MOVEA.L	TB_ITUBase(A5),A6	; Pointer to Library.
+	MOVE.L	#LUT_IDCMP_FLAGS,D0	; D0.L = New IDCmp Flags.
+	JSR	_LVOModifyIDCMP(A6)	; Add in the New Flags.
+*
+*	Don't Get Any More Mouse Messages.
+*
+	MOVEA.L	8(A7),A0		; Return Pointer to Window.
+	MOVEQ.L	#0,D0			; No More Mouse Reports.
+	JSR	_LVOReportMouse(A6)	; Now Get Messages From Mouse.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MouseDeltaOn:							*
+*									*
+*	Turns On the Reporting of Mouse Delta Movements.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Window.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Mouse Delta Movement Messages are Turned On.			*
+*									*
+*	12.Jul 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MOUSEDELTAON
+LUT_MOUSEDELTAON:
+	MOVEM.L D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Get Mouse Moved Messages, and Mouse Buttons For End.
+*
+	MOVEA.L	TB_ITUBase(A5),A6	; Pointer to Library.
+	MOVE.L	#LUT_IDCMP_FLAGS!MOUSEBUTTONS!MOUSEMOVE!DELTAMOVE,D0 ; New Flags
+	JSR	_LVOModifyIDCMP(A6)	; Add in the New Flags.
+*
+*	Tell Intuition To Send Us Mouse Messages.
+*
+	MOVEA.L	8(A7),A0		; Return Pointer to Window.
+	MOVEQ.L	#-1,D0			; Report Mouse Now.
+	JSR	_LVOReportMouse(A6)	; Now Get Messages From Mouse.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MouseDeltaOff:							*
+*									*
+*	Turns Off the Reporting of Mouse Delta Movements.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Window.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Mouse Delta Movement Messages are Turned Off.			*
+*									*
+*	12.Jul 1990 Jamie Lisa Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MOUSEDELTAOFF
+LUT_MOUSEDELTAOFF:
+	MOVEM.L D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Only Get Gadget Messages.
+*
+	MOVEA.L	TB_ITUBase(A5),A6	; Pointer to Library.
+	MOVE.L	#LUT_IDCMP_FLAGS,D0	; D0.L = New IDCmp Flags.
+	JSR	_LVOModifyIDCMP(A6)	; Add in the New Flags.
+*
+*	Don't Get Any More Mouse Messages.
+*
+	MOVEA.L	8(A7),A0		; Return Pointer to Window.
+	MOVEQ.L	#0,D0			; No More Mouse Delta Reports.
+	JSR	_LVOReportMouse(A6)	; Now Get Messages From Mouse.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	HighlightGadget:						*
+*									*
+*	Causes a Fast Gadget to Become Highlighted.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget to Highlight.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Fast Gadget is Highlighted.					*
+*									*
+*	CC	== Zero -> Release Not Over Gadget.			*
+*	CC	!= Zero -> Released Over Gadget.			*
+*									*
+*	22.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_HighLightGadget
+LUT_HighLightGadget:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	First Highlight the Image.
+*
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	CALLTL	HiLiteBoolSelect	; Highligh the Box.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	HighLightOn:							*
+*									*
+*	Turns On the Highlighting Of A Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget to Highlight.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Fast Gadget Is Highlighted.					*
+*									*
+*	22.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_HighLightOn
+LUT_HighLightOn:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Draw the Fast Gadget Non-HighLited.
+*
+	MOVEA.L	A0,A2			; A2.L = Address of Fast Gadget.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of System Base.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVE.L	A2,A0			; A0.L = Address of Fast Gadget.
+	BSR	LUT_SetHiLite		; Turn On The Hi-Lighting.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadget.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw the Fast Gadget.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On Arrow Sprite.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks to Run.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	HighLightOff:							*
+*									*
+*	Turns Off the Highlighting Of A Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget to De-Highlight.		*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Fast Gadget Is De-Highlighted.					*
+*									*
+*	22.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_HighLightOff
+LUT_HighLightOff:
+	MOVEM.L	D0-D1/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Draw the Fast Gadget Non-HighLited.
+*
+	TST.W	FG_HiLiteMask(A0)	; Value Not Highlighted?
+	BEQ.S	HILIF1			; Exit If No Highlighting Nessary.
+	MOVEA.L	A0,A2			; A2.L = Address of Fast Gadget.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of System Base.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVE.L	A2,A0			; A0.L = Address of Fast Gadget.
+	CLR.W	FG_HiLiteMask(A0)	; Un-Highlight the Calling Image.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadget.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw the Fast Gadget.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On Arrow Sprite.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks to Run.
+*
+*	Exit Subroutine.
+*
+HILIF1	MOVEM.L	(A7)+,D0-D1/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoHighLiteOnOff:						*
+*									*
+*	Highlights a Fast Gadget Image, and DeHighlights When Done.	*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget to Highlight.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Fast Gadget Is Highlighted, Then DeHighlighted.			*
+*									*
+*	CC	== Zero -> Release Not Over Gadget.			*
+*	CC	!= Zero -> Released Over Gadget.			*
+*									*
+*	12.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoHighLiteOnOff
+LUT_DoHighLiteOnOff:
+	MOVEM.L	D0,-(A7)		; Save Calling State.
+*
+*	First Highlight the Image.
+*
+	BSR	LUT_HighLightGadget	; Highlight the Box.
+	BEQ.S	DOHIG1			; Exit If Not Picked.
+	BSR.S	LUT_HighLightOff	; Un-Highlight The Image.
+	MOVEQ.L	#-1,D0			; Set CC != Zero.
+*
+*	Exit Subroutine.
+*
+DOHIG1	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PannelSelect:							*
+*									*
+*	Allows Only One Gadget In a List of Gadgets to be Selected.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Gadget In Pannel List.			*
+*	A0.L	= Address of Selected Gadget.				*
+*	A1.L	= Address of First Pannel Gadget in List.		*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Release Not Over Gadget.			*
+*	CC	!= Zero -> Released Over Gadget.			*
+*									*
+*	22.Nov 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PannelSelect
+LUT_PannelSelect:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Highlight The Picked Gadget.
+*
+	BSR	LUT_HighLightGadget	; Highlight the Box.
+	BEQ.S	PANSE6			; Exit If Not Picked.
+*
+*	Loop Down List Of Gadgets, And De-Highlight All Gadgets.
+*
+	EXG.L	A0,A1			; A0.L = Head Of List.
+	BRA.S	PANSE3			; Start Looping.
+PANSE1	CMPA.L	A0,A1			; Don't De-Highlight Selected Gadget.
+	BEQ.S	PANSE2			; Jump If Selected Gadget.
+	BSR	LUT_HighLightOff	; Turn Off The Highlighting.
+PANSE2	MOVE.L	gg_NextGadget(A0),D1	; Next Position In List.
+	BEQ.S	PANSE4			; Jump If NULL Pointer.
+	MOVEA.L	D1,A0			; Next Position.
+PANSE3	DBF	D0,PANSE1		; Loop Until Done.
+*
+*	Write the New Gadget On the Screen.
+*
+PANSE4	MOVEA.L	A1,A0			; Address Of Gadget To Highlight.
+	BSR	LUT_HighLightOn		; Turn On The Highlighting.
+	MOVEQ.L	#-1,D0			; Set CC != Zero.
+	BRA.S	PANSE9			; Exit Subroutine.
+*
+*	Make Sure At Least One Squair Is Highlighted.
+*
+PANSE5	TST.W	FG_HiLiteMask(A1)	; Value Highlighted?
+	BNE.S	PANSE8			; Found One Highlighted.
+	MOVE.L	gg_NextGadget(A1),D1	; Pointer to Next In List.
+	BEQ.S	PANSE7			; Exit If End Of List.
+	MOVEA.L	D1,A1			; Next Position In List.
+PANSE6	DBF	D0,PANSE5		; Loop For Each Gadget.
+PANSE7	BSR	LUT_HighLightOn		; Turn On The Highlighting of Picked.
+PANSE8	MOVEQ.L	#0,D0			; Set CC == Zero.
+*
+*	Exit Subroutine.
+*
+PANSE9	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CycleImage:							*
+*									*
+*	Cycles A List Of Images In A Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of Images To Cycle.				*
+*	A0.L	= Address of Selected Gadget.				*
+*	A1.L	= Address of Table Of Images To Cycle.			*
+*									*
+*	Output:								*
+*									*
+*	Bit Map Pictures Are Cycled Thru Table Of Images.		*
+*									*
+*	23.Nov 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CycleImage
+LUT_CycleImage:
+	MOVEM.L	D0-D2/A0-A2,-(A7)	; Save Calling State.
+*
+*	Loop and Find Current Gadget In List.
+*
+	MOVEA.L	A1,A2			; A2.L = Address of Gadget Table.
+	MOVEQ.L	#0,D1			; Index To What We Are On.
+	MOVE.L	FG_Data(A0),D2		; D2.L = Address of Current Image.
+	BRA.S	CYCIM2			; Start Looping.
+CYCIM1	CMP.L	(A2)+,D2		; At This Position In Table?
+	BEQ.S	CYCIM4			; Jump If Entry Found.
+	ADDQ.L	#1,D1			; Increment Table Index.
+CYCIM2	DBF	D0,CYCIM1		; Loop For Size Of Table.
+CYCIM3	MOVEQ.L	#0,D1			; Not Found Use First Entry.
+	BRA.S	CYCIM5			; Skip Else Part.
+CYCIM4	TST.W	D0			; Ending Position?
+	BEQ.S	CYCIM3			; Jump If Last Position.
+	ADDQ.L	#1,D1			; Move To Next Position.
+	LSL.L	#2,D1			; Index To Image.
+CYCIM5	MOVE.L	0(A1,D1.L),FG_Data(A0)	; Address If New Image.
+*
+*	Redraw Image On The Screen.
+*
+	MOVEA.L	A0,A2			; A2.L = Address of Fast Gadget.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of System Base.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	MOVE.L	A2,A0			; A0.L = Address of Fast Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadget.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw the Fast Gadget.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On Arrow Sprite.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks to Run.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	BarImage:							*
+*									*
+*	Returns the Address of the Bar Image.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Current Bar Position, 0 to SLIDESIZE - 1.	*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of Fast Gadget Image.				*
+*									*
+*	19.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BarImage
+LUT_BarImage:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Set Address of Which Bar Image to Use.
+*
+	MOVE.L	D0,D1			; D1.L = Current Position.
+	ANDI.L	#$0F,D1			; Leave Only Low Bits.
+	ASL.L	#2,D1			; Make Long Word Index.
+	MOVEA.L	BARIM2(PC,D1.L),A0	; A0.L = Address of Image.
+*
+*	Adjust Base Address of Image to Reflect MSB Position.
+*
+	LSR.L	#4,D0			; Get Rid of LSB.
+	NEG.L	D0			; Make Go Other Way Around.
+	MOVEQ.L	#15,D1			; Assume Amount to Move.
+	ADD.L	D1,D0			; Amount to Adjust.
+	ASL.L	#3,D0			; Make Address Offset.
+	ADDA.L	D0,A0			; A0.L = Address of Image.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+*
+BARIM2	DC.L	LUT_SLIDER0_BT,LUT_SLIDER1_BT,LUT_SLIDER2_BT,LUT_SLIDER3_BT
+	DC.L	LUT_SLIDER4_BT,LUT_SLIDER5_BT,LUT_SLIDER6_BT,LUT_SLIDER7_BT
+	DC.L	LUT_SLIDER8_BT,LUT_SLIDER9_BT,LUT_SLIDERA_BT,LUT_SLIDERB_BT
+	DC.L	LUT_SLIDERC_BT,LUT_SLIDERD_BT,LUT_SLIDERE_BT,LUT_SLIDERF_BT
+	PAGE
+*************************************************************************
+*									*
+*	BarPosition:							*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Gadget to Get Position Of.			*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Current Position of Bar.				*
+*									*
+*	19.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_BarPosition
+LUT_BarPosition:
+	MOVEM.L	D1/A0,-(A7)		; Save Calling State.
+*
+*	Run Down Bit Map Until FFFF Not Found.
+*
+	MOVEA.L	FG_Data(A0),A0		; Address of Current Image.
+	MOVEQ.L	#-1,D1			; Value to Compare.
+	MOVEQ.L	#-8,D0			; Initilize Position Counter,-8 +8 = 0.
+	SUBQ.L	#1*2,A0			; A0.L = Point Back For Pre-Advance.
+BARPO1	ADDQ.L	#8,D0			; Move to Next Position, 1/2 Value.
+	ADDQ.L	#3*2,A0			; Move To Plane Position.
+	CMP.W	(A0)+,D1		; Still At FFFF?
+	BEQ.S	BARPO1			; Jump Back If Still FFFF.
+*
+*	Found an Non FFFF Value.
+*
+	ADD.L	D0,D0			; FFFF Count Times Two.
+	MOVE.W	-2(A0),D1		; Value to Check, 0 to 15.
+	BRA.S	BARPO3			; Start Looping.
+BARPO2	ADDQ.L	#1,D0			; Move To Next Position.
+BARPO3	LSL.W	#1,D1			; Is The Bit Set?
+	BCS.S	BARPO2			; Jump Back If More Bits Left.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1/A0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoSlideBar:							*
+*									*
+*	Slide A Bar Image Back and Fourth.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Mouse xy Position.					*
+*	A0.L	= Address of Fast Gadget to Highlight.			*
+*	A1.L	= Address of Alt-Highlight Routine.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Bar Image Is Slid Back and Forth.				*
+*									*
+*	19.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+BARSIZE		EQU	17		; Length of Pick Area of Bar.
+BARSTEP		EQU	16		; Step When Hi Out Of Hit Area.
+SLIDESIZE	EQU	256		; Length of Slide Area.
+*
+	XDEF	LUT_DoSlideBar
+LUT_DoSlideBar:
+	MOVEM.L	D0-D3/A0-A3/A6,-(A7)	; Save Calling State.
+	MOVEA.L	A0,A3			; A3.L = Gadget Address.
+	MOVE.L	D0,D2			; D2.L = Starting xy Position.
+	MOVE.L	D0,D3			; D3.L = Starting xy for Pointer Update.
+	SWAP.W	D3			; D3.L = High = y Position.
+	MOVEM.L	D0/A0-A1,-(A7)		; Save Calling State.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off the SoftSprite.
+	MOVEM.L	(A7)+,D0/A0-A1		; Return Calling State.
+*
+*	Set Up Variables for Slider Code.
+*
+	SWAP.W	D0			; Make X Coordinate.
+	SUB.W	gg_LeftEdge(A0),D0	; Make Relative Offset.
+	EXT.L	D0			; Make Long Word.
+	MOVE.L	D0,D1			; D1.L = Starting x Mouse Position.
+	BSR	LUT_BarPosition		; D0.L = Current Bar Position.
+	CMP.L	D0,D1			; Check Left Most Position.
+	BCS.S	DOSBA1			; Jump If Not On Bar Left.
+	ADDI.L	#BARSIZE,D0		; Old Right Mouse Position.
+	CMP.L	D0,D1			; Check Right Most Position.
+	BCS.S	DOSBA3			; Jump If On Bar Right.
+*
+*	Mouse Over Right Area And Not Over Bar.
+*
+	SUBI.L	#BARSIZE-BARSTEP,D0	; Adjust To Step Size.
+	MOVE.L	#SLIDESIZE-1,D1		; Right Edge.
+	CMP.L	D1,D0			; Too Far Right?
+	BCS.S	DOSBA2			; Jump If Ok.
+	MOVE.L	D1,D0			; Position to Set Bar.
+	BRA.S	DOSBA2			; Skip Else Part.
+*
+*	Mouse Over Left Area And Not Over Bar.
+*
+DOSBA1	SUBI.L	#BARSTEP,D0		; Move Left Once.
+	BPL.S	DOSBA2			; Jump If Positive.
+	MOVEQ.L	#0,D0			; Left Bar Edge at Zero.
+*
+*	Now Write All This Data On the Screen.
+*
+DOSBA2	BSR	LUT_BarImage		; A0.L = New Bar Image.
+	CMPA.L	FG_Data(A3),A0		; Has the Position Changed?
+	BEQ	DOSBA8			; Exit If New and Old the Same.
+	MOVE.L	A0,FG_Data(A3)		; Save New Gadget Image.
+	MOVEA.L	A3,A0			; A0.L = Address of Gadget.
+	JSR	(A1)			; Performer Alt-Highlight Routine.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset Into Image.
+	CALLTL	DrawFastGList		; Draw Gadget On Screen.
+	BRA.S	DOSBA8			; Skip Else Parts.
+*
+*	Move Slider Gadget.
+*
+DOSBA3	MOVEA.L	TB_Window(A5),A0	; Pointer to Window.
+	BSR	LUT_MOUSEON		; Turn On Mouse Movements.
+*
+*	Make New Slider Box Position.
+*
+	SUBI.L	#BARSIZE,D0		; Put Back To Where It Was.
+	SUB.L	D0,D1			; D1.L = Delta From Edge of Bar.
+	MOVE.L	D2,D0			; Get x Coordinate.
+	MOVE.L	D1,D2			; Save Bar Offset.
+DOSBA4	SWAP.W	D0			; Put In Low Position.
+	SUB.W	gg_LeftEdge(A3),D0	; Make Relative Offset.
+	EXT.L	D0			; Make Long Word.
+	SUB.L	D2,D0			; Make Relative to Bar.
+	BMI.S	DOSBA5			; Skip If < Zero.
+	MOVE.L	#SLIDESIZE-1,D1		; Right Edge.
+	CMP.L	D1,D0			; Over Right Edge?
+	BCS.S	DOSBA6			; Jump If < Right Edge.
+	MOVE.L	D1,D0			; > Right Make Right.
+	BRA.S	DOSBA6			; Skip Else Part.
+DOSBA5	MOVEQ.L	#0,D0			; < 0 Goes to 0.
+DOSBA6	MOVE.W	D0,D3			; D3.W = Save Last x Offset.
+	BSR	LUT_BarImage		; A0.L = New Bar Image.
+	CMPA.L	FG_Data(A3),A0		; Image Changed?
+	BEQ.S	DOSBA7			; Jump If No Refresh Needed.
+	MOVE.L	A0,FG_Data(A3)		; Store New Image Pointer.
+*
+*	Write The New Positions On The Screen.
+*
+	MOVEA.L	A3,A0			; A0.L = Address of Gadget.
+	JSR	(A1)			; Performer Alt-Highlight Routine.
+	MOVE.L	A1,-(A7)		; Save Address of Alt-Highlight.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#1,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset Into Image.
+	CALLTL	DrawFastGList		; Draw Gadget On Screen.
+	MOVEA.L	(A7)+,A1		; Return Address of Alt-Highlight.
+*
+*	If Any Other Message But MOUSEMOVE Shows Up, Exit.
+*
+DOSBA7	MOVEA.L	TB_MsgPort(A5),A0	; A0.L = Address of Message Port.
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of SYS Base.
+	BSR	LUT_MOVMSG		; D0.L = Mouse xy Position.
+	BEQ.S	DOSBA4			; Jump If Mouse Movement.
+	MOVEA.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	BSR	LUT_MOUSEOFF		; No More Mouse Reports.
+*
+*	Move the y Position of Pointer Back to Where We Started.
+*
+	MOVE.L	D3,D1			; D1.L = Mouse xy.
+	SWAP.W	D1			; D1.W = Mouse y.
+	MOVE.W	D3,D0			; Make Last Mouse x Offset.
+	ADD.W	gg_LeftEdge(A3),D0	; D0.W = Mouse x.
+	CALLTL	MoveSoftSpriteABS	; Move to xy Coordinate.
+DOSBA8	CALLTL	SoftSpriteBPLCON0On	; Turn On the SoftSprite.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D3/A0-A3/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	SetHiLite:							*
+*									*
+*	Turns On The Hi-Lighting In A Fast Gadget.			*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget.				*
+*									*
+*	Output:								*
+*									*
+*	The Hi-Lighting In The Fast Gadget Is Turned On.		*
+*									*
+*	17.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SetHiLite
+LUT_SetHiLite:
+	MOVE.B	FG_HiLiteVal(A0),FG_HiLiteMask+0(A0)	; Set Low  Byte.
+	MOVE.B	FG_HiLiteVal(A0),FG_HiLiteMask+1(A0)	; Set High Byte.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	TBarImage:							*
+*									*
+*	Returns the Address of the Bar Image.				*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Value of Current Bar Position, 0 to TBARSLIDESIZE - 1.*
+*	A5.L	= ToasterBase						*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of Fast Gadget Image.				*
+*									*
+*	19.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_TBarImage
+LUT_TBarImage:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Set Address Of Image.
+*
+	MULU.W	#6*8,D0			; 6 Words Wide * 8.
+	MOVEA.L	TB_TBarFGL(A5),A0	; A0.L = Address of Fast Gadget.
+	MOVEA.L	FG_Data(A0),A0		; A0.L = Address of Picture.
+	SUBA.L	D0,A0			; A0.L = Address of Image.
+*
+*	Exit Subroutine.
+*
+	MOVE.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	TBarPosition:							*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Gadget to Get Position Of.			*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Current Position of Bar.				*
+*									*
+*	19.Feb 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_TBarPosition
+LUT_TBarPosition:
+	MOVEM.L	D1-D2/A0,-(A7)		; Save Calling State.
+*
+*	Run Down Bit Map Until Center Slider Is Not Found.
+*
+	MOVEA.L	FG_Data(A0),A0		; Address of Current Image.
+	ADDA.W	#(4)*4,A0		; Move To Center Word.
+	MOVEQ.L	#0,D0			; Initilize Position Counter.
+	MOVE.L	#$007FFFB1,D1		; Value to Compare.
+	MOVEQ.L	#(12-1)*4,D2		; Amount To Increment By.
+	BRA.S	TBARP2			; Start Looping.
+TBARP1	ADDA.L	D2,A0			; Move To Next Image Address.
+	ADDQ.W	#1,D0			; Move To Next Position.
+TBARP2	CMP.L	(A0)+,D1		; Value Still Slider?
+	BEQ.S	TBARP1			; Jump Back If Not Done.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D1-D2/A0		; Return Calling State.
+	RTS
+	END
+@
+
+
+2.1
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT3.a and t:,RCSt1A786ea98 differ
+@
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@Binary files LUT3.a and t:,RCSt1A786eae8 differ
+@

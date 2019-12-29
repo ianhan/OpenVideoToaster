@@ -1,0 +1,674 @@
+3c3
+< 	XDEF Cut		;creates a brush from screen
+---
+> 	XDEF Cut	;creates a brush from screen
+5c5
+< 	XDEF CutorPaste		;cutpaste mode, button up, newcut or pastedown handler
+---
+> 	XDEF CutorPaste	;cutpaste mode, button up, newcut or pastedown handler
+20,23d19
+< 	include "ram:mod.i"
+<  ifd paint2000
+< 	include	"ps:assembler.i"
+<  endc
+32,33c28
+< 	include "messages.i"		;MOUSEBUTTONS define
+< 	include	"ps:serialdebug.i"
+---
+> 	include "messages.i"	;MOUSEBUTTONS define
+35,36d29
+< 
+< 
+38c31
+< 	xref BB1Ptr_			;CAN WE SUBSTITUE BB_Bitmap+bm_Planes ?????...no!
+---
+> 	xref BB1Ptr_	;CAN WE SUBSTITUE BB_Bitmap+bm_Planes ?????...no!
+54c47
+< 	xref EffectNumber_		;mirror?...if so dont clear (yet)
+---
+> 	xref EffectNumber_	;mirror?...if so dont clear (yet)
+56,58c49,51
+< 	xref FlagBitMapSaved_		;reset, restart new 'edges' of rect,circ
+< 	xref FlagBSmooth_		;smooth (connected dots) draw mode
+< 	xref FlagCirc_			;test.l checks circ,curv,rect,line modes
+---
+> 	xref FlagBitMapSaved_	;reset, restart new 'edges' of rect,circ
+> 	xref FlagBSmooth_	;smooth (connected dots) draw mode
+> 	xref FlagCirc_		;test.l checks circ,curv,rect,line modes
+62c55
+< 	xref FlagDither_		;needed by paintcode
+---
+> 	xref FlagDither_	;needed by paintcode
+64c57
+< 	;xref FlagFrbx_			;asks for 'screen arrange'
+---
+> 	;xref FlagFrbx_		;asks for 'screen arrange'
+119,121d111
+< ;SERDEBUG	equ	1
+< 
+< 
+123,124d112
+< ;	DUMPMSG	<Paste_Again>
+< 	
+125a114
+> 
+135,138c124,125
+< Paste:	
+< ;	DUMPMSG	<Paste:>
+< 	xjsr	SetAltPointerWait	;pointers.o, "wait" while redrawing shape
+< 	xjsr	ClearBrushMask		;strokebounds.o;Clear out Brush/Repaint mask
+---
+> Paste:	xjsr	SetAltPointerWait	;pointers.o, "wait" while redrawing shape
+> 	xjsr	ClearBrushMask	;strokebounds.o;Clear out Brush/Repaint mask
+141,143c128,130
+< 	lea 	PasteMaskBitMap_(BP),A0	;"from" BRUSH'S MASK
+< 	lea 	BB_BitMap_(BP),a1		;"to" 'REGULAR' drawing screensize MASK
+< 	move.w	(a0),d4 		;bm_BytesPerRow(a0),d4
+---
+> 	lea PasteMaskBitMap_(BP),A0	;"from" BRUSH'S MASK
+> 	lea BB_BitMap_(BP),a1		;"to" 'REGULAR' drawing screensize MASK
+> 	move.w	(a0),d4 ;bm_BytesPerRow(a0),d4
+152,153c139,140
+< 	sub.w	d2,D0			;bump "fromX" to the right
+< 	add.w	d2,d4			;reduce width (d4=width)
+---
+> 	sub.w	d2,D0	;bump "fromX" to the right
+> 	add.w	d2,d4	;reduce width (d4=width)
+156c143
+< 	moveq	#0,d2			;clear "to	X"
+---
+> 	moveq	#0,d2	;clear "to	X"
+158,160c145,147
+< 	move.w	d2,d6			;check if off right side... (d6=temp)
+< 	add.w	d4,d6			;toX+width
+< 	subq.w	#1,d6			;...-1=rightside pixel	#
+---
+> 	move.w	d2,d6	;check if off right side... (d6=temp)
+> 	add.w	d4,d6	;toX+width
+> 	subq.w	#1,d6	;...-1=rightside pixel	#
+162c149
+< 	bcs.s	199$			;not off right side...
+---
+> 	bcs.s	199$	;not off right side...
+164c151
+< 	sub.w	d2,d4			;-toX = new width
+---
+> 	sub.w	d2,d4	;-toX = new width
+170,171c157,158
+< 	sub.w	d3,d1			;bump "fromY" down
+< 	add.w	d3,d5			;reduce height
+---
+> 	sub.w	d3,d1	;bump "fromY" down
+> 	add.w	d3,d5	;reduce height
+173c160
+< 	moveq	#0,d3			;clear "to Y"
+---
+> 	moveq	#0,d3	;clear "to Y"
+176,179c163,166
+< 	sub.w	d3,d6			; - "toY"
+< 	cmp.w	d5,d6			;current ht <= dist to bottom edge?
+< 	bcc.s	3$			;yes
+< 	move.w	d6,d5			;no, only go up to right edge
+---
+> 	sub.w	d3,d6	; - "toY"
+> 	cmp.w	d5,d6	;current ht <= dist to bottom edge?
+> 	bcc.s	3$	;yes
+> 	move.w	d6,d5	;no, only go up to right edge
+182,183c169,170
+< 	moveq	#1,d7 			;move.b	#%00000001,d7;d7=bitplane mask ("planepick")
+< 	CALLIB 	Graphics,BltBitMap
+---
+> 	moveq	#1,d7 ;move.b	#%00000001,d7		;d7=bitplane mask ("planepick")
+> 	CALLIB Graphics,BltBitMap
+198c185
+< 	;rts				;Paste
+---
+> 	;rts		;Paste
+201,202c188
+< MostlyEndCutPaste:	
+< ;	DUMPMSG	<MostlyEndCutPaste:>
+---
+> MostlyEndCutPaste:	;subr...MACRO
+213d198
+< ;	DUMPMSG	<no_old_brush:>
+217c202
+< 	clr.l	rp_TmpRas(A0)		;RASTPORT graphics paradigm sometimes weak
+---
+> 	clr.l	rp_TmpRas(A0)	;RASTPORT graphics paradigm sometimes weak
+228,230c213,214
+< ;	DUMPMSG	<InitCutPaste:>
+< 	;;xjsr	QuitPainting		;canceler.o	APRIL12'89
+< 	xref FlagToast_			;JULY201990
+---
+> 	;;xjsr	QuitPainting	;canceler.o	APRIL12'89
+> 	xref FlagToast_		;JULY201990
+236c220
+< 	bsr	MostlyEndCutPaste	;doesn't kill cpundo:xtra cutpaste undo
+---
+> 	bsr.s	MostlyEndCutPaste	;doesn't kill cpundo:xtra cutpaste undo
+255c239
+< ;MAY18late....helps w/effects
+---
+> 		;MAY18late....helps w/effects
+265c249
+< 	xjsr	CopyScreenSuper		;MAY19...fixes(?) draw-undo-cut-repeat
+---
+> 	xjsr	CopyScreenSuper	;MAY19...fixes(?) draw-undo-cut-repeat
+271c255
+< 	beq	cprts ;EndCutPaste		;sorry, charlie, no undo around?
+---
+> 	beq.s	cprts ;EndCutPaste		;sorry, charlie, no undo around?
+273d256
+< ;	DUMPMSG	<noundo_ok>
+310c293
+< 	tst.b	FlagOpen_(BP)		;loading (a brush)? AUG281990
+---
+> 	tst.b	FlagOpen_(BP)	;loading (a brush)? AUG281990
+312c295
+< ;no need...;xjsr	SetAltPointerWait	;non-interruptable....
+---
+> 	;no need...;xjsr	SetAltPointerWait	;non-interruptable....
+323d305
+< ;	DUMPMSG	<EndCutPaste:>
+339d320
+< 	DUMPMSG	<_UnDoRGB:>
+344d324
+< 	DUMPMSG	<abort_cut_and_clear:>
+348d327
+< 	DUMPMSG	<abort_cut:>
+351c330
+< 	bsr	EndCutPaste
+---
+> 	bsr.s	EndCutPaste
+359d337
+< 
+361d338
+< 	DUMPMSG	<_ClearANDFixPointer>
+368d344
+< 	DUMPMSG	<CutorPaste>
+370a347
+> 
+402a380,382
+> Cut:	;creates a brush (if none), DOES screen->brushimage, superbit->screen
+> 		;july06 new sequence: up-pri, endcutpaste, activate, setpointer
+> 
+404,410c384
+< ;creates a brush (if none), DOES screen->brushimage, superbit->screen
+< ;july06 new sequence: up-pri, endcutpaste, activate, setpointer
+< ;
+< ;AUG161990...bummout last paste coords, now cannot "Scis" "Redo" "Redo"
+< ;
+< Cut:
+< 	DUMPMSG	<Cut>
+---
+> 		;AUG161990...bummout last paste coords, now cannot "Scis" "Redo" "Redo"
+418c392,400
+< 	xref	FlagNeedHiresAct_
+---
+> 	;;MAR91, KLUDGE, DEBUGGER
+> 	;move.l	#300,d0
+> 	;move.l	#300,d1
+> 	;CALLIB	DOS,Delay
+> 
+> 
+> 
+> ;JULY06;	xjsr	SetAltPointerWait	;pointers.o, "wait" while redrawing shape
+> 	xref FlagNeedHiresAct_
+420c402,404
+< 	xjsr	ReallyActivate		;main.o
+---
+> 	xjsr	ReallyActivate	;main.o
+> ;JULY06;	bsr	MostlyEndCutPaste
+> 		;july06..lastly, set the pointer
+423,424c407,408
+< 	tst.b	FlagText_(BP)		;gonna cut text?
+< 	bne.s	textskipflood		;...if so, no 'flood'
+---
+> 	tst.b	FlagText_(BP)	;gonna cut text?
+> 	bne.s	textskipflood	;...if so, no 'flood'
+428c412
+< 	bcc.s	textskipflood		;...if so, no 'flood'
+---
+> 	bcc.s	textskipflood	;...if so, no 'flood'
+430c414
+< 					;march27...flagclosewb check
+---
+> 		;march27...flagclosewb check
+435,436c419,420
+< 	xjsr	FreeCPUnDo		;march26'89...lowmem flood helper
+< 9$	xjsr	DoFlood			;newflood.o, flood fills drawing mask
+---
+> 	xjsr	FreeCPUnDo	;march26'89...lowmem flood helper
+> 9$:	xjsr	DoFlood		;newflood.o, flood fills drawing mask
+438,442c422,424
+< 
+< 
+<  ifc 't','f' ;JULY05...bug fix for: single pixel cut not happen?
+<  ;may05'89...
+<  ;abort if flood fill didnt/couldnt happen
+---
+>   ifc 't','f' ;JULY05...bug fix for: single pixel cut not happen?
+> 		;may05'89...
+> 		;abort if flood fill didnt/couldnt happen
+444c426
+< 	;bne	abort_cut		;empty bitmap?
+---
+> 	;bne	abort_cut	;empty bitmap?
+450d431
+< 
+452c433,435
+< 	DUMPMSG	<textskipflood>
+---
+> 
+> 
+> 
+455c438
+< 	bne	noblowchip
+---
+> 	bne.s	noblowchip
+457c440
+< 	bne	noblowchip
+---
+> 	bne.s	noblowchip
+462c445
+< 	bcc	noblowchip		;effect#3,4,5 (flips/rotates)
+---
+> 	bcc.s	noblowchip		;effect#3,4,5 (flips/rotates)
+464,465c447
+< ;?;ALLOWS CUT,then paste right away
+< ;;;	xjsr	ClearBrushMask		;strokebounds.o;blitclears drawing mask
+---
+> 	;?;ALLOWS CUT,then paste right away;;;xjsr	ClearBrushMask		;strokebounds.o;blitclears drawing mask
+466a449
+> 	xjsr	DoColorFlood	;newflood.asm, digipaint pi
+468,469c451
+< *	DUMPMSG	<DOING A COLOR FLOOD>
+< 	xjsr	DoColorFlood		;newflood.asm, digipaint pi
+---
+> 	xjsr	ReMask		;handle transparency, "slicing of mask"
+471,476c453,455
+< *	DUMPMSG	<DOING A REMASK>
+< 	xjsr	ReMask			;handle transparency, "slicing of mask"
+< 
+< ;AUG221990
+< ;(slow cpus) if user clicked on screen, then abort this cut
+< ;re: bug on Charles' machine...leaving rectangles...
+---
+> 		;AUG221990
+> 		;(slow cpus) if user clicked on screen, then abort this cut
+> 		;re: bug on Charles' machine...leaving rectangles...
+481,482c460,462
+< 	DUMPMSG	<noblowchip>
+< ;APRIL02'89;xjsr	ReMask		;handle transparency, "slicing of mask"
+---
+> 
+> 
+> 	;APRIL02'89;xjsr	ReMask		;handle transparency, "slicing of mask"
+484c464
+< 					;get D0=xmin d1=ymin d2=xmax d3=ymax d4=width d5=height
+---
+> 		;get D0=xmin d1=ymin d2=xmax d3=ymax d4=width d5=height
+486,488c466,467
+< 	DUMPMSG	<CutLoadedBrush>
+< 	xjsr	StrokeBounds		;strokeb.o, finds 'rectangle' inside drawmask
+< 	bmi	abort_cut		;empty bitmap?
+---
+> 	xjsr	StrokeBounds	;strokeb.o, finds 'rectangle' inside drawmask
+> 	bmi	abort_cut	;empty bitmap?
+489a469
+> 	;xjsr	Debug_d0_d6	;KLUDGE/TESTING
+491c471
+< ;help out text brushes...not quite wide enough...AUG271990
+---
+> 		;help out text brushes...not quite wide enough...AUG271990
+496,497c476,477
+< 	add.w	#2,d2			;ending 'x'
+< 	add.w	#2,d4			;width
+---
+> 	add.w	#2,d2		;ending 'x'
+> 	add.w	#2,d4		;width
+500,501c480,481
+< ;AUG161990
+< ;IF user did not select "brush load", then force an extra "undorgb"
+---
+> 		;AUG161990
+> 		;IF user did not select "brush load", then force an extra "undorgb"
+504c484
+< 	xref FlagBrush_			;file requester setup for brush load?
+---
+> 	xref FlagBrush_		;file requester setup for brush load?
+511,513c491
+< 
+< 
+< ;	xref FlagBrush_			;file requester setup for brush load?
+---
+> ;	xref FlagBrush_		;file requester setup for brush load?
+519,522c497,500
+< ;july07...fixing width, blew it with bstripe extra, for stretch fix?
+< 	move.w	d4,paste_width_(BP) 	;-(sp)	;"real", calc width, from bitmap JULY07 GONNA STACK 2x
+< 	moveq	#3,d4			;blows calc'd imagewidth
+< 	sub.w	d4,d0			;bup-3, starting x
+---
+> 		;july07...fixing width, blew it with bstripe extra, for stretch fix?
+> 	move.w	d4,paste_width_(BP) ;-(sp)	;"real", calc width, from bitmap JULY07 GONNA STACK 2x
+> 	moveq	#3,d4	;blows calc'd imagewidth
+> 	sub.w	d4,d0	;bup-3, starting x
+525,528c503,506
+< 	;neg.w	d4			;leftedge bup width, now
+< 	addq	#3,d0			;original leftedge
+< 	move.w	d0,d4			;=new leftblank
+< 	moveq	#0,d0			;leftedge=0, now
+---
+> 	;neg.w	d4	;leftedge bup width, now
+> 	addq	#3,d0	;original leftedge
+> 	move.w	d0,d4	;=new leftblank
+> 	moveq	#0,d0	;leftedge=0, now
+541a520,521
+> 	;xjsr	Debug_d0_d6
+> 	;xjsr	DebugMe10
+544a525,527
+> 	;xjsr	DebugMe11
+> 
+> 	;;xjsr	DebugMe0
+556a540,541
+> 	;xjsr	DebugMe1
+> 
+562c547
+< ;code to handle "scis"sors/draw/cutout/"repeat lineup" bug
+---
+> 		;code to handle "scis"sors/draw/cutout/"repeat lineup" bug
+567c552
+< 	moveM.w	d0/d1,save_display_x_(BP) ;x,y
+---
+> 	moveM.w	d0/d1,save_display_x_(BP)	;x,y
+571,572c556,557
+< 	lea 	BB_BitMap_(BP),A0		;"from" normal fullsize drawmask
+< 	lea 	PasteMaskBitMap_(BP),a1	;"to" paste MASK bitmap
+---
+> 	lea BB_BitMap_(BP),A0		;"from" normal fullsize drawmask
+> 	lea PasteMaskBitMap_(BP),a1	;"to" paste MASK bitmap
+577c562
+< 	move.w	(a1),d4 		;bm_BytesPerRow(a1),d4	;'to' bitmap width
+---
+> 	move.w	(a1),d4 ;bm_BytesPerRow(a1),d4	;'to' bitmap width
+582a568,569
+> 	;xjsr	DebugMe2
+> 
+585c572
+< 	CALLIB 	Graphics,BltBitMap	;queue up blitter, THEN proc' copy
+---
+> 	CALLIB Graphics,BltBitMap	;queue up blitter, THEN proc' copy
+586a574
+> 	;xjsr	DebugMe3
+598,599c586
+< ;?;ALLOWS CUT,then paste right away;;;xjsr	ClearBrushMask		;strokebounds.o;blitclears drawing mask
+< 
+---
+> 	;?;ALLOWS CUT,then paste right away;;;xjsr	ClearBrushMask		;strokebounds.o;blitclears drawing mask
+602c589,591
+< 	DUMPMSG	<grabtextimage>
+---
+> 
+> 	;xjsr	DebugMe4
+> 
+604c593
+< 	lea 	PasteBitMap_(BP),a1		;"to" BRUSH IMAGERY bitmap
+---
+> 	lea PasteBitMap_(BP),a1		;"to" BRUSH IMAGERY bitmap
+610c599
+< 	lea 	ScreenBitMap_(BP),A0	;"FROM" VISIBLE SCREEN bitmap
+---
+> 	lea ScreenBitMap_(BP),A0	;"FROM" VISIBLE SCREEN bitmap
+612c601
+< 	move.b	#%11111111,d7		;d7=bitplane mask ("planepick")
+---
+> 	move.b	#%00111111,d7		;d7=bitplane mask ("planepick")
+618c607
+< 	xjsr	AllocCPUnDo		;Memories.o, Cut Paste UnDo (fastmem)
+---
+> 	xjsr	AllocCPUnDo	;Memories.o, Cut Paste UnDo (fastmem)
+620c609
+< ;MAY18late...lowmem...no cpundo?
+---
+> 		;MAY18late...lowmem...no cpundo?
+630,633c619,621
+< ;AUG161990
+< ;don't "saveundorgb" if just a file (not brush) load
+< 
+< 	xref 	FlagOpen_
+---
+> 		;AUG161990
+> 		;don't "saveundorgb" if just a file (not brush) load
+> 	xref FlagOpen_
+645c633
+< 	xjsr	BStripe			;June24
+---
+> 	xjsr	BStripe		;June24
+648,650c636,637
+< ;don't re-render just because cutting a brush
+< ;...undo-comp uses LastRepaintHt_ to flag lines...AUG281990
+< 
+---
+> 		;don't re-render just because cutting a brush
+> 		;...undo-comp uses LastRepaintHt_ to flag lines...AUG281990
+661c648
+< 	xjsr	SwapSuperCPUnDo		;memories.o
+---
+> 	xjsr	SwapSuperCPUnDo	;memories.o
+664d650
+< 	DUMPMSG	<CopySuperScreenRSTP:>
+674,676c660,661
+< 	DUMPMSG	<_SwapSuperCPUnDo>
+< 	xjsr	SwapSuperCPUnDo		;memories.o
+< 	xjmp	CopySuperScreen		;memories.o
+---
+> 	xjsr	SwapSuperCPUnDo	;memories.o
+> 	xjmp	CopySuperScreen	;memories.o
+680,682c665,666
+< 	DUMPMSG	<_CopySuperScreen>
+< ;	;digipaint pi/24
+< 	;movem.l	d0-d7/a0-a6,-(sp) ;YUCK ....CLEANUP
+---
+> 	;	;digipaint pi/24
+> 	;movem.l	d0-d7/a0-a6,-(sp)	;YUCK ....CLEANUP
+696c680
+< 	xjmp	CopySuperScreen		;*this* removes the text, reg undo->visible
+---
+> 	xjmp	CopySuperScreen	;*this* removes the text, reg undo->visible
+700d683
+< ;	DUMPMSG	<DoShowPaste>
+706c689
+< 	bcc.s	ReallyShowPaste		;'maxcount' or more ticks have gone by
+---
+> 	bcc.s	ReallyShowPaste	;'maxcount' or more ticks have gone by
+710,712c693
+< 	DUMPMSG	<ReallyShowPaste>
+< 
+< 	;xref	FlagSetGrid_		;DigiPaint PI
+---
+> 	;xref	FlagSetGrid_	;DigiPaint PI
+720c701
+< ;27JAN92......'free' the double buffer....
+---
+> 		;27JAN92......'free' the double buffer....
+731c712
+< 	tst.b	FlagMenu_(BP)		;menu displayed?
+---
+> 	tst.b	FlagMenu_(BP)	;menu displayed?
+735c716
+< 	;st	FlagNeedMagnify_(BP) 	;<-should only set this if "truly" needed
+---
+> 	;st	FlagNeedMagnify_(BP) ;<-should only set this if "truly" needed
+744c725
+< 	;bne	zmagrts			;MAY23	;leave brush alone when in pick mode
+---
+> 	;bne	zmagrts		;MAY23	;leave brush alone when in pick mode
+747,748c728,729
+< 	xref	LastM_Window_
+< 	xref 	GWindowPtr_
+---
+> 	xref LastM_Window_
+> 	xref GWindowPtr_
+754c735
+< 	xref 	FlagSingleBit_		;indicates 'single bitplane undo' of cutpaste
+---
+> 	xref FlagSingleBit_	;indicates 'single bitplane undo' of cutpaste
+757c738
+< 	bra	zmagrts			;last msg NOT from hires, "stop"
+---
+> 	bra.s	zmagrts			;last msg NOT from hires, "stop"
+763d743
+< 	DUMPMSG	<ForcedShowPaste>
+786c766
+< 	move.l	D0,A0			;MWindowPTr (magnify window)
+---
+> 	move.l	D0,A0		;MWindowPTr (magnify window)
+789,791c769,771
+< 	bmi.s	noton_mags		;mousepointer "above" magnify window on magscr
+< 	asr.w	#3,D0			;x/8 (remember, weir doing a *8 magnify)
+< 	asr.w	#2,d1			;y/4 (remember, weir doing a *8 magnify)
+---
+> 	bmi.s	noton_mags	;mousepointer "above" magnify window on magscr
+> 	asr.w	#3,D0		;x/8 (remember, weir doing a *8 magnify)
+> 	asr.w	#2,d1		;y/4 (remember, weir doing a *8 magnify)
+798c778
+< 	;;bra.s	gots_xy			;got show x,y
+---
+> 	;;bra.s	gots_xy		;got show x,y
+824c804
+< 	asr.w	#3,d2				;pixels->bytes
+---
+> 	asr.w	#3,d2		;pixels->bytes
+826c806
+< 	;asr.w	#3,d0				;pixels->bytes
+---
+> 	;asr.w	#3,d0		;pixels->bytes
+837,838c817,818
+< ;if pointer is "off bottom", revert//hang up on bottom
+< ;MAY23......unshow if off bottom
+---
+> 		;if pointer is "off bottom", revert//hang up on bottom
+> 		;MAY23......unshow if off bottom
+844,845c824,825
+< 	;PEA	UnShowPaste			;MAY23...causes flicker
+< 	BRA	UnShowPaste			;MAY23
+---
+> 	;PEA	UnShowPaste	;MAY23...causes flicker
+> 	BRA	UnShowPaste	;MAY23
+849,850c829,830
+< 	bsr	DoDouble
+< 	bne.s	enda_showpaste			;else no memory for double scrn, do old way
+---
+> 	bsr.s	DoDouble
+> 	bne.s	enda_showpaste	;else no memory for double scrn, do old way
+859,860c839,840
+< 	bsr	internal_usp			;UnShowPaste	;remove brush from screen
+< 	xjsr	ReSeePaste			;simple blit to see
+---
+> 	bsr.s	internal_usp	;UnShowPaste	;remove brush from screen
+> 	xjsr	ReSeePaste	;simple blit to see
+863,864c843,844
+< 	xref FlagRotate_			;DigiPaintPi
+< 	tst.b	FlagRotate_(BP)			;DigiPaintPi
+---
+> 	xref FlagRotate_	;DigiPaintPi
+> 	tst.b	FlagRotate_(BP)	;DigiPaintPi
+866c846
+< 	xjsr	ShowRot				;showrot.asm
+---
+> 	xjsr	ShowRot		;showrot.asm
+870d849
+< 	DUMPMSG	<enda_showpaste>
+875a855
+> 
+877c857
+< 	xref DeadHt_				;only need to clear this many lines (unshow)
+---
+> 	xref DeadHt_	;only need to clear this many lines (unshow)
+883,887c863,864
+< 
+< 	DUMPMSG	<UnShowPaste>
+< 
+< 	;tst.b	FlagMenu_(BP)			;menu displayed?
+< 	;bne	enda_unshowp			;guru if dont stop upon menu?
+---
+> 	;tst.b	FlagMenu_(BP)	;menu displayed?
+> 	;bne	enda_unshowp	;guru if dont stop upon menu?
+890c867
+< 	beq	enda_unshowp			;nothing to "unshow"
+---
+> 	beq.s	enda_unshowp	;nothing to "unshow"
+892c869
+< ;NOPE;DONE IN MAIN LOOP;st	FlagNeedShowPaste_(BP)	;ONLY PLACE CLEARED in whole program AUG301991
+---
+> 	;NOPE;DONE IN MAIN LOOP;st	FlagNeedShowPaste_(BP)	;ONLY PLACE CLEARED in whole program AUG301991
+895,899c872,876
+< 	tst.l	bm_Planes(a1)			;get the bitmap (have plane adrs?)
+< 	beq.s	checkdo_usp			;processor copy fastmem undobitmap->screen
+< 	bsr	MoveDoubleFront			;removes brush by showing 'clean' bitmap
+< 	clr.w	DeadHt_(BP)			;signal 'nothing to undo'
+< 	;do not delete double buff'		;xjmp FreeDouble ;chip copy of screen for dbl buf'
+---
+> 	tst.l	bm_Planes(a1)		;get the bitmap (have plane adrs?)
+> 	beq.s	checkdo_usp	;processor copy fastmem undobitmap->screen
+> 	bsr	MoveDoubleFront	;removes brush by showing 'clean' bitmap
+> 	clr.w	DeadHt_(BP)	;signal 'nothing to undo'
+> 	;do not delete double buff';xjmp FreeDouble ;chip copy of screen for dbl buf'
+904d880
+< 	DUMPMSG	<UnShowAndFreeDouble>
+909,910c885
+< 	DUMPMSG	<checkdo_usp>
+< 	tst.l	PasteBitMap_Planes_(BP)		;really carrying a brush?
+---
+> 	tst.l	PasteBitMap_Planes_(BP)	;really carrying a brush?
+914d888
+< 	DUMPMSG	<checkdo_usp>
+916,918c890,892
+< 	beq.s	enda_unshowp			;probably not happen...
+< 	clr.w	DeadHt_(BP)			;for next time...so dont do 2x
+< 	move.w	DeadY_(BP),d1			;d1 will calc 2b lineoffset to first line
+---
+> 	beq.s	enda_unshowp	;probably not happen...
+> 	clr.w	DeadHt_(BP)	;for next time...so dont do 2x
+> 	move.w	DeadY_(BP),d1	;d1 will calc 2b lineoffset to first line
+948,949d921
+< 
+< 
+963c935
+< 	moveq	#8,d0			;6 bitplanes, please
+---
+> 	moveq	#6,d0			;6 bitplanes, please
+979c951
+< 	CALLIB 	Graphics,InitRastPort	;sets fgpen=1, bg=0, aol=1
+---
+> 	CALLIB Graphics,InitRastPort	;sets fgpen=1, bg=0, aol=1
+1000,1001c972,973
+< scrx_d3	equr d3
+< scry_d4	equr d4
+---
+> scrx_d3		equr d3
+> scry_d4		equr d4
+1070,1071c1042,1043
+< 	; NDEF BltMaskBitMapRastPort,$FFFFFD84
+< 	; BltMaskBitMapRastPort
+---
+> 		; NDEF BltMaskBitMapRastPort,$FFFFFD84
+> 		; BltMaskBitMapRastPort
+1073c1045
+< 	; (A0,D0/D1,A1,D2/D3/D4/D5/D6,A2)
+---
+> 		; (A0,D0/D1,A1,D2/D3/D4/D5/D6,A2)
+1098,1099d1069
+< 	DUMPMSG	<MoveDoubleFront>
+< 
+1103c1073
+< 	moveq	#8-1,d0
+---
+> 	moveq	#6-1,d0
+1114c1084
+< 	moveq	#8-1,d0
+---
+> 	moveq	#6-1,d0
+1123,1124d1092
+< 
+< 	ALLDUMPS

@@ -1,0 +1,947 @@
+********************************************************************
+* LUT6.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: LUT6.a,v 2.4 1993/05/11 13:39:35 Finch2 Exp $
+*
+* $Log: LUT6.a,v $
+*Revision 2.4  1993/05/11  13:39:35  Finch2
+**** empty log message ***
+*
+*Revision 2.1  93/02/23  14:18:54  Finch
+*Removed FindGridCrouton
+*
+*********************************************************************
+	NOLIST
+	idnt	"LUT6"
+	section LUT_text,code
+	Include	"Assembler.i"
+	Include	"NewTek.i"
+	Include	"Include.i"
+	Include	"Elh.i"
+	Include	"VtHand.i"
+	Include	"Instinct.i"
+	Include	"LUTEqu.i"
+	Include	"LUT0.i"
+	Include	"LUT1.i"
+	Include	"LUT2.i"
+	Include	"LUT3.i"
+	Include	"LUT4.i"
+	Include	"LUT5.i"
+	Include	"LUT8.i"
+	Include	"LUT9.i"
+	Include	"LUTA.i"
+	Include	"LUTB.i"
+	Include	"LUTLib.i"
+	STARTLIST
+	PAGE
+*************************************************************************
+*									*
+*	MakeEditMark:							*
+*									*
+*	Makes the Edit Mark For The Edit Position.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= High Word, Mark 1, Low Word, Mark 2, -1 = No Mark.	*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	A4.L	= Mark Buffer is Updated To Represent Values.		*
+*									*
+*	19.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MakeEditMark
+LUT_MakeEditMark:
+	MOVEM.L	D0-D2/A0-A1,-(A7)	; Save Calling State.
+*
+*	Blast Edit Buffer To Blank.
+*
+	MOVE.L	D0,D2			; Save Input Parameters.
+	LEA.L	LTE_EditMark(A4),A1	; A1.L = Address of Buffer.
+	MOVEA.L	A1,A0			; A0.L = Address of Buffer.
+	MOVE.L	#$FFFF0000,D0		; Value to Clear With.
+	MOVE.L	#LUT_EditMarkLn/4,D1	; Number of Long Words.
+	BSR	FillLong		; Clear The Memory Area.
+*
+*	Loop Up To Twice And Make Marker.
+*
+MAKEM1	CMPI.W	#-1,D2			; Value Set In This Position?
+	BEQ	MAKEM7			; Jump If Nothing In This Position.
+	MOVE.W	D2,D0			; Make QUAD Position.
+	ANDI.W	#$FFFC,D0		; Remove Lower Bits.
+	ADD.W	D0,D0			; 8 Byte Wide Index.
+	BTST.L	#1,D2			; In Upper Byte?
+	BEQ.S	MAKEM2			; Jump If Not Upper.
+	ADDQ.W	#1,D0			; Move To Upper Byte.
+MAKEM2	LEA.L	12(A1,D0.W),A0		; A0.L = Address of Word.
+	BTST.L	#0,D2			; In Upper Nibble?
+	BEQ.S	MAKEM3			; Jump If Not Upper.
+	MOVE.B	(A0),D0			; Value To Make.
+	ANDI.B	#$C3,D0			; Clear Upper Nibble.
+	BRA.S	MAKEM6			; Skip Else Part.
+MAKEM3	BTST.L	#1,D2			; Do We Have To Step Back Two Words?
+	BEQ.S	MAKEM4			; Jump If We Have To Step Back Two.
+	MOVE.B	-(A0),D0		; Get Previous Value.
+	ANDI.B	#$FC,D0			; Clear Lower Two Bits.
+	MOVE.B	D0,(A0)+		; Save Value Position 0.
+	MOVE.B	D0,1*LUT_EditMarkBWd-1(A0) ;Save Value Position 1.
+	MOVE.B	D0,2*LUT_EditMarkBWd-1(A0) ;Save Value Position 2.
+	MOVE.B	D0,3*LUT_EditMarkBWd-1(A0) ;Save Value Position 3.
+	MOVE.B	D0,4*LUT_EditMarkBWd-1(A0) ;Save Value Position 4.
+	MOVE.B	D0,5*LUT_EditMarkBWd-1(A0) ;Save Value Position 5.
+	MOVE.B	D0,6*LUT_EditMarkBWd-1(A0) ;Save Value Position 6.
+	MOVE.B	D0,7*LUT_EditMarkBWd-1(A0) ;Save Value Position 7.
+	BRA.S	MAKEM5			; Skip Else Part.
+MAKEM4	MOVE.B	-7(A0),D0		; Get Previous Value.
+	ANDI.B	#$FC,D0			; Clear Lower Two Bits.
+	MOVE.B	D0,-7(A0)		; Save Value Position 0.
+	MOVE.B	D0,1*LUT_EditMarkBWd-7(A0) ;Save Value Position 1.
+	MOVE.B	D0,2*LUT_EditMarkBWd-7(A0) ;Save Value Position 2.
+	MOVE.B	D0,3*LUT_EditMarkBWd-7(A0) ;Save Value Position 3.
+	MOVE.B	D0,4*LUT_EditMarkBWd-7(A0) ;Save Value Position 4.
+	MOVE.B	D0,5*LUT_EditMarkBWd-7(A0) ;Save Value Position 5.
+	MOVE.B	D0,6*LUT_EditMarkBWd-7(A0) ;Save Value Position 6.
+	MOVE.B	D0,7*LUT_EditMarkBWd-7(A0) ;Save Value Position 7.
+MAKEM5	MOVE.B	(A0),D0			; Value To Make.
+	ANDI.B	#$3F,D0			; Clear Lower Nibble.
+MAKEM6	MOVE.B	D0,(A0)			; Save Value Position 0.
+	MOVE.B	D0,1*LUT_EditMarkBWd(A0) ;Save Value Position 1.
+	MOVE.B	D0,2*LUT_EditMarkBWd(A0) ;Save Value Position 2.
+	MOVE.B	D0,3*LUT_EditMarkBWd(A0) ;Save Value Position 3.
+	MOVE.B	D0,4*LUT_EditMarkBWd(A0) ;Save Value Position 4.
+	MOVE.B	D0,5*LUT_EditMarkBWd(A0) ;Save Value Position 5.
+	MOVE.B	D0,6*LUT_EditMarkBWd(A0) ;Save Value Position 6.
+	MOVE.B	D0,7*LUT_EditMarkBWd(A0) ;Save Value Position 7.
+	MOVE.W	#-1,D2			; Flag For All Done.
+MAKEM7	SWAP.W	D2			; Get Other Position.
+	CMPI.L	#-1,D2			; Add Done?
+	BNE	MAKEM1			; Jump If Not Done Yet.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D2/A0-A1	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MakeEditLine:							*
+*									*
+*	Makes the Edit Line Between The Edit Positions.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= High Word, Mark 1, Low Word, Mark 2, -1 = No Mark.	*
+*	A4.L	= Address of LUT Base.					*
+*									*
+*	Output:								*
+*									*
+*	A4.L	= Mark Buffer is Updated To Represent Value of Line.	*
+*									*
+*	25.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MakeEditLine
+LUT_MakeEditLine:
+	MOVEM.L	D0-D3/A0-A1,-(A7)	; Save Calling State.
+*
+*	If There Are Two Markers, Draw A Line Between Them.
+*
+	MOVE.L	D0,D3			; For Later Line Draw.
+	LEA.L	LTE_EditMark(A4),A1	; A1.L = Address of Buffer.
+	CMPI.W	#-1,D3			; Draw This Position?
+	BEQ.S	MAKEL6			; Exit If Not Two Markers.
+	MOVEQ.L	#0,D2			; Clear High Bits.
+	MOVE.W	D3,D2			; Save This Position.
+	CLR.W	D3			; Clear High Bits.
+	SWAP.W	D3			; Get Other Position.
+	CMPI.W	#-1,D3			; Draw This Position?
+	BEQ.S	MAKEL6			; Exit If Not Two Markers.
+	CMP.W	D3,D2			; Make Proper Order.
+	BCS.S	MAKEL1			; Jump If D2 < D3.
+	EXG.L	D2,D3			; Swap So D2 < D3.
+MAKEL1	SUB.L	D2,D3			; D3.L = Number of Units To Draw.
+	SUBQ.L	#1,D3			; Need To Be At Least Two.
+	BMI.S	MAKEL6			; Exit If 0 or 1.
+*
+*	Draw Starting Position.
+*
+	ADDQ.W	#1,D2			; Move To Next Position.
+	MOVE.L	D2,D1			; Check For Mod 4.
+	ANDI.W	#$0003,D1		; Position  0 to  3.
+	BEQ.S	MAKEL3			; Jump If Mod 4 = 0.
+	NEG.W	D1			; Position -3 to -1.
+	ADDQ.W	#4,D1			; Position  1 to  3.
+	CMP.W	D1,D3			; That Many Points To Draw?
+	BCC.S	MAKEL2			; Jump If Ok.
+	MOVE.L	D3,D1			; Else Draw As Many As We Have.
+MAKEL2	SUB.L	D1,D3			; Less From Total.
+	BSR	MAKELD			; Draw Up To 3 Starting Positions.
+*
+*	Draw Middle Sections 4 At a Time, Then Ending Position.
+*
+MAKEL3	MOVE.L	D3,D1			; Get Number of 4 Sections.
+	LSR.L	#2,D3			; Divide By 4.
+	ANDI.W	#$0003,D1		; D1.L = Number of Ending Sections.
+	MOVE.L	D2,D0			; Make Bigger Index.
+	ADD.W	D0,D0			; 8 Byte Wide Index.
+	LEA.L	12(A1,D0.W),A0		; A0.L = Address of Word.
+	ADD.W	D3,D2			; Move x Position To Next.
+	ADD.W	D3,D2
+	ADD.W	D3,D2
+	ADD.W	D3,D2
+	BRA.S	MAKEL5			; Start Looping.
+MAKEL4	MOVE.W	(A0),D0			; Get Screen Value.
+	ANDI.W	#$0003,D0		; Leave Only Low Bits.
+	MOVE.W	D0,(A0)			; Save Value Position 0.
+	MOVE.W	D0,LUT_EditMarkBWd(A0)	; Save Value Position 1.
+	MOVE.B	-7(A0),D0		; Get Little Left Edge.
+	ANDI.B	#$FC,D0			; Remove It.
+	MOVE.B	D0,-7(A0)		; Save Value Position 0.
+	MOVE.B	D0,LUT_EditMarkBWd-7(A0) ;Save Value Position 1.
+	ADDQ.L	#8,A0			; Move To Next Address.
+MAKEL5	DBF	D3,MAKEL4		; Loop Until Done.
+	BSR.S	MAKELD			; Draw Up To 3 Ending Positions.
+*
+*	Exit Subroutine.
+*
+MAKEL6	MOVEM.L	(A7)+,D0-D3/A0-A1	; Return Calling State.
+	RTS
+*
+*	Draw Up To 3 Starting or Ending Positions.
+*
+MAKEL7	MOVE.W	D2,D0			; Make QUAD Position.
+	ANDI.W	#$FFFC,D0		; Remove Lower Bits.
+	ADD.W	D0,D0			; 8 Byte Wide Index.
+	BTST.L	#1,D2			; In Upper Byte?
+	BEQ.S	MAKEL8			; Jump If Not Upper.
+	ADDQ.W	#1,D0			; Move To Upper Byte.
+MAKEL8	LEA.L	12(A1,D0.W),A0		; A0.L = Address of Word.
+	BTST.L	#0,D2			; In Upper Nibble?
+	BEQ.S	MAKEL9			; Jump If Not Upper.
+	MOVE.B	(A0),D0			; Value To Make.
+	ANDI.B	#$C3,D0			; Clear Upper Nibble.
+	BRA.S	MAKELC			; Skip Else Part.
+MAKEL9	BTST.L	#1,D2			; Do We Have To Step Back Two Words?
+	BEQ.S	MAKELA			; Jump If We Have To Step Back Two.
+	MOVE.B	-(A0),D0		; Get Previous Value.
+	ANDI.B	#$FC,D0			; Clear Lower Two Bits.
+	MOVE.B	D0,(A0)+		; Save Value Position 0.
+	MOVE.B	D0,LUT_EditMarkBWd-1(A0) ;Save Value Position 1.
+	BRA.S	MAKELB			; Skip Else Part.
+MAKELA	MOVE.B	-7(A0),D0		; Get Previous Value.
+	ANDI.B	#$FC,D0			; Clear Lower Two Bits.
+	MOVE.B	D0,-7(A0)		; Save Value Position 0.
+	MOVE.B	D0,LUT_EditMarkBWd-7(A0) ;Save Value Position 1.
+MAKELB	MOVE.B	(A0),D0			; Value To Make.
+	ANDI.B	#$3F,D0			; Clear Lower Nibble.
+MAKELC	MOVE.B	D0,(A0)			; Save Value Position 0.
+	MOVE.B	D0,LUT_EditMarkBWd(A0)	; Save Value Position 1.
+	ADDQ.W	#1,D2			; Move To Next Position.
+MAKELD	DBF	D1,MAKEL7		; Loop Until Done.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DrawEditMark:							*
+*									*
+*	Draws The Current Edit Mark On The Screen.			*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	Edit Mark Is Written On The Screen.				*
+*									*
+*	19.Apr 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DrawEditMark
+LUT_DrawEditMark:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Draw The Fast Gadget On The Screen.
+*
+	MOVEQ.L	#1,D0			; D0.L = Number Of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset To Image.
+	LEA.L	LUT_EditColorsFG,A0	; A0.L = Address Of Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address Of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	CALLTL	DrawFastGList		; Draw Gadget On The Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A2	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	FindLUTData:							*
+*									*
+*	Returns the Address of the Numbered LUT Data.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number  of LUT Curton To Find.			*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	A0.L	= Address of Numbered LUT Data.				*
+*									*
+*	CC	== Zero -> No LUT Data Was Found.			*
+*	CC	!= Zero -> LUT Data Was Found.				*
+*									*
+*	11.Jun 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_FindLUTData
+LUT_FindLUTData:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Loop And Find The Data.
+*
+	MOVEA.L	LTE_LULPtr(A4),A0	; A0.L = Address of Head of List.
+	MOVE.L	A0,D1			; NULL Pointer?
+	BRA.S	FNDLD2			; Start Looping.
+FNDLD1	MOVEA.L	LUL_Next(A0),A0		; Move To Next Position.
+	MOVE.L	A0,D1			; NULL Pointer?
+FNDLD2	DBEQ	D0,FNDLD1		; Loop Until Done.
+	BEQ.S	FNDLD3			; Exit On NULL Pointer.
+	ADDQ.L	#LUL_LUT,A0		; Move To LUT Data.
+*
+*	Exit Subroutine.
+*
+FNDLD3	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	CountLULData:							*
+*									*
+*	Counts Up The Number of LUL Data Items.				*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LUT Extension Base.			*
+*									*
+*	Output:								*
+*									*
+*	D0.L	= Number of LUT Croutons.				*
+*	D1.L	= Value  of Selected Crouton.				*
+*									*
+*	16.Jul 1990 Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_CountLULData
+LUT_CountLULData:
+	MOVEM.L	D2/A0-A1,-(A7)		; Save Calling State.
+*
+*	Loop and Count the LUL.
+*
+	MOVEQ.L	#0,D0			; D0.L = Number of Croutons.
+	MOVEQ.L	#-1,D1			; D1.L = Value  of Selected Crouton.
+	MOVEA.L	LTE_LULPtr(A4),A0	; A0.L = Address of Head of List.
+	BRA.S	CNTLU3			; Start Looping.
+CNTLU1	LEA.L	LUL_LUT(A0),A1		; A1.L = Address of LUT.
+	CMPA.L	LTE_PresentLUT(A4),A1	; Is This The Selected LUT?
+	BNE.S	CNTLU2			; Jump If Not Selected LUT.
+	MOVE.L	D0,D1			; Value of Selected Crouton.
+CNTLU2	ADDQ.L	#1,D0			; D0.L = Increment Count of Croutons.
+	MOVEA.L	LUL_Next(A0),A0		; A0.L = Address of Next In List.
+CNTLU3	MOVE.L	A0,D2			; NULL Pointer?
+	BNE.S	CNTLU1			; Exit On NULL Pointer.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D2/A0-A1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoStep:								*
+*									*
+*	Steps to Next Data For LUT Crouton Image.			*
+*									*
+*	Input:								*
+*									*
+*	D2.W	= Value of Raw Key Code.				*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> None of the Step Keys Were Pressed.		*
+*									*
+*	16.Jul 1990 Jamie L. Finch					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoStep
+LUT_DoStep:
+	MOVE.L	D0,-(A7)		; Save Calling State.
+*
+*	Check For Move Forward.
+*
+	CMPI.W	#$0C,D2			; Keyboard + Key Hit?
+	BEQ.S	DOSTE2			; Jump If Keyboard + Key Hit.
+	CMPI.W	#$4E,D2			; -> Key Hit?
+	BEQ.S	DOSTE2			; Jump If -> Key Hit.
+	CMPI.W	#$5E,D2			; Numberic Keypad + Key Hit?
+	BEQ.S	DOSTE2			; Jump If Numberic Keypad + Key Hit.
+*
+*	Check For Move Backward.
+*
+	CMPI.W	#$0B,D2			; Keyboard - Key Hit?
+	BEQ.S	DOSTE1			; Jump If Keyhboard - Key Hit.
+	CMPI.W	#$4A,D2			; Numberic Keypad - Key Hit?
+	BEQ.S	DOSTE1			; Jump If Numberic Keypad - Key Hit.
+	CMPI.W	#$4F,D2			; <- Key Hit?
+	BNE.S	DOSTE4			; Jump If <- Key Not Hit.
+*
+*	Now Move To That Position.
+*
+DOSTE1	MOVEQ.L	#-1,D0			; D0.L = Direction To Go.
+	BRA.S	DOSTE3			; Skip Else Part.
+DOSTE2	MOVEQ.L	#1,D0			; D0.L = Direction To Go.
+DOSTE3	BSR.S	LUT_MoveInList		; Move To The Position.
+	CMP.W	D0,D0			; Set CC == Zero.
+*
+*	Exit Subroutine.
+*
+DOSTE4	MOVEM.L	(A7)+,D0		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	MoveInList:							*
+*									*
+*	Moves Forward Or Backwards in Linked List of LUT Croutons.	*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= Number of Croutons To Move.				*
+*									*
+*	Output:								*
+*									*
+*	An Attempt is Made To Move That Many Positions in List.		*
+*									*
+*	02.Oct 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_MoveInList
+LUT_MoveInList:
+	MOVEM.L	D0-D3/A0,-(A7)		; Save Calling State.
+*
+*	Move To Position.
+*
+	MOVE.L	D0,D2			; D2.L = Number of Positions To Move.
+	BSR.S	LUT_CountLULData	; D0.L = Count, D1.L = Select.
+	TST.L	D0			; Any LUT Data At All?
+	BEQ.S	MOVIL5			; Exit If No LUT Data.
+	TST.L	D1			; Is a LUT Data Selected?
+	BPL.S	MOVIL1			; Jump If LUT Data Selected.
+	MOVEQ.L	#1,D3			; D3.L = LUT Data To Select.
+	BRA.S	MOVIL3			; Skip Else Part.
+MOVIL1	BNE.S	MOVIL2			; Jump If Not Zero Position.
+	MOVE.L	D0,D1			; Make Maximum Position.
+MOVIL2	MOVE.L	D1,D3			; Make LUT Data To Select.
+	ADD.L	D2,D3			; D3.L = LUT Data To Select.
+	BLE.S	MOVIL5			; Exit If Zero Position Reached.
+	CMP.L	D0,D3			; Past Maximum Position.
+	BGT.S	MOVIL5			; Exit If Past Maximum Position.
+MOVIL3	CMP.L	D0,D3			; At Maximum Position?
+	BNE.S	MOVIL4			; Jump If Not Maximum Position.
+	MOVEQ.L	#0,D3			; If Maximum, Make First.
+MOVIL4	CMP.L	D3,D1			; Did We Pick Another LUT Data?
+	BEQ.S	MOVIL5			; Exit If Nothing Changed.
+	MOVE.L	D3,D0			; D0.L = Value Of LUT Data To Select.
+	BSR	LUT_FindLUTData		; A0.L = Address of This LUT Data.
+	BEQ.S	MOVIL5			; Exit If Not Found.
+	BSR.S	LUT_SwitchLULData	; Go To The New Crouton.
+*
+*	Exit Subroutine.
+*
+MOVIL5	MOVEM.L	(A7)+,D0-D3/A0		; Return Calling State.
+	RTS
+*************************************************************************
+*									*
+*	SwitchLULData:							*
+*									*
+*	Switches From One LUT Crouton To Second Lut Crouton, Saving Data*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of New LUT Crouton.				*
+*	D1.L	= Number  of Old LUT Crouton.				*
+*	A4.L	= Address of LTE Base.					*
+*									*
+*	Output:								*
+*									*
+*	Old Crouton Data Is Saved, And We Are Switched To The New LUT	*
+*	Crouton, And The Screen Is Updated.				*
+*									*
+*	03.Oct 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_SwitchLULData
+LUT_SwitchLULData:
+	MOVEM.L	D0-D1/A0-A2,-(A7)	; Save Calling State.
+*
+*	Start to Transition From Selected LUT Data to New LUT Data.
+*
+	BSR	LUT_ModeOffEditor	; Make Sure LUT Mode is Off.
+	MOVEA.L	A0,A2			; A2.L = Address of New LUT Data.
+	MOVE.L	D1,D0			; D0.L = Number  of Old LUT Data.
+	TST.L	D0			; No Old LUT Data Found.
+	BMI.S	SWTCR1			; Jump If No Old LUT Data.
+	BSR	LUT_FindLUTData		; A0.L = Address of Old LUT Data.
+	BEQ.S	SWTCR1			; Jump If No Old LUT Data.
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A0) ; Is The Data Valid?
+	BNE.S	SWTCR1			; Exit If Data Not Valid.
+	BSR	LUT_PutCroutonData	; Write Data Out To Old LUT Data.
+*
+*	Get The Data From Source LUT and Update The Screen.
+*
+SWTCR1	MOVEA.L	A2,A0			; A0.L = Address of Source Buffer.
+	MOVEA.L	A4,A1			; Address of Destination Buffer.
+	CMPI.L	#LUT_CheckConst,LUT_CheckVal(A1) ; Is The Data Valid?
+	BNE.S	SWTCR3			; Exit If Data Not Valid.
+	BCLR.B	#LTEF_DVE0Pure,LTE_Flags(A4) ; Clear The Pure Data Flag.
+	MOVE.W	#LUT_Sizeof/2-1,D0	; Loop Counter.
+SWTCR2	MOVE.W	(A0)+,(A1)+		; Move The Data.
+	DBF	D0,SWTCR2		; Loop Until Done.
+*
+*	Make This The Current LUT.
+*
+	MOVE.L	A2,LTE_PresentLUT(A4)	; Save Pointer to Present Data.
+	BSR	LUT_DrawAfterChanging	; Redraw The Screen.
+*
+*	Exit Subroutine.
+*
+SWTCR3	MOVEM.L	(A7)+,D0-D1/A0-A2	; Exit Subroutine.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	NumbericKeyPadEntry:						*
+*									*
+*	Enters The Numbers Struck On The Numberic Key Pad.		*
+*									*
+*	Input:								*
+*									*
+*	D2.W	= Value of Raw Key Code.				*
+*									*
+*	Output:								*
+*									*
+*	Numberic Key Pad Entry Is Performed.				*
+*									*
+*	CC	== Zero -> Execution Without Error.			*
+*	CC	!= Zero -> None of the Step Keys Were Pressed.		*
+*									*
+*	02.Oct 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+NUMARY	DC.B	$3F,$3E,$3D,$2F,$2E,$2D,$1F,$1E,$1D,$0F
+NUMARL	EQU	*-NUMARY
+*
+	XDEF	LUT_NumbericKeyPadEntry
+LUT_NumbericKeyPadEntry:
+	MOVEM.L	D0-D2/A0-A2/A6,-(A7)	; Save Calling State.
+*
+*	Check For Numberic Digit.
+*
+	LEA.L	NUMARY(PC),A0		; A0.L = Address of Number Array.
+	MOVEQ.L	#NUMARL-1,D0		; D0.L = Loop Counter.
+NUMKP1	CMP.B	(A0)+,D2		; Found Character Match?
+	DBEQ	D0,NUMKP1		; Loop For Length of Table.
+	BNE.S	NUMKP2			; Jump If Not Found.
+*
+*	They Just Entered a New Digit.
+*
+	ADDI.W	#'0',D0			; Convert To ASCII.
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Number String.
+	MOVE.B	1(A0),(A0)		; Move Character Up.
+	MOVE.B	D0,1(A0)		; Save New Character.
+*
+*	Print New Value On Screen.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Soft Sprite.
+	MOVE.L	#TBFG_LEFTEDGE+NUMBERTEXT_X,D0	; D0.L = x Coordinate.
+	MOVE.L	#TBFG_TOPEDGE+NUMBERTEXT_Y,D1	; D1.L = y Coordinate.
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Text.
+	BSR	LUT_PrintNumber		; Print Number On Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Soft Sprite.
+	BRA.S	NUMKP5			; Exit Subroutine.
+*
+*	Check For Enter Key.
+*
+NUMKP2	CMPI.W	#$43,D2			; Was It The Enter Key?
+	BNE.S	NUMKP6			; Exit If Not Enter Key.
+	LEA.L	LUT_NumberString,A0	; Address of String To Convert.
+	BSR	ASCINT			; D0.L = Integer Value.
+	MOVE.L	D0,D2			; D2.L = Integer Value.
+	BSR	LUT_CountLULData	; D0.L = Count, D1.L = Old Select Crouton
+	CMP.L	D0,D2			; Past Last One?
+	BCS.S	NUMKP4			; Jump If Within Range.
+*
+*	Entered A Number Out of Range.
+*
+	TST.L	D1			; Value Not Set?
+	BPL.S	NUMKP3			; Jump If Value Set.
+	MOVEQ.L	#0,D1			; Else Use First One.
+NUMKP3	MOVE.L	D1,D0			; D0.L = Value To Convert.
+	MOVEQ.L	#3,D1			; D1.L = # of Bytes In Resulting Buffer.
+	MOVEQ.L	#'0',D2			; D2.L = High String Pad Character.
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Number String.
+	BSR	RUBINTOASC		; Convert To Ascii.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Soft Sprite.
+	MOVE.L	#TBFG_LEFTEDGE+NUMBERTEXT_X,D0	; D0.L = x Coordinate.
+	MOVE.L	#TBFG_TOPEDGE+NUMBERTEXT_Y,D1	; D1.L = y Coordinate.
+	LEA.L	LUT_NumberString,A0	; A0.L = Address of Text.
+	BSR	LUT_PrintNumber		; Write Number on Screen.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Soft Sprite.
+	BRA.S	NUMKP5			; Exit Subroutine.
+*
+*	Move To The Selected LUT Data.
+*
+NUMKP4	MOVE.L	D2,D0			; D0.L = Value Of LUL To Select.
+	BSR	LUT_FindLUTData		; A0.L = Address of This LUT Data.
+	BEQ.S	NUMKP5			; Exit If Not Found.
+	BSR	LUT_SwitchLULData	; Select The New LUT Data.
+NUMKP5	CMP.W	D0,D0			; Set CC == Zero.
+*
+*	Exit Subroutine.
+*
+NUMKP6	MOVEM.L	(A7)+,D0-D2/A0-A2/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DoKeySwitchVideo:						*
+*									*
+*	Checks The Current Raw Key Code, For Video Switch Key.		*
+*									*
+*	Input:								*
+*									*
+*	D2.W	= Value of Current Raw Key Code.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	CC	== Zero -> Key Match Video Key To Switch Video.		*
+*	CC	!= Zero -> Not a Key To Switch Video.			*
+*									*
+*	05.Sept 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoKeySwitchVideo
+LUT_DoKeySwitchVideo:
+	MOVEM.L	D0-D2/A0-A2,-(A7)	; Save Calling State.
+*
+*	Check For Upper and Lower Range.
+*
+	CMPI.W	#$50+LUT_DoKeySwitchVideoLn,D2 ; Check For Upper Range.
+	BCC.S	DOKSV2			; Exit If Out Of Upper Range.
+	SUBI.W	#$50,D2			; Is It a Function Key?
+	BCS.S	DOKSV2			; Jump If Not Function Key.
+*
+*	Change The Video Source.
+*
+	MOVEQ.L	#0,D0			; D0.L = Clear High Bits.
+	ADD.W	D2,D2			; Make Word Wide Index.
+	MOVE.W	LUT_DoKeySwitchVideoTb(PC,D2.W),D0 ; D0.W = Video Source.
+	BEQ.S	DOKSV1			; Don't Let Them Select It.
+	BSR	LUT_ProgramVideoN	; Change The Video Source.
+*
+*	Draw the New Buttons on the Screen.
+*
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Arrow Sprite.
+	BSR	LUT_HiLiteVideoN	; Update the Buttons.
+	LEA.L	LUT_ProgramKey1FG,A0	; A0.L = Address of First Fast Gadget.
+	MOVEA.L	TB_Window(A5),A1	; A1.L = Address of Window.
+	SUBA.L	A2,A2			; A2.L = Address of Requestor.
+	MOVEQ.L	#4,D0			; D0.L = Number of Gadgets.
+	MOVEQ.L	#0,D1			; D1.L = Offset to Image.
+	CALLTL	DrawFastGList		; Draw the Fast Gadget.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Arrow Sprite.
+DOKSV1	MOVEQ.L	#0,D0			; Set CC == Zero.
+	BRA.S	DOKSV3			; Exit Subroutine.
+*
+*	Exit Subroutine.
+*
+DOKSV2	MOVEQ.L	#-1,D0			; Set CC != Zero, Not Picked.
+DOKSV3	MOVEM.L	(A7)+,D0-D2/A0-A2	; Return Calling State.
+	RTS
+*
+	XDEF	LUT_DoKeySwitchVideoTb
+LUT_DoKeySwitchVideoTb:
+	DC.W	M_VIDEO1,M_VIDEO2,M_VIDEO3,M_VIDEO4,$0000,$0000,M_ENCODER
+;;;	DC.W	M_VIDEO1,M_VIDEO2,M_VIDEO3,M_VIDEO4,M_DV0,M_DV1,M_ENCODER
+LUT_DoKeySwitchVideoLn	EQU	(*-LUT_DoKeySwitchVideoTb)/2
+	PAGE
+*************************************************************************
+*									*
+*	DoStringGadget:							*
+*									*
+*	Does All The Processing Nessary For A String Gadget.		*
+*									*
+*	Input:								*
+*									*
+*	A0.L	= Address of Fast Gadget.				*
+*	A4.L	= Address of LUT Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	String Gadget Is Processed.					*
+*									*
+*	02.Aug 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoStringGadget
+LUT_DoStringGadget:
+	MOVEM.L	D0-D1/A0-A1/A3/A6,-(A7)	; Save Calling State.
+	MOVE.L	TB_ITUBase(A5),A6	; A6.L = Address of Intuition Base.
+*
+*	Remove Gadgets From Window.
+*
+	MOVE.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	MOVE.L	wd_FirstGadget(A0),A1	; A1.L = Address of First In List.
+	MOVE.L	A1,A3			; A3.L = Save First In List.
+	MOVEQ.L	#-1,D0			; D0.L = Flag for All of Them.
+	CALLROM	RemoveGList		; Remove All Gadgets From Window.
+*
+*	Now Add Our String Gadget.
+*
+	MOVE.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	LEA.L	LUT_WHOLEBG,A1		; A1.L = Address of First In List.
+	MOVEQ.L	#0,D0			; D0.L = Position to Add Gadgets.
+	CALLROM	AddGadget		; Add Them To The Window.
+*
+*	Make The String Gadget Active.
+*
+	LEA.L	LUT_COMMENTBOXSI,A0	; Fource User To First Position In
+	CLR.W	si_BufferPos(A0)	; Gadget When He Starts Up.
+	LEA.L	LUT_REALSIG,A0		; A0.L = Address of Gadget.
+	CALLTL	ActivateFCString	; Do The String Gadget.
+*
+*	Now Put The Old Gadgets Back In The Window.
+*
+	MOVE.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	LEA.L	LUT_WHOLEBG,A1		; A1.L = Address of Gadget To Remove.
+	CALLROM	RemoveGadget		; Remove It From The Window.
+*
+*	Now Add Old Gadgets Back To Window.
+*
+	MOVE.L	TB_Window(A5),A0	; A0.L = Address of Window.
+	MOVE.L	A3,A1			; A1.L = Address of Gadgets.
+	MOVEQ.L	#0,D0			; D0.L = Position to Add Gadgets.
+	MOVEQ.L	#-1,D1			; D1.L = Frag for All of Them.
+	CALLROM	AddGList		; Add Gadgets Back To Window.
+*
+*	Exit Subroutine.
+*
+	CMP.W	D0,D0			; Set CC == Zero -> No Special Funct.
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A3/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PrintNumberText:						*
+*									*
+*	Calculates Then Prints the Number Arrows Numbers On The Screen.	*
+*									*
+*	Input:								*
+*									*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Number is Calculated, Then Printed On The Screen.		*
+*									*
+*	01.Aug 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PrintNumberText
+LUT_PrintNumberText:
+	MOVEM.L	D0-D1,-(A7)		; Save Calling State.
+*
+*	Make Ascii Value.
+*
+	BSR	LUT_CountLULData	; D1.L = Value of Crouton We Are On.
+	TST.L	D0			; Any LUT Croutons?
+	BNE.S	PRTNT1			; Jump If Valid Count.
+	MOVEQ.L	#0,D1			; Else Use First Crouton.
+PRTNT1	MOVE.L	D1,D0			; D0.L = Value To Convert To Ascii.
+	BSR	LUT_PrintTheNumber	; Write Number On Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1		; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	PrintNumber:							*
+*									*
+*	Prints the Number Arrows Number on The Screen.			*
+*									*
+*	Input:								*
+*									*
+*	D0.L	= x Position to Print Number.				*
+*	D1.L	= y Position to Print Number.				*
+*	A0.L	= Address of Number String to Print.			*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Number Arrows Numbers are Printed on the Screen.		*
+*									*
+*	02.Oct 1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_PrintNumber
+LUT_PrintNumber:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Print Text On String.
+*
+	MOVEA.L	TB_GFXBase(A5),A6	; A6.L = Address of Graphics Library.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	MOVE.L	A0,-(A7)		; Save Address of String.
+	CALLROM	Move			; Move To That Screen Location.
+	MOVEA.L	(A7)+,A0		; Return Address of String.
+	MOVEQ.L	#2,D0			; D0.L = Length of String.
+	MOVEA.L	TB_RastPort(A5),A1	; A1.L = Address of Rast Port.
+	CALLROM	Text			; Write Text On Screen.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	RestoreDefault:							*
+*									*
+*	Restores the Default Data For Selected Crouton.			*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Default Data for Crouton is Found.				*
+*									*
+*	09.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DoRestoreDefault
+LUT_DoRestoreDefault:
+	MOVEM.L	D0-D1/A0-A1,-(A7)	; Save Calling State.
+*
+*	Do The High Lighting.
+*
+	BSR	LUT_DoHighLiteOnOff	; High Light The Image.
+	BEQ.S	DORSD3			; Exit If They Let Go.
+	BSR	LUT_ModeOffEditor	; Make Sure LUT Mode is Off.
+*
+*	Copy The Default to the Screen.
+*
+	BSR	LUT_CountLULData	; D0.L = Count, D1.L = Number.
+	TST.L	D0			; Any LUT Croutons At All?
+	BEQ.S	DORSD3			; Exit If No LUT Curtons.
+	EXG.L	D0,D1			; D0.L = Number, D1.L = Count.
+	BSR	LUT_FindLUTData		; A0.L = Address of LUT.
+	BEQ.S	DORSD3			; Exit If Not Found.
+	BSR	LUT_ReadLUTDefault	; Read It Off The Disk.
+	BEQ.S	DORSD1			; Skip If No Error.
+	BSR	LUT_FileErrorMessage	; Put Up The Error Message.
+*
+*	Copy It To The Working LUT Buffer.
+*
+DORSD1	MOVE.W	#(LUT_Sizeof/2)-1,D0	; Loop Counter.
+	MOVEA.L	A4,A1			; Address of Destination.
+DORSD2	MOVE.W	(A0)+,(A1)+		; Move The Data.
+	DBF	D0,DORSD2		; Loop Until Done.
+	BSR.S	LUT_DrawAfterChanging	; Redraw The Screen.
+*
+*	Exit Subroutine.
+*
+DORSD3	MOVEM.L	(A7)+,D0-D1/A0-A1	; Return Calling State.
+	CMP.W	D0,D0			; No Special Function.
+	RTS
+	PAGE
+*************************************************************************
+*									*
+*	DrawAfterChanging:						*
+*									*
+*	Redraws the LUT Screen after some data is Changed on the Screen.*
+*									*
+*	Input:								*
+*									*
+*	A4.L	= Address of LTE Base.					*
+*	A5.L	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The LUT Screen Is Redrawn.					*
+*									*
+*	09.May 1991 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+	XDEF	LUT_DrawAfterChanging
+LUT_DrawAfterChanging:
+	MOVEM.L	D0-D1/A0-A1/A6,-(A7)	; Save Calling State.
+*
+*	Redraw Everything On The Screen.
+*
+	MOVEA.L	TB_SYSBase(A5),A6	; A6.L = Address of Sys Base.
+	JSR	_LVOForbid(A6)		; Keep Other Tasks From Running.
+	CALLTL	SoftSpriteBPLCON0Off	; Turn Off Soft Sprite.
+	BSR	LUT_Add_FGadgets	; Redraw The Screen.
+*
+*	Redraw The Colors On The Screen.
+*
+	CLR.W	TB_TValSec(A5)		; Needed For DVE Draw Routines.
+	MOVE.L	LTE_EditRGB(A4),D0	; Get RGB Value.
+	BSR	LUT_MakeColorSquare	; Put Up the Color Square.
+	MOVEQ.L	#0,D0			; Make Top/Bottom Value.
+	MOVE.W	LUT_UpperRangeArrowFG+FG_HiLiteMask,D0
+	NOT.W	D0			; Go Other Way Around.
+	BSR	LUT_MakeEditColors	; Make The Edit Colors.
+	BSR	LUT_SendEdit		; Write Edit Colors.
+	BSR	LUT_GetTBarPosition	; Get Current TBar Position.
+	CALLTL	SoftSpriteBPLCON0On	; Turn On  Soft Sprite.
+	JSR	_LVOPermit(A6)		; Allow Other Tasks To Run.
+	CALLTL	InstallAVEI		; Make Sure Ok.
+*
+*	Exit Subroutine.
+*
+	MOVEM.L	(A7)+,D0-D1/A0-A1/A6	; Return Calling State.
+	RTS
+	END

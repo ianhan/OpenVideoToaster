@@ -1,0 +1,971 @@
+8,9d7
+< 
+< 	include "ram:mod.i"
+14,41c12
+< *	include "gadgets.i"
+< 	include "intuition/intuition.i"
+< 
+< 	include	"graphics/text.i"
+< 	include	"lib/diskfont_lib.i"
+< 
+< 	include	"lib/dos_lib.i"
+< 	include	"libraries/dosextens.i"
+< 
+< 	include	"ps:serialdebug.i"
+< 
+< 
+< ;	xref	StdPot7
+< ;	xref	StdPot8
+< ;	xref	StdPot9
+< ;	xref	StdPotA
+< 
+< 
+< xst	macro
+< 	xref	\1
+< 	st	\1(BP)	
+< 	endm	
+< 
+< xsf	macro
+< 	xref	\1
+< 	sf	\1(BP)	
+< 	endm	
+< 
+---
+> 	include "gadgets.i"
+43,46d13
+< 	xref	TOutlinePSGadget
+< 
+< ;;SERDEBUG	equ	1
+< 
+71,82d37
+< 	xref DiskFontLibrary_
+< 	xref DirnameBuffer_
+< 	xref PostScriptFont_
+< 	xref FlagBrush_
+< 	xref ActionCode_
+< 
+< 	xref MSPot7
+< 	xref MSPot8
+< 	xref MSPot9
+< 	xref MSPot0A
+< 
+< 	xdef AddString
+84,87d38
+< ;	XREF RotTextGadgetLI
+< ;	XREF StrTextGadgetLI
+< ;	XREF SheTextGadgetLI
+< ;	XREF SizeTextGadgetLI
+89,93d39
+< 
+< 
+< 	ALLDUMPS
+< ;	RDUMP
+< 
+96c42
+< 
+---
+> 	;JUNE04;bsr	EndFonts
+98c44
+< 	bne	unf_errout
+---
+> 	bne.s	unf_errout
+102,113d47
+<  ifeq 0
+< 	bsr	TestFontType
+< 	tst.b	PostScriptFont_(a5)
+< 	beq.s	1$
+< 
+< 	bsr	BuildPath
+< 	bra.s	exitloadfont
+< 
+< 1$
+<  endc
+< 
+<  ifeq 1
+124,137d57
+<  endc
+< 
+< 	lea	DirnameBuffer_(BP),a1
+< 	lea	FontNameBuffer_(BP),a2
+< 	xjsr	copy_string_a1_to_a2	;dirrtns.o
+< 	move.b	#'.',-1(a2)
+< 	move.b	#'f',(a2)+
+< 	move.b	#'o',(a2)+
+< 	move.b	#'n',(a2)+
+< 	move.b	#'t',(a2)+
+< 	clr.b	(a2)
+< 
+< 	lea	FilenameBuffer_(BP),a0	;find size of font
+< 	xjsr	cva2i
+139d58
+<  ifeq 1
+145a65,66
+> 	;xjmp	FontErrorRtn	;canceler.o (no file loaded)
+> 		;JUNE04
+151a73,74
+> 
+> 		;MAY18......
+152a76
+> 	;JUNE16;xjsr EnsureLotsaExtraChip 	;memories.o, about 26k avail?
+191a116,118
+> 	;clr.b	tf_Flags(a1)	;KLUDGE TEST messes with flags (revpath, etc?)
+> 	;clr.b	tf_Style(a1)	;"all disk files contain $0f" valu?
+> 				;note...this BLOWS AWAY the colortext flag
+207a135
+> 	;move.b	#%011,ta_Flags(a0)	;just rom or disk?
+210,218d137
+<  endc
+< 
+< 	lea	FontNameBuffer_(BP),a1
+< 	lea	SampleTextAtt,a0
+< 	move.w	d0,ta_YSize(a0)
+< 	move.l	a1,ta_Name(a0)
+< 	move.l	DiskFontLibrary_(BP),a6
+< 	jsr	_LVOOpenDiskFont(a6)
+< 
+222c141,144
+< exitloadfont
+---
+> 
+> 	;sf	FlagOpen_(BP)		;clear out filerequester (next time)
+> 	;st	FlagNeedGadRef_(BP)	;signal for main loop gadget redisplay
+> 	;paint pi
+244,247d165
+< unf_errout:			;JUNE04
+< 	xjsr	FontErrorRtn	;canceler.o (no file loaded)
+< 	moveq	#-1,d0	;set NE flag
+< 	rts
+251a170,187
+>   ifc 't','f' ;disabled june 14 ...BE SURE TO REMOVE CANCELER.O REQUESTS, TOO
+> 	bsr.s	check_fontinuse
+> 		;build fontname "digipaint.font" (not needed 'till loaded ok)
+> 	beq.s	007$			;not in use
+> 	lea	ProgramNameBuffer_(BP),a1
+> 	lea	FontNameBuffer_(BP),a2
+> 	xjsr	copy_string_a1_to_a2	;dirrtns.o
+> 	move.b	#'.',-1(a2)
+> 	move.b	#'f',(a2)+
+> 	move.b	#'o',(a2)+
+> 	move.b	#'n',(a2)+
+> 	move.b	#'t',(a2)+
+> 	clr.b	(a2)
+> 	xjsr	FontInUseErrorRtn
+> 	moveq	#-1,d0		;set returned result NE flag when error
+> 	rts			;endfonts
+> 007$
+>   endc
+275a212,215
+> 		;MAY18 late
+> 	;lea	TextMask_RP_(BP),a1
+> 	;suba.l	a0,a0			;a0=font(null removes it)
+> 	;CALLIB	Graphics,SetFont
+285c225
+<  ifeq 1
+---
+> 
+291a232,241
+>   ifc 't','f' ;june 14
+> 	beq.s	oktorem
+> 	move.l	a1,-(sp)
+> 	xjsr	CheckCancel		;remove 'extra' mousemoves
+> 	xjsr	SetLowerPriority	;'go slow to wait' (rtns d0=prev pri)
+> 	xjsr	ExecSetTaskPri		;reset to prev/existing pri
+> 	move.l	(sp)+,a1
+> 	bra.s	checka		;check again, everyone close font?
+> oktorem:
+>   endc
+301c251
+< eacmf:
+---
+> eacmf:	rts
+303,304d252
+<  endc
+< 	rts
+306d253
+<  ifeq 1
+314d260
+<  endc
+316c262,263
+< MakeTextBrush:	;ensure 'toggle-text-scr-gadget' is toggled off
+---
+> MakeTextBrush:
+> 		;ensure 'toggle-text-scr-gadget' is toggled off
+320,321c267,268
+< 	cmp.w	gg_Flags(a0),d0		;any change (did we turn if off?)
+< 	beq.s	1$
+---
+> 	  cmp.w	gg_Flags(a0),d0		;any change (did we turn if off?)
+> 	  beq.s	1$
+325,411d271
+< 	tst.b	PostScriptFont_(a5)
+< 	beq	MakeBrushFromBitmap
+< 
+< MakeBrushFromPs
+< 	movem.l	d0-d5/a0-a3/a6,-(sp)
+< 	DUMPMSG	<MakeBrushFromPS>
+< 	bsr	BuildCommand
+<  ifeq	0
+< 	lea	constring,a0
+< 	move.l	a0,d1
+<  	move.l	#MODE_NEWFILE,D2
+< 	CALLIB	DOS,Open
+< 	move.l	d0,d4
+< 	beq	bigdeal1
+< ;;	lea	exstring,a0
+<  endc
+< 	lea	CommandBuffer,a0
+< 	DUMPMEM	<COMMAND>,0(A0),#200
+< 
+< 	move.l	a0,d1
+< 	moveq.l	#0,d2
+< 	move.l	d4,d3
+< 	CALLIB	SAME,Execute
+< 
+< * check for exestinse of file.
+< 	movem.l	d0-d5/a0-a6,-(sp)
+< 	move.l	#RFName,d1	
+< 	move.l	#MODE_OLDFILE,d2
+< 	CALLIB	SAME,Open	
+< 	move.l	d0,d1
+< 	beq	.notthere
+< 	CALLIB	SAME,Close	
+< 	movem.l	(sp)+,d0-d5/a0-a6
+< 
+<  ifeq 1
+< 	lea	RFPath,a0
+< 	move.l	a0,d1
+< 	move.l	#ACCESS_READ,d2
+< 	CALLIB	SAME,Lock
+< 	move.l	d0,d1
+< 	beq.s	2$
+< 	CALLIB	SAME,CurrentDir
+<  endc
+< 	
+< 	lea	FilenameBuffer_(a5),a1
+< 	lea	RFName,a0
+< 	bsr	AddString
+< 
+<  ifeq 1
+< 	xjsr	DoInlineAction
+< 	dc.w	'Lo','br'
+< ;;	xjsr	ReDoHires
+< 	xjsr	ShowFReq
+< 	xjsr	DoInlineAction
+< 	dc.w	'Ok','ls'
+<  endc
+< 
+<  ifeq 0
+< 	xref	OKGadget_IntuiText
+< 	move.l	#OKGadget_IntuiText,a0			;relocatable, from showfreq
+< 	move.l	it_IText(a0),a0				;'Load/Save Brush/RGB/Frame'
+< 	lea	4(a0),a0
+< 	move.l	#' Bru',(a0)
+< 
+< 	st	FlagBrush_(BP)
+< 	xst	FlagCutLoadBrush_
+< 	st	FlagOpen_(BP)
+< 	xref	Flag24_
+< 	xref	FlagFont_
+< 	xref	FlagCompFReq_
+< 	sf	Flag24_(BP)
+< 	sf	FlagFont_(BP)	
+< 	sf	FlagCompFReq_(BP) 
+< 	xjsr	File_Load
+<  endc
+< .notthere
+< 2$
+<  ifeq 0
+< 	move.l	d4,d1
+< 	CALLIB	DOS,Close
+<  endc
+< 	move.b	#0,FilenameBuffer_(a5)
+< bigdeal1
+< 	movem.l	(sp)+,d0-d5/a0-a3/a6
+< 	rts
+< 
+< MakeBrushFromBitmap
+426a287,288
+> 	;AUG261990;xjsr	SaveUnDo		;memories.o (only copies if needed)
+> 	;AUG261990;xjsr	SaveUnDoRGB		;june271990.....helps w/brush rgb colors
+530a393,397
+> ;	xref	Datared_		;digipaint pi
+> ;	move.l	Datared_(BP),-(sp)	;ensure no 'rgb' mode buffers affected
+> ;	clr.l	Datared_(BP)
+> ;JULY011990
+> 
+531a399
+> 	;;;;xjsr	SaveUnDoRGB		;AUG271990
+533a402,403
+> ;JULY011990;	move.l	(sp)+,Datared_(BP)	;ensure no 'rgb' mode buffers affected
+> 
+556a427,433
+> 	;;;;no need at all...;xjsr	UnDoRGB		;june271990....helps w/colors
+> 
+>   	;;;;;;;BRA notext ;KLUDGEOUT thurs june281990
+> 	;;sf	FlagText_(BP)
+> 	;;bra	notext
+> 
+> 
+557a435,448
+> 	;AUG271990;xjsr	Cut			;cutpaste.o
+> 
+> 		;stash undo pointers....AUG271990
+> 		;free/restore after cut
+> 	;xref UnDored_
+> 	;xref UnDogreen_
+> 	;xref UnDoblue_
+> 	;move.l	UnDored_(BP),-(sp)
+> 	;move.l	UnDogreen_(BP),-(sp)
+> 	;move.l	UnDoblue_(BP),-(sp)
+> 
+> 
+> 	;;;;;BRA	notext		;KLUDGEOUT....AUG271990
+> 
+560a452,455
+> 	;xjsr	RestoreCPUnDo ;xdef CopyCPUnDoSuper ;copy cpundo to UnDoBitMap
+> 	;xjsr	SwapSuperScreen		;'undo' for ham bitmaps...
+> 	;xjsr	UnShowPaste
+> 	;xjsr	FreeDouble	;UnShowPaste	;yep...outta here...
+564c459,464
+< 987$:
+---
+> 987$:	;"works"...but cutpaste s/b doing this....;xjsr	UnDo			;memories.asm
+> 	;xjsr	FreeUnDoRGB		;rgbrtns.asm
+> 
+> 	;move.l	(sp)+,UnDoblue_(BP)
+> 	;move.l	(sp)+,UnDogreen_(BP)
+> 	;move.l	(sp)+,UnDored_(BP)
+565a466,467
+> 
+> 	;xjsr	UnDo			;removes text image...APRIL03'89
+570a473,474
+> 	;beq.s	notext			;skip mask shrink rtn
+> 		;MAY19
+571a476
+> 	;no...doesnt work...;xjsr	UnDoRGB	;june271990....fixes rgb-undo bug when cutting text...
+574a480,481
+> ;AUG271990;	xjsr	UnDoRGB	;june271990....fixes rgb-undo bug when cutting text...
+> 
+609c516
+< 	move.L	bm_Planes+(8*4)(a0),a1	;mask (a1 "from")
+---
+> 	move.L	bm_Planes+(6*4)(a0),a1	;mask (a1 "from")
+624a532
+> 	;add.w	d5,a2		;bump 'to' address past shrunken rt half
+718a627,632
+> 
+> 
+> 
+> 
+> 
+> 
+733a648,662
+> ;		;BOLD?
+> ;	move.l	#'Tbbo',d0
+> ;	bsr	_FindGadget ;tool.o;arg D0=action code, rtns gadget in a0 AND d0, zero valid
+> ;	beq.s	xnobold
+> ;	moveq	#1,d1		;bold bit
+> ;	bsr.s	resetgad
+> ;xnobold:
+> ;		;UNDERLINE?
+> ;	move.l	#'Tbun',d0
+> ;	bsr	_FindGadget ;tool.o;arg D0=action code, rtns gadget in a0 AND d0, zero valid
+> ;	beq.s	xnounderl
+> ;	moveq	#0,d1		;underline bit
+> ;	bsr.s	resetgad
+> ;xnounderl:
+> 
+760a690
+> ;setselected:
+781,1368c711
+< 
+< TestFontType
+< 	movem.l	d0-d1/a0-a1,-(sp)
+< 	lea	FilenameBuffer_(BP),a0
+< 	bsr	CheckForPostScript
+< 	tst.l	d0
+< 	seq	PostScriptFont_(a5)
+< 
+< ;;	move.b	#1,PostScriptFont_(a5)
+< 	movem.l	(sp)+,d0-d1/a0-a1
+< 	rts
+< 
+< 
+< *****************************************************************************
+< 
+< SearchLength	equ	100		;must be < 128
+< 
+< CheckForPostScript:	;(filename)
+< 			;    a0
+< 	movem.l	d1-d5/a0-a1/a6,-(sp)
+< 	moveq.l	#-1,d4			;error code
+< 
+< 	lea 	-SearchLength(sp),sp
+< 
+< 	move.l	a0,d1
+< 	move.l	#MODE_OLDFILE,d2
+< 	CALLIB	DOS,Open
+< 	move.l	d0,d5
+< 	beq.s	.abort
+< 
+< 
+< 	move.l	d0,d1		;file handle
+< 	move.l	sp,d2		;buffer
+< 	moveq.l	#SearchLength,d3		;length
+< 	CALLIB	SAME,Read
+< 	cmp.l	d0,d3
+< 	bne.s	.errorclose
+< 
+< 	move.l	sp,a0
+< 	move.l	#SearchLength-(psstringe-psstring),d1
+< 2$	move.l	a0,a2
+< 	lea	psstring,a1
+< 	move.l	#(psstringe-psstring)-1,d0
+< 1$	cmp.b	(a2)+,(a1)+
+< 	dbne	d0,1$
+< 	beq.s	.gotmatch
+< 	addq.l	#1,a0
+< 	dbf	d1,2$
+< 	bra.s	.errorclose			;no match was found
+< .gotmatch
+< 	moveq.l	#0,d4
+< 
+< .errorclose
+< 	move.l	d5,d1
+< 	CALLIB	SAME,Close
+< .abort
+< 	lea 	SearchLength(sp),sp
+< 	move.l	d4,d0
+< 	movem.l	(sp)+,d1-d5/a0-a1/a6
+< 	move.l	d0,d0				;set z flag
+< 	rts
+< 
+< 
+< BuildPath
+< 	movem.l	d0-d2/a0-a1/a6,-(sp)
+< 
+< 	lea	SavePathBuffer,a0
+< 	move.l	a0,d1
+< 	move.l	#100,d2		;length
+< ;;	CALLIB	DOS,GetCurrentDirName
+< 
+< 	move.l	#200,d0		;length
+< 	lea	SavePathBuffer,a0
+< 	bsr	GetCurrentPath
+< 
+< 
+< ;;	lea	SavePathBuffer,a1
+< ;;	lea	Kludgepath,a0
+< ;;	bsr	AddString
+< 
+< 
+< 	lea	SavePathBuffer,a1
+< 1$	tst.b	(a1)+
+< 	bne.s	1$
+< 
+< 	subq.l	#1,a1
+< 
+< 	move.b	#'/',(a1)+
+< 	lea	FilenameBuffer_(BP),a0
+< 	bsr	AddString
+< 
+< 	movem.l	(sp)+,d0-d2/a0-a1/a6
+< 	rts
+< 
+< 
+< BuildCommand:
+< 	movem.l	d0-d4/a0-a6,-(sp)
+< 	lea	CommandBuffer,a1
+< *
+< 	lea	CodeName,a0
+< 	bsr	AddString
+< *
+< 	lea	TextStringBuffer_(BP),a0	
+< 	cmp.b	#' ',(a0)			;check for a blank in the first char	 
+< 	bne	101$				;if there is, just put a b for blank!
+< 	move.b	#'b',(a0)			;dont try to make empty brushes!!!!
+< 101$	
+< 	tst.b	(a0)			;check for a blank in the first char	 
+< 	bne	108$				;if there is, just put a b for blank!
+< 	move.b	#'b',(a0)			;dont try to make empty brushes!!!!
+< 108$	
+< 
+< 	bsr	AddString
+< *
+< 	lea	EndQuote,a0
+< 	bsr	AddString
+< *
+< 	lea	SavePathBuffer,a0
+< 	bsr	AddString
+< *	
+< 	bsr	AddSizePram			;pass a1 outstring
+< *
+< 	lea	EndStuff,a0
+< 	bsr	AddString
+< *	
+< 	bsr	AddStrechPram
+< *
+< 	bsr	AddSkewPram
+< *
+< 	bsr	AddRotatePram
+< *
+< 	bsr	AddFladsPram
+< *
+< 	move.l	#0,(a1)
+< 	movem.l	(sp)+,d0-d4/a0-a6
+< 	rts
+< 
+< AddSizePram:
+< Factor  set     32
+< 	movem.l	d0-d4/a2-a5,-(sp)
+< 	moveq	#0,d1	
+< 	move.w	MSPot7,d1
+< 	divu	#Factor,d1
+< 	and.l	#$0000ffff,d1		
+< ;	DUMPREG	<D1 = SIZE>	
+< *	move.w	#100,d1
+< 	lea	workstr,a0	
+< 	bsr	TS_ASC_Con
+< *
+< 	lea	workstr,a0	
+< 	bsr	AddString
+< 	movem.l	(sp)+,d0-d4/a2-a5
+< 	rts
+< 
+< 
+< AddStrechPram:
+< 	movem.l	d0-d4/a2-a5,-(sp)
+< 	moveq	#0,d1
+< 	move.w	MSPot9,d1
+< 	
+< 	add.w	#16384,d1
+< 	cmp.w	#16384,d1
+< 	bcc	555$
+< 	move.w	#16384,d0
+< 	sub.w	d1,d0
+< 	move.w	d0,d1	
+< 	
+< 555$
+< ;	DUMPREG	<D1 = STRECH>	
+< *	move.w	#0,d1
+< 	lea	workstr,a0	
+< 	bsr	TS_ASC_Con
+< *
+< 	lea	workstr,a0	
+< 	bsr	AddString
+< 	movem.l	(sp)+,d0-d4/a2-a5
+< 	rts
+< 
+< AddSkewPram:
+< 	movem.l	d0-d4/a2-a5,-(sp)
+< 	move.w	MSPot8,d1
+< ;	DUMPREG	<D1 = SKEW>
+< *	move.w	#0,d1
+< 	lea	workstr,a0	
+< 	bsr	TS_ASC_Con
+< *
+< 	lea	workstr,a0	
+< 	bsr	AddString
+< 	movem.l	(sp)+,d0-d4/a2-a5
+< 	rts
+< 
+< AddRotatePram:
+< 	movem.l	d0-d4/a2-a5,-(sp)
+< 	move.w	MSPot0A,d1
+< 
+< ;	DUMPREG	<D1 = ROT>	
+< *	move.w	#0,d1
+< 	lea	workstr,a0	
+< 	bsr	TS_ASC_Con
+< *
+< 	lea	workstr,a0	
+< 	bsr	AddString
+< 	movem.l	(sp)+,d0-d4/a2-a5
+< 	rts
+< 
+< 
+< AddFladsPram:
+< 	movem.l	d0-d4/a2-a5,-(sp)
+< 	lea	TOutlinePSGadget,a0
+< 	btst.b	#7,1+gg_Flags(a0)
+< 	beq.s	NOOUTLINE
+< ;	DUMPMSG	<OUTLINE IS ON>
+< 	lea	outline_str,a0	
+< 	bsr	AddString
+< NOOUTLINE:
+< 	movem.l	(sp)+,d0-d4/a2-a5
+< 	rts
+< 
+< 
+< ;;PSText <Text> <font> <size> <file> [<stretch> <skew °> <rotate> <outline/S>]
+< 
+< ;****** NC/TS_ASC_Con *****************************************
+< ;
+< ;   NAME
+< ;	TS_ASC_Con -- Converts number to SH_ASCii string of digits.
+< ;		
+< ;   SYNOPSIS
+< ;	string = SH_ASC_Con( number,deststring)
+< ;	A0		     D1	    A0
+< ;
+< ;   FUNCTION
+< ;	Converts word length number to null termanated string.
+< ;
+< ;   INPUTS
+< ;	number		-  value equal to a four(or less) digit number.
+< ;	deststring	-  pointer to a work space of a least 5 bytes. 
+< ;
+< ;   RESULT
+< ;	string 		- non-null termanated SH_ASCii string.  	
+< ;
+< ;   EXAMPLE
+< ;
+< ;   NOTES
+< ;	Distroys what was at address in A0
+< ;	Doesn't check for overflow of number to convert. 		
+< ;
+< ;   BUGS
+< ;	
+< ;   SEE ALSO
+< ;
+< ;****************************************************************************
+< 	XDEF	TS_ASC_Con
+< TS_ASC_Con:
+< 	MOVEM.L	D0-D2/A0-A1,-(SP) 
+< 	move.b	#' ',(a0)+	*leading space
+< 
+< 	moveq	#0,d2
+< 	AND.L	#$0000FFFF,D1	*Clear the hi-word remainder! 
+< *
+< 	DIVU	#10000,D1	*Get place
+< 	or.b	d1,d2	
+< 	tst.w	d2
+< 	beq	400$	
+< 	ADD.B	#$30,D1		* Move to ASCII $ number
+< 	MOVE.B	D1,(A0)+	* Pace in string
+< 400$
+< 	CLR.W	D1		* Clear out Quiotiont
+< 	SWAP	D1		* Move remander to low word
+< *
+< 	DIVU	#1000,D1	*Get place
+< 	or.b	d1,d2
+< 	tst.w	d2
+< 	beq	500$	
+< 	ADD.B	#$30,D1		* Move to ASCII $ number
+< 	MOVE.B	D1,(A0)+	* Pace in string
+< 500$
+< 	CLR.W	D1		* Clear out Quiotiont
+< 	SWAP	D1		* Move remander to low word
+< *
+< 	DIVU	#100,D1		*Get place
+< 	or.b	d1,d2
+< 	tst.w	d2
+< 	beq	600$
+< 	ADD.B	#$30,D1		* Move to ASCII $ number
+< 	MOVE.B	D1,(A0)+	* Pace in string
+< 600$
+< 	CLR.W	D1		* Clear out Quiotiont
+< 	SWAP	D1		* Move remander to low word
+< *
+< 	DIVU	#10,D1		*Get place
+< 	or.b	d1,d2
+< 	tst.w	d2
+< 	beq	700$
+< 	ADD.B	#$30,D1		* Move to ASCII $ number
+< 	MOVE.B	D1,(A0)+	* Pace in string
+< 700$
+< 	CLR.W	D1		* Clear out Quiotiont
+< 	SWAP	D1		* Move remander to low word
+< *
+< 	ADD.B	#$30,D1		* Move to ASCII $ number
+< 	MOVE.B	D1,(A0)+	* Pace in string
+< 
+< *	MOVE.B	#' ',(A0)+	* TRAILING SPACE
+< 
+< 	MOVE.B	#$0,(A0)+	* Place null on end of string.
+< 	MOVEM.L	(SP)+,D0-D2/A0-A1
+< 	RTS
+< 
+< 
+< 
+< 
+< skewRange	equ	150
+< stretchRange	equ	20
+<  ifeq 1	
+< BuildCommand
+< 	movem.l	d0-d1/a0-a3,-(sp)
+< 	lea	CommandBuffer,a1
+< 
+< 	lea	CodeName,a0
+< 	bsr	AddString
+< 	lea	TextStringBuffer_(BP),a0
+< 	bsr	AddString
+< 	lea	EndQuote,a0
+< 	bsr	AddString
+< ;;	lea	FilenameBuffer_(BP),a0
+< 	lea	SavePathBuffer,a0
+< 	bsr	AddString
+< 
+< 
+< 	moveq.l	#0,d0
+< ;	move.w	StdPot7,d0
+< ;	divu.w	#$ffff/(400-10),d0
+< *****	move.l  SizeTextGadgetLI,d0 		;get size from int gad	
+< 	bsr	Long2Word
+< 	cmp.w	#10,d0
+< 	bhi	305$				;skip if size is ok.			
+< ;	add.w	#10,d0				;min size
+< 	move.w	#10,d0				;min sixe
+< 305$
+< 	move.b	#' ',(a1)+
+< 	bsr	InsertAscii
+< 
+< 	lea	EndStuff,a0
+< 	bsr	AddString
+< 
+< 
+< ****	xref	StBuffStr
+< 	move.b	#' ',(a1)+
+< *	lea	StBuffStr,a0
+< 202$	move.b	(a0)+,(a1)+
+< 	bne	202$
+< 	lea	-1(a1),a1	
+< 
+<  ifeq 1
+< 	move.b	#' ',(a1)+
+< 	move.b	#'-',(a1)+
+< 	move.b	#'.',(a1)+
+< 	move.b	#'5',(a1)+
+< 	move.b	#'5',(a1)+
+< 	move.b	#'5',(a1)+
+< 	move.b	#'5',(a1)+
+< 	move.b	#'5',(a1)+
+<  endc
+<  ifeq 1
+< ;stretch
+< 	moveq.l	#0,d0
+< ******	move.l	StrTextGadgetLI,d0		;get value from int gad
+< ;	bsr	Long2Word
+< 
+< 55$
+< 	move.b	#' ',(a1)+
+< 	bsr	InsertAsciifrac
+<  endc
+< 
+< 	moveq.l	#0,d0
+< ;	move.w	StdPotA,d0
+< ******	move.l	SheTextGadgetLI,d0	
+< 	bsr	Long2Word
+< 
+< ;	divu.w	#$ffff/(skewRange),d0
+< ;	sub.w	#(skewRange/2),d0
+< 	move.b	#' ',(a1)+
+< 	bsr	InsertAscii
+< 
+< 
+< 	moveq.l	#0,d0
+< ;	move.w	StdPot9,d0
+< ******	move.l	RotTextGadgetLI,d0
+< 	bsr	Long2Word
+< 
+< 	cmp.l	#360,d0
+< 	ble	307$
+< 	move.l	#360,d0
+< 307$
+< 
+< ;	divu.w	#$ffff/(360),d0
+< 	move.b	#' ',(a1)+
+< 	bsr	InsertAscii	;rotate
+< 
+< 
+< 	lea	TOutlinePSGadget,a0
+< 	btst.b	#7,1+gg_Flags(a0)
+< 	beq.s	3$
+< 	move.b	#' ',(a1)+
+< 	move.b	#'1',(a1)+
+< 	clr.b	(a1)+
+< 3$
+< 	movem.l	(sp)+,d0-d1/a0-a3
+< 	rts
+<  endc
+< 
+< Long2Word:
+< 	tst.l	d0
+< 	bpl	1$
+< 	neg.l	d0
+< 	neg.w	d0
+< 1$	rts	
+< 
+< 
+< AddString
+< 	movem.l	a0,-(sp)
+< 1$	move.b	(a0)+,(a1)+
+< 	bne.s	1$
+< 	movem.l	(sp)+,a0
+< 	subq.l	#1,a1		;backup to null
+< 	rts
+< 
+< InsertAsciifrac
+< 	move	d0,d1
+< ;	divu	#100,d1
+< 	moveq.l	#0,d0
+< 	move.w	d1,d0
+< 	bsr	InsertAscii
+< 	move.b	#'.',(a1)+
+< 	swap.w	d1
+< 	move.w	d1,d0
+< 	mulu.w	#100,d0
+< 	bsr	InsertAscii
+< 	rts
+< 	
+< 
+< 
+< 
+< 
+< InsertAscii
+< 	movem.l	d0-d3/a0,-(sp)
+< 
+< 	tst.w	d0
+< 	bpl.s	1$
+< 	neg.w	d0
+< 	move.b	#'-',(a1)+
+< 1$
+< 
+< 	lea	3(a1),a1
+< 	moveq.l	#3-1,d3
+< 2$	ext.l	d0
+< 	divu.w	#10,d0
+< 	move.l	d0,d1
+< 	swap.w	d1
+< 	add.b	#'0',d1
+< 	move.b	d1,-(a1)
+< 	dbf	d3,2$
+< 	lea	3(a1),a1
+< 	clr.b	(a1)
+< 
+< 	movem.l	(sp)+,d0-d3/a0
+< 	rts
+< 
+< *****************************************************************************
+< *	This function fills in a buffer with the current path
+< *****************************************************************************
+< GetCurrentPath:	;(buffer,buffersize)
+< 		;  a0       d0
+< 
+< 	movem.l	d0-d4/a0-a4,-(sp)
+< 	move.l	sp,a2
+< 
+< 	sub.w	#fib_SIZEOF,sp	;allocate long word alligned fib on
+< 	move.l	sp,d1			;stack
+< 	and.b	#-4,d1
+< 	move.l	d1,sp
+< 
+< 	move.l	a0,a3			;This where to put result
+< 	move.l	a0,a4
+< 	add.l	d0,a4			;build workregister starting at end
+< 	move.b	#0,-(a4)		;of buffer
+< 	move.b	#0,-(a4)
+< 
+< 	move.l	4,a6
+< 	sub.l	a1,a1
+< 	CALLIB	Exec,FindTask
+< 	move.l	d0,a0
+< 
+< 	move.l	pr_CurrentDir(a0),d1
+< 	CALLIB	DOS,DupLock
+< 	move.l	d0,d4
+< 	beq.s	5$			;error exit
+< 	bra.s	888$
+< 
+< 999$	cmp.l	a4,a3
+< 	bcc.s	5$			;error exit
+< 	move.b	#'/',-(a4)
+< 888$	move.l	d4,d1
+< 	move.l	sp,a0			;fib on stack
+< 	move.l	a0,d2
+< 	CALLIB	SAME,Examine
+< 	tst.l	d0
+< 	beq.s	5$
+< 
+< 	move.l	d4,d1
+< 	CALLIB	SAME,ParentDir
+< 
+< 	move.l	d4,d1
+< 	move.l	d0,d4
+< 	CALLIB	SAME,UnLock
+< 
+< 	tst.l	d4
+< 	bne.s	3$
+< 	move.b	#':',(a4)
+< 3$
+< 	lea	fib_FileName(sp),a0	;fib is on stack
+< 	bsr	StLen
+< 	sub.l	d0,a4
+< 	cmp.l	a4,a3
+< 	bcc.s	5$			;error exit
+< 
+< 	move.l	a4,a1
+< 	bra.s	2$
+< 1$	move.b	(a0)+,(a1)+
+< 2$	dbf	d0,1$
+< 
+< 	tst.l	d4
+< 	bne.s	999$
+< 
+< 	move.l	a3,(a2)			;setup error return
+< 
+< 4$	move.b	(a4)+,(a3)+		;move new string to front of buffer
+< 	bne.s	4$
+< 
+< 5$	move.l	a2,sp
+< 	movem.l	(sp)+,d0-d4/a0-a4
+< 	rts
+< StLen
+< 	move.l	a0,-(sp)
+< 	moveq.l	#-1,d0
+< 1$	addq.l	#1,d0
+< 	tst.b	(a0)+
+< 	bne.s	1$
+< 	move.l	(sp)+,a0
+< 	rts
+< 
+< 
+< psstring	dc.b	'!PS-AdobeFont'
+< psstringe
+< 
+< SampleTextAtt	dc.l	n1
+< 		dc.w	100
+< 		dc.b	0,FPF_DISKFONT
+< n1		dc.b	'CGTimes.font',0
+< 
+< 
+< constring	dc.b	'nil:',0
+< ;;exstring	dc.b	'C:PSText >nil: "Test" newwork:toaster/exe/toaster/toasterfonts/FontBankH-M/Henning'
+< ;;		dc.b	' 100 ram:x100 1 0 75',0
+< 
+< workstr		dc.b	' 100',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+< 
+< 
+< *CodeName	dc.b	'C:PSText >nil: "',0
+< CodeName	dc.b	'C:PSText "',0
+< EndQuote	dc.b	'" ',0
+< EndStuff	dc.b	' ram:x100',0
+< 
+< ;;RFPath		dc.b	'ram:',0
+< ;;RFName		dc.b	'x100',0
+< 
+< RFName		dc.b	'ram:x100',0
+< outline_str	dc.b	' OUTLINE',0
+< 
+< 
+< 
+< 
+< ;;Kludgepath	dc.b	'newwork:toaster/exe/toaster/toasterfonts/FontBankH-M',0
+< 
+< SavePathBuffer	ds.b	200
+< CommandBuffer	ds.b	500
+< 
+<   END
+---
+>   END
+\ No newline at end of file

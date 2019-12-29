@@ -1,0 +1,473 @@
+head	2.0;
+access;
+symbols;
+locks; strict;
+comment	@ * @;
+
+
+2.0
+date	95.08.31.15.27.31;	author Holt;	state Exp;
+branches;
+next	;
+
+
+desc
+@RCS Controlled file
+@
+
+
+2.0
+log
+@FirstCheckIn
+@
+text
+@/********************************************************************
+* listhelp.c 
+* Copyright (c)1994 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved.
+* $Id: listhelp.c,v Exp $
+* $Log: listhelp.c,v $
+*********************************************************************/
+/********************************************************************
+* listhelp.c
+*
+* Copyright ©1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+*	11-4-92		Hartford	Fixed bug in QuicksortList() where one-item
+*							lists returned FALSE
+*	12-17-92	Steve H		Convert to use SmartStrings
+*	2-2-93		Steve H		Convert to CG
+*	5-13-93		Steve H		Last Update
+*********************************************************************/
+#include <exec/exec.h>
+#include <proto/exec.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifndef PROTO_PASS
+#include <asm.p>
+#include <newgadgets.p>
+#include <newmenu.p>
+#endif
+
+#include <listhelp.h>
+
+//#define RESERVE_CHIP_CONTIG 120000
+#define RESERVE_CHIP_CONTIG 100000
+#define RESERVE_TOTAL 240000
+
+/****** ListHelp/SafeAllocMem ***************************************
+*
+*   NAME
+*	SafeAllocMem
+*
+*   SYNOPSIS
+*	VOID *__asm SafeAllocMem(
+*		register __d0 ULONG ByteSize,
+*		register __d1 ULONG Attributes)
+*
+*   FUNCTION
+*	Saves RESERVE_CHIP of continguous chip memory
+*	for other use. (Will fail if try to allocate past this)
+*
+*********************************************************************
+*/
+
+BOOL MemoryIsLow(VOID)
+{
+	if (AvailMem(MEMF_LARGEST|MEMF_CHIP) <= RESERVE_CHIP_CONTIG) return(TRUE);
+	if (AvailMem(0) <= RESERVE_TOTAL) return(TRUE);
+	return(FALSE);
+}
+#ifdef NOCRLIB
+//*******************************************************************
+VOID *__asm SafeAllocMem(
+	register __d0 ULONG ByteSize,
+	register __d1 ULONG Attributes)
+{
+	VOID *Memory;
+
+	DumpUDecL("SafeAllocMem: Entry... ",ByteSize," bytes \\");
+	DumpReg("SafeAllocMem: Entry");
+	if (Memory = AllocMem(ByteSize,Attributes)) {
+		if (MemoryIsLow()) {
+			FreeMem(Memory,ByteSize);
+			Memory = NULL;
+		}
+	}
+	if (!Memory) LowMemoryStatus();
+	DumpMsg("SafeAllocMem: Exit");
+	return(Memory);
+}
+
+#ifdef ASDFG
+// if not asking for chip, see if enough fast
+//	if (!(Attributes && MEMF_CHIP)) { DUUUH! }
+	if (!(Attributes&MEMF_CHIP)) {
+// if enough fast, OK
+		if (AvailMem(MEMF_LARGEST|MEMF_FAST) >= ByteSize)
+			return(AllocMem(ByteSize,Attributes));
+	}
+// if not enough fast, or asking for chip, see if enough reserve
+	Memory = AllocMem(ByteSize,Attributes);
+	if (AvailMem(MEMF_LARGEST|MEMF_CHIP) >= RESERVE_CHIP)
+		return(Memory);
+	else {
+		if (Memory) FreeMem(Memory,ByteSize);
+		return(NULL);
+	}
+#endif
+
+/****** ListHelp/NodeToOffset ***************************************
+*
+*   NAME
+*	NodeToOffset
+*
+*   SYNOPSIS
+*	ULONG NodeToOffset(struct List *List,struct MinNode *Node)
+*
+*   FUNCTION
+*	returns 0 if node not in list, else 1..ListLength
+*
+*********************************************************************
+*/
+ULONG NodeToOffset(struct List *List,struct MinNode *Node)
+{
+	struct MinNode *Test,*Next;
+	ULONG Count=0;
+
+	Test = (struct MinNode *)List->lh_Head;
+	while (Next=Test->mln_Succ) {
+		Count++;
+		if (Test == Node) return(Count);
+		Test = Next;
+	}
+	return(0);
+}
+
+#ifdef ASDFG
+
+/****** ListHelp/GetNode ********************************************
+*
+*   NAME
+*	GetNode
+*
+*   SYNOPSIS
+*	struct MinNode *GetNode(struct List *list, ULONG A)
+*
+*   NOTES
+*	start numbering with 1
+*
+*********************************************************************
+*/
+struct MinNode *GetNode(struct List *list, ULONG A)
+{
+	struct MinNode *node;
+
+	if (list && A) {
+		node = (struct MinNode *)list->lh_Head;
+		while (node->mln_Succ) {
+			A--;
+			if (!A) return(node);
+			node = node->mln_Succ;
+		}
+	}
+	return(NULL);
+}
+
+/****** ListHelp/ListLength *****************************************
+*
+*   NAME
+*	ListLength
+*
+*   SYNOPSIS
+*	ULONG ListLength(struct List *list)
+*
+*   FUNCTION
+*	start numbering with 1
+*
+*********************************************************************
+*/
+ULONG ListLength(struct List *list)
+{
+	ULONG Total = 0;
+	struct MinNode *node;
+
+	if (list) {
+		node = (struct MinNode *)list->lh_Head;
+		while (node = node->mln_Succ) Total++;
+	}
+	return(Total);
+}
+
+/****** ListHelp/FreeSmartList ***************************************
+*
+*   NAME
+*	FreeSmartList
+*
+*   SYNOPSIS
+*	VOID FreeSmartList(struct List *List)
+*
+*   FUNCTION
+*	Frees contents of List, then does NewList(List)
+*	Does NOT free List structure
+*
+*********************************************************************
+*/
+VOID FreeSmartList(struct List *List)
+{
+	struct SmartNode *SmartNode,*Next;
+
+	SmartNode = (struct SmartNode *)List->lh_Head;
+	while (Next = (struct SmartNode *)SmartNode->MinNode.mln_Succ) {
+		FreeSmartNode(SmartNode);
+		SmartNode=Next;
+	}
+	NewList(List);
+}
+
+/****** ListHelp/FreeSmartNode ***************************************
+*
+*   NAME
+*	FreeSmartNode
+*
+*   SYNOPSIS
+*	VOID FreeSmartNode(struct SmartNode *SmartNode)
+*
+*   FUNCTION
+*	Frees one node (better remove it from list first!)
+*
+*********************************************************************
+*/
+VOID FreeSmartNode(struct SmartNode *SmartNode)
+{
+	if (SmartNode && SmartNode->TotalSize) {
+		if (SmartNode->Name)
+			FreeSmartString(SmartNode->Name);
+		FreeMem(SmartNode,SmartNode->TotalSize);
+	}
+}
+
+/****** ListHelp/RemoveFreeSmartNode ********************************
+*
+*   NAME
+*	RemoveFreeSmartNode
+*
+*   SYNOPSIS
+*	RemoveFreeSmartNode(struct SmartNode *SmartNode)
+*
+*   FUNCTION
+*	Removes a node from its list and then frees it. (Better be in a list!)
+*
+*********************************************************************
+*/
+VOID RemoveFreeSmartNode(struct SmartNode *SmartNode)
+{
+	if (SmartNode && SmartNode->TotalSize) {
+		Remove((struct Node *)&SmartNode->MinNode);
+		FreeSmartNode(SmartNode);
+	}
+}
+
+/****** ListHelp/AllocSmartNode ********************************
+*
+*   NAME
+*	AllocSmartNode
+*
+*   SYNOPSIS
+*	struct SmartNode *AllocSmartNode(struct SmartString *Name,ULONG TotalSize,
+*		ULONG MemoryAttributes)
+*
+*   FUNCTION
+*	Allocates a SmartNode with an optional Name field.
+*	TotalSize is size of node, including SmartNode size.
+*	MemoryAttributes are same as for Exec AllocMem().
+*
+********************************************************************
+*/
+struct SmartNode *AllocSmartNode(struct SmartString *Name,ULONG TotalSize,
+	ULONG MemoryAttributes)
+{
+	struct SmartNode *SmartNode;
+	BOOL Error = TRUE;
+
+	if (!(SmartNode=(struct SmartNode *)SafeAllocMem(TotalSize,MemoryAttributes))) 
+		return(NULL);
+
+	SmartNode->TotalSize = TotalSize;
+	if (Name) {
+		if (SmartNode->Name = DuplicateSmartString(Name)) Error = FALSE;
+	} else Error = FALSE;
+
+	if (Error) {
+		FreeSmartNode(SmartNode);
+		SmartNode = NULL;
+	}
+	return(SmartNode);
+}
+
+/****** ListHelp/QuicksortList **************************************
+*
+*   NAME   
+*	QuicksortList
+*
+*   SYNOPSIS
+*	BOOL QuicksortList(struct List *list,
+*		int (*CompareNodes)(struct MinNode *NodeA,struct MinNode *NodeB))
+*
+*   FUNCTION
+* 	CompareNodes() returns: if <0, A<B; if =0, A=B; if >0, A>B
+*
+*********************************************************************
+*/
+BOOL QuicksortList(struct List *list,
+	int (*CompareNodes)(struct MinNode *NodeA,struct MinNode *NodeB))
+{
+	BOOL result = FALSE;
+	ULONG N;
+
+	if (list) {
+		N = ListLength(list);
+		if (N > 1) {
+			QS(list,1,N,CompareNodes);
+		}
+		result = TRUE;
+	}
+	return(result);
+}
+
+/******************************************************************/
+VOID QS(struct List *list,ULONG R1,ULONG RN,
+	int (*Compare)(struct MinNode *NodeA,struct MinNode *NodeB))
+{
+	ULONG I,J,GroupSize;
+	struct MinNode *R1Node;
+
+	GroupSize = RN-R1+1;
+
+	if (GroupSize <= 1) return;
+	if (GroupSize == 2) {
+		if (Compare(GetNode(list,R1),GetNode(list,RN)) > 0)
+			SwapListNodes(list,R1,RN);
+		return;
+	}
+
+	I = R1+1; /* start at R2 */
+	J = RN;   /* start at RN */
+
+	R1Node = GetNode(list,R1);
+
+/* partition list into two */
+	do {
+
+/* go right until RI belongs in right subgroup after partition */
+	while (Compare(R1Node,GetNode(list,I)) > 0) {
+		I++;
+		if (I >= RN) break;
+	}
+
+/* go left until RJ belongs in left subgroup */
+	while (Compare(R1Node,GetNode(list,J)) < 0) {
+		J--;
+		if (J <= R1) break;
+	}
+
+	if (I<J) SwapListNodes(list,I,J);
+
+	} while (I<J);
+
+/* complete partitioning at J: J now correct */
+	SwapListNodes(list,R1,J);
+
+/* do left and right partitions (if they are non-empty) */
+	if (R1 < (J-1)) QS(list,R1,J-1,Compare);
+	if ((J+1) < RN) QS(list,J+1,RN,Compare);
+}
+
+/******************************************************************/
+VOID SwapListNodes(struct List *list,ULONG A,ULONG B)
+{
+	struct MinNode *ANode,*BNode,*HoldSucc,*HoldPred;
+
+	if (A==B) return;
+
+	ANode = GetNode(list,A);
+	BNode = GetNode(list,B);
+
+	HoldSucc = BNode->mln_Succ;
+	HoldPred = BNode->mln_Pred;
+
+	if (HoldPred == ANode) NearSwap(ANode,BNode);
+	else if (HoldSucc == ANode) NearSwap(BNode,ANode);
+	else {
+
+	ANode->mln_Pred->mln_Succ = BNode;
+	BNode->mln_Pred = ANode->mln_Pred;
+	BNode->mln_Succ = ANode->mln_Succ;
+	ANode->mln_Succ->mln_Pred = BNode;
+	
+	HoldPred->mln_Succ = ANode;
+	ANode->mln_Pred = HoldPred;
+	ANode->mln_Succ = HoldSucc;
+	HoldSucc->mln_Pred = ANode;
+	}
+}
+
+/******************************************************************/
+VOID NearSwap(struct MinNode *ANode,struct MinNode *BNode)
+{
+	struct MinNode *HoldPred;
+
+	HoldPred = ANode->mln_Pred;
+	BNode->mln_Succ->mln_Pred = ANode;
+	ANode->mln_Succ = BNode->mln_Succ;
+	BNode->mln_Succ = ANode;
+	BNode->mln_Pred = ANode->mln_Pred;
+	ANode->mln_Pred = BNode;
+	HoldPred->mln_Succ = BNode;
+}
+
+#ifdef ASDFG
+/****** ListHelp/GetNodePosition ************************************
+*
+*   NAME
+*	GetNodePosition
+*
+*   SYNOPSIS
+*	ULONG GetNodePosition(struct List *list, struct SmartString *Name)
+*
+*   INPUTS
+*	Name is case sensitive
+*
+*   NOTES
+*	start numbering with 1
+*	return of 0 means couldn't find it
+*
+*********************************************************************
+*/
+ULONG GetNodePosition(struct List *list, struct SmartString *Name)
+{
+	struct Node *node;
+	ULONG A = 0;
+
+	if (list && Name) {
+		node = list->lh_Head;
+		while (node->mln_Succ) {
+			A++;
+
+needs work!
+
+			if (!strcmp(Name,node->ln_Name)) return(A);
+			node = node->mln_Succ;
+		}
+	}
+	return(NULL);
+}
+#endif
+
+#endif
+#endif
+
+// end of listhelp.c
+@

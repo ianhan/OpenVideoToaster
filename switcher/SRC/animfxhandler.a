@@ -1,0 +1,4908 @@
+********************************************************************
+* $AnimFXHandler.a$ - starting point of all new source code modules
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id: animfxhandler.a,v 2.29 1995/12/27 15:46:50 Holt Exp $
+*
+* $Log: animfxhandler.a,v $
+*Revision 2.29  1995/12/27  15:46:50  Holt
+*turned off sounds durring flyer sequencing.
+*
+*Revision 2.28  1995/10/03  09:40:57  Flick
+**** empty log message ***
+*
+*Revision 2.27  1995/10/03  09:38:38  Flick
+*Fixed AnimFX bug: NumFields tag was bogus if speed buttons changed, unless FX was then played
+*
+*Revision 2.26  1995/08/09  16:44:36  Flick
+*Now accepts LoopStopTime from sequencer when sequencing (for looping FX)
+*
+*Revision 2.25  1995/08/09  11:31:32  Flick
+*Oops! I was wrong, should've used FGC_BG to update matte color, not FGC_FCOUNT
+*Fixed now.  Also, timing of self-aborting looping ILBM/ANIM's is much more
+*accurate now.  Calculate stop time now after ALL setup work is done.
+*
+*Revision 2.24  1995/08/09  09:57:29  Flick
+*ANIM's which have their matte color changed while already selected now update
+*it on an FGC_FCOUNT command.
+*
+*Revision 2.23  1995/08/08  15:35:37  Flick
+*Looping ANIM/ILBM's now support TAG_Duration (0=forever)
+*They abort now on Right Mouse Button (Left still works for those who like it)
+*
+*Revision 2.22  1995/01/31  10:27:18  Kell
+**** empty log message ***
+*
+*Revision 2.21  1995/01/24  11:48:59  Kell
+*Scroll/Crawl data is now loaded into FastMem.  More debugs.
+*
+*Revision 2.20  1994/11/02  11:22:02  Kell
+*Now support the WAITABORT_BIT while sequencing, for aborting anytime.
+*
+*Revision 2.19  1994/10/28  12:55:22  Kell
+*And to prevent our Software interrupt from being disabled.
+*
+*Revision 2.18  1994/10/28  12:54:25  Kell
+*Removed AllInterruptsOff/On calls to prevent masterclock being shut off.
+*
+*Revision 2.17  1994/10/13  17:57:15  Kell
+*Now supports the new Encoder Tag.  The Matte tag is no longer used.
+*
+*Revision 2.16  1994/09/27  04:34:08  Kell
+*Changed macros & functions that used Matt to Matte. And now using SetMatteColor instead of old RestoreMattColor.
+*
+*Revision 2.15  1994/09/21  17:55:13  Kell
+*Removed the ANIM/ILBM fx dependence on the Toaster Effects drawer.
+*
+*Revision 2.14  1994/07/27  19:24:37  Kell
+**** empty log message ***
+*
+*Revision 2.13  1994/07/01  12:36:07  Kell
+**** empty log message ***
+*
+*Revision 2.12  94/06/04  03:41:31  Kell
+*When sequencing, ANIM/ILBM FX interlace should now always OK.
+*
+*Revision 2.11  94/05/24  21:32:32  Kell
+*Now only looks at FGC_SELECT and FGC_REMOVE (not Q or K versions).
+*Now always selects standard FX on SELECT failures.
+*Now AUTOs can wait for particular times for frame accuracy.
+*
+*Revision 2.10  94/05/04  06:01:50  Kell
+**** empty log message ***
+*
+*Revision 2.9  94/03/19  11:57:53  Kell
+*Now does SwitcherFX
+*
+*Revision 2.8  94/03/19  00:35:19  Kell
+*Fixed some effects control panels
+*
+*Revision 2.7  94/03/18  09:17:51  Kell
+**** empty log message ***
+*
+*Revision 2.6  94/03/17  21:10:24  Kell
+*Disabled MATTE TRUE whenever MatteColor is taged.
+*
+*Revision 2.5  94/03/16  10:49:11  Kell
+*New fields to keep track of Frames counts on all speeds
+*
+*Revision 2.4  94/03/15  21:57:21  Kell
+*Fixed ANIMs so TAG_NumFields is always upto date.
+*
+*Revision 2.3  94/03/11  20:51:49  Kell
+**** empty log message ***
+*
+*Revision 2.2  94/02/17  12:31:10  Kell
+**** empty log message ***
+*
+*Revision 2.1  94/02/07  16:52:10  Kell
+*Various changes to support the new 4.0 croutons & projects.
+*Added new tag list handling routines.
+*
+*
+*Revision 2.0  94/02/07  16:48:40  Kell
+*FirstCheckIn
+*Revision 2.41  93/12/06  21:56:19  Kell
+*Added VerticalScroll flag for special vertically only SuperBMs.
+*
+*Revision 2.40  93/12/02  20:54:14  Kell
+*New algorithmic dynamic motion, fader, etc. added.
+*Palette cycling can now go backwards.
+*We now have a Reverse flag for effects and Reverse butt log tag.
+*
+*Revision 2.39  93/11/16  02:07:32  Kell
+*Fixed bug where anim latch FX used wrong effect color at slow speeds.
+*
+*Revision 2.38  93/11/06  08:40:53  Kell
+*Fixed to work with EF_EffectsLogic, EF_EffectsTable, EF_TimeVariables and EF_VariableResults no longer being embedded within EFXBase.
+*
+*Revision 2.37  93/10/29  03:42:13  Kell
+*Now calles TB functions for Mouse button states, vs looking at hardware.
+*
+*Revision 2.36  93/10/23  05:33:10  Kell
+*Now a flag indicates in an effect is an ANIM FX.
+*AREXX now can change speeds on fixed speed FX.
+*Audio filter only turned off if required.
+*ANIM FX now work with AREXX tbar commands by doing AUTOs with Pauses.
+*
+*Revision 2.35  93/06/19  10:30:50  Kell
+*Fixes to prevent snow/matte from flashing at top of FX at transition start
+*
+*Revision 2.34  93/06/09  18:48:22  Kell
+*Fixed bug that prevented EffectColor changes to stick
+*
+*Revision 2.33  93/06/09  18:15:54  Kell
+*New 4000 fx now work with Lumkeying
+*
+*Revision 2.32  93/06/08  06:57:02  Kell
+*Fixes to encoder/matte FX that have DV3 at start/end of transition.
+*
+*Revision 2.31  93/06/07  15:39:45  Kell
+*Now sends ABORT command after autos, vs STOP
+*
+*Revision 2.30  93/06/05  07:36:28  Kell
+*Bug fixes involving Matte color and Latch FX, non latch FX, encoder fx.
+*Now won't accidentally see Snow or some wrong matte color at FX start/end
+*
+*Revision 2.29  93/06/01  20:08:02  Kell
+*Fixed crashes due to Anims failing to load.
+*
+*Revision 2.28  93/05/30  13:10:38  Kell
+*Attempts to fix crashing bug when anim loading fails.
+*
+*Revision 2.27  93/05/28  21:37:10  Kell
+**** empty log message ***
+*
+*Revision 2.25  93/05/25  02:22:09  Kell
+*Now deals with source changes while midtransition.
+*
+*Revision 2.24  93/05/24  19:29:21  Kell
+*Added fxhc_Abort command vs just the old fxhc_Stop.
+*
+*Revision 2.23  93/05/24  16:40:03  Kell
+**** empty log message ***
+*
+*Revision 2.22  93/05/24  10:11:18  Kell
+*Fixed PaletteColor bugs
+*
+*Revision 2.21  93/05/22  11:02:59  Kell
+*Now remaps AA FX on nonAA machines correctly.
+*
+*Revision 2.20  93/05/21  03:05:43  Kell
+**** empty log message ***
+*
+*Revision 2.19  93/05/21  03:04:05  Kell
+*Backed out to previous version.
+*
+*Revision 2.16  93/05/20  04:21:42  Kell
+*FieldSync now works on 30 frame/sec animations.
+*
+*Revision 2.15  93/05/14  17:59:15  Kell
+**** empty log message ***
+*
+*Revision 2.14  93/05/14  04:23:22  Kell
+*Now handles stomping Sprite palette automatically.
+*
+*Revision 2.13  93/05/13  20:09:03  Kell
+**** empty log message ***
+*
+*Revision 2.12  93/05/12  22:35:03  Kell
+**** empty log message ***
+*
+*Revision 2.11  93/05/12  22:26:44  Kell
+*SimpleBM now honors both color0 & Bit15 pixelsw modes.
+*Fixed QUAFALPHA bug, Added SlowEffect Abort flag, Transparent ranges bug.
+*Added skip frames at end of anim feature.
+*
+*Revision 2.10  93/05/12  20:55:15  Turcotte
+**** empty log message ***
+*
+*Revision 2.9  93/05/12  12:10:35  Kell
+*Fixed Interlace bug, WAIT4LMB when exiting loops, and HAM planes.
+*
+*Revision 2.8  93/05/11  02:15:05  Kell
+*Fixed lopsided nesting of AllInterrupts & Interrupts routines, causeing
+*crashes after FX with audio.
+*
+*Revision 2.7  93/05/08  15:43:48  Kell
+*Lastest color cycling code for ILBM, & now handles ChromaFX
+*
+*Revision 2.6  93/05/07  00:25:58  Kell
+*Now handles interlaced data.
+*
+*Revision 2.5  93/05/06  04:12:43  Kell
+**** empty log message ***
+*
+*Revision 2.4  93/05/05  02:09:11  Kell
+*Fixes to encoder glitches when EH1 is sent.
+*
+*Revision 2.3  93/05/04  08:04:45  Kell
+*Fixed long wait after 68000 speed anims.
+*
+*Revision 2.2  93/05/01  02:35:27  Kell
+*New stuff for palette animation.
+*
+*Revision 2.1  93/04/29  13:34:25  Kell
+*Fixed anims from stopping too soon after a loop anim was run.
+*
+*
+*********************************************************************
+
+
+	include	"Assembler.i"
+	include "exec/types.i"
+
+	include "exec/memory.i"
+	include "exec/execbase.i"
+	include "exec/interrupts.i"
+        include "hardware/custom.i"
+	include "graphics/gfx.i"
+	INCLUDE	'libraries/dos.i'
+
+	Include	"Instinct.i"
+	Include	"EfLib.i"
+	Include "ELH.i"
+	Include	"VtHand.i"
+	Include	"Rect.i"
+	Include "KeyLogic.i"
+	include "custom.i"	;for _custom, _intena
+	Include "macros.i"
+	Include "Croutons.i"
+
+	include "AnimatedEffectsEqu.i"
+	include "AnimEQU.i"
+	Include "AnimFXtable.i"
+
+	Include "SerialDebug.i"
+	Include "VTDebug.i"
+
+	XCODE	AnimFXHandler
+
+;;SERDEBUG	set	1
+
+;;DBLP		set	1	;debug Looping stuff
+
+;;DBAFXH	set	1	;debug AnimFXHandler
+;;DBAFXH2	set	1	;more debug AnimFXHandler
+
+;;DBTAGS	set	1	;debug Tag handlers
+;;DEBUGMEMORY	SET	1
+
+*--------------------
+
+;;DEBUGSPEEDORPLAY	SET	1
+* when DEBUGSPEEDORPLAY is set, DEBUGSPEED or DEBUGPLAY must be set (but not both)
+;;DEBUGSPEED	set	1
+;;DEBUGPLAY	set	1
+		
+DEBUGSPEEDORPLAYMAXFIELDS	EQU	500	;used by DEBUGSPEEDORPLAY
+
+ANIMCHIPLIMIT	set  (70000)	;Always leaves a chunk at least this big
+ANIMPUBLICLIMIT set  (30000)	;Always leaves a chuck at least this big
+
+*************************************************************************
+* Summary of ILBM/ANIM processing flow:
+* 
+* ILBM Auto ->AnimFXHandler ->ProcessEffect ->AutoHandler ->[TBarHandlerAuto (if 1st field, ->AnimPlayForward: ->FirstFieldHandler), ->InstallNextField ->OverrideProcessDuring]*#fields
+* ILBM TBar ->AnimFXHandler ->ProcessEffect ->[TBarHandler (if 1st field, ->AnimPlayForward: ->FirstFieldHandler), ->InstallNextField ->OverrideProcessDuring]*#fields
+* ILBM ReDo ->AnimFXHandler ->ProcessEffect ->FieldReinstall (does nothing!!)
+* 
+* ANIM Auto ->AnimFXHandler ->ProcessEffect ->AnimAutoTBarHandler ->AnimPlayForward: [InterruptHandler ->InstallNextField ->OverrideProcessDuring]*#fields 
+* ANIM TBar ->AnimFXHandler ->ProcessEffect ->AnimAutoTBarHandler ->AnimPlayForward: [InterruptHandler ->InstallNextField ->OverrideProcessDuring]*#fields
+* ANIM ReDo ->AnimFXHandler ->ProcessEffect ->OverrideProcessDuring
+* 
+*************************************************************************
+*									*
+*	Crouton Effect:							*
+*
+*	Plays an ANIM style effect.
+*									*
+*	Input:								*
+*									*
+*	04(A7)	= Gadget Select Message.				*
+*	08(A7)	= Address of Fast Gadget That Was Selected.		*
+*	12(A7)	= Address of Toaster Base.				*
+*									*
+*	Output:								*
+*									*
+*	The Crouton Effect Is Executed Once.				*
+*									*
+*	03.March 1993 Steven R. Kell				
+*									*
+*************************************************************************
+
+	SECTION	,DATA
+
+LocalData  		;LocalData STRUCTURE
+	dc.l	0	;anl_Flags, Same as aec_Flags.
+	dc.l	0	;anl_FileName, File Name.
+
+	dc.l AvailableMem ;anl_AvailableMemory, Available Memory, ->linked list of Effects memory
+
+	dc.l	0	  ;anl_DOSBase, DOS Base.
+	dc.l	0	  ;anl_SYSBase, SYS Base.
+	dc.l	0	  ;anl_GFXBase, GFX Base.
+	dc.l	0	  ;anl_TSTBase, ToastBase.
+
+	dc.l	ANIMCHIPLIMIT
+	dc.l	ANIMPUBLICLIMIT
+
+	dcb.b	LocalData+anl_Sizeof-*,0
+
+*---
+	dcb.b	LocalData+anl_Sizeof+AFXP_SIZEOF-*,0
+
+*---
+	dc.l	0		;ALCD_FastGadget
+
+	dc.l	0		;NOT USED IN 4.0!!!!! ALCD_EffectsLock, Lock on Effects Drawer
+	dc.l	0		;ALCD_LastInstallTime
+
+	dc.b	0		;ALCD_Flags1
+	dc.b	0		;ALCD_Flags2	
+
+	dc.w	ALCD_YMouse
+	dc.l	0		;ALCD_CurrentTBarTime
+
+	dc.l	0		;APTR	ALCD_AudioInfoSlow
+	dc.l	0		;APTR	ALCD_AudioInfoMedium
+	dc.l	0		;APTR	ALCD_AudioInfoFast
+	dc.l	0		;APTR	ALCD_CurrentAudioInfo
+	
+	dc.l	0		;ALCD_LastCycleTime
+
+	dcb.b	bm_SIZEOF,0	;ALCD_BitMap for upto 8 planes
+	
+	dc.w	0		;ALCD_TransformedTBarTime
+	dc.w	0		;pad
+
+* The assembler crashes on the 2nd pass if the following line is
+* left in.  I guess ALCD_SIZEOF is wrong or something??????????
+;;	dcb.b	LocalData+ALCD_SIZEOF-*,0
+
+* Want to relatively address this!!!
+* SHOULD ONLY SEND HEADERS THAT HAVE CHANGED!!!!!!!
+* Can't send EH3 without flashing MATTE or Encoder!!!
+AnimELHList	dc.b	EH4,EH2,EH1,EH68,EHEND
+	        CNOP	0,2	 
+
+*----------------------------------------------
+	IFD	DEBUGSPEEDORPLAY
+
+	 dc.l	0	;number of fields-1
+DebugSpeedOrPlayBuffer:
+	 dcb.l	DEBUGSPEEDORPLAYMAXFIELDS*2,0
+
+	ENDC	;IFD DEBUGSPEEDORPLAY
+*----------------------------------------------
+AvailableMem:	;linked list of availableMem avm_ structures
+
+* This chunk is between the interface plances and bottom of DVE fx / readscanline stuff
+AnimChipFree	dc.l	AnimChipPublic1	;avm_NextNode
+		dc.l	0		;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_CHIP	;avm_MemoryType
+		dc.w	avmc_PriFree	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimChipFree+avm_Sizeof-*,0
+		
+* This is the DVE coplists / DVE planes / readscanlineBM / any ECD_ stuff
+AnimChipPublic1	dc.l	AnimChipPublic2	;avm_NextNode
+		dc.l	AnimChipFree	;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_CHIP	;avm_MemoryType
+		dc.w	avmc_PriPublic	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimChipPublic1+avm_Sizeof-*,0
+
+* This is the frameloading buffer
+AnimChipPublic2	dc.l	AnimChipPrivate	;avm_NextNode
+		dc.l	AnimChipPublic1	;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_CHIP	;avm_MemoryType
+		dc.w	avmc_PriPublic	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimChipPublic2+avm_Sizeof-*,0
+
+* This is the interface planes.  This node is optionally skipped.
+AnimChipPrivate	dc.l	AnimFastFree	;avm_NextNode
+		dc.l	AnimChipPublic2 	;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_CHIP	;avm_MemoryType
+		dc.w	avmc_PriPrivate	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimChipPrivate+avm_Sizeof-*,0
+
+* This is above the DVE LUT
+AnimFastFree	dc.l	AnimFastPublic	;avm_NextNode
+		dc.l	AnimChipPrivate	;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_FAST	;avm_MemoryType
+		dc.w	avmc_PriFree	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimFastFree+avm_Sizeof-*,0
+
+* This is the DVE LUT
+AnimFastPublic	dc.l	0		;avm_NextNode
+		dc.l	AnimFastFree	;avm_PreviousNode
+		dc.l	0		;avm_Memory	;fill in later
+		dc.l	0		;avm_Size	;fill in later
+		dc.w	MEMF_FAST	;avm_MemoryType
+		dc.w	avmc_PriPublic	;avm_MemoryPri
+		dc.l	0		;avm_NumberOfBytesUsed
+		dcb.b	AnimFastPublic+avm_Sizeof-*,0
+
+EndOfAvailableMem:
+**************************************************************************
+TagListLUT:
+	dc.l	0			;No TagID = 0
+	dc.l	TagVersion		;Default UWORD = AFXT_Ver_3
+	dc.l	TagRevision		;Default UWORD = AFXT_Rev_First
+	dc.l	TagAAeffect		;Default = TRUE
+	dc.l	TagNonAAeffect		;Default = FALSE
+	dc.l	TagKillInterfaceNonAA	;Default = TRUE
+	dc.l	TagKillInterfaceAA	;Default = TRUE
+	dc.l	TagButtonELHlogic	;Default = AFXT_Logic_Encoder
+	dc.l	TagCustomButtonELHlogic	;Default = ->TEL_Encoder(a4), ->Custom ButtonELH logic
+	dc.l	TagNumberOfAnims	;Default = AFXT_OneAnim 
+	dc.l	TagRequestFileName	;Default = FALSE
+	dc.l	TagAnimFiles		;Default = NULL
+	dc.l	TagFrames		;Default = FALSE = Fields
+	dc.l	TagFieldSync		;Default = FALSE
+	dc.l	TagVariableSpeeds	;Default = FALSE
+	dc.l	TagForcePlayForward	;Default = FALSE
+	dc.l	TagForcePlayReverse	;Default = FALSE
+	dc.l	TagLoopAnims		;Default = FALSE
+	dc.l	TagAnimControl		;Default = NULL
+	dc.l	TagAudioFastSamples	;Default = AFXT_NoAudioFast
+	dc.l	TagAudioMediumSamples	;Default = AFXT_NoAudioMedium
+	dc.l	TagAudioSlowSamples	;Default = AFXT_NoAudioSlow
+	dc.l	TagAudioFiles		;Default = NULL
+	dc.l	TagAudioControl		;Default = NULL
+	dc.l	TagPauseTimes		;Default = NULL
+	dc.l	TagLatchColors		;Default = NULL
+	dc.l	TagTransparentColors	;Default = NULL
+	dc.l	TagPaletteColors	;Default = NULL
+
+	dc.l	TagEquations		;Default = NULL
+	dc.l	TagEncoder		;Default = NULL
+	dc.l	TagVerticalScroll	;Default = NULL
+	dc.l	TagReverseTime		;Default = NULL			
+	dc.l	TagReverseButtLog	;Default = AFXT_Logic_Encoder
+	dc.l	TagReverseCustomButtLog	;Default = ->TEL_Encoder(a4), ->Custom ButtonELH logic
+
+	dc.l	TagKeyMode		;Default = AFXT_Key_Overlay70ns
+	dc.l	TagMatteColor		;Default = AFXT_Matte_Current
+	dc.l	TagCustomMatteColor	;Default = Black = $000000
+	dc.l	TagBorderColor		;Default = AFXT_Border_Current
+	dc.l	TagCustomBorderColor	;Default YIQ = $470000
+	dc.l	TagLineNumbers		;Default = NULL
+	dc.l	TagLineNumberPlane	;Default = AFXT_LineNumber_None
+	dc.l	TagForceFreeze4		;Default = FALSE
+	dc.l	TagForceFreeze8		;Default = FALSE
+	dc.l	TagForceLive		;Default = FALSE
+	dc.l	TagForceLumKeyOn	;Default = FALSE
+	dc.l	TagForceLumKeyOff	;Default = FALSE
+	dc.l	TagForceLumKeyOnBlack	;Default = FALSE
+	dc.l	TagForceLumKeyOnWhite	;Default = FALSE
+	dc.l	TagBadDefaultFX		;Default = FALSE
+	dc.l	TagLoadPictures		;Default = NULL
+
+	dc.l	Tagpad6			;Default = NULL
+	dc.l	Tagpad7			;Default = NULL
+
+	dc.l	TagDigitalFX		;Default = FALSE
+	dc.l	Tagpad1			;Default = NULL
+	dc.l	TagLUT			;Default = FALSE
+	dc.l	TagDigitalPairs		;Default = FALSE
+	dc.l	TagLatchAM		;Default = FALSE
+	dc.l	TagLatchBM		;Default = FALSE
+	dc.l	TagLatchIS		;Default = FALSE
+	dc.l	TagHonorPreviewOverLay	;Default = FALSE
+	dc.l	TagForceDefaultMatte	;Default = FALSE
+	dc.l	TagTurnAudioFilterOff	;Default = FALSE. Turns off the audio filter
+	dc.l	TagAudioStartField	;Default = 0
+	dc.l	TagNumAudioFields	;Default = length of ANIM
+	dc.l	TagISandClipPause	;Default = FALSE
+	dc.l	TagInterlaced		;Default = FALSE
+	dc.l	TagFirstFieldNTSCII	;Default = FALSE
+	dc.l	TagBounceILBM		;Default = FALSE
+	dc.l	TagLatchRanges		;Default = NULL
+	dc.l	TagLatchList		;Default = NULL
+	dc.l	TagTransparentRanges	;Default = NULL
+	dc.l	TagTransparentList	;Default = NULL
+	dc.l	TagColor0Transparent	;Default = FALSE = Color0 PixelSw
+	dc.l	TagAbortIfSlow		;Default = FALSE
+	dc.l	TagNumSkipFieldsAtEnd	;Default = 0
+	dc.l	TagTBarDoesAuto		;Default = FALSE
+	dc.l	TagDoNotStompSprite	;Default = FALSE
+	dc.l	TagAbortLoopAtEnd	;Default = FALSE
+	dc.l	TagNonAAremap		;Default = 0 = AFXT_Remap_Encoder
+	dc.l	Tag100PercentWhiteMatte ;Default = FALSE
+	dc.l	TagUseEffectColor 	;Default = FALSE
+		
+	dc.l	TagLoopCount  
+	dc.l	TagCroutonType   
+	dc.l	TagTimeLine   
+	dc.l	TagIndexID   
+	dc.l	TagFCountMode   
+	dc.l	TagVariableFCount   
+	dc.l	TagSlowFCount   
+	dc.l	TagMedFCount   
+	dc.l	TagFastFCount   
+	dc.l	TagVariableFCount68000   
+	dc.l	TagSlowFCount68000   
+	dc.l	TagMedFCount68000   
+	dc.l	TagFastFCount68000   
+	dc.l	TagNumFields   
+	dc.l	TagStartTime   
+	dc.l	TagDescriptorList   
+	dc.l	TagAboutList   
+	dc.l	TagCommentList   
+		
+* NEW TAG HANDLERS GO HERE!!!!
+
+EndOfTagTable	EQU	*
+
+MaxTagNumber	EQU (((EndOfTagTable-TagListLUT)/4)-1)
+
+**************************************************************************
+	SECTION	,CODE
+
+	ALLDUMPS	;!!
+
+***************************************************************
+* d0=FGCcommand, a3->FG, a4->EfxBase, a5->TB
+
+* All ANIM/ILBM FX jump here before any FGC commands have been processed.
+
+AnimFXHandler:				;Standard PEtbar will never be used.
+	DEBUGUDEC.w DBAFXH,<****** AnimFXHandler FGC=>,d0,<\>
+
+	cmpi.w	#FGC_TOMAIN,d0		;TOPRVW is ignored
+	bne.s	3$
+	movea.l	a3,a0
+	JUMPTL	FGC_AutoCommand
+
+3$	lea	LocalData,a2
+
+	cmpi.w	#FGC_LOAD,d0
+	bne	6$
+
+	DEBUGMSG DBAFXH,<FGC_LOAD>
+
+	bsr	InitializeAnimFXParams
+	bsr	ReadTagLists	;over write initial "loadseged" defaults with
+				;possibly new defaults (before project loading).
+
+* fill out anl_ structure & LockEffect drawer if necessary
+	tst.b	ALCD_AnimFXParams+AFXP_NumberOfAnims(a2)
+	beq	5$			;jump if no ANIMs	
+
+	btst.b	#AFXP_AnimFlags1_RequestFileName,ALCD_AnimFXParams+AFXP_AnimFlags1(a2)	
+	bne	5$			;jump if ANIM files loaded via requester
+
+* assume there is an ANIM in an overlay hunk
+	move.l	FGS_FileName(a3),a1	;a1.L = Address of Crouton File Name.
+
+* Don't put them in debug hunks anymore
+;;	moveq	#1,d1			; Hunk #1
+	moveq	#0,d1
+
+ 	tst.l	ALCD_AnimFXParams+AFXP_AnimFiles(a2)
+	beq.s	4$			;jump if there aren't external ANIM files
+
+	move.l	ALCD_AnimFXParams+AFXP_AnimFiles(a2),a1
+	move.l	(a1),d0
+	beq	5$	;if NULL, no known ANIM available
+	move.l	d0,a1
+	moveq	#0,d1	;Not in OverLay Hunk
+
+* a1 ->FileName
+* Got ANIM name, and Lock if necessary
+* always CD to Effects Drawer so file names without total paths will work
+4$
+
+;; REMOVED LockEffects call for 4.0
+;;	moveq.l	#-1,d0			;Means Look At Toaster/Effects only
+;;	CALLTL	LockEffects		;D0.L = Address of Lock.
+;;	move.l	d0,ALCD_EffectsLock(a2)	;Did We Get The Lock?
+;;	beq	5$			;Exit If Lock Failed.
+
+* assume ILBM
+	CALLTL	StuffFCount	;fix tag NumFields
+	XJSR	StuffNumFrames	;fix tag NumFields
+
+	lea	-anh_SIZEOF(sp),sp
+	movea.l	sp,a0
+	move.l	d1,d0			;hunk#
+	CALLTL	LoadAnimHeader
+	moveq	#1,d1		;assume ILBM
+	tst.l	d0
+	bne	7$		;jump if AnimHeader read error (maybe ILBM)
+
+	move.l	anh_abstime(sp),d1
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a2)
+	beq	9$
+	moveq	#0,d0
+	move.b	anh_interleave(sp),d0
+	sub.l	d0,d1
+
+9$	movea.l	a3,a0
+	move.l	d1,d0		;=num frames
+	bsr	StuffNumAnimFrames
+	bsr	FixupNumFields	;Set NumFields correctly for sequencer (rounds to frame)
+
+7$	lea	anh_SIZEOF(sp),sp
+
+;; REMOVED LockEffects call for 4.0
+;;	move.l	ALCD_EffectsLock(a2),d1
+;;	GET.l	TB_DOSBase,a6	
+;;	CALLROM	UnLock
+
+5$	rts
+
+*----
+* Standard PEtbar will never be used.
+6$	movea.l	a2,a0			;->LocalData
+	lea	TBarHandler(pc),a1	;default handler, used for FIELDREDO
+
+	cmpi.w	#FGC_REMOVE,d0
+;;	beq.s	10$
+;;	cmpi.w	#FGC_REMOVEQ,d0
+	bne.s	15$
+
+10$	DEBUGMSG DBAFXH,<FGC_REMOVE>
+	bsr	AnimRemoveHandler
+	bra	100$
+
+*----
+15$	cmpi.w	#FGC_BORDER,d0
+	bne	16$
+* Border is being changed.
+	DEBUGMSG DBAFXH,<FGC_BORDER>
+
+	btst.b	#AFXP_SwitcherFlags2_UseEffectColor,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a0)
+	beq	18$
+
+	btst.b	#AFXP_SwitcherFlags2_ForceDefaultMatte,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a0)
+	bne	18$			;jump if don't allow updating default matte
+	moveq	#0,d1
+	GET.w	TB_EffectColor,d1
+	addq.w	#1,d1
+;;;	move.b	d1,FGS_MatteColor(a3)	;From now on, use new Effect color
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_MatteColor,d0
+	CALLTL	PutLongValue
+18$	rts
+
+*----
+16$	cmpi.w	#FGC_TBAR,d0
+	bne	20$
+
+	DEBUGMSG DBAFXH,<FGC_TBAR>
+
+	btst.b	#AFXP_SwitcherFlags2_TBarDoesAuto,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a0)
+	beq.s	17$
+	moveq	#FGC_AUTO,d0
+	bra	30$		;force AUTO on tbar
+
+17$	bset.b	#ALCD_Flags1_TBar,ALCD_Flags1(a0) ;it's a TBar drag
+
+	lea	ProcessMatteEncoder,a2
+	move.l	a2,EF_PreProcessDuring(a4)	;assume DOTBAR
+
+	btst.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a0)
+	bne	100$
+
+	clr.l	EF_PreProcessDuring(a4)
+	bset.b	#EFFLAGS1_NODOTBAR,EF_Flags1(a4)
+	bra	90$
+
+*----
+20$	cmpi.w	#FGC_AUTO,d0
+	beq.s	30$
+	cmpi.w	#FGC_UNAUTO,d0
+	bne	100$
+
+30$	DEBUGMSG DBAFXH,<FGC_AUTO or FGC_UNAUTO>
+
+	bclr.b	#ALCD_Flags1_TBar,ALCD_Flags1(a0) ;not a TBar drag
+
+	lea	AutoHandler(pc),a1
+	btst.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a0)
+	bne.s	100$
+90$	lea	AnimAutoTBarHandler(pc),a1
+
+*----
+100$	DEBUGMSG DBAFXH,<Before ProcessEffect>
+
+	GET.l	TB_EfxFG,d1
+	cmp.l	a3,d1
+	beq	106$			;jump is we're selected
+
+	DEBUGMSG DBAFXH,<We are not selected, so use default a0 & a2>
+
+* NOTE: The button logic ptr a0 is bogus until after a SELECT
+* NOTE: The Effects Data ptr a2 is bogus until after a SELECT
+	movea.l	EF_EffectsLogic(a4),a0
+	move.l	TEL_Encoder(a0),a0		;default when not selected
+	suba.l	a2,a2				;default when not selected
+	bra	102$
+
+106$	lea	ALCD_AnimFXParams(a0),a2
+
+	btst.b	#AFXP_AnimFlags2_ReverseTime,ALCD_AnimFXParams+AFXP_AnimFlags2(a0)
+	beq.s	103$
+	movea.l	AFXP_ReverseCustomButtLog(a2),a0
+	bra.s	104$
+103$	movea.l	AFXP_CustomButtonELHlogic(a2),a0
+
+104$	tst.l	AFXP_Equations(a2)	;probably not necessary
+	beq.s	101$
+	lea	AFXP_Equations(a2),a2
+
+	DEBUGMSG DBAFXH,<Have Equations>
+
+	bra.s	102$
+101$	suba.l	a2,a2			;assume -> no FXvariables
+
+* a0->ButtonELHLogic, a1->Field/AutoTBarHandler, a2->FXvariables,
+* a3->FG, a4->EfxBase, a5->TB, d0=FGcommand
+
+102$	move.l	TB_EfxFG(a5),-(sp) ;stash on stack because this code is recursive
+	jsr	_LVOProcessEffect(a4)
+
+	DEBUGMSG DBAFXH,<After ProcessEffect>
+
+	move.l	(sp)+,d1	   ;->may be previous effect FG
+
+*----
+* things that can finish a transition
+	cmpi.w	#FGC_TBAR,d0
+	beq	500$		
+	cmpi.w	#FGC_AUTO,d0
+	beq	500$		
+	cmpi.w	#FGC_UNAUTO,d0
+	beq	500$		
+	cmpi.w	#FGC_TAKE,d0
+	beq	500$		
+	
+*----------------------------------
+	cmpi.w	#FGC_BG,d0
+	bne	107$
+
+* Matte color TAG has been changed
+	bsr	UpdateMatteColor
+	bra	200$
+
+
+107$	cmpi.w	#FGC_FCOUNT,d0
+	bne	105$
+
+
+	DEBUGMSG DBAFXH,<FGC_FCOUNT>
+
+*** Must do this because "StuffFCount" from PEframecount writes the selected FCount into
+*** the NumFields tag!!  This would just break sequencing totally, if speed buttons were
+*** changed without a subsequent FGC_SELECT.
+	movea.l	a3,a0		;->FG
+	bsr	FixupNumFields	;Set NumFields correctly for sequencer, based on
+				;NumFramesXXXX & FCountMode tags
+
+* Speed/Duration may have been changed.
+	bsr	UpdateSoundIcon
+
+*** New for 4.05 -- Get loop duration tag and pass to Anim/ILBM player ***
+	move.l	#TAGID_Duration,d0
+	movea.l	a3,a0			;->FG
+	CALLTL	GetLongValue
+	DEBUGUDEC.w DBLP,<*** LoopDuration=>,d0,<\>
+	move.l	d0,TB_CurLoopDuration(a5)	;0 indicates "forever" (as before)
+***
+
+	bra	200$
+
+*----------------------------------
+105$
+	cmpi.w	#FGC_SELECT,d0
+;;	beq.s	110$
+;;	cmpi.w	#FGC_SELECTQ,d0
+;;	beq.s	110$
+;;	cmpi.w	#FGC_SELECTK,d0
+	bne	200$
+
+110$	DEBUGMSG DBAFXH,<FGC_SELECT>
+
+	cmp.l	TB_EfxFG(a5),d1
+	beq	200$	;jump if already selected (don't select again)
+			;or relvarify  said it wasn't selected.
+
+* is it possible for TB_EfxFG to change and not be = to this FG????
+;	cmp.l	TB_EfxFG(a5),a3
+;	bne.s	200$		;relvarify said it wasn't selected
+
+	DEBUGMSG DBAFXH,<Before AnimSelectHandler>
+
+	bsr	AnimSelectHandler
+	bpl	200$
+
+	DEBUGMSG DBAFXH,<Select Failed so selecting Internal Fade>
+
+* Select failed, so re-select previous effect (assume possible!)
+*+	tst.l	d1
+*+	beq	333$		;panic, no previous FG
+*+
+*+	move.l	d1,a2
+*+	move.l	FG_Function(a2),d0
+*+	beq	333$		;panic, no previous FG function
+*+
+*+	DEA.l	TB_SliceFGL,a0
+*+	moveq	#CGSLICEID,d0
+*+	CALLTL	IndexFastG
+*+	beq.s	300$		;jump if can't find CG
+*+
+*+	cmp.l	a2,d0
+*+	beq	333$		;panic, previous FG was CG
+*+
+*+300$	DEBUGMSG DBAFXH,<SelectStdEfx incase previous FG fails>
+*+
+*+ 	CALLTL	SelectStdEfx	;just in case previous FG fails (prevent endless loop)
+*+
+*+	GET.l	TB_EfxFG,d0
+*+	cmp.l	a2,d0
+*+	beq	444$		;previous FX same as that select by SelectStdEfx
+*+
+*+	DEBUGMSG DBAFXH,<Finally Select Previous FG>
+*+
+*+	movem.l	a2/a5,-(sp)
+*+	move.l	#FGC_SELECT,-(sp)	;was FGC_SELECTQ pre 4.0
+*+	move.l	FG_Function(a2),a0
+*+	jsr	(a0)			;Select previous EFX crouton
+*+	move.l	4(sp),d0		;->this FG
+*+	lea	12(sp),sp
+*+
+*+;;	cmp.l	TB_EfxFG(a5),d0
+*+;;	beq.s	444$			;able to re-select previous EFX
+*+	bra.s	444$			;Assume some effect was selected!
+*+
+*+* Panic unable to select a previous EFX!
+*+333$	DEBUGMSG DBAFXH,<Before SelectStdEfx panic>
+*+
+*+	CALLTL	SelectStdEfx					
+*+
+*+444$	GET.l	TB_EfxFG,a0
+*+	CALLTL	DrawCroutonImage	;was CompCroutonImage
+
+	CALLTL	SelectStdEfx				
+	PUT.w	d0,TB_ErrFlag		;stash Select Failure from AnimSelectHandler
+
+*----
+200$	DEBUGMSG DBAFXH,<rts from AnimFXHandler>
+	rts
+
+* Transition may be finished
+500$	DEBUGMSG DBAFXH,<FGC may have finished Transition>
+
+	GET.w	TB_TBarTime,d0		;assume we have hires time
+	beq.s	520$
+	cmpi.w	#TBarTimeMax,d0
+	bne	200$
+520$	lea	LocalData,a0
+	bclr.b	#ALCD_Flags1_SetupForward,ALCD_Flags1(a0) ;assume can't setup
+	btst.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a0) ;interface killed?
+	bne	200$			;jump if Interface is not protected
+	bset.b	#ALCD_Flags1_SetupForward,ALCD_Flags1(a0) ;flagged as pre-setup
+
+;;	movea.l	FG_Function(a3),a4
+;;	movea.l	CroutonEffect_AEC(a4),a4	;->AEC_BaseAddr
+	movea.l	FGS_LocalData(a3),a4		;->AEC_BaseAddr
+
+	DEBUGMSG DBAFXH,<Before AnimSetupForward>
+
+	JUMPTL	AnimSetupForward
+
+**************************************************************
+* a0->FG, d0=num anim fields
+* Works for ILBMs also
+
+	XDEF	StuffNumAnimFrames
+StuffNumAnimFrames
+	movem.l	d0/d2-d6/a0,-(sp)
+	move.l	d0,d6
+
+	move.l	#TAGID_FastFCount,d2
+	move.l	#TAGID_MedFCount,d3
+	move.l	#TAGID_SlowFCount,d4
+	move.l	#TAGID_VariableFCount,d5
+
+	XJSR	AreWeFast
+	bne.s	5$			; If 68020/68030/68040, Default Speed.
+
+* running on 68000
+	move.l	#TAGID_FastFCount68000,d2
+	move.l	#TAGID_MedFCount68000,d3
+	move.l	#TAGID_SlowFCount68000,d4
+	move.l	#TAGID_VariableFCount68000,d5
+5$
+*** Count of 0 = Lock this speed out
+*** If bit 15 is set of TB_NumFrames...., then this setting LOOPs
+*** Currently, only ANIM code will ever set bit 15.
+
+*------
+;;;	move.w	FGS_SlowFCount(a3),d0
+	move.l	d4,d0
+
+	DEBUGMSG DBSNF,<Before GetLongValue1>
+
+	CALLTL	GetLongValue
+	mulu	d6,d0
+
+	addq.w	#1,d0			;round up to nearest frame
+	lsr.w	#1,d0
+	PUT.w	d0,TB_NumFramesSlow
+	
+	move.l	d0,d1
+	move.l	#TAGID_NumFramesSlow,d0
+	CALLTL	PutLongValue
+
+*------
+;;;	move.w	FGS_MedFCount(a3),d0
+	move.l	d3,d0
+
+	DEBUGMSG DBSNF,<Before GetLongValue2>
+
+	CALLTL	GetLongValue
+	mulu	d6,d0
+
+	addq.w	#1,d0
+	lsr.w	#1,d0
+	PUT.w	d0,TB_NumFramesMedium
+	
+	move.l	d0,d1
+	move.l	#TAGID_NumFramesMedium,d0
+	CALLTL	PutLongValue
+
+*------
+;;;	move.w	FGS_FastFCount(a3),d0
+	move.l	d2,d0
+
+	DEBUGMSG DBSNF,<Before GetLongValue3>
+
+	CALLTL	GetLongValue
+	mulu	d6,d0
+
+	addq.w	#1,d0			;round up to nearest frame
+	lsr.w	#1,d0
+	PUT.w	d0,TB_NumFramesFast
+
+	move.l	d0,d1
+	move.l	#TAGID_NumFramesFast,d0
+	CALLTL	PutLongValue
+
+*------
+;;;	move.w	FGS_VariableFCount(a3),d0
+	move.l	d5,d0
+
+	DEBUGMSG DBSNF,<Before GetLongValue3>
+
+	CALLTL	GetLongValue
+	mulu	d6,d0
+
+	addq.w	#1,d0			;round up to nearest frame
+	lsr.w	#1,d0
+	PUT.w	d0,TB_NumFramesVariable
+
+	move.l	d0,d1
+	move.l	#TAGID_NumFramesVariable,d0
+	CALLTL	PutLongValue
+
+*------------------------------------------------------------
+* = FGS_NumFields defaults (may change by project loading)
+	GET.w	TB_FCountSec,d1
+	mulu	d6,d1
+	move.l	#TAGID_NumFields,d0
+	CALLTL	PutLongValue
+
+	movem.l	(sp)+,d0/d2-d6/a0
+	rts
+
+FCMtagTable
+	dc.l	TAGID_NumFramesMedium
+	dc.l	TAGID_NumFramesFast
+	dc.l	TAGID_NumFramesVariable
+	dc.l	TAGID_NumFramesSlow
+
+**************************************************************
+* a0->FG
+* Sets NumFields tag, based on NumFrame tags & FCountMode tag
+
+	XDEF	FixupNumFields
+FixupNumFields
+	DUMPMSG	<FixupNumFields>
+
+	movem.l	d0-d1/a0-a1,-(sp)
+
+	move.l	#TAGID_FCountMode,d0
+	CALLTL	GetLongValue
+	DUMPUDEC.w	<FCM=>,d0,<\\>
+	and.w	#3,d0
+	add.l	d0,d0
+	add.l	d0,d0
+
+	lea.l	FCMtagTable(PC),a1
+	move.l	0(a1,d0.w),d0			;Tag to get value we want
+;	move.l	FCMtagTable(PC,d0.w),d0		;Tag to get value we want
+	DUMPHEXI.l	<Tag=>,d0,<\\>
+	CALLTL	GetLongValue
+
+	add.l	d0,d0			;Convert frames to fields
+	move.l	d0,d1
+	move.l	#TAGID_NumFields,d0
+	DUMPUDEC.l	<NumFields3=>,d1,<\\>
+	CALLTL	PutLongValue
+
+	movem.l	(sp)+,d0-d1/a0-a1
+	rts
+
+***************************************************************
+* a3->FG, a4->EfxBase, a5->TB
+* Returns error code.  Fatal errors codes are < 0.
+* Returns 1 if ANIM already loaded
+AnimSelectHandler:
+	movem.l	d1/a0-a4/a6,-(sp)
+
+	DEBUGMSG	DBAFXH,<AnimSelectHandler:>,<\>
+
+	lea	LocalData,a2
+	move.l	a3,ALCD_FastGadget(a2)	;stash ->FastGadget
+
+;; REMOVED LockEffects call for 4.0
+;;	clr.l	ALCD_EffectsLock(a2)
+
+	move.l	#-1,ALCD_CurrentTBarTime(a2)
+
+	bsr	InitializeAnimFXParams
+	bsr	ReadTagLists
+	bsr	AnimMemoryMap	;this could be done later ????
+
+*-------
+	btst.b	#ECSFETCH_BIT,TB_Flags2(a5)	
+	beq.s	40$		;jump if running AA code
+	
+* running on nonAA machine
+	btst.b	#AFXP_MachineFlags1_NonAAeffect,ALCD_AnimFXParams+AFXP_MachineFlags1(a2)
+	beq	888$			;jump if not an AA effect
+	bra.s	45$
+
+* running on AA machine
+40$	btst.b	#AFXP_MachineFlags1_AAeffect,ALCD_AnimFXParams+AFXP_MachineFlags1(a2)
+	beq	888$			;jump if not a nonAA effect
+*-------
+
+45$
+;;	movea.l	FG_Function(a3),a6
+;;	clr.l	CroutonEffect_AEC(a6)
+	clr.l	FGS_LocalData(a3)
+
+* fill out anl_ structure & LockEffect drawer if necessary
+	tst.b	ALCD_AnimFXParams+AFXP_NumberOfAnims(a2)
+	beq	777$			;Error, jump if no ANIMs	
+
+* always CD to Effects Drawer so file names without total paths will work
+
+;; REMOVED LockEffects call for 4.0
+;;	moveq.l	#-1,d0			;Means Look At Toaster/Effects only
+;;	CALLTL	LockEffects		;D0.L = Address of Lock.
+;;	move.l	d0,ALCD_EffectsLock(a2)	;Did We Get The Lock?
+;;	beq	555$			;Exit If Lock Failed.
+
+	clr.l	ALCD_AnimLoad+anl_Flags(a2)
+
+	cmpi.l	#CrUD_Scroll,FGS_ObjectType(a3)
+	beq.s	721$
+	cmpi.l	#CrUD_Crawl,FGS_ObjectType(a3)
+	bne	722$
+
+***!!! CURRENTLY, TRYING TO AUTO a SCROLL/CRAWL will crash
+721$ 	ori.l	#(1<<aecb_CirBuffsInFAST),ALCD_AnimLoad+anl_Flags(a2) ;Force uncompressed ILMB into FAST
+
+722$ 	tst.l	ALCD_AnimFXParams+AFXP_AnimFiles(a2)
+	beq.s	2$			;jump if there aren't external ANIM files
+	move.l	ALCD_AnimFXParams+AFXP_AnimFiles(a2),a1
+	move.l	(a1),ALCD_AnimLoad+anl_FileName(a2)
+	bne.s	8$	;if NULL, try other forms of ANIM supplies
+
+2$	btst.b	#AFXP_AnimFlags1_RequestFileName,ALCD_AnimFXParams+AFXP_AnimFlags1(a2)	
+	beq.s	3$			;jump if ANIM files not loaded via requester
+	suba.l	a0,a0		;no tag list
+	CALLTL	GetFileLoadName
+	move.l	d0,ALCD_AnimLoad+anl_FileName(a2)
+	bne.s	8$
+	bra	777$	;unable to get a file name
+
+* assume there is an ANIM in an overlay hunk
+3$
+;;	ori.l	#(1<<aecb_AnimInOverlay),ALCD_AnimLoad+anl_Flags(a2) ;assume Anim in overlay
+	movea.l	FGS_FileName(a3),a1	;a1.L = Address of Crouton File Name.
+   	move.l	a1,ALCD_AnimLoad+anl_FileName(a2)
+
+* anl_FileName ->FileName
+* Got ANIM name, and Lock if necessary
+8$	move.l	a2,a0			;->ANL_structure
+
+	btst.b	#AFXP_MachineFlags1_AAeffect,ALCD_AnimFXParams+AFXP_MachineFlags1(a2)
+	beq.s	9$		;jump if running nonAA code for sure
+
+;;	btst.b	#ECSFETCH_BIT,TB_Flags2(a5)	
+;;	bne.s	9$		;jump if running nonAA code
+
+	ori.l	#(1<<aecb_8BitColors),ALCD_AnimLoad+anl_Flags(a2)
+
+9$	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a2)
+	beq.s	10$
+	ori.l	#(1<<aecb_LoopAnim),ALCD_AnimLoad+anl_Flags(a2)
+
+10$	move.l	TB_DOSBase(a5),ALCD_AnimLoad+anl_DOSBase(a0)
+	move.l	TB_SYSBase(a5),ALCD_AnimLoad+anl_SYSBase(a0)
+	move.l	TB_GFXBase(a5),ALCD_AnimLoad+anl_GFXBase(a0)
+	move.l	a5,ALCD_AnimLoad+anl_TSTBase(a0)
+
+	CALLTL	DisplayWaitSprite
+
+	CALLTL	AnimLoad		;will return an error code
+	
+	DEBUGHEXI.l	DBAFXH,<AnimLoad=>,d0,<\\>
+
+	CALLTL	DisplayNormalSprite
+
+	tst.l	d0
+	bmi	666$
+
+*****************************
+	IFD	DEBUGMEMORY
+	movem.l	d0-d2/a4,-(sp)
+
+	DEBUGMSG	DEBUGMEMORY,< >
+
+	move.l	AnimChipFree+avm_NumberOfBytesUsed,d0
+	beq	11$
+	move.l	AnimChipFree+avm_Memory,d1
+	move.l	AnimChipFree+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<ChipFree   =>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+
+11$	move.l	AnimChipPublic1+avm_NumberOfBytesUsed,d0
+	beq	12$
+	move.l	AnimChipPublic1+avm_Memory,d1
+	move.l	AnimChipPublic1+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<ChipPublic1=>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+
+12$	move.l	AnimChipPublic2+avm_NumberOfBytesUsed,d0
+	beq	13$
+	move.l	AnimChipPublic2+avm_Memory,d1
+	move.l	AnimChipPublic2+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<ChipPublic2=>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+
+13$	move.l	AnimChipPrivate+avm_NumberOfBytesUsed,d0
+	beq	14$
+	move.l	AnimChipPrivate+avm_Memory,d1
+	move.l	AnimChipPrivate+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<ChipPrivate=>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+
+14$	move.l	AnimFastFree+avm_NumberOfBytesUsed,d0
+	beq	15$
+	move.l	AnimFastFree+avm_Memory,d1
+	move.l	AnimFastFree+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<FastFree   =>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+	
+15$	move.l	AnimFastPublic+avm_NumberOfBytesUsed,d0
+	beq	16$
+	move.l	AnimFastPublic+avm_Memory,d1
+	move.l	AnimFastPublic+avm_Size,d2
+	DEBUGHEXI.L DEBUGMEMORY,<FastPublic =>,d1,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Size=>,d2,< >
+	DEBUGUDEC.L DEBUGMEMORY,<Alloced=>,d0,<\>
+
+16$
+	lea	AvailableMem,a4
+	move.l	#EndOfAvailableMem-AvailableMem,d0
+	DEBUGMEM	DEBUGMEMORY,<AvailableMem>,(a4),d0
+	movem.l	(sp)+,d0-d2/a4
+
+	ENDC		;DEBUGMEMORY
+
+*****************************
+	
+;;	move.l	a0,CroutonEffect_AEC(a6) ;stash ->AECBase
+	move.l	a0,FGS_LocalData(a3)	 ;stash ->AECBase
+
+	movea.l	a0,a6			 ;->AECBase	
+	
+*----------------
+
+* Load Audio
+	bclr.b	#ALCD_Flags1_AudioInit,ALCD_Flags1(a2)	;assume AudioInit failed
+	bclr.b	#ALCD_Flags1_AudioLoad,ALCD_Flags1(a2)	;assume AudioLoad failed
+	bclr.b	#ALCD_Flags2_AudioReady,ALCD_Flags2(a2)
+	bclr.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a2)
+
+
+	tst.l	TB_FlyerBase(a5)			;dont do sound if flyer!
+	bne	18$
+
+	tst.b	ALCD_AnimFXParams+AFXP_AudioFastSamples(a2)
+	bne.s	80$			;jump if some audio 
+	tst.b	ALCD_AnimFXParams+AFXP_AudioMediumSamples(a2)
+	bne.s	80$			;jump if some audio
+	tst.b	ALCD_AnimFXParams+AFXP_AudioSlowSamples(a2)
+	beq	18$			;jump if no audio
+
+* One or more audio samples
+80$ 	CALLTL	InitFXAudioChannels
+
+	tst.l	d0
+	beq	18$		;jump if Audio channel allocation failed
+	bset.b	#ALCD_Flags1_AudioInit,ALCD_Flags1(a2)	
+
+	moveq	#1,d1		;start at hunk #1
+	movea.l	ALCD_AnimLoad+anl_FileName(a2),a0
+
+	clr.l	ALCD_AudioInfoFast(a2)
+	tst.b	ALCD_AnimFXParams+AFXP_AudioFastSamples(a2)
+	beq	90$			;jump if some audio 
+	moveq	#FALSE,d0	;all data is not in overlays
+
+	CALLTL	LoadFXAudio
+
+	move.l	d0,ALCD_AudioInfoFast(a2)
+	
+	beq	85$
+	bset.b	#ALCD_Flags1_AudioLoad,ALCD_Flags1(a2)
+
+85$	addq.w	#1,d1
+
+90$	clr.l	ALCD_AudioInfoMedium(a2)
+	tst.b	ALCD_AnimFXParams+AFXP_AudioMediumSamples(a2)
+	beq	100$			;jump if some audio 
+	moveq	#FALSE,d0	;all data is not in overlays
+
+	CALLTL	LoadFXAudio
+
+	move.l	d0,ALCD_AudioInfoMedium(a2)
+	beq	95$
+	bset.b	#ALCD_Flags1_AudioLoad,ALCD_Flags1(a2)
+
+95$	addq.w	#1,d1
+
+100$	clr.l	ALCD_AudioInfoSlow(a2)
+	tst.b	ALCD_AnimFXParams+AFXP_AudioSlowSamples(a2)
+	beq	18$			;jump if some audio 
+	moveq	#FALSE,d0	;all data is not in overlays
+
+	CALLTL	LoadFXAudio
+
+	move.l	d0,ALCD_AudioInfoSlow(a2)
+	beq	18$
+	bset.b	#ALCD_Flags1_AudioLoad,ALCD_Flags1(a2)
+	
+*----------------
+* Load was successful.  There is enough memory.
+18$	bsr	UpdateSoundIcon	
+
+;;	bset.b	#EFFECTCOLOR_BIT,TB_Flags2(a5)	  ;Can't use DVE border color
+
+	bsr	UpdateMatteColor	;Get MatteColor tags ---> TB_
+
+	bclr.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a2)	;assume ANIM
+	cmpi.w	#1,aec_FrameCount(a6)
+	bne.s	19$
+	bset.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a2)
+
+	clr.l	EF_OverrideProcessDuring(a4)
+	lea	FieldReinstall(pc),a0
+	move.l	a0,EF_FieldReinstall(a4)
+
+	bra	30$
+
+* An ANIM
+19$	bset.b	#ANIMFX_BIT,TB_Flags2(a5)
+
+	clr.l	EF_FieldReinstall(a4)
+	lea	OverrideProcessDuring(pc),a0
+	move.l	a0,EF_OverrideProcessDuring(a4)
+
+* assume non-loop
+* Fix TB_NumFrames... which has the incorrect value via StuffNumFrames in PEselect..
+	move.w	aec_FrameCount(a6),d0	;=1 for ILBMs
+	cmpi.w	#1,d0
+	beq	30$				;forgetit it ILBM
+	movea.l	a3,a0		;->FG
+	bsr	StuffNumAnimFrames
+	bsr	FixupNumFields	;Set NumFields correctly for sequencer (rounds to frame)
+
+* ILBMs jump here
+30$	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a2)
+	beq.s	39$
+	tst.w	TB_NumFramesSlow(a5)
+	beq.s	31$
+	bset.b	#7,TB_NumFramesSlow(a5)
+31$	tst.w	TB_NumFramesMedium(a5)
+	beq.s	32$
+	bset.b	#7,TB_NumFramesMedium(a5)
+32$	tst.w	TB_NumFramesFast(a5)
+	beq.s	33$
+	bset.b	#7,TB_NumFramesFast(a5)
+33$
+
+*** New for 4.05 -- Get loop duration tag and pass to Anim/ILBM player <<<
+	move.l	#TAGID_Duration,d0
+	movea.l	a3,a0			;->FG
+	CALLTL	GetLongValue
+	DEBUGUDEC.w DBLP,<*** LoopDuration=>,d0,<\>
+	move.l	d0,TB_CurLoopDuration(a5)	;0 indicates "forever" (as before)
+***
+
+39$	bclr.b	#ALCD_Flags1_SetupForward,ALCD_Flags1(a2) ;assume pre-setup not possible
+	bclr.b	#ALCD_Flags1_SetupReverse,ALCD_Flags1(a2)
+
+	lea	AnimChipFree,a0	;assume interface killed by AnimChipFree chunk
+	btst.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2)
+	bne.s	20$		;jump if interface was killable
+	lea	AnimChipPrivate,a0 ;Interface killed by AnimChipPrivate chunk
+
+20$	bset.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2) ;assume killed
+	tst.l	avm_NumberOfBytesUsed(a0)
+	bne.s	444$			;jump if Interface planes are used
+	bclr.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2) ;interface not killed
+
+* WE NEED TO SEE IF THE ANIM IS TO BE PLAYED FORWARD OR BACKWARD!!!!!
+* I GUESS THIS FLAG SHOULD BE STORED IN THE PROJECT.
+
+	bset.b	#ALCD_Flags1_SetupForward,ALCD_Flags1(a2)	;flagged pre-setup
+	movea.l	a6,a4
+	CALLTL	AnimSetupForward
+
+444$	moveq	#0,d0
+500$	movem.l	(sp)+,d1/a0-a4/a6
+	rts
+
+*-----------------------------
+555$	moveq	#AEE_UnableToLockEffects,d0		;=-40 Can't Lock Effects errorcode
+	bra.s	666$
+
+777$	moveq	#AEE_UnableToGetFileName,d0		;=-41 Unable to get a file name
+	bra.s	666$
+
+888$	moveq	#AEE_IncorrectFileVersion,d0	;=-30 Wrong version for this machine
+;;	bra.s	666$
+
+*--------------------------
+* Unable to load effect - Error handling
+666$	moveq	#0,d1
+	lea	noloadmsg(pc),a0
+	suba.l	a2,a2
+	lea	continuemsg(pc),a3
+
+	lea	error_mem(pc),a1	;assume out of mem = error_mem
+	cmp.l	#AEE_NotEnoughFreeMemory,d0	;error -3 = NotEnoughFreeMemory
+	beq.s	999$				
+
+	lea	error_dos(pc),a1	;assume dos error = error_dos
+	bgt.s	999$			;errors -1 & -2 (AEE_OpenFile, AEE_FileReadError)
+	cmp.w	#AEE_UnableToLockEffects,d0
+	ble.s	999$			;jump if -40 or -41 = error_dos
+					;= UnableToLockEffects or UnableToGetFileName
+
+* assume file format error (=-30 - -4 = File format errors or IncorrctFileVersion
+	lea	error_format(pc),a1	;assume out of mem
+
+999$	move.l	d0,-(sp)		;save error code
+	moveq	#0,d0
+	CALLTL	DoSwitcherRequester
+	move.l	(sp)+,d0
+	bra.s	500$
+
+noloadmsg	dc.b	'Can not load the effect.',0
+continuemsg	dc.b	'CONTINUE',0
+
+* possible error messages
+error_mem	dc.b	'Not enough memory',0
+error_dos	dc.b	'DOS error',0
+error_format	dc.b	'Wrong file type',0
+
+	CNOP	0,4
+
+***************************************************************
+UpdateSoundIcon:
+	movem.l	d0/a0,-(sp)
+	clr.w	TB_HasSoundSec(a5)	;assume no sound
+
+	GET.w	TB_FCountModeSec,d0
+	addq.w	#1,d0
+	andi.w	#%11,d0		;smfv=0123
+	cmpi.w	#FCountMode_Variable+1,d0
+	beq.s	666$		;jump if variable speed turned on
+
+	add.w	d0,d0
+	add.w	d0,d0
+	lea	LocalData+ALCD_AudioInfoSlow,a0
+	tst.l	0(a0,d0.w)
+	beq.s	666$
+
+	PUT.w	#1,TB_HasSoundSec
+
+666$	movem.l	(sp)+,d0/a0
+	rts
+
+
+***************************************************************
+* a3->FG, a5->TB 
+*
+* This stuffs the MatteColor tags into TB_xxx stuff
+***************************************************************
+UpdateMatteColor:
+	movem.l	d0/a0,-(sp)
+
+;;;	move.b	FGS_MatteColor(a3),d0
+	move.l	#TAGID_MatteColor,d0
+	movea.l	a3,a0			;->FG
+	CALLTL	GetLongValue
+
+	ext.w	d0
+	beq.s	10$				  ;jump if use current effect color
+	bmi.s	10$				  ;jump if Custom (don't change buttons)
+
+* new effect color			
+	subq.w	#1,d0
+	move.w	d0,TB_EffectColor(a5)
+	move.w	d0,TB_CurrentEffectColor(a5)
+	bra	20$
+	
+10$	move.w	TB_CurrentEffectColor(a5),TB_EffectColor(a5)
+	
+20$	movem.l	(sp)+,d0/a0
+	rts
+
+
+***************************************************************
+* a3->FG, a4->EfxBase, a5->TB 
+AnimMemoryMap:
+	movem.l	d0-d1/a0-a2,-(sp)
+
+	lea	LocalData,a2
+
+* This chunk is between the interface planes and the bottom of DVE fx / readscanline stuff
+* On effects that kill the interface, the interface is included.
+
+	moveq	#0,d0	;assume killed interface, interface depth default
+	bset.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2) ;assume killed interface
+		
+****!!!!** NEED TO MOD FOR TagLISTS!!!!
+;;	movea.l	FG_Function(a3),a0	
+;;	move.l	CroutonEffect_AFXT(a0),a0	;->Source ToasterTable
+
+****!!!!**** TEMP HACK
+	movea.l	FGS_TagLists(a3),a0	;offset
+;;	beq.s	666$			;no TagLists offset
+	adda.l	a3,a0			;search link list
+	addq.l	#4,a0
+
+	btst.b	#ECSFETCH_BIT,TB_Flags2(a5)	
+	beq.s	10$		;jump if running AA code
+
+* Non-AA code
+	btst.b	#AFXP_MachineFlags1_KillInterfaceNonAA,ALCD_AnimFXParams+AFXP_MachineFlags1(a2)
+	bne.s	30$	;jump if kill
+	bra.s	20$	;don't kill
+
+* AA code
+10$	btst.b	#AFXP_MachineFlags1_KillInterfaceAA,ALCD_AnimFXParams+AFXP_MachineFlags1(a2)
+	bne.s	30$	;jump if kill
+			
+* don't kill interface
+20$	bclr.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2) ;flaged not killed
+	GET.w	TB_InterfaceDepth,d0	;2 or 3
+
+* kill interface (was assumed)
+30$	add.w	d0,d0
+	add.w	d0,d0			;*4
+	add.w	#TB_CHIPMem,d0
+	move.l	0(a5,d0.w),d0		;->past interface planes
+
+	lea	AnimChipFree,a0
+	move.l	d0,avm_Memory(a0)
+	move.l	TB_EffectsBase+EFB_CHIPDataMem(a5),d1
+	sub.l	d0,d1
+	move.l	d1,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+
+* This is the DVE coplists / DVE planes / readscanlineBM / any ECD_ stuff.
+* I'm not including the small write buffer in this chunk.
+* If framegrabbing, motion removal, etc. occur
+* then the N-Buffer may need to be restored!!!!
+* If this memory is used, a CALLTL InitEFXChipMem() & CALLTL InitDVEChipMem()
+* may need happen at REMOVE time. 
+* 68000 framegrabs require a fully functional DVE system, so I suggest
+* SELECTing a Standard non-anim effect when doing 68000 framegrabbing!!!!!!!!
+	lea	AnimChipPublic1,a0
+	move.l	TB_EffectsBase+EFB_CHIPDataMem(a5),d0
+	move.l	d0,avm_Memory(a0)
+	move.l	TB_CHIPMem(a5),d1
+	add.l	TB_CHIPMemSIZE(a5),d1
+	sub.l	#(TB_CHIPMEMBLOCKSIZE*2),d1
+	sub.l	d0,d1
+	move.l	d1,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+		
+* This is the frameloading buffer.
+* I'm not including the small write buffer at the top of memory.
+* If frameloading, ChromaFX loading etc occur then the N-Buffer
+* may need to be restored!!!!
+	lea	AnimChipPublic2,a0
+	GET.l	TB_CHIPMem,d0
+	add.l	TB_CHIPMemSIZE(a5),d0	;->Top of memory + 1
+	move.l	#TB_CHIPMEMBLOCKSIZE*2,d1
+	sub.l	d1,d0
+	move.l	d0,avm_Memory(a0)
+	sub.l	#SMALLWRITEBUFFERSIZE,d1
+	move.l	d1,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+	
+* This is the interface planes.
+* If this memory is used, the Interface won't be visible during transitions
+* and the N-Buffer CAN'T be generated at select time.
+	lea	AnimChipPublic2,a0
+	lea	AnimFastFree,a1
+	btst.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a2)
+	beq.s	50$
+* Interfaced killed
+	move.l	a1,avm_NextNode(a0)
+	move.l	a0,avm_PreviousNode(a1)
+	bra.s	60$
+
+* Interface not killed
+50$	move.l	#AnimChipPrivate,d0
+	move.l	d0,avm_NextNode(a0)
+	move.l	d0,avm_PreviousNode(a1)
+
+	lea	AnimChipPrivate,a0
+	move.l	TB_CHIPMem(a5),d0
+	move.l	d0,avm_Memory(a0)
+	GET.w	TB_InterfaceDepth,d1	;2 or 3
+	add.w	d1,d1
+	add.w	d1,d1
+	add.w	#TB_CHIPMem,d1			;*4
+	move.l	0(a5,d1.w),d1
+	sub.l	d0,d1
+	move.l	d1,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+
+* This is above the DVE LUT.
+60$	lea	AnimFastFree,a0
+	move.l	TB_EffectsBase+EFB_FASTDataMem(a5),d0
+	add.l	#EFD_SIZEOF,d0
+	move.l	d0,avm_Memory(a0)
+	move.l	TB_FASTMem(a5),d1
+	add.l	TB_FASTMemSIZE(a5),d1
+	sub.l	d0,d1
+	move.l	d1,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+
+* This is the DVE LUT (won't allow BuffX, Y, A, or B to ever be touched!)
+* If this memory is used, it will need to be fixed up after REMOVE, via
+* a CALLTL InitDVEFastMem().
+	lea	AnimFastPublic,a0
+	move.l	TB_EffectsBase+EFB_FASTDataMem(a5),d0
+	add.l	#EFD_Bytes2BmLUT,d0	
+	move.l	d0,avm_Memory(a0)
+	move.l	#2*BYTE2BMLUTSIZE,avm_Size(a0)
+	clr.l	avm_NumberOfBytesUsed(a0)
+	
+	movem.l	(sp)+,d0-d1/a0-a2
+	rts
+
+***************************************************************
+* a4->EfxBase
+InitializeAnimFXParams:
+	movem.l	a0-a1,-(sp)
+	lea	LocalData+ALCD_AnimFXParams,a0
+
+	move.w	#AFXT_Ver_3,AFXP_Version(a0)
+	move.w	#AFXT_Rev_First,AFXP_Revision(a0)
+
+	move.b	#((1<<AFXP_MachineFlags1_AAeffect)!(1<<AFXP_MachineFlags1_KillInterfaceNonAA)!(1<<AFXP_MachineFlags1_KillInterfaceAA)),AFXP_MachineFlags1(a0)
+	clr.b	AFXP_MachineFlags2(a0)
+	clr.b	AFXP_AnimFlags1(a0)
+	clr.b	AFXP_AnimFlags2(a0)
+	clr.b	AFXP_SwitcherFlags1(a0)
+	clr.b	AFXP_SwitcherFlags2(a0)
+	clr.b	AFXP_ToasterFlags1(a0)
+	clr.b	AFXP_ToasterFlags2(a0)
+	clr.b	AFXP_DynamicFlags1(a0)
+
+	movea.l	EF_EffectsLogic(a4),a1
+	move.l	TEL_Encoder(a1),AFXP_CustomButtonELHlogic(a0)
+	move.l	TEL_Encoder(a1),AFXP_ReverseCustomButtLog(a0)
+
+	clr.l	AFXP_AnimControl(a0)	
+	clr.l	AFXP_AudioControl(a0)	
+	clr.l	AFXP_AnimFiles(a0)		
+	clr.l	AFXP_AudioFiles(a0)		
+
+	clr.l	AFXP_PauseTimes(a0)		
+	clr.l	AFXP_LatchColors(a0)	
+	clr.l	AFXP_TransparentColors(a0)	
+	clr.l	AFXP_PaletteColors(a0)	
+
+	clr.l	AFXP_Equations(a0)		
+	clr.l	AFXP_pad1(a0)		
+	clr.l	AFXP_pad2(a0)	
+	clr.l	AFXP_pad3(a0)	
+	clr.l	AFXP_pad4(a0)	
+	clr.l	AFXP_pad5(a0)	
+
+	clr.l	AFXP_LineNumbers(a0)	
+	clr.l	AFXP_LoadPictures(a0)	
+
+	clr.w	AFXP_pad6(a0)		
+
+	clr.b	AFXP_AudioFastSamples(a0)	
+	clr.b	AFXP_AudioMediumSamples(a0)	
+	clr.b	AFXP_AudioSlowSamples(a0)	
+	move.b	#AFXT_OneAnim,AFXP_NumberOfAnims(a0)
+
+	clr.b	AFXP_LineNumberPlane(a0)	
+	clr.b	AFXP_KeyMode(a0)		
+	clr.b	AFXP_pad7(a0)		;not used
+
+* The border color stuff is not currently used (for AlgoFX only)
+	clr.b	AFXP_BorderColor(a0)	
+	move.l	#$470000,AFXP_CustomBorderColor(a0)
+
+	clr.w	AFXP_pad8(a0)		;not used
+	move.w	#AFXT_Logic_Encoder,AFXP_ButtonELHlogic(a0)	
+	move.w	#AFXT_Logic_Encoder,AFXP_ReverseButtLog(a0)	
+
+	clr.w	AFXP_AudioStartField(a0)	
+	move.w	#AFXT_Audio_LengthOfAnim,AFXP_NumAudioFields(a0)	;to end of sample
+
+	clr.l	AFXP_LatchRanges(a0)	
+	clr.l	AFXP_LatchList(a0)	
+	clr.l	AFXP_TransparentRanges(a0)	
+	clr.l	AFXP_TransparentList(a0)	
+
+	clr.w	AFXP_NumSkipFieldsAtEnd(a0)	
+	clr.b	AFXP_NonAAremap(a0)		
+
+	movem.l	(sp)+,a0-a1
+	rts
+
+
+***************************************************************
+* a2->LocalData, a3->FG, a4->EFXbase, a5->TB
+
+ReadTagLists:
+	DEBUGMSG DBTAGS,<------------- ReadTagLists ------------>
+
+	movem.l	d0/a0-a1,-(sp)
+
+	move.l	FGS_TagLists(a3),d0	;offset
+	beq	666$			;no TagLists offset
+	lea	0(a3,d0.l),a1		;destination link lists
+	
+10$	lea	TLN_SIZEOF(a1),a0 	;->first item in tag list
+
+	DEBUGMEM DBTAGS,<TagListNode>,0(a1),#TLN_SIZEOF+4
+	DEBUGMEM DBTAGS,<TagList>,0(a0),#152
+
+	bsr.s	ReadTagList
+	
+	move.l	(a1),d0		;->next node in list
+	beq.s	666$		;jump if done
+	move.l	d0,a1
+	bra	10$
+	
+666$	movem.l	(sp)+,d0/a0-a1
+	rts
+
+*----------------------
+* a0->TagList a2->LocalData, a3->FG, a4->EFXbase, a5->TB
+
+ReadTagList:
+	DEBUGHEXI.l	DBTAGS,<ReadTagList: sp=>,sp,< >
+	DEBUGHEXI.l	DBTAGS,<(sp)=>,0(sp),<\>
+	
+	movem.l	d0-d1/a0-a2/a6,-(sp)
+
+	lea	LocalData+ALCD_AnimFXParams,a1	;->Destination Local data
+	lea	TagListLUT,a2
+	
+100$	moveq	#4,d0		;assume LONG
+
+	DEBUGHEXI.l	DBTAGS,<ptr to ID>,a0,<\>
+
+	move.l	(a0)+,d1
+	beq	666$		;jump if end of taglist
+
+;;	  DEBUGHEXI.l	DBTAGS,<ID=>,d1,<\>
+;;	  tst.l	d1
+
+	bmi	110$		;jump if LONG
+
+	DEBUGHEXI.l	DBTAGS,<ptr to length>,a0,<\>
+
+	move.l	(a0)+,d0	;STRUCT length
+
+110$	tst.w	d1
+	beq	150$		;jump if ignore
+
+	cmpi.w	#MaxTagNumber,d1
+	bgt.s	150$		;too big a number
+
+	DEBUGMSG	DBTAGS,<before jsr>
+	
+	add.w	d1,d1
+	add.w	d1,d1		;*4
+	move.l	0(a2,d1.w),a6
+
+	movem.l	d0/d2-d7/a0-a5,-(sp)	;don't care about d1/a6
+	jsr	(a6)	;a0->data, a1->destination AnimFXParams
+	movem.l	(sp)+,d0/d2-d7/a0-a5
+
+150$	adda.l	d0,a0
+	bra	100$
+
+666$	movem.l	(sp)+,d0-d1/a0-a2/a6
+
+	DEBUGHEXI.l	DBTAGS,<ReadTagList rts sp=>,sp,< >
+	DEBUGHEXI.l	DBTAGS,<(sp)=>,0(sp),<\>
+	
+	rts
+	
+****************************************************************
+* a0->Tag value, a1->AnimFXParams, a3->FG, a4->EFXbase a5->TB
+* d0=Tag size
+* All registers are FREE!
+TagVersion		
+	DEBUGMSG DBTAGS,<TagVersion>
+	move.w	2(a0),AFXP_Version(a1)
+	rts
+*------------------------------
+TagRevision		
+	DEBUGMSG DBTAGS,<TagRevision>
+	move.w	2(a0),AFXP_Revision(a1)
+	rts
+*------------------------------
+* All effects are either AA, nonAA, or (AA & nonAA).
+TagAAeffect		
+	DEBUGMSG DBTAGS,<TagAAeffect>
+	tst.w	2(a0)
+	bne.s	10$
+	bclr.b	#AFXP_MachineFlags1_AAeffect,AFXP_MachineFlags1(a1)
+	bset.b	#AFXP_MachineFlags1_NonAAeffect,AFXP_MachineFlags1(a1)
+10$	rts
+*------------------------------
+TagNonAAeffect		
+	DEBUGMSG DBTAGS,<TagNonAAeffect>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_MachineFlags1_NonAAeffect,AFXP_MachineFlags1(a1)
+	bra.s	20$
+10$	bset.b	#AFXP_MachineFlags1_AAeffect,AFXP_MachineFlags1(a1)
+20$	rts
+
+*------------------------------
+TagKillInterfaceNonAA	
+	DEBUGMSG DBTAGS,<TagKillInterfaceNonAA>
+	tst.w	2(a0)
+	bne.s	10$
+	bclr.b	#AFXP_MachineFlags1_KillInterfaceNonAA,AFXP_MachineFlags1(a1)
+10$	rts
+*------------------------------
+TagKillInterfaceAA	
+	DEBUGMSG DBTAGS,<TagKillInterfaceAA>
+	tst.w	2(a0)
+	bne.s	10$
+	bclr.b	#AFXP_MachineFlags1_KillInterfaceAA,AFXP_MachineFlags1(a1)
+10$	rts
+*------------------------------
+TagButtonELHlogic
+	DEBUGMSG DBTAGS,<TagButtonELHlogic>
+	move.w	2(a0),d0
+	move.w	d0,AFXP_ButtonELHlogic(a1)
+	beq.s	10$		;requires CustomButtonELHlogic pointer
+	subq.w	#1,d0
+	add.w	d0,d0
+	add.w	d0,d0
+
+	movea.l	EF_EffectsLogic(a4),a6
+	movea.l	0(a6,d0.w),a6
+
+	move.l	a6,AFXP_CustomButtonELHlogic(a1)	
+10$	rts
+*------------------------------
+TagCustomButtonELHlogic	
+	DEBUGMSG DBTAGS,<TagCustomButtonELHlogic>
+	move.l	a0,AFXP_CustomButtonELHlogic(a1)
+	tst.l	(a0)
+	beq.s	10$
+	clr.w	AFXP_ButtonELHlogic(a1)
+10$	rts
+*------------------------------
+TagNumberOfAnims	
+	DEBUGMSG DBTAGS,<TagNumberOfAnims>
+	move.b	3(a0),AFXP_NumberOfAnims(a1)
+	rts
+
+*------------------------------
+TagRequestFileName
+	DEBUGMSG DBTAGS,<TagRequestFileName>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_RequestFileName,AFXP_AnimFlags1(a1)
+10$	rts
+
+*------------------------------
+TagAnimFiles		
+	DEBUGMSG DBTAGS,<TagAnimFiles>
+	move.l	a0,AFXP_AnimFiles(a1)
+	rts
+*------------------------------
+TagFrames		
+	DEBUGMSG DBTAGS,<TagFrames>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_Frames,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagFieldSync		
+	DEBUGMSG DBTAGS,<TagFieldSync>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_FieldSync,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagVariableSpeeds	
+	DEBUGMSG DBTAGS,<TagVariableSpeeds>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_VariableSpeeds,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagForcePlayForward	
+	DEBUGMSG DBTAGS,<TagForcePlayForward>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_ForcePlayForward,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagForcePlayReverse	
+	DEBUGMSG DBTAGS,<TagForcePlayReverse>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_ForcePlayReverse,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagLoopAnims		
+	DEBUGMSG DBTAGS,<TagLoopAnims>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_LoopAnims,AFXP_AnimFlags1(a1)
+10$	rts
+*------------------------------
+TagAnimControl
+	DEBUGMSG DBTAGS,<TagAnimControl>
+	move.l	a0,AFXP_AnimControl(a1)
+	rts
+*------------------------------
+TagAudioFastSamples	
+	DEBUGMSG DBTAGS,<TagAudioFastSamples>
+	move.b	3(a0),AFXP_AudioFastSamples(a1)
+	rts
+*------------------------------
+TagAudioMediumSamples	
+	DEBUGMSG DBTAGS,<TagAudioMediumSamples>
+	move.b	3(a0),AFXP_AudioMediumSamples(a1)
+	rts
+*------------------------------
+TagAudioSlowSamples	
+	DEBUGMSG DBTAGS,<TagAudioSlowSamples>
+	move.b	3(a0),AFXP_AudioSlowSamples(a1)
+	rts
+*------------------------------
+TagAudioFiles		
+	DEBUGMSG DBTAGS,<TagAudioFiles>
+	move.l	a0,AFXP_AudioFiles(a1)
+	rts
+*------------------------------
+TagAudioControl		
+	DEBUGMSG DBTAGS,<TagAudioControl>
+	move.l	a0,AFXP_AudioControl(a1)
+	rts
+*------------------------------
+TagPauseTimes		
+	DEBUGMSG DBTAGS,<TagPauseTimes>
+	move.l	a0,AFXP_PauseTimes(a1)
+	rts
+*------------------------------
+TagLatchColors		
+	DEBUGMSG DBTAGS,<TagLatchColors>
+	move.l	a0,AFXP_LatchColors(a1)
+	rts
+*------------------------------
+TagTransparentColors	
+	DEBUGMSG DBTAGS,<TagTransparentColors>
+	move.l	a0,AFXP_TransparentColors(a1)
+	rts
+*------------------------------
+TagPaletteColors	
+	DEBUGMSG DBTAGS,<TagPaletteColors>
+	move.l	a0,AFXP_PaletteColors(a1)
+	rts
+
+*------------------------------
+TagKeyMode		
+	DEBUGMSG DBTAGS,<TagKeyMode>
+	move.b	3(a0),d0
+	move.b	d0,AFXP_KeyMode(a1)
+
+	cmpi.b	#AFXT_Key_DIB,d0
+	bne.s	10$
+	ori.b	#AFXT_Remap_DIB,AFXP_NonAAremap(a1)
+	bra.s	666$
+
+10$	cmpi.b	#AFXT_Key_DIGBR,d0
+	bne.s	666$
+	ori.b	#AFXT_Remap_DIBGR,AFXP_NonAAremap(a1)
+
+666$	rts
+
+*------------------------------
+**** THIS NEEDS SOME WORK!!!!!! ***!!!****
+
+TagMatteColor
+	DEBUGMSG DBTAGS,<TagMatteColor>
+
+	bset.b	#AFXP_SwitcherFlags2_UseEffectColor,AFXP_SwitcherFlags2(a1)
+	rts
+
+*------------------------------
+TagCustomMatteColor	
+	DEBUGMSG DBTAGS,<TagCustomMatteColor>
+
+	move.l	#AFXT_Matte_Custom,d1
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_MatteColor,d0
+	CALLTL	PutLongValue
+
+	bset.b	#AFXP_SwitcherFlags2_UseEffectColor,AFXP_SwitcherFlags2(a1)
+	rts
+
+*------------------------------
+TagBorderColor		
+	DEBUGMSG DBTAGS,<TagBorderColor>
+
+	move.l	#TRUE,d1
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_AlgoFXborder,d0
+	CALLTL	PutLongValue
+
+	move.b	3(a0),AFXP_BorderColor(a1)
+	rts
+*------------------------------
+TagCustomBorderColor	
+	DEBUGMSG DBTAGS,<TagCustomBorderColor>
+
+	move.l	#TRUE,d1
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_AlgoFXborder,d0
+	CALLTL	PutLongValue
+
+	move.l	#AFXT_Border_Custom,d1
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_BorderColor,d0
+	CALLTL	PutLongValue
+
+	move.l	(a0),AFXP_CustomBorderColor(a1)
+	rts
+*------------------------------
+TagLineNumbers		
+	DEBUGMSG DBTAGS,<TagLineNumbers>
+	move.l	a0,AFXP_LineNumbers(a1)
+	rts
+*------------------------------
+TagLineNumberPlane	
+	DEBUGMSG DBTAGS,<TagLineNumberPlane>
+	move.b	3(a0),AFXP_LineNumberPlane(a1)
+	rts
+*------------------------------
+TagForceFreeze4		
+	DEBUGMSG DBTAGS,<TagForceFreeze4>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceFreeze4,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceFreeze8		
+	DEBUGMSG DBTAGS,<TagForceFreeze8>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceFreeze8,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceLive		
+	DEBUGMSG DBTAGS,<TagForceLive>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceLive,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceLumKeyOn	
+	DEBUGMSG DBTAGS,<TagForceLumKeyOn>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceLumKeyOn,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceLumKeyOff	
+	DEBUGMSG DBTAGS,<TagForceLumKeyOff>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceLumKeyOff,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceLumKeyOnBlack	
+	DEBUGMSG DBTAGS,<TagForceLumKeyOnBlack>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceLumKeyOnBlack,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagForceLumKeyOnWhite	
+	DEBUGMSG DBTAGS,<TagForceLumKeyOnWhite>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_ForceLumKeyOnWhite,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagBadDefaultFX
+	DEBUGMSG DBTAGS,<TagBadDefaultFX>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags1_BadDefaultFX,AFXP_SwitcherFlags1(a1)
+10$	rts
+*------------------------------
+TagLoadPictures		
+	DEBUGMSG DBTAGS,<TagLoadPictures>
+	move.l	a0,AFXP_LoadPictures(a1)
+	rts
+*------------------------------
+TagDigitalFX		
+	DEBUGMSG DBTAGS,<TagDigitalFX>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_DigitalFX,AFXP_ToasterFlags1(a1)
+	ori.b	#AFXT_Remap_Digital,AFXP_NonAAremap(a1)
+10$	rts
+*------------------------------
+TagEncoder		
+	DEBUGMSG DBTAGS,<TagEncoder>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_Encoder,AFXP_ToasterFlags1(a1)
+10$	rts
+*------------------------------
+TagLUT			
+	DEBUGMSG DBTAGS,<TagLUT>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_LUT,AFXP_ToasterFlags1(a1)
+10$	rts
+*------------------------------
+TagDigitalPairs		
+	DEBUGMSG DBTAGS,<TagDigitalPairs>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_DigitalPairs,AFXP_ToasterFlags1(a1)
+10$	rts
+*------------------------------
+TagLatchAM		
+	DEBUGMSG DBTAGS,<TagLatchAM>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_LatchAM,AFXP_ToasterFlags1(a1)
+	ori.b	#AFXT_Remap_Latch,AFXP_NonAAremap(a1)
+10$	rts
+*------------------------------
+TagLatchBM		
+	DEBUGMSG DBTAGS,<TagLatchBM>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_LatchBM,AFXP_ToasterFlags1(a1)
+	ori.b	#AFXT_Remap_Latch,AFXP_NonAAremap(a1)
+10$	rts
+*------------------------------
+TagLatchIS		
+	DEBUGMSG DBTAGS,<TagLatchIS>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_LatchIS,AFXP_ToasterFlags1(a1)
+	ori.b	#AFXT_Remap_Latch,AFXP_NonAAremap(a1)
+10$	rts
+
+*------------------------------
+TagHonorPreviewOverLay
+	DEBUGMSG DBTAGS,<TagHonorPreviewOverLay>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_ToasterFlags1_HonorPreviewOverLay,AFXP_ToasterFlags1(a1)
+10$	rts
+
+*------------------------------
+TagForceDefaultMatte
+	DEBUGMSG DBTAGS,<TagForceDefaultMatte>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags2_ForceDefaultMatte,AFXP_SwitcherFlags2(a1)
+10$	rts
+
+*------------------------------
+TagTurnAudioFilterOff
+	DEBUGMSG DBTAGS,<TagTurnAudioFilterOff>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_MachineFlags1_TurnAudioFilterOff,AFXP_MachineFlags1(a1)
+10$	rts
+
+*------------------------------
+TagAudioStartField	
+	DEBUGMSG DBTAGS,<TagAudioStartField>
+	move.w	2(a0),AFXP_AudioStartField(a1)
+	rts
+
+*------------------------------
+TagNumAudioFields	
+	DEBUGMSG DBTAGS,<TagNumAudioFields>
+	move.w	2(a0),AFXP_NumAudioFields(a1)
+	rts
+
+*------------------------------
+TagISandClipPause
+	DEBUGMSG DBTAGS,<TagISandClipPause>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags2_ISandClipPause,AFXP_SwitcherFlags2(a1)
+10$	rts
+	
+*------------------------------
+TagInterlaced
+	DEBUGMSG DBTAGS,<TagInterlaced>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_Interlaced,AFXP_AnimFlags2(a1)
+10$	rts
+	
+*------------------------------
+TagFirstFieldNTSCII
+	DEBUGMSG DBTAGS,<TagFirstFieldNTSCII>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags1_FirstFieldNTSCII,AFXP_AnimFlags1(a1)
+10$	rts
+	
+*------------------------------
+TagBounceILBM
+	DEBUGMSG DBTAGS,<TagBounceILBM>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_BounceILBM,AFXP_AnimFlags2(a1)
+	bset.b	#AFXP_AnimFlags1_LoopAnims,AFXP_AnimFlags1(a1)
+10$	rts
+
+*------------------------------
+TagLatchRanges		
+	DEBUGMSG DBTAGS,<TagLatchRanges>
+	move.l	a0,AFXP_LatchRanges(a1)
+	rts
+	
+*------------------------------
+TagLatchList		
+	DEBUGMSG DBTAGS,<TagLatchList>
+	move.l	a0,AFXP_LatchList(a1)
+	rts
+	
+*------------------------------
+TagTransparentRanges	
+	DEBUGMSG DBTAGS,<TagTransparentRanges>
+	move.l	a0,AFXP_TransparentRanges(a1)
+	rts
+	
+*------------------------------
+TagTransparentList	
+	DEBUGMSG DBTAGS,<TagTransparentList>
+	move.l	a0,AFXP_TransparentList(a1)
+	rts
+
+*------------------------------
+TagColor0Transparent	
+	DEBUGMSG DBTAGS,<TagColor0Transparent>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_Color0Transparent,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+TagAbortIfSlow		
+	DEBUGMSG DBTAGS,<TagAbortIfSlow>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_AbortIfSlow,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+TagNumSkipFieldsAtEnd
+	DEBUGMSG DBTAGS,<TagNumSkipFieldsAtEnd>
+	move.w	2(a0),AFXP_NumSkipFieldsAtEnd(a1)
+	rts
+
+*------------------------------
+TagTBarDoesAuto
+	DEBUGMSG DBTAGS,<TagTBarDoesAuto>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags2_TBarDoesAuto,AFXP_SwitcherFlags2(a1)
+10$	rts
+	
+*------------------------------
+TagDoNotStompSprite
+	DEBUGMSG DBTAGS,<TagDoNotStompSprite>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_DoNotStompSprite,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+TagAbortLoopAtEnd
+	DEBUGMSG DBTAGS,<TagAbortLoopAtEnd>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_AbortLoopAtEnd,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+TagNonAAremap		
+	DEBUGMSG DBTAGS,<TagNonAAremap>
+	move.b	3(a0),AFXP_NonAAremap(a1)
+	rts
+
+*------------------------------
+Tag100PercentWhiteMatte
+	DEBUGMSG DBTAGS,<Tag100PercentWhiteMatte>
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags2_100PercentWhiteMatte,AFXP_SwitcherFlags2(a1)
+	bset.b	#AFXP_SwitcherFlags2_UseEffectColor,AFXP_SwitcherFlags2(a1)
+10$	rts
+
+*------------------------------
+TagUseEffectColor
+	DEBUGMSG DBTAGS,<TagUseEffectColor>
+	beq.s	10$
+	bset.b	#AFXP_SwitcherFlags2_UseEffectColor,AFXP_SwitcherFlags2(a1)
+10$	rts
+
+*------------------------------
+TagEquations
+	DEBUGMSG DBTAGS,<TagEquations>
+
+	move.l	a0,d0			;->equation variables
+	lea	AFXP_Equations(a1),a6	;->EffectData
+	sub.l	a6,d0			;variables-EffectData
+	move.l	d0,AFXP_Equations(a1)
+
+	move.w	#ET_Fader,d0	
+	CALLEF	SearchDynamic
+	beq.s	10$	
+	bset.b	#AFXP_DynamicFlags1_Fader,AFXP_DynamicFlags1(a1)
+
+10$	move.w	#ET_LumKey,d0	
+	CALLEF	SearchDynamic
+	beq.s	20$	
+	bset.b	#AFXP_DynamicFlags1_LumKey,AFXP_DynamicFlags1(a1)
+
+20$	move.w	#ET_TBarTime,d0	
+	CALLEF	SearchDynamic
+	beq.s	30$	
+	bset.b	#AFXP_DynamicFlags1_TBarTime,AFXP_DynamicFlags1(a1)
+
+30$	move.w	#ET_BMposition,d0	
+	CALLEF	SearchDynamic
+	beq.s	40$	
+	bset.b	#AFXP_DynamicFlags1_BMposition,AFXP_DynamicFlags1(a1)
+
+40$	rts
+
+*------------------------------
+TagReverseButtLog
+	DEBUGMSG DBTAGS,<TagReverseButtLog>
+	move.w	2(a0),d0
+	move.w	d0,AFXP_ReverseButtLog(a1)
+	beq.s	10$		;requires ReverseCustomButtLog pointer
+	subq.w	#1,d0
+	add.w	d0,d0
+	add.w	d0,d0
+
+	movea.l	EF_EffectsLogic(a4),a6
+	movea.l	0(a6,d0.w),a6
+
+	move.l	a6,AFXP_ReverseCustomButtLog(a1)	
+10$	rts
+*------------------------------
+TagReverseCustomButtLog	
+	DEBUGMSG DBTAGS,<TagReverseCustomButtLog>
+	move.l	a0,AFXP_ReverseCustomButtLog(a1)
+	tst.l	(a0)
+	beq.s	10$
+	clr.w	AFXP_ReverseButtLog(a1)
+10$	rts
+
+*------------------------------
+TagReverseTime
+	DEBUGMSG DBTAGS,<TagReverseTime>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_ReverseTime,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+TagVerticalScroll
+	DEBUGMSG DBTAGS,<TagVerticalScroll>
+	tst.w	2(a0)
+	beq.s	10$
+	bset.b	#AFXP_AnimFlags2_VerticalScroll,AFXP_AnimFlags2(a1)
+10$	rts
+
+*------------------------------
+* Unused Tag items that fill in LONGs in the AFXP structure
+Tagpad1
+Tagpad6
+Tagpad7
+
+TagLoopCount  
+TagCroutonType   
+TagTimeLine   
+TagIndexID   
+TagFCountMode   
+TagVariableFCount   
+TagSlowFCount   
+TagMedFCount   
+TagFastFCount   
+TagVariableFCount68000   
+TagSlowFCount68000   
+TagMedFCount68000   
+TagFastFCount68000   
+TagNumFields   
+TagStartTime   
+TagDescriptorList   
+TagAboutList   
+TagCommentList   
+	rts
+
+
+* ABOVE TAG ROUTINES USE THESE REGISTERS
+* a0->Tag value, a1->AnimFXParams, a3->FG, a4->EFXbase
+* All registers are FREE!
+*****************************************************************
+
+
+***************************************************************
+* a3->FG, a4->EfxBase, a5->TB 
+AnimRemoveHandler:
+	movem.l	d0-d1/a0-a2/a4/a6,-(sp)
+	
+	DEBUGMSG	DBAFXH,<AnimRemoveHandler:>,<\>
+
+	lea	LocalData,a2
+
+	clr.l	EF_OverrideProcessDuring(a4)
+	clr.l	EF_FieldReinstall(a4)
+	clr.l	EF_PreProcessDuring(a4)
+*-------------
+* Unload Audio	
+	move.l	ALCD_AudioInfoSlow(a2),d0
+	beq.s	5$
+	move.l	d0,a0
+	CALLTL	FreeFXAudio
+	clr.l	ALCD_AudioInfoSlow(a2)
+
+5$	move.l	ALCD_AudioInfoMedium(a2),d0
+	beq.s	10$
+	move.l	d0,a0
+	CALLTL	FreeFXAudio
+	clr.l	ALCD_AudioInfoMedium(a2)
+
+10$	move.l	ALCD_AudioInfoFast(a2),d0
+	beq.s	15$
+	move.l	d0,a0
+	CALLTL	FreeFXAudio
+	clr.l	ALCD_AudioInfoFast(a2)
+
+15$	btst.b	#ALCD_Flags1_AudioInit,ALCD_Flags1(a2)	
+	beq.s	20$
+	CALLTL	FreeFXAudioChannels
+	bclr.b	#ALCD_Flags1_AudioInit,ALCD_Flags1(a2)	
+*-------------	
+
+20$ ;;	bclr.b	#EFFECTCOLOR_BIT,TB_Flags2(a5)	  ;reset to default DVE borders
+	
+;;	movea.l	FG_Function(a3),a0	
+;;	move.l	CroutonEffect_AEC(a0),d0	;->AECBase
+	move.l	FGS_LocalData(a3),d0		;->AECBase
+	beq	50$
+
+	move.l	d0,a4
+	CALLTL	AnimUnload
+;;	clr.l	CroutonEffect_AEC(a0)
+	clr.l	FGS_LocalData(a3)
+
+50$
+
+;; REMOVED LockEffects call for 4.0
+;;	lea	LocalData,a0
+;;	move.l	ALCD_EffectsLock(a0),d1
+;;	beq	100$
+;;
+;;	GET.l	TB_DOSBase,a6	
+;;	CALLROM	UnLock
+
+100$	lea	AnimChipPublic1,a0
+	tst.l	avm_NumberOfBytesUsed(a0)
+	beq	200$
+
+	CALLTL	InitEFXChipMem
+ 	CALLTL	InitDVEChipMem
+
+200$	lea	AnimFastPublic,a0
+	tst.l	avm_NumberOfBytesUsed(a0)
+	beq	666$
+
+	CALLTL	InitDVEFastMem
+
+666$	bclr.b	#ANIMFX_BIT,TB_Flags2(a5)
+
+	movem.l	(sp)+,d0-d1/a0-a2/a4/a6
+	rts
+
+***************************************************************
+* ????? If NODOTBAR ANIM
+* ????? a0->ButtonELHlogic, a2->FXvariables, a3->FG, a4->EFXlib, a5->TB
+* ????? d0= (auto/tbar)=0/unauto=1, d1=FIELDFIRST/FIELDDURING/FIELDLAST/FIELDREDO | FIELDDOELH/FIELDNOELH
+* ????? 
+* ????? IF DOTBAR non-ANIM
+* ????? a1->ButtonELHlogic (not needed), a2->FXvariables, a3->FG, a4->EFXlib, a5->TB
+* ????? d0= time (not looked at?, d1=FIELDFIRST/FIELDDURING/FIELDLAST/FIELDREDO | FIELDDOELH/FIELDNOELH
+* ?????
+* ????? This is called by anything that does a FIELDREDO (e.g. change clip midtransition)
+
+* This code is used by the ILBM FX FGC_AUTO handler, called by ProcessEffect()
+* (see AutoHandler())
+
+TBarHandlerAuto:
+	movem.l	d0/d2-d3/a0-a2/a6,-(sp)
+
+	DEBUGMSG	DBAFXH2,<TBarHandlerAuto:>,<\>
+
+	lea	LocalData,a1
+	bra	tbarhand
+
+* This routine is the ILBM FX FGC_TBAR handler called by ProcessEffect().
+* This is called multiple times, once per field for ILBM Auto or ILMB TBar.
+TBarHandler:
+	movem.l	d0/d2-d3/a0-a2/a6,-(sp)	;SEE ABOVE !!!!
+
+	DEBUGMSG	DBAFXH2,<TBarHandler:>,<\>
+
+	lea	LocalData,a1
+	bset.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;assume interrupts off
+
+tbarhand:
+	bset.b	#0,TB_CycleFlags(a5)
+
+	moveq	#0,d0				;AUTO/TBAR (not UNAUTO)
+
+	bset.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1) ;it's a TBar drag (necessary???)
+
+
+
+;***!!! ???? Can Anims ever get here ?????
+	btst.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a1)
+	bne.s	5$
+	bsr	AnimAutoTBarHandler	;DON'T THIS IS EVER EXECUTED!!!!
+	bra	666$
+
+
+
+* Algorithmic non-ANIM TBAR (=IBLM FX FGC_TBAR)
+* Softsprite & Interrupts should already be off (unless 1st field)
+5$
+;;	movea.l	FG_Function(a3),a6
+;;	movea.l	CroutonEffect_AEC(a6),a6	;->AEC_BaseAddr
+	movea.l	FGS_LocalData(a3),a6		;->AECBase
+	
+	cmp.w	#FIELDFIRST,d1
+	bne	200$
+
+	DEBUGMSG	DBAFXH,<before SetupFirstField>,<\>
+
+	bsr	SetupFirstField		;a1->ALCD a3->FG, a5->TB, a4->EFlib, a6->AECbase
+
+	DEBUGMSG	DBAFXH,<before ForceDoTBar2Top>,<\>
+
+	CALLTL	ForceDoTBar2Top
+
+	lea	FirstFieldHandler(pc),a0
+	exg	a4,a6
+
+	DEBUGMSG	DBAFXH,<before AnimPlayForward>,<\>
+
+	CALLTL	AnimPlayForward		;haults after 1st field is ready
+	exg	a4,a6
+
+	DEBUGMSG	DBAFXH,<after AnimPlayForward >,<\>
+
+* ready to show next field.
+200$	GET.l	TB_ColorCycle,d0	
+	beq.s	300$
+	move.l	d0,a0
+	jsr	(a0)	;modify CURRENT DVESprite
+
+	LEA.L	TB_EffectsBase+EFB_DVESprites1(A5),A0
+    	GETCURRENTANDFLIP	A0
+     	PUT.L	A0,TB_CurrentSprite1	;do before elh stuff below
+
+300$	btst.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+	bne.s	335$			;jump if already off
+	CALLTL	InterruptsOff
+	bset.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+
+335$	movea.l	a6,a0	;->AEC, a1->Local data
+	move.l	d1,d0			;elhflag from process effect
+
+	DEBUGMSG	DBAFXH,<before InstallNextField>,<\>
+
+	bsr	InstallNextField
+
+	DEBUGMSG	DBAFXH,<after InstallNextField >,<\>
+
+	CALLTL	Wait4Top
+
+666$	movem.l	(sp)+,d0/d2-d3/a0-a2/a6
+	rts
+
+nosnowlist dc.b	EH3,EH1,EHEND
+	CNOP	0,4
+
+***************************************************************
+* a1->ALCD a3->FG, a5->TB, a4->EFlib, a6->aecbase
+SetupFirstField:
+	movem.l	d0-d1/a0/a6,-(sp)
+
+	bclr.b	#ALCD_Flags1_FrameDisplayed,ALCD_Flags1(a1) ;start of anim
+	bclr.b	#ALCD_Flags1_NextFrameReady,ALCD_Flags1(a1)
+
+	btst.b	#ALCD_Flags1_SetupForward,ALCD_Flags1(a1)    ;flagged pre-setup
+	bne	20$
+
+	bclr.b	#EFFLAGS1_DISPLAYTRASHED,EF_Flags1(a4) ;assume interface not trashed
+	btst.b	#ALCD_Flags1_KilledInterface,ALCD_Flags1(a1) ;interface killed?
+	beq.s	10$			;jump if Interface is protected
+	
+	bset.b	#EFFLAGS1_DISPLAYTRASHED,EF_Flags1(a4) ;interface trashed
+	CALLTL	InstallAVE
+	CALLTL	ImageryOff
+
+10$ 	exg	a4,a6
+	CALLTL	AnimSetupForward
+	exg	a4,a6
+
+*------------------
+20$	btst.b	#AFXP_ToasterFlags1_DigitalFX,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	30$
+	CALLTL	DVElutoff
+30$
+	btst.b	#AFXP_SwitcherFlags2_UseEffectColor,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a1)
+	beq	104$
+
+	btst.b	#ALCD_Flags2_MatteShown,ALCD_Flags2(a1)
+	bne	104$
+
+;;;	move.b	FGS_MatteColor(a3),d0
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_MatteColor,d0
+	CALLTL	GetLongValue
+
+	ext.w	d0
+	bmi	103$			;jump if custom matte
+	GET.w	TB_EffectColor,d0
+
+	cmpi.w	#1,d0			;white
+	bne.s	121$
+	btst.b	#AFXP_SwitcherFlags2_100PercentWhiteMatte,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a1)
+	beq.s	121$
+	move.w	#$0fff,d0
+	bra.s	106$
+
+121$	cmp.w	#9,d0			; is the index argument valid?
+	bcc	104$			; if not skip this bogus color
+
+* 0-7, and 8=snow
+	GET.l	TB_BGColorFGL,a0	; Pointer to a pointer
+122$	move.l	(a0),d1
+	move.l	d1,a0
+	beq	104$			; Error, so use current matte
+123$	dbra	d0,122$
+
+	move.w	FG_IndexID(a0),d0	; BGColor
+	bra.s	106$
+
+* custom matte color (not show)
+103$
+;;;	move.w	FGS_CustomMatteColor(a3),d0
+	movea.l	a3,a0			;->FG
+	move.l	#TAGID_CustomMatteColor,d0
+	CALLTL	GetLongValue
+
+106$	GET.w	TB_ToastBGC,d1
+	andi.w	#MATTE_BITS,d1
+	cmp.w	d1,d0
+	beq.s	104$
+
+	bset.b	#EFFLAGS1_MATTETRASHED,EF_Flags1(a4)
+	GET.w	TB_ToastBGC,EF_SavedMatte(a4)
+	
+	CALLTL	SetMatteColor
+
+*-----------------------	
+104$	DEA.l	TB_VTSetUp,a0
+	btst.b	#AFXP_ToasterFlags1_Encoder,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	bne.s	202$
+
+	ELHSET_MATTE	a0
+	bra	105$
+
+*-----------------
+* if encoder, then set matte to snow to avoid clitches to encoder color
+* when ever EH1 (or EH3) are written to.
+202$	DEA.l	TB_VTSetUp,a0
+	ELHCLEAR_MATTE	a0
+	ELHTEST_NOSNOW	a0
+	beq	105$		;jump if snow is already on
+
+	bset.b	#EFFLAGS1_MATTETRASHED,EF_Flags1(a4)
+	GET.w	TB_ToastBGC,EF_SavedMatte(a4)
+
+	ELHCLEAR_NOSNOW	a0
+	ELHPUT_MP_I	a0,$f	;avoid transparency in sprite
+	lea	nosnowlist(pc),a0
+
+	CALLTL	SendELHList2Toaster	;may flash snow for a field or so???
+	DEA.l	TB_VTSetUp,a0
+
+*-----------------------
+105$	ELHCLEAR_AMWIPE	a0
+	btst.b	#AFXP_ToasterFlags1_LatchAM,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	110$
+	ELHSET_AMWIPE	a0
+	
+110$	ELHCLEAR_BMWIPE	a0
+	btst.b	#AFXP_ToasterFlags1_LatchBM,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	115$
+	ELHSET_BMWIPE	a0
+	
+115$ ;;	btst.b	#AFXP_ToasterFlags1_DigitalFX,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+     ;;	beq.s	120$
+     ;;	ELHCLEAR_LINP	a0
+
+120$ ;;	moveq	#0,d0
+     ;;	move.b	ALCD_AnimFXParams+AFXP_KeyMode(a1),d0
+     ;;	ELHPUT_CDS_R	a0,d0	
+
+;;	ELHPUT_CD_I	a0,VTI_CD_SHOWB  ;should already be defaulted to this
+
+	btst.b	#AFXP_ToasterFlags1_HonorPreviewOverLay,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	bne.s	130$
+	ELHCLEAR_PVMUTE	a0
+	ELHCLEAR_USERON	a0	
+
+130$	movem.l	(sp)+,d0-d1/a0/a6
+	rts
+
+***************************************************************
+FirstFieldHandler
+	cmpi.l	#fxhc_Ready,d0
+	bne.s	666$
+
+	move.l	#fxhc_Stop,d0
+100$	rts
+
+666$	move.l	#fxhc_NotReady,d0
+	bra.s	100$
+
+***************************************************************
+* Algorithmic non-ANIM AUTO
+* a0->ButtonELHlogic, a2->FXvariables, a3->FG, a4->EFXlib, a5->TB
+* d0= (auto/tbar)=0/unauto=1, d1=FIELDFIRST/FIELDDURING/FIELDLAST(?)/FIELDREDO | FIELDDOELH/FIELDNOELH
+*
+* This routine is the ILBM FGC_AUTO handler called by ProcessEffect().
+*  (see TBarHandler() for ILBM FX FGC_TBAR code)
+AutoHandler:
+	movem.l	d0-d6/a1/a6,-(sp)
+
+	DEBUGMSG	DBAFXH2,<AutoHandler:>,<\>
+
+	bset.b	#0,TB_CycleFlags(a5)
+
+	movea.l	a0,a1
+	move.w	d0,d6		;stash auto/unauto flag = direction
+	lea	LocalData,a6
+	bclr.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a6)	;interrupts on
+
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a6)
+	beq.s	5$		;jump if a non-Loop anim
+
+;;	WAIT4LMBUP
+	CALLTL	Wait4LMBup
+	CALLTL	Wait4RMBup
+
+
+5$		move.w	d6,d0
+		move.l	#$10000,d3
+		GET.w	TB_FCountSec,d2	;FrameCount for effect
+		divu	d2,d3		;incremental time
+
+		swap	d3		;clear upper word
+		clr.w	d3
+		swap	d3
+
+		tst.w	d0
+		beq.s	17$		;jump if auto
+
+* unauto
+		GET.W	TB_TValSec,d0	;unauto
+		mulu	d2,d0
+		divu	#TValMax,d0	;round down to #frames left (going upward)
+
+		move.w	d3,d4
+		mulu	d0,d4		;amount of time left
+		move.w	d0,d2		;frame counter
+		neg.l	d3
+		add.l	d3,d4		;do next frame from current time
+		bra	50$
+
+* auto
+17$		move.w	#TValMax,d0
+		sub.w	TB_TValSec(a5),d0
+		mulu	d2,d0
+		divu	#TValMax,d0	;rounded down to #frames left
+		
+		move.w	d3,d4
+		sub.w	d0,d2		;# of frames from start
+		mulu	d2,d4
+		add.l	d3,d4		;do next frame from current time
+		move.w	d0,d2
+
+* d2.w=frame counter, d3.l=incremental time, d4.l=time
+		bra	50$
+
+*------
+20$
+;; I think some EF_TimeStop stuff needs to go here ????? See dynam.a
+
+24$		tst.l	d4
+		bge.s	27$
+		moveq	#0,d4
+		bra.s	26$
+27$		cmpi.l	#TBarTimeMax,d4
+		bls.s	26$
+		move.w	#TBarTimeMax,d4
+26$		PUT.w	d4,TB_TBarTime
+		move.w	d4,d5
+		lsr.w	#7,d5
+		PUT.w	d5,TB_TValSec
+
+* d1=mode, a0 -> tables of logic, a4->EFXLib, a5->TB)
+	cmpi.w	#FIELDFIRST,d1		;via MakeLive done earlier
+	bne.s	32$
+	bsr	ProcessMatteEncoder
+
+*>>> New for 4.05 -- For looping anims, setup optional time to abort myself <<<*
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a6)
+	beq.s	.notlooped		;jump if a non-Loop anim
+
+	btst.b	#4,TB_DisplayRenderMode(a5)
+	bne.s	.notlooped		;jump if sequencing (seq gave us stop time)
+
+	move.l	TB_CurLoopDuration(a5),d0	;A specific duration requested?
+	DEBUGUDEC.w DBLP,<ILBM Duration=>,d0,<\>
+	tst.l	d0
+	beq.s	.eternal
+	add.l	TB_MasterTime(a5),d0
+.eternal
+	DEBUGUDEC.w DBLP,<ILBM StopTime=>,d0,<\>
+	move.l	d0,TB_LoopStopTime(a5)		;When effect should abort itself
+.notlooped
+*>>>
+
+32$	CALLEF  ProcessDuring
+	or.l	d0,d1
+
+* d1 = 1 of need to send out ELH
+
+	bsr	TBarHandlerAuto
+
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a6)
+	beq.s	30$
+
+;;	ISLMBUP
+	CALLTL	IsLMBup
+	beq	666$
+	CALLTL	IsRMBup
+	beq	666$
+
+*** New for 4.05 -- Watch for time to abort automatically ***
+	move.l	TB_LoopStopTime(a5),d1	;Time at which to stop
+	beq.s	.dontquit		;If 0, forever (until mouse button)
+	cmp.l	TB_MasterTime(a5),d1	;Time's up?
+	bls	666$
+.dontquit
+
+	btst.b	#WAITABORT_BIT,TB_Flags3(a5)
+	bne	666$
+
+30$	move.w	#FIELDDURING,d1
+
+;; I think some EF_TimeStop stuff needs to go here ????? See dynam.a
+
+40$	add.l	d3,d4
+50$	dbra	d2,20$
+
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a6)
+	beq.s	666$
+	
+	bchg	#0,d6	;assume bounce
+	btst.b	#AFXP_AnimFlags2_BounceILBM,ALCD_AnimFXParams+AFXP_AnimFlags2(a6)
+	bne	5$
+
+	bchg	#0,d6	;no bounce (redo auto or unauto)
+	clr.w	TB_TValSec(a5)		;assume doing autos
+	tst.w	d6
+	beq	5$			;jump for another auto
+
+	PUT.w	#TValMax,TB_TValSec
+	bra	5$			;jump for another unauto	
+
+666$	clr.l	TB_LoopStopTime(a5)	;Don't leave this lying around (new for 4.05)
+
+ 	btst.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a6)	;interrupts on?
+	beq.s	777$			;jump if already on
+	CALLTL	InterruptsOn
+	bclr.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a6)	;interrupts off Necessary???
+
+777$	movem.l	(sp)+,d0-d6/a1/a6	
+	rts
+
+***************************************************************
+* d1=mode, a0->ButtLog a4->EFlib, a5->TB
+ProcessMatteEncoder:
+	movem.l	d0-d1/a1,-(sp)
+
+	lea	LocalData,a1
+
+	cmpi.w	#FIELDFIRST,d1		;via MakeLive done earlier
+	bne	202$
+
+	bclr.b	#ALCD_Flags2_MatteShown,ALCD_Flags2(a1)	;assume not shown
+
+	btst.b	#AFXP_ToasterFlags1_Encoder,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	bne.s	10$
+
+	jsr	_LVOIsMatteShown(a4)
+	tst.w	d0
+	beq	202$			;matte not shown
+	bset.b	#ALCD_Flags2_MatteShown,ALCD_Flags2(a1)	;matte is shown
+	bra.s	202$
+
+*---------
+* Must avoid looking at Matte before or after Encoder FX
+10$	moveq	#0,d1		;assume no matte shown
+	GET.w	TB_OLaySec,d0
+	btst	#B_ENCODER,d0
+	beq	209$
+	moveq	#1,d1	
+
+	bclr	#B_ENCODER,d0
+	bset	#B_VIDEO1,d0	;force to vid1
+	PUT.w	d0,TB_OLaySec
+	
+209$	GET.w	TB_MainSec,d0
+	btst	#B_ENCODER,d0
+	beq	203$
+	moveq	#1,d1
+
+	bclr	#B_ENCODER,d0
+	bset	#B_VIDEO1,d0	;force to vid1
+	PUT.w	d0,TB_MainSec
+
+203$	jsr	_LVOIsMatteShown(a4)	;see if remaining Prvw bus is a problem
+	tst.w	d0
+	beq.s	204$
+
+	GET.w	TB_PrvwSec,d0
+	btst	#B_ENCODER,d0
+	beq	204$
+	moveq	#1,d1
+
+	bclr	#B_ENCODER,d0
+	bset	#B_VIDEO1,d0	;force to vid1
+	PUT.w	d0,TB_PrvwSec
+
+204$	tst.w	d1
+	beq	202$
+
+	CALLTL	CookPrvw
+	CALLTL	CookAndServeMain  ;show new sources before messing with matte
+
+202$	movem.l	(sp)+,d0-d1/a1
+	rts
+
+***************************************************************
+* a0->ButtonELHlogic, a2->FXvariables, a3->FG, a4->EFXlib, a5->TB
+* d0= (auto/tbar)=0/unauto=1, d1=FIELDFIRST/FIELDDURING/FIELDLAST(?)/FIELDREDO | FIELDDOELH/FIELDNOELH
+* The ALCD_Flags1_TBar flag indicates AUTO or TBAR.
+* The Softsprite should already be off.
+
+* Called by ANIM FX FGC_AUTO/TBAR handler from ProcessEffect().
+* This is only called once per ANIM Auto, or once per ANIM TBar drag.
+* So this isn't called for every field of an ANIM, but rts on AUTO
+* finish, or drag finished.
+
+AnimAutoTBarHandler:
+	movem.l	d0/d2-d3/a0-a2/a6,-(sp)
+
+	DEBUGMSG	DBAFXH2,<AnimAutoTBarHandler:>,<\>
+
+	tst.w	d0
+	bne	2000$			;UNAUTO not supported!!!!
+
+	bset.b	#0,TB_CycleFlags(a5)
+
+	IFD	DEBUGSPEEDORPLAY
+	 lea	DebugSpeedOrPlayBuffer,a6
+	 move.l	#-1,-4(a6)			;initialize buffer
+	ENDC	;IFD DEBUGSPEEDORPLAY
+
+* Softsprite should already be off
+;;	movea.l	FG_Function(a3),a6
+;;	movea.l	CroutonEffect_AEC(a6),a6	;->AEC_BaseAddr
+	movea.l	FGS_LocalData(a3),a6		;->AEC_BaseAddr
+
+	lea	LocalData,a1
+
+	bclr.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on
+	
+* WE NEED TO SEE IF THE ANIM IS TO BE PLAYED FORWARD OR BACKWARD!!!!!
+* I GUESS THIS FLAG SHOULD BE STORED IN THE PROJECT.
+
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne	7$			;jump if not AUTO
+
+* AUTO (loop and non-loop)
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	beq.s	6$		;jump if a non-Loop anim
+
+;;	WAIT4LMBUP
+	CALLTL	Wait4LMBup
+	CALLTL	Wait4RMBup
+
+	bra	7$
+
+* Auto - non-loop
+6$	GET.w	TB_FCountModeSec,d0
+	addq.w	#1,d0	 ;smf=301 -> 412, variable speed is never allowed here!
+	andi.w	#%11,d0  ;smf=012
+	add.w	d0,d0
+	add.w	d0,d0
+	lea	ALCD_AudioInfoSlow(a1),a2
+	lea	0(a2,d0.w),a2
+	move.l	(a2),ALCD_CurrentAudioInfo(a1)	;may be no sample at this speed
+
+7$	cmp.w	#FIELDFIRST,d1
+	bne	200$
+
+* d1=mode, a0 -> tables of logic, a4->EFXLib, a5->TB)
+	bsr	ProcessMatteEncoder
+	bsr	SetupFirstField		;a1->ALCD a3->FG, a5->TB, a4->EFlib, a6->AECbase
+
+*>>> New for 4.05 -- For looping anims, setup optional time to abort myself <<<*
+	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	beq.s	.notlooped		;jump if a non-Loop anim
+
+	btst.b	#4,TB_DisplayRenderMode(a5)
+	bne.s	.notlooped		;jump if sequencing (seq gave us stop time)
+
+	move.l	TB_CurLoopDuration(a5),d0	;A specific duration requested?
+	DEBUGUDEC.w DBLP,<ANIM Duration=>,d0,<\>
+	tst.l	d0
+	beq.s	.eternal
+	add.l	TB_MasterTime(a5),d0
+.eternal
+	DEBUGUDEC.w DBLP,<ANIM StopTime=>,d0,<\>
+	move.l	d0,TB_LoopStopTime(a5)		;When effect should abort itself
+.notlooped
+*>>>
+
+200$	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	beq.s	210$			;jump if AUTO
+	CALLTL	DeltaYMouse		;get initial mouse Y coordinate	
+	move.w	d1,ALCD_YMouse(a1)	;stash initial position
+
+210$	lea	InterruptHandler(pc),a0
+	exg	a4,a6
+	CALLTL	AnimPlayForward	
+	exg	a4,a6
+
+* Anim done playing. Get out of it cleanly
+	
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne	1500$			;jump if TBAR
+
+* done with AUTO
+	btst.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a1)
+	beq.s	400$		;jump if already off
+
+	bclr.b	#ALCD_Flags2_AudioReady,ALCD_Flags2(a1)
+	bclr.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a1)
+
+	CALLTL	AbortFXAudio
+	LEDON
+
+400$
+*---------------------------
+	IFD	DEBUGSPEEDORPLAY
+	movem.l	d0-d7/a6,-(sp)
+
+	DEBUGMSG	DEBUGSPEEDORPLAY,<----------------------------------------------->
+
+	lea	DebugSpeedOrPlayBuffer,a6
+	move.l	-4(a6),d0		;number of fields -1
+
+	IFD	DEBUGSPEED
+
+	ble	1000$			;jump if one or no fields
+	subq.w	#1,d0
+	moveq	#1,d5			;frame counter
+	
+900$	move.l	(a6)+,d1		;frame #0
+	move.l	(a6)+,d2		;vert+hor #0
+	lsr.l	#8,d2
+	andi.l	#$1ff,d2
+	swap	d2
+	clr.w	d2	;*64K
+	divu	#264,d2
+	swap	d1
+	move.w	d2,d1
+
+	move.l	(a6),d3		;frame #1
+	move.l	4(a6),d4	;vert+hor #1
+	lsr.l	#8,d4
+	andi.l	#$1ff,d4
+	swap	d4
+	clr.w	d4	;*64K
+	divu	#264,d4
+	swap	d3
+	move.w	d4,d3
+	
+	move.l	d1,d6
+	swap	d6
+	move.l	d3,d7
+	swap	d7
+	sub.w	d6,d7
+
+	sub.l	d1,d3 
+
+	DEBUGUDEC.W  DEBUGSPEEDORPLAY,<ToFrame#>,d5,< >
+	DEBUGUDEC.W  DEBUGSPEEDORPLAY,<Speed=>,d7,< >
+	swap	d3
+	DEBUGHEXI.W DEBUGSPEEDORPLAY,<numfields.fract=>,d3,<>
+	swap	d3
+	DEBUGHEXI.W DEBUGSPEEDORPLAY,<.>,d3,<\>
+
+	addq.w	#1,d5
+
+	ENDC	;DEBUGSPEED
+
+	IFD	DEBUGPLAY
+
+900$	move.w	(a6),d1
+	DEBUGUDEC.W DEBUGSPEEDORPLAY,<field=>,d1,< >
+	addq.w	#4,a6
+	move.l	(a6)+,d1
+	DEBUGHEXI.L DEBUGSPEEDORPLAY,<plane0=>,d1,<\>
+	ENDC	;DEBUGPLAY
+
+	dbra	d0,900$
+	
+1000$	movem.l	(sp)+,d0-d7/a6	
+
+	ENDC	;IFD DEBUGSPEEDORPLAY
+
+*-----------------------------------------------
+1500$ 	btst.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+	beq.s	2000$			;jump if already on
+	CALLTL	InterruptsOn
+	bclr.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts off Necessary???
+
+2000$	movem.l	(sp)+,d0/d2-d3/a0-a2/a6
+	rts
+
+***************************************************************
+* Called by Vertically blanking interrupt server (a0->LocalData, a5->TB)
+VertBHandler
+	bset.b	#ALCD_Flags1_FrameDisplayed,ALCD_Flags1(a0)
+
+	btst.b	#ALCD_Flags2_AudioReady,ALCD_Flags2(a0)
+	bne.s	100$
+
+* off or to be turned off
+
+	btst.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a0)
+	beq	666$		;jump if already off
+
+	CALLTL	AbortFXAudio
+	LEDON
+
+	bclr.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a0)
+	bra.s	666$
+	
+* ready set
+100$	btst.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a0)
+	bne.s	666$		;jump if already on
+	
+;;	movem.l	d0/a0,-(sp)
+;;	move.l	ALCD_CurrentAudioInfo(a0),d0
+;;	beq.s	50$			;jump if no sample for this speed	
+;;	move.l	d0,a0
+;;	CALLTL	PlayFXAudio
+;;50$	movem.l	(sp)+,d0/a0
+
+	LEDON
+	btst.b	#AFXP_MachineFlags1_TurnAudioFilterOff,ALCD_AnimFXParams+AFXP_MachineFlags1(a0)
+	beq.s	150$
+	LEDOFF
+
+* As of 10-1-93 any AudioReady flag will always have an audio sample supplied
+150$	bset.b	#ALCD_Flags2_AudioCurrent,ALCD_Flags2(a0)
+	move.l	a0,-(sp)
+	movea.l	ALCD_CurrentAudioInfo(a0),a0	;won't ever be NULL
+	CALLTL	PlayFXAudio
+	movea.l	(sp)+,a0	
+
+666$	rts
+
+***************************************************************
+* InterruptHandler(->AECBase, flags)
+*		    a0      d0
+
+* This handler is used by ANIM FXs for AUTO/TBAR (not by ILBM fx)
+InterruptHandler:
+	movem.l	d1-d2/a1-a2/a4-a5,-(sp)
+
+	lea	LocalData,a1		
+	movea.l	aec_TSTBase(a0),a5	;->ToastBase
+	movea.l	aec_DisplayFrame(a0),a2		;->currently shown field
+	movea.l	acl_ForwardLink(a2),a2		;->next field to display
+	
+* This will be called atleast 60 times / sec.  So cycling can happen
+* once per field.
+	bsr	DoCycle
+
+*----------------
+* Test for TBar halted or LOOP AUTO aborted.
+5$	move.b	ALCD_Flags1(a1),d1
+	andi.b	#((1<<ALCD_Flags1_FrameDisplayed)!(1<<ALCD_Flags1_NextFrameReady)),d1
+	beq	15$			;don't allow abort before 1st frame
+					;This HACK fixes some bugs!!!
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	beq.s	10$			; jump if AUTO
+	CALLTL	SelectButtonState	; mouse button been released?
+	bne	777$			; User halted TBar drag
+	bra	15$
+
+10$	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	beq	15$		;jump if non Loop anim
+
+;;	ISLMBUP
+	CALLTL	IsLMBup
+	beq.s	.die_soon
+	CALLTL	IsRMBup
+	beq.s	.die_soon
+
+*** New for 4.05 -- Watch for time to abort automatically ***
+	move.l	TB_LoopStopTime(a5),d1	;Time at which to stop
+	beq.s	15$			;If 0, forever (until mouse button)
+	cmp.l	TB_MasterTime(a5),d1	;Time's up?
+	bhi.s	15$
+
+.die_soon
+* THIS NEEDS SOME WORK!!!!!!!!!!!!!!!!!!!!
+	bset.b	#ALCD_Flags2_AbortLoopAtEnd,ALCD_Flags2(a1)
+	bra	770$
+
+*----------------
+
+;At this time I'm ignoring NotReady calls.  In the future I may want to
+;install the current coplist 60 times/sec for interlaced user interfaces???
+15$	cmpi.l	#fxhc_Ready,d0
+	bne	666$
+
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	beq	17$			;jump if AUTO move
+
+* Get new TBar position
+* NOTE! This only has a resolution of 512.  The new DoTBar has a resolution
+* of 64K but I can't use it because of the busy wait.  We should modify
+* this code to give us a greater resolution!!!!!!!
+
+	move.w	ALCD_YMouse(a1),d1
+	CALLTL	DeltaYMouse		; check mouse
+	move.w	d1,ALCD_YMouse(a1)
+	tst.w	d0
+	bmi	17$			;don't allow negative drags
+	GET.w	TB_TValSec,d1
+	add.w	d0,d1
+	move.w	d1,d0
+	lsl.w	#7,d1		;hires
+	bne.s	19$
+	moveq	#1,d1	;hack to force to at lease TBar position 1
+19$	cmpi.w	#TValMax,d0
+	bcs.s	16$
+	move.w	#TValMax,d0
+	move.w	#TBarTimeMax,d1
+16$	PUT.w	d0,TB_TValSec
+	PUT.w	d1,TB_TBarTime	
+
+* next frame is generated (may be first frame)
+17$	move.b	ALCD_Flags1(a1),d0	
+	andi.b	#ALCDc_Mode_Mask,d0
+;	cmpi.b	#ALCDc_Mode_Wait4First,d0 ;=0
+	beq	90$	;jump if no frames yet displayed
+
+	cmpi.b	#ALCDc_Mode_Displayed,d0
+	bne	50$
+
+* Just showed a field.  Loop AUTO anims play forever, unto abort.
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne.s	18$			;jump if TBar dragged
+
+* Look for pause frames on Loop and non-Loop ANIM with AUTO
+* This code is not useful for pause frames on ILBMs!!
+
+* This indirection sure seems kludgy!
+	movea.l	ALCD_FastGadget(a1),a4	 ;->FastGadget
+;;	movea.l	FG_Function(a4),a4	 ;->Code
+;;	movea.l	CroutonEffect_EFX(a4),a4 ;->EFXBase
+	move.l	FGS_EntryLibrary(a4),a4	 ;->EFXBase
+
+	tst.l	EF_TimeStop(a4)
+	ble.s	68$			; haven't defined < 0 yet
+
+	move.w	aec_FrameCount(a0),d1
+	sub.w	ALCD_AnimFXParams+AFXP_NumSkipFieldsAtEnd(a1),d1
+	mulu	EF_TimeStop+2(a4),d1
+	
+	moveq	#0,d2
+	move.w	acl_FrameNumber(a2),d2
+	addq.w	#1,d2
+	swap	d2
+	
+	cmp.l	d2,d1	;jump if >= time stop
+	bls	777$
+
+68$	btst.b	#AFXP_AnimFlags1_LoopAnims,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	bne	20$		;jump if a Loop anim
+
+* TBar, or AUTO & non-loop anim
+18$	move.w	aec_FrameCount(a0),d1
+	subq.w	#1,d1	
+	sub.w	ALCD_AnimFXParams+AFXP_NumSkipFieldsAtEnd(a1),d1
+
+	cmp.w	acl_FrameNumber(a2),d1
+	bne	20$
+
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne	666$			;jump if TBar dragged
+
+* Need to burn off some fields if not 60 fps, so last field of ANIM
+* displays for the correct length of time.
+
+	GET.w	TB_FCountSec,d0
+	subq.w	#1,d0			;will automatically display 1 field
+	bra.s	71$
+70$	CALLTL	Wait4Top
+	bsr	DoCycle
+71$	dbra	d0,70$
+
+	bra	773$			;Abort, end of AUTO anim
+
+* Always ready for next frame if this is a loop anim & AUTO
+20$	bclr.b	#ALCD_Flags1_NextFrameReady,ALCD_Flags1(a1)	
+	move.l	#fxhc_Ready,d0
+	bra	1000$
+	
+50$	cmpi.b	#ALCDc_Mode_Wait2Display,d0
+	beq	666$
+
+* assume ALCDc_Mode_Wait4Next
+* DO WE NEED TO DISABLE INTERRUPTS SO WE DON'T MISS OUR TIME??????
+* I don't think so, since low level interrupts can't interrupt this,
+* and with InterruptsOff() no higher level interrupts will exist.	
+
+* Use InterruptsOff so Audio isn't killed????????????
+
+	btst.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+	bne.s	52$			;jump if already off
+	CALLTL	InterruptsOff
+	bset.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+
+***!! I can't turn off all interrupts or else the MasterClock will not count
+***!! and so ChangeIS which calls Wait4Time will wait forever!!!
+52$ ;;	CALLTL	AllInterruptsOff
+
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne.s	150$			;jump if TBar
+
+* Get ANIM Speed (assumes at most 255 video fields per anim field)
+* We could set the upper bit to indicated >255 video fields / anim field??
+* In the past, the upper bit indicated default slow/med/fast of 20/30/60 fps
+
+	GET.w	TB_FCountSec,d0
+	add.l	ALCD_LastInstallTime(a1),d0
+
+	cmp.l	TB_MasterTime(a5),d0
+	bgt	444$		;jump if not install field yet
+	beq.s	100$
+	
+	btst.b	#AFXP_AnimFlags2_AbortIfSlow,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	100$	;jump if don't care about failure to install at right time.
+
+* Anim failured to play fast enough!!
+;;	CALLTL	AllInterruptsOn
+	bra	772$
+
+* jumps here if 1st frame
+90$	btst.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+	bne.s	92$			;jump if already off
+	CALLTL	InterruptsOff
+	bset.b	#ALCD_Flags2_InterruptsOff,ALCD_Flags2(a1)	;interrupts on?
+
+92$ ;;	CALLTL	AllInterruptsOff
+
+* Time to install (assume on correct field)
+100$	btst.b	#AFXP_AnimFlags1_FieldSync,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	beq.s	150$		;jump if not Field Sync
+
+	GET.w	TB_FCountSec,d0
+	subq.w	#1,d0
+	beq.s	105$		;jump if 60 fields per sec
+
+	btst.b	#AFXP_AnimFlags2_Interlaced,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	150$		;jump if field data
+
+	subq.w	#1,d0
+	bne.s	150$		;jump if not 30 frames/sec
+
+* 30 frames/sec - FieldSync
+	moveq	#0,d0
+	bra.s	107$
+
+* 60 fields/sec - FieldSync
+105$	move.w	acl_FrameNumber(a2),d0
+	ror.w	#1,d0
+
+107$	btst.b	#AFXP_AnimFlags1_FirstFieldNTSCII,ALCD_AnimFXParams+AFXP_AnimFlags1(a1)
+	beq.s	110$
+	not.w	d0
+
+110$	move.w	_custom+vposr,d1
+	eor.w	d1,d0
+	bmi	444$
+
+150$  	moveq	#-1,d0
+	bsr	InstallNextField
+
+	btst.b	#WAITABORT_BIT,TB_Flags3(a5)
+	bne	774$
+	
+444$ ;;	CALLTL	AllInterruptsOn
+
+* Waiting at TBar bottom, or notReady, or waiting to display
+666$	move.l	#fxhc_NotReady,d0
+		
+1000$	movem.l (sp)+,d1-d2/a1-a2/a4-a5
+	rts
+
+* LOOP AUTO Abort with LMB/RMB/TimeUp
+770$	clr.l	TB_LoopStopTime(a5)	;Don't leave this lying around (new for 4.05)
+
+*------------------------
+	IFD	CRAP
+	ISLMBUP
+	beq.s	770$
+	move.l	a0,-(sp)
+	lea	el(pc),a0
+771$ 	CALLTL	SendELHList2Toaster
+	ISLMBUP
+	bne.s	771$
+	move.l	(sp)+,a0
+	bra.s	777$
+
+el	dc.b EH4,EH2,EH1,EH68,EHEND
+	CNOP	0,4
+
+	ENDC
+*------------------------
+
+* End of AUTO
+773$
+
+* Abort requested by user
+774$
+
+* Anim failed to play to desired speed
+772$	move.l	#fxhc_Abort,d0
+	bra	1000$
+
+* TBar haulted or AUTO pause frame
+777$ 
+
+* End of non-loop AUTO
+999$	move.l	#fxhc_Stop,d0
+	bra	1000$
+
+*--------------------------
+* a1->ALCD
+DoCycle:
+	move.l	d0,-(sp)
+	GET.l	TB_MasterTime,d0
+	cmp.l	ALCD_LastCycleTime(a1),d0
+	beq.s	5$			;jump if already cycled the field	
+	bset.b	#0,TB_CycleFlags(a5)
+	CALLTL	VBServer1		;do the colorcycling VertIntServer
+;;	bclr.b	#0,TB_CycleFlags(a5)	;??????
+	GET.l	TB_MasterTime,ALCD_LastCycleTime(a1)
+5$	move.l	(sp)+,d0
+	rts
+	
+*************************************************
+* GetTBarTime(a4->EFXBase, a5->TB,d0=flag), returns d0.w
+
+* d0=0 if don't allow transformed TBarTime
+* d0=1 returned "transformed" TBarTime, if possible
+GetTBarTime:
+	movem.l	d1/a0-a1,-(sp)
+	move.w	d0,d1		;stash flag
+	lea	LocalData,a1
+
+	moveq	#0,d0
+	GET.w	TB_TBarTime,d0
+
+	btst.b	#AFXP_AnimFlags2_ReverseTime,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	10$
+	neg.w	d0
+	add.w	#TBarTimeMax,d0
+
+10$	tst.w	d1
+	beq	15$
+
+	btst.b	#AFXP_DynamicFlags1_TBarTime,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq	15$
+
+* set this flag negative at select time
+	cmp.l	ALCD_CurrentTBarTime(a1),d0
+	bne.s	12$				;need to calculate	
+	move.w	ALCD_TransformedTBarTime(a1),d0	
+	bra	15$
+
+* calculate transformed TBar
+12$	move.l	d0,ALCD_CurrentTBarTime(a1)
+	movea.l	EF_TimeVariables(a4),a0
+	lea	TTV_TimeVarsTBarTime(a0),a0
+	CALLEF	TimeVariablesCalc		;a4->EFXbase
+	
+	movea.l	EF_VariableResults(a4),a0
+	move.w	TVR_TBarTime+TBTD_Time(a0),d0
+	add.w	d0,d0
+	move.w	d0,ALCD_TransformedTBarTime(a1)
+
+15$	movem.l	(sp)+,d1/a0-a1
+	rts
+
+***************************************************************
+* InstallNextField(a0->AECbase,a1->LocalData,d0=ELHflag)
+* This will need to look at the LocalData to see if you are scrolling
+* on a superbitmap or something else bizar.
+* This routine is guaranteed to install the copperlist in the next
+* field, unless IS or CLIP has changed alot, in which case 2 or
+* 4 fields are blown off.
+* d0= -1 if need to do processduring.
+* d0= 0 if no process during needed, no elh need to be sent out
+* d0> 0 if elh needs to be send out (according to processduring)
+InstallNextField
+	movem.l	d0-d3/a0/a2-a6,-(sp)
+
+	DEBUGMSG	DBAFXH2,<InstallNextField:>,<\>
+
+	move.l	d0,d1			;stash elh flag
+
+	movea.l	a0,a2			;->AECbase	
+	movea.l	aec_TSTBase(a2),a5	;->ToastBase
+	movea.l	aec_DisplayFrame(a2),a3		;->currently shown field
+	movea.l	acl_ForwardLink(a3),a3		;->next field to display
+
+	btst.b	#ALCD_Flags2_ILBM,ALCD_Flags2(a1)
+	bne.s	4$			;jump if ILBM
+
+* Figure TBarTime & TValSec on Frame number
+	moveq	#0,d0
+	move.w	acl_FrameNumber(a3),d0		;F
+	swap	d0				;65536*F
+	divu	aec_FrameCount(a2),d0		;(65536*F)/N
+	bne.s	1$	
+	moveq	#1,d0				;force to atleast time $0001
+
+1$	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	beq	2$			;jump if AUTO move
+
+	cmp.w	TB_TBarTime(a5),d0
+	bhi	1000$			;jump if TBar is lagging. = WAIT
+	
+2$	PUT.W	d0,TB_TBarTime
+	lsr.w	#7,d0			;divide by 128
+	PUT.w	d0,TB_TValSec	
+
+* This sure seems kludgy!
+4$	movea.l	ALCD_FastGadget(a1),a4	;->FastGadget
+;;	movea.l	FG_Function(a4),a4	 ;->Code
+;;	movea.l	CroutonEffect_EFX(a4),a4 ;->EFXBase
+	move.l	FGS_EntryLibrary(a4),a4	 ;->EFXBase
+
+	movea.l	ALCD_AnimFXParams+AFXP_CustomButtonELHlogic(a1),a0	;assume forward ButtLog
+	btst.b	#AFXP_AnimFlags2_ReverseTime,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	21$
+	movea.l	ALCD_AnimFXParams+AFXP_ReverseCustomButtLog(a1),a0
+	
+* a0 -> tables of logic, a4->EFXLib, a5->TB)
+21$	move.l	d1,d0
+	bpl	22$
+
+	CALLEF  ProcessDuring
+
+* d0 = 1 if need to send out ELH
+
+22$	move.b	ALCD_Flags1(a1),d1
+	andi.b	#((1<<ALCD_Flags1_FrameDisplayed)!(1<<ALCD_Flags1_NextFrameReady)),d1
+	beq	24$			;always allow pause if 1st field
+
+	btst.b	#AFXP_SwitcherFlags2_ISandClipPause,ALCD_AnimFXParams+AFXP_SwitcherFlags2(a1)
+	bne	24$		;jump if want the pause	
+	move.l	d0,-(sp)
+	moveq	#-1,d0		;Wait to field before 1st field of effect
+	moveq	#1,d1		;always honor current interlace flop
+	CALLTL	Wait4Time
+	move.l	(sp)+,d0
+	btst.b	#WAITABORT_BIT,TB_Flags3(a5)
+	bne	1000$
+	bra	23$
+
+24$	move.l	d0,-(sp)
+	CALLEF	ChangeClips	;busy waits!!!!!!!
+
+	moveq	#2,d0
+	CALLEF	ChangeISlace	;busy waits!!!!!!!
+	move.l	(sp)+,d0
+
+* d0= NeedELH flag from ProcessDuring
+23$	bsr	OverrideProcessDuring
+
+;	   APTR	SSBM_BitMap
+;	   APTR	SSBM_ColorTable	  ;LONGs on AA, WORDS on nonAA machines
+;	   APTR	SSBM_Sprite1	  ;may be NULL
+;	   APTR	SSBM_ELHList	  ;may be NULL 
+;	   WORD	SSBM_SourceX	  ;140/70ns pixel X offset into BM
+;	   WORD	SSBM_SourceY	  ;pixel Y offset into BM
+;	   WORD	SSBM_SourceWidth  ;rectangles 140/70ns pixel width may be < BM width, may be cropped by Display
+;	   WORD	SSBM_SourceHeight ;rectangle height may be < BM height, may be cropped by Display
+;	   WORD	SSBM_DestinationX 	;35ns AA or 140ns nonAA pixel X offset into overscan display
+;	   WORD	SSBM_DestinationY 	;pixel Y offset into overscan display
+;	   WORD	SSBM_DestinationWidth   ;display 140/70ns pixel width (usually 384 or 768)
+;	   WORD	SSBM_DestinationHeight  ;display height (usually 241)
+;	   WORD	SSBM_Modulo		;used to skip over rows on 2 field data	
+;	   WORD	SSBM_ViewModes		;HIRES, HAM, etc.
+
+5$	lea	TB_EffectsBase+EFB_SSBM(a5),a0
+	
+	clr.l	SSBM_ELHList(a0)	;Assume no ELH headers
+	tst.w	d0			;ELH flags
+	beq.s	8$
+	move.l	#AnimELHList,SSBM_ELHList(a0)  ;see Time variables below also
+	
+8$	moveq	#0,d1			;assume AA effect
+	btst.b	#AFXP_MachineFlags1_AAeffect,ALCD_AnimFXParams+AFXP_MachineFlags1(a1)
+	bne.s	9$
+	moveq	#1,d1			;NonAAflag
+
+9$	move.l	ALCD_AnimFXParams+AFXP_LatchColors(a1),d0
+	beq	12$			;jump if no latch colors
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	moveq	#1,d0
+	bsr	GetTBarTime
+
+;; d1=nonAAflag
+	bsr	MakeLatchColors
+	movem.l	(sp)+,a0-a1
+
+12$	move.l	ALCD_AnimFXParams+AFXP_LatchRanges(a1),d0
+	beq.s	121$			;jump if no latch ranges
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	move.l	d1,d0
+	bsr	MakeLatchRanges
+	movem.l	(sp)+,a0-a1
+
+121$	move.l	ALCD_AnimFXParams+AFXP_LatchList(a1),d0
+	beq.s	125$			;jump if no latch list
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	move.l	d1,d0
+	bsr	MakeLatchList
+	movem.l	(sp)+,a0-a1
+	
+*-----------------
+125$	move.l	ALCD_AnimFXParams+AFXP_TransparentColors(a1),d0
+	beq	126$			;jump if no latch colors
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	moveq	#1,d0
+	bsr	GetTBarTime
+	bsr	MakeTransparentColors
+	movem.l	(sp)+,a0-a1
+	
+126$	move.l	ALCD_AnimFXParams+AFXP_TransparentRanges(a1),d0
+	beq.s	127$			;jump if no Transparent ranges
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	bsr	MakeTransparentRanges
+	movem.l	(sp)+,a0-a1
+
+127$	move.l	ALCD_AnimFXParams+AFXP_TransparentList(a1),d0
+	beq.s	13$			;jump if no Transparent list
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	bsr	MakeTransparentList
+	movem.l	(sp)+,a0-a1
+	
+*-----------------
+13$	move.l	ALCD_AnimFXParams+AFXP_PaletteColors(a1),d0
+	beq	20$			;jump if no latch colors
+	movem.l	a0-a1,-(sp)
+	move.l	acl_ColorTable(a3),a0	
+	move.l	d0,a1
+	moveq	#1,d0
+	bsr	GetTBarTime
+;; d1=nonAAflag
+	bsr	MakePaletteColors
+	movem.l	(sp)+,a0-a1
+
+*-----------------
+20$	move.l	acl_ColorTable(a3),SSBM_ColorTable(a0)	;assume no remapping
+
+	tst.w	d1
+	bne.s	28$	;jump if nonAA only effect
+
+;;	btst.b	#AFXP_MachineFlags1_NonAAeffect,ALCD_AnimFXParams+AFXP_MachineFlags1(a1)
+;;	beq.s	28$
+	
+	btst.b	#ECSFETCH_BIT,TB_Flags2(a5)	
+	beq.s	28$		;jump if running on AA machine
+
+* AA Effect assumed on non-AA machine, so need remapping
+
+	movem.l	a0-a1,-(sp)
+
+	move.w	acl_NumberOfColors(a3),d0
+	moveq	#0,d1
+	move.b	ALCD_AnimFXParams+AFXP_NonAAremap(a1),d1
+
+	lea	TempPalette(pc),a1	
+	move.l	a1,SSBM_ColorTable(a0)
+	move.l	acl_ColorTable(a3),a0
+
+	bsr	NonAAremap
+	movem.l	(sp)+,a0-a1
+
+*-----------------
+
+28$	move.w	#0,SSBM_SourceX(a0)	
+	move.w	#0,SSBM_SourceY(a0)	
+
+	move.w	acl_Width(a3),d0
+	lsl.w	#3,d0	
+	move.w	d0,SSBM_SourceWidth(a0)
+
+	move.w	#0,SSBM_Modulo(a0)	;assume non-interlace
+
+	move.w	acl_Height(a3),d0
+	btst.b	#AFXP_AnimFlags2_Interlaced,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	50$
+	move.w	acl_Width(a3),SSBM_Modulo(a0)	;assume interlaced
+	lsr.w	#1,d0
+50$	move.w	d0,SSBM_SourceHeight(a0)
+
+	move.w	#0,SSBM_DestinationX(a0)	
+	move.w	#0,SSBM_DestinationY(a0)	
+
+*!***********************************************	
+
+* Do Time Variables
+	movem.l	a0/a3,-(sp)
+	movea.l	a0,a3		;temporary -> SSBM
+	moveq	#0,d0		;don't allow TBar transformations 
+	bsr	GetTBarTime
+	move.l	d0,d1
+
+	movea.l	EF_TimeVariables(a4),a2		;NOTE! ->AECbase is killed
+	movea.l	EF_VariableResults(a4),a6
+
+*--------
+	btst.b	#AFXP_DynamicFlags1_BMposition,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq	71$
+
+;;	move.l	d1,d0
+	lea	TTV_TimeVarsBMposition(a2),a0
+	CALLEF	TimeVariablesCalc	;a4->EFXbase
+
+* Scroll BitMaps only work if HIRES!!
+	move.w	#368+14,d0	;NOTE +14 fudge factor
+	sub.w	TVR_BMposition+BMPD_Xaxis(a6),d0
+	add.w	d0,d0		;deltaX will be 35ns resolution
+	add.w	TVR_BMposition+BMPD_deltaX(a6),d0
+	move.w	d0,SSBM_DestinationX(a3)
+	
+	move.w	#241,d0		;assume interlaced
+	btst.b	#AFXP_AnimFlags2_Interlaced,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	bne.s	51$
+	move.w	#120,d0		;non-laced
+
+51$	sub.w	TVR_BMposition+BMPD_Yaxis(a6),d0
+	add.w	TVR_BMposition+BMPD_deltaY(a6),d0
+	move.w	d0,SSBM_DestinationY(a3)
+
+*--------
+71$	btst.b	#AFXP_DynamicFlags1_Fader,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq.s	72$
+
+	move.l	d1,d0
+	lea	TTV_TimeVarsFader(a2),a0
+	CALLEF	TimeVariablesCalc	;a4->EFXbase
+	
+	DEA.l	TB_VTSetUp,a0
+	move.w	TVR_Fader+FDRD_CD(a6),d0
+	ELHPUT_CD_R	a0,d0
+
+	move.l	#AnimELHList,SSBM_ELHList(a3)
+
+*--------
+72$	btst.b	#AFXP_DynamicFlags1_LumKey,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq.s	73$
+
+	move.l	d1,d0
+	lea	TTV_TimeVarsLumKey(a2),a0
+	CALLEF	TimeVariablesCalc	;a4->EFXbase
+
+	DEA.l	TB_VTSetUp,a0
+	move.w	TVR_LumKey+LKAD_LKA(a6),d0
+	ELHPUT_LKA_R	a0,d0
+
+	move.l	#AnimELHList,SSBM_ELHList(a3)
+
+73$	movem.l	(sp)+,a0/a3
+
+
+*!********************************************************
+* I won't use the acl_BitMap because it may be too deep or
+* need rearranging.
+
+	lea	ALCD_BitMap(a1),a2
+	move.l	a2,SSBM_BitMap(a0)	;Destination BM
+	
+	lea	acl_BitMap(a3),a6	;Source BM
+	move.l	(a6)+,(a2)+	;copy bpr/rows
+	move.w	(a6)+,d0	;flags/depth
+
+	btst.b	#AFXP_DynamicFlags1_BMposition,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq.s	52$
+	btst.b	#AFXP_AnimFlags2_VerticalScroll,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	bne.s	52$
+	lsr.b	#1,d0		;bm_Depth / 2 if scrollable BM
+
+52$	move.w	d0,(a2)+
+	move.w	(a6)+,(a2)+	;pad
+	andi.w	#$ff,d0		;only want depth for later
+
+	btst.b	#AFXP_DynamicFlags1_BMposition,ALCD_AnimFXParams+AFXP_DynamicFlags1(a1)
+	beq.s	90$
+
+	btst.b	#AFXP_AnimFlags2_VerticalScroll,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	bne.s	90$
+
+	move.w	SSBM_DestinationX(a0),d1
+	subq.w	#4,d1
+	btst.l	#6,d1
+	bne.s	90$
+
+	sub.w	#60,d1
+	move.w	d1,SSBM_DestinationX(a0)
+
+	move.w	d0,d1	;original depth / 2
+	add.w	d1,d1
+	add.w	d1,d1	;*4
+	adda.w	d1,a6	;use upper half of planes
+	bra.s	90$
+
+85$	move.l	(a6)+,(a2)+
+90$	dbra	d0,85$
+
+;;	DEBUGMEM	CRAP,<Source bm>,acl_BitMap(a3),#(8+16*4)
+;;	DEBUGMEM	CRAP,<Destination bm>,ALCD_BitMap(a1),#(8+8*4)
+;;	bsr	DumpTestBM
+
+*!***********************************************
+	clr.l	SSBM_Sprite1(a0)	;assume not digital
+	btst.b	#AFXP_ToasterFlags1_DigitalFX,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	30$
+
+	moveq	#0,d0
+	move.b	ALCD_BitMap+bm_Depth(a1),d0
+	subq.b	#1,ALCD_BitMap+bm_Depth(a1)
+	add.w	d0,d0
+	add.w	d0,d0	;*4
+	add.l	#ALCD_BitMap,d0
+	move.l	bm_Planes-4(a1,d0.l),SSBM_Sprite1(a0)	;line numbers
+	bset.b	#EFFLAGS1_TEMPORARYSPRITE1,EF_Flags1(a4)
+
+* We need to remember to clear out TB_CurrentSprite1(a5) when done!!!
+
+* If HAM8 swap plane pointers back around.
+30$	cmpi.b	#8,ALCD_BitMap+bm_Depth(a1)	;is depth 8 ?
+	bne	35$
+
+32$	btst.b	#3,acl_ViewModes+2(a3)		;is it HAM?
+	bne	34$
+
+* 8 bits of non-HAM
+	btst.b	#AFXP_AnimFlags2_DoNotStompSprite,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	bne	35$		;assume palette is OK for sprite
+	
+* Assume AA machine type palette
+	move.l	acl_ColorTable(a3),a2
+	adda.w	#2+(240*4),a2		;->low order nibble of color 240
+	lea	spriteBits(pc),a6
+	move.w	#16-1,d0
+	move.w	#~PACO_Mask_Sprite,d1
+31$	and.w	d1,(a2)
+	move.w	(a6)+,d2	;or bits
+	or.w	d2,(a2)
+	addq.w	#4,a2
+	dbra	d0,31$
+	bra.s	35$
+
+* rearrange planes
+34$	lea	ALCD_BitMap+bm_Planes(a1),a6
+
+	move.l	0*4(a6),d0	;new 2
+	move.l	1*4(a6),d1	;new 3
+	move.l	6*4(a6),0*4(a6)
+	move.l	7*4(a6),1*4(a6)
+
+	move.l	5*4(a6),7*4(a6)
+	move.l	4*4(a6),6*4(a6)
+	move.l	3*4(a6),5*4(a6)
+	move.l	2*4(a6),4*4(a6)
+	move.l	d1,3*4(a6)
+	move.l	d0,2*4(a6)
+	
+*-----------------
+
+35$	move.w	#384,SSBM_DestinationWidth(a0)
+	btst.b	#7,acl_ViewModes+2(a3)
+	beq.s	100$
+	move.w	#768,SSBM_DestinationWidth(a0)
+
+* This better be 241 high, or else we got garbage at bottom of screen!
+100$	move.w	#241,SSBM_DestinationHeight(a0)
+	
+	move.w	acl_ViewModes+2(a3),d0
+	bclr	#GENLOCK_VIDEO,d0
+	btst.b	#AFXP_AnimFlags2_Color0Transparent,ALCD_AnimFXParams+AFXP_AnimFlags2(a1)
+	beq.s	106$
+	bset	#GENLOCK_VIDEO,d0
+106$	move.w	d0,SSBM_ViewModes(a0)
+
+;;	CALLTL	SetupSSBM
+;;	movea.l	d0,a0
+;;	CALLTL	InstallField
+	CALLTL	SetupAndInstallSSBM
+
+*---------------------
+	IFD	CRAP
+	cmpi.w	#36,TB_ClipASec(a5)
+	bne	105$
+	cmpi.w	#300,TB_TValSec(a5)
+	ble	105$
+	CALLTL	Wait4Top
+	DEA.l	TB_VTSetUp,a0
+	ELHGET_MP	a0,d0
+	andi.w	#$f,d0
+	DEBUGUDEC	CRAP,<MP= >,d0,< >
+	ELHTEST_NOSNOW	a0
+	beq.s	104$	
+	DEBUGMSG	CRAP,<NOSNOW>
+	bra.s	101$
+104$	DEBUGMSG	CRAP,<SNOW>
+101$	lea	103$,a0
+102$	CALLTL	SendELHList2Toaster
+	ISLMBUP
+	beq.s	102$	;jump if not up = down
+	bra.s	105$
+103$	dc.b	EH2,EH4,EH1,EH68,EHEND
+	CNOP	0,4
+	ENDC		;CRAP
+*---------------------	
+
+* NEED INTERRUPTS OFF ?????????
+
+105$	bclr.b	#ALCD_Flags1_FrameDisplayed,ALCD_Flags1(a1)
+	bset.b	#ALCD_Flags1_NextFrameReady,ALCD_Flags1(a1)	
+
+* is it time to install the audio ?
+	btst.b	#ALCD_Flags1_AudioLoad,ALCD_Flags1(a1)
+	beq	150$
+
+	btst.b	#ALCD_Flags1_TBar,ALCD_Flags1(a1)
+	bne	150$			;jump if TBAR move
+
+	move.w	ALCD_AnimFXParams+AFXP_AudioStartField(a1),d0
+	cmp.w	acl_FrameNumber(a3),d0
+	bne	140$
+
+	tst.l	ALCD_CurrentAudioInfo(a1)
+	beq	140$			;jump if no sample for this speed
+	bset.b	#ALCD_Flags2_AudioReady,ALCD_Flags2(a1)	;starts on next field
+
+* ok to fall here, because maybe the stop frame = start frame
+140$	tst.w	ALCD_AnimFXParams+AFXP_NumAudioFields(a1)
+	bmi.s	150$				;go to end of effect
+	add.w	ALCD_AnimFXParams+AFXP_NumAudioFields(a1),d0
+	cmp.w	acl_FrameNumber(a3),d0
+	bne.s	150$
+	bclr.b	#ALCD_Flags2_AudioReady,ALCD_Flags2(a1)	;ends on next field
+
+150$	move.l	a1,TB_MasterTimerData(a5)	;->local data
+	lea	VertBHandler,a6			
+	move.l	a6,TB_MasterTimerEvent(a5)	;->VertB handler
+
+* arm the vertb handler for the next field
+	move.l	TB_MasterTime(a5),d0
+	move.l	d0,ALCD_LastInstallTime(a1) ;time of last field install
+	addq.l	#1,d0
+	move.l	d0,TB_MasterTimer(a5)	;We have installed the copperlist, so
+					;It will so up at the start of the
+					;next field. The mastertimer will go
+					;off then, so we can clear the
+					;waiting to display flag.
+					
+	IFD	DEBUGSPEEDORPLAY
+	 lea	DebugSpeedOrPlayBuffer,a0
+	 move.l	-4(a0),d0
+	 addq.l	#1,d0
+	 cmpi.w	#DEBUGSPEEDORPLAYMAXFIELDS,d0
+	 beq.s	1000$			;jump if end of buffer
+	 move.l	d0,-4(a0)
+	 lsl.l	#3,d0
+
+	 IFD	DEBUGSPEED
+	 move.l	ALCD_LastInstallTime(a1),0(a0,d0.w)
+	 move.l	_custom+vposr,4(a0,d0.w)
+	 ENDC
+
+	 IFD	DEBUGPLAY
+	 move.l	 acl_FrameNumber(a3),0(a0,d0.w)
+	 lea	 acl_BitMap(a3),a6
+	 move.l	 bm_Planes(a6),4(a0,d0.w)
+	 ENDC
+
+	ENDC	;IFD DEBUGSPEEDORPLAY
+
+1000$	movem.l	(sp)+,d0-d3/a0/a2-a6
+	rts
+
+*------------------
+TempPalette	dcb.w	18,0	;used on nonAA machines
+
+spriteBits:
+	dc.w	PACO_Sprite0	
+	dc.w	PACO_Sprite1	
+	dc.w	PACO_Sprite2	
+	dc.w	PACO_Sprite3	
+	dc.w	PACO_Sprite4	
+	dc.w	PACO_Sprite5	
+	dc.w	PACO_Sprite6	
+	dc.w	PACO_Sprite7	
+	dc.w	PACO_Sprite8	
+	dc.w	PACO_Sprite9	
+	dc.w	PACO_SpriteA
+	dc.w	PACO_SpriteB
+	dc.w	PACO_SpriteC
+	dc.w	PACO_SpriteD
+	dc.w	PACO_SpriteE
+	dc.w	PACO_SpriteF
+
+***************************************************************
+* a3->FG
+* Assume ProcessEffect has already occured.
+FieldReinstall:
+	move.l	d1,-(sp)
+
+	DEBUGMSG	DBAFXH2,<FieldReinstall:>,<\>
+
+	moveq	#FIELDREDO,d1
+;;	bsr	TBarHandler
+
+	move.l	(sp)+,d1
+	rts
+
+*******************************************************************
+* Over rides ELH logic, kind of a HACK!!!
+* a4->EfxBase, a5->TB
+OverrideProcessDuring:
+	movem.l	d0-d2/a0-a1,-(sp)
+
+	DEBUGMSG	DBAFXH2,<OverrideProcessDuring:>,<\>
+
+	lea	LocalData,a1
+
+	clr.b	TB_StashCount(a5)
+	DEA.l	TB_VTSetUp,a0
+
+	btst.b	#AFXP_ToasterFlags1_DigitalFX,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+     	beq.s	60$
+	tst.w	EF_NotDigital(a4)
+	bne.s	60$		;jump if a TDE wipe effect
+     	ELHCLEAR_LINP	a0
+
+60$	tst.w	TB_KeyModeSec(a5)
+	bpl.s	65$
+
+* lumkeying on
+ 	ELHGET_CDS	a0,d1
+	
+	cmpi.b	#VTI_CDS_DIB,ALCD_AnimFXParams+AFXP_KeyMode(a1)
+	beq.s	65$
+	
+	cmpi.b	#VTI_CDS_DIBGR,ALCD_AnimFXParams+AFXP_KeyMode(a1)
+	beq.s	65$
+	
+	cmpi.w	#VTI_CDS_LUMKEY,d1	;jump if QUAF, or QUAFALPHA & Lumkeying
+	beq.s	75$
+	
+65$	moveq	#0,d1
+	move.b	ALCD_AnimFXParams+AFXP_KeyMode(a1),d1
+
+	cmpi.w	#VTI_CDS_TRANSQUAD,d1
+	bne.s	70$
+
+	tst.w	EF_NotDigital(a4)
+	beq.s	70$			;jump if not a TDE wipe effect
+
+* Disabling QUAFALPHA on TDE Wipe effects
+	ELHGET_AM	a0,d2
+	ELHGET_BM	a0,d0
+	ELHPUT_AM_R	a0,d0
+	ELHPUT_BM_R	a0,d2
+	move.w	#VTI_CDS_QUAF,d1	;loose the shadow
+	
+70$	ELHPUT_CDS_R	a0,d1	
+;;	ELHPUT_CD_I	a0,VTI_CD_SHOWB  ;don't touch for fadein/out
+
+75$	btst.b	#AFXP_ToasterFlags1_LatchAM,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	3$	
+	ELHPUT_AM_I	a0,VTI_AM_MONO
+
+3$	btst.b	#AFXP_ToasterFlags1_LatchBM,ALCD_AnimFXParams+AFXP_ToasterFlags1(a1)
+	beq.s	5$	
+	ELHPUT_BM_I	a0,VTI_BM_MONO
+
+5$	movem.l	(sp)+,d0-d2/a0-a1
+	rts
+
+***************************************************************
+* d0.b=latch source, d1.w=1 if WORD palette, returns d0=Latch bits
+LatchSource2OrBits:
+	move.l	a0,-(sp)
+
+	ext.w	d0
+	bgt.s	100$			;jump if based on button rows
+
+	neg.w	d0
+	subq.w	#1,d0
+	bra.s	300$
+
+100$	cmpi.w	#LARA_CurrentMain,d0
+	bne.s	120$
+	cmpi.b	#M_LUTBUS_MAIN,TB_LutBus(a5)
+	beq.s	360$
+	GET.w	TB_MainSec,d0
+	CALLTL	Mask2BM
+	bra.s	300$
+
+120$	cmpi.w	#LARA_CurrentPreview,d0
+	bne.s	140$
+	cmpi.b	#M_LUTBUS_PRVW,TB_LutBus(a5)
+	beq.s	360$
+	GET.w	TB_PrvwSec,d0
+	CALLTL	Mask2BM
+	bra.s	300$
+
+140$	cmpi.w	#LARA_CurrentOverLay,d0
+	bne.s	400$			;don't recognize the source, don't latch
+	cmpi.b	#M_LUTBUS_OLAY,TB_LutBus(a5)
+	beq.s	360$
+	GET.w	TB_OLaySec,d0
+	CALLTL	Mask2BM
+;;	bra.s	300$
+
+* Remember the other possibilities: InitialMain/Prvw/Olay, LoadBank etc. !!!!!!
+* d0 = LUT table index number
+300$	add.w	d0,d0
+	
+	tst.w	d1
+	beq.s	310$
+
+	lea	LatchLUT_WORD(pc),a0
+	move.w	0(a0,d0.w),d0	;OR value
+	bra.s	350$
+
+310$	add.w	d0,d0		;*4	
+	lea	LatchLUT(pc),a0
+	move.l	0(a0,d0.w),d0	;OR value
+
+350$	move.l	(sp)+,a0
+	rts
+
+* lut bus
+360$	move.w	#$0801,d0	;assume WORD palette
+	tst.w	d1
+	bne.s	350$
+	move.l	#$80000200,d0
+	bra.s	350$
+
+400$	moveq	#0,d0	;error
+	bra.s	350$
+
+*----------------------
+*  RGB rgb, rgb=%x12x xxxx x0xx, And mask = $~00000604 = $fffff9fb	
+LatchLUT
+		dc.l	$80000000	;1 	
+		dc.l	$80000004	;2
+		dc.l	$80000400	;3
+		dc.l	$80000404	;4
+		dc.l	$80000200	;dv0 See above for Lutbus
+		dc.l	$80000204	;dv1
+		dc.l	$80000600	;enc
+		dc.l	$80000604	;mono
+
+*  gb=%0xxx 1xx2, And mask = $~0089 = $ff76	
+LatchLUT_WORD
+		dc.w	$0800	;1 	
+		dc.w	$0880	;2
+		dc.w	$0808	;3
+		dc.w	$0888	;4
+		dc.w	$0801	;dv0 See above for Lutbus
+		dc.w	$0881	;dv1
+		dc.w	$0809	;enc
+		dc.w	$0889	;mono
+
+***************************************************************
+* a0->ColorMap, a1->LatchColors, a5->TB, d0=time, d1=WORDflag
+MakeLatchColors:
+	movem.l	d0-d4/a1,-(sp)
+	move.l	d0,d3	;save time
+
+	move.w	#$ff76,d2	;assume WORD palette
+	tst.w	d1
+	bne.s	10$
+	move.l	#$fffff9fb,d2
+
+10$	tst.w	(a1)
+	beq.s	666$
+	
+	cmp.w	LACO_StartTime(a1),d3
+	bcs.s	400$	;jump if before start time
+	cmp.w	LACO_EndTime(a1),d3
+	bhi.s	400$	;jump if after end time
+
+	move.b	LACO_Source(a1),d0
+	bsr	LatchSource2OrBits
+	
+	moveq	#0,d4
+	move.b	LACO_Color(a1),d4
+
+	add.w	d4,d4
+
+	tst.w	d1
+	beq.s	390$
+	and.w	d2,0(a0,d4.w)
+	or.w	d0,0(a0,d4.w)
+	bra.s	400$
+
+390$	add.w	d4,d4	;*4
+	and.l	d2,0(a0,d4.w)
+	or.l	d0,0(a0,d4.w)
+
+400$	addq.w	#LACO_SIZEOF,a1
+	bra	10$
+
+666$	movem.l	(sp)+,d0-d4/a1
+	rts
+		           
+***************************************************************
+*  d0=WORDflag, a0->ColorMap, a1->LatchRanges, a5->TB
+MakeLatchRanges:
+	movem.l	d0-d3/a1,-(sp)
+
+	move.w	d0,d1
+	move.w	#$ff76,d2	;assume WORD palette
+	tst.w	d1
+	bne.s	10$
+	move.l	#$fffff9fb,d2
+
+10$	tst.w	(a1)
+	beq.s	666$
+	
+	move.w	LARA_Source(a1),d0
+	bsr	LatchSource2OrBits
+
+	moveq	#0,d3
+	move.b	LARA_StartColor(a1),d3
+	add.w	d3,d3
+
+	moveq	#0,d2
+	move.b	LARA_NumColors(a1),d2
+
+	tst.w	d1
+	beq.s	390$
+
+*--- WORD palette
+	bra.s	320$
+315$	and.w	d2,0(a0,d3.w)
+	or.w	d0,0(a0,d3.w)
+	addq.w	#2,d3
+320$	dbra	d2,315$
+	bra.s	400$
+
+*--- LONG palette
+390$	add.w	d3,d3	;*4
+	bra.s	20$
+
+15$	and.l	d2,0(a0,d3.w)
+	or.l	d0,0(a0,d3.w)
+	addq.w	#4,d3
+20$	dbra	d2,15$
+
+400$	addq.w	#LARA_SIZEOF,a1
+	bra	10$
+
+666$	movem.l	(sp)+,d0-d3/a1
+	rts
+
+***************************************************************
+*  d0=WORDflag, a0->ColorMap, a1->LatchList, a5->TB
+MakeLatchList:
+	movem.l	d0-d3/a1,-(sp)
+
+	move.w	d0,d1
+	move.w	#$ff76,d2	;assume WORD palette
+	tst.w	d1
+	bne.s	10$
+	move.l	#$fffff9fb,d2
+
+10$	move.w	(a1)+,d0		;LALI_Source
+	beq.s	666$
+	
+	bsr	LatchSource2OrBits
+
+15$	move.w	(a1)+,d3		;LALI_Color
+	bmi.s	10$
+
+	add.w	d3,d3
+
+	tst.w	d1
+	beq.s	390$
+
+	and.w	d2,0(a0,d3.w)
+	or.w	d0,0(a0,d3.w)
+	bra	15$
+
+390$	add.w	d3,d3	;*4
+	and.l	d2,0(a0,d3.w)
+	or.l	d0,0(a0,d3.w)
+	bra	15$
+
+666$	movem.l	(sp)+,d0-d3/a1
+	rts
+
+***************************************************************
+* a0->ColorMap, a1->TransparentColors, d0=time
+MakeTransparentColors:
+	movem.l	d1/a1,-(sp)
+
+10$	tst.w	(a1)
+	bmi.s	666$
+	
+	cmp.w	TRCO_StartTime(a1),d0
+	bcs.s	400$	;jump if before start time
+	cmp.w	TRCO_EndTime(a1),d0
+	bhi.s	400$	;jump if after end time
+
+	move.w	TRCO_Color(a1),d1
+
+	add.w	d1,d1
+	add.w	d1,d1	;*4
+	bset.b	#7,0(a0,d1.w)
+
+400$	addq.w	#TRCO_SIZEOF,a1
+	bra	10$
+
+666$	movem.l	(sp)+,d1/a1
+	rts
+
+***************************************************************
+* a0->ColorMap, a1->TransparentRanges, a5->TB
+MakeTransparentRanges:
+	movem.l	d0-d1/a1,-(sp)
+
+10$	tst.w	(a1)
+	beq.s	666$
+	
+	moveq	#0,d0
+	move.b	TRRA_StartColor(a1),d0
+	add.w	d0,d0
+	add.w	d0,d0	;*4
+
+	moveq	#0,d1
+	move.b	TRRA_NumColors(a1),d1
+	bra.s	20$
+
+15$	bset.b	#7,0(a0,d0.w)
+	addq.w	#4,d0
+20$	dbra	d1,15$
+
+400$	addq.w	#TRRA_SIZEOF,a1
+	bra	10$
+
+666$	movem.l	(sp)+,d0-d1/a1
+	rts
+
+***************************************************************
+* a0->ColorMap, a1->TransparentList, a5->TB
+MakeTransparentList:
+	movem.l	d0/a1,-(sp)
+
+10$	move.w	(a1)+,d0		;TRLI_Color
+	bmi.s	666$
+	
+	add.w	d0,d0
+	add.w	d0,d0	;*4
+
+	bset.b	#7,0(a0,d0.w)
+	bra	10$
+
+666$	movem.l	(sp)+,d0/a1
+	rts
+
+***************************************************************
+* a0->ColorMap, a1->PaletteColors, a5->TB, d0=time (0-$ffff), d1=WORDflag
+MakePaletteColors:
+	tst.w	d1
+	bne	MakePaletteColorsNonAA
+
+;;MakePaletteColorsAA:
+	movem.l	d0-d7/a0/a2,-(sp)
+	move.w	PACO_StartingColorNumber(a1),d4
+	move.w	d4,d2			;stash color #
+	add.w	d4,d4
+	add.w	d4,d4
+	lea	0(a0,d4.w),a0		;->staring color in colormap
+	
+	move.w	PACO_NumberOfColors(a1),d4	;d4 = number of colors
+
+	mulu	PACO_NumberOfPalettes(a1),d0
+	swap	d0		;=Palette #, 0 -> (#ofPalettes-1)
+
+	move.w	PACO_ColorsBetweenPalettes(a1),d5
+	muls	d5,d0
+	tst.w	d5	;d0 may have been 0
+	bpl.s	5$
+	
+	neg.w	d5
+	move.w	PACO_NumberOfPalettes(a1),d6
+	subq.w	#1,d6
+	mulu	d6,d5
+	add.l	d5,d0
+		
+5$	add.l	d0,d0
+	add.l	d0,d0
+	lea	PACO_FRGB(a1,d0.l),a2	;->starting Palette color in table
+
+	move.w	#$8fff,d5
+	move.w  #$7000,d6
+	move.w	#$f000,d7
+
+	bra.s	400$
+
+* a2->source, a0->destination, a1->PaletteColorsStruct, d4=count, d2=color#
+10$	move.l	(a2)+,d3
+	move.w	d3,d0
+	and.w	d7,d0		;#$f000
+	beq.s	100$		;jump if no latch
+
+	bpl.s	11$
+	ori.w	#$0fff,d0
+11$	rol.w	#4,d0
+	moveq	#0,d1
+	bsr	LatchSource2OrBits
+
+	andi.w	#$09fb,d3	;and out latch bits
+	or.l	d0,d3		;or in new latch bits
+
+* latch done 
+100$	swap	d3
+	move.w	d3,d0
+	and.w	d5,d3	;#$8fff
+	swap	d3
+	
+	and.w	d6,d0	;#$7000, only 2 of the 3 mask# bits are currently used
+	rol.w	#6,d0		;index * 4
+	move.l	PACO_Mask0(a1,d0.w),d0
+
+	cmpi.w	#240,d2
+	blt.s	200$
+	andi.w	#~$0737,d0	;don't allow modifying sprite colors
+
+200$	and.l	d0,d3
+	not.l	d0
+	and.l	d0,(a0)
+	or.l	d3,(a0)+
+	
+	addq.w	#1,d2
+400$	dbra	d4,10$
+
+	movem.l	(sp)+,d0-d7/a0/a2
+	rts
+
+
+*-------------------------
+MakePaletteColorsNonAA:
+	movem.l	d0-d5/a0-a1,-(sp)
+	move.w	PACO_NonAA_StartingColorNumber(a1),d4
+	add.w	d4,d4
+	lea	0(a0,d4.w),a0		;->staring color in colormap
+	
+	move.w	PACO_NonAA_NumberOfColors(a1),d4	;d4 = number of colors
+
+	mulu	PACO_NonAA_NumberOfPalettes(a1),d0
+	swap	d0				;=Palette #, 0 -> (#ofPalettes-1)
+	move.w	PACO_NonAA_ColorsBetweenPalettes(a1),d3
+	muls	d3,d0
+	tst.w	d3	;d0 may have been 0
+	bpl.s	5$
+
+	neg.w	d3
+	move.w	PACO_NonAA_NumberOfPalettes(a1),d5
+	subq.w	#1,d5
+	mulu	d5,d3
+	add.l	d3,d0
+
+5$	add.l	d0,d0
+	lea	PACO_NonAA_FRGB(a1,d0.l),a1	;->starting Palette color in table
+	
+	move.w	#$f000,d3	
+	move.w	#$0fff,d5
+
+	bra.s	400$
+* a1->source, a0->destination, d4=count
+10$	move.w	(a1)+,d0
+	move.w	d0,d2
+	and.w	d3,d2		;#$f000
+	beq.s	100$		;jump if no latch
+
+	bpl.s	11$
+	or.w	d5,d2		;#$0fff
+11$	rol.w	#4,d2
+	move.w	d2,d0
+	moveq	#1,d1
+	bsr	LatchSource2OrBits
+
+100$	move.w	d0,(a0)+
+400$	dbra	d4,10$
+
+	movem.l	(sp)+,d0-d5/a0-a1
+	rts
+
+***************************************************************
+* d0.w=NumberOfColors, d1.w=remapMode, a0->SourceColorMap, a1->DestColorMap, a5->TB
+NonAAremap:
+	movem.l	d0-d2/a0-a1,-(sp)
+	cmpi.w	#17,d0
+	ble.s	10$	
+	moveq	#17,d0	;don't allow sprite modifications
+
+10$	cmpi.w	#AFXT_Remap_Encoder,d1
+	beq.s	100$ 	
+	cmpi.w	#AFXT_Remap_Digital,d1	
+	beq.s	200$ 	
+	cmpi.w	#AFXT_Remap_DIB,d1		
+	beq.s	300$ 	
+	cmpi.w	#AFXT_Remap_DIBGR,d1	
+	beq.s	400$ 	
+	cmpi.w	#AFXT_Remap_Latch,d1	
+	beq	500$ 	
+	cmpi.w	#AFXT_Remap_DIBlatch,d1	
+	beq	700$ 	
+	cmpi.w	#AFXT_Remap_DIBGRlatch,d1	
+	beq	600$ 	
+
+* Unknown modes default to Encoder 
+
+*-------------------
+*AFXT_Remap_Encoder 	
+100$	addq.w	#2,a0
+	bra.s	130$
+110$	move.w	(a0),(a1)+
+	addq.w	#4,a0
+130$	dbra	d0,110$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_Digital,   g0->b0, r0->b3
+200$	bra.s	290$
+210$	move.l	(a0)+,d1
+	move.w	#$226,d2
+	btst	#4,d1		;G0
+	beq.s	220$
+	addq.w	#1,d2		;->I
+220$	btst	#8,d1		;R0
+	beq.s	230$
+	addq.w	#2,d2		;->
+230$	move.w	d2,(a1)+
+290$	dbra	d0,210$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_DIB,  b1->b0, b0->b3		
+300$	bra.s	390$
+310$	move.l	(a0)+,d1
+	move.w	#$226,d2
+	btst	#1,d1
+	beq.s	320$
+	addq.w	#1,d2
+320$	btst	#0,d1
+	beq.s	330$
+	addq.w	#2,d2
+330$	move.w	d2,(a1)+
+390$	dbra	d0,310$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_DIBGR, b1->b0, b0->b3, g1->g3, r1->r3	
+400$	bra.s	490$
+410$	move.l	(a0)+,d1
+	move.w	#$776,d2
+	btst	#1,d1
+	beq.s	420$
+	addq.w	#1,d2
+420$	btst	#0,d1
+	beq.s	430$
+	addq.w	#2,d2
+430$	btst	#5,d1
+	beq.s	440$
+	addi.w	#1<<4,d2
+440$	btst	#9,d1
+	beq.s	450$
+	addi.w	#1<<8,d2
+450$	move.w	d2,(a1)+
+490$	dbra	d0,410$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_Latch, pixelsw->r3, r1->b0, r2->b3, b2->g3	
+500$	bra.s	590$
+510$	move.l	(a0)+,d1
+	move.w	#$776,d2
+	btst	#31,d1
+	beq.s	520$
+	addi.w	#1<<8,d2
+520$	btst	#9,d1
+	beq.s	530$
+	addq.w	#1,d2
+530$	btst	#10,d1
+	beq.s	540$
+	addq.w	#2,d2
+540$	btst	#2,d1
+	beq.s	550$
+	addi.w	#1<<4,d2
+550$	move.w	d2,(a1)+
+590$	dbra	d0,510$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_DIBGRlatch	
+600$	bra.s	690$
+610$	move.l	(a0)+,d1
+	move.w	#$776,d2
+	btst	#31,d1
+	beq.s	645$
+
+* latch color
+	addi.w	#1<<8,d2
+	btst	#9,d1
+	beq.s	630$
+	addq.w	#1,d2
+630$	btst	#10,d1
+	beq.s	640$
+	addq.w	#2,d2
+640$	btst	#2,d1
+	beq.s	685$
+	addi.w	#1<<4,d2
+	bra.s	685$
+
+* DIBGR color
+645$	btst	#1,d1
+	beq.s	655$
+	addq.w	#1,d2
+655$	btst	#0,d1
+	beq.s	665$
+	addq.w	#2,d2
+665$	btst	#5,d1
+	beq.s	675$
+	addi.w	#1<<4,d2
+675$	btst	#9,d1
+	beq.s	685$
+	addi.w	#1<<8,d2
+
+685$	move.w	d2,(a1)+
+690$	dbra	d0,610$
+	bra	2000$
+
+*-------------------
+*AFXT_Remap_DIBlatch
+700$	bra.s	790$
+710$	move.l	(a0)+,d1
+	move.w	#$776,d2
+	btst	#31,d1
+	beq.s	745$
+
+* latch color
+	addi.w	#1<<8,d2
+	btst	#9,d1
+	beq.s	730$
+	addq.w	#1,d2
+730$	btst	#10,d1
+	beq.s	740$
+	addq.w	#2,d2
+740$	btst	#2,d1
+	beq.s	785$
+	addi.w	#1<<4,d2
+	bra.s	785$
+
+* DIB color
+745$	btst	#1,d1
+	beq.s	755$
+	addq.w	#1,d2
+755$	btst	#0,d1
+	beq.s	785$
+	addq.w	#2,d2
+
+785$	move.w	d2,(a1)+
+790$	dbra	d0,710$
+
+;;	bra	2000$
+
+2000$	movem.l	(sp)+,d0-d2/a0-a1
+	rts
+
+
+	IFD	CRAP
+**************************!!!!!!!!!!!!!!!!!!!!
+* a3->acl_ structure
+DumpTestBM:
+	movem.l	d0-d7/a0-a6,-(sp)
+
+	cmpi.w	#1,TB_TValSec(a5)
+* AAR --
+	bne	.stufdone
+	
+	DEBUGMSG	CRAP,<dumping picture>
+
+	GET.l	TB_DOSBase,a6		; get to Toaster ROOT
+	lea	.file1,a0	; open up the settings file
+	move.l	a0,d1
+	move.l	#MODE_NEWFILE,d2
+	CALLROM	Open
+	move.l	d0,d4
+
+	move.l	d4,d1
+	lea	filehdr,a2
+	move.l	a2,d2
+	move.l	#endofhdr-filehdr,d3
+	CALLROM	Write
+
+	lea	acl_BitMap+bm_Planes+0*4(a3),a2
+	moveq	#8-1,d5
+.nextfile1
+	move.l	d4,d1
+	move.l	(a2)+,d2
+	move.l	#(896/8)*564,d3
+	CALLROM	Write
+	dbra	d5,.nextfile1
+
+	move.l	d4,d1
+	CALLROM	Close
+*-----------
+	lea	.file2,a0	; open up the settings file
+	move.l	a0,d1
+	move.l	#MODE_NEWFILE,d2
+	CALLROM	Open
+	move.l	d0,d4
+
+	move.l	d4,d1
+	lea	filehdr,a2
+	move.l	a2,d2
+	move.l	#endofhdr-filehdr,d3
+	CALLROM	Write
+
+	lea	acl_BitMap+bm_Planes+8*4(a3),a2
+	moveq	#8-1,d5
+.nextfile2
+	move.l	d4,d1
+	move.l	(a2)+,d2
+	move.l	#(896/8)*564,d3
+	CALLROM	Write
+	dbra	d5,.nextfile2
+
+	move.l	d4,d1
+	CALLROM	Close
+
+* AAR --
+.stufdone
+	movem.l	(sp)+,d0-d7/a0-a6
+	rts	
+
+*!!!**************************
+.file1	dc.b	'ram:file1',0
+.file2	dc.b	'ram:file2',0
+
+filehdr
+
+dumpbodysize EQU ((896/8)*564)*8
+
+ dc.l $464F524D		;FORM
+
+ dc.l dumpbodysize+(endofhdr-startofhdr)	;FORM size
+
+startofhdr EQU *
+ dc.l $494C424D		;ILBM, ACBM ????
+ dc.l $424D4844    	;BMHD
+ dc.l $00000014,$03800234,$00000000,$08000000     
+ dc.l $00008034,$03800234
+ dc.l $43414D47		;CAMG
+ dc.l $00000004     
+ dc.l $00008004
+ dc.l $434D4150		;CMAP
+ dc.l $00000300,$00000001     
+ dc.l $01010202,$02030303,$04040405,$05050606     
+ dc.l $06070707,$08080809,$09090A0A,$0A0B0B0B     
+ dc.l $0C0C0C0D,$0D0D0E0E,$0E0F0F0F,$10101011     
+ dc.l $11111212,$12131313,$14141415,$15151616     
+ dc.l $16171717,$18181819,$19191A1A,$1A1B1B1B     
+ dc.l $1C1C1C1D,$1D1D1E1E,$1E1F1F1F,$20202021     
+ dc.l $21212222,$22232323,$24242425,$25252626     
+ dc.l $26272727,$28282829,$29292A2A,$2A2B2B2B     
+ dc.l $2C2C2C2D,$2D2D2E2E,$2E2F2F2F,$30303031     
+ dc.l $31313232,$32333333,$34343435,$35353636     
+ dc.l $36373737,$38383839,$39393A3A,$3A3B3B3B     
+ dc.l $3C3C3C3D,$3D3D3E3E,$3E3F3F3F,$40404041     
+ dc.l $41414242,$42434343,$44444445,$45454646     
+ dc.l $46474747,$48484849,$49494A4A,$4A4B4B4B     
+ dc.l $4C4C4C4D,$4D4D4E4E,$4E4F4F4F,$50505051     
+ dc.l $51515252,$52535353,$54545455,$55555656     
+ dc.l $56575757,$58585859,$59595A5A,$5A5B5B5B     
+ dc.l $5C5C5C5D,$5D5D5E5E,$5E5F5F5F,$60606061     
+ dc.l $61616262,$62636363,$64646465,$65656666     
+ dc.l $66676767,$68686869,$69696A6A,$6A6B6B6B     
+ dc.l $6C6C6C6D,$6D6D6E6E,$6E6F6F6F,$70707071     
+ dc.l $71717272,$72737373,$74747475,$75757676     
+ dc.l $76777777,$78787879,$79797A7A,$7A7B7B7B     
+ dc.l $7C7C7C7D,$7D7D7E7E,$7E7F7F7F,$80808081     
+ dc.l $81818282,$82838383,$84848485,$85858686     
+ dc.l $86878787,$88888889,$89898A8A,$8A8B8B8B     
+ dc.l $8C8C8C8D,$8D8D8E8E,$8E8F8F8F,$90909091     
+ dc.l $91919292,$92939393,$94949495,$95959696     
+ dc.l $96979797,$98989899,$99999A9A,$9A9B9B9B     
+ dc.l $9C9C9C9D,$9D9D9E9E,$9E9F9F9F,$A0A0A0A1     
+ dc.l $A1A1A2A2,$A2A3A3A3,$A4A4A4A5,$A5A5A6A6     
+ dc.l $A6A7A7A7,$A8A8A8A9,$A9A9AAAA,$AAABABAB     
+ dc.l $ACACACAD,$ADADAEAE,$AEAFAFAF,$B0B0B0B1     
+ dc.l $B1B1B2B2,$B2B3B3B3,$B4B4B4B5,$B5B5B6B6     
+ dc.l $B6B7B7B7,$B8B8B8B9,$B9B9BABA,$BABBBBBB     
+ dc.l $BCBCBCBD,$BDBDBEBE,$BEBFBFBF,$C0C0C0C1     
+ dc.l $C1C1C2C2,$C2C3C3C3,$C4C4C4C5,$C5C5C6C6     
+ dc.l $C6C7C7C7,$C8C8C8C9,$C9C9CACA,$CACBCBCB     
+ dc.l $CCCCCCCD,$CDCDCECE,$CECFCFCF,$D0D0D0D1     
+ dc.l $D1D1D2D2,$D2D3D3D3,$D4D4D4D5,$D5D5D6D6     
+ dc.l $D6D7D7D7,$D8D8D8D9,$D9D9DADA,$DADBDBDB     
+ dc.l $DCDCDCDD,$DDDDDEDE,$DEDFDFDF,$E0E0E0E1     
+ dc.l $E1E1E2E2,$E2E3E3E3,$E4E4E4E5,$E5E5E6E6     
+ dc.l $E6E7E7E7,$E8E8E8E9,$E9E9EAEA,$EAEBEBEB     
+ dc.l $ECECECED,$EDEDEEEE,$EEEFEFEF,$F0F0F0F1     
+ dc.l $F1F1F2F2,$F2F3F3F3,$F4F4F4F5,$F5F5F6F6     
+ dc.l $F6F7F7F7,$F8F8F8F9,$F9F9FAFA,$FAFBFBFB     
+ dc.l $FCFCFCFD,$FDFDFEFE,$FEFFFFFF
+ dc.l $424F4459     	;BODY
+
+ dc.l dumpbodysize	;BODY size
+endofhdr EQU	*
+
+	CNOP	0,4
+
+	ENDC	;CRAP
+
+**************************************************************
+* This is the Last line in AnimFXHandler.a
+**************************************************************
+
+	END
+

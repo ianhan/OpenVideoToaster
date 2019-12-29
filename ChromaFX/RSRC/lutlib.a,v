@@ -1,0 +1,106 @@
+head     2.0;
+branch   ;
+access   ;
+symbols  ;
+locks    ; strict;
+comment  @*@;
+
+
+2.0
+date     92.05.18.23.57.51;  author Hartford;  state Exp;
+branches ;
+next     ;
+
+
+desc
+@@
+
+
+
+2.0
+log
+@*** empty log message ***
+@
+text
+@********************************************************************
+* LUTLib.a
+*
+* Copyright (c)1992 NewTek, Inc.
+* Confidental and Proprietary. All rights reserved. 
+*
+* $Id$
+*
+* $Log$
+*
+*********************************************************************
+
+	NOLIST
+	idnt	"LUTLib"
+	section	LUT_data,data
+
+	include	"Assembler.i"
+	include "Include.i"
+	include	"Elh.i"
+	include	"VtHand.i"
+	include	"Instinct.i"
+
+	include	"LUTEqu.i"
+	include	"LUT0.i"
+	include	"LUT9.i"
+	include	"LUTA.i"
+;;	LIST
+	PAGE
+*************************************************************************
+*									*
+*	LUT Lib:							*
+*									*
+*	Contains The Library Base For LUT Mode.				*
+*									*
+*	11.Jun.1990 Jamie L. Finch.					*
+*									*
+*************************************************************************
+*
+LUT_NegativeSize:
+	DC.L	LUTLibrary-LUT_NegativeSize ; Size of offset to LIB Start
+
+	LIBJMP	LUT_GridEffect	; Execute The Crouton's Grid Effect.
+*
+	XDEF	LUTLibrary
+LUTLibrary:
+	DC.L	0		; LN_SUCC
+	DC.L	0		; LN_PRED
+	DC.B	NT_LIBRARY	; LN_TYPE
+	DC.B	0		; LN_PRI
+	DC.L	LUT_NAME
+	DC.B	0		; LIB_FLAGS
+	DC.B	0		; LIB_pad
+	DC.W	LUTLibrary-LUT_NegativeSize ; LIB_NEGSIZE, # Of Bytes Before LIB
+	DC.W	LUT_PositiveSize-LUTLibrary ; LIB_POSSIZE, # Of Bytes After  LIB
+	DC.W	1		; LIB_VERSION
+	DC.W	0		; LIB_REVISION
+	DC.L	0		; LIB_IDSTRING, identification
+	DC.L	0		; LIB_SUM. checksum
+	DC.W	0		; LIB_OPENCNT, # of current opens
+LUT_PositiveSize:
+*
+*	Number Gadget Strings.
+*
+	XDEF	LUT_NumberString
+LUT_NumberString:
+	DC.B	'0','0',0
+	XDEF	LUT_GridNString1
+LUT_GridNString1:
+	DC.B	'0','0',0
+	XDEF	LUT_GridNString2
+LUT_GridNString2:
+	DC.B	'0','0',0
+	XDEF	LUT_GridNString3
+LUT_GridNString3:
+	DC.B	'0','0',0
+	XDEF	LUT_GridNString4
+LUT_GridNString4:
+	DC.B	'0','0',0
+*
+	DC.B	0		; PAD.
+	END
+@
